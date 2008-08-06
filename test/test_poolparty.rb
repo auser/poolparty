@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/test_helper.rb'
 
-class TestPoolparty < Test::Unit::TestCase
+class TestPoolParty < Test::Unit::TestCase
 
   def setup
   end

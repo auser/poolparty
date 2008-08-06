@@ -1,4 +1,19 @@
-== 0.0.1 2008-08-05
-
-* 1 major enhancement:
-  * Initial release
+== 0.1.2 2008-08-05
+  * Added development tasks for easy setup
+  * Updated Scheduler to include ThreadPool for threaded safety
+  * Added poolnotify
+  * Updating gem on github
+  * Changed configuration style to rsync all files across every instance
+  * Moved configuration back to a configure scrip
+  * Added in vlad configuration
+  * Added plugin ability to install custom software
+  * Updated configuration style
+  * Added cloud_list to pool
+  * Changed listing of the clouds through pool       
+  * Added plugin_manager
+  * Moved remoting to rake remote task (from vlad)
+  * Changed configuration from instance-based to cloud-based
+  * Updated source
+  * Plugin support
+  * Cleaned up base
+  * Extensible monitoring

@@ -1,4 +1,4 @@
-module Poolparty
+module PoolParty
   module VERSION #:nodoc:
     MAJOR = 0
     MINOR = 0

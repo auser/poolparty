@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
-GEM_NAME = 'poolparty' # what ppl will type to install your gem
-RUBYFORGE_PROJECT = 'poolparty'
+GEM_NAME = 'PoolParty' # what ppl will type to install your gem
+RUBYFORGE_PROJECT = 'PoolParty'
 
 require 'rubygems'
 begin
@@ -17,7 +17,7 @@ require 'syntax/convertors/html'
 require 'erb'
 require File.dirname(__FILE__) + "/../lib/#{GEM_NAME}/version.rb"
 
-version  = Poolparty::VERSION::STRING
+version  = PoolParty::VERSION::STRING
 download = "http://rubyforge.org/projects/#{RUBYFORGE_PROJECT}"
 
 def rubyforge_project_id

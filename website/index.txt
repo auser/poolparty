@@ -1,6 +1,6 @@
-h1. poolparty
+h1. PoolParty
 
-h1. &#x2192; 'poolparty'
+h1. &#x2192; 'Easy cloud computing'
 
 
 h2. What
@@ -8,7 +8,7 @@ h2. What
 
 h2. Installing
 
-<pre syntax="ruby">sudo gem install poolparty</pre>
+<pre syntax="ruby">sudo gem install PoolParty</pre>
 
 h2. The basics
 
@@ -19,17 +19,13 @@ h2. Demonstration of usage
 
 h2. Forum
 
-"http://groups.google.com/group/poolparty":http://groups.google.com/group/poolparty
-
-TODO - create Google Group - poolparty
+"http://groups.google.com/group/PoolParty":http://groups.google.com/group/PoolParty
 
 h2. How to submit patches
 
 Read the "8 steps for fixing other people's code":http://drnicwilliams.com/2007/06/01/8-steps-for-fixing-other-peoples-code/ and for section "8b: Submit patch to Google Groups":http://drnicwilliams.com/2007/06/01/8-steps-for-fixing-other-peoples-code/#8b-google-groups, use the Google Group above.
 
-TODO - pick SVN or Git instructions
-
-The trunk repository is <code>svn://rubyforge.org/var/svn/poolparty/trunk</code> for anonymous access.
+The trunk repository is <code>svn://rubyforge.org/var/svn/PoolParty/trunk</code> for anonymous access.
 
 OOOORRRR
 
@@ -39,14 +35,11 @@ You can fetch the source from either:
 
 * rubyforge: "http://rubyforge.org/scm/?group_id=<%= rubyforge_project_id %>":http://rubyforge.org/scm/?group_id=<%= rubyforge_project_id %>
 
-<pre>git clone git://rubyforge.org/poolparty.git</pre>
+<pre>git clone git://rubyforge.org/PoolParty.git</pre>
 
 <% else %>
 
 * rubyforge: MISSING IN ACTION
-
-TODO - You can not created a RubyForge project, OR have not run <code>rubyforge config</code>
-yet to refresh your local rubyforge data with this projects' id information.
 
 When you do this, this message will magically disappear!
 
@@ -54,21 +47,17 @@ Or you can hack website/index.txt and make it all go away!!
 
 <% end %>
 
-* github: "http://github.com/GITHUB_USERNAME/poolparty/tree/master":http://github.com/GITHUB_USERNAME/poolparty/tree/master
+* github: "http://github.com/auser/PoolParty/tree/master":http://github.com/auser/PoolParty/tree/master
 
-<pre>git clone git://github.com/GITHUB_USERNAME/poolparty.git</pre>
+<pre>git clone git://github.com/auser/PoolParty.git</pre>
 
+* gitorious: "git://gitorious.org/PoolParty/mainline.git":git://gitorious.org/PoolParty/mainline.git
 
-TODO - add "github_username: username" to ~/.rubyforge/user-config.yml and newgem will reuse it for future projects.
-
-
-* gitorious: "git://gitorious.org/poolparty/mainline.git":git://gitorious.org/poolparty/mainline.git
-
-<pre>git clone git://gitorious.org/poolparty/mainline.git</pre>
+<pre>git clone git://gitorious.org/PoolParty/mainline.git</pre>
 
 h3. Build and test instructions
 
-<pre>cd poolparty
+<pre>cd PoolParty
 rake test
 rake install_gem</pre>
 
@@ -79,5 +68,5 @@ This code is free to use under the terms of the MIT license.
 
 h2. Contact
 
-Comments are welcome. Send an email to "FIXME full name":mailto:FIXME email via the "forum":http://groups.google.com/group/poolparty
+Comments are welcome. Send an email to "Ari Lerner":mailto:ari.lerner@citrusbyte.com email via the "forum":http://groups.google.com/group/PoolParty
 

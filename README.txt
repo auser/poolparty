@@ -1,4 +1,4 @@
-= poolparty
+= PoolParty
 
 * FIX (url)
 

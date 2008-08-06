@@ -1,24 +1,12 @@
-require 'poolparty/version'
+require 'PoolParty/version'
 
 AUTHOR = 'Ari Lerner'  # can also be an array of Authors
 EMAIL = "ari.lerner@citrusbyte.com"
 DESCRIPTION =<<-EOM      
-      Get ready to jump in the pool, you just installed PoolParty!
-
-      Please check out the documentation for any questions or check out the google groups at
-        http://groups.google.com/group/poolpartyrb
-
-      Don't forget to check out the plugin tutorial @ http://poolpartyrb.com for extending PoolParty!      
-
-      For more information, check http://poolpartyrb.com
-      On IRC: 
-        irc.freenode.net
-        #poolpartyrb
-        
-      *** Ari Lerner @ <ari.lerner@citrusbyte.com> ***
+  Self-healing, auto-scaling cloud computing tool
 EOM
-GEM_NAME = 'poolparty' # what ppl will type to install your gem
-RUBYFORGE_PROJECT = 'poolparty' # The unix name for your project
+GEM_NAME = 'PoolParty' # what ppl will type to install your gem
+RUBYFORGE_PROJECT = 'PoolParty' # The unix name for your project
 HOMEPATH = "http://#{RUBYFORGE_PROJECT}.rubyforge.org"
 DOWNLOAD_PATH = "http://rubyforge.org/projects/#{RUBYFORGE_PROJECT}"
 EXTRA_DEPENDENCIES = [
@@ -48,8 +36,8 @@ end
 REV = nil
 # UNCOMMENT IF REQUIRED:
 # REV = YAML.load(`svn info`)['Revision']
-VERS = Poolparty::VERSION::STRING + (REV ? ".#{REV}" : "")
-RDOC_OPTS = ['--quiet', '--title', 'poolparty documentation',
+VERS = PoolParty::VERSION::STRING + (REV ? ".#{REV}" : "")
+RDOC_OPTS = ['--quiet', '--title', 'PoolParty documentation',
     "--opname", "index.html",
     "--line-numbers",
     "--main", "README",

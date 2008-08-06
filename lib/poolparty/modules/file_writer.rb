@@ -9,13 +9,13 @@ module PoolParty
     end
     # Write a temp file with the content str
     def write_to_temp_file(str="")        
-      tempfile = Tempfile.new("#{base_tmp_dir}/poolparty-#{rand(1000)}-#{rand(1000)}")
+      tempfile = Tempfile.new("#{base_tmp_dir}/PoolParty-#{rand(1000)}-#{rand(1000)}")
       tempfile.print(str)
       tempfile.flush
       tempfile
     end
     def with_temp_file(str="", &block)
-      Tempfile.open "#{base_tmp_dir}/poolparty-#{rand(10000)}-#{rand(10000)}" do |fp|
+      Tempfile.open "#{base_tmp_dir}/PoolParty-#{rand(10000)}-#{rand(10000)}" do |fp|
         fp.puts str
         fp.flush
         block.call(fp)
