@@ -4,6 +4,10 @@ $:.unshift(File.dirname(__FILE__)) unless
 ## Load PoolParty
 pwd = File.join(File.dirname(__FILE__), "poolparty")
 
+%w( aska backcall ).each do |library|
+  require "#{library}"
+end
+
 # Load the required files
 # If there is an init file, load that, otherwise
 # require all the files in each directory

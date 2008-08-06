@@ -49,3 +49,8 @@ def wait_launch(time=5)
   Process.kill("INT", pid)
   Process.wait(pid, 0)
 end
+
+def read_file(path)
+  require "open-uri"
+  open(path).read
+end
