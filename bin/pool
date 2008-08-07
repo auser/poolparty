@@ -1,0 +1,7 @@
+#!/usr/bin/ruby
+require 'optparse'
+$.unshift(File.join(File.dirname(__FILE__), ".."))
+
+require "poolparty"
+
+puts ARGV

@@ -5,13 +5,13 @@ pool :poolpartyrb do
     
     # Configuration
     configure { :maximum_instances => 1,:keypair => "name" }
-    minimum_instances = 1
+    minimum_instances 1
     
     apache do
       enable_php
       virtual_host do
-        document_root = "/www/domain1"
-        server_name = "domain1.com"
+        document_root "/www/domain1"
+        server_name "domain1.com"
       end
       virtual_host {
         :document_root => "/www/domain2",

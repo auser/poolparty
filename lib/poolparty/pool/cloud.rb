@@ -9,8 +9,7 @@ module PoolParty
     end    
     
     class Cloud
-      attr_reader :name
-      attr_accessor :options
+      attr_reader :name, :options
       include MethodMissingSugar
       
       def initialize(name, opts={}, &block)

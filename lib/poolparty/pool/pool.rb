@@ -13,10 +13,11 @@ module PoolParty
       attr_accessor :name    
       include Cloud
       include MethodMissingSugar
+      include Plugin
 
       def initialize(name,&block)
         @name = name
-        self.instance_eval &block
+        self.instance_eval &block        
       end
       
       def options(h={})
@@ -26,6 +27,14 @@ module PoolParty
       end
       
       alias_method :configure, :options
+      
+      # Plugins
+      def loaded_plugins
+        @loaded_plugins ||= load_plugins
+      end    
+      def load_plugins
+        Dir["#{plugin_directory}/**/init.rb"].each {|a| require a} if File.directory?(plugin_directory)
+      end
             
     end
     
