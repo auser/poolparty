@@ -12,8 +12,6 @@ describe "Configuer" do
     before(:each) do
       @s = Script.new
       Script.stub!(:new).and_return(@s)
-      @proc = Proc.new {  }
-      @pool = Pool.new :test, &@proc
       @basic = read_file(File.join(File.dirname(__FILE__), "files", "ruby_basic.rb"))
     end
     it "should load the basic example configure" do
@@ -21,6 +19,14 @@ describe "Configuer" do
     end
     it "should call inflate on the pools" do
       @s.pools.each {|a,b| b.should_receive(:inflate).and_return true }
+    end
+    describe "pool" do
+      before(:each) do
+        @pool = @s.pool(:poolpartyrb)
+      end
+      it "should set the plugin directory" do
+        @pool.plugin_directory.should == "docs_plugins"
+      end
     end
     describe "clouds" do
       before(:each) do
