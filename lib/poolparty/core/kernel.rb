@@ -9,4 +9,9 @@ module Kernel
   def as(klass_or_obj, &block)
     block.in_context(klass_or_obj).call
   end
+  def load_p(dir)
+    Dir["#{dir}/**"].each do |file|
+      File.directory?(file) ? load_p(file) : (require "#{file}")
+    end
+  end  
 end
