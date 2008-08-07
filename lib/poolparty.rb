@@ -13,15 +13,11 @@ end
 
 Kernel.load_p File.dirname(__FILE__) + "/poolparty/pool/**"
 
-# Default configuration
 module PoolParty
-  OPTIONS = {
-    
-  }
 end
 
 class Object
-  include PoolParty;include PoolParty::Pool;include PoolParty::Cloud
+  include PoolParty  
+  include PoolParty::Cloud
+  include PoolParty::Pool
 end
-
-puts "here"

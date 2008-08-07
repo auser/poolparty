@@ -1,8 +1,8 @@
 module PoolParty  
   module Pool
     
-    def pool(name="main", &block)
-      pools[name] = Pool.new(name, &block)
+    def pool(name=:main, &block)
+      pools.has_key?(name) ? pools[name] : (pools[name] = Pool.new(name, &block))
     end
 
     def pools
@@ -27,6 +27,10 @@ module PoolParty
       end
       
       alias_method :configure, :options
+      
+      # This is where the entire process starts
+      def inflate
+      end
       
       # Plugins
       def loaded_plugins

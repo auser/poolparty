@@ -1,7 +1,9 @@
 #!/usr/bin/ruby
 require 'optparse'
-$.unshift(File.join(File.dirname(__FILE__), ".."))
-
+$:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
 require "poolparty"
 
-puts ARGV
+# Get the git-style program name
+program_name = "#{File.basename($0)}-#{ARGV[0]}"
+
+program_name

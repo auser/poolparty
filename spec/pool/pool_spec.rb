@@ -7,9 +7,10 @@ describe "Pool" do
   it "should respond to the pool method" do
     @obj.respond_to?(:pool).should == true
   end
-  it "should store the pool in the global list of pools" do
-    pool :app do;end
-    @obj.pools.has_key?(:app).should == true
+  it "should store the pool in the global array" do
+    @p = pool :app do
+    end
+    @obj.pools[:app].should == @p
   end
   
   describe "block" do
