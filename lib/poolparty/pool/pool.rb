@@ -4,7 +4,7 @@ module PoolParty
     def pool(name=:main, &block)
       pools.has_key?(name) ? pools[name] : (pools[name] = Pool.new(name, &block))
     end
-
+    
     def pools
       @@pools ||= {}
     end

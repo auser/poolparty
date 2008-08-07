@@ -9,7 +9,7 @@ module PoolParty
     end
     
     def inflate
-      @pool.inflate if @pool
+      pools.map {|name,pool| pool.inflate } unless pools.empty?
     end
     
   end
