@@ -17,11 +17,11 @@ module PoolParty
         self.instance_eval &block
         
         # Add the plugin definition to the cloud as an instance method
-        Cloud.extend(self)
-        #   define_method name do
-        #     instance_eval &block
-        #   end
-        # end
+        Cloud.instance_eval do
+          define_method name do
+            instance_eval &block
+          end
+        end
         
       end
     end
