@@ -21,4 +21,7 @@ class Object
     block.in_context(self).call
     self
   end
+  def meta_def name, &blk
+    (class << self; self; end).instance_eval { define_method name, &blk }
+  end
 end

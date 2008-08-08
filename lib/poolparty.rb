@@ -19,5 +19,9 @@ end
 class Object
   include PoolParty  
   include PoolParty::Cloud
-  include PoolParty::Pool
+  include PoolParty::Pool  
+end
+
+class Class
+  include PoolParty::Plugin
 end

@@ -10,14 +10,14 @@ module PoolParty
     end
 
     class Pool
-      attr_accessor :name    
+      attr_accessor :name
       include Cloud
       include MethodMissingSugar
       include Plugin
 
       def initialize(name,&block)
         @name = name
-        self.instance_eval &block        
+        self.instance_eval &block
       end
       
       def options(h={})
@@ -38,8 +38,7 @@ module PoolParty
       end    
       def load_plugins
         Dir["#{plugin_directory}/**/init.rb"].each {|a| require a} if File.directory?(plugin_directory)
-      end
-            
+      end            
     end
     
   end

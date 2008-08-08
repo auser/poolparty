@@ -4,6 +4,7 @@ pool :poolpartyrb do
     
     apache do
       enable_php
+      
       virtual_host do
         document_root "/www/domain1"
         server_name "domain1.com"
