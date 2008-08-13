@@ -11,6 +11,7 @@ module PoolParty
     class Cloud
       attr_reader :name, :options
       include MethodMissingSugar
+      # include PoolParty::Cloud
       
       def initialize(name, opts={}, &block)
         @name = name

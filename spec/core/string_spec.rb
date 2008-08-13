@@ -46,4 +46,23 @@ listen web_proxy 127.0.0.1:3000
       @str.runnable.should == "echo 'hi' &&         puts 'hi'"
     end
   end
+  describe "Constantize" do
+    it "should be able to turn itself into constant" do
+      "prok".class_constant.should == PoolProkClas
+    end
+    it "should turn itself into a class constant" do
+      "prock".class_constant.class.should == Class
+    end
+    it "should not recreate the constant if it exists" do
+      Class.should_receive(:new).once.and_return Class.new
+      "prok".class_constant
+      "prok".class_constant
+    end
+    it "should be able to create a module into a constant" do
+      "prok".module_constant.should == PoolProkModule
+    end
+    it "should turn itself into a class constant" do
+      "prock".module_constant.class.should == Module
+    end
+  end
 end

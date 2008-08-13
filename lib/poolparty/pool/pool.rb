@@ -13,7 +13,7 @@ module PoolParty
       attr_accessor :name
       include Cloud
       include MethodMissingSugar
-      include Plugin
+      include PluginModel
 
       def initialize(name,&block)
         @name = name

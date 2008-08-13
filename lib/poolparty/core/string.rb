@@ -24,8 +24,25 @@ class String
   def nice_runnable(quite=true)
     self.split(/ && /).join("\n")
   end
-  def classify
-    self.capitalize
+  def class_constant(superclass=nil)
+    symc = "Pool_#{self}_Class".classify
+    unless Object.const_defined?(symc)
+      # Make class here
+      klass = Class.new(superclass ? superclass : Object) do
+        def self.feature(name, &block)
+          _feature(name, block)
+        end
+        yield if block_given?
+      end      
+      Object.const_set(symc, klass) 
+    end
+    symc.constantize
+  end
+  def module_constant(&block)
+    symc = "Pool_#{self}_Module".classify.to_sym
+    mod = Module.new(&block)    
+    Object.const_set(symc, mod) unless Object.const_defined?(symc)
+    Object.const_get(symc)
   end
   def collect_each_line_with_index(&block)
     returning [] do |arr|
