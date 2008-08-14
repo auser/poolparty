@@ -1,4 +1,4 @@
-module PoolParty  
+module PoolParty
   module Pool
     
     def pool(name=:main, &block)
@@ -31,6 +31,13 @@ module PoolParty
       # This is where the entire process starts
       def inflate
       end
+      
+      def output(*args)
+        args.each do |line|
+          (@output ||= []) << line
+        end
+      end
+      
       
       # Plugins
       def loaded_plugins

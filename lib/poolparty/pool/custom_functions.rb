@@ -1,14 +1,13 @@
 module PoolParty
-  class CustomFunction    
+  module CustomFunction    
     class << self
       
       def has_custom_function(name)
-        !a.select {|i| i =~ /#{name}/}.empty?
+        !output.select {|i| i =~ /#{name}/}.empty?
       end
       
-      def append_if_no_such_line
-        return if has_custom_function("append_if_no_such_line")
-        output get_function_named(:append_if_no_such_line)
+      def append_if_no_such_line        
+        output get_function_named(:append_if_no_such_line) unless has_custom_function("append_if_no_such_line")
       end
       
       def get_function_named(name)
