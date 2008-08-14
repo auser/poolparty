@@ -27,8 +27,8 @@ module PoolParty
                 
         # Add the plugin definition to the cloud as an instance method
         Cloud.instance_eval do
-          define_method name do            
-            (@klass ||= klass.new).instance_eval &block
+          define_method name do
+            (@klass ||= klass.new).instance_eval &block            
           end
         end
 

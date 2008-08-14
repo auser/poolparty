@@ -7,6 +7,16 @@ pool :poolpartyrb do
     configure({ :maximum_instances => 1,:keypair => "name" })
     minimum_instances 1    
     
+    apache do
+      enable_php
+      site("poolpartyrb.com")
+    end
+    
+    monit do
+      enable
+      watch :apache
+    end
+    
   end
   
 end
