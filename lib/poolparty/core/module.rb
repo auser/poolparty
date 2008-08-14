@@ -19,4 +19,6 @@ class Module
         private target
     end
   end
+  def set(*args)
+  end
 end

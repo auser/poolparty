@@ -43,6 +43,7 @@ describe "Plugin" do
       it "should be able to call the plugin method site" do
         @plugin.site("hi", {:document_root => "/root"})
         @plugin.document_root.should == "/root"
+        puts @plugin.output
       end
     end
   end

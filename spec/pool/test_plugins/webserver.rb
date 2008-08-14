@@ -14,7 +14,8 @@ class WebServers
       virtual_host name, opts
     end
     
-    custom_function :virtual_host, <<-EOM
+    set do
+      custom_function :virtual_host, <<-EOM
 define virtual_host($docroot, $ip, $order = 500, $ensure = "enabled") { 
     $file = "/etc/sites-available/$name.conf" 
     file { $file: 
@@ -27,9 +28,9 @@ define virtual_host($docroot, $ip, $order = 500, $ensure = "enabled") {
             disabled => absent 
         } 
     } 
-}    
-    EOM
-
+}
+      EOM
+    end
         
   end
 end
