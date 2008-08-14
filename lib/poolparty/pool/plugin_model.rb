@@ -14,16 +14,20 @@ module PoolParty
       
       def initialize(name,&block)
         @name = name
+        class_string_name = "#{name}"
         # Create the block inside the instantiated plugin
-        "#{name}".module_constant &block
+        class_string_name.module_constant &block
         
-        # Create the class to evaluate the plugin on the implmented call
-        name.to_s.class_constant &block
+        # Create the class to evaluate the plugin on the implemented call
+        klass = class_string_name.class_constant(Plugin::Plugin).extend(class_string_name.module_constant)
         
-        # Create the cloud method
-        # meth = "def #{name}(&block); #{@klass.instance_eval &block} end"
-        # # Add the plugin definition to the cloud as an instance method
-        # Cloud.module_eval { meth }
+        # Add the plugin definition to the cloud as an instance method
+        Cloud.instance_eval do
+          define_method name do
+            klass.instance_eval &block
+          end
+        end
+        
       end
     end
     
