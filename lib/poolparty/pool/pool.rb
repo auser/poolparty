@@ -40,13 +40,6 @@ module PoolParty
         end
       end
       
-      # Plugins
-      def loaded_plugins
-        @loaded_plugins ||= load_plugins
-      end    
-      def load_plugins
-        Dir["#{plugin_directory}/**/init.rb"].each {|a| require a} if File.directory?(plugin_directory)
-      end            
     end
     
   end

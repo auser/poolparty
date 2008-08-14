@@ -22,6 +22,11 @@ describe "Plugin" do
     before(:each) do
       @plugin = "apache".class_constant.new
     end
+    describe "storage" do
+      it "should store the plugin in a Hash on the pool" do
+        @p.plugins.class.should == Hash
+      end
+    end
     it "should store the regsitered plugins in an array" do
       @plugin.should_not be_nil
     end
@@ -43,7 +48,6 @@ describe "Plugin" do
       it "should be able to call the plugin method site" do
         @plugin.site("hi", {:document_root => "/root"})
         @plugin.document_root.should == "/root"
-        puts @plugin.output
       end
     end
   end

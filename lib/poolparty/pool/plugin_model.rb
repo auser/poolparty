@@ -5,8 +5,9 @@ module PoolParty
       plugins.has_key?(name) ? plugins[name] : (plugins[name] = PluginModel.new(name, &block))
     end
     alias_method :register_plugin, :plugin
+    
     def plugins
-      @@plugins ||= {}
+      @plugins ||= {}
     end
     
     class PluginModel
@@ -30,7 +31,7 @@ module PoolParty
             (@klass ||= klass.new).instance_eval &block
           end
         end
-        
+
       end
     end
     

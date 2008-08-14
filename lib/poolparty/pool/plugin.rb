@@ -17,7 +17,6 @@ module PoolParty
     
     class Plugin
       include CustomFunction
-      include Output
       
       def has_file(filelocation, opts={})
         output <<-EOF

@@ -1,5 +1,7 @@
 module PoolParty
   module CustomFunction    
+    
+    include Output
           
     def has_custom_function(name)
       !output.select {|i| i =~ /#{name}/}.empty?
