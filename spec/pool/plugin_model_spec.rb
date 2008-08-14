@@ -20,7 +20,7 @@ describe "Plugin" do
   end
   describe "registered" do
     before(:each) do
-      @plugin = "apache".class_constant
+      @plugin = "apache".class_constant.new
     end
     it "should store the regsitered plugins in an array" do
       @plugin.should_not be_nil

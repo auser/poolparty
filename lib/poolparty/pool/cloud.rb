@@ -9,9 +9,8 @@ module PoolParty
     end    
     
     class Cloud
-      attr_reader :name, :options
+      attr_reader :name, :options, :templates
       include MethodMissingSugar
-      # include PoolParty::Cloud
       
       def initialize(name, opts={}, &block)
         @name = name
@@ -31,7 +30,21 @@ module PoolParty
         }.merge(h).to_os
       end
       
-      alias_method :configure, :options      
+      alias_method :configure, :options
+      
+      def templates(*args)
+         returning (@templates ||= []) do |templates|
+           templates << args
+         end
+      end
+      
+      def output(*args)
+        returning (@output ||= []) do |output|
+          args.each do |line|
+            output << line
+          end
+        end        
+      end
       
     end
   end  

@@ -19,12 +19,12 @@ module PoolParty
         class_string_name.module_constant &block
         
         # Create the class to evaluate the plugin on the implemented call
-        klass = class_string_name.class_constant(PoolParty::Plugin::Plugin).extend(class_string_name.module_constant)
+        klass = class_string_name.class_constant(PoolParty::Plugin::Plugin).send :include, class_string_name.module_constant
         
         # Add the plugin definition to the cloud as an instance method
         Cloud.instance_eval do
-          define_method name do
-            klass.instance_eval &block
+          define_method name do            
+            (@klass ||= klass.new).instance_eval &block
           end
         end
         

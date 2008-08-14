@@ -1,10 +1,22 @@
-:custom:
-  :append_if_no_such_line: |
-       define append_if_no_such_line($file, $line, $refreshonly = 'false') {
-          exec { "/bin/echo '$line' >> '$file'":
-             unless      => "/bin/grep -Fxqe '$line' '$file'",
-             path        => "/bin",
-             refreshonly => $refreshonly,
-          }
-       }
-       
+:append_if_no_such_line: |
+     define append_if_no_such_line($file, $line, $refreshonly = 'false') {
+        exec { "/bin/echo '$line' >> '$file'":
+           unless      => "/bin/grep -Fxqe '$line' '$file'",
+           path        => "/bin",
+           refreshonly => $refreshonly,
+        }
+     }
+:virtual_host: |
+  define virtual_host($docroot, $ip, $order = 500, $ensure = "enabled") { 
+      $file = "/etc/sites-available/$name.conf" 
+      file { $file: 
+          content => template("virtual_host.erb"), 
+          notify => Service[apache] 
+      } 
+      file { "/etc/sites-enabled/$order-$name.conf": 
+          ensure => $ensure ? { 
+              enabled => $file, 
+              disabled => absent 
+          } 
+      } 
+  } 

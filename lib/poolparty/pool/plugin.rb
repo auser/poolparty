@@ -2,9 +2,9 @@ module PoolParty
   
   module Plugin
     class Plugin
-      class << self
-        
-        
+      include CustomFunction
+      include Output
+                
         def has_file(filelocation, opts={})
           output <<-EOF
             file { #{File.basename(filelocation, File.extname(filelocation))}:
@@ -17,7 +17,6 @@ module PoolParty
         end
 
         def has_line_in_file(line, file)
-          puts "here"
           append_if_no_such_line
           output <<-EOM
           append_if_no_such_line{ #{line[-1..10]}:
@@ -26,7 +25,25 @@ module PoolParty
           EOM
         end
         
-      end      
+        def package(package, opts={})
+          output <<-EOM
+            package {
+              #{package}: 
+                ensure => installed
+                #{opts.map {|k,v| "#{k} => #{v}"}}
+            }
+          EOM
+        end
+        
+        def gem(gem)
+          package(gem, {:provider => "gem", :require => "Package[rubygems]"})
+        end
+        
+        def template(file)
+          raise Exception.new("Template cannot be found. Check your path again (#{file})") unless File.file?(file)
+          file
+        end
+
     end
     
   end

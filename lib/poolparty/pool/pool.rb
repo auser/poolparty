@@ -32,12 +32,13 @@ module PoolParty
       def inflate
       end
       
-      def output(*args)
-        args.each do |line|
-          (@output ||= []) << line
+      def output
+        returning (@output ||= []) do |output|
+          clouds.each do |name, cloud|
+            output << cloud.output
+          end
         end
       end
-      
       
       # Plugins
       def loaded_plugins
