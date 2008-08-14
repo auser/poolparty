@@ -5,14 +5,10 @@ pool :poolpartyrb do
     apache do
       enable_php
       
-      virtual_host do
-        document_root "/www/domain1"
-        server_name "domain1.com"
-      end
-      virtual_host {
+      site({
         :document_root => "/www/domain2",
         :server_name => "domain2.com"
-      }
+      })
     end    
     
   end

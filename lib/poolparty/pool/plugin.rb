@@ -1,6 +1,17 @@
 module PoolParty
-  
+      
   module Plugin
+    module ClassMethods                  
+    end
+    
+    module InstanceMethods
+    end
+    
+    def self.included(receiver)
+      receiver.extend         ClassMethods
+      receiver.send :include, InstanceMethods
+    end
+    
     class Plugin
       include CustomFunction
       include Output
@@ -37,11 +48,21 @@ module PoolParty
         
         def gem(gem)
           package(gem, {:provider => "gem", :require => "Package[rubygems]"})
-        end
+        end        
         
         def template(file)
           raise Exception.new("Template cannot be found. Check your path again (#{file})") unless File.file?(file)
           file
+        end
+        
+        # Boring additions
+        def custom_function(name, str)
+          define_method name do
+            output str
+          end
+        end
+        def custom_functions_file(filename)
+          output open(filename).read
         end
 
     end

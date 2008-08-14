@@ -16,11 +16,13 @@ module PoolParty
         @name = name
         class_string_name = "#{name}"
         # Create the block inside the instantiated plugin
-        class_string_name.module_constant &block
+        class_string_name.module_constant(&block)
         
         # Create the class to evaluate the plugin on the implemented call
-        klass = class_string_name.class_constant(PoolParty::Plugin::Plugin).send :include, class_string_name.module_constant
-        
+        klass = class_string_name.class_constant(PoolParty::Plugin::Plugin)
+        klass.send :include, PoolParty::Plugin
+        klass.send :include, class_string_name.module_constant
+                
         # Add the plugin definition to the cloud as an instance method
         Cloud.instance_eval do
           define_method name do            

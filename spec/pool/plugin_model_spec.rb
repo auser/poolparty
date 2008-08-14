@@ -8,7 +8,7 @@ describe "Plugin" do
       cloud :app do
         apache do
           enable_php
-          virtual_host("heady", {
+          site("heady", {
             :document_root => "/root"
           })
         end
@@ -37,11 +37,11 @@ describe "Plugin" do
         @plugin.enable_php
         @plugin.php.should == true
       end
-      it "should call the virtual_host method when in the defininition of the cloud" do
-        @plugin.respond_to?(:virtual_host).should == true
+      it "should call the site method when in the defininition of the cloud" do
+        @plugin.respond_to?(:site).should == true
       end
-      it "should be able to call the plugin method virtual_host" do
-        @plugin.virtual_host("hi", {:document_root => "/root"})
+      it "should be able to call the plugin method site" do
+        @plugin.site("hi", {:document_root => "/root"})
         @plugin.document_root.should == "/root"
       end
     end

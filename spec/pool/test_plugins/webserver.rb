@@ -1,7 +1,7 @@
 class WebServers
   register_plugin :apache do
     
-    self.class.send :attr_accessor, :php, :document_root
+    attr_accessor :php, :document_root
     
     def enable_php
       @php = true
@@ -9,9 +9,12 @@ class WebServers
       has_line_in_file "AddModule mod_php4.c", "/etc/httpd/httpd.conf"
     end
     
-    def virtual_host(name=:domain1, opts={})
+    def site(name=:domain1, opts={})
       @document_root = opts[:document_root]
+      virtual_host name, opts
     end
     
+    
+        
   end
 end

@@ -9,7 +9,7 @@ describe "Plugin" do
         
         apache do
           enable_php
-          virtual_host("heady", {
+          site("heady", {
             :document_root => "/root"
           })
         end
