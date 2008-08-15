@@ -29,7 +29,7 @@ module PoolParty
       end
       
       def has_file(filelocation, opts={})
-        container.files.merge({ File.basename(filelocation).to_sym => opts })
+        container.files.merge!({ File.basename(filelocation).to_sym => opts })
       end
 
       def has_line_in_file(line, file)
@@ -37,11 +37,11 @@ module PoolParty
           :file => file,
           :line => line
         }
-        container.lines.merge({ line.gsub(/\s+/, '').to_sym => opts })
+        container.lines.merge!({ line.gsub(/\s+/, '').to_sym => opts })
       end
       
       def package(package, opts={})
-        container.packages.merge({ :package => opts })
+        container.packages.merge!({ :package => opts })
       end
       
       def gem(gem)

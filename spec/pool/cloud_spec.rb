@@ -1,5 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
+include PoolParty::Cloud
 describe "Cloud" do
   before(:each) do
     @obj = Object.new

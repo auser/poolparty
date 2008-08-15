@@ -27,6 +27,9 @@ describe "Plugin" do
     it "should not be empty" do
       @plugin.class.should == ApacheClas
     end
+    it "should have access to the pool's container" do
+      @plugin.container.should == @p.container
+    end
     describe "after eval'ing" do
       before(:each) do
         @plugin.instance_eval do
@@ -36,9 +39,9 @@ describe "Plugin" do
       it "should call enable_php on the class" do
         @plugin.php.should == true
       end
-      # it "the output should collect on the pool's container" do
-      #   @p.cloud(:app).parent.container.lines.should_not be_empty
-      # end
+      it "the output should collect on the pool's container" do
+        @p.cloud(:app).parent.container.lines.should_not be_empty
+      end
     end
     describe "before eval'ing" do
       it "should call has_line_in_file" do

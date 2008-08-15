@@ -17,9 +17,8 @@ module PoolParty
 end
 
 class Object
-  include PoolParty  
-  include PoolParty::Pool
-  include PoolParty::Cloud
+  include PoolParty
+  include PoolParty::Pool  
 end
 
 class Class

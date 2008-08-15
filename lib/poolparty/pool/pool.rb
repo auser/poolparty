@@ -11,7 +11,7 @@ module PoolParty
 
     class Pool
       attr_accessor :name, :container
-      include Cloud
+      include PoolParty::Cloud
       include MethodMissingSugar
       include PluginModel
       
