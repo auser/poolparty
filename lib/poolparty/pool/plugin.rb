@@ -28,11 +28,11 @@ module PoolParty
         @parent.parent.container
       end
       
-      def has_file(filelocation, opts={})
+      def file(filelocation, opts={})
         container.files.merge!({ File.basename(filelocation).to_sym => opts })
       end
 
-      def has_line_in_file(line, file)
+      def line_in_file(line, file)
         opts = {
           :file => file,
           :line => line
@@ -65,7 +65,15 @@ module PoolParty
       def set
         yield if block_given?
       end
-
+      alias_method :configure, :set
+      
+      def method_missing(m, *args, &block)
+        if m.to_s =~ /has/
+          self.send m.to_s.gsub(/has_/, '').to_sym, *args, &block
+        else
+          super
+        end
+      end
     end
     
   end

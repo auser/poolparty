@@ -30,10 +30,17 @@ describe "Plugin" do
     it "should have access to the pool's container" do
       @plugin.container.should == @p.container
     end
+    it "should not have any packages before eval'ing" do
+      @plugin.container.packages.should be_empty
+    end
     describe "after eval'ing" do
       before(:each) do
         @plugin.instance_eval do
           enable_php
+          
+          set do
+            gem "aska"
+          end
         end
       end
       it "should call enable_php on the class" do
@@ -41,6 +48,9 @@ describe "Plugin" do
       end
       it "the output should collect on the pool's container" do
         @p.cloud(:app).parent.container.lines.should_not be_empty
+      end
+      it "should yield the set block in the plugin" do
+        @plugin.container.packages.should_not be_empty
       end
     end
     describe "before eval'ing" do
