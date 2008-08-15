@@ -10,15 +10,18 @@ module PoolParty
     end
 
     class Pool
-      attr_accessor :name
+      attr_accessor :name, :container
       include Cloud
       include MethodMissingSugar
       include PluginModel
-
+      
       def initialize(name,&block)
         @name = name
-        self.instance_eval &block
+        @container = Container.new
+        self.instance_eval &block if block_given?
       end
+      
+      def name;@name;end
       
       def options(h={})
         @options ||= {
@@ -30,16 +33,7 @@ module PoolParty
       
       # This is where the entire process starts
       def inflate
-      end
-      
-      def output
-        returning (@output ||= []) do |output|
-          clouds.each do |name, cloud|
-            output << cloud.output
-          end
-        end
-      end
-      
+      end            
     end
     
   end

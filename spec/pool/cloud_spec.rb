@@ -3,6 +3,7 @@ require File.dirname(__FILE__) + '/../spec_helper'
 describe "Cloud" do
   before(:each) do
     @obj = Object.new
+    @pool = pool :app do; end
   end
   it "should respond to the pool method outside the block" do
     @obj.respond_to?(:cloud).should == true
@@ -17,17 +18,20 @@ describe "Cloud" do
   end
   describe "block" do
     before(:each) do
-      @cloud = Cloud.new(:test) do
+      @cloud = Cloud.new(:test, @pool) do
         # Inside cloud block
       end
     end
     
+    it "should be able to pull the pool from the cloud" do
+      @cloud.parent == @pool
+    end
     it "should respond to a configure method" do
       @cloud.respond_to?(:configure).should == true
     end
     describe "configuration" do
       before(:each) do
-        @cloud2 = Cloud.new(:test) do
+        @cloud2 = Cloud.new(:test, @pool) do
           minimum_instances 1
           maximum_instances 2
         end

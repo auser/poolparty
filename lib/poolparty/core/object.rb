@@ -21,6 +21,18 @@ class Object
     block.in_context(self).call
     self
   end
+  def block_instance_eval(*args, &block)
+    return instance_eval(*args,&block) unless block_given? && !block.arity.zero?
+    old_method = (self.class.instance_method(:__) rescue nil)
+    self.class.send(:define_method, :__, &block)
+    block_method = self.class.instance_method(:__)
+    if old_method
+      self.class.send(:define_method, :__, old_method)
+    else
+      self.class.send(:remove_method, :__)
+    end
+    block_method.bind(self).call(*args)
+  end
   def meta_def name, &blk
     (class << self; self; end).instance_eval { define_method name, &blk }
   end

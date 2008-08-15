@@ -19,6 +19,21 @@ class Module
         private target
     end
   end
+  def attr_accessor_with_default( *syms, &block )
+    raise 'Default value in block required' unless block
+    syms.each do | sym |
+      module_eval do
+        attr_writer( sym )
+        define_method( sym ) do | |
+          class << self; self; end.class_eval do
+            attr_reader( sym )
+          end
+          instance_variables.include?("@#{sym}") ? instance_variable_get( "@#{sym}" ) : instance_variable_set( "@#{sym}", block.call )
+        end
+      end
+    end
+    nil
+  end
   def set(*args)
   end
 end

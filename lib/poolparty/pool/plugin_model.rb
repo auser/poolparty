@@ -1,8 +1,8 @@
 module PoolParty    
   module PluginModel
     
-    def plugin(name=:plugin, &block)
-      plugins.has_key?(name) ? plugins[name] : (plugins[name] = PluginModel.new(name, &block))
+    def plugin(name=:plugin, cloud=nil, &block)
+      plugins.has_key?(name) ? plugins[name] : (plugins[name] = PluginModel.new(name, cloud, &block))
     end
     alias_method :register_plugin, :plugin
     
@@ -12,9 +12,11 @@ module PoolParty
     
     class PluginModel
       attr_accessor :name, :klass
+      attr_reader :parent
       
-      def initialize(name,&block)
+      def initialize(name,cld,&block)
         @name = name
+        @parent = cld
         class_string_name = "#{name}"
         
         # Create the class to evaluate the plugin on the implemented call
@@ -24,15 +26,15 @@ module PoolParty
         # Create the block inside the instantiated plugin
         class_string_name.module_constant(&block)
         klass.send :include, class_string_name.module_constant
-                
+        
         # Add the plugin definition to the cloud as an instance method
-        Cloud.instance_eval do
-          define_method name do
-            (@klass ||= klass.new).instance_eval &block            
+        Cloud::Cloud.module_eval <<-EOE
+          def #{name}(&block)
+            @klass ||= #{class_string_name.class_constant}.new(self).instance_eval(&block)
           end
-        end
-
+        EOE
       end
+      
     end
     
   end

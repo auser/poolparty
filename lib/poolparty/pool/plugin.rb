@@ -2,12 +2,12 @@ module PoolParty
       
   module Plugin
     module ClassMethods
-    end
-    
-    module InstanceMethods
       def attr_accessor(*args)        
         args.each {|arg| self.class.send :attr_accessor, arg }
       end
+    end
+    
+    module InstanceMethods      
     end
     
     def self.included(receiver)
@@ -17,35 +17,31 @@ module PoolParty
     
     class Plugin
       include CustomFunction
+      attr_accessor :parent
+      
+      def initialize(parent)
+        @parent = parent
+        yield if block_given?
+      end
+      
+      def container
+        @parent.parent.container
+      end
       
       def has_file(filelocation, opts={})
-        output <<-EOF
-          file { #{File.basename(filelocation, File.extname(filelocation))}:
-              file  => #{filelocation},
-              owner => #{opts[:owner] || "root"},
-              group => #{opts[:group] || "root"}, 
-              mode => #{opts[:mode] || "440"}
-          }
-        EOF
+        container.files.merge({ File.basename(filelocation).to_sym => opts })
       end
 
       def has_line_in_file(line, file)
-        append_if_no_such_line
-        output <<-EOM
-        append_if_no_such_line{ #{line[-1..10]}:
-                   file => "#{file}",
-                   line => "#{line}"}
-        EOM
+        opts = {
+          :file => file,
+          :line => line
+        }
+        container.lines.merge({ line.gsub(/\s+/, '').to_sym => opts })
       end
       
       def package(package, opts={})
-        output <<-EOM
-          package {
-            #{package}: 
-              ensure => installed
-              #{opts.map {|k,v| "#{k} => #{v}"}}
-          }
-        EOM
+        container.packages.merge({ :package => opts })
       end
       
       def gem(gem)
@@ -54,7 +50,7 @@ module PoolParty
       
       def template(file)
         raise Exception.new("Template cannot be found. Check your path again (#{file})") unless File.file?(file)
-        file
+        container.templates << file
       end
       
       # Core additions

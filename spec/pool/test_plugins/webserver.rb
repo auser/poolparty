@@ -1,10 +1,10 @@
 class WebServers
-  register_plugin :apache do
+  plugin :apache do
     
     attr_accessor :php, :document_root
     
     def enable_php
-      @php = true
+      @php = true      
       has_line_in_file "LoadModule php4_module        libexec/httpd/libphp4.so", "/etc/httpd/httpd.conf"
       has_line_in_file "AddModule mod_php4.c", "/etc/httpd/httpd.conf"
     end

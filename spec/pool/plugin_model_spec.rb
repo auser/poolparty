@@ -6,21 +6,22 @@ describe "Plugin" do
     
     @p = pool :poolpartyrb do
       cloud :app do
-        apache do
+        apache do                
           enable_php
           site("heady", {
             :document_root => "/root"
           })
         end
       end
-    end        
+    end
+    @c = @p.cloud(:app)
   end
   describe "methods should include" do
     it "register_plugin(plugin)" do;WebServers.respond_to?(:register_plugin).should == true;end
   end
   describe "registered" do
     before(:each) do
-      @plugin = "apache".class_constant.new
+      @plugin = "apache".class_constant.new(@c)
     end
     describe "storage" do
       it "should store the plugin in a Hash on the pool" do
@@ -30,8 +31,11 @@ describe "Plugin" do
     it "should store the regsitered plugins in an array" do
       @plugin.should_not be_nil
     end
+    it "should set the pool on the plugin" do
+      @plugin.parent.should == @c
+    end
     it "should have the plugin name as a method on the cloud " do
-      PoolParty::Cloud::Cloud.respond_to?(:apache).should == true
+      @c.respond_to?(:apache).should == true
     end
     describe "methods" do
       it "should call the enable_php method when in the defininition of the cloud" do

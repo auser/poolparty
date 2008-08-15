@@ -11,12 +11,7 @@ pool :poolpartyrb do
       enable_php
       site("poolpartyrb.com")
     end
-    
-    monit do
-      enable
-      watch :apache
-    end
-    
+        
   end
   
 end
