@@ -1,5 +1,7 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
 
+include PoolParty::Resources
+
 describe "File" do
   before(:each) do
     @file = PoolParty::Resources::File.new
@@ -13,13 +15,17 @@ describe "File" do
       @file << @instance1
     end
     it "should turn the one hash instance into a string" do
-      @file.to_s.should == "file {\n\tpuppetmaster.conf:\n\t\tname => /etc/apache2/puppetmaster.conf;\n}"
-      
+      @file.to_s.should =~ /name => \/etc\/apache2\/puppetmaster\.conf;/      
     end
     it "should turn the two hash instance into a string" do
       @instance2 = {:name => "/etc/init.d/puppetmaster"}
       @file << @instance2
-      @file.to_s.should == "file {\n\tpuppetmaster.conf:\n\t\tname => /etc/apache2/puppetmaster.conf;\n\tpuppetmaster:\n\t\tname => /etc/init.d/puppetmaster;\n}"
+      @file.to_s.should =~ /name => \/etc\/apache2\/puppetmaster\.conf;/
+    end
+    describe "as included" do            
+      before(:each) do
+        @file = nil
+      end
       
     end
   end

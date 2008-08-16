@@ -10,6 +10,11 @@ module PoolParty
   module Resources
     
     class Resource
+      include MethodMissingSugar
+      
+      def initialize(&block)
+        self.instance_eval &block if block_given?
+      end
       # Generic to_s
       # Most Resources won't need to extend this
       def to_s
@@ -27,9 +32,13 @@ module PoolParty
         @instances ||= []
       end
       def <<(*args)
-        args.each {|arg| instances << arg}
+        args.each {|arg| instances << options.merge(arg) }
       end
       alias_method :push, :<<
+      
+      def options
+        {}
+      end
     end
     
   end
