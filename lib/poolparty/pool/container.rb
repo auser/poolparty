@@ -12,7 +12,7 @@ module PoolParty
     attr_accessor_with_default :packages, :services, :files, :lines do
       Hash.new
     end
-    attr_accessor_with_default :classes, :templates do
+    attr_accessor_with_default :classes, :templates, :custom_functions do
       Array.new
     end
     

@@ -50,8 +50,8 @@ describe "Plugin" do
         @plugin.respond_to?(:site).should == true
       end
       it "should be able to call the plugin method site" do
+        @plugin.should_receive(:virtual_host).once
         @plugin.site("hi", {:document_root => "/root"})
-        @plugin.document_root.should == "/root"
       end
     end
   end

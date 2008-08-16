@@ -1,7 +1,7 @@
 class WebServers
   plugin :apache do
     
-    attr_accessor :php, :document_root
+    attr_accessor :php
     
     def enable_php
       @php = true
@@ -10,11 +10,14 @@ class WebServers
     end
     
     def site(name=:domain1, opts={})
-      @document_root = opts[:document_root]
       virtual_host name, opts
     end
     
-    set do      
+    def virtual_host(name, opts={})
+      
+    end
+    
+    set do
       custom_function :virtual_host, <<-EOM
 define virtual_host($docroot, $ip, $order = 500, $ensure = "enabled") { 
     $file = "/etc/sites-available/$name.conf" 

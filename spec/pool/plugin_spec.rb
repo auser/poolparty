@@ -39,7 +39,7 @@ describe "Plugin" do
           enable_php
           
           set do
-            gem "aska"
+            has_gem "aska"
           end
         end
       end
@@ -51,6 +51,9 @@ describe "Plugin" do
       end
       it "should yield the set block in the plugin" do
         @plugin.container.packages.should_not be_empty
+      end
+      it "should set the gem 'aska' as a package on the container" do
+        @plugin.container.packages[:aska].should_not be_nil
       end
     end
     describe "before eval'ing" do

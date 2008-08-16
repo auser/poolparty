@@ -41,7 +41,7 @@ module PoolParty
       end
       
       def package(package, opts={})
-        container.packages.merge!({ :package => opts })
+        container.packages.merge!({ package.to_sym => opts })
       end
       
       def gem(gem)
@@ -54,14 +54,6 @@ module PoolParty
       end
       
       # Core additions
-      def custom_function(name, str)
-        self.class.send :define_method, name do
-          output str
-        end
-      end
-      def custom_functions_file(filename)
-        output open(filename).read
-      end
       def set
         yield if block_given?
       end
