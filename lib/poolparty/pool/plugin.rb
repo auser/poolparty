@@ -29,19 +29,12 @@ module PoolParty
       end
       
       def file(filelocation, opts={})
-        container.files.merge!({ File.basename(filelocation).to_sym => opts })
       end
 
       def line_in_file(line, file)
-        opts = {
-          :file => file,
-          :line => line
-        }
-        container.lines.merge!({ line.gsub(/\s+/, '').to_sym => opts })
       end
       
       def package(package, opts={})
-        container.packages.merge!({ package.to_sym => opts })
       end
       
       def gem(gem)
@@ -49,16 +42,14 @@ module PoolParty
       end
       
       def call(*args)
-        args.each {|arg| container.custom_calls << arg }
       end
       
       def function(*args)
-        args.each {|arg| container.custom_functions << arg }
       end
       
       def template(file)
         raise Exception.new("Template cannot be found. Check your path again (#{file})") unless File.file?(file)
-        container.templates << file
+        file
       end
       
       # Core additions

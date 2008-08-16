@@ -12,13 +12,7 @@ describe "Pool" do
     end
     @obj.pools[:app].should == @p
   end
-  
-  it "should have a container when instantiaed" do
-    @p = pool :app do
-    end
-    @p.container.should_not be_nil
-  end
-  
+    
   describe "block" do
     before(:each) do
       @pool = Pool.new(:test) do
