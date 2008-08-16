@@ -14,11 +14,18 @@ class WebServers
     end
     
     def virtual_host(name, opts={})
+      opts = {
+        :document_root => opts[:document_root] || "/www/#{name}/"
+      }
+      call "virtual_host()"
+    end
+    
+    def include_modules(*args)
       
     end
     
     set do
-      custom_function :virtual_host, <<-EOM
+      function %q{
 define virtual_host($docroot, $ip, $order = 500, $ensure = "enabled") { 
     $file = "/etc/sites-available/$name.conf" 
     file { $file: 
@@ -32,7 +39,7 @@ define virtual_host($docroot, $ip, $order = 500, $ensure = "enabled") {
         } 
     } 
 }
-      EOM
+      }
     end
         
   end

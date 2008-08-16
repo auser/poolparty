@@ -46,7 +46,15 @@ module PoolParty
       
       def gem(gem)
         package(gem, {:provider => "gem", :require => "Package[rubygems]"})
-      end        
+      end
+      
+      def call(*args)
+        args.each {|arg| container.custom_calls << arg }
+      end
+      
+      def function(*args)
+        args.each {|arg| container.custom_functions << arg }
+      end
       
       def template(file)
         raise Exception.new("Template cannot be found. Check your path again (#{file})") unless File.file?(file)
