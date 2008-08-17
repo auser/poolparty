@@ -19,7 +19,7 @@ module PoolParty
       include CustomFunction
       attr_accessor :parent
       
-      def initialize(parent)
+      def initialize(parent=nil)
         @parent = parent
         yield if block_given?
       end

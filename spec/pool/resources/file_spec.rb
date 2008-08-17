@@ -24,9 +24,16 @@ describe "File" do
     end
     describe "as included" do            
       before(:each) do
-        @file = nil
+        @file = file do
+          name "/www/conf/httpd.conf"
+        end
       end
-      
+      it "should use default values" do
+        @file.name.should == "/www/conf/httpd.conf"
+      end
+      it "should keep the default values for the file" do
+        @file.mode.should == 644
+      end
     end
   end
 end

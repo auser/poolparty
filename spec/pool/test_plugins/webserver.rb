@@ -3,6 +3,12 @@ class WebServers
     
     attr_accessor :php
     
+    def initialize(p)
+      # Require apache package
+      package({:name => "apache"})
+      super
+    end
+    
     def enable_php
       @php = true
       has_line_in_file "LoadModule php4_module        libexec/httpd/libphp4.so", "/etc/httpd/httpd.conf"

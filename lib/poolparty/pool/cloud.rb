@@ -29,7 +29,7 @@ module PoolParty
           :keypair => (ENV["KEYPAIR_NAME"].nil? || ENV["KEYPAIR_NAME"].empty?) ? @parent : ENV["KEYPAIR_NAME"],
           :ami => 'ami-44bd592d',
           :polling_time => "30.seconds"
-        }.merge(h).to_os
+        }.merge(h)
       end
       
       alias_method :configure, :options

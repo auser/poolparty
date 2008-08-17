@@ -2,7 +2,7 @@ module PoolParty
   module Resources
     
     def file(&block)
-      @file ||= File.new(&block)
+      File.new(&block)
     end
     
     class File < Resource
@@ -10,8 +10,9 @@ module PoolParty
       def options(h={})
         @options ||= {
           :ensure => "present",
-          :mode => 0644,
-          :owner => "poolparty"
+          :mode => 644,
+          :owner => "poolparty",
+          :name => nil
         }.merge(h)
       end      
     end

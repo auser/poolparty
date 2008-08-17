@@ -26,7 +26,7 @@ module PoolParty
       def options(h={})
         @options ||= {
           :plugin_directory => "plugins"
-        }.merge(h).to_os
+        }.merge(h)
       end
       
       alias_method :configure, :options

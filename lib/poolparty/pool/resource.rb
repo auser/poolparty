@@ -12,8 +12,12 @@ module PoolParty
     class Resource
       include MethodMissingSugar
       
-      def initialize(&block)
+      def initialize(opts={}, &block)
+        set_vars_from_options(opts)
         self.instance_eval &block if block_given?
+      end
+      def set_vars_from_options(opts={})
+        opts.each {|k,v| self.send k.to_sym, v } unless opts.empty?
       end
       # Generic to_s
       # Most Resources won't need to extend this
@@ -22,7 +26,7 @@ module PoolParty
           output << "#{self.class.to_s.split("::")[-1].downcase} {"
             instances.each do |opts|
               output << "\t#{::File.basename(opts[:name])}:"
-              output << opts.flush_out_options({:prev => "\t\t", :post => ";"})
+              output << opts.flush_out({:prev => "\t\t", :post => ";"})
             end
           output << "}"
         end.join("\n")
