@@ -18,6 +18,27 @@ describe "Cloud" do
     @cld = cloud :pop do;end
     @obj.cloud(:pop).should == @cld
   end
+  describe "options" do
+    before(:each) do
+      @p = pool :app do
+        minimum_instances 100
+        cloud :apple do
+          # minimum_instances 100
+        end
+      end
+      @c = @p.cloud(:apple)
+    end
+    it "should be able to grab the cloud from the pool" do
+      @c.should == @p.cloud(:apple)
+    end
+    it "should take the options set on the pool" do
+      puts @p.options
+      @p.minimum_instances.should == 100
+    end
+    it "should take the options set from the pool" do
+      @c.minimum_instances.should == 100
+    end
+  end
   describe "block" do
     before(:each) do
       @cloud = Cloud.new(:test, @pool) do

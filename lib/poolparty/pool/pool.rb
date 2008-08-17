@@ -14,22 +14,17 @@ module PoolParty
       include PoolParty::Cloud
       include MethodMissingSugar
       include PluginModel
+      include Configurable
+      
+      default_options({
+        :plugin_directory => "plugins"
+      })
       
       def initialize(name,&block)
         @name = name
         @container = Container.new
         self.instance_eval &block if block_given?
       end
-      
-      def name;@name;end
-      
-      def options(h={})
-        @options ||= {
-          :plugin_directory => "plugins"
-        }.merge(h)
-      end
-      
-      alias_method :configure, :options
       
       # This is where the entire process starts
       def inflate

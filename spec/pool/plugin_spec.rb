@@ -6,13 +6,15 @@ describe "Plugin" do
   before(:each) do
     @p = pool :poolpartyrb do
       cloud :app do
-        apache do                
+        
+        apache do
           enable_php
           site("heady", {
             :document_root => "/root"
           })
         end
       end
+      
     end
     @c = @p.cloud(:app)
   end
