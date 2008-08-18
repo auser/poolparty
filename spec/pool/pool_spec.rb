@@ -34,12 +34,15 @@ describe "Pool" do
       before(:each) do
         @pool = Pool.new :test do
           plugin_directory "nails"
+          rocky_shores "ranger"
         end
       end
       it "should set the plugin_directory to nails" do
         @pool.plugin_directory.should == "nails"
       end
-      
+      it "should set the rocky_shores to ranger" do
+        @pool.rocky_shores.should == "ranger"
+      end
     end
     
   end

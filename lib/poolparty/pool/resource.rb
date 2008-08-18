@@ -9,12 +9,17 @@
 module PoolParty    
   module Resources
     
+    def resources
+      @resources ||= []
+    end
+    
     class Resource
       include MethodMissingSugar
+      include Configurable
       
       def initialize(opts={}, &block)
         set_vars_from_options(opts)
-        self.instance_eval &block if block_given?
+        self.instance_eval &block if block
       end
       def set_vars_from_options(opts={})
         opts.each {|k,v| self.send k.to_sym, v } unless opts.empty?
@@ -39,10 +44,6 @@ module PoolParty
         args.each {|arg| instances << options.merge(arg) }
       end
       alias_method :push, :<<
-      
-      def options
-        {}
-      end
     end
     
   end

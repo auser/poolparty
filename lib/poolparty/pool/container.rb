@@ -1,5 +1,6 @@
 module PoolParty
-  class Container
     
+  class Container    
   end
+  
 end

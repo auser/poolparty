@@ -22,8 +22,8 @@ module PoolParty
       
       def initialize(name,&block)
         @name = name
-        @container = Container.new
-        self.instance_eval &block if block
+        @container = Container::Container.new
+        instance_eval &block if block
       end
       
       # This is where the entire process starts

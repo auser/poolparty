@@ -1,20 +1,21 @@
 module PoolParty    
   module Resources
     
-    def file(&block)
-      File.new(&block)
+    def file(opts={}, &block)
+      returning PoolParty::Resources::File.new(opts, &block) do |r|
+        resources << r
+      end
     end
     
     class File < Resource
       
-      def options(h={})
-        @options ||= {
-          :ensure => "present",
-          :mode => 644,
-          :owner => "poolparty",
-          :name => nil
-        }.merge(h)
-      end      
+      default_options({
+        :ensure => "present",
+        :mode => 644,
+        :owner => "poolparty",
+        :name => nil
+      })
+      
     end
     
   end

@@ -24,7 +24,7 @@ describe "File" do
     end
     describe "as included" do            
       before(:each) do
-        @file = file do
+        @file = file({:rent => "low"}) do
           name "/www/conf/httpd.conf"
         end
       end
@@ -33,6 +33,9 @@ describe "File" do
       end
       it "should keep the default values for the file" do
         @file.mode.should == 644
+      end
+      it "should also set options through a hash" do
+        @file.rent.should == "low"
       end
     end
   end

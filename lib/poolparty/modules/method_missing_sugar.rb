@@ -1,6 +1,6 @@
 module PoolParty
   module MethodMissingSugar
-    def method_missing(m, *args, &block)
+    def method_missing(m, *args, &block)      
       if block_given?
         (args[0].class == self.class) ? args[0].instance_eval(&block) : super
       else
