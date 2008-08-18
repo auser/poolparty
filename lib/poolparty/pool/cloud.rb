@@ -28,7 +28,7 @@ module PoolParty
       def initialize(name, parent, &block)
         @name = name
         set_parent(parent)
-        instance_eval &block if block_given?
+        self.instance_eval &block if block_given?
       end
       
       def set_parent(parent)

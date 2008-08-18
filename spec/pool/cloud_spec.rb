@@ -5,7 +5,7 @@ include PoolParty::Cloud
 describe "Cloud" do
   before(:each) do
     @obj = Object.new
-    @pool = pool :app do; end
+    @pool = pool :just_pool do; end
   end
   it "should respond to the pool method outside the block" do
     @obj.respond_to?(:cloud).should == true
@@ -20,7 +20,7 @@ describe "Cloud" do
   end
   describe "options" do
     before(:each) do
-      @p = pool :app do
+      @p = pool :options do
         minimum_instances 100
         cloud :apple do
           # minimum_instances 100
@@ -32,7 +32,6 @@ describe "Cloud" do
       @c.should == @p.cloud(:apple)
     end
     it "should take the options set on the pool" do
-      puts @p.options
       @p.minimum_instances.should == 100
     end
     it "should take the options set from the pool" do
