@@ -27,13 +27,13 @@ module PoolParty
       
       def initialize(name, parent, &block)
         @name = name
-        set_parent(parent)
+        set_parent(parent) if parent
         self.instance_eval &block if block_given?
       end
       
       def set_parent(parent)
         @parent = parent
-        configure(parent.options)
+        configure(parent.options) if parent.respond_to?(:options)
       end
                   
     end

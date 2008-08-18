@@ -10,9 +10,16 @@ describe "Cloud" do
   it "should respond to the pool method outside the block" do
     @obj.respond_to?(:cloud).should == true
   end
-  it "should store the cloud in the global list of clouds" do
-    cloud :pop do;end
-    @obj.clouds.has_key?(:pop).should == true
+  describe "global" do
+    before(:each) do
+      @cloud1 = cloud :pop do;end
+    end
+    it "should store the cloud in the global list of clouds" do    
+      @obj.clouds.has_key?(:pop).should == true
+    end
+    it "should store the cloud" do
+      @obj.cloud(:pop).should == @cloud1
+    end
   end
   it "should return the cloud if the cloud key is already in the clouds list" do
     @cld = cloud :pop do;end
@@ -22,8 +29,7 @@ describe "Cloud" do
     before(:each) do
       @p = pool :options do
         minimum_instances 100
-        cloud :apple do
-          # minimum_instances 100
+        cloud :apple do          
         end
       end
       @c = @p.cloud(:apple)
