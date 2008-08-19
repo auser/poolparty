@@ -24,7 +24,7 @@ describe "Service" do
     end
     describe "as included" do            
       before(:each) do
-        @service = service({:rent => "low"}) do
+        @service = service({:rent => "low", :ensure => "running"}) do
           name "mdmdp"
           besure "running"
         end
@@ -37,6 +37,9 @@ describe "Service" do
       end
       it "should also set options through a hash" do
         @service.rent.should == "low"
+      end
+      it "should also set options through a hash" do
+        @service.ensure.should == "running"
       end
     end
   end

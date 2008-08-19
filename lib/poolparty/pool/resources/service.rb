@@ -10,12 +10,12 @@ module PoolParty
     class Service < Resource
       
       default_options({
-        :besure => "running",
+        :ensure => "running",
         :enable => "true",
         :name => nil,
         :require => nil
-      })      
-      
+      })
+           
     end
     
   end
