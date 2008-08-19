@@ -15,12 +15,12 @@ describe "Package" do
       @package << @instance1
     end
     it "should turn the one hash instance into a string" do
-      @package.to_s.should =~ /name => \/etc\/apache2\/puppetmaster\.conf;/      
+      @package.to_s.should =~ /\/etc\/apache2\/puppetmaster\.conf:/      
     end
     it "should turn the two hash instance into a string" do
       @instance2 = {:name => "/etc/init.d/puppetmaster"}
       @package << @instance2
-      @package.to_s.should =~ /name => \/etc\/apache2\/puppetmaster\.conf;/
+      @package.to_s.should =~ /etc\/init\.d\/puppetmaster:/
     end
     describe "as included" do            
       before(:each) do

@@ -30,7 +30,7 @@ module PoolParty
         returning Array.new do |output|
           output << "#{self.class.to_s.split("::")[-1].downcase} {"
             instances.each do |opts|
-              output << "\t#{::File.basename(opts[:name])}:"
+              output << "\t#{opts.delete(:name)}:"
               output << opts.flush_out({:prev => "\t\t", :post => ";"})
             end
           output << "}"

@@ -4,38 +4,38 @@ include PoolParty::Resources
 
 describe "File" do
   before(:each) do
-    @file = PoolParty::Resources::File.new
+    @cron = PoolParty::Resources::Cron.new
   end
   it "should have instances of files" do
-    @file.respond_to?(:instances).should == true
+    @cron.respond_to?(:instances).should == true
   end
   describe "instances" do
     before(:each) do
-      @instance1 = {:name => "/etc/apache2/puppetmaster.conf"}
-      @file << @instance1
+      @instance1 = {:command => "/bin/logrotate"}
+      @cron << @instance1
     end
     it "should turn the one hash instance into a string" do
-      @file.to_s.should =~ /\/etc\/apache2\/puppetmaster\.conf:/
+      @cron.to_s.should =~ /command => '\/bin\/logrotate';/
     end
     it "should turn the two hash instance into a string" do
-      @instance2 = {:name => "/etc/init.d/puppetmaster"}
-      @file << @instance2
-      @file.to_s.should =~ /\/etc\/apache2\/puppetmaster\.conf:/
+      @instance2 = {:name => "/bin/mail -s \"letters\""}
+      @cron << @instance2
+      @cron.to_s.should =~ /\/bin\/mail -s \"letters\":/
     end
     describe "as included" do            
       before(:each) do
-        @file = file({:rent => "low"}) do
+        @cron = file({:rent => "low"}) do
           name "/www/conf/httpd.conf"
         end
       end
       it "should use default values" do
-        @file.name.should == "/www/conf/httpd.conf"
+        @cron.name.should == "/www/conf/httpd.conf"
       end
       it "should keep the default values for the file" do
-        @file.mode.should == 644
+        @cron.mode.should == 644
       end
       it "should also set options through a hash" do
-        @file.rent.should == "low"
+        @cron.rent.should == "low"
       end
     end
   end

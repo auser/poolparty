@@ -15,18 +15,17 @@ describe "Service" do
       @service << @instance1
     end
     it "should turn the one hash instance into a string" do
-      @service.to_s.should =~ /name => \/etc\/apache2\/puppetmaster\.conf;/      
+      @service.to_s.should =~ /\/etc\/apache2\/puppetmaster\.conf:/
     end
     it "should turn the two hash instance into a string" do
       @instance2 = {:name => "/etc/init.d/puppetmaster"}
       @service << @instance2
-      @service.to_s.should =~ /name => \/etc\/apache2\/puppetmaster\.conf;/
+      @service.to_s.should =~ /\/etc\/apache2\/puppetmaster\.conf:/
     end
     describe "as included" do            
       before(:each) do
-        @service = service({:rent => "low", :ensure => "running"}) do
+        @service = service({:rent => "low", :ensure => "stopped"}) do
           name "mdmdp"
-          besure "running"
         end
       end
       it "should use default values" do
@@ -39,7 +38,7 @@ describe "Service" do
         @service.rent.should == "low"
       end
       it "should also set options through a hash" do
-        @service.ensure.should == "running"
+        @service.ensure.should == "stopped"
       end
     end
   end

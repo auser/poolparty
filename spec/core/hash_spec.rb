@@ -25,6 +25,6 @@ describe "Hash" do
     @a.to_os.to_hash.should == @a
   end
   it "should be able to flush out into a string into an array" do
-    @a.flush_out.should == ["a => 10","b => 20","c => 30"]
+    @a.flush_out.should == ["a => '10'","b => '20'","c => '30'"]
   end
 end
