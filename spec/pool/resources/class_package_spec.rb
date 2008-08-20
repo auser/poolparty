@@ -10,7 +10,7 @@ describe "File" do
     @class.respond_to?(:resources).should == true
   end
   it "should store the resources in an array" do
-    @class.resources.class.should == Array
+    @class.resources.class.should == Hash
   end
   it "should be able to store resources with <<" do
     @class.respond_to?(:<<).should == true
@@ -24,7 +24,7 @@ describe "File" do
       @class.resources.size.should == 1
     end
     it "should be the file" do
-      @class.resources.first.should == @file
+      @class.resource(:file).should == @file
     end
     describe "to_s" do
       it "should call to_s on the file" do
@@ -53,9 +53,9 @@ describe "setting with a block" do
     @class1.resources.size.should_not be_zero
   end
   it "should have the file resource in the resources array" do
-    @class1.resources.first.class.should == PoolParty::Resources::File
+    @class1.resource(:file).class.should == PoolParty::Resources::File
   end
   it "should store the file in the resources array" do
-    @class1.resources.first.name.should == "frank"
+    @class1.resource(:file).name.should == "frank"
   end
 end

@@ -2,9 +2,7 @@ module PoolParty
   module Resources
     
     def service(opts={}, &block)
-      returning PoolParty::Resources::Service.new(opts, &block) do |r|
-        resources << r
-      end
+      resources[:service] ||= PoolParty::Resources::Service.new(opts, &block)
     end
     
     class Service < Resource

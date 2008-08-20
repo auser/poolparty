@@ -84,4 +84,9 @@ listen web_proxy 127.0.0.1:3000
       end
     end
   end
+  describe "top level class" do
+    it "should be able to get the top level class" do
+      "PoolParty::Resources::File".top_level_class.should == "file"
+    end
+  end
 end

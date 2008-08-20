@@ -2,9 +2,7 @@ module PoolParty
   module Resources
     
     def exec(opts={}, &block)
-      returning PoolParty::Resources::Exec.new(opts, &block) do |r|
-        resources << r
-      end
+      resources[:exec] ||= PoolParty::Resources::Exec.new(opts, &block)
     end
     
     class Exec < Resource

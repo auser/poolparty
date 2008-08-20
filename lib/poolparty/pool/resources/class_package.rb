@@ -25,7 +25,10 @@ module PoolParty
       end
       
       def <<(*args)
-        args.each {|resource| resources << resource }
+        args.each {|arg| 
+          type = arg.class.to_s.top_level_class.to_sym
+          resources[type] ||= arg
+        }
       end
       alias_method :push, :<<
       

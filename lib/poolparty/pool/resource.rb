@@ -10,7 +10,11 @@ module PoolParty
   module Resources
     
     def resources
-      @resources ||= []
+      @resources ||= {}
+    end
+    
+    def resource(type=:file, opts={}, &block)
+      resources[type] ||= (block ? block.call : nil)
     end
     
     class Resource
@@ -28,7 +32,7 @@ module PoolParty
       # Most Resources won't need to extend this
       def to_s
         returning Array.new do |output|
-          output << "#{self.class.to_s.split("::")[-1].downcase} {"
+          output << "#{self.class.to_s.top_level_class} {"
             instances.each do |opts|
               output << "\t#{opts.delete(:name)}:"
               output << opts.flush_out({:prev => "\t\t", :post => ";"})

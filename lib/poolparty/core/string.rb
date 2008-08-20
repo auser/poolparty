@@ -21,6 +21,9 @@ class String
     # map {|l| l << "#{" >/dev/null 2>/dev/null" if quite}" }.
     self.strip.split(/\n/).join(" && ")
   end
+  def top_level_class
+    self.split("::")[-1].downcase rescue self
+  end
   def nice_runnable(quite=true)
     self.split(/ && /).join("\n")
   end

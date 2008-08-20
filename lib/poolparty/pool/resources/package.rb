@@ -2,9 +2,7 @@ module PoolParty
   module Resources
     
     def package(opts={}, &block)
-      returning PoolParty::Resources::Package.new(opts, &block) do |r|
-        resources << r
-      end
+      resources[:package] ||= PoolParty::Resources::Package.new(opts, &block)
     end
     
     class Package < Resource
