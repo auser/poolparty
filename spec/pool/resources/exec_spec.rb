@@ -4,29 +4,25 @@ include PoolParty::Resources
 
 describe "Exec" do
   before(:each) do
-    @instance1 = {:name => "/usr/bin/ifconfig"}
-    @exec = PoolParty::Resources::Exec.new(@instance1)
+    exec({:name => "/usr/bin/ifconfig"})
   end
   it "should have instances of execs" do
-    @exec.respond_to?(:instances).should == true
+    exec.respond_to?(:instances).should == true
   end
   describe "instances" do
-    before(:each) do      
-      @exec << @instance1
-    end
     it "should turn the one hash instance into a string" do
-      @exec.to_s.should =~ /exec \{\n\t\/usr\/bin\/ifconfig/
+      exec.to_string.should =~ /exec \{\n\t\/usr\/bin\/ifconfig/
     end
     it "should turn the two hash instance into a string" do
-      @instance2 = {:name => "/usr/bin/ping 127.0.0.1"}
-      @exec << @instance2
-      @exec.to_s.should =~ /\n\t\/usr\/bin\/ping 127\.0\.0\.1:/
+      exec({:name => "/usr/bin/ping 127.0.0.1"})
+      exec.to_string.should =~ /\n\t\/usr\/bin\/ping 127\.0\.0\.1:/
     end
     describe "as included" do            
       before(:each) do
-        @exec = exec({:rent => "low"}) do
+        exec({:rent => "low"}) do
           name "/www/conf/httpd.conf"
         end
+        @exec = exec.instance_named("/www/conf/httpd.conf")
       end
       it "should use default values" do
         @exec.name.should == "/www/conf/httpd.conf"

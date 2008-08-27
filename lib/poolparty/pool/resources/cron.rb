@@ -2,14 +2,13 @@ module PoolParty
   module Resources
     
     def cron(opts={}, &block)
-      returning PoolParty::Resources::Exec.new(opts, &block) do |r|
-        resources << r
-      end
+      resource(:cron) << PoolParty::Resources::Cron.new(opts, &block)
     end
     
     class Cron < Resource
       
       default_options({
+        :name => "cron",
         :command => nil,
         :user => "poolparty",
         :hour => "*",
@@ -19,6 +18,10 @@ module PoolParty
         :weekday => "*"
       })
       
+      
+      def name(*args)
+        command(*args)
+      end
     end
     
   end

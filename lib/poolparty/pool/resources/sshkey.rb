@@ -1,12 +1,17 @@
 module PoolParty    
   module Resources
         
-    class SshKey < Resource
+    def sshkey(opts={}, &block)
+      resource(:sshkey) << PoolParty::Resources::Sshkey.new(opts, &block)
+    end
+    
+    class Sshkey < Resource
       
       default_options({
         :command => nil,
         :key => "ALONGSTRINGOFDIGITS",
-        :target => "~/.ssh/poolparty_id_rsa"
+        :target => "~/.ssh/poolparty_id_rsa",
+        :name => "key"
       })
       
       def keyfile=(file)

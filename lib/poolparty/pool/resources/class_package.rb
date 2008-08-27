@@ -2,24 +2,23 @@ module PoolParty
   module Resources
     
     def class_package(opts={}, &block)
-      PoolParty::Resources::ClassPackage.new(opts, &block)
+      PoolParty::Resources::Classpackage.new(opts, &block)
     end
     
-    class ClassPackage < Resource      
+    class Classpackage < Resource      
       include Resources
       
       default_options({
         :name => "custom"
       })
       
-      def initialize(opts={}, &block)
-        super(opts, &block)
+      def resources
+        @class_resources ||= {}
       end
-      
-      def to_s
+      def to_string
         returning Array.new do |output|
           output << "class #{name} {"
-          resources.map {|resource| output << resource.to_s }
+          resources.map {|k,resource| output << resource.to_string("\t") }
           output << "}"
         end.join("\n")
       end
@@ -27,7 +26,7 @@ module PoolParty
       def <<(*args)
         args.each {|arg| 
           type = arg.class.to_s.top_level_class.to_sym
-          resources[type] ||= arg
+          resource(type) << arg unless arg.class.to_s == "PoolParty::Resources::Classpackage"
         }
       end
       alias_method :push, :<<

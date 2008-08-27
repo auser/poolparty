@@ -27,4 +27,7 @@ describe "Hash" do
   it "should be able to flush out into a string into an array" do
     @a.flush_out.should == ["a => '10'","b => '20'","c => '30'"]
   end
+  it "should be able to flush out with prev and posts" do
+    @a.flush_out("hi", "ho").should == ["hia => '10'ho","hib => '20'ho","hic => '30'ho"]
+  end
 end

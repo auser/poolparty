@@ -11,28 +11,27 @@ describe "File" do
   end
   describe "instances" do
     before(:each) do
-      @instance1 = {:command => "/bin/logrotate"}
-      @cron << @instance1
+      cron({:command => "/bin/logrotate"})
     end
     it "should turn the one hash instance into a string" do
-      @cron.to_s.should =~ /command => '\/bin\/logrotate';/
+      cron.to_string.should =~ /command => '\/bin\/logrotate';/
     end
     it "should turn the two hash instance into a string" do
-      @instance2 = {:name => "/bin/mail -s \"letters\""}
-      @cron << @instance2
-      @cron.to_s.should =~ /\/bin\/mail -s \"letters\":/
+      cron({:name => "/bin/mail -s \"letters\""})
+      cron.to_string.should =~ /\/bin\/mail -s \"letters\":/
     end
     describe "as included" do            
       before(:each) do
-        @cron = file({:rent => "low"}) do
+        cron({:rent => "low"}) do
           name "/www/conf/httpd.conf"
         end
+        @cron = cron.instance_named("/www/conf/httpd.conf")
       end
       it "should use default values" do
         @cron.name.should == "/www/conf/httpd.conf"
       end
       it "should keep the default values for the file" do
-        @cron.mode.should == 644
+        @cron.user.should == "poolparty"
       end
       it "should also set options through a hash" do
         @cron.rent.should == "low"

@@ -4,7 +4,7 @@ include PoolParty::Resources
 
 describe "File" do
   before(:each) do
-    @class = PoolParty::Resources::ClassPackage.new
+    @class = PoolParty::Resources::Classpackage.new({:name => "rockstar"})
   end
   it "should have a method resources" do
     @class.respond_to?(:resources).should == true
@@ -17,24 +17,26 @@ describe "File" do
   end
   describe "with resources" do
     before(:each) do
-      @file = file do; end
+      @file = file({:name => "red"}) do; end
       @class << @file
     end
     it "should store a resource in the resources array" do
       @class.resources.size.should == 1
     end
     it "should be the file" do
-      @class.resource(:file).should == @file
+      @class.resource(:file).options.should == @file.options
     end
     describe "to_s" do
-      it "should call to_s on the file" do
-        @file.should_receive(:to_s).and_return "file {}"
+      before(:each) do
+        @class.instance_eval do
+          file({:name => "red"}) do; end
+        end
       end
       it "should output the class with the name as class [name]" do
-        @class.to_s.should =~ /class custom/
+        @class.to_string.should =~ /class rockstar/
       end
       after do
-        @class.to_s
+        @class.to_string
       end
     end
   end
@@ -43,7 +45,7 @@ describe "setting with a block" do
   before(:each) do
     @class1 = class_package do
       name "my_class"
-      file({:name => "frank"}) do; end
+      file({:name => "frank"})
     end
   end
   it "should set the name when set" do
@@ -56,6 +58,6 @@ describe "setting with a block" do
     @class1.resource(:file).class.should == PoolParty::Resources::File
   end
   it "should store the file in the resources array" do
-    @class1.resource(:file).name.should == "frank"
+    @class1.resource(:file).instance_named("frank").name.should == "frank"
   end
 end

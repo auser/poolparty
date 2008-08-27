@@ -11,22 +11,24 @@ describe "File" do
   end
   describe "instances" do
     before(:each) do
-      @instance1 = {:name => "/etc/apache2/puppetmaster.conf"}
-      @file << @instance1
+      file({:name => "/etc/apache2/puppetmaster.conf"})
     end
     it "should turn the one hash instance into a string" do
-      @file.to_s.should =~ /\/etc\/apache2\/puppetmaster\.conf:/
+      file.to_string.should =~ /\/etc\/apache2\/puppetmaster\.conf:/
     end
     it "should turn the two hash instance into a string" do
-      @instance2 = {:name => "/etc/init.d/puppetmaster"}
-      @file << @instance2
-      @file.to_s.should =~ /\/etc\/apache2\/puppetmaster\.conf:/
+      file do
+        name "/etc/init.d/puppetmaster"
+        owner "redsmith"
+      end
+      file.to_string.should =~ /\/etc\/apache2\/puppetmaster\.conf:/
     end
     describe "as included" do            
-      before(:each) do
-        @file = file({:rent => "low"}) do
+      before(:each) do        
+        file({:rent => "low"}) do
           name "/www/conf/httpd.conf"
         end
+        @file = file.instances.select {|a| a.name == "/www/conf/httpd.conf" }.first
       end
       it "should use default values" do
         @file.name.should == "/www/conf/httpd.conf"

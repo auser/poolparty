@@ -11,22 +11,21 @@ describe "Package" do
   end
   describe "instances" do
     before(:each) do
-      @instance1 = {:name => "/etc/apache2/puppetmaster.conf"}
-      @package << @instance1
+      package({:name => "/etc/apache2/puppetmaster.conf"})
     end
     it "should turn the one hash instance into a string" do
-      @package.to_s.should =~ /\/etc\/apache2\/puppetmaster\.conf:/      
+      package.to_string.should =~ /\/etc\/apache2\/puppetmaster\.conf:/      
     end
     it "should turn the two hash instance into a string" do
-      @instance2 = {:name => "/etc/init.d/puppetmaster"}
-      @package << @instance2
-      @package.to_s.should =~ /etc\/init\.d\/puppetmaster:/
+      package({:name => "/etc/init.d/puppetmaster"})
+      package.to_string.should =~ /etc\/init\.d\/puppetmaster:/
     end
     describe "as included" do            
       before(:each) do
-        @package = package({:rent => "low"}) do
+        package({:rent => "low"}) do
           name "/www/conf/httpd.conf"
         end
+        @package = package.instance_named("/www/conf/httpd.conf")
       end
       it "should use default values" do
         @package.name.should == "/www/conf/httpd.conf"

@@ -2,7 +2,7 @@ module PoolParty
   module Resources
     
     def file(opts={}, &block)
-      resources[:file] ||= PoolParty::Resources::File.new(opts, &block)
+      resource(:file) << PoolParty::Resources::File.new(opts, &block)
     end
     
     class File < Resource
