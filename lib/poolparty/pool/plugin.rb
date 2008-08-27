@@ -57,6 +57,7 @@ module PoolParty
         yield if block_given?
       end
       alias_method :configure, :set
+      alias_method :custom, :set
       
       def method_missing(m, *args, &block)
         if m.to_s =~ /has/

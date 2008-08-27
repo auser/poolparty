@@ -36,4 +36,5 @@ class Module
   end
   def set(*args)
   end
+  alias_method :custom, :set
 end
