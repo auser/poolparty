@@ -5,7 +5,7 @@ require 'active_support'
 Dependencies.load_paths << File.dirname(__FILE__)
 
 ## Load PoolParty
-%w(core modules).each do |dir|
+%w(core modules exceptions).each do |dir|
   Dir[File.dirname(__FILE__) + "/poolparty/#{dir}/**"].each do |file|
     require file
   end

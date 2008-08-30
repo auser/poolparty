@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 require File.dirname(__FILE__) + '/test_plugins/webserver'
 
-class Resource < PoolParty::Resources::Resource
+class MyResource < PoolParty::Resources::Resource
   # Just to give some options for the test class
   def options(h={})
     @options ||= {:a => 1,:b => 2,:c => 3}
@@ -9,7 +9,7 @@ class Resource < PoolParty::Resources::Resource
 end
 describe "Resource" do
   before(:each) do
-    @resource = Resource.new({:a => 10}) do
+    @resource = MyResource.new({:a => 10}) do
       b "90"
     end
   end

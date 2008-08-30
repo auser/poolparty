@@ -14,7 +14,7 @@ module PoolParty
     end
     
     def resource(type=:file)
-      resources[type] ||= ("PoolParty::Resources::#{type.to_s.capitalize}".classify.constantize.new)
+      resources[type] ||= ("PoolParty::Resources::#{type.to_s.camelize}".classify.constantize.new)
     end
     
     #:nodoc:
@@ -72,7 +72,7 @@ module PoolParty
         !instance_named(name).nil?
       end
       def has_name?(instance)
-        (instance.name && !instance.name.empty?)
+        (instance.name && !instance.name.to_s.empty?)
       end
       def can_add_instance?(instance)
         has_name?(instance) && !contains_instance_named?(instance.name)
