@@ -11,6 +11,10 @@ module PoolParty
       resources[:custom_resource] ||= PoolParty::Resources::CustomResource.new(name, &block)
     end
     
+    def store(str)
+      custom_resource(self).function_calls << str
+    end
+    
     class CustomResource < Resource
       attr_reader :name, :function_string, :function_calls
       
@@ -32,17 +36,18 @@ module PoolParty
       
       def custom_usage(&block)
         PoolParty::Resources.module_eval &block
-        @function_calls = ""
+        @function_calls = []
       end
       
-      def to_string
+      def to_string(prev="")
         returning Array.new do |output|
           output << "#{prev} # Custom Functions\n"
           instances.each do |resource|
-            output << "#{prev}\t#{resource.function_calls}"
+            resource.function_calls.each do |call|
+              output << "#{prev}#{call}"
+            end            
           end
-        end.join("\n")
-        
+        end.join("\n")        
       end
       
       def function_strings(prev="")
@@ -53,6 +58,13 @@ module PoolParty
           end
         end.join("\n")
       end
+      
+      def <<(*args)
+        args.each {|arg| arg.is_a?(String) ? (function_calls << arg) : (instances << arg) }
+        self
+      end
+      alias_method :push, :<<
+      
     end        
     
   end    

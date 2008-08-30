@@ -49,7 +49,7 @@ describe "Custom Resource" do
         define_resource(:rockstar) do
           custom_usage do
             def has_line_in_file(line="line_in_file", file="file")
-              "line(#{file}, #{line})"
+              store "line(#{file}, #{line})"
             end
           end
           custom_function <<-EOF
@@ -77,14 +77,12 @@ describe "Custom Resource" do
         custom_resource(:rockstar).function_strings.should =~ /define line/
       end
       it "should allow for the has_line_in_file to be called from within a plugin" do
-        has_line_in_file("hi", "filename").should =~ /line\(filename, hi/
+        has_line_in_file("hi", "filename").should == ["line(filename, hi)"]
       end
       it "should have several lines in the files when called several times" do
-        raise
         has_line_in_file("hi", "filename")
         has_line_in_file("hi", "filename2")
-        has_line_in_file("hi", "filename3")
-        puts custom_resource(:rockstar).to_string
+        custom_resource(:rockstar).to_string("\t").should =~ /line\(filename, hi\)\n\tline\(filename2, hi\)/
       end
     end
   end
