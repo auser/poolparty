@@ -10,9 +10,9 @@ command_line = "#{program_name} #{ARGV.join(" ")}"
 
 # Run it from the command-line first
 if !`which #{program_name}`.empty?
-  `#{command_line}`
+  exec "#{command_line}"
 elsif(File.file?(File.join(File.dirname(__FILE__), program_name)))
-  `#{File.join(File.dirname(__FILE__), program_name)} #{ARGV.join(" ")}`
+  exec "#{File.join(File.dirname(__FILE__), program_name)} #{ARGV.join(" ")}"
 else
   puts "Unknown poolparty binary: #{program_name}"
 end

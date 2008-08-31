@@ -64,6 +64,6 @@ EOS
     # Installation skeleton.  Intermediate directories are automatically
     # created so don't sweat their absence here.
     BASEDIRS = %w(
-      pool
+      config
     )
 end

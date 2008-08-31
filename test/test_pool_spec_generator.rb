@@ -27,7 +27,7 @@ class TestPoolspecGenerator < Test::Unit::TestCase
 
   def test_generator_without_options
     run_generator('poolspec', [APP_ROOT], sources)
-    assert_directory_exists "pool"    
+    assert_directory_exists "config"    
   end
   
   def test_generated_templated_file
