@@ -4,6 +4,15 @@ $:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
 require "poolparty"
 
 # Get the git-style program name
-program_name = "#{File.basename($0)}-#{ARGV[0]}"
+name = ARGV.shift
+program_name = "#{File.basename($0)}-#{name}"
+command_line = "#{program_name} #{ARGV.join(" ")}"
 
-program_name
+# Run it from the command-line first
+if !`which #{program_name}`.empty?
+  `#{command_line}`
+elsif(File.file?(File.join(File.dirname(__FILE__), program_name)))
+  `#{File.join(File.dirname(__FILE__), program_name)} #{ARGV.join(" ")}`
+else
+  puts "Unknown poolparty binary: #{program_name}"
+end

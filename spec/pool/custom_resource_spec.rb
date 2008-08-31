@@ -3,6 +3,9 @@ require File.dirname(__FILE__) + '/../spec_helper'
 include PoolParty::Resources
 
 describe "Custom Resource" do
+  before do
+    reset_resources!
+  end
   it "should provide custom_resource as a method" do
     self.respond_to?(:define_resource).should == true
   end
@@ -11,6 +14,7 @@ describe "Custom Resource" do
       reset_resources!
     end
     it "should say it is not valid if there is no custom_function defined" do
+      reset_resources!
       lambda {
         define_resource(:rockstar) do          
           custom_usage do
@@ -18,7 +22,7 @@ describe "Custom Resource" do
             end
           end
         end
-      }.should.raise(ResourceException)
+      }.should raise_error
     end
     it "should raise ResourceException if there is no custom_usage defined" do
       lambda {
@@ -28,7 +32,7 @@ describe "Custom Resource" do
           }
           EOF
         end
-      }.should.raise(ResourceException)
+      }.should raise_error
     end
     it "should not raise ResourceException if custom_function and custom_usage are defined" do
       lambda {
@@ -42,10 +46,11 @@ describe "Custom Resource" do
           }
           EOF
         end
-      }.should.not.raise(ResourceException)
+      }.should_not raise_error
     end
     describe "printing" do
       before do
+        reset_resources!
         define_resource(:rockstar) do
           custom_usage do
             def has_line_in_file(line="line_in_file", file="file")
