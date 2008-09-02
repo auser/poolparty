@@ -1,3 +1,6 @@
+== 0.2 2008-09-02
+  * Finished new syntax rewrite
+  
 == 0.1.2 2008-08-05
   * Added development tasks for easy setup
   * Updated Scheduler to include ThreadPool for threaded safety

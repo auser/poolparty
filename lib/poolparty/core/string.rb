@@ -30,7 +30,6 @@ class String
   def class_constant(superclass=nil)
     symc = "#{self}_Class".classify
     unless Object.const_defined?(symc)
-      # Make class here
       klass = Class.new(superclass ? superclass : Object) do
         yield if block_given?
       end
