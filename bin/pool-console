@@ -6,7 +6,8 @@ libs =  " -r irb/completion"
 # Perhaps use a console_lib to store any extra methods I may want available in the cosole
 # libs << " -r #{File.dirname(__FILE__) + '/../lib/console_lib/console_logger.rb'}"
 libs <<  " -r #{File.dirname(__FILE__) + '/../lib/PoolParty.rb'}"
-puts "Loading PoolParty gem"
+libs <<  " -r #{File.dirname(__FILE__) + '/../lib/helpers/console.rb'}"
+puts "Loading PoolParty console..."
 
 @conf = ARGV.empty? ? "config/poolspec.rb" : ARGV[0]
 exec "#{irb} #{libs} --simple-prompt"

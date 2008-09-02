@@ -4,7 +4,8 @@ require File.dirname(__FILE__) + '/test_plugins/webserver'
 describe "Plugin" do
 
   before(:each) do
-    @p = pool :poolpartyrb do      
+    reset!
+    pool :poolpartyrb do      
       cloud :app do
         apache do
           enable_php
@@ -12,14 +13,14 @@ describe "Plugin" do
             :document_root => "/root"
           })
         end
-      end
-      
+      end      
     end
+    @p = pool :poolpartyrb
     @c = @p.cloud(:app)
   end
   
   it "should allow access to the pool on the cloud" do
-    @p.cloud(:app).parent.should == @p
+    @c.parent.should == @p
   end
   describe "instance" do
     before(:each) do
@@ -28,8 +29,8 @@ describe "Plugin" do
     it "should not be empty" do
       @plugin.class.should == ApacheClas
     end
-    it "should have access to the pool's container" do
-      @plugin.container.should == @p.container
+    it "should have access to the cloud's container" do
+      @plugin.container.should == @p.cloud(:app).container
     end
     describe "after eval'ing" do
       before(:each) do

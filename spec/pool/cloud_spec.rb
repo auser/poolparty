@@ -23,7 +23,7 @@ describe "Cloud" do
   end
   it "should return the cloud if the cloud key is already in the clouds list" do
     @cld = cloud :pop do;end
-    @obj.cloud(:pop).should == @cld
+    @pool.cloud(:pop).should == @cld
   end
   describe "options" do
     before(:each) do

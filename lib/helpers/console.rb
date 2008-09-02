@@ -5,6 +5,10 @@ module PoolParty
       PoolParty::Script.inflate open(filename).read
     end
     
+    def reload!
+      reset!
+    end
+    
   end
 end
 

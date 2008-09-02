@@ -3,14 +3,15 @@ module PoolParty
     
     def pool(name=:main, &block)
       pools.has_key?(name) ? pools[name] : (pools[name] = Pool.new(name, &block))
-    end
+    end    
     
     def pools
-      @@pools ||= {}
+      $pools ||= {}
     end
     
     def reset!
-      @@pools = nil
+      $pools = nil
+      $clouds = nil
     end
 
     class Pool
@@ -35,5 +36,9 @@ module PoolParty
       end            
     end
     
+    # Helpers
+    def remove_pool(name)
+      pools.delete(name) if pools.has_key?(name)
+    end
   end
 end

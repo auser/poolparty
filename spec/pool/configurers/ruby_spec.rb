@@ -1,8 +1,11 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
 require File.dirname(__FILE__) + '/../test_plugins/webserver'
 
-describe "Configuer" do
+describe "Configurer" do
   before(:each) do
+    reset!
+    @basic = read_file(File.join(File.dirname(__FILE__), "files", "ruby_basic.rb"))
+    Script.inflate @basic
     @conf = Object.new
   end
   it "should not be nil" do
@@ -23,7 +26,8 @@ describe "Configuer" do
     end
     describe "pool" do
       before(:each) do
-        @pool = @s.pool(:poolpartyrb)
+        Script.inflate @basic
+        @pool = pool(:poolpartyrb)
       end
       it "should set the plugin directory" do
         @pool.plugin_directory.should == "docs_plugins"
@@ -31,7 +35,9 @@ describe "Configuer" do
     end
     describe "clouds" do
       before(:each) do
-        @cloud = @s.pool(:poolpartyrb).cloud(:app)
+        reset!
+        Script.inflate @basic
+        @cloud = pool(:poolpartyrb).cloud(:app)
       end
       it "should contain a list of the clouds within the pool (:app)" do
         @cloud.should_not be_nil

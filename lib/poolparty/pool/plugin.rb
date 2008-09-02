@@ -25,7 +25,7 @@ module PoolParty
       end
       
       def container
-        @parent.parent.container
+        @parent.container
       end
       
       def file(filelocation, opts={})

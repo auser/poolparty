@@ -5,7 +5,7 @@ module PoolParty
     end
 
     def clouds
-      @@clouds ||= {}
+      $clouds ||= {}
     end    
     
     class Cloud
