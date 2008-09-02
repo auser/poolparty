@@ -4,6 +4,9 @@ describe "Script" do
   it "should have inflate as a class method" do
     Script.respond_to?(:inflate).should == true
   end
+  it "should have inflate_file as an instance method" do
+    Script.respond_to?(:inflate_file).should == true
+  end
   it "should have inflate as an instance method" do
     Script.new.respond_to?(:inflate).should == true
   end
