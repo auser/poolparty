@@ -8,6 +8,10 @@ module PoolParty
     def pools
       @@pools ||= {}
     end
+    
+    def reset!
+      @@pools = nil
+    end
 
     class Pool
       attr_accessor :name, :container
