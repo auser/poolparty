@@ -1,32 +1,36 @@
 = PoolParty
 
-* FIX (url)
+http://poolpartyrb.com
 
 == DESCRIPTION:
 
-FIX (describe your package)
+COMING SOON
 
 == FEATURES/PROBLEMS:
 
-* FIX (list of features or problems)
+COMING SOON
 
 == SYNOPSIS:
 
-  FIX (code sample of usage)
+poolparty is written with the intention of being as application-agnostic as possible. It installs only the basic 
+required software to glue the cloud together on the instances as listed below.
+
+poolparty is easily configuration. In fact, it makes little assumptions about your development environment and allows 
+several options on how to begin configuring the cloud.
 
 == REQUIREMENTS:
 
-* FIX (list of requirements)
+COMING SOON
 
 == INSTALL:
 
-* FIX (sudo gem install, anything else)
+sudo gem install auser-poolparty
 
 == LICENSE:
 
 (The MIT License)
 
-Copyright (c) 2008 FIXME full name
+Copyright (c) 2008 Ari Lerner
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
