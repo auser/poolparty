@@ -43,6 +43,9 @@ module PoolParty
       def set_vars_from_options(opts={})
         opts.each {|k,v| self.send k.to_sym, v } unless opts.empty?
       end
+      def requires(str="")
+        options.merge!(:require => str)
+      end
       # Generic to_s
       # Most Resources won't need to extend this
       def to_string(prev="")
@@ -80,6 +83,15 @@ module PoolParty
       end
     end
     
+    # Adds two methods to the module
+    # Adds the method type:
+    #   has_
+    # and 
+    #   does_not_have_
+    # for the type passed
+    # for instance
+    # add_has_and_does_not_have_methods_for(:file)
+    # gives you the methods has_file and does_not_have_file
     def self.add_has_and_does_not_have_methods_for(type=:file)
       module_eval <<-EOE
         def has_#{type}(opts={}, &block)
