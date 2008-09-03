@@ -4,6 +4,7 @@ include PoolParty::Resources
 
 describe "File" do
   before(:each) do
+    reset!
     @class = PoolParty::Resources::Classpackage.new({:name => "rockstar"})
   end
   it "should have a method resources" do

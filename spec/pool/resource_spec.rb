@@ -67,7 +67,42 @@ describe "Resource" do
       it "should say it can add an instance if the instance has a name and it is unique" do
         file.can_add_instance?( @file2 ).should == false
       end
-
+    end
+    describe "method_missing" do
+      before(:each) do
+        file({:name => "red"})
+        file({:name => "hot"})
+        file({:name => "summer"})
+        @file2 = file.instance_named("hot")
+        @file3 = file.instance_named("summer")
+      end
+      it "should be able to pick out methods with the phrase has_" do
+        lambda {
+          has_file
+        }.should_not raise_error
+      end
+      it "should not have a method prepended with crabs_" do
+        lambda {
+          crabs_file
+        }.should raise_error
+      end
+      it "should pick out methods with the phrase does_not_" do
+        lambda {
+          does_not_have_file({:name => "red"})
+        }.should_not raise_error
+      end
+      it "should set the has_file to present ensure" do
+        has_file({:name => "redface"})
+        file.instance_named("redface").options[:ensure].should == "present"
+      end
+      it "should set the does_not_have_file to absent ensure" do
+        does_not_have_file({:name => "net"})
+        file.instance_named("net").options[:ensure].should == "absent"
+      end
+      it "should be able to have_service as well" do
+        has_service({:name => "apache"})
+        service.instance_named("apache").options[:ensure].should == "present"
+      end
     end
   end
 end

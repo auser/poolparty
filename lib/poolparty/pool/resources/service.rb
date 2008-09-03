@@ -5,6 +5,8 @@ module PoolParty
       resource(:service) << PoolParty::Resources::Service.new(opts, &block)
     end
     
+    add_has_and_does_not_have_methods_for(:service)
+    
     class Service < Resource
       
       default_options({

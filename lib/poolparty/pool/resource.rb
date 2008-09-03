@@ -21,7 +21,7 @@ module PoolParty
     def reset_resources!
       resources.each {|k,v| resources[k] = nil}
     end
-    
+        
     def resources_string
       returning Array.new do |output|
         resources.each do |type, resource|
@@ -64,7 +64,8 @@ module PoolParty
         self
       end
       alias_method :push, :<<
-            
+      
+      # Helpers
       def instance_named(name="")
         instances.select {|a| a.name == name }.first
       end
@@ -77,6 +78,17 @@ module PoolParty
       def can_add_instance?(instance)
         has_name?(instance) && !contains_instance_named?(instance.name)
       end
+    end
+    
+    def self.add_has_and_does_not_have_methods_for(type=:file)
+      module_eval <<-EOE
+        def has_#{type}(opts={}, &block)
+          #{type}(opts.merge(:ensure => "present")) &block
+        end
+        def does_not_have_#{type}(opts={}, &block)
+          #{type}(opts.merge(:ensure => "absent")) &block
+        end
+      EOE
     end
     
   end

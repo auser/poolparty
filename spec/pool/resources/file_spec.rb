@@ -24,7 +24,7 @@ describe "File" do
       file.to_string.should =~ /\/etc\/apache2\/puppetmaster\.conf:/
     end
     describe "as included" do            
-      before(:each) do        
+      before(:each) do
         file({:rent => "low"}) do
           name "/www/conf/httpd.conf"
         end

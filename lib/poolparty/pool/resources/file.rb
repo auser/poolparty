@@ -5,6 +5,8 @@ module PoolParty
       resource(:file) << PoolParty::Resources::File.new(opts, &block)
     end
     
+    add_has_and_does_not_have_methods_for(:file)
+    
     class File < Resource
       
       default_options({

@@ -8,4 +8,15 @@ module PoolParty
       end
     end
   end
+  module MethodMissingHasResource
+    def method_missing(m, options={}, &block)
+      if m.to_s =~ /has_/
+        self.send "#{m}".split("_")[-1].to_sym, options.merge(:ensure => "present"), &block
+      elsif m.to_s =~ /does_not_have_/
+        self.send "#{m}".split("_")[-1].to_sym, options.merge(:ensure => "absent"), &block
+      else
+        super
+      end
+    end
+  end
 end
