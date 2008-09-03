@@ -27,6 +27,7 @@ describe "Cloud" do
   end
   describe "options" do
     before(:each) do
+      reset!
       @p = pool :options do
         minimum_instances 100
         cloud :apple do          
@@ -46,6 +47,7 @@ describe "Cloud" do
   end
   describe "block" do
     before(:each) do
+      reset!
       @cloud = Cloud.new(:test, @pool) do
         # Inside cloud block
       end
@@ -59,6 +61,7 @@ describe "Cloud" do
     end
     describe "configuration" do
       before(:each) do
+        reset!
         @cloud2 = Cloud.new(:test, @pool) do
           minimum_instances 1
           maximum_instances 2
@@ -85,6 +88,23 @@ describe "Cloud" do
       it "should be able to take a hash from configure and convert it to the options" do
         @cloud.configure( {:minimum_instances => 1, :maximum_instances => 10, :keypair => "friend"} )
         @cloud.keypair.should == "friend"
+      end
+      describe "minimum_instances/maximum_instances as a range" do
+        before(:each) do
+          reset!
+          @pool = pool :just_pool do
+            cloud :app do
+              instances 8..15
+            end
+          end
+          @cloud = @pool.cloud(:app)
+        end
+        it "should set the minimum based on the range" do
+          @cloud.minimum_instances.should == 8
+        end
+        it "should set the maximum based on the range set by instances" do
+          @cloud.maximum_instances.should == 15
+        end
       end
     end
     

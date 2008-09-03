@@ -21,6 +21,7 @@ module PoolParty
       include PluginModel
       include Configurable
       include PrettyPrinter
+      include CloudResourcer
       
       default_options({
         :plugin_directory => "plugins"
@@ -31,7 +32,7 @@ module PoolParty
         @container = Container::Container.new
         instance_eval &block if block
       end
-      
+            
       # This is where the entire process starts
       def inflate
       end

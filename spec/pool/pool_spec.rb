@@ -32,6 +32,7 @@ describe "Pool" do
     end
     describe "configuration" do
       before(:each) do
+        reset!
         @pool = Pool.new :test do
           plugin_directory "nails"
           rocky_shores "ranger"
@@ -43,7 +44,30 @@ describe "Pool" do
       it "should set the rocky_shores to ranger" do
         @pool.rocky_shores.should == "ranger"
       end
-    end
-    
+      describe "range for min/max instances" do
+        it "should be able to respond to instances" do
+          @pool.respond_to?(:instances).should == true
+        end
+        it "should be able to pass instances a range" do
+          lambda {
+            @pool.instance_eval do
+              instances 2..5
+            end
+          }.should_not raise_error
+        end
+        it "should set the minimum as the minimum_instances from the range" do
+          @pool.instance_eval do
+            instances 2..5
+          end
+          @pool.minimum_instances.should == 2
+        end
+        it "should set the maximum as the maximum_instances from the range" do
+          @pool.instance_eval do
+            instances 2..5
+          end
+          @pool.maximum_instances.should == 5
+        end
+      end
+    end    
   end
 end

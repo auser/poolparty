@@ -14,6 +14,7 @@ module PoolParty
       include MethodMissingSugar
       include Configurable
       include PrettyPrinter
+      include CloudResourcer
       
       default_options({
         :minimum_instances => 2,
