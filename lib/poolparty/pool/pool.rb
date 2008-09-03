@@ -20,6 +20,7 @@ module PoolParty
       include MethodMissingSugar
       include PluginModel
       include Configurable
+      include PrettyPrinter
       
       default_options({
         :plugin_directory => "plugins"
@@ -33,7 +34,7 @@ module PoolParty
       
       # This is where the entire process starts
       def inflate
-      end            
+      end
     end
     
     # Helpers

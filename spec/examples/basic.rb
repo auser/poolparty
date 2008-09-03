@@ -8,7 +8,9 @@ pool :app do
   
   cloud :app do
     minimum_instances 2
+    ami "ami-abc123"
   end
+  
   cloud :db do    
   end
 end

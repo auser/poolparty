@@ -11,14 +11,14 @@ module PoolParty
     # as well
     def reload!      
       reset!
-      require "#{File.join(File.dirname(__FILE__), %w(.. poolparty.rb))}"
-      require "#{File.join(File.dirname(__FILE__), %w( console.rb))}"
     end
-    
-    def pool_print(p=nil, prev="")
-      returning String.new do |out|
-        out << "hi"
+        
+    def pool_print(*options)
+      pools.each do |k,v|
+        print v.pretty_print
       end
+      puts ""
+      pools.size
     end
     
   end

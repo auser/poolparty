@@ -13,6 +13,7 @@ module PoolParty
       attr_accessor :parent
       include MethodMissingSugar
       include Configurable
+      include PrettyPrinter
       
       default_options({
         :minimum_instances => 2,

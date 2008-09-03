@@ -24,6 +24,7 @@ describe "Console" do
     end
     describe "calling" do
       before(:each) do
+        reset!
         load_pool("pop")
       end
       it "should instance_eval the string" do
@@ -42,13 +43,11 @@ describe "Console" do
   end  
   describe "reload!" do
     before(:each) do
+      reset!
       self.stub!(:require).and_return true
     end
     it "should call reset!" do
       self.should_receive(:reset!).once
-    end
-    it "should receive 2 requires to reload the console" do
-      self.should_receive(:require).twice      
     end
     after do
       reload!
@@ -70,7 +69,9 @@ describe "Console" do
     end
     it "should be able to print the clouds" do      
       pools.should_not be_empty
-      puts pool_print
+      with_output_surpressed do
+        pool_print.should == pools.size
+      end      
     end
   end
 end
