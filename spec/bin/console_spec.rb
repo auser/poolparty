@@ -1,5 +1,5 @@
 require File.dirname(__FILE__) + '/../spec_helper'
-require File.dirname(__FILE__) + '/../../lib/helpers/console'
+require File.dirname(__FILE__) + '/../../lib/poolparty/helpers/console'
 
 describe "Console" do
   describe "load_pool" do
@@ -40,4 +40,37 @@ describe "Console" do
       end
     end
   end  
+  describe "reload!" do
+    before(:each) do
+      self.stub!(:require).and_return true
+    end
+    it "should call reset!" do
+      self.should_receive(:reset!).once
+    end
+    it "should receive 2 requires to reload the console" do
+      self.should_receive(:require).twice      
+    end
+    after do
+      reload!
+    end
+  end
+  describe "print" do
+    before(:each) do
+      reset!
+      @string =<<-EOS
+      pool :app do
+        maximum_instances 2
+        cloud :rawr do          
+        end
+      end
+      EOS
+      self.stub!(:open).and_return @string
+      @string.stub!(:read).and_return @string
+      load_pool("pop")
+    end
+    it "should be able to print the clouds" do      
+      pools.should_not be_empty
+      puts pool_print
+    end
+  end
 end
