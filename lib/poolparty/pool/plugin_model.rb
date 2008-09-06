@@ -33,7 +33,7 @@ module PoolParty
         # Add the plugin definition to the cloud as an instance method
         Cloud::Cloud.module_eval <<-EOE
           def #{name}(&block)
-            @#{class_string_name.downcase} ||= #{class_string_name.class_constant}.new(self)
+            @#{class_string_name.downcase} ||= #{class_string_name.class_constant}.new(self, &block)
           end
         EOE
       end

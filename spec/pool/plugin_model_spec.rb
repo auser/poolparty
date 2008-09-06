@@ -26,6 +26,9 @@ describe "Plugin" do
       it "should store the plugin in a Hash on the pool" do
         @c.plugins.class.should == Hash
       end
+      it "should be able to retrieve the plugin as a name" do
+        @c.plugin("apache").should_not be_nil
+      end
     end
     it "should store the regsitered plugins in an array" do
       @plugin.should_not be_nil

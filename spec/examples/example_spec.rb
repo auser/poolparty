@@ -56,7 +56,6 @@ describe "with_apache_plugin" do
       @c.apache.class.should == ApacheClas
     end
     it "should set php == true on the apache plugin" do
-      @c.apache.enable_php
       @c.apache.php.should == true
     end
   end

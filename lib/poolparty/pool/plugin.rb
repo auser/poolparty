@@ -21,9 +21,9 @@ module PoolParty
       
       attr_accessor :parent
       
-      def initialize(parent=nil)
+      def initialize(parent=nil, &block)
         @parent = parent
-        yield if block_given?
+        self.instance_eval &block if block
       end
       
       def container
