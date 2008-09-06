@@ -38,4 +38,19 @@ class Numeric
     self * 7.days
   end
   alias :week :weeks
+  
+  def months
+    self * 31.days
+  end
+  alias :month :months
+  
+  def time_ago
+    %w(year month week day hour minute).map {|unit| return units_ago(unit, self) if self > 1.send(unit) }
+    return "Less than a minute ago"
+  end
+
+  def units_ago(unit,seconds)
+    in_units = (seconds / 1.send(unit))
+    "#{in_units.to_i} #{in_units != 1 ? unit.to_s.pluralize : unit} ago" 
+  end
 end
