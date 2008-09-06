@@ -45,5 +45,8 @@ describe "Time" do
     it "should turn 45.days into 1 month ago" do
       45.days.time_ago.should == "1 month ago"
     end
+    it "should turn 70.days into 2 months ago" do
+      70.days.time_ago.should == "2 months ago"
+    end
   end
 end
