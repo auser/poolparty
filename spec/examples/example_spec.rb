@@ -28,7 +28,7 @@ end
 describe "with_apache_plugin" do
   before(:each) do
     reset!
-    PoolParty::Script.inflate(open(File.dirname(__FILE__) + "/with_apache_plugin.rb").read)
+    PoolParty::Script.inflate(open(File.dirname(__FILE__) + "/with_apache_plugin.rb").read, File.dirname(__FILE__))
   end
   it "should have one pool called :app" do
     pool(:app).should_not be_nil
@@ -48,7 +48,16 @@ describe "with_apache_plugin" do
   it "should set the minimum_instances on the db cloud to 3" do
     pool(:app).cloud(:db).minimum_instances.should == 2
   end
-  it "should have php == true" do
-    pool(:app).cloud(:app).php.should == true
+  describe "apache plugin" do
+    before(:each) do
+      @c = pool(:app).cloud(:app)
+    end
+    it "should have apache as the ApacheClas" do
+      @c.apache.class.should == ApacheClas
+    end
+    it "should set php == true on the apache plugin" do
+      @c.apache.enable_php
+      @c.apache.php.should == true
+    end
   end
 end

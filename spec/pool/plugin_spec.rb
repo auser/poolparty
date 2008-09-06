@@ -36,10 +36,7 @@ describe "Plugin" do
       before(:each) do
         @plugin.instance_eval do
           enable_php
-          
-          set do
-            has_gem "aska"
-          end
+          has_gem "aska"
         end
       end
       it "should call enable_php on the class" do

@@ -19,7 +19,7 @@ describe "Console" do
       self.respond_to?(:load_pool).should == true
     end
     it "should call script inflate on the filename" do
-      PoolParty::Script.should_receive(:inflate).with(@string).and_return "pop"
+      PoolParty::Script.should_receive(:inflate).once
       load_pool("pop")
     end
     describe "calling" do

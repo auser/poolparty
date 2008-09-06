@@ -24,7 +24,7 @@ describe "Plugin" do
     end
     describe "storage" do
       it "should store the plugin in a Hash on the pool" do
-        @p.plugins.class.should == Hash
+        @c.plugins.class.should == Hash
       end
     end
     it "should store the regsitered plugins in an array" do
