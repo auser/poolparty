@@ -58,5 +58,9 @@ describe "with_apache_plugin" do
     it "should set php == true on the apache plugin" do
       @c.apache.php.should == true
     end
+    it "should store the method in options if it's not defined on the plugin" do
+      @c.enable_asp true
+      @c.options[:enable_asp].should == true
+    end
   end
 end
