@@ -30,16 +30,24 @@ describe "Pool" do
         Proc.new {puts "hi"}
       end
     end
+    describe "plugins" do
+      before(:each) do
+        @pool.instance_eval do
+          plugin_directory "plugins"
+        end
+      end
+      it "should call Dir when the plugin directory is set"
+    end
     describe "configuration" do
       before(:each) do
         reset!
         @pool = Pool.new :test do
-          plugin_directory "nails"
+          nick_nack "nails"
           rocky_shores "ranger"
         end
       end
       it "should set the plugin_directory to nails" do
-        @pool.plugin_directory.should == "nails"
+        @pool.nick_nack.should == "nails"
       end
       it "should set the rocky_shores to ranger" do
         @pool.rocky_shores.should == "ranger"

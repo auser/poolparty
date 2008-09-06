@@ -3,7 +3,7 @@ module PoolParty
     
     # Load a file that contains a pool into memory
     def load_pool(filename)
-      PoolParty::Script.inflate open(filename).read
+      PoolParty::Script.inflate(open(filename).read, File.dirname(filename))
     end
     
     # Clear all the pools and reload the console
@@ -13,7 +13,7 @@ module PoolParty
       reset!
     end
         
-    def pool_print(*options)
+    def pool_print(options={})
       pools.each do |k,v|
         print v.pretty_print
       end

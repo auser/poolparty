@@ -45,8 +45,8 @@ class Numeric
   alias :month :months
   
   def time_ago
-    %w(year month week day hour minute).map {|unit| return units_ago(unit, self) if self > 1.send(unit) }
-    return "Less than a minute ago"
+    out = %w(year month week day hour minute).detect {|unit| self > 1.send(unit) }
+    units_ago(out, self) rescue "Less than a minute ago"
   end
 
   def units_ago(unit,seconds)

@@ -14,6 +14,10 @@ module PoolParty
             out << cl.pretty_print("#{prev}\t") unless self == cl
           end
         end
+        if self.respond_to?(:plugins)
+          out << "#{prev}\t\tPlugins"
+          out << "#{prev}\t\t" + plugins.map {|a| a}.join("\n")
+        end
       end.join("\n")
     end
     

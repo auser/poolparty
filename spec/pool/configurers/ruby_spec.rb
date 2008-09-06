@@ -29,9 +29,6 @@ describe "Configurer" do
         Script.inflate @basic
         @pool = pool(:poolpartyrb)
       end
-      it "should set the plugin directory" do
-        @pool.plugin_directory.should == "docs_plugins"
-      end
     end
     describe "clouds" do
       before(:each) do

@@ -7,12 +7,15 @@ module PoolParty
     alias_method :register_plugin, :plugin
     
     def plugins
-      @plugins ||= {}
+      $plugins ||= {}
     end
     
     class PluginModel
       attr_accessor :name, :klass
       attr_reader :parent
+      include MethodMissingSugar
+      include Configurable
+      include PrettyPrinter
       
       def initialize(name,cld,&block)
         @name = name
@@ -30,7 +33,7 @@ module PoolParty
         # Add the plugin definition to the cloud as an instance method
         Cloud::Cloud.module_eval <<-EOE
           def #{name}(&block)
-            @klass ||= #{class_string_name.class_constant}.new(self).instance_eval(&block)
+            @#{class_string_name.downcase} ||= #{class_string_name.class_constant}.new(self)
           end
         EOE
       end

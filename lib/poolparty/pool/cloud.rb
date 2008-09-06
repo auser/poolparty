@@ -1,3 +1,5 @@
+require File.dirname(__FILE__) + "/plugin_model"
+
 module PoolParty    
   module Cloud
     def cloud(name=:main, &block)
@@ -11,6 +13,7 @@ module PoolParty
     class Cloud
       attr_reader :name, :templates
       attr_accessor :parent
+      include PoolParty::PluginModel
       include MethodMissingSugar
       include Configurable
       include PrettyPrinter

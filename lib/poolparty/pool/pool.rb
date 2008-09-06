@@ -10,27 +10,29 @@ module PoolParty
     end
     
     def reset!
-      $pools = nil
-      $clouds = nil
+      $pools = $clouds = $plugins = nil
     end
 
     class Pool
       attr_accessor :name, :container
       include PoolParty::Cloud
       include MethodMissingSugar
-      include PluginModel
+      # include PluginModel
       include Configurable
       include PrettyPrinter
       include CloudResourcer
       
       default_options({
-        :plugin_directory => "plugins"
       })
       
       def initialize(name,&block)
         @name = name
         @container = Container::Container.new
         instance_eval &block if block
+      end
+      
+      def plugin_directory(*args)
+        args.each {|arg| Dir["#{arg}/*.rb"].each {|f| load f }}
       end
             
       # This is where the entire process starts
