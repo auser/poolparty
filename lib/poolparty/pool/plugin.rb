@@ -15,11 +15,7 @@ module PoolParty
         @parent = parent
         self.instance_eval &block if block
       end
-      
-      def container
-        @parent.container
-      end
-            
+                  
     end
     
   end
