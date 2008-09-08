@@ -42,11 +42,14 @@ describe "with_apache_plugin" do
   it "should set the minimum_instances on the cloud to 2 (overriding the pool options)" do
     pool(:app).cloud(:app).minimum_instances.should == 2
   end
-  it "should set the maximum_instances on the cloud to 5" do
+  it "should set the maximum_instances on the cloud to 10" do
     pool(:app).cloud(:app).maximum_instances.should == 10
   end
-  it "should set the minimum_instances on the db cloud to 3" do
+  it "should set the minimum_instances on the db cloud to 2" do
     pool(:app).cloud(:db).minimum_instances.should == 2
+  end
+  it "should have included the apache plugin and given the class a method by the name of the plugin" do
+    pool(:app).cloud(:app).methods.include?("apache").should == true
   end
   describe "apache plugin" do
     before(:each) do
