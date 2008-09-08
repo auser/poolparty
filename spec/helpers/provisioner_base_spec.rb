@@ -24,9 +24,6 @@ describe "ProvisionerBase" do
       ProvisionerBase.new.tasks.class.should == Array
     end
     it "should have empty tasks on the provisioner" do
-      ProvisionerBase.new.tasks.each do |t|
-        puts "task: #{t.empty?}"
-      end
       ProvisionerBase.new.tasks.should be_empty
     end
     it "should allow a new class to write tasks that aren't empty upon instantiation" do
