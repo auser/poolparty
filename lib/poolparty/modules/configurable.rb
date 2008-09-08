@@ -3,7 +3,7 @@ module PoolParty
     module ClassMethods      
       def default_options(h={})
         @default_options ||= h
-      end      
+      end
     end
     
     module InstanceMethods
