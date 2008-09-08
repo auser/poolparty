@@ -9,7 +9,7 @@ require 'poolparty'
   end
 end
 
-Dir["#{File.dirname(__FILE__)}/helpers/**"].each {|a| require a}
+# Dir["#{File.dirname(__FILE__)}/helpers/**"].each {|a| require a}
 
 include PoolParty
 extend PoolParty
