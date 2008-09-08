@@ -40,7 +40,10 @@ describe "ProvisionerBase" do
     ProvisionerBase.installers[:ubuntu].should_not be_nil
   end
   it "should be able to fetch the ubuntu installer with the helper method installer" do
-    ProvisionerBase.new.installer_for("ubuntu").should == "apt-get"
+    ProvisionerBase.new.installer_for("ubuntu").should == "apt-get install"
+  end
+  it "should be able to fetch the fedora installer with the helper method installer" do
+    ProvisionerBase.new.installer_for("fedora").should == "yum install"
   end
   describe "install_string" do
     before(:each) do

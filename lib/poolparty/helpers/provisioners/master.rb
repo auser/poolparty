@@ -6,12 +6,23 @@ module Provisioner
         install_puppet_master,
         create_local_hosts_entry,
         create_basic_site_pp,
-        setup_fileserver
+        setup_fileserver,
+        setup_autosigning,
+        create_local_node
       ]
     end
     
     def install_puppet_master
-      "#{installer_for(@os)} install puppet factor"
+      "#{installer_for(@os)} #{get_puppet_packages}"
+    end
+    
+    def get_puppet_packages
+      case @os        
+      when :fedora
+        "puppet-server puppet factor"
+      else
+        "puppet factor"
+      end
     end
     
     def create_local_hosts_entry
@@ -37,5 +48,18 @@ module Provisioner
       EOS
     end
     
+    def setup_autosigning
+      <<-EOS
+        echo "*.#{@ip}" > /etc/puppet/autosign.conf
+      EOS
+    end
+    
+    def create_local_node
+      <<-EOS
+        node "master.#{@ip}" {
+           include hosts
+        }
+      EOS
+    end
   end
 end

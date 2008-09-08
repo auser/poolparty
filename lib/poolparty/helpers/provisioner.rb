@@ -29,8 +29,9 @@ module Provisioner
     # Package installers for general *nix operating systems
     def self.installers
       @installers ||= {
-        :ubuntu => "apt-get",
-        :fedora => "yum"
+        :ubuntu => "apt-get install",
+        :fedora => "yum install",
+        :gentoo => "emerge"
       }
     end
     # Convenience method to grab the installer

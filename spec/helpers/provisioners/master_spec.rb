@@ -20,6 +20,9 @@ describe "Master provisioner" do
     it "should call setup_fileserver" do
       @master.should_receive(:setup_fileserver)
     end
+    it "should call create_local_node" do
+      @master.should_receive(:create_local_node)
+    end
     after do
       @master.install
     end
@@ -35,5 +38,8 @@ describe "Master provisioner" do
   end
   it "should return setup_fileserver with the setup" do
     @master.setup_fileserver.should == "        echo \"[files]\n          path /data/puppet/fileserver\n          allow 127.0.0.1\" > /etc/puppet/fileserver.conf\n        mkdir -p /data/puppet/fileserver\n"
+  end
+  it "should be able to create_local_node" do
+    @master.create_local_node.should == "        node \"master.127.0.0.1\" {\n           include hosts\n        }\n"    
   end
 end
