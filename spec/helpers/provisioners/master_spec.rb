@@ -5,7 +5,7 @@ include Provisioner
 
 describe "Master provisioner" do
   before(:each) do
-    @master = Master.new(:ubuntu)
+    @master = Master.new("127.0.0.1", :ubuntu)
   end
   describe "install_tasks" do
     it "should call install_puppet_master" do
@@ -17,6 +17,9 @@ describe "Master provisioner" do
     it "should call create_basic_site_pp" do
       @master.should_receive(:create_basic_site_pp)
     end
+    it "should call setup_fileserver" do
+      @master.should_receive(:setup_fileserver)
+    end
     after do
       @master.install
     end
@@ -25,9 +28,12 @@ describe "Master provisioner" do
     @master.install_puppet_master.should == "apt-get install puppet factor"
   end
   it "should return create_local_hosts_entry as echo" do
-    @master.create_local_hosts_entry.should == "        echo \"ubuntu             puppet\" >> /etc/hosts\n"
+    @master.create_local_hosts_entry.should == "        echo \"127.0.0.1             puppet\" >> /etc/hosts\n"
   end
-  it "should return create_basic_site_pp" do    
-    @master.create_basic_site_pp.should == "        echo \"import 'nodes/*.pp'\" > /etc/puppet/manifests/site.pp\n        echo \"import 'classes/*.pp'\" >> /etc/puppet/manifests/site.pp\n"
+  it "should return create_basic_site_pp" do        
+    @master.create_basic_site_pp.should == "        echo \"import 'nodes/*.pp'\" > /etc/puppet/manifests/site.pp\n        echo \"import 'classes/*.pp'\" >> /etc/puppet/manifests/site.pp\n        mkdir /etc/puppet/manifests/nodes /etc/puppet/manifests/classes\n"
+  end
+  it "should return setup_fileserver with the setup" do
+    @master.setup_fileserver.should == "        echo \"[files]\n          path /data/puppet/fileserver\n          allow 127.0.0.1\" > /etc/puppet/fileserver.conf\n        mkdir -p /data/puppet/fileserver\n"
   end
 end
