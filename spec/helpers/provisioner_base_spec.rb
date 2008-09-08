@@ -40,6 +40,41 @@ describe "ProvisionerBase" do
     ProvisionerBase.installers[:ubuntu].should_not be_nil
   end
   it "should be able to fetch the ubuntu installer with the helper method installer" do
-    ProvisionerBase.installer_for("ubuntu").should == "apt-get"
+    ProvisionerBase.new.installer_for("ubuntu").should == "apt-get"
+  end
+  describe "install_string" do
+    before(:each) do
+      class Provisioner::BTestProvisioner < Provisioner::ProvisionerBase
+        def tasks
+          [
+            "hello",
+            insert_space,
+            add_world
+          ]          
+        end
+        def insert_space
+          " "
+        end
+        def add_world
+          "cruel world"
+        end
+      end
+      @provisioner = BTestProvisioner.new
+    end
+    it "should not run \"hello\"" do
+      @provisioner.should_not_receive(:hello)
+    end
+    it "should run insert_space" do
+      @provisioner.should_receive(:insert_space).once.and_return " "
+    end
+    it "should run add_world" do
+      @provisioner.should_receive(:insert_space).once.and_return "world"
+    end
+    it "should compound the string to be hello \n   \n cruel world" do
+      @provisioner.install_string.should == "hello \n   \n cruel world"
+    end
+    after do
+      @provisioner.install_string
+    end
   end
 end
