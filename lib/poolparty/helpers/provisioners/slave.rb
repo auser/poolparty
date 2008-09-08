@@ -13,7 +13,7 @@ module Provisioner
     end
     
     def install_puppet
-      "#{installer_for(@os)} install puppet factor"
+      "#{installer_for(@os)} #{get_puppet_packages_for(@os)}"
     end
   end
 end

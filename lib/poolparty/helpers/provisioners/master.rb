@@ -13,18 +13,9 @@ module Provisioner
     end
     
     def install_puppet_master
-      "#{installer_for(@os)} #{get_puppet_packages}"
+      "#{installer_for(@os)} #{get_puppet_packages_for(@os)}"
     end
-    
-    def get_puppet_packages
-      case @os        
-      when :fedora
-        "puppet-server puppet factor"
-      else
-        "puppet factor"
-      end
-    end
-    
+        
     def create_local_hosts_entry
       <<-EOS
         echo "#{@ip}             puppet" >> /etc/hosts

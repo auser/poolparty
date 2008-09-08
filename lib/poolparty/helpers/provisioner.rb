@@ -26,6 +26,15 @@ module Provisioner
     def tasks(a=[])
       @tasks ||= a
     end
+    # Get the packages associated with each os
+    def get_puppet_packages_for(os)
+      case os
+      when :fedora
+        "puppet-server puppet factor"
+      else
+        "puppet factor"
+      end
+    end    
     # Package installers for general *nix operating systems
     def self.installers
       @installers ||= {
