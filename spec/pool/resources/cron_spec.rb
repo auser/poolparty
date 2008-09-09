@@ -24,6 +24,9 @@ describe "File" do
       before(:each) do
         cron({:rent => "low"}) do
           name "/www/conf/httpd.conf"
+          hour 23
+          minute 5
+          weekday 1
         end
         @cron = cron.instance_named("/www/conf/httpd.conf")
       end
@@ -35,6 +38,15 @@ describe "File" do
       end
       it "should also set options through a hash" do
         @cron.rent.should == "low"
+      end
+      it "should set the hour to 23" do
+        @cron.hour.should == 23
+      end
+      it "should set the minute to 5" do
+        @cron.minute.should == 5
+      end
+      it "should set the weekday to 1" do
+        @cron.weekday.should == 1
       end
     end
   end
