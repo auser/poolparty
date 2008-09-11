@@ -1,5 +1,9 @@
+require File.dirname(__FILE__) + "/display"
+
 module PoolParty
   module Console
+    
+    include Display
     
     # Load a file that contains a pool into memory
     def load_pool(filename)
@@ -11,14 +15,6 @@ module PoolParty
     # as well
     def reload!      
       reset!
-    end
-        
-    def pool_print(options={})
-      pools.each do |k,v|
-        print v.pretty_print
-      end
-      puts ""
-      pools.size
     end
     
   end
