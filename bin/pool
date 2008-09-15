@@ -2,17 +2,26 @@
 require 'optparse'
 $:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
 require "poolparty"
+require "#{File.dirname(__FILE__) + '/../lib/poolparty/helpers/binary.rb'}"
 
-# Get the git-style program name
+# Get the git-style program action
 name = ARGV.shift
+
+# If there was no program action given
+unless name
+  puts "Usage: #{ARGV[0]} <action> <options>"
+  puts "Pool actions:"
+  puts Binary.list_binaries
+  exit
+end
+
 program_name = "#{File.basename($0)}-#{name}"
-command_line = "#{program_name} #{ARGV.join(" ")}"
+program_location = File.join(Binary.binary_directory, program_name)
+command_line = "#{program_location} #{ARGV.join(" ")}"
 
 # Run it from the command-line first
-if !`which #{program_name}`.empty?
+if !Binary.available_binaries.include?(program_name)
   exec "#{command_line}"
-elsif(File.file?(File.join(File.dirname(__FILE__), program_name)))
-  exec "#{File.join(File.dirname(__FILE__), program_name)} #{ARGV.join(" ")}"
 else
   puts "Unknown poolparty binary: #{program_name}"
 end
