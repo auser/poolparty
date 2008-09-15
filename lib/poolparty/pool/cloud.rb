@@ -25,7 +25,7 @@ module PoolParty
         :access_key => ENV["AWS_ACCESS_KEY"],
         :secret_access_key => ENV["AWS_SECRET_ACCESS"],
         :ec2_dir => ENV["EC2_HOME"],
-        :keypair => (ENV["KEYPAIR_NAME"].nil? || ENV["KEYPAIR_NAME"].empty?) ? "pool" : ENV["KEYPAIR_NAME"],
+        :keypair => (ENV["KEYPAIR_NAME"].nil? || ENV["KEYPAIR_NAME"].empty?) ? nil : ENV["KEYPAIR_NAME"],
         :ami => 'ami-44bd592d',
         :polling_time => "30.seconds"
       })
@@ -40,7 +40,19 @@ module PoolParty
         @parent = parent
         configure(parent.options) if parent.respond_to?(:options)
       end
-                  
+      
+      # Keypairs
+      # If the parent (pool) doesn't have a keypair defined on it, then generate one based on the 
+      # pool_name and the cloud_name
+      def keypair(*args)
+        has_keypair? ? options[:keypair] : generate_keypair(*args)
+      end
+      def has_keypair?
+        options.has_key?(:keypair) && options[:keypair]
+      end
+      def generate_keypair(*args)
+        options[:keypair] = args.length > 0 ? args[0] : "#{@parent.name}_#{@name}"
+      end
     end
   end  
 end

@@ -106,6 +106,38 @@ describe "Cloud" do
           @cloud.maximum_instances.should == 15
         end
       end
+      describe "keypair" do
+        before(:each) do
+          reset!
+        end
+        it "should be able to define a keypair in the cloud" do
+          @c = cloud :app do
+            keypair "hotdog"
+          end
+          @c.keypair.should == "hotdog"
+        end
+        it "should take the pool parent's keypair if it's defined on the pool" do
+          pool :pool do
+            keypair "ney"
+            cloud :app do
+            end
+            cloud :group do
+            end
+          end
+          pool(:pool).cloud(:app).keypair.should == "ney"
+          pool(:pool).cloud(:group).keypair.should == "ney"
+        end
+        it "should generate a keypair based on the cloud name if none is defined" do
+          pool :pool do
+            cloud :app do
+            end
+            cloud :nickes do
+            end
+          end
+          pool(:pool).cloud(:app).keypair.should == "pool_app"
+          pool(:pool).cloud(:nickes).keypair.should == "pool_nickes"
+        end
+      end
     end
     
   end
