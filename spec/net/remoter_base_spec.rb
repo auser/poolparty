@@ -53,6 +53,9 @@ describe "RemoterBase" do
         it "should be able to grab all the alist keypairs" do
           @tr.list_of_instances("alist").map {|a| a[:instance_id] }.should == ["i-a1", "i-a2", "i-a3", "i-a4"]
         end
+        it "should be able to grab all the blist keypairs" do
+          @tr.list_of_instances("blist").map {|a| a[:instance_id] }.should == ["i-b1"]
+        end
       end
     end
     
