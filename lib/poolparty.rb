@@ -1,5 +1,8 @@
 require 'rubygems'
+
+# Load required gems
 require 'active_support'
+require "backcall"
 
 # Use active supports auto load mechanism
 Dependencies.load_paths << File.dirname(__FILE__)

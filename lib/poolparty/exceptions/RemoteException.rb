@@ -1,6 +1,7 @@
 class RemoteException < Exception
   EXCEPTION_MESSAGES = {
-    :method_not_defined => "Method is not defined"
+    :method_not_defined => "Method is not defined",
+    :invalid_formatting => "Invalid formatting"
   }
   attr_reader :message
   
