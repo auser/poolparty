@@ -5,7 +5,7 @@ require 'active_support'
 require "backcall"
 
 # Use active supports auto load mechanism
-Dependencies.load_paths << File.dirname(__FILE__)
+ActiveSupport::Dependencies.load_paths << File.dirname(__FILE__)
 
 ## Load PoolParty
 %w(core modules exceptions net).each do |dir|

@@ -23,10 +23,13 @@ module PoolParty
         raise RemoteException.new(:method_not_defined, "describe_instance")
       end
       # Get instances
+      # The instances must have a status associated with them on the hash
       def instances_list
         raise RemoteException.new(:method_not_defined, "instances_list")        
       end
       
+      # The following methods are inherent on the RemoterBase
+      # If you need to overwrite these methods, do so with caution
       # Listing methods
       def list_of_running_instances(list = list_of_nonterminated_instances)
         list.select {|a| a[:status] =~ /running/}
