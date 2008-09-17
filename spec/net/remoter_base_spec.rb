@@ -2,7 +2,8 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 include Remote
 
-class TestRemoter < RemoterBase  
+class TestRemoter
+  include RemoterBase  
 end
 
 describe "RemoterBase" do

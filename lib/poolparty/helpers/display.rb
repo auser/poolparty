@@ -7,7 +7,11 @@ module PoolParty
       end
       puts ""
       pools.size
-    end    
+    end
+    
+    def available_bases
+      puts Remote.available_bases
+    end
     
   end
 end

@@ -3,7 +3,7 @@ module PoolParty
     
     # This class is the base class for all remote types
     # Everything remoting-wise is derived from this class
-    class RemoterBase
+    module RemoterBase
       # Required methods
       # The next methods are required on all RemoteInstance types
       # If your RemoteInstance type does not overwrite the following methods
@@ -50,7 +50,12 @@ module PoolParty
       # If no keypair is passed, select them all
       def list_of_instances(keypair=nil)
         instances_list.select {|a| keypair ? a[:keypair] == keypair : a}
-      end      
+      end
+      
+      def self.included(other)
+        Remote.register_base(self.class)
+      end
+      
     end
     
   end

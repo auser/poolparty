@@ -43,6 +43,12 @@ class String
     Object.const_set(symc, mod) unless Object.const_defined?(symc)
     symc.to_s.constantize
   end
+  def preserved_module_constant(ext="", &block)
+    symc = "#{self}#{ext}".classify
+    mod = Module.new(&block)    
+    Object.const_set(symc, mod) unless Object.const_defined?(symc)
+    symc.to_s.constantize
+  end
   def collect_each_line_with_index(&block)
     returning [] do |arr|
       arr << self.split(/\n/).collect_with_index(&block)
