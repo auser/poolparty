@@ -31,12 +31,14 @@ describe "Pool" do
       end
     end
     describe "plugins" do
-      before(:each) do
+      after(:each) do
         @pool.instance_eval do
-          plugin_directory "plugins"
+          plugin_directory "yaway"
         end
       end
-      it "should call Dir when the plugin directory is set"
+      it "should call Dir when the plugin directory is set" do
+        Dir.should_receive(:[]).with("yaway/*.rb").once.and_return []        
+      end
     end
     describe "configuration" do
       before(:each) do

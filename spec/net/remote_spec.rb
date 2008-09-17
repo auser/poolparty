@@ -23,6 +23,20 @@ describe "Remote" do
     @tc.should_receive(:extend).with("Hype".preserved_module_constant("Remote")).once
     @tc.using :hype
   end
+  it "should keep a list of the remote_bases" do
+    @tc.stub!(:remote_bases).and_return [:ec2, :hype]
+    @tc.available_bases.should == [:ec2, :hype]
+  end
+  it "should be able to register a new base" do
+    @tc.remote_bases.should_receive(:<<).with(:hockey).and_return true
+    @tc.register_remote_base("Hockey")
+  end
+  it "should not extend the module if the remote base isn't found" do
+    @tc.should_not_receive(:extend)
+    hide_output do
+      @tc.using :paper
+    end    
+  end
   it "should extend the module with RemoterBase" do
     HypeRemote.should_receive(:extend).with(PoolParty::Remote::RemoterBase).once
     @tc.using :hype

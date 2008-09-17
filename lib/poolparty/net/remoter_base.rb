@@ -53,7 +53,7 @@ module PoolParty
       end
       
       def self.included(other)
-        Remote.register_base(self.class)
+        Remote.register_remote_base(self.class.to_s.downcase.to_sym)
       end
       
     end
