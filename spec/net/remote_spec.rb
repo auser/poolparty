@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
-module HypeRemote
+module Hype
   def hyper
   end
   def instances_list
@@ -20,7 +20,7 @@ describe "Remote" do
     @tc.respond_to?(:using).should == true
   end
   it "should include the module with using" do
-    @tc.should_receive(:extend).with("Hype".preserved_module_constant("Remote")).once
+    @tc.should_receive(:extend).with("Hype".preserved_module_constant).once
     @tc.using :hype
   end
   it "should keep a list of the remote_bases" do
@@ -38,7 +38,7 @@ describe "Remote" do
     end    
   end
   it "should extend the module with RemoterBase" do
-    HypeRemote.should_receive(:extend).with(PoolParty::Remote::RemoterBase).once
+    Hype.should_receive(:extend).with(PoolParty::Remote::RemoterBase).once
     @tc.using :hype
   end
   describe "after using" do
