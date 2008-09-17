@@ -21,7 +21,8 @@ module PoolParty
       include Configurable
       include PrettyPrinter
       include CloudResourcer
-            
+      include Remote
+      
       def initialize(name,&block)
         @name = name
         @container = Container::Container.new
