@@ -3,11 +3,14 @@
   that the clouds can use to rsync or run remote commands
 =end
 module PoolParty
-  module Remoter
-    module ClassMethods
-    end
-    
+  module Remoter    
     module InstanceMethods
+      def rsync_storage_files_to(remote_instance)
+        unless remote_instance
+          "#{rsync_command} #{Base.storage_directory} #{remote_instance.ip}:#{Base.remote_storage_path}"
+        end
+      end
+      # Generic commandable strings
       def ssh_string
         (["ssh"] << ssh_array).join(" ")
       end
@@ -17,6 +20,9 @@ module PoolParty
       def rsync_command
         "rsync --delete -azP -e '#{ssh_string}' "
       end
+    end
+    
+    module ClassMethods
     end
     
     def self.included(receiver)

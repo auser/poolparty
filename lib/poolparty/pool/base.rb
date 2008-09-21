@@ -11,9 +11,12 @@ module PoolParty
     default_options({
       :environment => "production",
       :user => "poolparty",
-      :base_keypair_path => "~/.ec2"
+      :base_keypair_path => "~/.ec2",
+      :tmp_path => "tmp",
+      :remote_storage_path => "/var/poolparty",
+      :storage_directory => File.join(Dir.pwd, "tmp")
     })
-    
+        
     # Class methods
     class << self
       def options(h={})
