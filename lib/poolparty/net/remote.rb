@@ -3,9 +3,12 @@ module PoolParty
     
     def using(type)
       if available_bases.include?(type.to_sym)
-        self.instance_eval do |t|
-          t.extend "#{type}".preserved_module_constant if type
-          "#{type}".preserved_module_constant.extend(RemoterBase)
+        unless using_remoter?
+          self.instance_eval do |t|
+            t.extend "#{type}".preserved_module_constant if type
+            "#{type}".preserved_module_constant.extend(RemoterBase)
+          end
+          @remote_base = type          
         end
       else
         puts "Unknown remote base" 
@@ -14,6 +17,10 @@ module PoolParty
     
     def available_bases
       remote_bases
+    end
+    
+    def using_remoter?
+      @remote_base ||= nil
     end
         
   end

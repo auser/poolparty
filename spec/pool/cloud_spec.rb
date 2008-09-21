@@ -20,6 +20,9 @@ describe "Cloud" do
     it "should store the cloud" do
       @obj.cloud(:pop).should == @cloud1
     end
+    it "should have set the using base on intantiation to ec2" do
+      @cloud1.using_remoter?.should == :ec2
+    end
   end
   it "should return the cloud if the cloud key is already in the clouds list" do
     @cld = cloud :pop do;end

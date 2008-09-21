@@ -41,6 +41,22 @@ describe "Remote" do
     Hype.should_receive(:extend).with(PoolParty::Remote::RemoterBase).once
     @tc.using :hype
   end
+  describe "when including" do
+    it "should be able to say if it is using a remote base with using_remoter?" do
+      @tc.using :hype
+      @tc.using_remoter?.should == :hype
+    end
+    it "should ask if it is using_remoter? when calling using" do
+      @tc.should_receive(:using_remoter?).once
+      @tc.using :hype
+    end
+    it "should only include the remote class once" do
+      @tc.should_receive(:extend).with(Hype).once
+      @tc.using :hype
+      @tc.using :hype
+      @tc.using :hype
+    end
+  end
   describe "after using" do
     before(:each) do
       @tc = TestClass.new

@@ -14,7 +14,6 @@ module PoolParty
       attr_reader :name, :templates
       attr_accessor :parent
       include PoolParty::PluginModel
-      include MethodMissingSugar
       include Configurable
       include PrettyPrinter
       include CloudResourcer
@@ -33,6 +32,8 @@ module PoolParty
       
       def initialize(name, parent, &block)
         @name = name
+        # this can be overridden in the spec, but ec2 is the default
+        using :ec2 
         set_parent(parent) if parent
         self.instance_eval &block if block_given?
       end

@@ -6,8 +6,8 @@ namespace(:dev) do
   # Setup a basic development environment for the user 
   desc "Setup development environment specify the config_file"
   task :setup => [:initialize, :setup_keypair] do    
-    certloc = "#{Application.ec2_dir}/#{Application.keypair}/cert-*.pem 2>/dev/null"
-    pkloc = "#{Application.ec2_dir}/#{Application.keypair}/pk-*.pem 2>/dev/null"
+    certloc = "#{Base.ec2_dir}/#{Base.keypair}/cert-*.pem 2>/dev/null"
+    pkloc = "#{Base.ec2_dir}/#{Base.keypair}/pk-*.pem 2>/dev/null"
     unless `ls #{certloc}`.length > 1 && `ls #{pkloc}`.length > 1
       puts <<-EOM
 Make sure you run rake dev:setup_pemkeys before you run this command
@@ -17,14 +17,14 @@ exiting...
       EOM
       exit
     end
-    keyfilename = ".#{Application.keypair}_pool_keys"
+    keyfilename = ".#{Base.keypair}_pool_keys"
     run <<-EOR
-      echo 'export AWS_ACCESS_KEY=\"#{Application.access_key}\"' > $HOME/#{keyfilename}
-      echo 'export AWS_SECRET_ACCESS=\"#{Application.secret_access_key}\"' >> $HOME/#{keyfilename}
-      echo 'export EC2_HOME=\"#{Application.ec2_dir}\"' >> $HOME/#{keyfilename}
-      echo 'export KEYPAIR_NAME=\"#{Application.keypair}\"' >> $HOME/#{keyfilename}
-      echo 'export EC2_PRIVATE_KEY=`ls ~/.ec2/#{Application.keypair}/pk-*.pem`;' >> $HOME/#{keyfilename}
-      echo 'export EC2_CERT=`ls ~/.ec2/#{Application.keypair}/cert-*.pem`;' >> $HOME/#{keyfilename}
+      echo 'export AWS_ACCESS_KEY=\"#{Base.access_key}\"' > $HOME/#{keyfilename}
+      echo 'export AWS_SECRET_ACCESS=\"#{Base.secret_access_key}\"' >> $HOME/#{keyfilename}
+      echo 'export EC2_HOME=\"#{Base.ec2_dir}\"' >> $HOME/#{keyfilename}
+      echo 'export KEYPAIR_NAME=\"#{Base.keypair}\"' >> $HOME/#{keyfilename}
+      echo 'export EC2_PRIVATE_KEY=`ls ~/.ec2/#{Base.keypair}/pk-*.pem`;' >> $HOME/#{keyfilename}
+      echo 'export EC2_CERT=`ls ~/.ec2/#{Base.keypair}/cert-*.pem`;' >> $HOME/#{keyfilename}
     EOR
     puts <<-EOM
 To work on this cloud, source the file like: 
@@ -35,24 +35,24 @@ To work on this cloud, source the file like:
   end
   desc "Generate a new keypair"
   task :setup_keypair => [:initialize] do
-    Application.keypair ||= "#{File.basename(Dir.pwd)}"    
-    run "ec2-delete-keypair #{Application.keypair}" if File.file?(Application.keypair_path)
-    puts "-- setting up keypair named #{Application.keypair} in #{Application.keypair_path}"
+    Base.keypair ||= "#{File.basename(Dir.pwd)}"    
+    run "ec2-delete-keypair #{Base.keypair}" if File.file?(Base.keypair_path)
+    puts "-- setting up keypair named #{Base.keypair} in #{Base.keypair_path}"
     run <<-EOR        
-      chmod 600 #{Application.keypair_path} 2>/dev/null
-      mkdir ~/.ec2/#{Application.keypair} 2>/dev/null
-      ec2-add-keypair #{Application.keypair} > #{Application.keypair_path}
+      chmod 600 #{Base.keypair_path} 2>/dev/null
+      mkdir ~/.ec2/#{Base.keypair} 2>/dev/null
+      ec2-add-keypair #{Base.keypair} > #{Base.keypair_path}
     EOR
   end
   desc "Setup pem keys"
   task :setup_pemkeys => [:initialize] do    
-    puts "Setting up stubbed pem keys in ~/.ec2/#{Application.keypair}"
+    puts "Setting up stubbed pem keys in ~/.ec2/#{Base.keypair}"
     run <<-EOR
-      mkdir -p ~/.ec2/#{Application.keypair} 2>/dev/null
-      echo 'UPDATE ME' > #{Application.ec2_dir}/#{Application.keypair}/cert-UPDATEME.pem
-      echo 'UPDATE ME' > #{Application.ec2_dir}/#{Application.keypair}/pk-UPDATEME.pem
+      mkdir -p ~/.ec2/#{Base.keypair} 2>/dev/null
+      echo 'UPDATE ME' > #{Base.ec2_dir}/#{Base.keypair}/cert-UPDATEME.pem
+      echo 'UPDATE ME' > #{Base.ec2_dir}/#{Base.keypair}/pk-UPDATEME.pem
     EOR
-    puts "Don't forget to replace your ~/.ec2/#{Application.keypair}/*.pem keys with the real amazon keys"
+    puts "Don't forget to replace your ~/.ec2/#{Base.keypair}/*.pem keys with the real amazon keys"
   end
   desc "initialize setup"
   task :init => [:setup_pemkeys]
@@ -61,7 +61,7 @@ To work on this cloud, source the file like:
   task :test => :initialize do
     puts "---- Testing ----"
     puts PoolParty.options(ARGV.dup)
-    puts "Using keypair at: #{Application.keypair_path}"
+    puts "Using keypair at: #{Base.keypair_path}"
   end
   desc "Installation listing"
   task :list_install => :initialize do

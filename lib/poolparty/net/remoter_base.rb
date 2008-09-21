@@ -28,6 +28,9 @@ module PoolParty
         raise RemoteException.new(:method_not_defined, "instances_list")        
       end
       
+      # Include the remoter class to include the other remoter classes
+      include Remoter
+      
       # The following methods are inherent on the RemoterBase
       # If you need to overwrite these methods, do so with caution
       # Listing methods

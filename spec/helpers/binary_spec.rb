@@ -6,7 +6,7 @@ describe "Binary" do
     Dir.stub!(:[]).and_return %w(init console)
   end
   it "should have the binary location set on Binary" do
-    Binary.binary_directory.should == "./spec/helpers/../../lib/poolparty/helpers/../../../bin"
+    Binary.binary_directory.should =~ /lib\/poolparty\/helpers\/\.\.\/\.\.\/\.\.\/bin/
   end
   it "should be able to list the binaries in the bin directory" do
     Binary.available_binaries.should == %w(console init)

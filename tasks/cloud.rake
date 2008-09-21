@@ -3,7 +3,7 @@ namespace(:cloud) do
   # Setup
   task :init do
     setup_application
-    raise Exception.new("You must specify your access_key and secret_access_key") unless Application.access_key && Application.secret_access_key
+    raise Exception.new("You must specify your access_key and secret_access_key") unless Base.access_key && Base.secret_access_key
   end
   # Install the stack on all of the nodes
   desc "Prepare all servers"

@@ -5,7 +5,7 @@ class TestClass
 end
 describe "FileWriter" do
   before(:each) do
-    # Application.reset!
+    # Base.reset!
     @instance = Class.new
     @instance.stub!(:name).and_return "node0"
     @instance.stub!(:ip).and_return "127.0.0.1"

@@ -2,6 +2,7 @@ require 'rubygems'
 
 # Load required gems
 require 'active_support'
+require 'open4'
 require "backcall"
 
 # Use active supports auto load mechanism

@@ -10,13 +10,13 @@ module PoolParty
       # Run a new instance, with the user_data and the ami described in the config
       def launch_new_instance!
         instance = ec2.run_instances(
-          :image_id => Application.ami, 
-          :user_data => "#{Application.launching_user_data}",
+          :image_id => Base.ami, 
+          :user_data => "#{Base.launching_user_data}",
           :minCount => 1,
           :maxCount => 1,
-          :key_name => "#{Application.keypair}",
+          :key_name => "#{Base.keypair}",
           :availability_zone => nil,
-          :size => "#{Application.size}")
+          :size => "#{Base.size}")
         begin
           item = instance#.instancesSet.item
           EC2ResponseObject.get_hash_from_response(item)
@@ -44,7 +44,7 @@ module PoolParty
       end
       # EC2 connections
       def ec2
-        @ec2 ||= EC2::Base.new(:access_key_id => Application.access_key, :secret_access_key => Application.secret_access_key)
+        @ec2 ||= EC2::Base.new(:access_key_id => Base.access_key, :secret_access_key => Base.secret_access_key)
       end
       def reset!
         @cached_descriptions = nil

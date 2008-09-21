@@ -20,6 +20,7 @@ module PoolParty
     def self.included(receiver)
       receiver.extend         ClassMethods
       receiver.send :include, InstanceMethods
+      receiver.send :include, MethodMissingSugar
     end
   end
 end

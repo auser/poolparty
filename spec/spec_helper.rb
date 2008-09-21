@@ -14,8 +14,8 @@ end
 include PoolParty
 extend PoolParty
 
-Application.environment = "test"
-Application.verbose = false
+Base.environment = "test"
+Base.verbose = false
 
 def stub_option_load
     @str=<<-EOS
@@ -26,9 +26,9 @@ def stub_option_load
     EOS
     @sio = StringIO.new
     StringIO.stub!(:new).and_return @sio
-    Application.stub!(:open).with("http://169.254.169.254/latest/user-data").and_return @sio
+    Base.stub!(:open).with("http://169.254.169.254/latest/user-data").and_return @sio
     @sio.stub!(:read).and_return @str
-    Application.reset!
+    Base.reset!
 end
 
 def hide_output

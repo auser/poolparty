@@ -1,6 +1,6 @@
 namespace(:ec2) do        
   task :init do
-    Application.options
+    Base.options
   end
   # Start a new instance in the cloud
   desc "Add and start an instance to the pool"
