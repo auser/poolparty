@@ -5,8 +5,8 @@
 module PoolParty
   module Remoter    
     module InstanceMethods
-      def rsync_storage_files_to(remote_instance)
-        unless remote_instance
+      def rsync_storage_files_to_command(remote_instance)
+        if remote_instance
           "#{rsync_command} #{Base.storage_directory} #{remote_instance.ip}:#{Base.remote_storage_path}"
         end
       end
@@ -18,7 +18,7 @@ module PoolParty
         ["-o StrictHostKeyChecking=no", "-l '#{Base.user}'", "-i '#{keypair_path}'"]
       end
       def rsync_command
-        "rsync --delete -azP -e '#{ssh_string}' "
+        "rsync --delete -azP --exclude cache --exclude temp -e '#{ssh_string}'"
       end
     end
     
