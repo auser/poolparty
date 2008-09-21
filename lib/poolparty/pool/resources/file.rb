@@ -13,7 +13,8 @@ module PoolParty
         :ensure => "present",
         :mode => 644,
         :owner => "poolparty",
-        :name => nil
+        :name => nil, 
+        :contents => ""
       })
       
     end

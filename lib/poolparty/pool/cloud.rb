@@ -1,4 +1,5 @@
 require File.dirname(__FILE__) + "/plugin_model"
+require File.dirname(__FILE__) + "/resource"
 
 module PoolParty    
   module Cloud
@@ -14,10 +15,11 @@ module PoolParty
       attr_reader :name, :templates
       attr_accessor :parent
       include PoolParty::PluginModel
+      include PoolParty::Resources
       include Configurable
       include PrettyPrinter
-      include CloudResourcer
-      include Remote
+      include CloudResourcer      
+      include Remote      
       
       default_options({
         :minimum_instances => 2,
@@ -54,6 +56,16 @@ module PoolParty
       end
       def generate_keypair(*args)
         options[:keypair] = args.length > 0 ? args[0] : "#{@parent.name}_#{@name}"
+      end
+      
+      # Configuration files
+      def build_manifest
+        returning String.new do |str|          
+          resources.each do |name, resource|
+            str << "# #{name}"
+            str << resource.to_string("\t")
+          end
+        end
       end
     end
   end  

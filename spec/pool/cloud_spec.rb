@@ -141,6 +141,31 @@ describe "Cloud" do
           pool(:pool).cloud(:nickes).keypair.should == "pool_nickes"
         end
       end
+      describe "Manifest" do
+        before(:each) do
+          @cloud.instance_eval do
+            has_file(:name => "/etc/httpd/http.conf") do
+              contents <<-EOE
+                hello my lady
+              EOE
+            end
+            has_gem(:name => "poolparty")
+            has_package(:name => "haproxy")
+          end
+        end
+        it "should it should have the method build_manifest" do
+          @cloud.respond_to?(:build_manifest).should == true
+        end
+        it "should return a string when calling build_manifest" do
+          @cloud.build_manifest.class.should == String          
+        end
+        it "should have 3 resources" do
+          @cloud.resources_count.should == 3
+        end
+        it "should be able to build the manifest for the cloud resources" do
+          @cloud.build_manifest.class.should == String
+        end
+      end
     end
     
   end

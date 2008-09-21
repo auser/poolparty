@@ -12,6 +12,6 @@ module PoolParty
     def keypair_path
       File.join(Base.base_keypair_path, keypair)
     end
-        
+    
   end
 end

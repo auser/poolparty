@@ -31,6 +31,14 @@ module PoolParty
       end.join("\n")
     end
     
+    def resources_count
+      count = 0
+      resources.each do |name, resource|
+        count += resource.instances.size
+      end
+      count
+    end
+    
     class Resource
       include MethodMissingSugar
       include Configurable
@@ -45,6 +53,9 @@ module PoolParty
       end
       def requires(str="")
         options.merge!(:require => str)
+      end
+      def ensures(str="")
+        options.merge!(:ensure => str)
       end
       # Generic to_s
       # Most Resources won't need to extend this
