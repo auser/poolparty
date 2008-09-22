@@ -61,7 +61,7 @@ module PoolParty
       # Make sure this template is moved to the tmp directory as well
       def template(file)
         raise TemplateNotFound.new("no template given") unless file
-        raise TemplateNotFound.new("template cannot be found") unless ::File.file?(file)
+        raise TemplateNotFound.new("template cannot be found #{file}") unless ::File.file?(file)
         options.merge!(:template => file)
         copy_file_to_storage_directory(file)
       end
