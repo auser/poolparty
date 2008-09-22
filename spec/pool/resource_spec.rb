@@ -27,6 +27,57 @@ describe "Resource" do
       @resource.to_string.should =~ /resource \{\n/
     end
   end
+  describe "instance methods" do
+    before(:each) do
+      @resource = MyResource.new
+    end
+    it "should be able to take requires method" do
+      @resource.respond_to?(:requires).should == true
+    end
+    it "should push require onto the options" do
+      @resource.options.has_key?(:require).should == false
+      @resource.requires("nibbles")
+      @resource.options.has_key?(:require).should == true
+    end
+    it "should be able to call ensures method on the resource" do
+      @resource.respond_to?(:ensures).should == true
+    end
+    it "should push the option ensure onto the options" do
+      @resource.options.has_key?(:ensure).should == false
+      @resource.ensures("nibbles")
+      @resource.options.has_key?(:ensure).should == true
+    end
+    describe "templating" do
+      before(:each) do
+        FileUtils.stub!(:cp).and_return true        
+      end
+      it "should have the method template" do
+        @resource.respond_to?(:template).should == true
+      end
+      it "should raise an exception if no file is given" do
+        lambda {
+          @resource.template
+        }.should raise_error
+      end
+      it "should raise an excepton if the file cannot be found" do
+        lambda {
+          @resource.template("radar")
+        }.should raise_error
+      end
+      it "should not raise an exception if there is a file passed and the file is found" do
+        File.should_receive(:file?).with("radar").and_return true
+        lambda {
+          @resource.template("radar")
+        }.should_not raise_error
+      end
+      it "should push the template option on to the options" do
+        File.stub!(:file?).with("radar").and_return true
+        @resource.options.has_key?(:template).should == false
+        @resource.template("radar")
+        @resource.options.has_key?(:template).should == true
+      end
+    end
+  end
   describe "command" do
     include PoolParty::Resources
     

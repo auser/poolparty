@@ -18,6 +18,9 @@ end
 Kernel.load_p File.dirname(__FILE__) + "/poolparty/pool/**"
 
 module PoolParty
+  def copy_file_to_storage_directory(file)
+    FileUtils.cp file, Base.storage_directory
+  end
 end
 
 class Object

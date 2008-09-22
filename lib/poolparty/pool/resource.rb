@@ -57,6 +57,14 @@ module PoolParty
       def ensures(str="")
         options.merge!(:ensure => str)
       end
+      # Give us a template to work with on the resource
+      # Make sure this template is moved to the tmp directory as well
+      def template(file)
+        raise TemplateNotFound.new("no template given") unless file
+        raise TemplateNotFound.new("template cannot be found") unless ::File.file?(file)
+        options.merge!(:template => file)
+        copy_file_to_storage_directory(file)
+      end
       # Generic to_s
       # Most Resources won't need to extend this
       def to_string(prev="")
