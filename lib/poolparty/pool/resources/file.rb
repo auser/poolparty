@@ -13,9 +13,12 @@ module PoolParty
         :ensure => "present",
         :mode => 644,
         :owner => "poolparty",
-        :name => nil, 
-        :contents => ""
+        :content => ""
       })
+      
+      def source
+        File.join(Base.fileserver_base, name)
+      end
       
     end
     

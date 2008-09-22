@@ -156,14 +156,22 @@ describe "Cloud" do
         it "should it should have the method build_manifest" do
           @cloud.respond_to?(:build_manifest).should == true
         end
-        it "should return a string when calling build_manifest" do
-          @cloud.build_manifest.class.should == String          
-        end
         it "should have 3 resources" do
           @cloud.resources_count.should == 3
         end
-        it "should be able to build the manifest for the cloud resources" do
-          @cloud.build_manifest.class.should == String
+        describe "building" do
+          before(:each) do
+            @manifest = @cloud.build_manifest
+          end
+          it "should return a string when calling build_manifest" do
+            @manifest.class.should == String          
+          end
+          it "should have a comment of # file in the manifest as described by the has_file" do
+            @manifest.should =~ /# file/
+          end
+          it "should have the comment of a package in the manifest" do
+            @manifest.should =~ /# package/
+          end
         end
       end
     end

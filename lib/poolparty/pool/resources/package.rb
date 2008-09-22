@@ -11,7 +11,6 @@ module PoolParty
       
       default_options({
         :ensure => "installed",
-        :alias => nil,
         :name => nil
       })
       

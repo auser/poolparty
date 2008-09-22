@@ -2,10 +2,10 @@ class String
   def hasherize(format=[])
     hash = {}
     i = 0
-    self.split(%r{[\n|\t|\s| ]+}).collect {|a| a.strip}.each do |f|
-      break unless format[i]
+    self.split(%r{[\n|\t|\s| ]+}).map {|a| a.strip}.each do |f|
+      next unless format[i]
       unless f == "" || f.nil?
-        hash[format[i]] = f
+        hash[format[i].to_sym] = f
         i+=1
       end      
     end
@@ -53,31 +53,5 @@ class String
     returning [] do |arr|
       arr << self.split(/\n/).collect_with_index(&block)
     end.flatten
-  end
-  def bucket_objects
-    AWS::S3::Bucket.objects(self)
-  end
-  def bucket_object(key)
-    AWS::S3::S3Object.value key, self if bucket_object_exists?(key)
-  end
-  def bucket_object_exists?(key)
-    AWS::S3::S3Object.exists? key, self
-  end
-  def store_bucket_value(key, data)
-    AWS::S3::S3Object.store key, data, self unless bucket_object_exists?(key)
-  end
-  def delete_bucket_value(key)
-    AWS::S3::S3Object.delete(key, self) if bucket_object_exists?(key)
-  end
-  def bucket_exists?
-    begin
-      AWS::S3::Bucket.find(self)
-      return true
-    rescue
-      return false
-    end        
-  end
-  def delete_bucket
-    AWS::S3::Bucket.delete(self, :force => true) if bucket_exists?
   end
 end

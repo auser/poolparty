@@ -5,7 +5,7 @@ class WebServers
     
     def initialize(p)
       # Require apache package
-      package({:name => "apache"})
+      has_package(:name => "apache")
       super
     end
     

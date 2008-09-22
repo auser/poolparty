@@ -28,3 +28,7 @@ end
 class Class
   include PoolParty::PluginModel
 end
+
+Dir[File.dirname(__FILE__) + "/poolparty/base_packages/*.rb"].each do |pkg|
+  require pkg
+end

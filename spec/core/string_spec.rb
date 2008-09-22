@@ -1,6 +1,27 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe "String" do
+  describe "hasherize" do
+    before(:each) do
+      @str=<<-EOE
+hello world
+you are my
+hero
+      EOE
+      @hashed = @str.hasherize(%w(hello you))
+    end
+    it "should return a hash from the string" do
+      @hashed.class.should == Hash
+    end
+    it "should have hello as a key" do
+      @hashed.has_key?(:hello).should == true
+    end
+    describe "arrayable" do
+      it "should be able to turn the string into an array" do
+        @str.arrayable.class.should == Array
+      end
+    end    
+  end
   before(:each) do
     @string = "string"
     @string.stub!(:bucket_objects).and_return([])

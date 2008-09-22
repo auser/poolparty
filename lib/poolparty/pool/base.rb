@@ -14,7 +14,8 @@ module PoolParty
       :base_keypair_path => "~/.ec2",
       :tmp_path => "tmp",
       :remote_storage_path => "/var/poolparty",
-      :storage_directory => File.join(Dir.pwd, "tmp")
+      :storage_directory => File.join(Dir.pwd, "tmp"),
+      :fileserver_base => "puppet://puppet/"
     })
         
     # Class methods

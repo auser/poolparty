@@ -1,3 +1,5 @@
+require File.dirname(__FILE__) + '/spec_helper'
+
 pool :app do
   
   plugin_directory File.join(File.dirname(__FILE__), "plugins")
