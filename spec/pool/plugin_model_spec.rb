@@ -40,6 +40,9 @@ describe "Plugin" do
       @c.respond_to?(:apache).should == true
     end
     describe "methods" do
+      before(:each) do
+        reset!
+      end
       it "should call the enable_php method when in the defininition of the cloud" do
         @plugin.respond_to?(:enable_php).should == true
       end

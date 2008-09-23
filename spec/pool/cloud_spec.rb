@@ -151,22 +151,37 @@ describe "Cloud" do
               EOE
             end
             has_gem(:name => "poolparty")
-            has_package(:name => "haproxy")
+            has_package(:name => "dummy")
           end
         end
         it "should it should have the method build_manifest" do
           @cloud.respond_to?(:build_manifest).should == true
         end
-        it "should have 5 resources" do
-          @cloud.resources_count.should == 5
+        it "should have 3 resources" do
+          @cloud.resources_count.should == 3
         end
         it "should receive add_poolparty_base_requirements before building the manifest" do
           @cloud.should_receive(:add_poolparty_base_requirements).once
           @cloud.build_manifest
         end
+        describe "add_poolparty_base_requirements" do
+          before(:each) do
+            @hb = "heartbeat".class_constant.new
+            "heartbeat".class_constant.stub!(:new).and_return @hb
+            @ha = "haproxy".class_constant.new
+            "haproxy".class_constant.stub!(:new).and_return @ha
+          end
+          it "should call enable on heartbeat" do
+            @hb.should_receive(:enable).and_return true
+            @cloud.add_poolparty_base_requirements
+          end
+          it "should call enable on haproxy" do
+            @ha.should_receive(:enable).and_return true
+            @cloud.add_poolparty_base_requirements
+          end
+        end
         describe "building" do
           before(:each) do
-            puts @cloud.resources_count
             @manifest = @cloud.build_manifest
           end
           it "should return a string when calling build_manifest" do

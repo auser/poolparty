@@ -27,11 +27,12 @@ module PoolParty
         # Create the class to evaluate the plugin on the implemented call
         klass = class_string_name.class_constant(PoolParty::Plugin::Plugin)
         klass.extend PoolParty::Resources
+        klass.send :include, PoolParty::Resources
         
         # Create the block inside the instantiated plugin
         klass.module_eval &block if block
         # class_string_name.module_constant(&block)
-        # klass.send :include, class_string_name.module_constant        
+        # klass.send :include, class_string_name.module_constant
         
         # Add the plugin definition to the cloud as an instance method
         Cloud::Cloud.module_eval <<-EOE

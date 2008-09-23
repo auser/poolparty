@@ -71,10 +71,10 @@ module PoolParty
       end
       
       def add_poolparty_base_requirements
-        instance_eval do
-          heartbeat
-          haproxy
-        end
+        # instance_eval do
+          heartbeat.enable
+          haproxy.enable
+        # end
       end
     end
   end  

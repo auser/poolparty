@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + "/plugins/webserver"
+require File.dirname(__FILE__) + "/pool/test_plugins/webserver"
 
 pool :app do
   

@@ -6,6 +6,7 @@ module PoolParty
       include MethodMissingSugar
       include Configurable
       include Resources
+      extend Resources
       
       attr_accessor :parent
       

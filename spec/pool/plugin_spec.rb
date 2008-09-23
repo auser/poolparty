@@ -32,6 +32,9 @@ describe "Plugin" do
     it "should have access to the cloud's container" do
       @plugin.container.should == @p.cloud(:app).container
     end
+    it "should have enable_php as a method" do
+      @plugin.respond_to?(:enable_php).should == true
+    end
     describe "after eval'ing" do
       before(:each) do
         @plugin.instance_eval do
@@ -46,15 +49,21 @@ describe "Plugin" do
     describe "before eval'ing" do
       before(:each) do
         reset!
+        @plugin = "apache".class_constant.new(@c)
       end
-      it "should call has_line_in_file"
-      #   @plugin.should_receive(:php).at_least(1).and_return true
-      # end
+      it "should call has_line_in_file" do
+        @plugin.should_receive(:php).and_return true
+      end
+      it "should call site" do
+        @plugin.should_receive(:site).with("frank").and_return true
+      end
       after do
         @plugin.instance_eval do
           enable_php
+          site("frank")
         end
       end
+      
     end
   end
 end
