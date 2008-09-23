@@ -3,25 +3,21 @@ require File.dirname(__FILE__) + "/resource"
 module PoolParty
   module Resources
     
-    def define_resource(name, &block)
-      custom_resource(name, &block) << PoolParty::Resources::CustomResource.new(name, &block)
+    def custom_resource(name, opts={}, &block)
+      resource(:custom_resource) << PoolParty::Resources::CustomResource.new(name, opts, &block)
     end
-    
-    def custom_resource(name, &block)
-      resources[:custom_resource] ||= PoolParty::Resources::CustomResource.new(name, &block)
-    end
-    
+    alias_method :define_resource, :custom_resource
+        
     def store(str)
-      (custom_resource(self.class.to_s).function_calls ||= []) << str
+      custom_resource(self.class.to_s).function_calls << str
     end
     
     class CustomResource < Resource
       attr_reader :name, :function_string, :function_calls
       
-      def initialize(name=:custom_method, &block)
+      def initialize(name=:custom_method, opts={}, &block)
         @name = name
-        self.instance_eval &block if block
-        push self
+        super(opts, &block)
       end
       
       def custom_function(str)
@@ -63,11 +59,11 @@ module PoolParty
         end.join("\n")
       end
       
-      def <<(*args)
-        args.each {|arg| arg.is_a?(String) ? (function_calls << arg) : (instances << arg) if can_add_instance?(arg) }
-        self
-      end
-      alias_method :push, :<<
+      # def <<(*args)
+      #   args.each {|arg| arg.is_a?(String) ? (function_calls << arg) : (instances << arg) if can_add_instance?(arg) }
+      #   self
+      # end
+      # alias_method :push, :<<
       
     end        
     

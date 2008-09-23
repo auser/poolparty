@@ -2,8 +2,7 @@ module PoolParty
   class Base
     plugin :haproxy do
       
-      def enable
-        
+      def enable        
         package({:name => "haproxy"})
       end      
       

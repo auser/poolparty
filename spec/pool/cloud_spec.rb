@@ -158,6 +158,10 @@ describe "Cloud" do
           @cloud.respond_to?(:build_manifest).should == true
         end
         it "should have 3 resources" do
+          @cloud.add_poolparty_base_requirements
+          @cloud.resources.each do |name,r|
+            # puts "name: #{name}"
+          end
           @cloud.resources_count.should == 3
         end
         it "should receive add_poolparty_base_requirements before building the manifest" do
@@ -166,6 +170,7 @@ describe "Cloud" do
         end
         describe "add_poolparty_base_requirements" do
           before(:each) do
+            reset!
             @hb = "heartbeat".class_constant.new
             "heartbeat".class_constant.stub!(:new).and_return @hb
             @ha = "haproxy".class_constant.new
@@ -192,8 +197,7 @@ describe "Cloud" do
           end
           it "should have the comment of a package in the manifest" do
             @manifest.should =~ /# packages/
-            
-            puts @manifest
+            # puts @manifest
           end
         end
       end
