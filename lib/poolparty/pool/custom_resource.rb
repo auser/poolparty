@@ -12,7 +12,7 @@ module PoolParty
     end
     
     def store(str)
-      custom_resource(self).function_calls << str
+      (custom_resource(self.class.to_s).function_calls ||= []) << str
     end
     
     class CustomResource < Resource
@@ -21,32 +21,36 @@ module PoolParty
       def initialize(name=:custom_method, &block)
         @name = name
         self.instance_eval &block if block
-        valid?
         push self
       end
       
-      def valid?
-        raise ResourceException.new("#{@name} must define a custom_function") unless @function_string
-        raise ResourceException.new("#{@name} must define a custom_usage") unless @function_calls
+      def custom_function(str)
+        function_string << str
       end
       
-      def custom_function(str)
-        @function_string = str
+      def function_string
+        @function_string ||= ""
+      end
+      
+      def function_calls
+        @function_calls ||= []
       end
       
       def custom_usage(&block)
         PoolParty::Resources.module_eval &block
-        @function_calls = []
+        function_calls
       end
       
       def to_string(prev="")
         returning Array.new do |output|
-          output << "#{prev} # Custom Functions\n"
+          output << "#{prev} # Custom Functions calls\n"
           instances.each do |resource|
             resource.function_calls.each do |call|
               output << "#{prev}#{call}"
             end            
           end
+          output << function_calls
+          output << function_strings(prev)
         end.join("\n")        
       end
       
@@ -60,7 +64,7 @@ module PoolParty
       end
       
       def <<(*args)
-        args.each {|arg| arg.is_a?(String) ? (function_calls << arg) : (instances << arg) }
+        args.each {|arg| arg.is_a?(String) ? (function_calls << arg) : (instances << arg) if can_add_instance?(arg) }
         self
       end
       alias_method :push, :<<

@@ -44,9 +44,12 @@ describe "Plugin" do
       end
     end
     describe "before eval'ing" do
-      it "should call has_line_in_file" do
-        @plugin.should_receive(:php).at_least(1).and_return true
+      before(:each) do
+        reset!
       end
+      it "should call has_line_in_file"
+      #   @plugin.should_receive(:php).at_least(1).and_return true
+      # end
       after do
         @plugin.instance_eval do
           enable_php

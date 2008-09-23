@@ -143,6 +143,7 @@ describe "Cloud" do
       end
       describe "Manifest" do
         before(:each) do
+          reset!
           @cloud.instance_eval do
             has_file(:name => "/etc/httpd/http.conf") do
               contents <<-EOE
@@ -156,21 +157,28 @@ describe "Cloud" do
         it "should it should have the method build_manifest" do
           @cloud.respond_to?(:build_manifest).should == true
         end
-        it "should have 3 resources" do
-          @cloud.resources_count.should == 3
+        it "should have 5 resources" do
+          @cloud.resources_count.should == 5
+        end
+        it "should receive add_poolparty_base_requirements before building the manifest" do
+          @cloud.should_receive(:add_poolparty_base_requirements).once
+          @cloud.build_manifest
         end
         describe "building" do
           before(:each) do
+            puts @cloud.resources_count
             @manifest = @cloud.build_manifest
           end
           it "should return a string when calling build_manifest" do
             @manifest.class.should == String          
           end
           it "should have a comment of # file in the manifest as described by the has_file" do
-            @manifest.should =~ /# file/
+            @manifest.should =~ /# files/
           end
           it "should have the comment of a package in the manifest" do
-            @manifest.should =~ /# package/
+            @manifest.should =~ /# packages/
+            
+            puts @manifest
           end
         end
       end

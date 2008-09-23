@@ -13,7 +13,7 @@ module PoolParty
       })
       
       def resources
-        @class_resources ||= {}
+        @@class_resources ||= {}
       end
       def to_string
         returning Array.new do |output|

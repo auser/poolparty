@@ -1,3 +1,5 @@
+require File.join(File.dirname(__FILE__), "resource")
+
 module PoolParty    
   module PluginModel
     
@@ -15,7 +17,7 @@ module PoolParty
       attr_reader :parent
       include MethodMissingSugar
       include Configurable
-      include PrettyPrinter
+      include PrettyPrinter      
       
       def initialize(name,cld,&block)
         @name = name
@@ -24,11 +26,12 @@ module PoolParty
         
         # Create the class to evaluate the plugin on the implemented call
         klass = class_string_name.class_constant(PoolParty::Plugin::Plugin)
-        klass.send :include, PoolParty::Plugin
+        klass.extend PoolParty::Resources
         
         # Create the block inside the instantiated plugin
-        class_string_name.module_constant(&block)
-        klass.send :include, class_string_name.module_constant
+        klass.module_eval &block if block
+        # class_string_name.module_constant(&block)
+        # klass.send :include, class_string_name.module_constant        
         
         # Add the plugin definition to the cloud as an instance method
         Cloud::Cloud.module_eval <<-EOE

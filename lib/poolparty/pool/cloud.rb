@@ -60,11 +60,20 @@ module PoolParty
       
       # Configuration files
       def build_manifest
-        returning String.new do |str|          
+        add_poolparty_base_requirements
+        
+        returning Array.new do |str|
           resources.each do |name, resource|
-            str << "# #{name}"
+            str << "# #{name.to_s.pluralize}"
             str << resource.to_string("\t")
           end
+        end.join("\n")
+      end
+      
+      def add_poolparty_base_requirements
+        instance_eval do
+          heartbeat
+          haproxy
         end
       end
     end

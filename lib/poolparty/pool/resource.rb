@@ -39,6 +39,10 @@ module PoolParty
       count
     end
     
+    def custom_file(path, str)
+      write_to_file_in_storage_directory(path, str)
+    end
+    
     class Resource
       include MethodMissingSugar
       include Configurable

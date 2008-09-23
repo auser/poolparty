@@ -13,27 +13,6 @@ describe "Custom Resource" do
     before(:each) do
       reset_resources!
     end
-    it "should say it is not valid if there is no custom_function defined" do
-      reset_resources!
-      lambda {
-        define_resource(:rockstar) do          
-          custom_usage do
-            def has_line_in_file(line="line_in_file", file="file")              
-            end
-          end
-        end
-      }.should raise_error
-    end
-    it "should raise ResourceException if there is no custom_usage defined" do
-      lambda {
-        define_resource(:rockstar) do          
-          custom_function <<-EOF
-          define line($file, $line, $ensure = 'present') {
-          }
-          EOF
-        end
-      }.should raise_error
-    end
     it "should not raise ResourceException if custom_function and custom_usage are defined" do
       lambda {
         define_resource(:rockstar) do          
@@ -87,7 +66,8 @@ describe "Custom Resource" do
       it "should have several lines in the files when called several times" do
         has_line_in_file("hi", "filename")
         has_line_in_file("hi", "filename2")
-        custom_resource(:rockstar).to_string("\t").should =~ /line\(filename, hi\)\n\tline\(filename2, hi\)/
+        custom_resource(:rockstar).to_string("\t").should =~ /line\(filename, hi\)/
+        custom_resource(:rockstar).to_string("\t").should =~ /line\(filename2, hi\)/
       end
     end
   end

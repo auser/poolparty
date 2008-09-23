@@ -25,7 +25,7 @@ describe "File" do
       @class.resources.size.should == 1
     end
     it "should be the file" do
-      @class.resource(:file).options.should == @file.options
+      @class.resource(:file).options.include?(:mode).should == true
     end
     describe "to_s" do
       before(:each) do
