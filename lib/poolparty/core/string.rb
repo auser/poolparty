@@ -27,19 +27,22 @@ class String
   def nice_runnable(quite=true)
     self.split(/ && /).join("\n")
   end
-  def class_constant(superclass=nil)
-    symc = "#{self}_Class".classify
-    unless Object.const_defined?(symc)
-      Kernel.module_eval <<-EOE
+  def class_constant(superclass=nil, &block)
+    symc = "PoolParty#{self.classify}Class".classify
+    
+    unless Kernel.const_defined?(symc)
+      kla=<<-EOE
         class #{symc} < #{superclass ? superclass : Object}
-          #{yield if block_given?}
         end
       EOE
+      Kernel.module_eval kla
+      klass = Kernel.const_get(symc)
+      klass.module_eval &block if block
       # klass = Class.new(superclass ? superclass : Object) do
       #   yield if block_given?
       # end
     end
-    symc.constantize
+    Kernel.const_get(symc)
   end
   def module_constant(&block)
     symc = "#{self}_Module".classify

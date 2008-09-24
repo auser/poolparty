@@ -72,7 +72,7 @@ listen web_proxy 127.0.0.1:3000
       @str = "prok"
     end
     it "should be able to turn itself into constant" do
-      @str.class_constant.should == ProkClas
+      @str.class_constant.should == PoolPartyProkClas
     end
     it "should turn itself into a class constant" do
       @str.class_constant.class.should == Class

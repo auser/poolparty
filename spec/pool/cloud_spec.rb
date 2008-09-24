@@ -169,19 +169,34 @@ describe "Cloud" do
           before(:each) do
             reset!
             @hb = "heartbeat".class_constant.new
+            @cloud.instance_eval do
+              @heartbeat = nil
+            end
+          end
+          it "should call initialize on heartbeat (in add_poolparty_base_requirements)" do
+            @hb.class.should_receive(:new).and_return true
+            @cloud.add_poolparty_base_requirements
+          end
+          it "should call heartbeat on the cloud" do
+            @cloud.should_receive(:heartbeat).and_return true
+            @cloud.add_poolparty_base_requirements
+          end
+          it "should call Hearbeat.new" do
+            "heartbeat".class_constant.should_receive(:new).and_return @hb
+            @cloud.add_poolparty_base_requirements            
+          end
+          it "should call enable on the plugin call" do
+            @hb = "heartbeat".class_constant
             "heartbeat".class_constant.stub!(:new).and_return @hb
-            @ha = "haproxy".class_constant.new
-            "haproxy".class_constant.stub!(:new).and_return @ha
+            
+            @cloud.add_poolparty_base_requirements
+            @cloud.heartbeat.should == @hb
           end
-          it "should call enable on heartbeat" do
-            @cloud.should_receive(:enable).and_return true
+          it "should call has_line when calling heartbeat" do
+            @cloud.should_receive(:has_line_in_file).at_least(1)
             @cloud.add_poolparty_base_requirements
           end
-          it "should call enable on haproxy" do
-            @ha.should_receive(:enable).and_return true
-            @cloud.add_poolparty_base_requirements
-          end
-          it "should call has_line... when calling heartbeat" do
+          it "should call has_line... when calling heartbeat which calls the call_function method" do
             PoolParty::Resources::CallFunction.should_receive(:new).and_return "bunk"
             @cloud.add_poolparty_base_requirements
           end
