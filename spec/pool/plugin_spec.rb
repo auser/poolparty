@@ -27,7 +27,7 @@ describe "Plugin" do
       @plugin = "apache".class_constant.new(@c)
     end
     it "should not be empty" do
-      @plugin.class.should == ApacheClas
+      @plugin.class.should == PoolPartyApacheClas
     end
     it "should have access to the cloud's container" do
       @plugin.container.should == @p.cloud(:app).container
@@ -44,6 +44,22 @@ describe "Plugin" do
       end
       it "should call enable_php on the class" do
         @plugin.php.should == true
+      end
+      it "should have resources attached to it" do
+        @plugin.resources.class.should == Hash
+      end
+      it "should have an array of gem resources" do
+        @plugin.resource(:package).class.should == Array
+      end
+      it "should have 1 gem in the resources defined" do
+        @plugin.resource(:package).size.should == 1
+      end
+      it "should have the gem named aska in the gem resource" do
+        @plugin.resource(:package).first.name.should == "aska"
+      end
+      it "should have its resources visible to its parent" do
+        @plugin.parent = @c
+        @c.resources
       end
     end
     describe "before eval'ing" do

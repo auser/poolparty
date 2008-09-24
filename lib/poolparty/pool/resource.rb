@@ -28,11 +28,11 @@ module PoolParty
       @resources = nil
     end
         
-    def resources_string
+    def resources_string(prev="")
       returning Array.new do |output|
         resources.each do |type, resource|
-          output << "# #{type}"
-          output << resource.to_string
+          output << "#{prev*2}# #{type}"
+          output << resource.to_string("#{prev*3}")
         end
       end.join("\n")
     end

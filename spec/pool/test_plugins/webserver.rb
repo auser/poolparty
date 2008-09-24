@@ -3,17 +3,12 @@ class WebServers
     
     attr_accessor :php
     
-    def initialize(p)
-      # Require apache package
-      has_package(:name => "apache")
-      super
+    def enable      
     end
     
     def enable_php
       @php = true
       php
-      # has_line_in_file "LoadModule php4_module        libexec/httpd/libphp4.so", "/etc/httpd/httpd.conf"
-      # has_line_in_file "AddModule mod_php4.c", "/etc/httpd/httpd.conf"
     end
     
     def php
@@ -28,15 +23,10 @@ class WebServers
       opts = {
         :document_root => opts[:document_root] || "/www/#{name}/"
       }
-      call "virtual_host()"
+      call_function "virtual_host()"
     end
-    
-    def include_modules(*args)
-      
-    end
-    
-    set do
-      function %q{
+        
+    custom_function <<-EOE
 define virtual_host($docroot, $ip, $order = 500, $ensure = "enabled") { 
     $file = "/etc/sites-available/$name.conf" 
     file { $file: 
@@ -50,8 +40,7 @@ define virtual_host($docroot, $ip, $order = 500, $ensure = "enabled") {
         } 
     } 
 }
-      }
-    end
+    EOE
         
   end
 end

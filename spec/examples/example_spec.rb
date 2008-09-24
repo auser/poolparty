@@ -56,7 +56,7 @@ describe "with_apache_plugin" do
       @c = pool(:app).cloud(:app)
     end
     it "should have apache as the ApacheClas" do
-      @c.apache.class.should == ApacheClas
+      @c.apache.class.should == PoolPartyApacheClas
     end
     it "should set php == true on the apache plugin" do
       @c.apache.php.should == true
@@ -98,7 +98,7 @@ describe "plugin_without_plugin_directory" do
       @c = pool(:app).cloud(:app)
     end
     it "should have apache as the ApacheClas" do
-      @c.apache.class.should == ApacheClas
+      @c.apache.class.should == PoolPartyApacheClas
     end
     it "should set php == true on the apache plugin" do
       @c.apache.php.should == true
