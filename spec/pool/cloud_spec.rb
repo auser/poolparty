@@ -146,7 +146,7 @@ describe "Cloud" do
           reset!
           @cloud.instance_eval do
             has_file(:name => "/etc/httpd/http.conf") do
-              contents <<-EOE
+              content <<-EOE
                 hello my lady
               EOE
             end
@@ -159,10 +159,7 @@ describe "Cloud" do
         end
         it "should have 3 resources" do
           @cloud.add_poolparty_base_requirements
-          @cloud.resources.each do |name,r|
-            # puts "name: #{name}"
-          end
-          @cloud.resources_count.should == 3
+          @cloud.number_of_resources.should == 3
         end
         it "should receive add_poolparty_base_requirements before building the manifest" do
           @cloud.should_receive(:add_poolparty_base_requirements).once
@@ -177,11 +174,15 @@ describe "Cloud" do
             "haproxy".class_constant.stub!(:new).and_return @ha
           end
           it "should call enable on heartbeat" do
-            @hb.should_receive(:enable).and_return true
+            @cloud.should_receive(:enable).and_return true
             @cloud.add_poolparty_base_requirements
           end
           it "should call enable on haproxy" do
             @ha.should_receive(:enable).and_return true
+            @cloud.add_poolparty_base_requirements
+          end
+          it "should call has_line... when calling heartbeat" do
+            PoolParty::Resources::CallFunction.should_receive(:new).and_return "bunk"
             @cloud.add_poolparty_base_requirements
           end
         end
@@ -197,7 +198,7 @@ describe "Cloud" do
           end
           it "should have the comment of a package in the manifest" do
             @manifest.should =~ /# packages/
-            # puts @manifest
+            puts @manifest
           end
         end
       end

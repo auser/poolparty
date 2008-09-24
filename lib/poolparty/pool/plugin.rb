@@ -12,14 +12,13 @@ module PoolParty
       
       default_options({})
       
-      def initialize(parent=nil, &block)
+      def initialize(parent=self, &block)
         @parent = parent
-        self.instance_eval &block if block
-        loaded
+        block ? self.instance_eval(&block) : enable
       end
       
-      # Overwrite this method. It is called on load of the plugin
-      def loaded
+      # Overwrite this method
+      def enable
       end
                   
     end

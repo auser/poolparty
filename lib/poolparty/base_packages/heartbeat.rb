@@ -2,7 +2,7 @@ module PoolParty
   class Base
     plugin :heartbeat do
       
-      def enable        
+      def enable
         has_line_in_file "[ca]\n\tautosign = true", "/etc/puppet/puppetd.conf"
         has_line_in_file "firstpuppetmasterhost       172.16.32.40/21/eth0:0", "/etc/ha.d/haresources"
 

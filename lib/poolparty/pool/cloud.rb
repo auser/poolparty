@@ -65,16 +65,20 @@ module PoolParty
         returning Array.new do |str|
           resources.each do |name, resource|
             str << "# #{name.to_s.pluralize}"
-            str << resource.to_string("\t")
+            resource.map {|a| str << a.to_string("\t") }
           end
         end.join("\n")
       end
       
-      def add_poolparty_base_requirements
-        instance_eval do
-          heartbeat.enable
-          haproxy.enable
+      def number_of_resources
+        arr = resources.map do |n, r|
+          r.size
         end
+        resources.map {|n,r| r.size}.inject(0){|sum,i| sum+=i}
+      end
+      
+      def add_poolparty_base_requirements
+        heartbeat
       end
     end
   end  

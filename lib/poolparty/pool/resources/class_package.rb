@@ -7,13 +7,14 @@ module PoolParty
     
     class Classpackage < Resource      
       include Resources
+      extend Resources
       
       default_options({
         :name => "custom"
       })
       
       def resources
-        @@class_resources ||= {}
+        @class_resources ||= {}
       end
       def to_string
         returning Array.new do |output|

@@ -2,7 +2,7 @@ module PoolParty
   module Resources
     
     def gem(opts={}, &block)
-      resource(:package) << PoolParty::Resources::Package.new(opts.merge({
+      add_resource(:package, opts.merge({
         :provider => "gem",
         :requires => "Package[rubygems]"
       }), &block)

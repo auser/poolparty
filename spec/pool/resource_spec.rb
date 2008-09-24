@@ -27,6 +27,14 @@ describe "Resource" do
       @resource.to_string.should =~ /resource \{\n/
     end
   end
+  describe "class methods" do
+    it "should have an array of available resources" do
+      PoolParty::Resources::Resource.available_resources.class.should == Array
+    end
+    it "should not be empty" do
+      PoolParty::Resources::Resource.available_resources.should_not be_empty
+    end
+  end
   describe "instance methods" do
     before(:each) do
       @resource = MyResource.new
@@ -80,13 +88,11 @@ describe "Resource" do
   end
   describe "command" do
     include PoolParty::Resources
-    
-    it "should create a new 'resource' when calling resource" do
-      PoolParty::Resources::File.should_receive(:new).once
-      resource(:file)
+    before(:each) do
+      reset_resources!
     end
     it "should create the new 'resource' as a resource" do
-      resource(:file).class.to_s.should == "PoolParty::Resources::File"
+      resource(:file).class.should == Array
     end
     it "should receive << when adding a new one" do
       resource(:file).should_receive(:<<).once
@@ -96,27 +102,16 @@ describe "Resource" do
       file({:name => "red"})
       file({:name => "hot"})
       file({:name => "summer"})
-      file.instances.size.should == 3
+      resource(:file).size.should == 3
     end
     describe "adding" do
       before(:each) do
-        file({:name => "red"})
-        file({:name => "hot"})
-        file({:name => "summer"})
-        @file2 = file.instance_named("hot")
-        @file3 = file.instance_named("summer")
+        @a = file({:name => "red"})
+        @b = file({:name => "hot"})
+        @c = file({:name => "summer"})
       end
-      it "should be able to get a resource by it's name" do
-        file.instance_named("hot").class.to_s.should == "PoolParty::Resources::File"
-      end
-      it "should be able to say it has an instance with a given name" do
-        file.contains_instance_named?("hot").should == true
-      end
-      it "should be able to say that the instance has a name" do
-        file.has_name?( @file3 ).should == true
-      end
-      it "should say it can add an instance if the instance has a name and it is unique" do
-        file.can_add_instance?( @file2 ).should == false
+      it "should contain file named with 'red'" do
+        resource(:file).include?(@a).should == true
       end
     end
     describe "method_missing" do
@@ -124,8 +119,6 @@ describe "Resource" do
         file({:name => "red"})
         file({:name => "hot"})
         file({:name => "summer"})
-        @file2 = file.instance_named("hot")
-        @file3 = file.instance_named("summer")
       end
       it "should be able to pick out methods with the phrase has_" do
         lambda {
@@ -144,15 +137,15 @@ describe "Resource" do
       end
       it "should set the has_file to present ensure" do
         has_file({:name => "redface"})
-        file.instance_named("redface").options[:ensure].should == "present"
+        resource(:file).get_named("redface").first.options[:ensure].should == "present"
       end
       it "should set the does_not_have_file to absent ensure" do
         does_not_have_file({:name => "net"})
-        file.instance_named("net").options[:ensure].should == "absent"
+        resource(:file).get_named("net").first.options[:ensure].should == "absent"
       end
       it "should be able to have_service as well" do
         has_service({:name => "apache"})
-        service.instance_named("apache").options[:ensure].should == "present"
+        resource(:service).get_named("apache").first.options[:ensure].should == "present"
       end
     end
   end

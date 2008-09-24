@@ -3,32 +3,25 @@ require File.dirname(__FILE__) + '/../../spec_helper'
 include PoolParty::Resources
 
 describe "File" do
-  before(:each) do
-    @file = PoolParty::Resources::File.new
-  end
-  it "should have instances of files" do
-    @file.respond_to?(:instances).should == true
-  end
   describe "instances" do
     before(:each) do
-      file({:name => "/etc/apache2/puppetmaster.conf"})
+      @file = file({:name => "/etc/apache2/puppetmaster.conf"})
     end
     it "should turn the one hash instance into a string" do
-      file.to_string.should =~ /\/etc\/apache2\/puppetmaster\.conf:/
+      @file.to_string.should =~ /\/etc\/apache2\/puppetmaster\.conf:/
     end
     it "should turn the two hash instance into a string" do
-      file do
+      @file = file do
         name "/etc/init.d/puppetmaster"
         owner "redsmith"
       end
-      file.to_string.should =~ /\/etc\/apache2\/puppetmaster\.conf:/
+      @file.to_string.should =~ /\/etc\/init\.d\/puppetmaster:/
     end
     describe "as included" do            
       before(:each) do
-        file({:rent => "low"}) do
+        @file = file({:rent => "low"}) do
           name "/www/conf/httpd.conf"
         end
-        @file = file.instances.select {|a| a.name == "/www/conf/httpd.conf" }.first
       end
       it "should use default values" do
         @file.name.should == "/www/conf/httpd.conf"

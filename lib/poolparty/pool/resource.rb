@@ -14,12 +14,18 @@ module PoolParty
     end
     
     def resource(type=:file)
-      resources[type] ||= ("PoolParty::Resources::#{type.to_s.camelize}".classify.constantize.new)
+      resources[type] ||= []
     end
     
+    def add_resource(type, opts={}, &block)
+      returning "PoolParty::Resources::#{type.to_s.camelize}".classify.constantize.new(opts, &block) do |o|
+        resource(type) << o
+      end
+    end
+        
     #:nodoc:
     def reset_resources!
-      resources.each {|k,v| resources[k] = nil}
+      @resources = nil
     end
         
     def resources_string
@@ -31,14 +37,6 @@ module PoolParty
       end.join("\n")
     end
     
-    def resources_count
-      count = 0
-      resources.each do |name, resource|
-        count += resource.instances.size
-      end
-      count
-    end
-    
     def custom_file(path, str)
       write_to_file_in_storage_directory(path, str)
     end
@@ -47,10 +45,31 @@ module PoolParty
       include MethodMissingSugar
       include Configurable
       
+      def self.inherited(subclass)
+        subclass = subclass.to_s.split("::")[-1] if subclass.to_s.index("::")
+        lowercase_class_name = subclass.to_s.downcase
+        
+        # Add add resource method to the Resources module
+        unless PoolParty::Resources.respond_to?(lowercase_class_name.to_sym)
+          method =<<-EOE
+            def #{lowercase_class_name}(opts={}, &blk)
+              add_resource(:#{lowercase_class_name}, opts, &blk)
+            end            
+          EOE
+          PoolParty::Resources.module_eval method
+          PoolParty::Resources.add_has_and_does_not_have_methods_for(lowercase_class_name.to_sym)
+          
+          available_resources << subclass
+        end
+      end
+      
+      def self.available_resources
+        @available_resources ||= []
+      end
+      
       def initialize(opts={}, &block)
         set_vars_from_options(opts) unless opts.empty?
         self.instance_eval &block if block
-        push self
       end
       def set_vars_from_options(opts={})
         opts.each {|k,v| self.send k.to_sym, v } unless opts.empty?
@@ -74,35 +93,10 @@ module PoolParty
       def to_string(prev="")
         returning Array.new do |output|
           output << "#{prev}#{self.class.to_s.top_level_class} {"
-            instances.each do |resource|
-              output << "#{prev}\t#{resource.name}:"
-              output << resource.options.flush_out("#{prev}\t\t",";")
-            end
+          output << "#{prev*2}#{self.name}:"
+          output << options.flush_out("#{prev*3}",";")
           output << "#{prev}}"
         end.join("\n")
-      end
-      # Each container has instances      
-      def instances
-        @instances ||= []
-      end
-      def <<(*args)
-        args.each {|arg| instances << arg if can_add_instance?(arg) }
-        self
-      end
-      alias_method :push, :<<
-      
-      # Helpers
-      def instance_named(name="")
-        instances.select {|a| a.name == name }.first
-      end
-      def contains_instance_named?(name="")
-        !instance_named(name).nil?
-      end
-      def has_name?(instance)
-        (instance.name && !instance.name.to_s.empty?)
-      end
-      def can_add_instance?(instance)
-        has_name?(instance) && !contains_instance_named?(instance.name)
       end
     end
     
@@ -118,10 +112,10 @@ module PoolParty
     def self.add_has_and_does_not_have_methods_for(type=:file)
       module_eval <<-EOE
         def has_#{type}(opts={}, &block)
-          #{type}(opts.merge(:ensure => "present")) &block
+          #{type}(opts.merge(:ensure => "present"), &block) 
         end
         def does_not_have_#{type}(opts={}, &block)
-          #{type}(opts.merge(:ensure => "absent")) &block
+          #{type}(opts.merge(:ensure => "absent"), &block)
         end
       EOE
     end

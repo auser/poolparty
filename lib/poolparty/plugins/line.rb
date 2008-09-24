@@ -3,11 +3,10 @@ module PoolParty
         
     plugin :line do
       define_resource(:line) do        
-        custom_usage do
-          def has_line_in_file(line="line_in_file", file="file")
-            store "line(#{file}, #{line})"
-          end
+        def has_line_in_file(line="line_in_file", file="file")
+          call_function "line(#{file}, #{line})"
         end
+                
         custom_function <<-EOF
         define line($file, $line, $ensure = 'present') {
           case $ensure {

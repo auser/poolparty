@@ -30,10 +30,14 @@ class String
   def class_constant(superclass=nil)
     symc = "#{self}_Class".classify
     unless Object.const_defined?(symc)
-      klass = Class.new(superclass ? superclass : Object) do
-        yield if block_given?
-      end
-      Object.const_set(symc, klass) 
+      Kernel.module_eval <<-EOE
+        class #{symc} < #{superclass ? superclass : Object}
+          #{yield if block_given?}
+        end
+      EOE
+      # klass = Class.new(superclass ? superclass : Object) do
+      #   yield if block_given?
+      # end
     end
     symc.constantize
   end

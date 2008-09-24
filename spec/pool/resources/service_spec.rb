@@ -7,27 +7,23 @@ describe "Service" do
     reset_resources!
     @service = PoolParty::Resources::Service.new
   end
-  it "should have instances of Services" do
-    @service.respond_to?(:instances).should == true
-  end
   describe "instances" do
     before(:each) do
-      service({:name => "/etc/apache2/puppetmaster.conf"})
+      @service = service({:name => "/etc/apache2/puppetmaster.conf"})
     end
     it "should turn the one hash instance into a string" do
-      service.to_string.should =~ /\/etc\/apache2\/puppetmaster\.conf:/
+      @service.to_string.should =~ /\/etc\/apache2\/puppetmaster\.conf:/
     end
     it "should turn the two hash instance into a string" do
-      service({:name => "/etc/init.d/puppetmaster"})
-      service.to_string.should =~ /\/etc\/apache2\/puppetmaster\.conf:/
+      @service = service({:name => "/etc/init.d/puppetmaster"})
+      @service.to_string.should =~ /\/etc\/init\.d\/puppetmaster:/
     end
     describe "as included" do            
       before(:each) do
         reset_resources!
-        service({:rent => "low", :ensure => "stopped"}) do
+        @service = service({:rent => "low", :ensure => "stopped"}) do
           name "mdmdp"
         end
-        @service = service.instance_named("mdmdp")
       end
       it "should use default values" do
         @service.name.should == "mdmdp"

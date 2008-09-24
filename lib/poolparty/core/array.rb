@@ -15,4 +15,10 @@ class Array
   def nice_runnable(quiet=true)
     self.join(" \n ").nice_runnable(quiet)
   end
+  def to_string(prev="")
+    map {|a| a.to_string(prev)}.join("\n")
+  end
+  def get_named(str="")
+    map {|a| a.name == str ? a : nil }.reject {|a| a.nil? }
+  end
 end

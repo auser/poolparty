@@ -2,33 +2,26 @@ require File.dirname(__FILE__) + '/../../spec_helper'
 
 include PoolParty::Resources
 
-describe "File" do
-  before(:each) do
-    @cron = PoolParty::Resources::Cron.new
-  end
-  it "should have instances of files" do
-    @cron.respond_to?(:instances).should == true
-  end
+describe "Cron" do
   describe "instances" do
     before(:each) do
-      cron({:command => "/bin/logrotate"})
+      @cron = cron({:command => "/bin/logrotate"})
     end
     it "should turn the one hash instance into a string" do
-      cron.to_string.should =~ /command => '\/bin\/logrotate';/
+      @cron.to_string.should =~ /command => '\/bin\/logrotate';/
     end
     it "should turn the two hash instance into a string" do
-      cron({:name => "/bin/mail -s \"letters\""})
-      cron.to_string.should =~ /\/bin\/mail -s \"letters\":/
+      @cron = cron({:name => "/bin/mail -s \"letters\""})
+      @cron.to_string.should =~ /\/bin\/mail -s \"letters\":/
     end
     describe "as included" do            
       before(:each) do
-        cron({:rent => "low"}) do
+        @cron = cron({:rent => "low"}) do
           name "/www/conf/httpd.conf"
           hour 23
           minute 5
           weekday 1
         end
-        @cron = cron.instance_named("/www/conf/httpd.conf")
       end
       it "should use default values" do
         @cron.name.should == "/www/conf/httpd.conf"

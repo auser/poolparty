@@ -24,9 +24,6 @@ describe "File" do
     it "should store a resource in the resources array" do
       @class.resources.size.should == 1
     end
-    it "should be the file" do
-      @class.resource(:file).options.include?(:mode).should == true
-    end
     describe "to_s" do
       before(:each) do
         @class.instance_eval do
@@ -56,9 +53,9 @@ describe "setting with a block" do
     @class1.resources.size.should_not be_zero
   end
   it "should have the file resource in the resources array" do
-    @class1.resource(:file).class.should == PoolParty::Resources::File
+    @class1.resource(:file).class.should == Array
   end
   it "should store the file in the resources array" do
-    @class1.resource(:file).instance_named("frank").name.should == "frank"
+    @class1.resource(:file).get_named("frank").first.name.should == "frank"
   end
 end
