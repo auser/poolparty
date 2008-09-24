@@ -9,6 +9,17 @@ class ResourcerTestClass
     "rangerbob"
   end
 end
+class TestParentClass
+  def options
+    {}
+  end
+  def services
+    @services ||= []
+  end
+  def add_service(s)
+    services << s
+  end
+end
 describe "CloudResourcer" do
   before(:each) do
     @tc = ResourcerTestClass.new
@@ -38,5 +49,39 @@ describe "CloudResourcer" do
       @tc.keypair_path.should == "#{Base.base_keypair_path}/#{@tc.keypair}"
       @tc.keypair_path.should == "~/.ec2/rangerbob"
     end
+  end
+  it "should provide set_parent" do
+    @tc.respond_to?(:set_parent).should == true
+  end
+  describe "parents" do
+    before(:each) do
+      @testparent = TestParentClass.new
+    end
+    describe "setting" do
+      it "should add the child to its services" do
+        @testparent.should_receive(:add_service)
+      end
+      it "should call configure with options" do
+        @tc.should_receive(:configure).with(@testparent.options)      
+      end
+      after do
+        @tc.set_parent(@testparent)
+      end      
+    end
+    describe "parent's services" do
+      before(:each) do        
+        @tc.set_parent(@testparent)        
+      end
+      it "should set the parent" do
+        @tc.parent.should == @testparent
+      end
+      it "should have one service set" do
+        @testparent.services.size.should == 1
+      end
+      it "should have the child in the parent's services" do
+        @testparent.services.first.should == @tc
+      end
+    end
+    
   end
 end

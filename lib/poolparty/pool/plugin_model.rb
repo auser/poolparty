@@ -12,7 +12,7 @@ module PoolParty
       $plugins ||= {}
     end
     
-    class PluginModel
+    class PluginModel      
       attr_accessor :name, :klass
       attr_reader :parent
       include MethodMissingSugar
@@ -31,9 +31,9 @@ module PoolParty
         
         # Create the block inside the instantiated plugin
         klass.module_eval &block if block
-        # class_string_name.module_constant(&block)
-        # klass.send :include, class_string_name.module_constant
         
+        # Store the name of the class for pretty printing later
+        klass.name = name
         # Add the plugin definition to the cloud as an instance method
         Cloud::Cloud.module_eval <<-EOE
           def #{name}(&block)

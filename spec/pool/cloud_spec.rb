@@ -59,6 +59,12 @@ describe "Cloud" do
     it "should be able to pull the pool from the cloud" do
       @cloud.parent == @pool
     end
+    it "should have services in an array" do
+      @cloud.services.class.should == Array
+    end
+    it "should have no services in the array when there are no services defined" do
+      @cloud.services.size.should == 0
+    end
     it "should respond to a configure method" do
       @cloud.respond_to?(:configure).should == true
     end
@@ -192,13 +198,40 @@ describe "Cloud" do
             @cloud.add_poolparty_base_requirements
             @cloud.heartbeat.should == @hb
           end
-          it "should call has_line when calling heartbeat" do
-            @cloud.should_receive(:has_line_in_file).at_least(1)
-            @cloud.add_poolparty_base_requirements
-          end
-          it "should call has_line... when calling heartbeat which calls the call_function method" do
-            PoolParty::Resources::CallFunction.should_receive(:new).and_return "bunk"
-            @cloud.add_poolparty_base_requirements
+          describe "after adding" do
+            before(:each) do
+              @cloud.add_poolparty_base_requirements
+            end
+            it "should add resources onto the heartbeat class inside the cloud" do
+              @cloud.services.size.should == 1
+            end
+            it "should store the class heartbeat" do
+              @cloud.services.first.class.should == "heartbeat".class_constant
+            end
+            it "should have an array of resources on the heartbeat" do
+              @cloud.services.first.resources.class.should == Hash
+            end
+            describe "resources" do
+              before(:each) do
+                @service = @cloud.services.first
+                @file = @service.resource(:file)
+              end
+              it "should not have a exec resource" do
+                @service.resource(:exec).should be_empty
+              end
+              it "should have a line resource" do
+                @file.should_not be_nil
+              end
+              it "should have an array of lines" do
+                @file.class.should == Array
+              end
+              it "should not be empty" do
+                @file.should_not be_empty
+              end
+              it "should have the file stored in the file resource" do
+                @file.first.to_string.should =~ /ha\.d\/heartbeat\.conf/
+              end
+            end
           end
         end
         describe "building" do
@@ -212,8 +245,10 @@ describe "Cloud" do
             @manifest.should =~ /# files/
           end
           it "should have the comment of a package in the manifest" do
-            @manifest.should =~ /# packages/
-            puts @manifest
+            @manifest.should =~ /# packages/            
+          end
+          it "should have the comment for heartbeat in the manifest" do
+            @manifest.should =~ /# heartbeat/
           end
         end
       end

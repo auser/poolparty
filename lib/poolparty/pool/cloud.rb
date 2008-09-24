@@ -13,7 +13,6 @@ module PoolParty
     
     class Cloud
       attr_reader :name, :templates
-      attr_accessor :parent
       include PoolParty::PluginModel
       include PoolParty::Resources
       include Configurable
@@ -39,12 +38,7 @@ module PoolParty
         set_parent(parent) if parent
         self.instance_eval &block if block_given?
       end
-      
-      def set_parent(parent)
-        @parent = parent
-        configure(parent.options) if parent.respond_to?(:options)
-      end
-      
+                  
       # Keypairs
       # If the parent (pool) doesn't have a keypair defined on it, then generate one based on the 
       # pool_name and the cloud_name
@@ -67,19 +61,25 @@ module PoolParty
             str << "# #{name.to_s.pluralize}"
             resource.map {|a| str << a.to_string("\t") }
           end
+          services.each do |service|
+            str << "# #{service.name}"
+            str << service.resources_string("\t")
+          end
         end.join("\n")
       end
-      
-      def number_of_resources
-        arr = resources.map do |n, r|
-          r.size
-        end
-        resources.map {|n,r| r.size}.inject(0){|sum,i| sum+=i}
-      end
-      
+            
       def add_poolparty_base_requirements
         heartbeat
       end
+            
+      def add_service(serv)
+        services << serv
+      end
+            
+      def services
+        @services ||= []
+      end
+      
     end
   end  
 end
