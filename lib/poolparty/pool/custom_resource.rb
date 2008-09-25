@@ -4,7 +4,7 @@ module PoolParty
   def define_resource(name, &block)
     symc = "#{name}".classify
     klass = "#{symc}".class_constant(PoolParty::Resources::CustomResource, {:preserve => true}, &block)
-    PoolParty::Resources::CustomMethods.module_eval &block
+    PoolParty::Resources::CustomMethods.add_methods_from(name, &block)
     klass
   end
   
@@ -16,7 +16,7 @@ module PoolParty
         resource(:call_function) << o
       end
     end
-            
+                
     # Resources for function call
     class CallFunction < Resource
       def initialize(str="", opts={}, &block)
@@ -32,17 +32,22 @@ module PoolParty
     
     class CustomResource < Resource
       def initialize(name=:custom_method, opts={}, &block)
-        puts "CustomResource: #{name}"
         @name = name
         super(opts, &block)
       end
       
-      def self.custom_function(str)
-        custom_functions << str
+      def resources
+        @resources ||= {}
       end
       
+      def self.custom_function(str)
+        custom_functions << str
+      end      
       def self.custom_functions
         @custom_functions ||= []
+      end
+      def custom_function(str)
+        self.class.custom_functions << str
       end
       
       def self.custom_functions_to_string(prev="")
@@ -58,15 +63,24 @@ module PoolParty
           output << "#{prev} # Custom Functions\n"
           output << self.class.custom_functions_to_string(prev)
         end.join("\n")        
-      end            
+      end
     end
-    
+        
     # A module just to store CustomMethods
     class CustomMethods
-      def added_modules
-        @added_modules ||= {}
+      def self.added_methods
+        @added_methods ||= {}
       end
       def self.add_methods_from(mod_name, &block)
+        @old_methods = available_methods
+        module_eval &block
+        added_methods[mod_name] = (available_methods - @old_methods)
+        mod_name
+      end
+      def self.call_method(method, *args, &block)        
+        return nil unless available_methods.include?(method)
+        mod_name = added_methods.reject {|k,v| k unless v.include?(method) }.keys.first
+        added_methods[mod_name.downcase.to_sym].send method, *args, &block
       end
       def self.custom_function(*args)        
       end
