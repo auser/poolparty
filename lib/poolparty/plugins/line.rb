@@ -5,11 +5,7 @@ module PoolParty
       def has_line_in_file(line="line_in_file", file="file")
         call_function "line(#{file}, #{line})"
       end
-      
-      def brain_child(str)
-        call_function "brain_child(#{str})"
-      end
-              
+                    
       custom_function <<-EOF
       define line($file, $line, $ensure = 'present') {
         case $ensure {
