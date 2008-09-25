@@ -249,6 +249,8 @@ describe "Cloud" do
           end
           it "should have the comment for heartbeat in the manifest" do
             @manifest.should =~ /# heartbeat/
+            
+            puts @manifest
           end
         end
       end

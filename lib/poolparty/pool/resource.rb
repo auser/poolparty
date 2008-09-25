@@ -93,8 +93,8 @@ module PoolParty
       def to_string(prev="")
         returning Array.new do |output|
           output << "#{prev}#{self.class.to_s.top_level_class} {"
-          output << "#{prev*2}#{self.name}:"
-          output << options.flush_out("#{prev*3}",";")
+          output << "#{prev}#{self.name}:"
+          output << options.flush_out("#{prev*2}",";")
           output << "#{prev}}"
         end.join("\n")
       end
