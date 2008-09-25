@@ -1,6 +1,9 @@
 require File.dirname(__FILE__) + "/resource"
 
 module PoolParty
+  def available_custom_resources
+    $available_custom_resources ||= []
+  end
   module DefinableResource
     def define_resource(name, &block)
       symc = "#{name}".classify
@@ -30,7 +33,7 @@ module PoolParty
         end.join("\n")
       end
     end
-    
+        
     class CustomResource < Resource
       def initialize(name=:custom_method, opts={}, &block)
         @name = name
@@ -38,6 +41,7 @@ module PoolParty
       end
       
       def self.inherited(subclass)
+        PoolParty::Resources.available_custom_resources << subclass
         super(subclass)
       end
       
@@ -57,8 +61,10 @@ module PoolParty
       
       def self.custom_functions_to_string(prev="")
         returning Array.new do |output|
-          custom_functions.each do |function_string|
-            output << "#{prev}\t#{function_string}"
+          PoolParty::Resources.available_custom_resources.each do |resource|
+            resource.custom_functions.each do |func|
+              output << "#{prev*2}#{func}"
+            end
           end
         end.join("\n")
       end      
