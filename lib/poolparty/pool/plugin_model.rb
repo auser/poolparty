@@ -28,7 +28,7 @@ module PoolParty
         klass = class_string_name.class_constant(PoolParty::Plugin::Plugin)
         klass.extend PoolParty::Resources
         klass.send :include, PoolParty::Resources
-        
+
         # Create the block inside the instantiated plugin
         klass.module_eval &block if block
         
