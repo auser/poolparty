@@ -157,7 +157,7 @@ describe "Cloud" do
               EOE
             end
             has_gem(:name => "poolparty")
-            has_package(:name => "dummy")
+            has_package(:name => "dummy")            
           end
         end
         it "should it should have the method build_manifest" do
@@ -249,6 +249,7 @@ describe "Cloud" do
           end
           it "should have the comment for heartbeat in the manifest" do
             @manifest.should =~ /# heartbeat/
+            puts @manifest
           end
         end
       end

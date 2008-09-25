@@ -32,7 +32,7 @@ module PoolParty
       returning Array.new do |output|
         resources.each do |type, resource|
           output << "#{prev*2}# #{type}"
-          output << resource.to_string("#{prev*3}")
+          output << resource.to_string("#{prev*2}")
         end
       end.join("\n")
     end
@@ -67,6 +67,10 @@ module PoolParty
         @available_resources ||= []
       end
       
+      def self.available_resource_methods
+        available_resources.map {|a| a.my_methods }
+      end
+      
       def initialize(opts={}, &block)
         set_vars_from_options(opts) unless opts.empty?
         self.instance_eval &block if block
@@ -98,6 +102,15 @@ module PoolParty
           output << "#{prev}}"
         end.join("\n")
       end
+      
+      def method_missing(m, *args, &block)
+        if PoolParty::Resources::CustomMethods.methods.include?(m)
+          puts "A resource has the method, yo"
+        else
+          super
+        end
+      end      
+      
     end
     
     # Adds two methods to the module
