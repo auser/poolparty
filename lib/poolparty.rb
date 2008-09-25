@@ -33,10 +33,11 @@ end
 class Object
   include PoolParty
   include PoolParty::Pool
+  include PoolParty::DefinableResource
 end
 
 class Class
-  include PoolParty::PluginModel
+  include PoolParty::PluginModel  
 end
 
 ## Load PoolParty Plugins and package

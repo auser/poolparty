@@ -1,12 +1,11 @@
 require File.dirname(__FILE__) + "/resource"
 
 module PoolParty
-  module Resources
-        
+  module DefinableResource
     def define_resource(name, &block)
       symc = "#{name}".classify
       unless Object.const_defined?(symc)
-        eval <<-EOE
+        Kernel.module_eval <<-EOE
           class #{symc} < PoolParty::Resources::CustomResource
           end
         EOE
@@ -16,7 +15,9 @@ module PoolParty
         end
       end
       symc.constantize
-    end
+    end    
+  end
+  module Resources
     
     def call_function(str, opts={}, &block)
       returning PoolParty::Resources::CallFunction.new(str, opts, &block) do |o|
@@ -32,7 +33,7 @@ module PoolParty
       end
       def to_string(prev="")
         returning Array.new do |arr|
-          arr << @str
+          arr << "#{prev}#{@str}"
         end.join("\n")
       end
     end
@@ -41,6 +42,10 @@ module PoolParty
       def initialize(name=:custom_method, opts={}, &block)
         @name = name
         super(opts, &block)
+      end
+      
+      def self.inherited(subclass)
+        super(subclass)
       end
       
       def self.custom_function(str)
@@ -68,8 +73,11 @@ module PoolParty
     end
     
     # Stub methods
+    # TODO: Find a better solution
     def custom_function(*args, &block)
     end
+    def self.custom_function(*args, &block)
+    end      
     
   end    
 end
