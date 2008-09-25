@@ -27,7 +27,7 @@ describe "Plugin" do
       @plugin = "apache".class_constant.new(@c)
     end
     it "should not be empty" do
-      @plugin.class.should == PoolPartyApacheClas
+      @plugin.class.should == PoolPartyApacheClass
     end
     it "should have access to the cloud's container" do
       @plugin.container.should == @p.cloud(:app).container

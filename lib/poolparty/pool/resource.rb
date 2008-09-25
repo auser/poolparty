@@ -101,17 +101,8 @@ module PoolParty
           output << options.flush_out("#{prev*3}",";")
           output << "#{prev}}"
         end.join("\n")
-      end
-      
-      def method_missing(m, *args, &block)
-        if PoolParty::Resources::CustomMethods.methods.include?(m)
-          puts "A resource has the method, yo"
-        else
-          super
-        end
       end      
-      
-    end
+    end    
     
     # Adds two methods to the module
     # Adds the method type:
