@@ -248,8 +248,10 @@ describe "Cloud" do
             @manifest.should =~ /# packages/            
           end
           it "should have the comment for heartbeat in the manifest" do
-            @manifest.should =~ /# heartbeat/
-            # puts @manifest
+            @manifest.should =~ /# heartbeat/            
+          end
+          it "should include custom functions" do
+            @manifest.should =~ /define line\(\$file/
           end
         end
       end

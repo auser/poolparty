@@ -65,6 +65,10 @@ module PoolParty
             str << "# #{service.name}"
             str << service.resources_string("\t")
           end
+          str << "\n\n"
+          str << "# Custom functions"
+          str << Resources::CustomResource.custom_functions_to_string
+          
         end.join("\n")
       end
             
