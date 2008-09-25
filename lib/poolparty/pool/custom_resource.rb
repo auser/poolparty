@@ -4,17 +4,19 @@ module PoolParty
   module DefinableResource
     def define_resource(name, &block)
       symc = "#{name}".classify
-      unless Object.const_defined?(symc)
-        Kernel.module_eval <<-EOE
-          class #{symc} < PoolParty::Resources::CustomResource
-          end
-        EOE
-        if block
-          symc.constantize.module_eval &block
-          PoolParty::Resources.module_eval &block
-        end
-      end
-      symc.constantize
+      klass = symc.class_constant(PoolParty::Resources::CustomResource, {:preserve => true}, &block)
+      # unless Object.const_defined?(symc)
+      #   Kernel.module_eval <<-EOE
+      #     class #{symc} < PoolParty::Resources::CustomResource
+      #     end
+      #   EOE
+      #   if block
+      #     symc.constantize.module_eval &block
+      #     PoolParty::Resources.module_eval &block
+      #   end
+      # end
+      # symc.constantize
+      klass
     end    
   end
 
