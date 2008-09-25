@@ -4,7 +4,7 @@ module PoolParty
       
       def enable
         package({:name => "haproxy"})
-      end      
+      end
       
     end  
   end
