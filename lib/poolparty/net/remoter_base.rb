@@ -27,10 +27,7 @@ module PoolParty
       def instances_list
         raise RemoteException.new(:method_not_defined, "instances_list")        
       end
-      
-      # Include the remoter class to include the other remoter classes
-      include Remoter
-      
+            
       # The following methods are inherent on the RemoterBase
       # If you need to overwrite these methods, do so with caution
       # Listing methods
@@ -53,8 +50,7 @@ module PoolParty
       # If no keypair is passed, select them all
       def list_of_instances(keypair=nil)
         instances_list.select {|a| keypair ? a[:keypair] == keypair : a}
-      end
-      
+      end      
       def self.included(other)
         Remote.register_remote_base(self.class.to_s.downcase.to_sym)
       end

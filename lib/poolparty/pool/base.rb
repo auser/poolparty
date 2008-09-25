@@ -15,7 +15,8 @@ module PoolParty
       :tmp_path => "tmp",
       :remote_storage_path => "/var/poolparty",
       :storage_directory => File.join(Dir.pwd, "tmp"),
-      :fileserver_base => "puppet://puppet/"
+      :fileserver_base => "puppet://puppet/",
+      :base_config_directory => "/etc/poolparty"
     })
         
     # Class methods
