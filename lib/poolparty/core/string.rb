@@ -27,23 +27,21 @@ class String
   def nice_runnable(quite=true)
     self.split(/ && /).join("\n")
   end
-  def class_constant(superclass=nil, &block)
-    symc = "PoolParty#{self.classify}Class".classify
+  def class_constant(superclass=nil, opts={}, &block)
+    symc = ((opts && opts[:preserve]) ? ("#{self.classify}Classs") : "PoolParty#{self.classify}Classs").classify
+        
+    kla=<<-EOE
+      class #{symc} #{"< #{superclass}" if superclass}
+      end
+    EOE
     
-    unless Kernel.const_defined?(symc)
-      kla=<<-EOE
-        class #{symc} < #{superclass ? superclass : Object}
-        end
-      EOE
-      Kernel.module_eval kla
-      klass = Kernel.const_get(symc)
-      klass.module_eval &block if block
-      # klass = Class.new(superclass ? superclass : Object) do
-      #   yield if block_given?
-      # end
-    end
-    Kernel.const_get(symc)
+    Kernel.module_eval kla
+    klass = symc.constantize
+    klass.module_eval &block if block
+    
+    klass
   end
+  
   def module_constant(&block)
     symc = "#{self}_Module".classify
     mod = Module.new(&block)    

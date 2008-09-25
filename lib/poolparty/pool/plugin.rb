@@ -14,9 +14,9 @@ module PoolParty
       
       default_options({})
       
-      def initialize(parent=self, &block)
+      def initialize(parent=self, opts={}, &block)
         set_parent(parent)
-        block ? self.instance_eval(&block) : enable
+        block ? instance_eval(&block) : enable
       end
       
       # Overwrite this method

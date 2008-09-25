@@ -3,14 +3,17 @@ require File.dirname(__FILE__) + '/../spec_helper'
 include PoolParty::Resources
 
 describe "Custom Resource" do
+  before(:each) do
+    @cloud = cloud :name do; end
+  end
   it "should provide custom_resource as a method" do
     self.respond_to?(:define_resource).should == true
   end
   describe "defining" do
     it "should not raise ResourceException if custom_function and custom_usage are defined" do
       lambda {
-        define_resource(:rockstar) do          
-          def has_line_in_file(line="line_in_file", file="file")
+        define_resource(:rockstar) do
+          def has_a_line_in_file(line="line_in_file", file="file")
             call_function "line(#{file}, #{line})"
           end
           custom_function <<-EOF
@@ -24,7 +27,7 @@ describe "Custom Resource" do
     describe "define_resource" do
       before(:each) do
         define_resource(:rockstar) do
-          def has_line_in_file(line="line_in_file", file="file")
+          def has_a_line_in_file(line="line_in_file", file="file")
             call_function "line(#{file}, #{line})"
           end
           custom_function <<-EOF
@@ -35,17 +38,17 @@ describe "Custom Resource" do
         end
       end
       it "should create a custom resource available as a class" do
-        lambda {PoolParty::Resources::Rockstar.new }.should_not raise_error
+        lambda {RockstarClass.new }.should_not raise_error
       end
-      it "should add the method has_line_in_file to Resources" do
-        PoolParty::Resources.methods.include?("has_line_in_file").should == true
-      end      
+      it "should add the method has_a_line_in_file to Resources" # do
+      #         PoolParty::Resources.methods.include?(:has_a_line_in_file).should == true
+      #       end
     end
     describe "printing" do
       before do
         reset_resources!
         define_resource(:rockstar) do
-          def has_line_in_file(line="line_in_file", file="file")
+          def has_a_line_in_file(line="line_in_file", file="file")
             call_function "line(#{file}, #{line})"
           end
           custom_function <<-EOF
@@ -54,22 +57,22 @@ describe "Custom Resource" do
           }
           EOF
         end
-        @resource = resource(:rockstar)
+        @resource = RockstarClass.new
       end
       it "should not be nil after it is defined" do
         @resource.should_not be_nil
       end
       it "should store the custom_function in the class" do
-        PoolParty::Resources::Rockstar.custom_functions.select {|a| a if a =~ /define line/}.should_not be_empty
+        RockstarClass.custom_functions.select {|a| a if a =~ /define line/}.should_not be_empty
       end
-      it "should allow for the has_line_in_file to be called from within a plugin" do        
-        @resource.should_receive(:has_line_in_file)
+      it "should allow for the has_a_line_in_file to be called from within a plugin" do        
         @resource.instance_eval do
-          has_line_in_file("hi", "filename")
-        end        
+          has_a_line_in_file("hi", "filename")
+        end
+        @resource.resource(:call_function).to_string.should == "line(filename, hi)"
       end
       it "should be stored in an array" do
-        @resource.class.should == Array
+        resource(:rockstar).class.should == Array
       end
       describe "call function" do
         it "should have the class CallFunction available" do
@@ -83,16 +86,41 @@ describe "Custom Resource" do
           add_resource(:call_function, "heyyohey")
           resource(:call_function).size.should == 1
         end
+        it "should add the method to the CustomMethods module" do
+          PoolParty::Resources::CustomMethods.should_receive(:module_eval).once
+          define_resource(:imarockstar) do
+          end
+        end
+        it "should include methods on the custom_resource in the CustomMethods module" do
+          define_resource(:youarealsoarockstar) do
+            def silly_method_that_does_silly_things              
+            end
+          end
+          PoolParty::Resources::CustomMethods.available_methods.include?("silly_method_that_does_silly_things").should == true
+        end
         it "should call call_function in the context of the custom resource" do
           PoolParty::Resources::CallFunction.should_receive(:new).and_return "bunk"
-          has_line_in_file("hi", "filename").should == "bunk"
+          @cloud.has_a_line_in_file("hi", "filename")
         end
         it "should store the call in the call_function resource" do
-          has_line_in_file("hi", "filename")
+          @cloud.has_a_line_in_file("hi", "filename")
           resource(:call_function).size.should == 1
         end
       end
-
+      
+      describe "within context" do
+        before(:each) do
+          @cloud = cloud :app do
+            has_a_line_in_file("hello", "messages")
+          end
+        end
+        it "should have 1 resource (the line resource)" do
+          @cloud.resources.should_not be_empty
+        end
+        it "should have one call_function resource" do
+          @cloud.resource(:call_function).first.to_string.should == "line(messages, hello)"
+        end
+      end
     end
   end
 end
