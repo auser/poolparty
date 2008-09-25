@@ -1,1 +1,4 @@
 tmp/*
+pkg/
+.git/
+.gitignore

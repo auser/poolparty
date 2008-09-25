@@ -1,0 +1,14 @@
+#!/usr/bin/env ruby
+require "rubygems"
+require "poolparty"
+
+location = ARGV.pop
+
+case location
+when "remote"
+  puts "Listing remote"
+  PoolParty::Remote::RemoteInstance.list_from_remote
+else
+  puts "Listing from local"
+  PoolParty::Remote::RemoteInstance.list_from_local
+end
