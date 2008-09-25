@@ -5,17 +5,7 @@ module PoolParty
     def define_resource(name, &block)
       symc = "#{name}".classify
       klass = symc.class_constant(PoolParty::Resources::CustomResource, {:preserve => true}, &block)
-      # unless Object.const_defined?(symc)
-      #   Kernel.module_eval <<-EOE
-      #     class #{symc} < PoolParty::Resources::CustomResource
-      #     end
-      #   EOE
-      #   if block
-      #     symc.constantize.module_eval &block
-      #     PoolParty::Resources.module_eval &block
-      #   end
-      # end
-      # symc.constantize
+      PoolParty::Resources.module_eval &block
       klass
     end    
   end
@@ -23,7 +13,6 @@ module PoolParty
   module Resources
     
     def call_function(str, opts={}, &block)
-      puts "call_function: #{str}"
       returning PoolParty::Resources::CallFunction.new(str, opts, &block) do |o|
         resource(:call_function) << o
       end

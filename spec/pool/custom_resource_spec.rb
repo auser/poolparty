@@ -40,9 +40,9 @@ describe "Custom Resource" do
       it "should create a custom resource available as a class" do
         lambda {RockstarClass.new }.should_not raise_error
       end
-      it "should add the method has_a_line_in_file to Resources" # do
-      #         PoolParty::Resources.methods.include?(:has_a_line_in_file).should == true
-      #       end
+      it "should add the method has_a_line_in_file to Resources" do
+        PoolParty::Resources.methods.include?("has_a_line_in_file").should == true
+      end
     end
     describe "printing" do
       before do
@@ -86,70 +86,28 @@ describe "Custom Resource" do
           add_resource(:call_function, "heyyohey")
           resource(:call_function).size.should == 1
         end
-        it "should add the method to the CustomMethods module with add_methods_from" do
-          PoolParty::Resources::CustomMethods.should_receive(:add_methods_from).once
-          define_resource(:imarockstar) do
-          end
-        end
-        it "should add the methods to the class through module_eval" do
-          PoolParty::Resources::CustomMethods.should_receive(:module_eval).once
-          define_resource(:imarockstar2) do
-          end
-        end
-        it "should store the new methods in the added_methods hash" do
-          define_resource(:imarockstar3) do
-            def i_do_nothing              
+        describe "defining" do
+          it "should add the methods to the class through module_eval" do
+            PoolParty::Resources.should_receive(:module_eval).at_least(1)
+            define_resource :imarockstar2YEAH do
             end
           end
-          PoolParty::Resources::CustomMethods.added_methods[:imarockstar3].should == ["i_do_nothing"]
         end
-        describe "calling" do
-          before(:each) do
-            reset_resources!
-            define_resource(:youarealsoarockstar_dude) do
-              def silly_method_that_does_silly_things
-                call_function "silly_custom_method"
-              end
-            end
-          end
-          it "should include methods on the custom_resource in the CustomMethods module" do
-            PoolParty::Resources::CustomMethods.available_methods.include?("silly_method_that_does_silly_things").should == true
-          end
-          it "should try to call it with method_missing" do
-            @cloud.should_receive(:method_missing).with(:silly_method_that_does_silly_things).and_return true
-            @cloud.silly_method_that_does_silly_things
-          end
-          it "should try to find the method in available_methods" do
-            PoolParty::Resources::CustomMethods.available_methods.should_receive(:include?)
-            @cloud.silly_method_that_does_silly_things
-          end
-          it "should run call_methods on CustomMethods when running a method" do            
-            PoolParty::Resources::CustomMethods.should_receive(:call_method)
-            @cloud.silly_method_that_does_silly_things
-          end
-          it "should call call_function in the context of the custom resource" do
-            PoolParty::Resources::CallFunction.should_receive(:new)
-            @cloud.silly_method_that_does_silly_things
-          end
-          it "should store the call in the call_function resource" do
-            @cloud.has_a_line_in_file_dude("hi", "filename")
-            resource(:call_function).size.should == 1
-          end
-          
-        end
-      end
       
-      describe "within context" do
-        before(:each) do
-          @cloud = cloud :app do
-            has_a_line_in_file("hello", "messages")
+        describe "within context" do
+          before(:each) do
+            cloud :apple do
+              has_line_in_file("hello", "messages")
+              brain_child("meee")
+            end
+            @cloud = cloud(:apple)
           end
-        end
-        it "should have 1 resource (the line resource)" do
-          @cloud.resources.should_not be_empty
-        end
-        it "should have one call_function resource" do
-          @cloud.resource(:call_function).first.to_string.should == "line(messages, hello)"
+          it "should have 1 resource (the line resource)" do
+            @cloud.resources.should_not be_empty
+          end
+          it "should have one call_function resource" do
+            @cloud.resource(:call_function).first.to_string.should == "line(messages, hello)"
+          end
         end
       end
     end
