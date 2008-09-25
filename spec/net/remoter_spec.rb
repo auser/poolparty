@@ -69,10 +69,9 @@ describe "Remoter" do
       end
       describe "with listing" do
         before(:each) do
-          @loc.stub!(:read).and_return %w(
-          192.168.0.1\tmaster
-          192.168.0.2\tnode1
-          )
+          str = "master 192.168.0.1
+          node1 192.168.0.2"
+          @loc.stub!(:read).and_return str
           TestClass.stub!(:open).and_return @loc
           TestClass.stub!(:get_working_listing_file).and_return @loc
           @ri = RemoteInstance.new({:ip => "192.168.0.1", :name => "master"})
@@ -82,15 +81,18 @@ describe "Remoter" do
           TestClass.list_from_local
         end
         it "should create a new RemoteInstance for each line in the file" do
-          RemoteInstance.should_receive(:new).twice
+          RemoteInstance.should_receive(:new).at_least(2)
           TestClass.list_from_local
         end
         it "should return a string" do
           TestClass.list_from_local.class.should == String
         end
+        it "should have the name of the master and the ip in the list_from_local" do
+          TestClass.list_from_local.split("\n")[0].should == "master\t192.168.0.1"
+        end
         it "should call to_s on the RemoteInstance instances" do          
-          RemoteInstance.should_receive(:new).twice.and_return @ri
-          @ri.should_receive(:to_s).twice
+          RemoteInstance.should_receive(:new).at_least(2).and_return @ri
+          @ri.should_receive(:to_s).at_least(2)
           TestClass.list_from_local
         end
       end

@@ -15,7 +15,7 @@ module PoolParty
       end
       
       def to_s
-        "#{@ip}\t\t#{@name}"
+        "#{@ip}\t#{@name}"
       end
     end
     

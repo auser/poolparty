@@ -27,15 +27,16 @@ module PoolParty
       def list_from_local
         list_file = get_working_listing_file
         if list_file
-          returning Array.new do |instances|
+          out = returning Array.new do |instances|
             open(list_file).read.split("\n").each do |line|
-              ip,name = line.split("\t")
+              ip,name = line.split(" ")
               instances << RemoteInstance.new({:ip => ip, :name => name}).to_s
             end
           end.join("\n")
         else
-          return "Cannot find list file"
+          out = "Cannot find list file"
         end
+        return out
       end
       def list_from_remote        
       end
