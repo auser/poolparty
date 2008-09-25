@@ -203,7 +203,7 @@ describe "Cloud" do
               @cloud.add_poolparty_base_requirements
             end
             it "should add resources onto the heartbeat class inside the cloud" do
-              @cloud.services.size.should == 1
+              @cloud.services.size.should > 0
             end
             it "should store the class heartbeat" do
               @cloud.services.first.class.should == "heartbeat".class_constant
@@ -252,6 +252,8 @@ describe "Cloud" do
           end
           it "should include custom functions" do
             @manifest.should =~ /define line\(\$file/
+            
+            # puts @manifest
           end
         end
       end

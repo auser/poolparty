@@ -74,6 +74,7 @@ module PoolParty
             
       def add_poolparty_base_requirements
         heartbeat
+        haproxy
       end
             
       def add_service(serv)
