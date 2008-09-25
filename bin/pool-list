@@ -4,11 +4,13 @@ require "poolparty"
 
 location = ARGV.pop
 
+include Remote
+
 case location
-when "remote"
-  puts "Listing remote"
+when "remote", "r", "-r", "--remote"
+  puts "Listing remote instances"
   PoolParty::Remote::RemoteInstance.list_from_remote
 else
-  puts "Listing from local"
-  PoolParty::Remote::RemoteInstance.list_from_local
+  puts "Listing instances from local list"
+  puts PoolParty::Remote::RemoteInstance.list_from_local
 end
