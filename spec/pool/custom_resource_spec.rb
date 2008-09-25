@@ -35,7 +35,7 @@ describe "Custom Resource" do
         end
       end
       it "should create a custom resource available as a class" do
-        lambda {PoolParty::Resources::Rockstar.new }.should_not raise_error
+        lambda {Rockstar.new }.should_not raise_error
       end
       it "should add the method has_line_in_file to Resources" do
         PoolParty::Resources.methods.include?("has_line_in_file").should == true
@@ -60,7 +60,7 @@ describe "Custom Resource" do
         @resource.should_not be_nil
       end
       it "should store the custom_function in the class" do
-        PoolParty::Resources::Rockstar.custom_functions.select {|a| a if a =~ /define line/}.should_not be_empty
+        Rockstar.custom_functions.select {|a| a if a =~ /define line/}.should_not be_empty
       end
       it "should allow for the has_line_in_file to be called from within a plugin" do        
         @resource.should_receive(:has_line_in_file)
