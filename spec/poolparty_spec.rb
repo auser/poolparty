@@ -23,6 +23,7 @@ describe "PoolParty" do
       PoolParty.write_to_file_in_storage_directory("/usr/bin/happydayz", "write this text")
     end
     it "should try to make the directory when writing to the storage directory" do    
+      File.stub!(:directory?).with(::File.dirname(@path)).and_return false
       File.stub!(:open).with(@path, "w+").once.and_return true
       FileUtils.should_receive(:mkdir_p).with(File.dirname(@path)).once.and_return true
       PoolParty.write_to_file_in_storage_directory("/usr/bin/happydayz", "write this text")
