@@ -105,6 +105,7 @@ describe "Remoter" do
           TestClass.stub!(:open).and_return @loc
           TestClass.stub!(:get_working_listing_file).and_return @loc
           @ri = PoolParty::Remote::RemoteInstance.new({:ip => "192.168.0.1", :name => "master"})
+          PoolParty::Remote::RemoteInstance.stub!(:new).and_return @ri
         end
         it "should call open on the get_working_listing_file" do
           TestClass.should_receive(:open).with(@loc).at_least(1).and_return @loc
@@ -118,7 +119,15 @@ describe "Remoter" do
           TestClass.list_from_local.class.should == String
         end
         it "should have the name of the master and the ip in the list_from_local" do
-          TestClass.list_from_local.split("\n")[0].should =~ /master\t192\.168\.0\.1/
+          TestClass.list_from_local.split("\n")[0].should =~ /master 192\.168\.0\.1/
+        end
+        it "should have responding in the listing" do
+          @ri.should_receive(:responding?).at_least(1).and_return 0.5
+          TestClass.list_from_local
+        end
+        it "should have the load in the listing" do
+          @ri.should_receive(:load).at_least(1).and_return 0.5
+          TestClass.list_from_local
         end
         it "should call to_s on the RemoteInstance instances" do          
           PoolParty::Remote::RemoteInstance.should_receive(:new).at_least(2).and_return @ri
