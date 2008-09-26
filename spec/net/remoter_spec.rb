@@ -78,6 +78,14 @@ describe "Remoter" do
       it "should contain the master in the listing" do
         @tc.list_from_remote.should =~ /master/
       end
+      it "should write to the first (preferred) local instances list file location for next time" do
+        @tc.list_from_remote
+        ::File.file?(@tc.local_instances_list_file_locations.first).should == true
+      end
+      after(:all) do
+        # Cleanup after ourselves
+        FileUtils.rm @loc
+      end
     end
     describe "local" do
       it "should call local_instances_list_file_locations" do
@@ -110,7 +118,7 @@ describe "Remoter" do
           TestClass.list_from_local.class.should == String
         end
         it "should have the name of the master and the ip in the list_from_local" do
-          TestClass.list_from_local.split("\n")[0].should == "master\t192.168.0.1"
+          TestClass.list_from_local.split("\n")[0].should =~ /master\t192\.168\.0\.1/
         end
         it "should call to_s on the RemoteInstance instances" do          
           PoolParty::Remote::RemoteInstance.should_receive(:new).at_least(2).and_return @ri

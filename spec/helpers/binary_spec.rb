@@ -14,4 +14,13 @@ describe "Binary" do
   it "should be able to say the binary is in the binary_directory" do
     Binary.available_binaries.include?("console")
   end
+  describe "get_existing_spec_location" do
+    before(:each) do
+      ::File.stub!(:file?).and_return false
+      ::File.stub!(:file?).with("#{Base.storage_directory}/pool.spec").and_return true
+    end
+    it "should be a String" do
+      Binary.get_existing_spec_location.class.should == String
+    end
+  end
 end

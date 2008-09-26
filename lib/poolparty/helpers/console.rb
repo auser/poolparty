@@ -7,7 +7,11 @@ module PoolParty
     
     # Load a file that contains a pool into memory
     def load_pool(filename)
-      PoolParty::Script.inflate(open(filename).read, File.dirname(filename))
+      unless filename && ::File.file?(filename)
+        puts "Could not load pool"
+      else
+        PoolParty::Script.inflate(open(filename).read, File.dirname(filename))
+      end
     end
     
     # Clear all the pools and reload the console

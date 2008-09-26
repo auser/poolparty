@@ -14,8 +14,12 @@ module PoolParty
         @name = opts[:name]
       end
       
+      def responding?
+        true        
+      end
+      
       def to_s
-        "#{@ip}\t#{@name}"
+        "#{@ip}\t#{@name}\t#{responding?}"
       end
     end
     
