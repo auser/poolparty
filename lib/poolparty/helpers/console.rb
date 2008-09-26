@@ -9,6 +9,7 @@ module PoolParty
     def load_pool(filename)
       unless filename && ::File.file?(filename)
         puts "Could not load pool"
+        exit
       else
         PoolParty::Script.inflate(open(filename).read, File.dirname(filename))
       end
