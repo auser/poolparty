@@ -18,16 +18,7 @@ end
 Kernel.load_p File.dirname(__FILE__) + "/poolparty/pool/**"
 
 module PoolParty
-  def copy_file_to_storage_directory(file)
-    FileUtils.cp file, Base.storage_directory
-  end
-  def write_to_file_in_storage_directory(file, str)
-    path = File.join(Base.storage_directory, file)
-    FileUtils.mkdir_p File.dirname(path)
-    File.open(path, "w+") do |f|
-      f << str
-    end
-  end
+  include FileWriter
 end
 
 class Object

@@ -1,4 +1,14 @@
 module PoolParty
+
+  def register_remote_base(*args)
+    args.each do |arg|
+      (remote_bases << "#{arg}".downcase.to_sym)
+    end    
+  end
+  def remote_bases
+    $remote_bases ||= []
+  end  
+
   module Remote
     
     # This class is the base class for all remote types
@@ -52,10 +62,12 @@ module PoolParty
         instances_list.select {|a| keypair ? a[:keypair] == keypair : a}
       end      
       def self.included(other)
-        Remote.register_remote_base(self.class.to_s.downcase.to_sym)
+        PoolParty.register_remote_base(self.class.to_s.downcase.to_sym)
       end
       
     end
     
   end
 end
+
+Dir["#{File.dirname(__FILE__)}/remote_bases/*.rb"].each {|base| require base }

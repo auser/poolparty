@@ -37,10 +37,6 @@ describe "Remote" do
       @tc.using :paper
     end    
   end
-  it "should extend the module with RemoterBase" do
-    Hype.should_receive(:extend).with(PoolParty::Remote::RemoterBase).once
-    @tc.using :hype
-  end
   describe "when including" do
     it "should be able to say if it is using a remote base with using_remoter?" do
       @tc.using :hype

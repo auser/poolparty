@@ -1,10 +1,9 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
-include Remote
-
 class TestClass
   include CloudResourcer
-  include Remoter
+  include Remote
+  using :ec2
   
   def keypair
     "fake_keypair"
@@ -13,6 +12,7 @@ end
 describe "Remoter" do
   before(:each) do
     @tc = TestClass.new
+    @sample_instances_list = [{:ip => "192.168.0.1", :name => "master"}, {:ip => "192.168.0.2", :name => "node1"}]
   end
   describe "ssh_string" do
     it "should have the ssh command" do
@@ -57,6 +57,28 @@ describe "Remoter" do
     it "should have the method list_from_remote available" do
       TestClass.respond_to?(:list_from_remote).should == true
     end
+    describe "remote" do
+      before(:each) do
+        @tc.stub!(:list_of_instances).and_return @sample_instances_list
+        @tc.stub!(:local_instances_list_file_locations).and_return [
+          "#{Base.storage_directory}/instances.list"
+        ]
+      end
+      it "should call list_of_instances when trying to list from remote" do
+        TestClass.should_receive(:list_of_instances).once.and_return @sample_instances_list
+        TestClass.list_from_remote
+      end
+      it "should create a new RemoteInstance for each hashed instance" do
+        PoolParty::Remote::RemoteInstance.should_receive(:new).exactly(2).and_return @ri
+        @tc.list_from_remote
+      end
+      it "should return a string" do
+        @tc.list_from_remote.class.should == String
+      end
+      it "should contain the master in the listing" do
+        @tc.list_from_remote.should =~ /master/
+      end
+    end
     describe "local" do
       it "should call local_instances_list_file_locations" do
         TestClass.should_receive(:local_instances_list_file_locations).and_return []
@@ -74,14 +96,14 @@ describe "Remoter" do
           @loc.stub!(:read).and_return str
           TestClass.stub!(:open).and_return @loc
           TestClass.stub!(:get_working_listing_file).and_return @loc
-          @ri = RemoteInstance.new({:ip => "192.168.0.1", :name => "master"})
+          @ri = PoolParty::Remote::RemoteInstance.new({:ip => "192.168.0.1", :name => "master"})
         end
         it "should call open on the get_working_listing_file" do
           TestClass.should_receive(:open).with(@loc).at_least(1).and_return @loc
           TestClass.list_from_local
         end
         it "should create a new RemoteInstance for each line in the file" do
-          RemoteInstance.should_receive(:new).at_least(2)
+          PoolParty::Remote::RemoteInstance.should_receive(:new).at_least(2)
           TestClass.list_from_local
         end
         it "should return a string" do
@@ -91,7 +113,7 @@ describe "Remoter" do
           TestClass.list_from_local.split("\n")[0].should == "master\t192.168.0.1"
         end
         it "should call to_s on the RemoteInstance instances" do          
-          RemoteInstance.should_receive(:new).at_least(2).and_return @ri
+          PoolParty::Remote::RemoteInstance.should_receive(:new).at_least(2).and_return @ri
           @ri.should_receive(:to_s).at_least(2)
           TestClass.list_from_local
         end

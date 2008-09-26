@@ -18,7 +18,7 @@ module PoolParty
       include Configurable
       include PrettyPrinter
       include CloudResourcer      
-      include Remote      
+      include Remote
       
       default_options({
         :minimum_instances => 2,

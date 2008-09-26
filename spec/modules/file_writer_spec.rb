@@ -5,74 +5,45 @@ class TestClass
 end
 describe "FileWriter" do
   before(:each) do
-    # Base.reset!
-    @instance = Class.new
-    @instance.stub!(:name).and_return "node0"
-    @instance.stub!(:ip).and_return "127.0.0.1"
     @test = TestClass.new
-    @test.stub!(:base_tmp_dir).and_return("tmp")
   end
-  describe "writing to the temp directory with a string" do
-    before(:each) do
-      @test.write_to_file_for("haproxy", @instance, "topical")
-      @outfile = "#{@test.base_tmp_dir}/node0-haproxy"
+  %w(write_to_file_in_storage_directory copy_file_to_storage_directory write_to_temp_file).each do |method|
+    eval <<-EOE
+    it "should have a #{method} method" do
+      @test.respond_to?(:#{method}).should == true
     end
-    after(:each) do
-      FileUtils.rm @outfile
-    end
-    it "should be able to write a file to the tmp directory with a string" do      
-      File.file?(@outfile).should == true
-    end
-    it "should be able to write to the file with the string" do
-      open(@outfile).read.should == "topical"
-    end
+    EOE
   end
-  
-  describe "writing to the temp directory with a block" do
-    before(:each) do
-      @test.write_to_file_for("haproxy", @instance) do
-        "Hello topical"
-      end
-      @outfile = "#{@test.base_tmp_dir}/node0-haproxy"
-    end
-    after(:each) do
-      FileUtils.rm @outfile
-    end
-    it "should be able to write a file to the tmp directory with a string" do      
-      File.file?(@outfile).should == true
-    end
-    it "should be able to write to the file with the string" do
-      open(@outfile).read.should == "Hello topical"
-    end
-    describe "for output of block" do
-      before(:each) do
-        @test.write_to_file_for("haproxy", @instance) do
-          "Fix and me"
-          "Hello topical"
-        end
-      end
-      it "should just write the final output of the block to the file" do
-        open(@outfile).read.should == "Hello topical"
-      end
-    end
+  it "should copy the file to the Base.storage_directory when calling copy_file_to_storage_directory" do
+    FileUtils.should_receive(:cp).with("ranger", Base.storage_directory).and_return true
+    @test.copy_file_to_storage_directory("ranger")
   end
-  
-  describe "without a node" do
-    before(:each) do
-      @test.write_to_file_for("haproxy") do
-        "Hello topical"
+  describe "write to file in storage directory" do
+    before(:each) do      
+      @filepath = File.join("willy", "nilly.rb")
+      @path = File.join(Base.storage_directory, @filepath)
+    end
+    it "should try to create the directory if it doesn't exist" do
+      ::File.stub!(:open).and_return true
+      File.stub!(:directory?).with(::File.dirname(@path)).and_return false
+      FileUtils.should_receive(:mkdir_p).with(::File.dirname(@path))
+    end
+    it "should not try to create the directory if it already exists" do
+      ::File.stub!(:open).and_return true
+      File.stub!(:directory?).with(::File.dirname(@path)).and_return true
+      FileUtils.should_not_receive(:mkdir_p)      
+    end
+    it "should call File.open on the file" do
+      ::File.should_receive(:open).with(@path, "w+").and_return true
+    end
+    it "should call the block if it is given with a block" do
+      block = Proc.new do |a|
+        "meee: #{a.class}"
       end
-      @outfile = "#{@test.base_tmp_dir}/haproxy"
+      @test.write_to_file_in_storage_directory(@filepath, "STRING TO WRITE", &block)
     end
-    after(:each) do
-      FileUtils.rm @outfile
+    after do
+      @test.write_to_file_in_storage_directory(@filepath, "STRING TO WRITE")
     end
-    it "should write to the master file without a node name" do
-      File.file?(@outfile).should == true
-    end
-  end
-  
-  after(:all) do
-    FileUtils.rm_r "tmp"
   end
 end

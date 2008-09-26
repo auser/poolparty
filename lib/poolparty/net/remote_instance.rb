@@ -5,7 +5,7 @@ module PoolParty
     
     class RemoteInstance
       include Remote
-      include PoolParty::Remoter
+      include PoolParty::Remote::Remoter
       
       attr_reader :ip, :name
       
