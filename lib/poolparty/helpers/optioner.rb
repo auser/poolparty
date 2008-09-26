@@ -34,7 +34,7 @@ module PoolParty
       
       opts.on('-V', '--version', 'Display the version')    { output_version ; exit 0 }
       opts.on('-v', '--verbose', 'Be verbose')    { @options[:verbose] = true }  
-      opts.on('-s', '--spec-file file', 'Set the spec file')      { @options[:spec] = true }
+      opts.on('-s [file]', '--spec-file [file]', 'Set the spec file')      { |file| self.spec file }
             
       blk.call(opts, self) if blk
       

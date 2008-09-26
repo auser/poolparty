@@ -1,9 +1,7 @@
 #!/usr/bin/env ruby
-require 'optparse'
 $:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
 require "poolparty"
 require "poolpartycl"
-
 o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
   opts.on('-l [remote|local]', '--location', 'Remote or local (default: local)')    { |o| optioner.location o }
 end

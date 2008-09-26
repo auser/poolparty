@@ -11,7 +11,8 @@ module PoolParty
             t.extend "#{type}".preserved_module_constant
             t.class.send :include, "#{type}".preserved_module_constant
           end
-          @remote_base = type          
+          @remote_base = type
+          self.class.send :attr_reader, :remote_base
         end
       else
         puts "Unknown remote base" 
