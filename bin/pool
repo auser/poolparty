@@ -1,15 +1,14 @@
 #!/usr/bin/ruby
-require 'optparse'
 $:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
 require "poolparty"
 require "poolpartycl"
 
 # Get the git-style program action
-o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
-  opts.on('-n [name]','--name [name]', 'Binary to run')    { |o| optioner.name o }
-end
+# o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
+#   opts.on('-n [name]','--name [name]', 'Binary to run')    { |o| optioner.name o }
+# end
 
-name = o.name ? o.name : ARGV.shift
+name = ARGV.shift
 
 # If there was no program action given
 if !name || name == "-h" || name == "--help"
