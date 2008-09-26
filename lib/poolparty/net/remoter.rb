@@ -26,8 +26,8 @@ module PoolParty
         if list_file
           out = returning Array.new do |instances|
             open(list_file).read.split("\n").each do |line|
-              ip,name,responding = line.split('\t')
-              instances << RemoteInstance.new({:ip => ip, :name => name}).to_s
+              ip,name,responding,load = line.split(" ")
+              instances << RemoteInstance.new({:ip => ip, :name => name, :responding => responding, :load => load}).to_s
             end
           end.join("\n")
         else
