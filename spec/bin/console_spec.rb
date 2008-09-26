@@ -2,6 +2,9 @@ require File.dirname(__FILE__) + '/../spec_helper'
 require File.dirname(__FILE__) + '/../../lib/poolparty/helpers/console'
 
 describe "Console" do
+  before(:each) do
+    ::File.stub!(:file?).with("pop").and_return true
+  end
   describe "load_pool" do
     before(:each) do
       reset!
@@ -18,7 +21,7 @@ describe "Console" do
     it "should give you the load_pool method" do
       self.respond_to?(:load_pool).should == true
     end
-    it "should call script inflate on the filename" do
+    it "should call script inflate on the filename" do      
       PoolParty::Script.should_receive(:inflate).once
       load_pool("pop")
     end

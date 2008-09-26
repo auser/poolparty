@@ -45,13 +45,14 @@ module PoolParty
         out_array.join("\n")
       end
       def get_working_listing_file
-        local_instances_list_file_locations.select {|f| File.file?(f) }.first
+        local_instances_list_file_locations.reject {|f| f unless File.file?(f) }.first
       end
       def local_instances_list_file_locations
         [
           "#{Base.base_config_directory}/instances.list",
           "~/.instances.list",
           "~/instances.list",
+          "#{Base.storage_directory}/instances.list",
           "instances.list"
         ]
       end

@@ -1,8 +1,15 @@
 #!/usr/bin/env ruby
-require "rubygems"
+require 'optparse'
+$:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
 require "poolparty"
+require "poolpartycl"
 
-location = ARGV.pop
+o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
+  opts.on('-l [remote|local]', '--location', 'Remote or local (default: local)')    { |o| optioner.location o }
+end
+load_pool(o.spec || Binary.get_existing_spec_location)
+
+location = o.location ? o.location : ARGV.pop
 
 include Remote
 
