@@ -235,7 +235,13 @@ describe "Cloud" do
           end
         end
         describe "building" do
-          before(:each) do
+          before(:each) do            
+            str = "master 192.168.0.1
+            node1 192.168.0.2"
+            @sample_instances_list = [{:ip => "192.168.0.1", :name => "master"}, {:ip => "192.168.0.2", :name => "node1"}]
+            @ris = @sample_instances_list.map {|h| PoolParty::Remote::RemoteInstance.new(h) }            
+            @cloud.should_receive(:list_from_local).once.and_return @ris
+                                    
             @manifest = @cloud.build_manifest
           end
           it "should return a string when calling build_manifest" do
@@ -254,6 +260,9 @@ describe "Cloud" do
             @manifest.should =~ /define line\(\$file/
             
             # puts @manifest
+          end
+          it "should include the hosts for all the listed local instances" do
+            @manifest.should =~ /host \{\n\t\tmaster:/
           end
         end
       end

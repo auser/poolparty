@@ -20,6 +20,11 @@ module PoolParty
         end
       end
       
+      # Is this remote instance the master?
+      def master?
+        @name == "master"
+      end
+      
       # The remote instances is only valid if there is an ip and a name
       def valid?
         !(@ip.nil? || @name.nil?)

@@ -12,7 +12,6 @@ pool :application do
   
   cloud :db do
     keypair "hotstuff_database"
-    minimum_instances 4
     maximum_instances 20
     ami "ami-1234bc"
   end

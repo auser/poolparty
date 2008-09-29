@@ -73,10 +73,10 @@ describe "Remoter" do
         @tc.list_from_remote
       end
       it "should return a string" do
-        @tc.list_from_remote.class.should == String
+        @tc.list_from_remote.class.should == Array
       end
       it "should contain the master in the listing" do
-        @tc.list_from_remote.should =~ /master/
+        @tc.list_from_remote.first.master?.should == true
       end
       it "should write to the first (preferred) local instances list file location for next time" do
         @tc.list_from_remote
@@ -84,7 +84,7 @@ describe "Remoter" do
       end
       after(:all) do
         # Cleanup after ourselves
-        FileUtils.rm @loc
+        FileUtils.rm @loc if ::File.file?(@loc)
       end
     end
     describe "local" do

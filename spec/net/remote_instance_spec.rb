@@ -23,4 +23,9 @@ describe "Remote Instance" do
     @ri = RemoteInstance.new(@valid_hash.merge({:name => nil}))
     @ri.valid?.should == false
   end
+  describe "methods" do
+    before(:each) do
+      @ri = RemoteInstance.new(@valid_hash)
+    end
+  end
 end
