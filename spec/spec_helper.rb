@@ -53,3 +53,22 @@ def read_file(path)
   require "open-uri"
   open(path).read
 end
+
+def stub_list_from_local_for(o)
+  @list =<<-EOS
+  master 192.168.0.1
+  node1 192.168.0.2
+  EOS
+  @file = "filename"
+  @file.stub!(:read).and_return @list
+  o.stub!(:get_working_listing_file).and_return @file
+  o.stub!(:open).and_return @file
+  
+  @ris = @list.split(/\n/).map {|line| PoolParty::Remote::RemoteInstance.new(line) }
+end
+def stub_list_from_remote_for(o)
+  @sample_instances_list = [{:ip => "192.168.0.1", :name => "master"}, {:ip => "192.168.0.2", :name => "node1"}]
+  @ris = @sample_instances_list.map {|h| PoolParty::Remote::RemoteInstance.new(h) }
+  
+  o.stub!(:list_of_instances).once.and_return @ris
+end

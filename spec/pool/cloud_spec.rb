@@ -262,9 +262,26 @@ describe "Cloud" do
             # puts @manifest
           end
           it "should include the hosts for all the listed local instances" do
-            @manifest.should =~ /host \{\n\t\tmaster:/
+            @manifest.should =~ /host \{\n\t\t"master":/
           end
         end
+      end
+    end
+    
+    describe "instances" do
+      before(:each) do
+        @cloud3 = cloud :pop do;end
+        stub_list_from_local_for(@cloud3)
+      end
+      it "should respond to the method master" do
+        @cloud3.respond_to?(:master).should == true
+      end
+      it "should create new RemoteInstances for each line" do
+        PoolParty::Remote::RemoteInstance.should_receive(:new).at_least(2).and_return @ris.first
+        @cloud3.master
+      end
+      it "should return a master that is not nil" do
+        @cloud3.master.should_not be_nil
       end
     end
     

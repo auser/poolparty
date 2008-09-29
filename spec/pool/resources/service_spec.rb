@@ -12,11 +12,11 @@ describe "Service" do
       @service = service({:name => "/etc/apache2/puppetmaster.conf"})
     end
     it "should turn the one hash instance into a string" do
-      @service.to_string.should =~ /\/etc\/apache2\/puppetmaster\.conf:/
+      @service.to_string.should =~ /"\/etc\/apache2\/puppetmaster\.conf":/
     end
     it "should turn the two hash instance into a string" do
       @service = service({:name => "/etc/init.d/puppetmaster"})
-      @service.to_string.should =~ /\/etc\/init\.d\/puppetmaster:/
+      @service.to_string.should =~ /"\/etc\/init\.d\/puppetmaster":/
     end
     describe "as included" do            
       before(:each) do

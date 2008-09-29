@@ -116,23 +116,23 @@ describe "Remoter" do
           TestClass.list_from_local
         end
         it "should return a string" do
-          TestClass.list_from_local.class.should == String
+          TestClass.list_from_local.class.should == Array
         end
         it "should have the name of the master and the ip in the list_from_local" do
-          TestClass.list_from_local.split("\n")[0].should =~ /master 192\.168\.0\.1/
+          TestClass.list_from_local[0].name.should == "master"
         end
         it "should have responding in the listing" do
           @ri.should_receive(:responding?).at_least(1).and_return 0.5
-          TestClass.list_from_local
+          @ri.to_s
         end
         it "should have the load in the listing" do
           @ri.should_receive(:load).at_least(1).and_return 0.5
-          TestClass.list_from_local
+          @ri.to_s
         end
         it "should call to_s on the RemoteInstance instances" do          
           PoolParty::Remote::RemoteInstance.should_receive(:new).at_least(2).and_return @ri
-          @ri.should_receive(:to_s).at_least(2)
-          TestClass.list_from_local
+          @ri.should_receive(:to_s).at_least(1)
+          @ri.to_s
         end
       end
       after do
