@@ -13,5 +13,11 @@ module PoolParty
       puts Remote.available_bases
     end
     
+    def header(str="")
+      <<-EOE
+********* #{str} ***********
+      EOE
+    end
+    
   end
 end

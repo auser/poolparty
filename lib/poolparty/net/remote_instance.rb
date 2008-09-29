@@ -8,11 +8,21 @@ module PoolParty
       
       attr_reader :ip, :name
       
-      def initialize(opts={})
-        @ip = opts[:ip]
-        @name = opts[:name]
-        @load = opts[:load]
-        @responding = opts[:responding]
+      def initialize(opts)
+        case opts.class.to_s.downcase
+        when "hash"
+          @ip = opts[:ip]
+          @name = opts[:name]
+          @load = opts[:load]
+          @responding = opts[:responding]
+        when "string"
+          @ip, @name, @responding, @load = opts.split(" ")
+        end
+      end
+      
+      # The remote instances is only valid if there is an ip and a name
+      def valid?
+        !(@ip.nil? || @name.nil?)
       end
       
       # Determine if the RemoteInstance is responding
