@@ -13,9 +13,9 @@ include Remote
 
 case location
 when "remote", "r", "-r", "--remote"
-  puts "Listing remote instances"
-  PoolParty::Remote::RemoteInstance.list_from_remote
+  puts header("Remote instance list")
+  puts PoolParty::Remote::RemoteInstance.list_from_remote.map{|a| a.to_s}
 else
-  puts "Listing instances from local list"
-  puts PoolParty::Remote::RemoteInstance.list_from_local
+  puts header("Local instance list (cached)")
+  puts PoolParty::Remote::RemoteInstance.list_from_local.map{|a| a.to_s}
 end

@@ -1,0 +1,9 @@
+#!/usr/bin/env ruby
+$:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
+require "poolparty"
+require "poolpartycl"
+
+o = PoolParty::Optioner.new(ARGV)
+load_pool(o.spec || Binary.get_existing_spec_location)
+
+puts pool_describe
