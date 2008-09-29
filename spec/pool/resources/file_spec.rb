@@ -8,14 +8,14 @@ describe "File" do
       @file = file({:name => "/etc/apache2/puppetmaster.conf"})
     end
     it "should turn the one hash instance into a string" do
-      @file.to_string.should =~ /\/etc\/apache2\/puppetmaster\.conf:/
+      @file.to_string.should =~ /"\/etc\/apache2\/puppetmaster\.conf":/
     end
     it "should turn the two hash instance into a string" do
       @file = file do
         name "/etc/init.d/puppetmaster"
         owner "redsmith"
       end
-      @file.to_string.should =~ /\/etc\/init\.d\/puppetmaster:/
+      @file.to_string.should =~ /"\/etc\/init\.d\/puppetmaster":/
     end
     describe "as included" do            
       before(:each) do

@@ -33,7 +33,7 @@ module PoolParty
             open(list_file).read.split("\n").each do |line|
               instances << RemoteInstance.new(line)
             end
-          end.join("\n")
+          end
         else
           out = "Cannot find list file"
         end
@@ -43,13 +43,13 @@ module PoolParty
       # Create a RemoteInstance for each of the instances from the hash
       # returned by the list of instances, write them to the cached file
       # and then return the array of instances
-      def list_from_remote
+      def list_from_remote(options={})
         out_array = returning Array.new do |instances|
           list_of_instances(respond_to?(:keypair) ? keypair : nil).each do |h|
             instances << RemoteInstance.new(h)
           end
         end
-        write_to_file(local_instances_list_file_locations.first, out_array.map{|a| a.to_s}.join("\n"))
+        write_to_file(local_instances_list_file_locations.first, out_array.map{|a| a.to_s}.join("\n")) unless options[:do_not_cache]
         out_array
       end
       # Get the instance first instance file that exists on the system from the expected places

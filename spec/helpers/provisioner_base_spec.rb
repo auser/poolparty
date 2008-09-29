@@ -1,9 +1,13 @@
 require File.dirname(__FILE__) + '/../spec_helper'
-require File.dirname(__FILE__) + '/../../lib/poolparty/helpers/provisioner'
+require File.dirname(__FILE__) + '/../../lib/poolparty/helpers/provisioner_base'
 
 include Provisioner
 
 describe "ProvisionerBase" do
+  before(:each) do
+    @cloud = cloud :app do; end
+    stub_list_from_local_for(@cloud)
+  end
   it "should respond to the class method install" do
     ProvisionerBase.respond_to?(:install).should == true
   end
@@ -18,13 +22,13 @@ describe "ProvisionerBase" do
           ]          
         end
       end
-      @tp = TestProvisioner.new
+      @tp = TestProvisioner.new(@cloud)
     end
     it "should have tasks on the provisioner" do
-      ProvisionerBase.new.tasks.class.should == Array
+      ProvisionerBase.new(@cloud).tasks.class.should == Array
     end
     it "should have empty tasks on the provisioner" do
-      ProvisionerBase.new.tasks.should be_empty
+      ProvisionerBase.new(@cloud).tasks.should be_empty
     end
     it "should allow a new class to write tasks that aren't empty upon instantiation" do
       @tp.tasks.should_not be_empty
@@ -40,10 +44,10 @@ describe "ProvisionerBase" do
     ProvisionerBase.installers[:ubuntu].should_not be_nil
   end
   it "should be able to fetch the ubuntu installer with the helper method installer" do
-    ProvisionerBase.new.installer_for("ubuntu").should == "apt-get install"
+    ProvisionerBase.new(@cloud).installer_for("ubuntu").should == "apt-get install"
   end
   it "should be able to fetch the fedora installer with the helper method installer" do
-    ProvisionerBase.new.installer_for("fedora").should == "yum install"
+    ProvisionerBase.new(@cloud).installer_for("fedora").should == "yum install"
   end
   describe "install_string" do
     before(:each) do
@@ -62,7 +66,7 @@ describe "ProvisionerBase" do
           "cruel world"
         end
       end
-      @provisioner = BTestProvisioner.new
+      @provisioner = BTestProvisioner.new(@cloud)
     end
     it "should not run \"hello\"" do
       @provisioner.should_not_receive(:hello)

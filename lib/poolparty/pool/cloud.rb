@@ -38,7 +38,7 @@ module PoolParty
         # this can be overridden in the spec, but ec2 is the default
         using :ec2
       end
-                  
+                        
       # Keypairs
       # If the parent (pool) doesn't have a keypair defined on it, then generate one based on the 
       # pool_name and the cloud_name
@@ -49,7 +49,7 @@ module PoolParty
         options.has_key?(:keypair) && options[:keypair]
       end
       def generate_keypair(*args)
-        options[:keypair] = args.length > 0 ? args[0] : "#{@parent.name}_#{@name}"
+        options[:keypair] = args.length > 0 ? args[0] : "#{@parent.respond_to?(:name) ? @parent.name : ""}_#{@name}"
       end
       
       # Configuration files
@@ -71,19 +71,33 @@ module PoolParty
           
         end.join("\n")
       end
-            
+      
+      # Add all the poolparty requirements here
+      # NOTE: These are written as plugins in the lib/poolparty/base_packages directory
+      # for examples. 
+      # Also note that there is no block associated. This is because we have written
+      # all that is necessary in a method called enable
+      # which is called when there is no block
       def add_poolparty_base_requirements
         heartbeat
         haproxy
         poolparty
       end
             
+      # Add to the services pool for the manifest listing
       def add_service(serv)
         services << serv
       end
-            
+      # Container for the services
       def services
         @services ||= []
+      end
+      
+      # Instances
+      # Get the master from the cloud
+      def master
+        @list = list_from_local
+        @list.reject {|a| a unless a.name =~ /master/ }.first if @list.class != String
       end
       
     end

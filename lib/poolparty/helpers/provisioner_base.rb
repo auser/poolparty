@@ -1,17 +1,26 @@
-# Provisioners
-# 
-# The provisioning for servers is handled by these provisioners
-
+=begin rdoc
+  The Provisioner is responsible for provisioning REMOTE servers
+  This class only comes in to play when calling the setup commands on
+  the development machine
+=end
 module Provisioner
   class ProvisionerBase
-    def initialize(ip="127.0.0.1", os=:ubuntu)
-      @ip = ip
-      @os = os.to_sym
+    include PoolParty::Remote::Remoter
+    
+    def initialize(cloud, os=:ubuntu)
+      @cloud = cloud
+      @os = os.to_s.downcase.to_sym
+      set_ip
+    end
+    def set_ip      
+      @ip = @cloud.master.ip if @cloud && @cloud.master
     end
     # This is the actual runner for the installation    
     def install
+      set_ip unless @ip
       install_string
     end
+    # Gather all the tasks into one string
     def install_string
       tasks.each do |task|
         case task.class
@@ -48,9 +57,13 @@ module Provisioner
       self.class.installers[name.to_sym]
     end
     # Install from the class-level
-    def self.install
-      new.install
-    end    
+    def self.install(cl)
+      new(cl).install
+    end
+    
+    def template_directory
+      File.join(File.dirname(__FILE__), "..", "templates")
+    end
   end
 end
 

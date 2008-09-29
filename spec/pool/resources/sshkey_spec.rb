@@ -9,13 +9,13 @@ describe "SshKey" do
     end
     it "should turn the one hash instance into a string" do
       @key = sshkey({:name => "rock"})
-      @key.to_string.should =~ /rock:\n/
+      @key.to_string.should =~ /"rock":\n/
     end
     it "should turn the two hash instance into a string" do
       @key = sshkey do
         name "poolparty_key"
       end
-      @key.to_string.should =~ /poolparty_key:/
+      @key.to_string.should =~ /"poolparty_key":/
     end
     describe "sizes" do
       before(:each) do

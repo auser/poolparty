@@ -16,7 +16,7 @@ module PoolParty
           @load = opts[:load]
           @responding = opts[:responding]
         when "string"
-          @ip, @name, @responding, @load = opts.split(" ")
+          @name, @ip, @responding, @load = opts.split(" ")
         end
       end
       

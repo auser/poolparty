@@ -11,11 +11,11 @@ describe "Package" do
       @package = package({:name => "/etc/apache2/puppetmaster.conf"})
     end
     it "should turn the one hash instance into a string" do
-      @package.to_string.should =~ /\/etc\/apache2\/puppetmaster\.conf:/      
+      @package.to_string.should =~ /"\/etc\/apache2\/puppetmaster\.conf":/      
     end
     it "should turn the two hash instance into a string" do
       @package = package({:name => "/etc/init.d/puppetmaster"})
-      @package.to_string.should =~ /etc\/init\.d\/puppetmaster:/
+      @package.to_string.should =~ /"\/etc\/init\.d\/puppetmaster":/
     end
     describe "as included" do            
       before(:each) do

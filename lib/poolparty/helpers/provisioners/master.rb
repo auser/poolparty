@@ -5,10 +5,13 @@ module Provisioner
       [
         install_puppet_master,
         create_local_hosts_entry,
+        setup_configs,
+        setup_basic_structure,
         create_basic_site_pp,
         setup_fileserver,
         setup_autosigning,
-        create_local_node
+        create_local_node,
+        create_poolparty_manifest
       ]
     end
     
@@ -18,15 +21,30 @@ module Provisioner
         
     def create_local_hosts_entry
       <<-EOS
-        echo "#{@ip}             puppet" >> /etc/hosts
+        echo "#{@ip}             puppet master" >> /etc/hosts
+      EOS
+    end
+    
+    def setup_basic_structure
+      <<-EOS
+        puppetmasterd --mkusers        
+        echo "import 'nodes/*.pp'" > /etc/puppet/manifests/site.pp
+        echo "import 'classes/*.pp'" >> /etc/puppet/manifests/site.pp
+        mkdir /etc/puppet/manifests/nodes /etc/puppet/manifests/classes
+      EOS
+    end
+    
+    def setup_configs
+      <<-EOS
+        echo "#{open(File.join(template_directory, "puppet.conf")).read}" > /etc/puppet/puppet.conf
       EOS
     end
     
     def create_basic_site_pp
       <<-EOS
-        echo "import 'nodes/*.pp'" > /etc/puppet/manifests/site.pp
-        echo "import 'classes/*.pp'" >> /etc/puppet/manifests/site.pp
-        mkdir /etc/puppet/manifests/nodes /etc/puppet/manifests/classes
+        echo "node default {
+            include poolparty
+        }" >> /etc/puppet/manifests/site.pp
       EOS
     end
     
@@ -46,11 +64,21 @@ module Provisioner
     end
     
     def create_local_node
-      <<-EOS
-        node "master.#{@ip}" {
-           include hosts
+      str = <<-EOS
+        node default {
+          include poolparty
         }
       EOS
+       @cloud.list_from_local.each do |ri|
+         str << <<-EOS           
+           node "#{ri.name}" {}
+         EOS
+       end
+      "echo #{str} > /etc/puppet/manifests/nodes/nodes.pp"
+    end
+    
+    def create_poolparty_manifest
+      
     end
   end
 end

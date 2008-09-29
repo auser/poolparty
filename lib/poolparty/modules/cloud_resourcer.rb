@@ -1,3 +1,5 @@
+require "ftools"
+
 module PoolParty
   module CloudResourcer
     
@@ -10,7 +12,18 @@ module PoolParty
     end
     
     def keypair_path
-      File.join(Base.base_keypair_path, keypair)
+      File.join(get_keypair_path, keypair)
+    end
+    
+    def get_keypair_path
+      keypair_paths.reject {|f| f unless ::File.exists?(f) }.first || ""
+    end
+    
+    def keypair_paths
+      [
+        Base.base_keypair_path,
+        "#{Base.base_config_directory}/#{keypair}"
+      ]
     end
     
     # Set the parent on the resource

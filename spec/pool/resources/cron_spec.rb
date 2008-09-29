@@ -11,8 +11,8 @@ describe "Cron" do
       @cron.to_string.should =~ /command => '\/bin\/logrotate';/
     end
     it "should turn the two hash instance into a string" do
-      @cron = cron({:name => "/bin/mail -s \"letters\""})
-      @cron.to_string.should =~ /\/bin\/mail -s \"letters\":/
+      @cron = cron({:name => "mail", :command => "/bin/mail -s \"letters\""})
+      @cron.to_string.should =~ /"mail":/
     end
     describe "as included" do            
       before(:each) do

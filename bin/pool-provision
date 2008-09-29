@@ -1,0 +1,31 @@
+#!/usr/bin/env ruby
+$:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
+require "poolparty"
+require "poolpartycl"
+
+o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
+  opts.on('-t', '--type [master|slave|all]', 'Provision these instances (default: all)')    { |o| optioner.class_type o }
+  opts.on('-a', '--all', 'Provision all the instances')    { |o| optioner.all true }
+  opts.on('-c [name]', '--cloud [name]', 'Cloud to provision (required)') {|o| optioner.cloud_name o }
+end
+load_pool(o.spec || Binary.get_existing_spec_location)
+
+if o.cloud_name
+  @c = cloud(o.cloud_name.downcase.to_sym)
+else
+  puts "Cloud name required. Please specify it with -c [name]"
+  exit(0)
+end
+
+if o.class_type && o.class_type != "all" && !o.all  
+  case o.class_type
+  when "master","m"
+    puts header("Provisioning the master instances")    
+  when "slave", "s"
+    puts header("Provisioning the slave instances")
+  end
+else
+  # Provision all the instances
+  puts header("Provisioning all the instances")
+  puts Provisioner::Master.install(@c)
+end
