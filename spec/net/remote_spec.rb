@@ -2,6 +2,7 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 module Hype
   def hyper
+    "beatnick"
   end
   def instances_list
     []
@@ -40,7 +41,7 @@ describe "Remote" do
   describe "when including" do
     it "should be able to say if it is using a remote base with using_remoter?" do
       @tc.using :hype
-      @tc.using_remoter?.should == :hype
+      @tc.using_remoter?.should_not == nil
     end
     it "should ask if it is using_remoter? when calling using" do
       @tc.should_receive(:using_remoter?).once
@@ -70,6 +71,9 @@ describe "Remote" do
       lambda {
         @tc.instances_list
       }.should_not raise_error
+    end
+    it "should run hyper" do
+      @tc.hyper.should == "beatnick"
     end
   end
 end

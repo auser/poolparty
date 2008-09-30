@@ -6,7 +6,7 @@ include Provisioner
 describe "ProvisionerBase" do
   before(:each) do
     @cloud = cloud :app do; end
-    stub_list_from_local_for(@cloud)
+    stub_list_from_remote_for(@cloud)
   end
   it "should respond to the class method install" do
     ProvisionerBase.respond_to?(:install).should == true

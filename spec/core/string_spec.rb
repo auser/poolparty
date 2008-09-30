@@ -91,6 +91,12 @@ listen web_proxy 127.0.0.1:3000
     it "should turn itself into a class constant" do
       @str.module_constant.class.should == Module
     end
+    it "should create the module on preserved module constant" do
+      Module.should_receive(:new).once
+      @str.preserved_module_constant.should == Prok
+      @str.preserved_module_constant
+      @str.preserved_module_constant
+    end
     describe "with a block" do
       before(:each) do
         @str = "nack"

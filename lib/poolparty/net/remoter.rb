@@ -49,7 +49,7 @@ module PoolParty
             instances << RemoteInstance.new(h)
           end
         end
-        write_to_file(local_instances_list_file_locations.first, out_array.map{|a| a.to_s}.join("\n")) unless options[:do_not_cache]
+        write_to_file(local_instances_list_file_locations.first, out_array.map{|a| a.to_s}.join("\n")) if options[:cache]
         out_array
       end
       # Get the instance first instance file that exists on the system from the expected places
@@ -69,7 +69,7 @@ module PoolParty
       end
 
       def self.included(receiver)
-        receiver.extend self      
+        receiver.extend self
       end
     end
   end

@@ -6,10 +6,10 @@ include Provisioner
 describe "Master provisioner" do
   before(:each) do
     @cloud = cloud :app do; end
-    stub_list_from_local_for(@cloud)    
-    @cloud.stub!(:master).and_return @ris.first
+    stub_list_from_remote_for(@cloud)
     
-    @master = Master.new(@cloud, :ubuntu)
+    @cloud.stub!(:master).and_return @ris.first
+    @master = Master.new(@cloud, :ubuntu)    
   end
   describe "install_tasks" do
     before(:each) do

@@ -79,7 +79,7 @@ describe "Remoter" do
         @tc.list_from_remote.first.master?.should == true
       end
       it "should write to the first (preferred) local instances list file location for next time" do
-        @tc.list_from_remote
+        @tc.list_from_remote(:cache => true)
         ::File.file?(@tc.local_instances_list_file_locations.first).should == true
       end
       after(:all) do

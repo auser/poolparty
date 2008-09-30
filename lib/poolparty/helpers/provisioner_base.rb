@@ -5,7 +5,6 @@
 =end
 module Provisioner
   class ProvisionerBase
-    include PoolParty::Remote::Remoter
     
     def initialize(cloud, os=:ubuntu)
       @cloud = cloud
@@ -13,7 +12,7 @@ module Provisioner
       set_ip
     end
     def set_ip      
-      @ip = @cloud.master.ip if @cloud && @cloud.master
+      @ip = @cloud.master.ip if @cloud && @cloud.master && !@ip
     end
     # This is the actual runner for the installation    
     def install
