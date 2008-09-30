@@ -36,7 +36,7 @@ describe "RemoterBase" do
 
         @b1={:instance_id => "i-b1", :ip => "127.0.0.2", :status => "shutting down", :launching_time => 55.minutes.ago, :keypair => "blist"}
         @c1={:instance_id => "i-c1", :ip => "127.0.0.4", :status => "pending", :launching_time => 2.days.ago, :keypair => "clist"}
-        @tr.stub!(:instances_list).and_return [@a1, @a2, @a3, @a4, @b1, @c1]
+        @tr.stub!(:describe_instances).and_return [@a1, @a2, @a3, @a4, @b1, @c1]
       end
       it "should gather a list of the running instances" do
         @tr.list_of_running_instances.map {|a| a[:instance_id] }.should == ["i-a1", "i-a2"]

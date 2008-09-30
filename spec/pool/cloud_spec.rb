@@ -242,7 +242,6 @@ describe "Cloud" do
             node1 192.168.0.2"
             @sample_instances_list = [{:ip => "192.168.0.1", :name => "master"}, {:ip => "192.168.0.2", :name => "node1"}]
             @ris = @sample_instances_list.map {|h| PoolParty::Remote::RemoteInstance.new(h) }            
-            @cloud.should_receive(:list_from_remote).once.and_return @ris
                                     
             @manifest = @cloud.build_manifest
           end
