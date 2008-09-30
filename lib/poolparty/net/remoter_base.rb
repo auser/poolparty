@@ -57,13 +57,13 @@ module PoolParty
       def list_of_nonterminated_instances(list = list_of_instances)
         list.reject {|a| a[:status] =~ /terminated/}
       end
+      def instances_list
+        list_of_instances.map {|i| puts "i: #{i}";PoolParty::Remote::RemoteInstance.new(i)}
+      end
       # List the instances for the current key pair, regardless of their states
       # If no keypair is passed, select them all
       def list_of_instances(keypair=nil)
         describe_instances.select {|a| keypair ? a[:keypair] == keypair : a}
-      end
-      def instances_list
-        list_of_instances.map {|i| PoolParty::Remote::RemoteInstance.new(i)}
       end
       # Instances
       # Get the master from the cloud

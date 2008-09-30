@@ -46,7 +46,7 @@ module PoolParty
       def list_from_remote(options={})
         out_array = returning Array.new do |instances|
           list_of_instances(respond_to?(:keypair) ? keypair : nil).each do |h|
-            instances << RemoteInstance.new(h)
+            instances << PoolParty::Remote::RemoteInstance.new(h)
           end
         end
         write_to_file(local_instances_list_file_locations.first, out_array.map{|a| a.to_s}.join("\n")) if options[:cache]
