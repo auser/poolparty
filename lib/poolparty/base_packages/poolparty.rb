@@ -3,6 +3,7 @@ module PoolParty
     plugin :poolparty do
       
       def enable
+        has_package(:name => "erlang")
         has_gem(:name => "poolparty")
         
         (self.respond_to?(:instances_list) ? self : parent).instances_list.each do |ri|
