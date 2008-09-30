@@ -17,7 +17,9 @@ module PoolParty
       include PoolParty::Resources
       include Configurable
       include PrettyPrinter
-      include CloudResourcer      
+      include CloudResourcer
+      # Net methods
+      include PoolParty::Remote::RemoterBase
       include Remote
       
       default_options({
@@ -96,7 +98,7 @@ module PoolParty
       # Instances
       # Get the master from the cloud
       def master
-        @list = list_from_local
+        @list = list_from_remote
         @list.reject {|a| a unless a.name =~ /master/ }.first if @list.class != String
       end
       

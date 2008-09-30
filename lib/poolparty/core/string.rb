@@ -44,13 +44,13 @@ class String
   
   def module_constant(&block)
     symc = "#{self}_Module".classify
-    mod = Module.new(&block)    
+    mod = Object.const_defined?(symc) ? Object.const_get(symc.to_sym) : Module.new(&block)
     Object.const_set(symc, mod) unless Object.const_defined?(symc)
     symc.to_s.constantize
   end
   def preserved_module_constant(ext="", &block)
     symc = "#{self}#{ext}".classify
-    mod = Module.new(&block)    
+    mod = Object.const_defined?(symc) ? Object.const_get(symc.to_sym) : Module.new(&block)
     Object.const_set(symc, mod) unless Object.const_defined?(symc)
     symc.to_s.constantize
   end

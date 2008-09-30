@@ -69,6 +69,6 @@ end
 def stub_list_from_remote_for(o)
   @sample_instances_list = [{:ip => "192.168.0.1", :name => "master"}, {:ip => "192.168.0.2", :name => "node1"}]
   @ris = @sample_instances_list.map {|h| PoolParty::Remote::RemoteInstance.new(h) }
-  
-  o.stub!(:list_of_instances).once.and_return @ris
+  o.stub!(:list_from_remote).and_return @ris
+  o.stub!(:instances_list).once.and_return @sample_instances_list
 end

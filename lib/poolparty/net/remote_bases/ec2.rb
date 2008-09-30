@@ -1,7 +1,7 @@
 module PoolParty
   module Remote
     
-    module EC2
+    module Ec2
       def launch_new_instance!
         true
       end
@@ -14,11 +14,12 @@ module PoolParty
         []
       end
       def instances_list
+        puts "Here?!?!?!?! in EC2"
         []
       end      
     end
         
   end
   
-  register_remote_base :EC2
+  register_remote_base :Ec2
 end

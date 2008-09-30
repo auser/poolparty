@@ -4,15 +4,19 @@ require File.dirname(__FILE__) + "/remoter"
 module PoolParty  
   module Remote
     
-    def using(type)
-      if available_bases.include?(type.to_sym)
-        unless using_remoter? || type.nil?
-          self.instance_eval do |t|
-            t.extend "#{type}".preserved_module_constant
-            t.class.send :include, "#{type}".preserved_module_constant
-          end
-          @remote_base = type
+    include PoolParty::Remote::Remoter
+    include PoolParty::Remote::RemoterBase
+    
+    def using(t)
+      if available_bases.include?(t.to_sym)
+        unless using_remoter? || t.nil?
           self.class.send :attr_reader, :remote_base
+          mod = "#{t}".preserved_module_constant
+          
+          mod.extend PoolParty::Remote::RemoterBase
+          self.class.send :include, mod
+          
+          @remote_base = "#{t}".preserved_module_constant          
         end
       else
         puts "Unknown remote base" 
@@ -26,12 +30,6 @@ module PoolParty
     def using_remoter?
       @remote_base ||= nil
     end
-    
-    def self.included(receiver)
-      receiver.send :include, PoolParty::Remote::RemoterBase
-      receiver.send :include, PoolParty::Remote::Remoter
-      receiver.extend self
-    end
-        
+                
   end  
 end

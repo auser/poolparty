@@ -21,7 +21,7 @@ describe "Cloud" do
       @obj.cloud(:pop).should == @cloud1
     end
     it "should have set the using base on intantiation to ec2" do
-      @cloud1.using_remoter?.should == :ec2
+      @cloud1.using_remoter?.should_not == nil
     end
   end
   it "should return the cloud if the cloud key is already in the clouds list" do
@@ -271,14 +271,10 @@ describe "Cloud" do
     describe "instances" do
       before(:each) do
         @cloud3 = cloud :pop do;end
-        stub_list_from_local_for(@cloud3)
+        stub_list_from_remote_for(@cloud3)
       end
       it "should respond to the method master" do
         @cloud3.respond_to?(:master).should == true
-      end
-      it "should create new RemoteInstances for each line" do
-        PoolParty::Remote::RemoteInstance.should_receive(:new).at_least(2).and_return @ris.first
-        @cloud3.master
       end
       it "should return a master that is not nil" do
         @cloud3.master.should_not be_nil

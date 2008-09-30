@@ -21,7 +21,7 @@ module Provisioner
         
     def create_local_hosts_entry
       <<-EOS
-        echo "#{@ip}             puppet master" >> /etc/hosts
+        echo "#{@cloud.master.ip}             puppet master" >> /etc/hosts
       EOS
     end
     
@@ -69,7 +69,7 @@ module Provisioner
           include poolparty
         }
       EOS
-       @cloud.list_from_local.each do |ri|
+       @cloud.list_from_remote(:do_not_cache => true).each do |ri|
          str << <<-EOS           
            node "#{ri.name}" {}
          EOS

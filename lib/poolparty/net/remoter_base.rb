@@ -3,23 +3,22 @@ module PoolParty
   def register_remote_base(*args)
     args.each do |arg|
       (remote_bases << "#{arg}".downcase.to_sym)
-    end    
+    end
   end
+  
   def remote_bases
     $remote_bases ||= []
   end  
 
-  module Remote
-    
+  module Remote    
     # This class is the base class for all remote types
     # Everything remoting-wise is derived from this class
-    module RemoterBase
+    module RemoterBaseMethods
       # Required methods
       # The next methods are required on all RemoteInstance types
       # If your RemoteInstance type does not overwrite the following methods
       # An exception will be raised and poolparty will explode into tiny little 
       # pieces. Don't forget to overwrite these methods
-      
       # Launch a new instance
       def launch_new_instance!
         raise RemoteException.new(:method_not_defined, "launch_new_instance!")
@@ -35,9 +34,11 @@ module PoolParty
       # Get instances
       # The instances must have a status associated with them on the hash
       def instances_list
-        raise RemoteException.new(:method_not_defined, "instances_list")        
+        raise RemoteException.new(:method_not_defined, "instances_list")
       end
-            
+      
+    end
+    module RemoterBase
       # The following methods are inherent on the RemoterBase
       # If you need to overwrite these methods, do so with caution
       # Listing methods
@@ -59,9 +60,11 @@ module PoolParty
       # List the instances for the current key pair, regardless of their states
       # If no keypair is passed, select them all
       def list_of_instances(keypair=nil)
+        puts methods.sort.join(", ")
         instances_list.select {|a| keypair ? a[:keypair] == keypair : a}
       end      
       def self.included(other)
+        self.send :include, RemoterBaseMethods
         PoolParty.register_remote_base(self.class.to_s.downcase.to_sym)
       end
       
