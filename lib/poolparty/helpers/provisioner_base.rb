@@ -16,8 +16,14 @@ module Provisioner
     end
     # This is the actual runner for the installation    
     def install
-      set_ip unless @ip
-      install_string
+      set_ip unless @ip      
+      valid? ? install_string : error
+    end
+    def valid?
+      true
+    end
+    def error
+      "Error in installation"
     end
     # Gather all the tasks into one string
     def install_string

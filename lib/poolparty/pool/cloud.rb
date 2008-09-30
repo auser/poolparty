@@ -94,14 +94,7 @@ module PoolParty
       def services
         @services ||= []
       end
-      
-      # Instances
-      # Get the master from the cloud
-      def master
-        @list = list_from_remote
-        @list.reject {|a| a unless a.name =~ /master/ }.first if @list.class != String
-      end
-      
+            
     end
   end  
 end

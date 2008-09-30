@@ -48,7 +48,7 @@ module PoolParty
       end
       def reset!
         @cached_descriptions = nil
-      end      
+      end
     end
     
     def self.included(receiver)

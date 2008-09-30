@@ -60,11 +60,15 @@ module PoolParty
       # List the instances for the current key pair, regardless of their states
       # If no keypair is passed, select them all
       def list_of_instances(keypair=nil)
-        puts methods.sort.join(", ")
         instances_list.select {|a| keypair ? a[:keypair] == keypair : a}
       end      
+      # Instances
+      # Get the master from the cloud
+      def master
+        @list = list_from_remote
+        @list.reject {|a| a unless a.name =~ /master/ }.first if @list.class != String
+      end
       def self.included(other)
-        self.send :include, RemoterBaseMethods
         PoolParty.register_remote_base(self.class.to_s.downcase.to_sym)
       end
       
