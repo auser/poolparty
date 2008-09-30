@@ -1,6 +1,14 @@
 module Provisioner
   class Master < ProvisionerBase
     
+    def valid?
+      !(@cloud.nil? || @cloud.master.nil?)
+    end
+    
+    def error
+      raise RemoteException.new(:could_not_install, "Your cloud does not have a master")
+    end
+    
     def tasks
       [
         install_puppet_master,
@@ -78,7 +86,7 @@ module Provisioner
     end
     
     def create_poolparty_manifest
-      
+      @cloud.build_manifest
     end
   end
 end

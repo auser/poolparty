@@ -48,10 +48,10 @@ class String
     Object.const_set(symc, mod) unless Object.const_defined?(symc)
     symc.to_s.constantize
   end
-  def preserved_module_constant(ext="", &block)
+  def preserved_module_constant(ext="", from="PoolParty::", &block)
     symc = "#{self}#{ext}".classify
-    mod = Object.const_defined?(symc) ? Object.const_get(symc.to_sym) : Module.new(&block)
-    Object.const_set(symc, mod) unless Object.const_defined?(symc)
+    mod = Kernel.const_defined?(symc) ? Kernel.const_get(symc.to_sym) : Module.new(&block)
+    Kernel.const_set(symc, mod) unless Kernel.const_defined?(symc)
     symc.to_s.constantize
   end
   def collect_each_line_with_index(&block)

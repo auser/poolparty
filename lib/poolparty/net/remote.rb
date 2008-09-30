@@ -5,7 +5,6 @@ module PoolParty
   module Remote
     
     include PoolParty::Remote::Remoter
-    include PoolParty::Remote::RemoterBase
     
     def using(t)
       if available_bases.include?(t.to_sym)
@@ -13,9 +12,10 @@ module PoolParty
           self.class.send :attr_reader, :remote_base
           mod = "#{t}".preserved_module_constant
           
-          mod.extend PoolParty::Remote::RemoterBase
+          mod.send :include, PoolParty::Remote::RemoterBase                    
           self.class.send :include, mod
-          
+          self.extend mod
+                    
           @remote_base = "#{t}".preserved_module_constant          
         end
       else

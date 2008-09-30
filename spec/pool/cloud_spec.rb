@@ -150,6 +150,7 @@ describe "Cloud" do
       describe "Manifest" do
         before(:each) do
           reset!
+          stub_list_from_remote_for(@cloud)
           @cloud.instance_eval do
             has_file(:name => "/etc/httpd/http.conf") do
               content <<-EOE
@@ -200,7 +201,8 @@ describe "Cloud" do
           end
           describe "after adding" do
             before(:each) do
-              @cloud.add_poolparty_base_requirements
+              stub_list_from_remote_for(@cloud)
+              @cloud.add_poolparty_base_requirements              
             end
             it "should add resources onto the heartbeat class inside the cloud" do
               @cloud.services.size.should > 0
@@ -240,7 +242,7 @@ describe "Cloud" do
             node1 192.168.0.2"
             @sample_instances_list = [{:ip => "192.168.0.1", :name => "master"}, {:ip => "192.168.0.2", :name => "node1"}]
             @ris = @sample_instances_list.map {|h| PoolParty::Remote::RemoteInstance.new(h) }            
-            @cloud.should_receive(:list_from_local).once.and_return @ris
+            @cloud.should_receive(:list_from_remote).once.and_return @ris
                                     
             @manifest = @cloud.build_manifest
           end
