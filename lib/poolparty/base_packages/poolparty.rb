@@ -5,7 +5,7 @@ module PoolParty
       def enable
         has_gem(:name => "poolparty")
         
-        self.parent.list_from_remote.each do |ri|
+        self.parent.instances_list.each do |ri|
           has_host({:name => ri.name, :ip => ri.ip})# unless ri.class != PoolParty::Remote::RemoteInstance
         end
       end
