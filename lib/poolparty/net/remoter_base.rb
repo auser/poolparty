@@ -33,8 +33,8 @@ module PoolParty
       end
       # Get instances
       # The instances must have a status associated with them on the hash
-      def instances_list
-        raise RemoteException.new(:method_not_defined, "instances_list")
+      def describe_instances
+        raise RemoteException.new(:method_not_defined, "describe_instances")
       end
       
     end
@@ -60,8 +60,11 @@ module PoolParty
       # List the instances for the current key pair, regardless of their states
       # If no keypair is passed, select them all
       def list_of_instances(keypair=nil)
-        instances_list.select {|a| keypair ? a[:keypair] == keypair : a}
-      end      
+        describe_instances.select {|a| keypair ? a[:keypair] == keypair : a}
+      end
+      def instances_list
+        list_of_instances.map {|i| PoolParty::Remote::RemoteInstance.new(i)}
+      end
       # Instances
       # Get the master from the cloud
       def master

@@ -24,8 +24,8 @@ module PoolParty
     def describe_instance(id=nil)
       get_instances_description.select {|a| a.instance_id == id}[0] rescue nil
     end
-    def instances_list
-      get_instances_description
+    def describe_instances
+      get_instances_description.map {|d| d.merge(:name => d[:instance_id])}
     end
     # Override the master method
     def master
