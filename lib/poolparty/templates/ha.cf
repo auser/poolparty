@@ -1,0 +1,9 @@
+# Haproxy conf
+keepalive 2 # Time inbetween heartbeats
+deadtime 32 # wait 32 seconds before declaring dead
+warntime 16 # issue a warning halfway through
+initdead 60 # Don't boot instances between 60 seconds of each other
+auto_failback on
+use_logd yes
+
+node <%= nodenames.join(" ") %>

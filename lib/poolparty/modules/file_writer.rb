@@ -8,7 +8,7 @@ module PoolParty
       write_to_file(path, str, &block)
     end
     def write_to_file(path, str, &block)
-      FileUtils.mkdir_p ::File.dirname(path) unless ::File.directory?(::File.dirname(path))
+      make_base_path(::File.dirname(path))
       ::File.open(path, "w+") do |f|
         f.print str
         f.flush
@@ -22,6 +22,17 @@ module PoolParty
         fp.print str
         fp.flush
         block.call(fp)
+      end
+    end
+    def make_base_path(path)
+      ::FileUtils.rm_rf path unless ::File.directory?(path)
+      unless ::File.directory?(path)
+        begin          
+          ::FileUtils.mkdir_p path
+        rescue Errno::ENOTDIR
+        rescue Errno::EEXIST
+          puts "There was an error"
+        end
       end
     end
     def make_base_directory

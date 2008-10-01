@@ -10,23 +10,31 @@ module PoolParty
           refreshonly true
         end
         
+        # variables for the templates
+        has_variable({:name => "nodenames", :value => PoolParty::Remote::RemoteInstance.list_of_node_names})
+        has_variable({:name => "node_ips",  :value => PoolParty::Remote::RemoteInstance.list_of_node_ips})
+        has_variable({:name => "port", :value => (port || Base.port)})
+        
         # These can also be passed in via hash
         has_remotefile(:name => "/etc/ha.d/ha.cf") do
           mode 444
           requires 'Package["heartbeat-2"]'
           notify 'Service["heartbeat"]'
+          template File.join(File.dirname(__FILE__), "..", "templates/ha.cf"), {:just_copy => true}
         end
         
         has_remotefile(:name => "/etc/ha.d/authkeys") do
           mode 400
           requires 'Package["heartbeat-2"]'
           notify 'Service["heartbeat"]'
+          template File.join(File.dirname(__FILE__), "..", "templates/authkeys"), {:just_copy => true}
         end
         
         has_remotefile(:name => "/etc/ha.d/cib.xml") do
           mode 444
           requires 'Package["heartbeat-2"]'
           notify 'Exec["heartbeat-update-cib"]'
+          template File.join(File.dirname(__FILE__), "..", "templates/cib.xml"), {:just_copy => true}
         end                
         
       end

@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/spec_helper'
 
 describe "PoolParty" do
   after(:all) do
-    FileUtils.rm_r(Base.storage_directory) rescue ""
+    # FileUtils.rm_r(Base.storage_directory) rescue ""
   end
   it "should have the method copy_file_to_storage_directory on the PoolParty" do
     PoolParty.respond_to?(:copy_file_to_storage_directory).should == true
