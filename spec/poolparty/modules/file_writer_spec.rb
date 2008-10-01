@@ -28,11 +28,6 @@ describe "FileWriter" do
       File.stub!(:directory?).with(::File.dirname(@path)).and_return false
       FileUtils.should_receive(:mkdir_p).with(::File.dirname(@path))
     end
-    it "should not try to create the directory if it already exists" do
-      ::File.stub!(:open).and_return true
-      File.stub!(:directory?).with(::File.dirname(@path)).and_return true
-      FileUtils.should_not_receive(:mkdir_p)      
-    end
     it "should call File.open on the file" do
       ::File.should_receive(:open).with(@path, "w+").and_return true
     end

@@ -44,13 +44,22 @@ module PoolParty
       # returned by the list of instances, write them to the cached file
       # and then return the array of instances
       def list_from_remote(options={})
-        out_array = returning Array.new do |instances|
+        out_array = get_remote_nodes
+        write_to_file(local_instances_list_file_locations.first, out_array.map{|a| a.to_s}.join("\n")) if options[:cache]
+        out_array
+      end
+      def list_of_node_names(options={})
+        list_from_local.collect {|ri| ri.name }
+      end
+      def list_of_node_ips(options={})
+        list_from_local.collect {|ri| ri.ip }
+      end
+      def get_remote_nodes
+        returning Array.new do |instances|
           list_of_instances(respond_to?(:keypair) ? keypair : nil).each do |h|
             instances << PoolParty::Remote::RemoteInstance.new(h)
           end
         end
-        write_to_file(local_instances_list_file_locations.first, out_array.map{|a| a.to_s}.join("\n")) if options[:cache]
-        out_array
       end
       # Get the instance first instance file that exists on the system from the expected places
       # denoted in the local_instances_list_file_locations

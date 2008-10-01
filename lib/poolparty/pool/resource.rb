@@ -86,10 +86,10 @@ module PoolParty
       end
       # Give us a template to work with on the resource
       # Make sure this template is moved to the tmp directory as well
-      def template(file)
+      def template(file, opts={})
         raise TemplateNotFound.new("no template given") unless file
         raise TemplateNotFound.new("template cannot be found #{file}") unless ::File.file?(file)
-        options.merge!(:template => file)
+        options.merge!(:template => file) unless opts[:just_copy]
         copy_file_to_storage_directory(file)
       end
       # Generic to_s

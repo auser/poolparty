@@ -18,7 +18,8 @@ module PoolParty
       :fileserver_base => "puppet://puppet/",
       :base_config_directory => "/etc/poolparty",
       :access_key => ENV["AWS_ACCESS_KEY_ID"] ? ENV["AWS_ACCESS_KEY_ID"] : nil,
-      :secret_access_key => ENV["AWS_SECRET_ACCESS_ID"] ? ENV["AWS_SECRET_ACCESS_ID"] : nil
+      :secret_access_key => ENV["AWS_SECRET_ACCESS_ID"] ? ENV["AWS_SECRET_ACCESS_ID"] : nil,
+      :port => "8080"
     })
         
     # Class methods

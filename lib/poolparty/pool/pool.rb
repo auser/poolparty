@@ -14,7 +14,7 @@ module PoolParty
     end
 
     class Pool
-      attr_accessor :name, :container
+      attr_accessor :name
       include PoolParty::Cloud
       include MethodMissingSugar
       # include PluginModel
@@ -25,7 +25,6 @@ module PoolParty
       
       def initialize(name,&block)
         @name = name
-        @container = Container::Container.new
         instance_eval &block if block
       end
       

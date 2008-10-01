@@ -18,7 +18,4 @@ describe "heartbeat base package" do
   it "should have a file resource" do
     @hb.resource(:remotefile).should_not be_empty
   end
-  it "should have at least 3 remotefiles" do
-    @hb.resource(:remotefile).size.should >= 3
-  end
 end

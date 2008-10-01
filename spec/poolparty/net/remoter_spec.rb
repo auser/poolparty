@@ -84,7 +84,7 @@ describe "Remoter" do
       end
       after(:all) do
         # Cleanup after ourselves
-        FileUtils.rm @loc if ::File.file?(@loc)
+        # FileUtils.rm @loc if ::File.file?(@loc)
       end
     end
     describe "local" do
