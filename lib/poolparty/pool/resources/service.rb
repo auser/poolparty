@@ -5,9 +5,8 @@ module PoolParty
       
       default_options({
         :ensure => "running",
-        :enable => "true",
         :name => nil,
-        :require => nil
+        :enable => true
       })
            
     end

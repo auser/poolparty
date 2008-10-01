@@ -1,0 +1,54 @@
+require File.dirname(__FILE__) + '/../../spec_helper'
+
+include PoolParty::Resources
+
+describe "Remote file" do
+  describe "instances" do
+    before(:each) do
+      @file = remotefile({:name => "/etc/apache2/puppetmaster.conf"})
+    end
+    it "should turn the one hash instance into a string" do
+      @file.to_string.should =~ /"\/etc\/apache2\/puppetmaster\.conf":/
+    end
+    it "should turn the two hash instance into a string" do
+      @file = file do
+        name "/etc/init.d/puppetmaster"
+        owner "redsmith"
+      end
+      @file.to_string.should =~ /"\/etc\/init\.d\/puppetmaster":/
+    end
+    describe "source setting" do
+      it "should have the source set to puppet" do
+        file = remotefile({:rent => "low"}) do
+          name "/www/conf/httpd.conf"
+          source "nickname/for/httpd.conf"
+        end
+        file.source.should == "puppet://puppet/nickname/for/httpd.conf"
+      end
+      it "should use the default (name) as the source" do
+        file = remotefile(:name => "/etc/nietche/nothing.txt")
+        file.source.should == "puppet://puppet/etc/nietche/nothing.txt"
+      end
+    end
+    describe "as included" do            
+      before(:each) do
+        @file = remotefile({:rent => "low"}) do
+          name "/www/conf/httpd.conf"
+          source "nickname/for/httpd.conf"
+        end
+      end
+      it "should have the source set to puppet" do
+        @file.source.should == "puppet://puppet/nickname/for/httpd.conf"
+      end
+      it "should use default values" do
+        @file.name.should == "/www/conf/httpd.conf"
+      end
+      it "should keep the default values for the file" do
+        @file.mode.should == 644
+      end
+      it "should also set options through a hash" do
+        @file.rent.should == "low"
+      end
+    end
+  end
+end

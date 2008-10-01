@@ -16,9 +16,6 @@ describe "heartbeat base package" do
     @pphc.resources.should be_empty
   end
   it "should have a file resource" do
-    @hb.resource(:file).should_not be_empty
-  end
-  it "should have call_function resource" do
-    @hb.resource(:call_function).should_not be_empty
+    @hb.resource(:remotefile).should_not be_empty
   end
 end
