@@ -15,6 +15,6 @@ describe "Variable" do
   end
   it "should be able to set the variable as an array if passed an array" do
     v = variable(:name => "girlfriends", :value => %w(Rachel Erica Michelle))
-    v.to_string.should == "$girlfriends = [ Rachel, Erica, Michelle ]"
+    v.to_string.should == "$girlfriends = [ 'Rachel', 'Erica', 'Michelle' ]"
   end
 end

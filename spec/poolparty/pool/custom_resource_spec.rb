@@ -106,7 +106,7 @@ describe "Custom Resource" do
             @cloud.resources.should_not be_empty
           end
           it "should have one call_function resource" do
-            @cloud.resource(:call_function).first.to_string.should == "line(messages, hello)"
+            @cloud.resource(:call_function).first.to_string.should =~ /line \{/
           end
         end
       end

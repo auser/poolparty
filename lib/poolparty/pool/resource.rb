@@ -78,12 +78,17 @@ module PoolParty
       def set_vars_from_options(opts={})
         opts.each {|k,v| self.send k.to_sym, v } unless opts.empty?
       end
+      
+      # Overrides for syntax
+      # Allows us to send require to require a resource
       def requires(str="")
         options.merge!(:require => str)
       end
+      # Allows us to send an ensure to ensure the presence of a resource
       def ensures(str="")
         options.merge!(:ensure => str)
       end
+      
       # Give us a template to work with on the resource
       # Make sure this template is moved to the tmp directory as well
       def template(file, opts={})
@@ -92,17 +97,67 @@ module PoolParty
         options.merge!(:template => file) unless opts[:just_copy]
         copy_file_to_storage_directory(file)
       end
+      # This way we can subclass resources without worry
+      def class_type_name
+        self.class.to_s.top_level_class
+      end      
+      def self.custom_function(str)
+        custom_functions << str
+      end
+      
+      def self.custom_function(str)
+        custom_functions << str
+      end      
+      def self.custom_functions
+        @custom_functions ||= []
+      end
+      def custom_function(str)
+        self.class.custom_functions << str
+      end
+      
+      def self.custom_functions_to_string(prev="")
+        returning Array.new do |output|
+          PoolParty::Resources.available_custom_resources.each do |resource|
+            resource.custom_functions.each do |func|
+              output << "#{prev*2}#{func}"
+            end
+          end
+        end.join("\n")
+      end
+      # Some things in puppet aren't allowed, so let's override them here
+      def disallowed_options
+        []
+      end
+      def key
+        name
+      end
+      # We want to gather the options, but if the option sent is nil
+      # then we want to override the option value by sending the key as
+      # a method so that we can override this if necessary. 
+      # Only runs on objects that have options defined, otherwise 
+      # it returns an empty hash
+      def get_modified_options
+        if options
+          opts = options.inject({}) do |sum,h| 
+            sum.merge!({h[0].to_sym => ((h[1].nil?) ? self.send(h[0].to_sym) : h[1]) }) unless disallowed_options.include?(h[0])
+          end
+        else
+          opts = {}
+        end
+        opts
+      end
       # Generic to_s
       # Most Resources won't need to extend this
       def to_string(prev="")
+        opts = get_modified_options
         returning Array.new do |output|
-          output << "#{prev}#{self.class.to_s.top_level_class} {"
-          output << "#{prev}\"#{self.name}\":"
-          output << options.flush_out("#{prev*2}",";")
+          output << "#{prev}#{class_type_name} {"
+          output << "#{prev}\"#{self.key}\":"
+          output << opts.flush_out("#{prev*2}").join(",\n")
           output << "#{prev}}"
         end.join("\n")
-      end      
-    end    
+      end
+    end
     
     # Adds two methods to the module
     # Adds the method type:
@@ -113,13 +168,14 @@ module PoolParty
     # for instance
     # add_has_and_does_not_have_methods_for(:file)
     # gives you the methods has_file and does_not_have_file
+    # TODO: Refactor nicely to include other types that don't accept ensure
     def self.add_has_and_does_not_have_methods_for(type=:file)
       module_eval <<-EOE
         def has_#{type}(opts={}, &block)
-          #{type}(opts.merge(:ensure => "present"), &block) 
+          #{type}(opts#{'.merge(:ensure => "present")' if type != :exec}, &block) 
         end
         def does_not_have_#{type}(opts={}, &block)
-          #{type}(opts.merge(:ensure => "absent"), &block)
+          #{type}(opts#{'.merge(:ensure => "absent")' if type != :exec}, &block)
         end
       EOE
     end

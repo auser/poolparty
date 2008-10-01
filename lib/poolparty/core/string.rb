@@ -27,6 +27,11 @@ class String
   def nice_runnable(quite=true)
     self.split(/ && /).join("\n")
   end
+  def to_option_string
+    self =~ /^[A-Z][a-zA-Z]*\[[a-zA-Z0-9\-\."']+\]/ ? "#{self}" : "'#{self}'"
+  end
+  # Refactor this guy to get the class if the class is defined, and not always create a new one
+  # although, it doesn't really matter as ruby will just reopen the class
   def class_constant(superclass=nil, opts={}, &block)
     symc = ((opts && opts[:preserve]) ? ("#{self.classify}Classs") : "PoolParty#{self.classify}Classs").classify
         

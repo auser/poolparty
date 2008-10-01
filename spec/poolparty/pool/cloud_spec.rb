@@ -239,17 +239,19 @@ describe "Cloud" do
             node1 192.168.0.2"
             @sample_instances_list = [{:ip => "192.168.0.1", :name => "master"}, {:ip => "192.168.0.2", :name => "node1"}]
             @ris = @sample_instances_list.map {|h| PoolParty::Remote::RemoteInstance.new(h) }            
-                                    
+            
+            reset_all!
+            @resources = nil
             @manifest = @cloud.build_manifest
           end
           it "should return a string when calling build_manifest" do
             @manifest.class.should == String          
           end
           it "should have a comment of # file in the manifest as described by the has_file" do
-            @manifest.should =~ /# files/
+            @manifest.should =~ /file \{/
           end
           it "should have the comment of a package in the manifest" do
-            @manifest.should =~ /# packages/            
+            @manifest.should =~ /package \{/
           end
           it "should have the comment for heartbeat in the manifest" do
             @manifest.should =~ /# heartbeat/            
@@ -257,7 +259,7 @@ describe "Cloud" do
           it "should include custom functions" do
             @manifest.should =~ /define line\(\$file/
             
-            # puts @manifest
+            File.open("test_manifest.pp", "w+") {|f| f << @manifest}
           end
           it "should include the hosts for all the listed local instances" do
             @manifest.should =~ /host \{\n\t\t"master":/
