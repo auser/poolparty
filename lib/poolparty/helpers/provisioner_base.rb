@@ -46,13 +46,13 @@ module Provisioner
       when :fedora
         "puppet-server puppet factor"
       else
-        "puppet factor"
+        "puppet puppetmaster"
       end
     end    
     # Package installers for general *nix operating systems
     def self.installers
       @installers ||= {
-        :ubuntu => "apt-get install",
+        :ubuntu => "apt-get install -y",
         :fedora => "yum install",
         :gentoo => "emerge"
       }

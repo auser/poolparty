@@ -27,5 +27,8 @@ if o.class_type && o.class_type != "all" && !o.all
 else
   # Provision all the instances
   puts header("Provisioning all the instances")
-  puts Provisioner::Master.install(@c)
+  provisioner_file = ::File.join(Base.storage_directory, "install.sh")
+  File.open(provisioner_file, "w+") do |file|
+    file << Provisioner::Master.install(@c)
+  end  
 end

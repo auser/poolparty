@@ -58,7 +58,7 @@ module PoolParty
         list.reject {|a| a[:status] =~ /terminated/}
       end
       def instances_list
-        list_of_instances.map {|i| puts "i: #{i}";PoolParty::Remote::RemoteInstance.new(i)}
+        list_of_instances.map {|i| PoolParty::Remote::RemoteInstance.new(i)}
       end
       # List the instances for the current key pair, regardless of their states
       # If no keypair is passed, select them all

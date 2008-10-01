@@ -16,6 +16,6 @@ describe "Slave provisioner" do
     end
   end
   it "should return install_puppet as apt-get install puppet factor" do
-    @slave.install_puppet.should == "apt-get install puppet factor"
+    @slave.install_puppet.should == "apt-get install -y puppet puppetmaster"
   end
 end

@@ -44,7 +44,7 @@ describe "ProvisionerBase" do
     ProvisionerBase.installers[:ubuntu].should_not be_nil
   end
   it "should be able to fetch the ubuntu installer with the helper method installer" do
-    ProvisionerBase.new(@cloud).installer_for("ubuntu").should == "apt-get install"
+    ProvisionerBase.new(@cloud).installer_for("ubuntu").should == "apt-get install -y"
   end
   it "should be able to fetch the fedora installer with the helper method installer" do
     ProvisionerBase.new(@cloud).installer_for("fedora").should == "yum install"
