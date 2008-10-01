@@ -29,7 +29,7 @@ describe "Service" do
         @service.name.should == "mdmdp"
       end
       it "should keep the default values for the Service" do
-        @service.enable.should == "true"
+        @service.enable.should == true
       end
       it "should also set options through a hash" do
         @service.rent.should == "low"

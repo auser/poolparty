@@ -216,10 +216,10 @@ describe "Cloud" do
             describe "resources" do
               before(:each) do
                 @service = @cloud.services.first
-                @file = @service.resource(:file)
+                @file = @service.resource(:remotefile)
               end
               it "should not have a exec resource" do
-                @service.resource(:exec).should be_empty
+                @service.resource(:exec).should_not be_empty
               end
               it "should have a line resource" do
                 @file.should_not be_nil
@@ -229,9 +229,6 @@ describe "Cloud" do
               end
               it "should not be empty" do
                 @file.should_not be_empty
-              end
-              it "should have the file stored in the file resource" do
-                @file.first.to_string.should =~ /ha\.d\/heartbeat\.conf/
               end
             end
           end
