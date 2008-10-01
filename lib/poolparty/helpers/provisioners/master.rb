@@ -13,8 +13,8 @@ module Provisioner
       [
         install_puppet_master,
         create_local_hosts_entry,
-        setup_configs,
         setup_basic_structure,
+        setup_configs,        
         create_basic_site_pp,
         setup_fileserver,
         setup_autosigning,
@@ -35,7 +35,8 @@ module Provisioner
     
     def setup_basic_structure
       <<-EOS
-        puppetmasterd --mkusers        
+        puppetmasterd --mkusers
+        mkdir -p #{Base.remote_storage_path}
         echo "import 'nodes/*.pp'" > /etc/puppet/manifests/site.pp
         echo "import 'classes/*.pp'" >> /etc/puppet/manifests/site.pp
         mkdir /etc/puppet/manifests/nodes /etc/puppet/manifests/classes
@@ -59,15 +60,15 @@ module Provisioner
     def setup_fileserver
       <<-EOS
         echo "[files]
-          path /data/puppet/fileserver
-          allow #{@ip}" > /etc/puppet/fileserver.conf
-        mkdir -p /data/puppet/fileserver
+          path /var/puppet/fileserver
+          allow *" > /etc/puppet/fileserver.conf
+        mkdir -p /var/puppet/fileserver
       EOS
     end
-    
+    # Change this eventually for better security support
     def setup_autosigning
       <<-EOS
-        echo "*.#{@ip}" > /etc/puppet/autosign.conf
+        echo "*" > /etc/puppet/autosign.conf
       EOS
     end
     
@@ -82,11 +83,13 @@ module Provisioner
            node "#{ri.name}" {}
          EOS
        end
-      "echo #{str} > /etc/puppet/manifests/nodes/nodes.pp"
+      "echo '#{str}' > /etc/puppet/manifests/nodes/nodes.pp"
     end
     
     def create_poolparty_manifest
-      @cloud.build_manifest
+      <<-EOS        
+        mv #{Base.remote_storage_path}/site.pp /etc/puppet/site.pp
+      EOS
     end
   end
 end

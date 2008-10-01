@@ -36,7 +36,7 @@ describe "Master provisioner" do
     end
   end
   it "should return install_puppet_master as apt-get install puppet factor" do
-    @master.install_puppet_master.should == "apt-get install puppet factor"
+    @master.install_puppet_master.should == "apt-get install -y puppet puppetmaster"
   end
   it "should return create_local_hosts_entry as echo" do
     @master.create_local_hosts_entry.should == "        echo \"192.168.0.1             puppet master\" >> /etc/hosts\n"
@@ -48,7 +48,7 @@ describe "Master provisioner" do
     @master.setup_basic_structure.should =~ /puppetmasterd --mkusers/
   end
   it "should return setup_fileserver with the setup" do
-    @master.setup_fileserver.should == "        echo \"[files]\n          path /data/puppet/fileserver\n          allow 192.168.0.1\" > /etc/puppet/fileserver.conf\n        mkdir -p /data/puppet/fileserver\n"
+    @master.setup_fileserver.should == "        echo \"[files]\n          path /var/puppet/fileserver\n          allow 192.168.0.1\" > /etc/puppet/fileserver.conf\n        mkdir -p /var/puppet/fileserver\n"
   end
   it "should be able to create_local_node" do
     @master.create_local_node.should =~ /ode \"master\" \{\}/
