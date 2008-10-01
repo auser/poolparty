@@ -8,7 +8,7 @@ describe "Cron" do
       @cron = cron({:command => "/bin/logrotate"})
     end
     it "should turn the one hash instance into a string" do
-      @cron.to_string.should =~ /command => '\/bin\/logrotate';/
+      @cron.to_string.should =~ /'\/bin\/logrotate'/
     end
     it "should turn the two hash instance into a string" do
       @cron = cron({:name => "mail", :command => "/bin/mail -s \"letters\""})

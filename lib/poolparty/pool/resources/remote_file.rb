@@ -9,6 +9,10 @@ module PoolParty
         :owner => "poolparty",
         :source => nil
       })
+            
+      def class_type_name
+        "file"
+      end
       
     end
     

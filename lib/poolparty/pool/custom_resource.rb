@@ -45,30 +45,6 @@ module PoolParty
         super(subclass)
       end
       
-      def self.custom_function(str)
-        custom_functions << str
-      end
-      
-      def self.custom_function(str)
-        custom_functions << str
-      end      
-      def self.custom_functions
-        @custom_functions ||= []
-      end
-      def custom_function(str)
-        self.class.custom_functions << str
-      end
-      
-      def self.custom_functions_to_string(prev="")
-        returning Array.new do |output|
-          PoolParty::Resources.available_custom_resources.each do |resource|
-            resource.custom_functions.each do |func|
-              output << "#{prev*2}#{func}"
-            end
-          end
-        end.join("\n")
-      end      
-      
       def to_string(prev="")
         returning Array.new do |output|
           output << "#{prev} # Custom Functions\n"

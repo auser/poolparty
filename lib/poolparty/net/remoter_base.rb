@@ -67,10 +67,16 @@ module PoolParty
       end
       # Instances
       # Get the master from the cloud
+      # EC2 doesn't give us the "name" of the instance, but fortunately
+      # it returns the results in an ordered fashion, so we can safely assume the 
+      # first instance is the master
       def master
         @list = list_from_remote
         @list.reject {|a| a unless a.name =~ /master/ }.first if @list.class != String
       end
+      # Reset the cache of descriptions
+      def reset!
+      end      
       def self.included(other)
         PoolParty.register_remote_base(self.class.to_s.downcase.to_sym)
       end

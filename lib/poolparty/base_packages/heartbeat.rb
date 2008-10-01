@@ -5,10 +5,7 @@ module PoolParty
       def enable
         has_package(:name => "heartbeat-2")
         has_service(:name => "heartbeat", :hasstatus => true, :ensure => "running")
-        has_exec(:name => "heartbeat-update-cib") do          
-          command "/usr/sbin/cibadmin -R -x /etc/ha.d/cib.xml"
-          refreshonly true
-        end
+        has_exec(:command => "/usr/sbin/cibadmin -R -x /etc/ha.d/cib.xml", :refreshonly => true)
         
         # variables for the templates
         has_variable({:name => "nodenames", :value => PoolParty::Remote::RemoteInstance.list_of_node_names})

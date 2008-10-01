@@ -116,4 +116,15 @@ listen web_proxy 127.0.0.1:3000
       "PoolParty::Resources::File".top_level_class.should == "file"
     end
   end
+  describe "to_option_string" do
+    it "should not touch a string, but return the string with single quotes" do
+      "rocks".to_option_string.should == "'rocks'"
+    end
+    it "should return a string of the format Service[nagios] with no single quotes" do
+      "Service[nagios]".to_option_string.should == "Service[nagios]"
+    end
+    it "should also return a string if there is a string within the string" do
+      'Package["heartbeat-2"]'.to_option_string.should == 'Package["heartbeat-2"]'
+    end
+  end
 end

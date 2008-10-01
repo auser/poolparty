@@ -12,7 +12,7 @@ describe "Exec" do
     end
     it "should turn the two hash instance into a string" do
       @exec = exec({:name => "/usr/bin/ping 127.0.0.1"})
-      @exec.to_string.should =~ /"\/usr\/bin\/ping 127\.0\.0\.1":/
+      @exec.to_string.should =~ /"\/usr\/bin\/ping 127\.0\.0\.1":/      
     end
     describe "as included" do            
       before(:each) do

@@ -5,8 +5,7 @@ module PoolParty
             
       default_options({
         :name => "master puppet",
-        :ip => "$ipaddress",
-        :alias => "$hostname"
+        :ip => "$ipaddress"
       })
       
     end

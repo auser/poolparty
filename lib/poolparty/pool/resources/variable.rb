@@ -15,7 +15,7 @@ module PoolParty
       def value_string
         case value.class.to_s
         when "Array"
-          "[ #{value.join(", ")} ]"
+          "[ #{value.map{|a| "'#{a}'"}.join(", ")} ]"
         else
           "'#{value}'"
         end

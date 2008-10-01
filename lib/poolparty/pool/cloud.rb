@@ -56,9 +56,15 @@ module PoolParty
       
       # Configuration files
       def build_manifest
+        reset_resources!
         add_poolparty_base_requirements
         
         returning Array.new do |str|
+          
+          str << "# Custom functions"
+          str << Resources::CustomResource.custom_functions_to_string
+          str << "\n"
+          
           resources.each do |name, resource|
             str << "# #{name.to_s.pluralize}"
             resource.map {|a| str << a.to_string("\t") }
@@ -66,11 +72,7 @@ module PoolParty
           services.each do |service|
             str << "# #{service.name}"
             str << service.resources_string("\t")
-          end
-          str << "\n\n"
-          str << "# Custom functions"
-          str << Resources::CustomResource.custom_functions_to_string
-          
+          end          
         end.join("\n")
       end
       
