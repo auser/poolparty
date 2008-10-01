@@ -1,5 +1,5 @@
 require File.dirname(__FILE__) + '/../spec_helper'
-require File.dirname(__FILE__) + '/../../lib/poolparty/helpers/console'
+require File.dirname(__FILE__) + '/../../../lib/poolparty/helpers/console'
 
 describe "Console" do
   before(:each) do

@@ -9,7 +9,7 @@ class Hash
     merge!(other_hash.delete_if {|k,v| has_key?(k) && !v.nil? })
   end
   def flush_out(prev="", post="")
-    collect {|k,v| "#{prev}#{k} => #{v.is_a?(String) ? "'#{v}'" : "#{v}"}#{post}" }
+    map {|k,v| "#{prev}#{k} => #{v.is_a?(String) ? "'#{v}'" : "#{v}"}#{post}" }
   end
   def to_os
     m={}

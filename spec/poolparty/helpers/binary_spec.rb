@@ -1,5 +1,5 @@
 require File.dirname(__FILE__) + '/../spec_helper'
-require File.dirname(__FILE__) + '/../../lib/poolparty/helpers/binary'
+require File.dirname(__FILE__) + '/../../../lib/poolparty/helpers/binary'
 
 describe "Binary" do
   before(:each) do

@@ -24,6 +24,9 @@ describe "Hash" do
   it "should be able to turn itself into an open struct with the method to_hash on the object" do
     @a.to_os.to_hash.should == @a
   end
+  it "should not put quotes around integers" do
+    {:a => 10, :b => "q"}.flush_out.should == ["a => 10", "b => 'q'"]
+  end
   it "should be able to flush out into a string into an array" do
     @a.flush_out.should == ["a => '10'","b => '20'","c => '30'"]
   end
