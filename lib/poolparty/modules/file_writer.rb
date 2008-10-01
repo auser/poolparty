@@ -1,7 +1,9 @@
 module PoolParty
   module FileWriter
-    def copy_file_to_storage_directory(file)
-      FileUtils.cp file, Base.storage_directory
+    def copy_file_to_storage_directory(file, dir=".")
+      path = ::File.join(Base.storage_directory, dir)
+      make_base_path(path)
+      FileUtils.cp file, path
     end
     def write_to_file_in_storage_directory(file, str, &block)
       path = ::File.join(Base.storage_directory, file)

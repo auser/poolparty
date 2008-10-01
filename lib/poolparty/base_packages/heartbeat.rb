@@ -20,21 +20,21 @@ module PoolParty
           mode 444
           requires 'Package["heartbeat-2"]'
           notify 'Service["heartbeat"]'
-          template File.join(File.dirname(__FILE__), "..", "templates/ha.cf"), {:just_copy => true}
+          template File.join(File.dirname(__FILE__), "..", "templates/ha.cf"), {:just_copy => true, :path => "/etc/ha.d"}
         end
         
         has_remotefile(:name => "/etc/ha.d/authkeys") do
           mode 400
           requires 'Package["heartbeat-2"]'
           notify 'Service["heartbeat"]'
-          template File.join(File.dirname(__FILE__), "..", "templates/authkeys"), {:just_copy => true}
+          template File.join(File.dirname(__FILE__), "..", "templates/authkeys"), {:just_copy => true,:path => "/etc/ha.d"}
         end
         
         has_remotefile(:name => "/etc/ha.d/cib.xml") do
           mode 444
           requires 'Package["heartbeat-2"]'
           notify 'Exec["heartbeat-update-cib"]'
-          template File.join(File.dirname(__FILE__), "..", "templates/cib.xml"), {:just_copy => true}
+          template File.join(File.dirname(__FILE__), "..", "templates/cib.xml"), {:just_copy => true, :path => "/etc/ha.d"}
         end                
         
       end

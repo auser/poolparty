@@ -95,7 +95,7 @@ module PoolParty
         raise TemplateNotFound.new("no template given") unless file
         raise TemplateNotFound.new("template cannot be found #{file}") unless ::File.file?(file)
         options.merge!(:template => file) unless opts[:just_copy]
-        copy_file_to_storage_directory(file)
+        copy_file_to_storage_directory(file, opts[:path] || "")
       end
       # This way we can subclass resources without worry
       def class_type_name
