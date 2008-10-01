@@ -3,7 +3,6 @@ module PoolParty
     plugin :poolparty do
       
       def enable
-        has_package(:name => "rubygems")
         has_package(:name => "erlang")
         has_gem(:name => "poolparty")
                 
@@ -27,7 +26,6 @@ module PoolParty
         
         has_service(:name => "cron") do
           ensures "running"
-          enable "true"
         end
       end
       
