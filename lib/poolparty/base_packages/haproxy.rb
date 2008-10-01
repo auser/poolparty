@@ -3,7 +3,9 @@ module PoolParty
     plugin :haproxy do
       
       def enable
-        package({:name => "haproxy"})
+        package({:name => "haproxy"}) do
+          requires 'Exec["apt-get-upgrade"]'
+        end
         
         # Startup haproxy and enable it
         has_line_in_file("s/ENABLED=0/ENABLED=1/g", "/etc/default/haproxy")
@@ -14,6 +16,8 @@ module PoolParty
         has_service(:name => "syslogd") do
           ensures "running"
         end
+        
+        has_exec(:name => "apt-get-upgrade", :command => "apt-get update && apt-get upgrade")
       end
       
     end  
