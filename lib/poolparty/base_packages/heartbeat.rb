@@ -3,9 +3,12 @@ module PoolParty
     plugin :heartbeat do
       
       def enable
-        has_package(:name => "heartbeat-2")
-        has_service(:name => "heartbeat", :hasstatus => true, :ensure => "running")
-        has_exec(:command => "/usr/sbin/cibadmin -R -x /etc/ha.d/cib.xml", :refreshonly => true)
+        has_package(:name => "heartbeat-2", :ensure => "running")
+        has_service(:name => "heartbeat", :hasstatus => true) do
+          ensures "running"
+        end
+        
+        has_exec(:name => "heartbeat-update-cib", :command => "/usr/sbin/cibadmin -R -x /etc/ha.d/cib.xml", :refreshonly => true)
         
         # variables for the templates
         has_variable({:name => "nodenames", :value => PoolParty::Remote::RemoteInstance.list_of_node_names})

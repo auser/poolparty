@@ -85,7 +85,7 @@ module PoolParty
         options.merge!(:require => str)
       end
       # Allows us to send an ensure to ensure the presence of a resource
-      def ensures(str="")
+      def ensures(str="running")
         options.merge!(:ensure => str)
       end
       
@@ -139,12 +139,12 @@ module PoolParty
       def get_modified_options
         if options
           opts = options.inject({}) do |sum,h| 
-            sum.merge!({h[0].to_sym => ((h[1].nil?) ? self.send(h[0].to_sym) : h[1]) }) unless disallowed_options.include?(h[0])
+            sum.merge!({h[0].to_sym => ((h[1].nil?) ? self.send(h[0].to_sym) : h[1]) })
           end
         else
           opts = {}
         end
-        opts
+        opts.reject {|k,v| disallowed_options.include?(k) }
       end
       # Generic to_s
       # Most Resources won't need to extend this

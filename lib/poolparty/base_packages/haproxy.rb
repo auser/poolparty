@@ -11,7 +11,9 @@ module PoolParty
         has_line_in_file("local0.* /var/log/haproxy.log", "/etc/syslog.conf", 'present', 'Service["syslogd"]')
         
         # Restart sysklogd after we update the haproxy.log
-        has_service(:name => "sysklogd")
+        has_service(:name => "syslogd") do
+          ensures "running"
+        end
       end
       
     end  
