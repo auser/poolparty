@@ -16,7 +16,7 @@ describe "Exec" do
     end
     describe "as included" do            
       before(:each) do
-        @exec = exec({:rent => "low"}) do
+        @exec = exec({:rent => "low", :ensures => "running"}) do
           name "/www/conf/httpd.conf"
         end
       end
@@ -28,6 +28,9 @@ describe "Exec" do
       end
       it "should also set options through a hash" do
         @exec.rent.should == "low"
+      end
+      it "should ensure running, not the default 'present'" do
+        @exec.ensure.should == "running"
       end
     end
   end

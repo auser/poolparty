@@ -4,18 +4,18 @@ module PoolParty
     class Exec < Resource
       
       default_options({
-        :path => "/usr/bin:/bin:/usr/local/bin"
+        :path => "/usr/bin:/bin:/usr/local/bin"        
       })
       
       
       def disallowed_options
-        [:ensure]
+        [:ensure, :name]
       end
       
       def key
-        command || name
+        name || command
       end
-            
+                  
     end
     
   end

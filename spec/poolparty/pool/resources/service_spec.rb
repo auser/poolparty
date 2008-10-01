@@ -37,6 +37,9 @@ describe "Service" do
       it "should also set options through a hash" do
         @service.ensure.should == "stopped"
       end
+      it "should set ensure as a default if it's not passed" do
+        service(:name => "romp").ensure.should == "running"
+      end
     end
   end
 end

@@ -3,6 +3,7 @@ module PoolParty
     plugin :poolparty do
       
       def enable
+        has_package(:name => "rubygems")
         has_package(:name => "erlang")
         has_gem(:name => "poolparty")
                 
