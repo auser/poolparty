@@ -1,5 +1,5 @@
 require File.dirname(__FILE__) + '/../spec_helper'
-require File.dirname(__FILE__) + '/../../lib/poolparty/helpers/display'
+require File.dirname(__FILE__) + '/../../../lib/poolparty/helpers/display'
 
 include Display
 

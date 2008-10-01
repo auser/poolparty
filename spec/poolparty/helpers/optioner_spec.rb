@@ -1,5 +1,5 @@
 require File.dirname(__FILE__) + '/../spec_helper'
-require File.dirname(__FILE__) + '/../../lib/poolparty/helpers/optioner'
+require File.dirname(__FILE__) + '/../../../lib/poolparty/helpers/optioner'
 
 describe "Option Parser" do
   describe "options" do

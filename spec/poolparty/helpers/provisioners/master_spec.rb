@@ -1,5 +1,5 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
-require File.dirname(__FILE__) + '/../../../lib/poolparty/helpers/provisioner_base'
+require File.dirname(__FILE__) + '/../../../../lib/poolparty/helpers/provisioner_base'
 
 include Provisioner
 
