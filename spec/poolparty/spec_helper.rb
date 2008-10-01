@@ -49,7 +49,6 @@ def wait_launch(time=5)
   Process.wait(pid, 0)
 end
 def reset_all!
-  reset_resources!
 end
 def read_file(path)
   require "open-uri"
