@@ -60,11 +60,7 @@ module PoolParty
         add_poolparty_base_requirements
         
         returning Array.new do |str|
-          
-          str << "# Custom functions"
-          str << Resources::CustomResource.custom_functions_to_string
-          str << "\n"
-          
+                    
           resources.each do |name, resource|
             str << "# #{name.to_s.pluralize}"
             resource.map {|a| str << a.to_string("\t") }
@@ -72,7 +68,11 @@ module PoolParty
           services.each do |service|
             str << "# #{service.name}"
             str << service.resources_string("\t")
-          end          
+          end
+          
+          str << "# Custom functions"
+          str << Resources::CustomResource.custom_functions_to_string
+          str << "\n"
         end.join("\n")
       end
       

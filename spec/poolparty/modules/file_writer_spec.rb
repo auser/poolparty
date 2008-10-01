@@ -15,7 +15,7 @@ describe "FileWriter" do
     EOE
   end
   it "should copy the file to the Base.storage_directory when calling copy_file_to_storage_directory" do
-    FileUtils.should_receive(:cp).with("ranger", Base.storage_directory).and_return true
+    FileUtils.should_receive(:cp).with("ranger", Base.storage_directory+"/.").and_return true
     @test.copy_file_to_storage_directory("ranger")
   end
   describe "write to file in storage directory" do
