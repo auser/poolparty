@@ -1,0 +1,26 @@
+#!/usr/bin/env ruby
+$:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
+require "poolparty"
+require "poolpartycl"
+o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
+  opts.on('-t', '--test', 'Testing mode')    { optioner.testing true }
+  opts.on('-c cloudname', '--cloud name', 'Start cloud by this name')    { |c| optioner.cloudname c }
+end
+
+load_pool(o.spec || Binary.get_existing_spec_location)
+
+@testing = o.testing
+
+include Remote
+
+if o.cloudname
+  @cloud = cloud(o.cloudname.downcase.to_sym)
+else
+  puts "Cloud name or pool name required. Please specify it with -c name"
+  exit(0)
+end
+
+with_cloud(@cloud) do
+  puts header("Starting cloud")
+  puts "#{self.list_of_running_instances.size} running instances (#{minimum_instances} - #{maximum_instances})"
+end

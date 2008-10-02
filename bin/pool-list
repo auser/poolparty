@@ -3,7 +3,11 @@ $:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
 require "poolparty"
 require "poolpartycl"
 o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
-  opts.on('-l [remote|local]', '--location', 'Remote or local (default: local)')    { |o| optioner.location o }
+  opts.on('-f [remote|local]', '--from [remote|local]', 'Remote or local (default: local)')    { |o| optioner.location o }
+  opts.on('-r', '--remote', 'Remote listing')    { optioner.location "remote" }
+  opts.on('-l', '--local', 'Local listing')    { optioner.location "local" }
+  opts.on('-p poolname', '--pool name', 'Listing for pool name')    { |p| optioner.poolname p }
+  opts.on('-c cloudname', '--cloud name', 'Listing for cloud')    { |c| optioner.cloudname c }
 end
 load_pool(o.spec || Binary.get_existing_spec_location)
 
@@ -11,11 +15,23 @@ location = o.location ? o.location : ARGV.pop
 
 include Remote
 
-case location
-when "remote", "r", "-r", "--remote"
-  puts header("Remote instance list")
-  puts PoolParty::Remote::RemoteInstance.list_from_remote.map{|a| a.to_s}
+if o.cloudname
+  @obj = cloud(o.cloudname.downcase.to_sym)
+elsif o.poolname
+  @obj = pool(o.poolname.downcase.to_sym)
 else
-  puts header("Local instance list (cached)")
-  puts PoolParty::Remote::RemoteInstance.list_from_local.map{|a| a.to_s}
+  puts "Cloud name or pool name required"
+  puts "Please specify either the pool with -p name"
+  puts "or the cloud with -c name"
+  exit(0)
+end
+
+with_cloud(@obj) do
+  puts header("#{location.capitalize} instance list")
+  case location
+  when "remote"
+    puts list_from_remote({:cache => true}).map{|a| a.to_s}
+  else
+    puts list_from_local.map{|a| a.to_s}
+  end
 end

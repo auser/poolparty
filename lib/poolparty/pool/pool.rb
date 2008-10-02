@@ -9,6 +9,10 @@ module PoolParty
       $pools ||= {}
     end
     
+    def with_pool(pool, &block)
+      pool.instance_eval block if block
+    end
+    
     def reset!
       $pools = $clouds = $plugins = nil
     end

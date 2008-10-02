@@ -71,10 +71,10 @@ module PoolParty
       # Expected places for the instances.list to be located at on the machine
       def local_instances_list_file_locations
         [
+          "#{Base.storage_directory}/instances.list",
           "#{Base.base_config_directory}/instances.list",
           "~/.instances.list",
-          "~/instances.list",
-          "#{Base.storage_directory}/instances.list",
+          "~/instances.list",          
           "instances.list"
         ]
       end
@@ -100,7 +100,7 @@ module PoolParty
       end
       # Are the maximum number of instances running?
       def maximum_number_of_instances_are_not_running?
-        list_of_running_instances.size < Application.maximum_instances
+        list_of_running_instances.size < maximum_instances
       end
       # Launch new instance while waiting for the number of pending instances
       #  to be zero before actually launching. This ensures that we only
@@ -112,6 +112,13 @@ module PoolParty
           reset!
         end
         return launch_new_instance!
+      end
+      # This will launch the minimum_instances if the minimum number of instances are not running
+      # If the minimum number of instances are not running and if we can start a new instance
+      def launch_minimum_number_of_instances
+        if !minimum_number_of_instances_are_running? && can_start_a_new_instance?
+          
+        end
       end
 
       def self.included(receiver)

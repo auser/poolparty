@@ -259,7 +259,7 @@ describe "Cloud" do
           it "should include custom functions" do
             @manifest.should =~ /define line\(\$file/
             
-            File.open("test_manifest.pp", "w+") {|f| f << @manifest}
+            # File.open("test_manifest.pp", "w+") {|f| f << @manifest}
           end
           it "should include the hosts for all the listed local instances" do
             @manifest.should =~ /host \{\n\t\t"master":/

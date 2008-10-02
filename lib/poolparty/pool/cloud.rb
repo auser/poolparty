@@ -9,7 +9,11 @@ module PoolParty
 
     def clouds
       $clouds ||= {}
-    end    
+    end
+    
+    def with_cloud(cloud, &block)
+      cloud.instance_eval &block if block
+    end
     
     class Cloud
       attr_reader :name, :templates
