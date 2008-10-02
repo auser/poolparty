@@ -43,27 +43,28 @@ module PoolParty
       # If you need to overwrite these methods, do so with caution
       # Listing methods
       def list_of_running_instances(list = list_of_nonterminated_instances)
-        list.select {|a| a[:status] =~ /running/}
+        list.select {|a| a.running? }
       end
       # Get a list of the pending instances
       def list_of_pending_instances(list = list_of_nonterminated_instances)
-        list.select {|a| a[:status] =~ /pending/}
+        list.select {|a| a.pending? }
       end
       # list of shutting down instances
-      def list_of_terminating_instances(list = list_of_nonterminated_instances)
-        list.select {|a| a[:status] =~ /shutting/}
+      def list_of_terminating_instances(list = remote_instances_list)
+        list.reject {|i| !i.terminating? }
       end
       # list all the nonterminated instances
-      def list_of_nonterminated_instances(list = list_of_instances)
-        list.reject {|a| a[:status] =~ /terminated/}
+      def list_of_nonterminated_instances(list = remote_instances_list)
+        list.reject {|i| i.terminating? || i.terminated? }
       end
-      def instances_list
+      def remote_instances_list
         list_of_instances.map {|i| PoolParty::Remote::RemoteInstance.new(i)}
       end
       # List the instances for the current key pair, regardless of their states
       # If no keypair is passed, select them all
-      def list_of_instances(keypair=nil)
-        describe_instances.select {|a| keypair ? a[:keypair] == keypair : a}
+      def list_of_instances(keyp=nil)
+        key = keyp ? keyp : keypair
+        describe_instances.select {|a| key ? a[:keypair] == key : a}
       end
       # Instances
       # Get the master from the cloud

@@ -47,9 +47,9 @@ describe "Remoter" do
   end
   describe "listing" do
     before(:each) do
-      @loc = "hi"
+      @loc = Base.storage_directory + "/instances.list"
       @locations = [@loc]
-      TestClass.stub!(:local_instances_list_file_locations).and_return @locations
+      @tc.stub!(:local_instances_list_file_locations).and_return @locations
     end
     it "should have the method list_from_local available" do
       TestClass.respond_to?(:list_from_local).should == true
@@ -88,14 +88,19 @@ describe "Remoter" do
       end
     end
     describe "local" do
-      it "should call local_instances_list_file_locations" do
-        TestClass.should_receive(:local_instances_list_file_locations).and_return []
-      end
-      it "should call File.file? on the local_instances_list_file_locations locations" do        
-        File.should_receive(:file?).with(@loc).and_return false
-      end
-      it "should call get_working_listing_file to get the working local instance file" do
-        TestClass.should_receive(:get_working_listing_file).and_return nil
+      describe "listing" do
+        before(:each) do
+          stub_list_from_remote_for(@tc)
+        end
+        it "should call local_instances_list_file_locations" do
+          @tc.should_receive(:local_instances_list_file_locations).and_return []
+        end
+        it "should call File.file? on the local_instances_list_file_locations locations" do        
+          File.should_receive(:file?).with(@loc).and_return false
+        end
+        it "should call get_working_listing_file to get the working local instance file" do
+          @tc.should_receive(:get_working_listing_file).and_return nil
+        end
       end
       describe "with listing" do
         before(:each) do
@@ -106,20 +111,22 @@ describe "Remoter" do
           TestClass.stub!(:get_working_listing_file).and_return @loc
           @ri = PoolParty::Remote::RemoteInstance.new({:ip => "192.168.0.1", :name => "master"})
           PoolParty::Remote::RemoteInstance.stub!(:new).and_return @ri
+          
+          stub_list_from_remote_for(@tc)
         end
         it "should call open on the get_working_listing_file" do
-          TestClass.should_receive(:open).with(@loc).at_least(1).and_return @loc
-          TestClass.list_from_local
+          @tc.should_receive(:open).with(@loc).at_least(1).and_return @loc
+          @tc.list_from_local
         end
         it "should create a new RemoteInstance for each line in the file" do
           PoolParty::Remote::RemoteInstance.should_receive(:new).at_least(2)
-          TestClass.list_from_local
+          @tc.list_from_local
         end
         it "should return a string" do
-          TestClass.list_from_local.class.should == Array
+          @tc.list_from_local.class.should == Array
         end
         it "should have the name of the master and the ip in the list_from_local" do
-          TestClass.list_from_local[0].name.should == "master"
+          @tc.list_from_local[0].name.should == "master"
         end
         it "should have responding in the listing" do
           @ri.should_receive(:responding?).at_least(1).and_return 0.5
@@ -137,7 +144,7 @@ describe "Remoter" do
       end
       after do
         hide_output do
-          TestClass.list_from_local
+          @tc.list_from_local
         end
       end
     end

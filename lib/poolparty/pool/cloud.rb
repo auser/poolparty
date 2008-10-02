@@ -11,7 +11,8 @@ module PoolParty
       $clouds ||= {}
     end
     
-    def with_cloud(cloud, &block)
+    def with_cloud(cloud, opts={}, &block)
+      cloud.options.merge!(opts)
       cloud.instance_eval &block if block
     end
     

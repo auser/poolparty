@@ -19,5 +19,11 @@ module PoolParty
       EOE
     end
     
+    def subheader(str="")
+      <<-EOE
+________ #{str} ________
+      EOE
+    end
+    
   end
 end

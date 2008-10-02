@@ -17,7 +17,7 @@ module PoolParty
       end
     end
     # Terminate an instance by id
-    def terminate_instance!(id=nil)
+    def terminate_instance!(instance_id=nil)
       ec2.terminate_instances(:instance_id => instance_id)
     end
     # Describe an instance's status
@@ -25,7 +25,7 @@ module PoolParty
       get_instances_description.select {|a| a.instance_id == id}[0] rescue nil
     end
     def describe_instances
-      get_instances_description.map {|d| d.merge(:name => d[:instance_id])}
+      get_instances_description
     end
     # Override the master method
     def master
@@ -86,7 +86,7 @@ class EC2ResponseObject
   def self.get_hash_from_response(resp)
     begin
       {
-        :instance_id => resp.instanceId, 
+        :name => resp.instanceId, 
         :ip => resp.dnsName, 
         :status => resp.instanceState.name,
         :launching_time => resp.launchTime,

@@ -2,10 +2,16 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe "heartbeat base package" do
   before(:each) do
-    @hb = PoolPartyHeartbeatClass.new
+    @cloud = Cloud.new(:app, self)
+    @hb = PoolPartyHeartbeatClass.new(@cloud)
+    stub_list_from_remote_for(@cloud)
+    stub_list_of_instances_for(@cloud)
   end
   it "should have the heartbeat package defined" do
     lambda {PoolPartyHeartbeatClass}.should_not raise_error    
+  end
+  it "should have a parent set to the cloud" do
+    @hb.parent.should == @cloud
   end
   it "should call enable (and setup resources) since there is no block given when it's instantiated" do
     @hb.resources.should_not be_empty

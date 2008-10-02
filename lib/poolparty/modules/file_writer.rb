@@ -1,16 +1,16 @@
 module PoolParty
   module FileWriter
-    def copy_file_to_storage_directory(file, dir=".")
-      path = ::File.join(Base.storage_directory, dir)
-      make_base_path(path)
+    def copy_file_to_storage_directory(file)
+      path = ::File.join( Base.storage_directory, ::File.basename(file) )
       FileUtils.cp file, path
     end
     def write_to_file_in_storage_directory(file, str, &block)
-      path = ::File.join(Base.storage_directory, file)
+      path = ::File.join( Base.storage_directory, ::File.basename(file) )
       write_to_file(path, str, &block)
     end
-    def write_to_file(path, str, &block)
-      make_base_path(::File.dirname(path))
+    def write_to_file(file, str, &block)
+      path = ::File.join( Base.storage_directory, ::File.basename(file) )
+      make_base_path( ::File.dirname(path) )
       ::File.open(path, "w+") do |f|
         f.print str
         f.flush
@@ -27,8 +27,7 @@ module PoolParty
       end
     end
     def make_base_path(path)
-      ::FileUtils.rm_rf path unless ::File.directory?(path)
-      unless ::File.directory?(path)
+      unless FileTest.directory?(path)
         begin          
           ::FileUtils.mkdir_p path
         rescue Errno::ENOTDIR
