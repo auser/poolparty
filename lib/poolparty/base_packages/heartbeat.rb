@@ -11,8 +11,8 @@ module PoolParty
         has_exec(:name => "heartbeat-update-cib", :command => "/usr/sbin/cibadmin -R -x /etc/ha.d/cib.xml", :refreshonly => true)
         
         # variables for the templates
-        has_variable({:name => "nodenames", :value => parent.list_of_node_names})
-        has_variable({:name => "node_ips",  :value => parent.list_of_node_ips})
+        has_variable({:name => "nodenames", :value => list_of_node_names})
+        has_variable({:name => "node_ips",  :value => list_of_node_ips})
         has_variable({:name => "port", :value => (port || Base.port)})
         
         # These can also be passed in via hash

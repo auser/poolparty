@@ -35,7 +35,7 @@ module PoolParty
             end
           end
         else
-          out = "Cannot find list file"
+          out = list_from_remote(:cache => true)
         end
         return out
       end
@@ -82,17 +82,22 @@ module PoolParty
       # More functional methods
       # Are the minimum number of instances running?
       def minimum_number_of_instances_are_running?
-        list_of_running_instances.size > minimum_instances
+        list_of_running_instances.size >= minimum_instances
       end
       # Can we shutdown an instance?
       def can_shutdown_an_instance?
-        minimum_number_of_instances_are_running?
+        list_of_running_instances.size > minimum_instances
       end
       # Request to launch a number of instances
       def request_launch_new_instances(num=1)
         out = []
         num.times {out << launch_new_instance!}
         out
+      end
+      # Let's terminate an instance that is not the master instance
+      def request_termination_of_non_master_instance
+        inst = list_of_running_instances.reject {|a| a.master? }.last
+        terminate_instance!(inst.name)
       end
       # Can we start a new instance?
       def can_start_a_new_instance?
@@ -107,17 +112,48 @@ module PoolParty
       #  launch one instance at a time
       def request_launch_one_instance_at_a_time
         reset!
-        while !list_of_pending_instances.size.zero?
+        if list_of_pending_instances.size.zero?
+          launch_new_instance!
+        else
+          puts "list_of_pending_instances"
           wait "5.seconds"
-          reset!
+          request_launch_one_instance_at_a_time
         end
-        return launch_new_instance!
       end
       # This will launch the minimum_instances if the minimum number of instances are not running
       # If the minimum number of instances are not running and if we can start a new instance
       def launch_minimum_number_of_instances
-        if !minimum_number_of_instances_are_running? && can_start_a_new_instance?
-          
+        if can_start_a_new_instance?
+          while !minimum_number_of_instances_are_running?
+            request_launch_one_instance_at_a_time
+            wait "5.seconds"
+          end
+        end
+      end
+      # Stub method for the time being to handle expansion of the cloud
+      def should_expand_cloud?
+        false
+      end
+      # Stub method for the time being to handle the contraction of the cloud
+      def should_contract_cloud?
+        false
+      end
+      # Expand the cloud
+      # If we can start a new instance and the load requires us to expand
+      # the cloud, then we should request_launch_new_instances
+      def expand_cloud_if_necessary
+        if can_start_a_new_instance?          
+          request_launch_new_instances(1) if should_expand_cloud?
+        end
+      end
+      # Contract the cloud
+      # If we can shutdown an instnace and the load allows us to contract
+      # the cloud, then we should request_termination_of_non_master_instance
+      def contract_cloud_if_necessary
+        if can_shutdown_an_instance?
+          if should_contract_cloud?
+            request_termination_of_non_master_instance
+          end
         end
       end
 

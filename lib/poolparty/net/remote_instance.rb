@@ -15,8 +15,9 @@ module PoolParty
           @name = opts[:name]
           @load = opts[:load]
           @responding = opts[:responding]
+          @status = opts[:status]
         when "string"
-          @name, @ip, @responding, @load = opts.split(" ")
+          @name, @ip, @status, @responding, @load = opts.split(" ")
         end
       end
       
@@ -40,6 +41,28 @@ module PoolParty
       # it will always be the same
       def load
         @current_load ||= @load
+      end
+      
+      # Get the status of the instance
+      def status
+        @status ||= "running"
+      end
+      
+      # Is this instance running?
+      def running?
+        status =~ /running/
+      end
+      # Is this instance pending?
+      def pending?
+        status =~ /pending/
+      end
+      # Is this instance terminating?
+      def terminating?
+        status =~ /shutting/
+      end
+      # Has this instance been terminated?
+      def terminated?
+        status =~ /terminated/
       end
       
       # Printing. This is how we extract the instances into the listing on the 

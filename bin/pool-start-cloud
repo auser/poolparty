@@ -2,8 +2,7 @@
 $:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
 require "poolparty"
 require "poolpartycl"
-o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
-  opts.on('-t', '--test', 'Testing mode')    { optioner.testing true }
+o = PoolParty::Optioner.new(ARGV) do |opts, optioner|  
   opts.on('-c cloudname', '--cloud name', 'Start cloud by this name')    { |c| optioner.cloudname c }
 end
 
@@ -20,7 +19,11 @@ else
   exit(0)
 end
 
-with_cloud(@cloud) do
+with_cloud(@cloud, {:testing => @testing}) do
   puts header("Starting cloud")
-  puts "#{self.list_of_running_instances.size} running instances (#{minimum_instances} - #{maximum_instances})"
+  puts "#{list_of_running_instances.size} running instances (#{minimum_instances} - #{maximum_instances})"
+  if (minimum_instances - list_of_running_instances.size) > 0
+    puts "Starting #{minimum_instances - list_of_running_instances.size} instances"    
+    testing ? puts("\tNot launching while in testing mode") : launch_minimum_number_of_instances
+  end  
 end

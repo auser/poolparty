@@ -15,17 +15,17 @@ describe "FileWriter" do
     EOE
   end
   it "should copy the file to the Base.storage_directory when calling copy_file_to_storage_directory" do
-    FileUtils.should_receive(:cp).with("ranger", Base.storage_directory+"/.").and_return true
+    FileUtils.should_receive(:cp).with("ranger", Base.storage_directory+"/ranger").and_return true
     @test.copy_file_to_storage_directory("ranger")
   end
   describe "write to file in storage directory" do
     before(:each) do      
-      @filepath = File.join("willy", "nilly.rb")
+      @filepath = File.join("nilly.rb")
       @path = File.join(Base.storage_directory, @filepath)
     end
     it "should try to create the directory if it doesn't exist" do
+      FileTest.stub!(:directory?).and_return false
       ::File.stub!(:open).and_return true
-      File.stub!(:directory?).with(::File.dirname(@path)).and_return false
       FileUtils.should_receive(:mkdir_p).with(::File.dirname(@path))
     end
     it "should call File.open on the file" do

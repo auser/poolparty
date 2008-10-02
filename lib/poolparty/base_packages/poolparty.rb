@@ -7,7 +7,8 @@ module PoolParty
         has_gem(:name => "poolparty")
                 
         # Build hostsfile
-        (self.respond_to?(:instances_list) ? self : parent).instances_list.each do |ri|
+        # TODO: COME BACK AND CLEAN THIS UP
+        (self.respond_to?(:remote_instances_list) ? self : parent).remote_instances_list.each do |ri|
           has_host({:name => ri.name, :ip => ri.ip})
         end
         
