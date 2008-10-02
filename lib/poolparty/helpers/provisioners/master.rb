@@ -60,12 +60,12 @@ module Provisioner
     def setup_fileserver
       <<-EOS
         echo "[files]
-          path /var/puppet/fileserver
+          path /var/puppet/fileserver/files
           allow *" > /etc/puppet/fileserver.conf
-        mkdir -p /var/puppet/fileserver
+        mkdir -p /var/puppet/fileserver/files
       EOS
     end
-    # Change this eventually for better security support
+    # Change this eventually for better security supportsetup_fileserver
     def setup_autosigning
       <<-EOS
         echo "*" > /etc/puppet/autosign.conf

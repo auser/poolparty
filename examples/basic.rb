@@ -4,6 +4,7 @@
 pool :application do
   
   instances 3..5
+  keypair "auser"
   
   cloud :app do
     minimum_instances 2
