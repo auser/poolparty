@@ -24,7 +24,7 @@ describe "Exec" do
         @exec.name.should == "/www/conf/httpd.conf"
       end
       it "should keep the default values for the exec" do
-        @exec.path.should == "/usr/bin:/bin:/usr/local/bin"
+        @exec.path.should =~ /\/usr\/bin:\/bin:\/usr\/local\/bin/
       end
       it "should also set options through a hash" do
         @exec.rent.should == "low"
