@@ -4,7 +4,7 @@ module PoolParty
     class Exec < Resource
       
       default_options({
-        :path => "/usr/bin:/bin:/usr/local/bin"        
+        :path => "/usr/bin:/bin:/usr/local/bin:$PATH"
       })
       
       

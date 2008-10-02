@@ -21,13 +21,13 @@ module PoolParty
           default: { err ( "unknown ensure value ${ensure}" ) }
           present: {
             exec {
-              "/bin/echo '${line}' >> '${file}'": unless => "/usr/bin/grep -qFx '${line}' '${file}'",
+              "/usr/bin/env echo '${line}' >> '${file}'": unless => "/usr/bin/env grep -qFx '${line}' '${file}'",
                notify => $notify
               }
             }
           absent: {
             exec {
-              "/usr/bin/sed -i '' -e '/^${line}\$/d' '${file}'": onlyif => "/usr/bin/grep -qFx '${line}' '${file}'",
+              "/usr/bin/env sed -i '' -e '/^${line}\$/d' '${file}'": onlyif => "/usr/bin/env grep -qFx '${line}' '${file}'",
               notify => $notify
             }
           }
