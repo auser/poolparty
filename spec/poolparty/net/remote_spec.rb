@@ -1,4 +1,5 @@
 require File.dirname(__FILE__) + '/../spec_helper'
+require "ftools"
 
 module Hype
   def hyper
@@ -223,11 +224,18 @@ describe "Remote" do
       before(:each) do
         Kernel.stub!(:exec).and_return true
         @tc.extend CloudResourcer
-        @tc.stub!(:keypair).and_return "pants"
+        @tc.stub!(:keypair).and_return "funky"
+      end
+      it "should raise an exception if it cannot find the keypair" do
+        lambda {
+          @tc.rsync_storage_files_to(@tc.master)
+        }.should raise_error
       end
       it "should call exec on the kernel" do
-        Kernel.should_receive(:exec).with("#{@tc.rsync_command} #{Base.storage_directory} 192.168.0.1:#{Base.remote_storage_path}").and_return true
-        @tc.rsync_storage_files_to(@tc.master)
+        ::File.stub!(:exists?).with("#{File.expand_path(Base.base_keypair_path)}/id_rsa-funky").and_return true
+        lambda {
+          @tc.rsync_storage_files_to(@tc.master)
+        }.should_not raise_error
       end
     end
   end

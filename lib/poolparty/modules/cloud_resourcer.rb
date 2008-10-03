@@ -11,18 +11,36 @@ module PoolParty
       end
     end
     
-    def keypair_path
-      ::File.join(get_keypair_path, keypair)
+    def full_keypair_path
+      unless keypair_path
+        raise RuntimeException.new("Keypair cannot be found")        
+      else
+        ::File.expand_path(keypair_path)
+      end
     end
     
-    def get_keypair_path
-      keypair_paths.reject {|f| f unless ::File.exists?(::File.join(f, keypair)) }.first || ""
+    def keypair_path
+      keypair_paths.each do |path|
+        possible_keypair_basenames.each do |base|
+          full_path = ::File.join( File.expand_path(path), "#{base}#{keypair}")
+          return full_path if ::File.exists?(full_path)
+        end
+      end
+      return nil
+    end
+    
+    def possible_keypair_basenames
+      [
+        "id_rsa-",
+        ""
+      ]
     end
     
     def keypair_paths
       [
         Base.base_keypair_path,
-        Base.base_config_directory
+        Base.base_config_directory,
+        Base.remote_storage_path
       ]
     end
     

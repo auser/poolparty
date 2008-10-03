@@ -12,6 +12,7 @@ end
 describe "Remoter" do
   before(:each) do
     @tc = TestClass.new
+    ::File.stub!(:exists?).with("#{File.expand_path(Base.base_keypair_path)}/id_rsa-fake_keypair").and_return true
     @sample_instances_list = [{:ip => "192.168.0.1", :name => "master"}, {:ip => "192.168.0.2", :name => "node1"}]
   end
   describe "ssh_string" do
@@ -30,7 +31,7 @@ describe "Remoter" do
       @tc.ssh_array.include?("-l '#{Base.user}'").should == true
     end
     it "should have the keypair path in the ssh_array" do
-      @tc.ssh_array.include?("-i '#{@tc.keypair_path}'").should == true
+      @tc.ssh_array.include?("-i '#{@tc.full_keypair_path}'").should == true
     end
   end
   describe "rsync_command" do
@@ -42,7 +43,7 @@ describe "Remoter" do
       @tc.rsync_command.should == "rsync --delete -azP --exclude cache -e '#{@tc.ssh_string}'"
     end
     it "should be able to rsync storage commands" do
-      @tc.rsync_storage_files_to_command(@ri).should == "#{@tc.rsync_command} #{Dir.pwd}/tmp 192.168.0.22:/var/poolparty"
+      @tc.rsync_storage_files_to_command(@ri).should == "#{@tc.rsync_command} #{Dir.pwd}/tmp/* 192.168.0.22:/var/poolparty/files"
     end
   end
   describe "listing" do

@@ -7,7 +7,7 @@ module PoolParty
     module Remoter
       def rsync_storage_files_to_command(remote_instance)
         if remote_instance
-          "#{rsync_command} #{Base.storage_directory} #{remote_instance.ip}:#{Base.remote_storage_path}"
+          "#{rsync_command} #{Base.storage_directory}/* #{remote_instance.ip}:#{Base.remote_storage_path}"
         end
       end
       # Generic commandable strings
@@ -19,7 +19,7 @@ module PoolParty
       # Ssh with the user in Base
       # And including the keypair_path
       def ssh_array
-        ["-o StrictHostKeyChecking=no", "-l '#{Base.user}'", "-i '#{::File.expand_path(keypair_path)}'"]
+        ["-o StrictHostKeyChecking=no", "-l '#{Base.user}'", "-i '#{full_keypair_path}'"]
       end
       def rsync_command
         "rsync --delete -azP --exclude cache -e '#{ssh_string}'"

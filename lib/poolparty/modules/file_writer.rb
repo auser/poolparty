@@ -40,7 +40,9 @@ module PoolParty
       FileUtils.mkdir_p Base.storage_directory unless ::File.directory?(Base.storage_directory)
     end
     def clear_base_directory
-      FileUtils.rm_r Base.storage_directory if ::File.directory?(Base.storage_directory)
+      Dir["#{Base.storage_directory}/*"].each do |file|
+        ::File.unlink file if ::File.exists?(file)
+      end
     end
   end
 end

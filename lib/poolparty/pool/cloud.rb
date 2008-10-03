@@ -62,6 +62,7 @@ module PoolParty
       # Configuration files
       def build_manifest
         reset_resources!
+        clear_base_directory
         add_poolparty_base_requirements
         
         returning Array.new do |str|
