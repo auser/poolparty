@@ -1,0 +1,35 @@
+#!/usr/bin/env ruby
+$:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
+require "poolparty"
+require "poolpartycl"
+o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
+  opts.on('-n name', '--name name', 'Listing for cloud name')    { |c| optioner.cloudname c }
+end
+load_pool(o.spec || Binary.get_existing_spec_location)
+
+include Remote
+
+begin
+  @cloud = cloud(o.cloudname.downcase.to_sym)
+rescue
+  puts "Cloud name required. Please specify it with -n name"
+  exit(0)
+end
+
+with_cloud(@cloud, {:testing => o.testing}) do
+  puts header("Provisioning cloud #{name}")
+  build_manifest
+  
+  puts "Building install file"
+  provisioner_file = ::File.join(Base.storage_directory, "install.sh")
+  File.open(provisioner_file, "w+") do |file|
+    file << Provisioner::Master.install(self)
+  end
+  
+  puts "Syncing local configuration files with master"
+  rsync_storage_files_to(master) unless testing
+  
+  puts "Logging on to the master and executing provisioning"
+  cmd = "cd #{Base.remote_storage_path} && chmod +x install.sh && /bin/sh install.sh && rm install.sh"
+  run_command_on(cmd, master) unless testing
+end

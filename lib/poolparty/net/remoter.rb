@@ -10,6 +10,9 @@ module PoolParty
           "#{rsync_command} #{Base.storage_directory}/* #{remote_instance.ip}:#{Base.remote_storage_path}"
         end
       end
+      def run_command_on_command(cmd="ls -l", remote_instance=nil)
+        "#{ssh_string} #{remote_instance.ip} '#{cmd}'"
+      end
       # Generic commandable strings
       def ssh_string
         (["ssh"] << ssh_array).join(" ")
@@ -159,6 +162,12 @@ module PoolParty
       def rsync_storage_files_to(instance=nil)
         if instance && instance.respond_to?(:ip) && !instance.ip.nil?
           Kernel.system "#{rsync_storage_files_to_command(instance)}"
+        end
+      end
+      
+      def run_command_on(cmd, instance=nil)
+        if instance && instance.respond_to?(:ip) && !instance.ip.nil?
+          Kernel.system "#{run_command_on_command(cmd, instance)}"
         end
       end
 
