@@ -21,6 +21,16 @@ class Object
     block.in_context(self).call
     self
   end
+  def to_option_string
+    case self.class
+    when String
+      self.to_option_string
+    when Array
+      self.each {|a| a.to_option_string }.join(" ")
+    else
+      "#{self}"
+    end
+  end
   def block_instance_eval(*args, &block)
     return instance_eval(*args,&block) unless block_given? && !block.arity.zero?
     old_method = (self.class.instance_method(:__) rescue nil)

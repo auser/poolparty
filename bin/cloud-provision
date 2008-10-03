@@ -18,11 +18,20 @@ end
 
 with_cloud(@cloud, {:testing => o.testing}) do
   puts header("Provisioning cloud #{name}")
-  build_manifest
+  prepare_to_configuration
+  
+  puts "Building configuration file"
+  @manifest = build_manifest
+  config_file = ::File.join(Base.storage_directory, "poolparty.pp")
+  ::File.open(config_file, "w+") do |file|
+    file << "class poolparty {"
+    file << @manifest
+    file << "}"
+  end
   
   puts "Building install file"
   provisioner_file = ::File.join(Base.storage_directory, "install.sh")
-  File.open(provisioner_file, "w+") do |file|
+  ::File.open(provisioner_file, "w+") do |file|
     file << Provisioner::Master.install(self)
   end
   

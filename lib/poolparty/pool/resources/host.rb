@@ -4,9 +4,13 @@ module PoolParty
     class Host < Resource
             
       default_options({
-        :name => "master puppet",
+        :name => "$hostname",
         :ip => "$ipaddress"
       })
+      
+      def key
+        name
+      end
       
     end
     

@@ -25,7 +25,13 @@ module PoolParty
       get_instances_description.select {|a| a.instance_id == id}[0] rescue nil
     end
     def describe_instances
-      get_instances_description.each {|h| h.merge!(:name => h[:instance_id]) }
+      get_instances_description.each do |h| 
+        h.merge!({
+          :name => h[:instance_id],
+          :hostname => h[:ip],
+          :ip => h[:ip].gsub(/.compute-1.amazonaws.com*/, '').gsub(/ec2-/, '').gsub(/-/, '.')
+        })
+      end
     end
     # Override the master method
     def master

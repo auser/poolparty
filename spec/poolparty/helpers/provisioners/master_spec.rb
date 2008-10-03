@@ -22,9 +22,6 @@ describe "Master provisioner" do
     it "should call create_local_hosts_entry" do
       @master.should_receive(:create_local_hosts_entry)
     end
-    it "should call create_basic_site_pp" do
-      @master.should_receive(:create_basic_site_pp)
-    end
     it "should call setup_fileserver" do
       @master.should_receive(:setup_fileserver)
     end
@@ -38,22 +35,16 @@ describe "Master provisioner" do
   it "should return install_puppet_master as apt-get install puppet factor" do
     @master.install_puppet_master.should == "apt-get install -y puppet puppetmaster"
   end
-  it "should return create_local_hosts_entry as echo" do
-    @master.create_local_hosts_entry.should == "        echo \"192.168.0.1             puppet master\" >> /etc/hosts\n"
-  end  
-  it "should return create_basic_site_pp" do        
-    @master.create_basic_site_pp.should =~ /echo \"node default \{\n/
-  end
   it "should return setup basic structure" do
     @master.setup_basic_structure.should =~ /puppetmasterd --mkusers/
   end
   it "should return setup_fileserver with the setup" do
-    @master.setup_fileserver.should == "        echo \"[files]\n          path /var/puppet/fileserver/files\n          allow *\" > /etc/puppet/fileserver.conf\n        mkdir -p /var/puppet/fileserver/files\n"
+    @master.setup_fileserver.should == "        echo \"[files]\n  path /var/poolparty/files\n  allow *\" > /etc/puppet/fileserver.conf\n        mkdir -p /var/poolparty/facts\n        mkdir -p /var/poolparty/files\n"    
   end
   it "should be able to create_local_node" do
-    @master.create_local_node.should =~ /ode \"master\" \{\}/
+    @master.create_local_node.should =~ /ode \"192.168.0.1\" \{\}/
   end
   it "should create a node1 node as well" do
-    @master.create_local_node.should =~ /ode \"node1\" \{\}/
+    @master.create_local_node.should =~ /ode \"192.168.0.1\" \{\}/
   end
 end
