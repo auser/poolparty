@@ -12,9 +12,9 @@ name = ARGV.shift
 
 # If there was no program action given
 if !name || name == "-h" || name == "--help"
-  puts "Usage: pool <specfile> <action> <options>"
-  puts "Pool actions:"
-  puts Binary.list_binaries_for("pool")
+  puts "Usage: cloud <specfile> <action> <options>"
+  puts "Cloud actions:"
+  puts Binary.list_binaries_for("cloud")
   exit
 end
 
@@ -24,7 +24,7 @@ program_location = File.join(Binary.binary_directory, program_name)
 command_line = "#{program_location} #{ARGV.join(" ")}"
 
 # Run it from the command-line first
-if Binary.available_binaries_for("pool").include?(name)
+if Binary.available_binaries_for("cloud").include?(name)
   exec "#{command_line}"
 else
   puts "Unknown poolparty binary: #{program_name}"

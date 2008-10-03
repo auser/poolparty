@@ -45,7 +45,7 @@ module PoolParty
       # and then return the array of instances
       def list_from_remote(options={})
         out_array = get_remote_nodes
-        write_to_file(local_instances_list_file_locations.first, out_array.map{|a| a.to_s}.join("\n")) if options[:cache]
+        write_to_file(local_instances_list_file_locations.first, out_array.map{|a| a.to_s }.join("\n")) if options[:cache]
         out_array
       end
       # Get the names of the nodes. Mainly used for puppet templating
@@ -71,11 +71,11 @@ module PoolParty
       # Expected places for the instances.list to be located at on the machine
       def local_instances_list_file_locations
         [
-          "#{Base.storage_directory}/instances.list",
-          "#{Base.base_config_directory}/instances.list",
-          "~/.instances.list",
-          "~/instances.list",          
-          "instances.list"
+          "#{Base.storage_directory}/#{name}-instances.list",
+          "#{Base.base_config_directory}/#{name}-instances.list",
+          "~/.#{name}-instances.list",
+          "~/#{name}-instances.list",          
+          "#{name}-instances.list"
         ]
       end
       
@@ -131,29 +131,27 @@ module PoolParty
         end
       end
       # Stub method for the time being to handle expansion of the cloud
-      def should_expand_cloud?
-        false
+      def should_expand_cloud?(force=false)
+        force || false
       end
       # Stub method for the time being to handle the contraction of the cloud
-      def should_contract_cloud?
-        false
+      def should_contract_cloud?(force=false)
+        force || false
       end
       # Expand the cloud
       # If we can start a new instance and the load requires us to expand
       # the cloud, then we should request_launch_new_instances
-      def expand_cloud_if_necessary
-        if can_start_a_new_instance?          
-          request_launch_new_instances(1) if should_expand_cloud?
+      def expand_cloud_if_necessary(force=false)
+        if can_start_a_new_instance?
+          request_launch_new_instances(1) if should_expand_cloud?(force)
         end
       end
       # Contract the cloud
       # If we can shutdown an instnace and the load allows us to contract
       # the cloud, then we should request_termination_of_non_master_instance
-      def contract_cloud_if_necessary
-        if can_shutdown_an_instance?
-          if should_contract_cloud?
-            request_termination_of_non_master_instance
-          end
+      def contract_cloud_if_necessary(force=false)
+        if can_shutdown_an_instance?          
+          request_termination_of_non_master_instance if should_contract_cloud?(force)
         end
       end
 

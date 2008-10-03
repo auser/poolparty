@@ -9,10 +9,10 @@ describe "Binary" do
     Binary.binary_directory.should =~ /lib\/poolparty\/helpers\/\.\.\/\.\.\/\.\.\/bin/
   end
   it "should be able to list the binaries in the bin directory" do
-    Binary.available_binaries.should == %w(console init)
+    Binary.available_binaries_for("pool").should == %w(console init)
   end
   it "should be able to say the binary is in the binary_directory" do
-    Binary.available_binaries.include?("console")
+    Binary.available_binaries_for("pool").include?("console")
   end
   describe "get_existing_spec_location" do
     before(:each) do
