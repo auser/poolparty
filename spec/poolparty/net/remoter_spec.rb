@@ -47,7 +47,7 @@ describe "Remoter" do
   end
   describe "listing" do
     before(:each) do
-      @loc = Base.storage_directory + "/instances.list"
+      @loc = Base.storage_directory + "/tc-instances.list"
       @locations = [@loc]
       @tc.stub!(:local_instances_list_file_locations).and_return @locations
     end
@@ -61,7 +61,7 @@ describe "Remoter" do
       before(:each) do
         @tc.stub!(:list_of_instances).and_return @sample_instances_list
         @tc.stub!(:local_instances_list_file_locations).and_return [
-          "#{Base.storage_directory}/instances.list"
+          "#{Base.storage_directory}/tc-instances.list"
         ]
       end
       it "should call list_of_instances when trying to list from remote" do

@@ -25,7 +25,7 @@ module PoolParty
       get_instances_description.select {|a| a.instance_id == id}[0] rescue nil
     end
     def describe_instances
-      get_instances_description
+      get_instances_description.each {|h| h.merge!(:name => h[:instance_id]) }
     end
     # Override the master method
     def master
@@ -86,6 +86,7 @@ class EC2ResponseObject
   def self.get_hash_from_response(resp)
     begin
       {
+        :instance_id => resp.instanceId,
         :name => resp.instanceId, 
         :ip => resp.dnsName, 
         :status => resp.instanceState.name,

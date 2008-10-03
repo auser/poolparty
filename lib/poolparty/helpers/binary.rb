@@ -4,11 +4,11 @@ module PoolParty
     
     class << self
       
-      def list_binaries
-        available_binaries.join(", ")
+      def list_binaries_for(ty="pool")
+        available_binaries_for(ty).join(", ")
       end
-      def available_binaries
-        Dir["#{binary_directory}/pool-*"].map {|a| File.basename(a.gsub(/pool-/, '')) }.sort
+      def available_binaries_for(ty="pool")
+        Dir["#{binary_directory}/#{ty}-*"].map {|a| File.basename(a.gsub(/#{ty}-/, '')) }.sort
       end
       def binary_directory
         "#{::File.dirname(__FILE__)}/../../../bin"

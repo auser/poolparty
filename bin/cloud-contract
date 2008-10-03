@@ -1,0 +1,27 @@
+#!/usr/bin/env ruby
+$:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
+require "poolparty"
+require "poolpartycl"
+
+o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
+  opts.on('-n name', '--name name', 'Listing for cloud name')    { |c| optioner.cloudname c }
+end
+load_pool(o.spec || Binary.get_existing_spec_location)
+
+@testing = o.testing
+
+include Remote
+
+begin
+  @cloud = cloud(o.cloudname.downcase.to_sym)
+rescue
+  puts "Cloud name required. Please specify it with -n name"
+  exit(0)
+end
+
+with_cloud(@cloud, {:testing => @testing}) do
+  puts header("Contracting cloud #{name}")
+  puts "#{list_of_running_instances.size} running instances (#{minimum_instances} minimum instances)"
+  puts testing ? "Not contracting (test mode)" : "Contracting the cloud if possible"
+  contract_cloud_if_necessary( !testing )
+end
