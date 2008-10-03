@@ -44,15 +44,15 @@ describe "CloudResourcer" do
     end
     it "should see if the file exists" do
       @t = "weeeeee"
-      ::File.should_receive(:exists?).with(@t).and_return false
+      ::File.should_receive(:exists?).with(@t+"/rangerbob").and_return false
       @tc.should_receive(:keypair_paths).once.and_return [@t]
       @tc.keypair_path
     end
     it "should fallback to the second one if the first doesn't exist" do
       @t = "weeeeee"
       @q = "woooooo"
-      ::File.should_receive(:exists?).with(@t).and_return false
-      ::File.should_receive(:exists?).with(@q).and_return true
+      ::File.stub!(:exists?).with(@t+"/rangerbob").and_return false
+      ::File.should_receive(:exists?).with(@q+"/rangerbob").and_return true
       @tc.should_receive(:keypair_paths).once.and_return [@t, @q]
       @tc.keypair_path.should == "woooooo/rangerbob"
     end

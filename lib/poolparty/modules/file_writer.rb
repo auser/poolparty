@@ -10,7 +10,7 @@ module PoolParty
     end
     def write_to_file(file, str, &block)
       path = ::File.join( Base.storage_directory, ::File.basename(file) )
-      make_base_path( ::File.dirname(path) )
+      make_base_path( Base.storage_directory )
       ::File.open(path, "w+") do |f|
         f.print str
         f.flush

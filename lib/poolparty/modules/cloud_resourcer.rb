@@ -12,17 +12,17 @@ module PoolParty
     end
     
     def keypair_path
-      File.join(get_keypair_path, keypair)
+      ::File.join(get_keypair_path, keypair)
     end
     
     def get_keypair_path
-      keypair_paths.reject {|f| f unless ::File.exists?(f) }.first || ""
+      keypair_paths.reject {|f| f unless ::File.exists?(::File.join(f, keypair)) }.first || ""
     end
     
     def keypair_paths
       [
         Base.base_keypair_path,
-        "#{Base.base_config_directory}/#{keypair}"
+        Base.base_config_directory
       ]
     end
     

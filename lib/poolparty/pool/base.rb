@@ -10,7 +10,7 @@ module PoolParty
     
     default_options({
       :environment => "production",
-      :user => "poolparty",
+      :user => "root", # This should change here
       :base_keypair_path => "~/.ec2",
       :tmp_path => "tmp",
       :remote_storage_path => "/var/poolparty",

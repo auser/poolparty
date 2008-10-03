@@ -19,7 +19,7 @@ module PoolParty
       # Ssh with the user in Base
       # And including the keypair_path
       def ssh_array
-        ["-o StrictHostKeyChecking=no", "-l '#{Base.user}'", "-i '#{keypair_path}'"]
+        ["-o StrictHostKeyChecking=no", "-l '#{Base.user}'", "-i '#{::File.expand_path(keypair_path)}'"]
       end
       def rsync_command
         "rsync --delete -azP --exclude cache -e '#{ssh_string}'"
@@ -152,6 +152,13 @@ module PoolParty
       def contract_cloud_if_necessary(force=false)
         if can_shutdown_an_instance?          
           request_termination_of_non_master_instance if should_contract_cloud?(force)
+        end
+      end
+      
+      # Rsync command to the instance
+      def rsync_storage_files_to(instance=nil)
+        if instance && instance.respond_to?(:ip) && !instance.ip.nil?
+          Kernel.exec rsync_storage_files_to_command(instance)
         end
       end
 

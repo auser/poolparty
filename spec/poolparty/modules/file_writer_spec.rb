@@ -6,6 +6,8 @@ end
 describe "FileWriter" do
   before(:each) do
     @test = TestClass.new
+    @filepath = File.join("nilly.rb")
+    @path = File.join(Base.storage_directory, @filepath)
   end
   %w(write_to_file_in_storage_directory copy_file_to_storage_directory write_to_temp_file).each do |method|
     eval <<-EOE
@@ -19,10 +21,6 @@ describe "FileWriter" do
     @test.copy_file_to_storage_directory("ranger")
   end
   describe "write to file in storage directory" do
-    before(:each) do      
-      @filepath = File.join("nilly.rb")
-      @path = File.join(Base.storage_directory, @filepath)
-    end
     it "should try to create the directory if it doesn't exist" do
       FileTest.stub!(:directory?).and_return false
       ::File.stub!(:open).and_return true
@@ -37,8 +35,15 @@ describe "FileWriter" do
       end
       @test.write_to_file_in_storage_directory(@filepath, "STRING TO WRITE", &block)
     end
+    it "should write the string in the file" do
+      @test.write_to_file_in_storage_directory(@filepath, "STRING TO WRITE")
+      open(::File.join( Base.storage_directory, @filepath)).read.should == "STRING TO WRITE"
+    end
     after do
       @test.write_to_file_in_storage_directory(@filepath, "STRING TO WRITE")
     end
+  end
+  after(:all) do
+    ::File.unlink @path if ::File.file? @path
   end
 end
