@@ -17,28 +17,14 @@ describe "Remote file" do
       end
       @file.to_string.should =~ /"\/etc\/init\.d\/puppetmaster":/
     end
-    describe "source setting" do
-      it "should have the source set to puppet" do
-        file = remotefile({:rent => "low"}) do
-          name "/www/conf/httpd.conf"
-          source "nickname/for/httpd.conf"
-        end
-        file.source.should == "puppet://puppet/nickname/for/httpd.conf"
-      end
-      it "should use the default (name) as the source" do
-        file = remotefile(:name => "/etc/nietche/nothing.txt")
-        file.source.should == "puppet://puppet/etc/nietche/nothing.txt"
-      end
-    end
     describe "as included" do            
       before(:each) do
         @file = remotefile({:rent => "low"}) do
           name "/www/conf/httpd.conf"
-          source "nickname/for/httpd.conf"
         end
       end
       it "should have the source set to puppet" do
-        @file.source.should == "puppet://puppet/nickname/for/httpd.conf"
+        @file.source.should == "puppet://puppet/files"
       end
       it "should use default values" do
         @file.name.should == "/www/conf/httpd.conf"

@@ -19,6 +19,12 @@ module PoolParty
         when "string"
           @name, @ip, @status, @responding, @load = opts.split(" ")
         end
+        
+        on_init
+      end
+      
+      # Callback
+      def on_init        
       end
       
       # Is this remote instance the master?

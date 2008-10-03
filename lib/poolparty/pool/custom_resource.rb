@@ -12,6 +12,11 @@ module PoolParty
       klass
     end    
   end
+  module DefinableFact
+    def define_fact(name, string="")
+      
+    end
+  end
 
   module Resources
     

@@ -27,7 +27,7 @@ describe "Cron" do
         @cron.name.should == "/www/conf/httpd.conf"
       end
       it "should keep the default values for the file" do
-        @cron.user.should == "poolparty"
+        @cron.user.should == "root"
       end
       it "should also set options through a hash" do
         @cron.rent.should == "low"

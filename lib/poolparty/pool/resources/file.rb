@@ -10,7 +10,7 @@ module PoolParty
       })
       
       def source(arg=nil)
-        arg ? options[:source] = arg : ::File.join(Base.fileserver_base, (options[:source] || name))
+        arg ? options[:source] = arg : "#{Base.fileserver_base}files"
       end
       
     end

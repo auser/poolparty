@@ -15,7 +15,6 @@ module Provisioner
         create_local_hosts_entry,
         setup_basic_structure,
         setup_configs,        
-        create_basic_site_pp,
         setup_fileserver,
         setup_autosigning,
         create_local_node,
@@ -29,7 +28,6 @@ module Provisioner
         
     def create_local_hosts_entry
       <<-EOS
-        echo "#{@cloud.master.ip}             puppet master" >> /etc/hosts
       EOS
     end
     
@@ -39,7 +37,8 @@ module Provisioner
         mkdir -p #{Base.remote_storage_path}
         echo "import 'nodes/*.pp'" > /etc/puppet/manifests/site.pp
         echo "import 'classes/*.pp'" >> /etc/puppet/manifests/site.pp
-        mkdir /etc/puppet/manifests/nodes /etc/puppet/manifests/classes
+        mkdir -p /etc/puppet/manifests/nodes 
+        mkdir -p /etc/puppet/manifests/classes
       EOS
     end
     
@@ -49,20 +48,11 @@ module Provisioner
       EOS
     end
     
-    def create_basic_site_pp
-      <<-EOS
-        echo "node default {
-            include poolparty
-        }" >> /etc/puppet/manifests/site.pp
-      EOS
-    end
-    
     def setup_fileserver
       <<-EOS
-        echo "[files]
-          path /var/puppet/fileserver/files
-          allow *" > /etc/puppet/fileserver.conf
-        mkdir -p /var/puppet/fileserver/files
+        echo "#{open(File.join(template_directory, "fileserver.conf")).read}" > /etc/puppet/fileserver.conf
+        mkdir -p /var/poolparty/facts
+        mkdir -p /var/poolparty/files
       EOS
     end
     # Change this eventually for better security supportsetup_fileserver
@@ -74,13 +64,13 @@ module Provisioner
     
     def create_local_node
       str = <<-EOS
-        node default {
-          include poolparty
-        }
+node default {
+  include poolparty
+}
       EOS
        @cloud.list_from_remote(:do_not_cache => true).each do |ri|
          str << <<-EOS           
-           node "#{ri.name}" {}
+node "#{ri.ip}" {}
          EOS
        end
       "echo '#{str}' > /etc/puppet/manifests/nodes/nodes.pp"
@@ -88,6 +78,7 @@ module Provisioner
     
     def create_poolparty_manifest
       <<-EOS
+        mv #{Base.remote_storage_path}/poolparty.pp /etc/puppet/manifests/classes
       EOS
     end
   end

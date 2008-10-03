@@ -59,10 +59,20 @@ module PoolParty
         options[:keypair] = args.length > 0 ? args[0] : "#{@parent.respond_to?(:name) ? @parent.name : ""}_#{@name}"
       end
       
+      def prepare_to_configuration
+        clear_base_directory
+        copy_misc_templates
+      end
+      
+      def copy_misc_templates
+        ["fileserver.conf"].each do |f|
+          copy_file_to_storage_directory(::File.join(::File.dirname(__FILE__), "..", "templates", f))
+        end
+      end
+      
       # Configuration files
       def build_manifest
-        reset_resources!
-        clear_base_directory
+        reset_resources!        
         add_poolparty_base_requirements
         
         returning Array.new do |str|
