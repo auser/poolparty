@@ -87,8 +87,7 @@ module Provisioner
     end
     
     def create_poolparty_manifest
-      <<-EOS        
-        mv #{Base.remote_storage_path}/site.pp /etc/puppet/site.pp
+      <<-EOS
       EOS
     end
   end
