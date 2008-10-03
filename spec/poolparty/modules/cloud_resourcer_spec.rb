@@ -43,35 +43,39 @@ describe "CloudResourcer" do
       @tc.keypair_path
     end
     it "should see if the file exists" do
-      @t = "weeeeee"
-      ::File.should_receive(:exists?).with(@t+"/rangerbob").and_return false
+      @t = "#{File.expand_path(Base.base_keypair_path)}"
+      ::File.should_receive(:exists?).with(@t+"/id_rsa-rangerbob").and_return false
+      ::File.stub!(:exists?).with(@t+"/rangerbob").and_return false
       @tc.should_receive(:keypair_paths).once.and_return [@t]
       @tc.keypair_path
     end
     it "should fallback to the second one if the first doesn't exist" do
-      @t = "weeeeee"
-      @q = "woooooo"
+      @t = "#{File.expand_path(Base.base_keypair_path)}"
+      @q = "#{File.expand_path(Base.base_config_directory)}"
+      ::File.stub!(:exists?).with(@t+"/id_rsa-rangerbob").and_return false
       ::File.stub!(:exists?).with(@t+"/rangerbob").and_return false
+      ::File.stub!(:exists?).with(@q+"/id_rsa-rangerbob").and_return false
       ::File.should_receive(:exists?).with(@q+"/rangerbob").and_return true
       @tc.should_receive(:keypair_paths).once.and_return [@t, @q]
-      @tc.keypair_path.should == "woooooo/rangerbob"
+      @tc.keypair_path.should == "/etc/poolparty/rangerbob"
     end
     describe "exists" do
       before(:each) do
-        @tc.stub!(:get_keypair_path).and_return "~/.ec2"
+        @t = "#{File.expand_path(Base.base_keypair_path)}"
+        ::File.stub!(:exists?).with(@t+"/id_rsa-rangerbob").and_return false
+        ::File.stub!(:exists?).with(@t+"/rangerbob").and_return true
       end
       it "should have the keypair_path" do
         @tc.respond_to?(:keypair_path).should == true
       end
       it "should set the keypair to the Base.keypair_path" do      
-        @tc.keypair_path.should =~ /#{Base.base_keypair_path}/
+        @tc.keypair_path.should =~ /#{File.expand_path(Base.base_keypair_path)}/
       end
       it "should set the keypair to have the keypair set" do
         @tc.keypair.should =~ /rangerbob/
       end
       it "should set it to the Base keypair_path and the keypair" do
-        @tc.keypair_path.should == "#{Base.base_keypair_path}/#{@tc.keypair}"
-        @tc.keypair_path.should == "~/.ec2/rangerbob"
+        @tc.keypair_path.should == "#{File.expand_path(Base.base_keypair_path)}/#{@tc.keypair}"
       end
     end
   end

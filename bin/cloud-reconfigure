@@ -1,0 +1,23 @@
+#!/usr/bin/env ruby
+$:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
+require "poolparty"
+require "poolpartycl"
+o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
+  opts.on('-n name', '--name name', 'Listing for cloud name')    { |c| optioner.cloudname c }
+end
+load_pool(o.spec || Binary.get_existing_spec_location)
+
+include Remote
+
+begin
+  @cloud = cloud(o.cloudname.downcase.to_sym)
+rescue
+  puts "Cloud name required. Please specify it with -n name"
+  exit(0)
+end
+
+with_cloud(@cloud, {:testing => o.testing}) do
+  puts header("Reconfiguring cloud #{name}")
+  build_manifest
+  testing ? puts(rsync_storage_files_to_command(master)) : rsync_storage_files_to(master)
+end

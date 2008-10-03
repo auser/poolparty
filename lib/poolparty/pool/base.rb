@@ -13,7 +13,7 @@ module PoolParty
       :user => "root", # This should change here
       :base_keypair_path => "~/.ec2",
       :tmp_path => "tmp",
-      :remote_storage_path => "/var/poolparty",
+      :remote_storage_path => "/var/poolparty/files",
       :storage_directory => File.join(Dir.pwd, "tmp"),
       :fileserver_base => "puppet://puppet/",
       :base_config_directory => "/etc/poolparty",

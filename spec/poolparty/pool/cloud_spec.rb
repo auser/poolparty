@@ -174,11 +174,11 @@ describe "Cloud" do
         end
         describe "add_poolparty_base_requirements" do
           before(:each) do
-            reset!
-            @hb = "heartbeat".class_constant.new
+            reset!            
             @cloud.instance_eval do
               @heartbeat = nil
             end
+            @hb = "heartbeat".class_constant.new(@cloud)
           end
           it "should call initialize on heartbeat (in add_poolparty_base_requirements)" do
             @hb.class.should_receive(:new).and_return true

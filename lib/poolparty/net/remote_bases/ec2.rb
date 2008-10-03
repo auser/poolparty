@@ -29,11 +29,11 @@ module PoolParty
     end
     # Override the master method
     def master
-      PoolParty::Remote::RemoteInstance.new(instances_list[0])
+      PoolParty::Remote::RemoteInstance.new( list_of_instances.first )
     end
     # Get the s3 description for the response in a hash format
     def get_instances_description
-      @cached_descriptions ||= EC2ResponseObject.get_descriptions(ec2.describe_instances)
+      @cached_descriptions ||= EC2ResponseObject.get_descriptions(ec2.describe_instances).sort_by {|a| a[:launching_time]}
     end
     # EC2 connections
     def ec2
