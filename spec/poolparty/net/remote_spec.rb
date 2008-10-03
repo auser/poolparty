@@ -219,5 +219,16 @@ describe "Remote" do
         @tc.contract_cloud_if_necessary
       end
     end
+    describe "rsync_storage_files_to" do
+      before(:each) do
+        Kernel.stub!(:exec).and_return true
+        @tc.extend CloudResourcer
+        @tc.stub!(:keypair).and_return "pants"
+      end
+      it "should call exec on the kernel" do
+        Kernel.should_receive(:exec).with("#{@tc.rsync_command} #{Base.storage_directory} 192.168.0.1:#{Base.remote_storage_path}").and_return true
+        @tc.rsync_storage_files_to(@tc.master)
+      end
+    end
   end
 end
