@@ -19,5 +19,10 @@ end
 with_cloud(@cloud, {:testing => o.testing}) do
   puts header("Reconfiguring cloud #{name}")
   build_manifest
-  testing ? puts(rsync_storage_files_to_command(master)) : rsync_storage_files_to(master)
+  if testing
+    puts(rsync_storage_files_to_command(master))
+  else
+    puts "Syncing local configuration files with master"
+    rsync_storage_files_to(master)
+  end
 end

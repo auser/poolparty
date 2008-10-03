@@ -31,7 +31,7 @@ describe "Remoter" do
       @tc.ssh_array.include?("-l '#{Base.user}'").should == true
     end
     it "should have the keypair path in the ssh_array" do
-      @tc.ssh_array.include?("-i '#{@tc.full_keypair_path}'").should == true
+      @tc.ssh_array.include?('-i "'+@tc.full_keypair_path+'"').should == true
     end
   end
   describe "rsync_command" do

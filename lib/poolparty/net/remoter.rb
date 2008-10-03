@@ -19,7 +19,7 @@ module PoolParty
       # Ssh with the user in Base
       # And including the keypair_path
       def ssh_array
-        ["-o StrictHostKeyChecking=no", "-l '#{Base.user}'", "-i '#{full_keypair_path}'"]
+        ["-o StrictHostKeyChecking=no", "-l '#{Base.user}'", '-i "'+full_keypair_path+'"']
       end
       def rsync_command
         "rsync --delete -azP --exclude cache -e '#{ssh_string}'"
@@ -158,7 +158,7 @@ module PoolParty
       # Rsync command to the instance
       def rsync_storage_files_to(instance=nil)
         if instance && instance.respond_to?(:ip) && !instance.ip.nil?
-          Kernel.exec rsync_storage_files_to_command(instance)
+          Kernel.system "#{rsync_storage_files_to_command(instance)}"
         end
       end
 
