@@ -222,7 +222,7 @@ describe "Remote" do
     end
     describe "rsync_storage_files_to" do
       before(:each) do
-        Kernel.stub!(:exec).and_return true
+        Kernel.stub!(:system).and_return true
         @tc.extend CloudResourcer
         @tc.stub!(:keypair).and_return "funky"
       end
