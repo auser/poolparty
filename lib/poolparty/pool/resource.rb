@@ -71,7 +71,14 @@ module PoolParty
         available_resources.map {|a| a.my_methods }
       end
       
-      def initialize(opts={}, &block)
+      def initialize(opts={}, parent=self, &block)
+        # Take the options of the parents
+        if parent.respond_to?(:options)
+          configure(parent.options)
+        else
+          parent.options = {}
+          configure(parent.options)
+        end
         set_vars_from_options(opts) unless opts.empty?
         self.instance_eval &block if block
       end

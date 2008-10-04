@@ -13,6 +13,11 @@ class Object
     original = self.method(original_id).to_proc
     define_method(new_id){|*args| original.call(*args)}
   end
+  def with_options(opts={}, parent=self, &block)
+    @p = parent.clone
+    @p.options.merge!(opts)
+    @p.instance_eval &block if block
+  end  
   def returning(receiver)
     yield receiver
     receiver

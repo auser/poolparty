@@ -10,7 +10,7 @@ module PoolParty
       def options(h={})
         @options ||= self.class.default_options.merge(h)
       end
-
+      
       def configure(h={})
         @options = nil
         options(h)
