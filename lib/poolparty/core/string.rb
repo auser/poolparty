@@ -28,7 +28,7 @@ class String
     self.split(/ && /).join("\n")
   end
   def to_option_string
-    self =~ /^[A-Z][a-zA-Z]*\[[a-zA-Z0-9\-\."'_]*\]/ ? "#{self}" : "'#{self}'"
+    self =~ /^[A-Z][a-zA-Z]*\[[a-zA-Z0-9\-\."'_\$\{\}]*\]/ ? "#{self}" : "'#{self}'"
   end
   # Refactor this guy to get the class if the class is defined, and not always create a new one
   # although, it doesn't really matter as ruby will just reopen the class
