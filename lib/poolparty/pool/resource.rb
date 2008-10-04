@@ -30,9 +30,15 @@ module PoolParty
         
     def resources_string(prev="")
       returning Array.new do |output|
+        
+        output << "# Variables"
+        output << resource(:variable).to_string("#{prev}")
+        
         resources.each do |type, resource|
-          output << "#{prev*2}# #{type}"
-          output << resource.to_string("#{prev*2}")
+          unless type == :variable
+            output << "#{prev*2}# #{type}"
+            output << resource.to_string("#{prev*2}")
+          end
         end
       end.join("\n")
     end
@@ -94,6 +100,10 @@ module PoolParty
       # Allows us to send an ensure to ensure the presence of a resource
       def ensures(str="running")
         options.merge!(:ensure => str)
+      end
+      # Alias for unless
+      def ifnot(str="")
+        options.merge!(:unless => str)
       end
       
       # Give us a template to work with on the resource

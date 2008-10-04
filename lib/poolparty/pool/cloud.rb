@@ -60,6 +60,7 @@ module PoolParty
       end
       
       def prepare_to_configuration
+        make_base_directory
         clear_base_directory
         copy_misc_templates
       end
@@ -87,9 +88,14 @@ module PoolParty
         
         returning Array.new do |str|
                     
+          str << "# Variables"
+          str << resource(:variable).to_string("#{prev}")
+          
           resources.each do |name, resource|
-            str << "# #{name.to_s.pluralize}"
-            resource.map {|a| str << a.to_string("\t") }
+            unless name == :variable
+              str << "# #{name.to_s.pluralize}"
+              resource.map {|a| str << a.to_string("\t") }
+            end
           end
           services.each do |service|
             str << "# #{service.name}"
