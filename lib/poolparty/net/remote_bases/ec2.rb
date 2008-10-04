@@ -1,4 +1,9 @@
 require "ec2"
+class String
+  def convert_from_ec2_to_ip
+    self.gsub(/.compute-1.amazonaws.com*/, '').gsub(/ec2-/, '').gsub(/-/, '.')
+  end
+end
 module PoolParty
   module Ec2
     def launch_new_instance!
@@ -25,13 +30,17 @@ module PoolParty
       get_instances_description.select {|a| a.instance_id == id}[0] rescue nil
     end
     def describe_instances
-      get_instances_description.each do |h| 
-        h.merge!({
-          :name => h[:instance_id],
-          :hostname => h[:ip],
-          :ip => h[:ip].gsub(/.compute-1.amazonaws.com*/, '').gsub(/ec2-/, '').gsub(/-/, '.')
-        })
+      unless @describe_instances
+        @describe_instances = get_instances_description.each do |h| 
+          h.merge!({
+            :name => h[:instance_id],
+            :hostname => h[:ip],
+            :ip => h[:ip].convert_from_ec2_to_ip
+          })
+        end
+        @describe_instances.first[:name] = "master"
       end
+      @describe_instances
     end
     # Override the master method
     def master
@@ -94,7 +103,7 @@ class EC2ResponseObject
       {
         :instance_id => resp.instanceId,
         :name => resp.instanceId, 
-        :ip => resp.dnsName, 
+        :ip => resp.dnsName || "not-assigned",
         :status => resp.instanceState.name,
         :launching_time => resp.launchTime,
         :keypair => resp.keyName

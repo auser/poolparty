@@ -64,8 +64,18 @@ module PoolParty
         copy_misc_templates
       end
       
+      def build_and_store_new_config_file
+        @manifest = build_manifest
+        config_file = ::File.join(Base.storage_directory, "poolparty.pp")
+        ::File.open(config_file, "w+") do |file|
+          file << "class poolparty {"
+          file << @manifest
+          file << "}"
+        end
+      end      
+      
       def copy_misc_templates
-        ["fileserver.conf"].each do |f|
+        ["fileserver.conf", "namespaceauth.conf"].each do |f|
           copy_file_to_storage_directory(::File.join(::File.dirname(__FILE__), "..", "templates", f))
         end
       end

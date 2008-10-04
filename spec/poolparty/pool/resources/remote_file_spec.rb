@@ -24,7 +24,7 @@ describe "Remote file" do
         end
       end
       it "should have the source set to puppet" do
-        @file.source.should == "puppet://puppet/files"
+        @file.source.should == "puppet:///files"
       end
       it "should use default values" do
         @file.name.should == "/www/conf/httpd.conf"

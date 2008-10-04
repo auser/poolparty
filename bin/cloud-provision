@@ -3,9 +3,12 @@ $:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
 require "poolparty"
 require "poolpartycl"
 o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
+  opts.on('-c [master|slaves|all]', '--class [master|slaves|all]', 'Provision class (default: all)')    { |c| optioner.provision_class c }
   opts.on('-n name', '--name name', 'Listing for cloud name')    { |c| optioner.cloudname c }
 end
 load_pool(o.spec || Binary.get_existing_spec_location)
+
+@provision_class = o.provision_class || "all"
 
 include Remote
 
@@ -16,29 +19,18 @@ rescue
   exit(0)
 end
 
-with_cloud(@cloud, {:testing => o.testing}) do
+with_cloud(@cloud, {:testing => o.testing, :provision_class => @provision_class}) do
   puts header("Provisioning cloud #{name}")
   prepare_to_configuration
   
   puts "Building configuration file"
-  @manifest = build_manifest
-  config_file = ::File.join(Base.storage_directory, "poolparty.pp")
-  ::File.open(config_file, "w+") do |file|
-    file << "class poolparty {"
-    file << @manifest
-    file << "}"
+  build_and_store_new_config_file
+  
+  if provision_class == "master" || provision_class == "all"
+    Provisioner.provision_master(self, testing)
+  end
+  if provision_class == "slave" || provision_class == "all"
+    Provisioner.provision_slaves(self, testing)
   end
   
-  puts "Building install file"
-  provisioner_file = ::File.join(Base.storage_directory, "install.sh")
-  ::File.open(provisioner_file, "w+") do |file|
-    file << Provisioner::Master.install(self)
-  end
-  
-  puts "Syncing local configuration files with master"
-  rsync_storage_files_to(master) unless testing
-  
-  puts "Logging on to the master and executing provisioning"
-  cmd = "cd #{Base.remote_storage_path} && chmod +x install.sh && /bin/sh install.sh && rm install.sh"
-  run_command_on(cmd, master) unless testing
 end

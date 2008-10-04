@@ -5,12 +5,7 @@ module PoolParty
       
       default_options({
         :command => nil,
-        :user => "root",
-        :hour => "*",
-        :minute => "*",
-        :month => "*",
-        :monthday => "*",
-        :weekday => "*"
+        :user => "root"
       })
 
     end

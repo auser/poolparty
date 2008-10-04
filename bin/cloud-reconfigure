@@ -18,11 +18,15 @@ end
 
 with_cloud(@cloud, {:testing => o.testing}) do
   puts header("Reconfiguring cloud #{name}")
-  build_manifest
-  if testing
-    puts(rsync_storage_files_to_command(master))
-  else
-    puts "Syncing local configuration files with master"
-    rsync_storage_files_to(master)
-  end
+  prepare_to_configuration
+  
+  puts "Building configuration file"
+  build_and_store_new_config_file
+  
+  puts "Syncing local configuration files with master"
+  rsync_storage_files_to(master)
+  
+  puts "Logging on to the master and restarting manager"
+  cmd = "puppetd"
+  run_command_on(cmd, master) unless testing
 end
