@@ -21,7 +21,7 @@ class PoolspecGenerator < RubiGen::Base
       m.directory ''
       BASEDIRS.each { |path| m.directory path }
       
-      m.template "pool_spec_template.erb", "config/poolspec.rb"
+      m.template "pool_spec_template.erb", "#{@name}.rb"
       # Create stubs
       # m.template "template.rb",  "some_file_after_erb.rb"
       # m.template_copy_each ["template.rb", "template2.rb"]
@@ -61,6 +61,5 @@ EOS
     # Installation skeleton.  Intermediate directories are automatically
     # created so don't sweat their absence here.
     BASEDIRS = %w(
-      config
     )
 end

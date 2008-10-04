@@ -30,7 +30,7 @@ module PoolParty
       get_instances_description.select {|a| a.instance_id == id}[0] rescue nil
     end
     def describe_instances
-      unless @describe_instances
+      unless @describe_instances && !@describe_instances.empty?
         @describe_instances = get_instances_description.each do |h| 
           h.merge!({
             :name => h[:instance_id],
@@ -38,7 +38,7 @@ module PoolParty
             :ip => h[:ip].convert_from_ec2_to_ip
           })
         end
-        @describe_instances.first[:name] = "master"
+        @describe_instances.first[:name] = "master" unless @describe_instances.empty?
       end
       @describe_instances
     end
