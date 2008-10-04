@@ -28,6 +28,7 @@ module Provisioner
         
     def create_local_hosts_entry
       <<-EOS
+        if [ -z "grep -v '#' /etc/hosts | grep 'puppet'" ]; then echo '#{@master_ip}           puppet master' >> /etc/hosts; fi
       EOS
     end
     
@@ -78,7 +79,7 @@ node "#{ri.ip}" {}
     
     def create_poolparty_manifest
       <<-EOS
-        mv #{Base.remote_storage_path}/poolparty.pp /etc/puppet/manifests/classes
+        mv #{Base.remote_storage_path}/#{Base.tmp_path}/poolparty.pp /etc/puppet/manifests/classes
       EOS
     end
   end

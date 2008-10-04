@@ -3,7 +3,7 @@ module PoolParty
   module Binary
     
     class << self
-      
+            
       def list_binaries_for(ty="pool")
         available_binaries_for(ty).join(", ")
       end

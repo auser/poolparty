@@ -4,6 +4,42 @@
   the development machine
 =end
 module Provisioner
+  
+  def self.provision_master(cloud, testing=false)
+    with_cloud(cloud) do
+      puts "Building install file"
+      provisioner_file = ::File.join(Base.storage_directory, "install_master.sh")
+      ::File.open(provisioner_file, "w+") do |file|
+        file << Master.install(self)
+      end
+
+      puts "Syncing local configuration files with master"
+      rsync_storage_files_to(master) unless testing
+
+      puts "Logging on to the master and executing provisioning"
+      cmd = "cd #{Base.remote_storage_path}/#{Base.tmp_path} && chmod +x install_master.sh && /bin/sh install_master.sh && rm install_master.sh && puppetmasterd"
+      run_command_on(cmd, master) unless testing
+    end
+  end
+  
+  def self.provision_slaves(cloud, testing=false)
+    slaves = cloud.list_of_running_instances.reject {|a| a.master? }
+    puts "Building slave install files"
+    provisioner_file = ::File.join(Base.storage_directory, "install_slave.sh")
+    ::File.open(provisioner_file, "w+") do |file|
+      file << Slave.install(cloud)
+    end
+    
+    slaves.each do |instance|
+      puts "Syncing local configuration files with master"
+      cloud.rsync_storage_files_to(instance) unless testing
+
+      puts "Logging on to the slave (@ #{instance.ip}) and executing provisioning"
+      cmd = "cd #{Base.remote_storage_path}/#{Base.tmp_path} && chmod +x install_slave.sh && /bin/sh install_slave.sh && rm install_slave.sh && puppetd"
+      cloud.run_command_on(cmd, instance) unless testing
+    end
+  end
+  
   class ProvisionerBase
     
     def initialize(cloud, os=:ubuntu)
@@ -27,7 +63,7 @@ module Provisioner
     end
     # Gather all the tasks into one string
     def install_string
-      tasks.each do |task|
+      default_tasks.each do |task|
         case task.class
         when String
           task
@@ -35,6 +71,10 @@ module Provisioner
           self.send(task.to_sym)
         end
       end.nice_runnable
+    end
+    # Tasks with default tasks 
+    def default_tasks
+      tasks
     end
     # Build a list of the tasks to run on the instance
     def tasks(a=[])
@@ -68,6 +108,26 @@ module Provisioner
     
     def template_directory
       File.join(File.dirname(__FILE__), "..", "templates")
+    end
+    
+    def create_local_node
+      str = <<-EOS
+node default {
+  include poolparty
+}
+      EOS
+       @cloud.list_from_remote(:do_not_cache => true).each do |ri|
+         str << <<-EOS           
+node "#{ri.ip}" {}
+         EOS
+       end
+      "echo '#{str}' > /etc/puppet/manifests/nodes/nodes.pp"
+    end
+
+    def create_poolparty_manifest
+      <<-EOS
+        mv #{Base.remote_storage_path}/poolparty.pp /etc/puppet/manifests/classes
+      EOS
     end
   end
 end

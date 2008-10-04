@@ -43,7 +43,7 @@ describe "Remoter" do
       @tc.rsync_command.should == "rsync --delete -azP --exclude cache -e '#{@tc.ssh_string}'"
     end
     it "should be able to rsync storage commands" do
-      @tc.rsync_storage_files_to_command(@ri).should == "#{@tc.rsync_command} #{Dir.pwd}/tmp/* 192.168.0.22:/var/poolparty/files"
+      @tc.rsync_storage_files_to_command(@ri).should == "#{@tc.rsync_command} #{Dir.pwd}/tmp 192.168.0.22:/var/poolparty"
     end
   end
   describe "listing" do
