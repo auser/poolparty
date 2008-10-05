@@ -14,7 +14,7 @@ module PoolParty
       end
       
       def source(arg=nil)
-        arg ? options[:source] = arg : "#{Base.fileserver_base}#{::File.basename(name)}"
+        arg ? options[:source] = arg : "#{Base.fileserver_base}/#{::File.basename(name)}"
       end
       
     end

@@ -1,7 +1,13 @@
 module PoolParty
   module FileWriter
     def copy_file_to_storage_directory(file)
+      make_base_directory
       path = ::File.join( Base.storage_directory, ::File.basename(file) )
+      FileUtils.cp file, path
+    end
+    def copy_template_to_storage_directory(file)
+      make_template_directory
+      path = ::File.join( Base.template_directory, ::File.basename(file) )
       FileUtils.cp file, path
     end
     def write_to_file_in_storage_directory(file, str, &block)
@@ -38,6 +44,9 @@ module PoolParty
     end
     def make_base_directory
       FileUtils.mkdir_p Base.storage_directory unless ::File.directory?(Base.storage_directory)
+    end
+    def make_template_directory
+      FileUtils.mkdir_p Base.template_directory unless ::File.directory?(Base.template_directory)      
     end
     def clear_base_directory
       Dir["#{Base.storage_directory}/*"].each do |file|

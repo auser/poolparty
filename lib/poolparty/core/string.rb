@@ -27,8 +27,10 @@ class String
   def nice_runnable(quite=true)
     self.split(/ && /).join("\n")
   end
-  def to_option_string
-    self =~ /^[A-Z][a-zA-Z]*\[[a-zA-Z0-9\-\."'_\$\{\}]*\]/ ? "#{self}" : "'#{self}'"
+  def to_option_string(ns=[])
+    a_template = self =~ /template/
+    a_service = self =~ /^[A-Z][a-zA-Z]*\[[a-zA-Z0-9\-\."'_\$\{\}]*\]/
+    (a_service || a_template) ? "#{self}" : "'#{self}'"
   end
   # Refactor this guy to get the class if the class is defined, and not always create a new one
   # although, it doesn't really matter as ruby will just reopen the class

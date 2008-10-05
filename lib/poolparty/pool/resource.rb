@@ -22,6 +22,32 @@ module PoolParty
         resource(type) << o
       end
     end
+    
+    def variable_string_from_resources(variables)
+      if variables
+        returning String.new do |str|
+          str << "\n# Variables \n"
+          str << variables.to_string("#{prev}")
+        end
+      else
+        ""
+      end
+    end
+    
+    def resources_string_from_resources(res, prev="\t")
+      if res
+        returning String.new do |output|
+          res.each do |type, resource|
+            unless type == :variable
+              output << "\n#{prev*2}# #{type}\n"
+              output << resource.to_string("#{prev*2}")
+            end
+          end          
+        end
+      else 
+        ""
+      end
+    end
         
     #:nodoc:
     def reset_resources!
@@ -31,15 +57,9 @@ module PoolParty
     def resources_string(prev="")
       returning Array.new do |output|
         
-        output << "# Variables"
-        output << resource(:variable).to_string("#{prev}")
+        output << variable_string_from_resources(resource(:variable))
+        output << resources_string_from_resources(resources)
         
-        resources.each do |type, resource|
-          unless type == :variable
-            output << "#{prev*2}# #{type}"
-            output << resource.to_string("#{prev*2}")
-          end
-        end
       end.join("\n")
     end
     
@@ -50,6 +70,9 @@ module PoolParty
     class Resource
       include MethodMissingSugar
       include Configurable
+      
+      extend PoolParty::Resources
+      include PoolParty::Resources
       
       def self.inherited(subclass)
         subclass = subclass.to_s.split("::")[-1] if subclass.to_s.index("::")
@@ -79,17 +102,17 @@ module PoolParty
       
       def initialize(opts={}, parent=self, &block)
         # Take the options of the parents
-        if parent.respond_to?(:options)
-          configure(parent.options)
-        else
-          parent.options = {}
-          configure(parent.options)
-        end
+        parent.respond_to?(:options) ? configure(parent.options) : configure((parent.options = {}))
         set_vars_from_options(opts) unless opts.empty?
         self.instance_eval &block if block
+        loaded
       end
       def set_vars_from_options(opts={})
         opts.each {|k,v| self.send k.to_sym, v } unless opts.empty?
+      end
+      
+      # Stub, so you can create virtual resources
+      def loaded        
       end
       
       # Overrides for syntax
@@ -111,8 +134,12 @@ module PoolParty
       def template(file, opts={})
         raise TemplateNotFound.new("no template given") unless file
         raise TemplateNotFound.new("template cannot be found #{file}") unless ::File.file?(file)
-        options.merge!(:template => file) unless opts[:just_copy]
-        copy_file_to_storage_directory(file)
+        unless opts[:just_copy]
+          options.merge!(:content => "template(\"#{::File.basename(file)}\")") 
+          copy_template_to_storage_directory(file)
+        else
+          copy_file_to_storage_directory(file)
+        end
       end
       # This way we can subclass resources without worry
       def class_type_name
@@ -163,11 +190,35 @@ module PoolParty
         end
         opts.reject {|k,v| disallowed_options.include?(k) }
       end
+      
+      def class_to_string(prev="\t")
+        returning String.new do |output|
+          output << "\nclass #{@name} {\n"
+          
+          if resource(:variable)
+            output << "\n# Variables\n"
+            output << resource(:variable).to_string("#{prev}")
+            output << "\n"
+          end        
+                    
+          resources.each do |n,r|
+            unless n == :variable
+              output << r.to_string(prev)
+              output << "\n"
+            end
+          end
+          output << "}\n"
+          output << "include #{@name}\n"
+        end        
+      end
       # Generic to_s
       # Most Resources won't need to extend this
       def to_string(prev="")
         opts = get_modified_options
         returning Array.new do |output|
+          if resources && !resources.empty?
+            output << class_to_string(prev)
+          end
           output << "#{prev}#{class_type_name} {"
           output << "#{prev}\"#{self.key}\":"
           output << opts.flush_out("#{prev*2}").join(",\n")
@@ -189,10 +240,10 @@ module PoolParty
     def self.add_has_and_does_not_have_methods_for(type=:file)
       module_eval <<-EOE
         def has_#{type}(opts={}, &block)
-          #{type}(opts#{'.merge(:ensure => "present")' if type != :exec}, &block) 
+          #{type}(#{type == :exec ? "opts" : "{:ensure => 'present'}.merge(opts)"}, &block)
         end
         def does_not_have_#{type}(opts={}, &block)
-          #{type}(opts#{'.merge(:ensure => "absent")' if type != :exec}, &block)
+          #{type}(#{type == :exec ? "opts" : "{:ensure => 'absent'}.merge(opts)"}, &block)
         end
       EOE
     end

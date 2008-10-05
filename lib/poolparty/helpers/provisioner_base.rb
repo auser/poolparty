@@ -12,10 +12,10 @@ module Provisioner
       ::File.open(provisioner_file, "w+") do |file|
         file << Master.install(self)
       end
-
+      
       puts "Syncing local configuration files with master"
       rsync_storage_files_to(master) unless testing
-
+      
       puts "Logging on to the master and executing provisioning"
       cmd = "cd #{Base.remote_storage_path}/#{Base.tmp_path} && chmod +x install_master.sh && /bin/sh install_master.sh && rm install_master.sh && puppetmasterd"
       run_command_on(cmd, master) unless testing

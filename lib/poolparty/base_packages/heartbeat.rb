@@ -3,7 +3,7 @@ module PoolParty
     plugin :heartbeat do
       
       def enable
-        has_package(:name => "heartbeat-2", :ensure => "running")
+        has_package(:name => "heartbeat-2", :ensure => "installed")
         has_service(:name => "heartbeat", :hasstatus => true) do
           ensures "running"
         end
