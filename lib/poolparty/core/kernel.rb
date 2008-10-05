@@ -21,13 +21,14 @@ module Kernel
   ensure
     $-v = saved_verbosity
   end
-  def with_output_surpressed
+  def hide_output
     begin
-      orig_std_out = STDOUT.clone
-      STDOUT.reopen("/dev/null", "w+")
-      yield
+      old_stdout = STDOUT.dup
+      STDOUT.reopen(File.open((PLATFORM =~ /mswin/ ? "NUL" : "/dev/null"), 'w'))
+      yield if block_given?
     ensure
-      STDOUT.reopen(orig_std_out)
+      STDOUT.flush
+      STDOUT.reopen(old_stdout)
     end
-  end
+  end  
 end

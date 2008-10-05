@@ -31,17 +31,6 @@ def stub_option_load
     Base.reset!
 end
 
-def hide_output
-  begin
-    old_stdout = STDOUT.dup
-    STDOUT.reopen(File.open((PLATFORM =~ /mswin/ ? "NUL" : "/dev/null"), 'w'))
-    yield if block_given?
-  ensure
-    STDOUT.flush
-    STDOUT.reopen(old_stdout)
-  end
-end
-
 def wait_launch(time=5)
   pid = fork {yield}
   wait time

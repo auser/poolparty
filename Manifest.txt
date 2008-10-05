@@ -85,6 +85,7 @@ lib/poolparty/pool/pool.rb
 lib/poolparty/pool/resource.rb
 lib/poolparty/pool/resources/class_package.rb
 lib/poolparty/pool/resources/cron.rb
+lib/poolparty/pool/resources/directory.rb
 lib/poolparty/pool/resources/exec.rb
 lib/poolparty/pool/resources/file.rb
 lib/poolparty/pool/resources/gem.rb
@@ -148,6 +149,7 @@ spec/poolparty/pool/pool_spec.rb
 spec/poolparty/pool/resource_spec.rb
 spec/poolparty/pool/resources/class_package_spec.rb
 spec/poolparty/pool/resources/cron_spec.rb
+spec/poolparty/pool/resources/directory_spec.rb
 spec/poolparty/pool/resources/exec_spec.rb
 spec/poolparty/pool/resources/file_spec.rb
 spec/poolparty/pool/resources/gem_spec.rb

@@ -27,6 +27,8 @@ with_cloud(@cloud, {:testing => o.testing}) do
   rsync_storage_files_to(master)
   
   puts "Logging on to the master and restarting manager"
-  cmd = "puppetd"
-  run_command_on(cmd, master) unless testing
+  cmd = "pkill -HUP puppetmasterd && puppetd --test && puppetd"
+  run_command_on(cmd, master) unless testing  
+  
+  clear_base_directory unless testing
 end
