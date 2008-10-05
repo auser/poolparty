@@ -19,7 +19,7 @@ describe "Base" do
   it "should set the remote storage path to /var/poolparty" do
     Base.remote_storage_path.should == "/var/poolparty"
   end
-  it "should set the fileserver_base to puppet://puppet/" do
-    Base.fileserver_base.should == "puppet:///"
+  it "should set the fileserver_base to puppet://" do
+    Base.fileserver_base.should =~ /puppet:\/\//
   end
 end

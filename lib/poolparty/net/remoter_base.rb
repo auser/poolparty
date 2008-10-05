@@ -68,10 +68,8 @@ module PoolParty
       end
       # Instances
       # Get the master from the cloud
-      # EC2 doesn't give us the "name" of the instance, but fortunately
-      # it returns the results in an ordered fashion, so we can safely assume the 
-      # first instance is the master
       def master
+        # remote_instances_list.select {|a| a.master }.first
         @list = list_from_remote
         @list.reject {|a| a unless a.name =~ /master/ }.first if @list.class != String
       end

@@ -44,7 +44,11 @@ module PoolParty
     end
     # Override the master method
     def master
-      PoolParty::Remote::RemoteInstance.new( list_of_instances.first )
+      # EC2 doesn't give us the "name" of the instance, but fortunately
+      # it returns the results in an ordered fashion, so we can safely assume the 
+      # first instance is the master
+      # PoolParty::Remote::RemoteInstance.new( list_of_instances.first )
+      remote_instances_list.select {|a| a.master? }.first
     end
     # Get the s3 description for the response in a hash format
     def get_instances_description

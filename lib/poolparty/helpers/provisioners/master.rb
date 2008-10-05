@@ -18,6 +18,7 @@ module Provisioner
         setup_fileserver,
         setup_autosigning,
         create_local_node,
+        move_templates,
         create_poolparty_manifest
       ]
     end
@@ -51,7 +52,10 @@ module Provisioner
     
     def setup_fileserver
       <<-EOS
-        echo "#{open(File.join(template_directory, "fileserver.conf")).read}" > /etc/puppet/fileserver.conf
+        echo "
+        [files]
+          path #{Base.remote_storage_path}/#{Base.tmp_path}
+          allow *" > /etc/puppet/fileserver.conf
         mkdir -p /var/poolparty/facts
         mkdir -p /var/poolparty/files
       EOS
@@ -75,6 +79,13 @@ node "#{ri.ip}" {}
          EOS
        end
       "echo '#{str}' > /etc/puppet/manifests/nodes/nodes.pp"
+    end
+    
+    def move_templates
+      <<-EOS
+      mkdir -p #{Base.template_path}
+      mv #{Base.remote_storage_path}/#{Base.template_directory}/* #{Base.template_path}
+      EOS
     end
     
     def create_poolparty_manifest

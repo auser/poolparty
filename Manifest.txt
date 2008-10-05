@@ -132,6 +132,7 @@ spec/poolparty/net/remote_instance_spec.rb
 spec/poolparty/net/remote_spec.rb
 spec/poolparty/net/remoter_base_spec.rb
 spec/poolparty/net/remoter_spec.rb
+spec/poolparty/plugins/line_spec.rb
 spec/poolparty/pool/base_spec.rb
 spec/poolparty/pool/cloud_spec.rb
 spec/poolparty/pool/configurers/files/ruby_basic.rb
@@ -176,9 +177,14 @@ test/test_poolparty.rb
 test_manifest.pp
 tmp/authkeys
 tmp/cib.xml
+tmp/fileserver.conf
 tmp/ha.cf
 tmp/happydayz
 tmp/heartbeat-instances.list
+tmp/install_master.sh
+tmp/install_slave.sh
+tmp/namespaceauth.conf
+tmp/poolparty.pp
 tmp/tc-instances.list
 website/index.html
 website/index.txt

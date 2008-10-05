@@ -25,7 +25,7 @@ command_line = "#{program_location} #{ARGV.join(" ")}"
 
 # Run it from the command-line first
 if Binary.available_binaries_for("pool").include?(name)
-  `#{command_line}`
+  Kernel.exec "#{command_line}"
 else
   puts "Unknown poolparty binary: #{program_name}"
 end

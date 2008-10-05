@@ -9,8 +9,4 @@ pool :poolparty do
     ami "ami-4bb05422"
   end
   
-  cloud :db do
-    
-  end
-  
 end

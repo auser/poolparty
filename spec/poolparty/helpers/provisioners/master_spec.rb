@@ -39,7 +39,7 @@ describe "Master provisioner" do
     @master.setup_basic_structure.should =~ /puppetmasterd --mkusers/
   end
   it "should return setup_fileserver with the setup" do
-    @master.setup_fileserver.should == "        echo \"[files]\n  path /var/poolparty/files\n  allow *\" > /etc/puppet/fileserver.conf\n        mkdir -p /var/poolparty/facts\n        mkdir -p /var/poolparty/files\n"    
+    @master.setup_fileserver.should =~ /\[files\]/
   end
   it "should be able to create_local_node" do
     @master.create_local_node.should =~ /ode \"192.168.0.1\" \{\}/

@@ -61,7 +61,7 @@ module PoolParty
       
       def prepare_to_configuration
         make_base_directory
-        clear_base_directory
+        # clear_base_directory
         copy_misc_templates
       end
       
@@ -87,19 +87,15 @@ module PoolParty
         add_poolparty_base_requirements
         
         returning Array.new do |str|
-                    
-          str << "# Variables"
-          str << resource(:variable).to_string("#{prev}")
           
-          resources.each do |name, resource|
-            unless name == :variable
-              str << "# #{name.to_s.pluralize}"
-              resource.map {|a| str << a.to_string("\t") }
-            end
-          end
+          str << resources_string
+          
           services.each do |service|
-            str << "# #{service.name}"
-            str << service.resources_string("\t")
+            str << "# #{service.name}\n"
+            str << "class #{service.name} {\n"
+            str << service.resources_string("\t\t")
+            str << "}\n"
+            str << "include #{service.name}"
           end
           
           str << "# Custom functions"
