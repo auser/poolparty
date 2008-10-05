@@ -61,6 +61,7 @@ lib/poolparty/helpers/provisioners/master.rb
 lib/poolparty/helpers/provisioners/slave.rb
 lib/poolparty/modules/cloud_resourcer.rb
 lib/poolparty/modules/configurable.rb
+lib/poolparty/modules/definable_resource.rb
 lib/poolparty/modules/ec2_wrapper.rb
 lib/poolparty/modules/file_writer.rb
 lib/poolparty/modules/method_missing_sugar.rb
@@ -125,6 +126,7 @@ spec/poolparty/helpers/provisioner_base_spec.rb
 spec/poolparty/helpers/provisioners/master_spec.rb
 spec/poolparty/helpers/provisioners/slave_spec.rb
 spec/poolparty/modules/cloud_resourcer_spec.rb
+spec/poolparty/modules/definable_resource.rb
 spec/poolparty/modules/file_writer_spec.rb
 spec/poolparty/modules/s3_string_spec.rb
 spec/poolparty/modules/tmp/willy/nilly.rb

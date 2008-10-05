@@ -22,33 +22,7 @@ module PoolParty
         resource(type) << o
       end
     end
-    
-    def variable_string_from_resources(variables)
-      if variables
-        returning String.new do |str|
-          str << "\n# Variables \n"
-          str << variables.to_string("#{prev}")
-        end
-      else
-        ""
-      end
-    end
-    
-    def resources_string_from_resources(res, prev="\t")
-      if res
-        returning String.new do |output|
-          res.each do |type, resource|
-            unless type == :variable
-              output << "\n#{prev*2}# #{type}\n"
-              output << resource.to_string("#{prev*2}")
-            end
-          end          
-        end
-      else 
-        ""
-      end
-    end
-        
+            
     #:nodoc:
     def reset_resources!
       @resources = nil
@@ -102,7 +76,7 @@ module PoolParty
       
       def initialize(opts={}, parent=self, &block)
         # Take the options of the parents
-        parent.respond_to?(:options) ? configure(parent.options) : configure((parent.options = {}))
+        configure(parent.options) if !parent.nil? && parent.respond_to?(:options)
         set_vars_from_options(opts) unless opts.empty?
         self.instance_eval &block if block
         loaded
@@ -112,7 +86,7 @@ module PoolParty
       end
       
       # Stub, so you can create virtual resources
-      def loaded        
+      def loaded
       end
       
       # Overrides for syntax
@@ -175,6 +149,9 @@ module PoolParty
       def key
         name
       end
+      def virtual_resource?
+        false
+      end
       # We want to gather the options, but if the option sent is nil
       # then we want to override the option value by sending the key as
       # a method so that we can override this if necessary. 
@@ -191,38 +168,25 @@ module PoolParty
         opts.reject {|k,v| disallowed_options.include?(k) }
       end
       
-      def class_to_string(prev="\t")
-        returning String.new do |output|
-          output << "\nclass #{@name} {\n"
-          
-          if resource(:variable)
-            output << "\n# Variables\n"
-            output << resource(:variable).to_string("#{prev}")
-            output << "\n"
-          end        
-                    
-          resources.each do |n,r|
-            unless n == :variable
-              output << r.to_string(prev)
-              output << "\n"
-            end
-          end
-          output << "}\n"
-          output << "include #{@name}\n"
-        end        
-      end
       # Generic to_s
       # Most Resources won't need to extend this
       def to_string(prev="")
         opts = get_modified_options
         returning Array.new do |output|
+          
           if resources && !resources.empty?
-            output << class_to_string(prev)
+            @cp = classpackage_with_self({:name => name})
+            output << @cp.to_string
+            output << "include #{@cp.name.sanitize}"
           end
-          output << "#{prev}#{class_type_name} {"
-          output << "#{prev}\"#{self.key}\":"
-          output << opts.flush_out("#{prev*2}").join(",\n")
-          output << "#{prev}}"
+          
+          unless virtual_resource?
+            output << "#{prev}#{class_type_name} {"
+            output << "#{prev}\"#{self.key}\":"
+            output << opts.flush_out("#{prev*2}").join(",\n")
+            output << "#{prev}}"            
+          end
+                    
         end.join("\n")
       end
     end

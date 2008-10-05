@@ -26,6 +26,27 @@ describe "Resource" do
     it "should be able to coalesce the instances" do
       @resource.to_string.should =~ /resource \{\n/
     end
+    describe "with resources" do
+      before(:each) do
+        self.stub!(:options).and_return(:name => "cook")
+        
+        @obj = PoolParty::Resources::Resource.new
+        @obj.stub!(:name).and_return "cook"
+        
+        @resource2 = MyResource.new do
+          file(:name => "shulie")
+        end
+      end
+      it "should call classpackage_with_self when it has resources" do
+        @resource2.should_receive(:classpackage_with_self).and_return @obj
+        @resource2.to_string
+      end
+      it "should call to_string on the class package" do
+        @obj.should_receive(:to_string).and_return "wee"
+        @resource2.should_receive(:classpackage_with_self).and_return @obj
+        @resource2.to_string
+      end
+    end
   end
   describe "class methods" do
     it "should have an array of available resources" do
