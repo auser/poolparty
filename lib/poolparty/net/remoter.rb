@@ -161,7 +161,9 @@ module PoolParty
       # Rsync command to the instance
       def rsync_storage_files_to(instance=nil)
         if instance && instance.respond_to?(:ip) && !instance.ip.nil?
-          Kernel.system "#{rsync_storage_files_to_command(instance)}"
+          hide_output do
+            Kernel.system "#{rsync_storage_files_to_command(instance)}"
+          end          
         end
       end
       

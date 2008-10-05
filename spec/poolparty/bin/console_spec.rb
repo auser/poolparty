@@ -72,7 +72,7 @@ describe "Console" do
     end
     it "should be able to print the clouds" do      
       pools.should_not be_empty
-      with_output_surpressed do
+      hide_output do
         pool_describe.should == pools.size
       end      
     end
