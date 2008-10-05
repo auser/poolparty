@@ -4,7 +4,7 @@ module PoolParty
     class File < Resource
             
       default_options({
-        :ensure => "present",
+        :ensure => "file",
         :mode => 644,
         :owner => "#{Base.user}"
       })

@@ -1,5 +1,20 @@
 module PoolParty
   module DefinableResource
+    # Define a new resource that can be called like any other resource
+    # Similar to any other resource (like file or exec)
+    # but you define it how you want it to work
+    # Example:
+    # 
+    # define_resource(:line_in_file) do
+    # end
+    # 
+    # Within the block, you can define any methods you want to run as
+    # part of the resource
+    # 
+    # One thing to note is that this is NOT like other resources in the sense
+    # that it does not give you any extra methods like the resources do
+    # 
+    # For example usage, see lib/poolparty/plugins/line.rb
     def define_resource(name, &block)
       symc = "#{name}".classify
       klass = symc.class_constant(PoolParty::Resources::CustomResource, {:preserve => true}, &block)
@@ -7,7 +22,6 @@ module PoolParty
       klass
     end
     
-    # TODO: Refactor this guy
     # Allow us to create virtual resources
     # Generally, in plugins
     # This sets a virtual resource against the Resource class
