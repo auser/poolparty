@@ -127,4 +127,9 @@ listen web_proxy 127.0.0.1:3000
       'Package["heartbeat-2"]'.to_option_string.should == 'Package["heartbeat-2"]'
     end
   end
+  describe "sanitize" do
+    it "should remove the periods from the string" do
+      "xnot.org".sanitize.should == "xnotorg"
+    end
+  end
 end

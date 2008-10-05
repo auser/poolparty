@@ -4,14 +4,6 @@ module PoolParty
   def available_custom_resources
     $available_custom_resources ||= []
   end
-  module DefinableResource
-    def define_resource(name, &block)
-      symc = "#{name}".classify
-      klass = symc.class_constant(PoolParty::Resources::CustomResource, {:preserve => true}, &block)
-      PoolParty::Resources.module_eval &block
-      klass
-    end    
-  end
   module DefinableFact
     def define_fact(name, string="")
       
