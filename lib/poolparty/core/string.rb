@@ -28,7 +28,7 @@ class String
     self.split(/ && /).join("\n")
   end
   def to_option_string(ns=[])
-    a_template = self =~ /template/
+    a_template = (self =~ /template/) == 0
     a_service = self =~ /^[A-Z][a-zA-Z]*\[[a-zA-Z0-9\-\."'_\$\{\}]*\]/
     (a_service || a_template) ? "#{self}" : "'#{self}'"
   end
