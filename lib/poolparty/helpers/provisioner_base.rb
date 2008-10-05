@@ -22,6 +22,23 @@ module Provisioner
     end
   end
   
+  def self.configure_master(cloud, testing=false)
+    with_cloud(cloud) do
+      puts "Building install file"
+      provisioner_file = ::File.join(Base.storage_directory, "configure_master.sh")
+      ::File.open(provisioner_file, "w+") do |file|
+        file << Master.configure(self)
+      end
+      
+      puts "Syncing local configuration files with master"
+      rsync_storage_files_to(master) unless testing
+      
+      puts "Logging on to the master and executing provisioning"
+      cmd = "cd #{Base.remote_storage_path}/#{Base.tmp_path} && chmod +x configure_master.sh && /bin/sh configure_master.sh && rm configure_master.sh && puppetmasterd"
+      run_command_on(cmd, master) unless testing
+    end
+  end
+  
   def self.provision_slaves(cloud, testing=false)
     slaves = cloud.list_of_running_instances.reject {|a| a.master? }
     puts "Building slave install files"
@@ -40,6 +57,26 @@ module Provisioner
     end
   end
   
+  def self.configure_slaves(cloud, testing=false)
+    with_cloud(cloud) do
+      puts "Building install file"
+      provisioner_file = ::File.join(Base.storage_directory, "configure_slave.sh")
+      ::File.open(provisioner_file, "w+") do |file|
+        file << Slave.configure(self)
+      end
+      
+      slaves = cloud.list_of_running_instances.reject {|a| a.master? }
+      slaves.each do |instance|
+        puts "Syncing local configuration files with slave"
+        cloud.rsync_storage_files_to(instance) unless testing
+
+        puts "Logging on to the slave (@ #{instance.ip}) and executing provisioning"
+        cmd = "cd #{Base.remote_storage_path}/#{Base.tmp_path} && chmod +x configure_slave.sh && /bin/sh configure_slave.sh && rm configure_slave.sh && puppetd"
+        cloud.run_command_on(cmd, instance) unless testing
+      end
+    end
+  end
+  
   class ProvisionerBase
     
     def initialize(cloud, os=:ubuntu)
@@ -55,6 +92,10 @@ module Provisioner
       set_ip unless @ip      
       valid? ? install_string : error
     end
+    def configure
+      set_ip unless @ip
+      valid? ? configure_string : error
+    end
     def valid?
       true
     end
@@ -63,7 +104,17 @@ module Provisioner
     end
     # Gather all the tasks into one string
     def install_string
-      default_tasks.each do |task|
+      install_tasks.each do |task|
+        case task.class
+        when String
+          task
+        when Method
+          self.send(task.to_sym)
+        end
+      end.nice_runnable
+    end
+    def configure_string
+      configure_tasks.each do |task|
         case task.class
         when String
           task
@@ -74,11 +125,14 @@ module Provisioner
     end
     # Tasks with default tasks 
     def default_tasks
-      tasks
+      install_tasks
     end
     # Build a list of the tasks to run on the instance
-    def tasks(a=[])
-      @tasks ||= a
+    def install_tasks(a=[])
+      @install_task ||= a
+    end
+    def configure_tasks(a=[])
+      @configure_tasks ||= a
     end
     # Get the packages associated with each os
     def get_puppet_packages_for(os)

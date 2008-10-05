@@ -9,14 +9,19 @@ module Provisioner
       raise RemoteException.new(:could_not_install, "Your cloud does not have a master")
     end
     
-    def tasks
+    def install_tasks
       [
         install_puppet_master,
         create_local_hosts_entry,
         setup_basic_structure,
         setup_configs,        
         setup_fileserver,
-        setup_autosigning,
+        setup_autosigning
+      ] << configure_tasks
+    end
+    
+    def configure_tasks
+      [
         create_local_node,
         move_templates,
         create_poolparty_manifest
