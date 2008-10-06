@@ -13,7 +13,7 @@ module PoolParty
       end
       
       def key
-        :name || :command
+        (self.send :name) ? :name : :command
       end
                   
     end
