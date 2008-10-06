@@ -11,23 +11,6 @@ module PoolParty
         (self.respond_to?(:remote_instances_list) ? self : parent).remote_instances_list.each do |ri|
           has_host({:name => "#{ri.name}", :ip => ri.ip })
         end
-        
-        # Let's make sure that the puppet and puppetmaster are always running
-        has_cron(:name => "restart-puppetmaster") do
-          command 'if [ -e /var/run/puppet/puppetmasterd.pid ]; then ps uw -p `cat /var/run/puppet/puppetmasterd.pid` | grep -q "ruby /usr/sbin/puppetmasterd" || (rm /var/run/puppet/puppetmasterd.pid; /usr/sbin/puppetmasterd start); else /usr/sbin/puppetmasterd start; fi'
-          user "root"
-          minute 0
-        end
-        
-        has_cron(:name => "restart-puppet") do
-          command 'if [ -e /var/run/puppetd.pid ]; then ps uw -p `cat /var/run/puppetd.pid` | grep -q "ruby /usr/sbin/puppetd" || (rm /var/run/puppetd.pid; /usr/sbin/puppet start); else /usr/sbin/puppetd start; fi'
-          user "root"
-          minute 0
-        end
-        
-        has_service(:name => "cron") do
-          ensures "running"
-        end
       end
       
     end  

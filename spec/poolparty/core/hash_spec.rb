@@ -33,4 +33,26 @@ describe "Hash" do
   it "should be able to flush out with prev and posts" do
     @a.flush_out("hi", "ho").should == ["hia => '10'ho","hib => '20'ho","hic => '30'ho"]
   end
+  describe "select" do
+    before(:each) do
+      @selected_hash = @a.select {|k,v| k if k == :a}
+    end
+    it "should return a hash when selecting" do
+      @selected_hash.class.should == Hash
+    end
+    it "should only have the key a (selected)" do
+      @selected_hash.keys.should == [:a]
+    end
+  end
+  describe "extract!" do
+    before(:each) do
+      @rejected_hash = @a.extract! {|k,v| k == :a }
+    end
+    it "should have a reject with the keys" do
+      @rejected_hash.keys.should == [:a]
+    end
+    it "should return the old array with the other keys" do
+      @a.keys.should == [:b, :c]
+    end
+  end
 end
