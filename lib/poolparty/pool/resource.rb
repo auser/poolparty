@@ -29,10 +29,8 @@ module PoolParty
     end
         
     def resources_string(prev="")
-      returning Array.new do |output|
-        
+      returning Array.new do |output|        
         output << resources_string_from_resources(resources)
-        
       end.join("\n")
     end
     

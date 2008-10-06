@@ -88,7 +88,7 @@ module PoolParty
         
         returning Array.new do |str|
           
-          str << resources_string
+          str << resources_string_from_resources(resources)
           
           # Refactor this into the resources method
           # TODO
@@ -101,7 +101,6 @@ module PoolParty
           
           str << "# Custom functions"
           str << Resources::CustomResource.custom_functions_to_string
-          str << "\n"
         end.join("\n")
       end
       

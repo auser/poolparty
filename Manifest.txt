@@ -179,6 +179,12 @@ test/test_helper.rb
 test/test_pool_spec_generator.rb
 test/test_poolparty.rb
 test_manifest.pp
+tmp/authkeys
+tmp/cib.xml
+tmp/ha.cf
+tmp/happydayz
+tmp/heartbeat-instances.list
+tmp/tc-instances.list
 website/index.html
 website/index.txt
 website/javascripts/rounded_corners_lite.inc.js

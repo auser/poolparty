@@ -26,7 +26,7 @@ module PoolParty
     
     def resources_string_from_resources(resources, prev="\t")
       @variables = resources.extract! {|name,resource| name == :variable}
-      returning String.new do |str|
+      returning Array.new do |str|
         unless @variables.empty?
           str << "\n# Variables \n"
           @variables.each do |name, variable|
@@ -38,7 +38,7 @@ module PoolParty
           str << "\n#{prev*2}# #{type}\n"
           str << resource.to_string("#{prev*2}")
         end        
-      end
+      end.join("\n")
     end
     
   end

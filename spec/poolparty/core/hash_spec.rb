@@ -54,5 +54,10 @@ describe "Hash" do
     it "should return the old array with the other keys" do
       @a.keys.should == [:b, :c]
     end
+    it "should not throw a fit with an empty hash" do
+      lambda {
+        {}.extract!
+      }.should_not raise_error
+    end
   end
 end
