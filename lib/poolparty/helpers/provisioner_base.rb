@@ -10,14 +10,14 @@ module Provisioner
       puts "Building install file"
       provisioner_file = ::File.join(Base.storage_directory, "install_master.sh")
       ::File.open(provisioner_file, "w+") do |file|
-        file << Master.install(self)
+        file << Provisioner::Master.install(self)
       end
       
       puts "Syncing local configuration files with master"
       rsync_storage_files_to(master) unless testing
       
       puts "Logging on to the master and executing provisioning"
-      cmd = "cd #{Base.remote_storage_path}/#{Base.tmp_path} && chmod +x install_master.sh && /bin/sh install_master.sh && rm install_master.sh && puppetmasterd"
+      cmd = "cd #{Base.remote_storage_path}/#{Base.tmp_path} && chmod +x install_master.sh && /bin/sh install_master.sh && rm install_master.sh"
       run_command_on(cmd, master) unless testing
     end
   end
@@ -27,14 +27,14 @@ module Provisioner
       puts "Building install file"
       provisioner_file = ::File.join(Base.storage_directory, "configure_master.sh")
       ::File.open(provisioner_file, "w+") do |file|
-        file << Master.configure(self)
+        file << Provisioner::Master.configure(self)
       end
       
       puts "Syncing local configuration files with master"
       rsync_storage_files_to(master) unless testing
       
       puts "Logging on to the master and executing provisioning"
-      cmd = "cd #{Base.remote_storage_path}/#{Base.tmp_path} && chmod +x configure_master.sh && /bin/sh configure_master.sh && rm configure_master.sh && puppetmasterd"
+      cmd = "cd #{Base.remote_storage_path}/#{Base.tmp_path} && chmod +x configure_master.sh && /bin/sh configure_master.sh && rm configure_master.sh && puppetrun --host #{master.name} --host #{list_of_running_instances.collect {|a| a.name }.join(" --host ")}"
       run_command_on(cmd, master) unless testing
     end
   end
@@ -44,7 +44,7 @@ module Provisioner
     puts "Building slave install files"
     provisioner_file = ::File.join(Base.storage_directory, "install_slave.sh")
     ::File.open(provisioner_file, "w+") do |file|
-      file << Slave.install(cloud)
+      file << Provisioner::Slave.install(cloud)
     end
     
     slaves.each do |instance|
@@ -52,7 +52,7 @@ module Provisioner
       cloud.rsync_storage_files_to(instance) unless testing
 
       puts "Logging on to the slave (@ #{instance.ip}) and executing provisioning"
-      cmd = "cd #{Base.remote_storage_path}/#{Base.tmp_path} && chmod +x install_slave.sh && /bin/sh install_slave.sh && rm install_slave.sh && puppetd"
+      cmd = "cd #{Base.remote_storage_path}/#{Base.tmp_path} && chmod +x install_slave.sh && /bin/sh install_slave.sh && rm install_slave.sh && puppetrun --host #{instance.name}"
       cloud.run_command_on(cmd, instance) unless testing
     end
   end
@@ -62,7 +62,7 @@ module Provisioner
       puts "Building install file"
       provisioner_file = ::File.join(Base.storage_directory, "configure_slave.sh")
       ::File.open(provisioner_file, "w+") do |file|
-        file << Slave.configure(self)
+        file << Provisioner::Slave.configure(self)
       end
       
       slaves = cloud.list_of_running_instances.reject {|a| a.master? }
@@ -71,7 +71,7 @@ module Provisioner
         cloud.rsync_storage_files_to(instance) unless testing
 
         puts "Logging on to the slave (@ #{instance.ip}) and executing provisioning"
-        cmd = "cd #{Base.remote_storage_path}/#{Base.tmp_path} && chmod +x configure_slave.sh && /bin/sh configure_slave.sh && rm configure_slave.sh && puppetd"
+        cmd = "cd #{Base.remote_storage_path}/#{Base.tmp_path} && chmod +x configure_slave.sh && /bin/sh configure_slave.sh && rm configure_slave.sh"
         cloud.run_command_on(cmd, instance) unless testing
       end
     end
@@ -158,6 +158,10 @@ module Provisioner
     # Install from the class-level
     def self.install(cl)
       new(cl).install
+    end
+    
+    def self.configure(cl)
+      new(cl).configure
     end
     
     def template_directory

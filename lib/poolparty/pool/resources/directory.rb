@@ -9,6 +9,10 @@ module PoolParty
         :owner => "#{Base.user}"
       })
       
+      def class_type_name
+        "file"
+      end
+      
     end
     
   end

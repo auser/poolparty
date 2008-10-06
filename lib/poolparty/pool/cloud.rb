@@ -90,6 +90,8 @@ module PoolParty
           
           str << resources_string
           
+          # Refactor this into the resources method
+          # TODO
           services.each do |service|
             str << "# #{service.name}\n"
             str << "class #{service.name} {\n"
