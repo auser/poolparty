@@ -17,11 +17,20 @@ include Remote
 @clouds = o.cloudname ? [cloud(o.cloudname.downcase.to_sym)] : clouds
 
 @clouds.each do |name, cloud|
-  
+
   with_cloud(cloud, {:location => @location}) do
-    logger.info header("Listing cloud #{name}")
-    out = location == "remote" ? list_from_remote({:cache => true}).map{|a| a.to_s} : list_from_local.map{|a| a.to_s }    
-    logger.info out
+    logger.info header("Maintaining cloud #{name}")
+    if !minimum_number_of_instances_are_running?
+      logger.warn "#{list_of_running_instances.size} running instances of between #{minimum_instances} and #{maximum_instances}"
+      logger.warn "Launching new instance"
+      expand_cloud_if_necessary( !testing )
+    elsif !maximum_number_of_instances_are_not_running?
+      logger.warn "#{list_of_running_instances.size} running instances of between #{minimum_instances} and #{maximum_instances}"
+      logger.warn "Shutting down non-master instance"
+      contract_cloud_if_necessary( !testing )
+    else
+      logger.info "Cloud is maintained"
+    end    
   end  
-  
+
 end

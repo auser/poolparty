@@ -14,18 +14,15 @@ load_pool(o.spec || Binary.get_existing_spec_location)
 
 include Remote
 
-if o.poolname
-  @pool = pool(o.poolname.downcase.to_sym)
-else
-  puts "Pool name required. Please specify it with -n name"
-  exit(0)
-end
+@pools = o.poolname ? [pool(o.poolname.downcase.to_sym)] : pools
 
-with_pool(@pool, {:location => @location}) do
-  puts header("Listing pool #{name}")
-  clouds.each do |name, cloud|
-    puts subheader("Cloud: #{name}")
-    out = location == "remote" ? cloud.list_from_remote({:cache => true}).map{|a| a.to_s} : cloud.list_from_local.map{|a| a.to_s}
-    puts out
+@pools.each do |name, pool|
+  with_pool(pool, {:location => @location}) do
+    puts header("Listing pool #{name}")
+    clouds.each do |name, cloud|
+      puts subheader("Cloud: #{name}")
+      out = location == "remote" ? cloud.list_from_remote({:cache => true}).map{|a| a.to_s} : cloud.list_from_local.map{|a| a.to_s}
+      puts out
+    end
   end
 end

@@ -169,5 +169,21 @@ describe "Resource" do
         resource(:service).get_named("apache").first.options[:ensure].should == "present"
       end
     end
+    describe "get_resource" do
+      before(:each) do
+        @red = file(:name => "red")
+        @hot = file(:name => "hot")
+        @tamales = file(:name => "tamales")
+      end
+      it "should return a type of resource when looking for a resource that exists" do
+        get_resource(:file, "hot").class.should == PoolParty::Resources::File
+      end
+      it "should return the resource of the name requested" do
+        get_resource(:file, "hot").should == @hot
+      end
+      it "should return nil if the resource requested is not there" do
+        get_resource(:file, "smarties").should be_nil
+      end
+    end
   end
 end

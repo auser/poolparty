@@ -27,4 +27,7 @@ describe "PoolParty" do
       File.open(@path).read.should == "write this text"
     end
   end
+  it "should have a logger" do
+    PoolParty.logger.should_not be_nil
+  end
 end
