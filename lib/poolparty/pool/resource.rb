@@ -22,6 +22,10 @@ module PoolParty
         resource(type) << o
       end
     end
+    
+    def get_resource(type, name)
+      resource(type).select {|resource| resource.name == name }.first
+    end
             
     #:nodoc:
     def reset_resources!

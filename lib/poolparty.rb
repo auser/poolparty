@@ -5,6 +5,7 @@ require 'active_support'
 require 'open4'
 require "backcall"
 require "ftools"
+require "logging"
 
 # Use active supports auto load mechanism
 ActiveSupport::Dependencies.load_paths << File.dirname(__FILE__)
@@ -22,6 +23,17 @@ Kernel.load_p File.dirname(__FILE__) + "/poolparty/pool/**"
 
 module PoolParty
   include FileWriter
+  
+  def logger
+    @pool_logger ||= make_new_logger
+  end
+  
+  private
+  #:nodoc:#
+  def make_new_logger
+    FileUtils.mkdir_p Base.pool_logger_location unless ::File.directory?(Base.pool_logger_location)
+    Loggable.new
+  end
 end
 
 class Object

@@ -21,7 +21,8 @@ module PoolParty
       :template_path => "/var/lib/puppet/templates",
       :access_key => ENV["AWS_ACCESS_KEY_ID"] ? ENV["AWS_ACCESS_KEY_ID"] : nil,
       :secret_access_key => ENV["AWS_SECRET_ACCESS_ID"] ? ENV["AWS_SECRET_ACCESS_ID"] : nil,
-      :port => "8080"
+      :port => "80",
+      :pool_logger_location => File.join(Dir.pwd, "logs")
     })
         
     # Class methods
