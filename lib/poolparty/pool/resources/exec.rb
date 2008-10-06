@@ -13,7 +13,7 @@ module PoolParty
       end
       
       def key
-        name || command
+        :name || :command
       end
                   
     end

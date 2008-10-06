@@ -31,7 +31,6 @@ module PoolParty
     def resources_string(prev="")
       returning Array.new do |output|
         
-        output << variable_string_from_resources(resource(:variable))
         output << resources_string_from_resources(resources)
         
       end.join("\n")
@@ -147,7 +146,7 @@ module PoolParty
         []
       end
       def key
-        name
+        :name
       end
       def virtual_resource?
         false
@@ -182,7 +181,7 @@ module PoolParty
           
           unless virtual_resource?
             output << "#{prev}#{class_type_name} {"
-            output << "#{prev}\"#{self.key}\":"
+            output << "#{prev}\"#{self.send key}\":"
             output << opts.flush_out("#{prev*2}").join(",\n")
             output << "#{prev}}"            
           end

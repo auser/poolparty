@@ -7,11 +7,7 @@ module PoolParty
         :name => "$hostname",
         :ip => "$ipaddress"
       })
-      
-      def key
-        name
-      end
-      
+            
     end
     
   end

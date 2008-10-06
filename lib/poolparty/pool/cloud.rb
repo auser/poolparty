@@ -93,11 +93,10 @@ module PoolParty
           # Refactor this into the resources method
           # TODO
           services.each do |service|
-            str << "# #{service.name}\n"
-            str << "class #{service.name} {\n"
-            str << service.resources_string("\t\t")
-            str << "}\n"
-            str << "include #{service.name}"
+            @cp = classpackage_with_self(service.options.merge(:name => service.name), service)
+            str << "# #{service.name}"
+            str << @cp.to_string
+            str << "include #{service.name.sanitize}"
           end
           
           str << "# Custom functions"

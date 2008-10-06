@@ -2,6 +2,14 @@
   Hash extentions
 =end
 class Hash
+  alias :old_select :select
+
+  def select(&block)
+    Hash[*self.old_select(&block).inject([]){|res,(k,v)| res << k << v}]    
+  end
+  def extract!
+    Hash[*self.old_select { |k, v| yield(k, v) && self.delete(k) }.flatten]
+  end
   def safe_merge(other_hash)
     merge(other_hash.delete_if {|k,v| has_key?(k) })
   end
