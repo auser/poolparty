@@ -33,4 +33,5 @@ with_cloud(@cloud, {:testing => o.testing, :provision_class => @provision_class}
     Provisioner.provision_slaves(self, testing)
   end
   
+  clear_base_directory unless testing
 end

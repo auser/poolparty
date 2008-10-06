@@ -16,7 +16,8 @@ module Provisioner
         setup_basic_structure,
         setup_configs,        
         setup_fileserver,
-        setup_autosigning
+        setup_autosigning,
+        start_puppetmaster
       ] << configure_tasks
     end
     
@@ -24,7 +25,8 @@ module Provisioner
       [
         create_local_node,
         move_templates,
-        create_poolparty_manifest
+        create_poolparty_manifest,
+        restart_puppetd
       ]
     end
     
@@ -46,6 +48,7 @@ module Provisioner
         echo "import 'classes/*.pp'" >> /etc/puppet/manifests/site.pp
         mkdir -p /etc/puppet/manifests/nodes 
         mkdir -p /etc/puppet/manifests/classes
+        mv #{Base.remote_storage_path}/#{Base.tmp_path}/namespaceauth.conf /etc/puppet/namespaceauth.conf
       EOS
     end
     
@@ -97,6 +100,14 @@ node "#{ri.ip}" {}
       <<-EOS
         mv #{Base.remote_storage_path}/#{Base.tmp_path}/poolparty.pp /etc/puppet/manifests/classes
       EOS
+    end
+    
+    def start_puppetmaster
+      "puppetmasterd && puppetd --listen"
+    end
+    
+    def restart_puppetd # && puppetrun --host 127.0.0.1
+      # "puppetd --listen"
     end
   end
 end

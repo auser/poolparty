@@ -14,7 +14,7 @@ module PoolParty
         
         # Let's make sure that the puppet and puppetmaster are always running
         has_cron(:name => "restart-puppetmaster") do
-          command 'if [ -e /var/run/puppetmasterd.pid ]; then ps uw -p `cat /var/run/puppetmasterd.pid` | grep -q "ruby /usr/sbin/puppetmasterd" || (rm /var/run/puppetmasterd.pid; /usr/sbin/puppetmaster start); else /usr/sbin/puppetmaster start; fi'
+          command 'if [ -e /var/run/puppet/puppetmasterd.pid ]; then ps uw -p `cat /var/run/puppet/puppetmasterd.pid` | grep -q "ruby /usr/sbin/puppetmasterd" || (rm /var/run/puppet/puppetmasterd.pid; /usr/sbin/puppetmasterd start); else /usr/sbin/puppetmasterd start; fi'
           user "root"
           minute 0
         end

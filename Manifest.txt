@@ -179,17 +179,6 @@ test/test_helper.rb
 test/test_pool_spec_generator.rb
 test/test_poolparty.rb
 test_manifest.pp
-tmp/authkeys
-tmp/cib.xml
-tmp/fileserver.conf
-tmp/ha.cf
-tmp/happydayz
-tmp/heartbeat-instances.list
-tmp/install_master.sh
-tmp/install_slave.sh
-tmp/namespaceauth.conf
-tmp/poolparty.pp
-tmp/tc-instances.list
 website/index.html
 website/index.txt
 website/javascripts/rounded_corners_lite.inc.js

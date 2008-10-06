@@ -12,7 +12,7 @@ module Provisioner
       [
         install_puppet,        
         setup_puppet
-      ]
+      ] << configure_tasks
     end
     
     def configure_tasks
@@ -25,7 +25,7 @@ module Provisioner
     def install_puppet
       <<-EOE        
         #{installer_for(@os)} #{get_puppet_packages_for(@os)}
-        echo 'DAEMON_OPTS="-w 120 –server #{@master_ip}"' > /etc/default/puppet
+        echo 'DAEMON_OPTS="-w 120 –server puppet"' > /etc/default/puppet
       EOE
     end
     
