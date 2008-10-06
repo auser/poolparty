@@ -4,3 +4,5 @@ pkg/*
 pkg*
 .git/
 .gitignore
+logs/*
+logs/
