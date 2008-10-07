@@ -23,6 +23,9 @@ describe "Cloud" do
     it "should have set the using base on intantiation to ec2" do
       @cloud1.using_remoter?.should_not == nil
     end
+    it "should have custom_install_tasks which are overriden in the ec2 base" do
+      @cloud1.custom_install_tasks.should_not be_empty
+    end
   end
   it "should return the cloud if the cloud key is already in the clouds list" do
     @cld = cloud :pop do;end

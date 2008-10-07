@@ -21,8 +21,7 @@ module PoolParty
       # Overwrite this method
       def enable
       end
-      
-      
+            
       def method_missing(m, *args, &block)
         if block_given?
           (args[0].class == self.class) ? args[0].instance_eval(&block) : super

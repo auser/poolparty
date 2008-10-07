@@ -46,12 +46,40 @@ module PoolParty
     def get_instances_description
       @cached_descriptions ||= EC2ResponseObject.get_descriptions(ec2.describe_instances).sort_by {|a| a[:launching_time]}
     end
+    
+    # Help create a keypair for the cloud
+    # This is a helper to create the keypair and add them to the cloud for you
+    def create_keypair
+      return false unless keypair
+      FileUtils.mkdir_p ::File.dirname(new_keypair_path) unless ::File.directory?(::File.dirname(new_keypair_path))
+      Kernel.system "ec2-add-keypair #{keypair} > #{new_keypair_path} && chmod 600 #{new_keypair_path}"
+    end
     # EC2 connections
     def ec2
       @ec2 ||= EC2::Base.new( :access_key_id => (access_key || Base.access_key), 
                               :secret_access_key => (secret_access_key || Base.secret_access_key)
                             )
     end
+    
+    # Callback
+    def custom_install_tasks_for(o)
+      [
+        "# ec2 installation tasks",
+        "# Set hostname",
+        "HOSTNAME='#{o.name}'
+        IPV4=`curl http://169.254.169.254/latest/meta-data/public-ipv4`
+        echo '$IPV4 $HOSTNAME' >> /etc/hosts
+        hostname $HOSTNAME
+        echo $HOSTNAME > /etc/hostname"
+      ]
+    end
+    
+    def custom_configure_tasks_for(o)
+      [
+        "# ec2 configuration"
+      ]
+    end
+    
     def reset!
       @cached_descriptions = nil
     end

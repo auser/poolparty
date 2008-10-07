@@ -16,7 +16,7 @@ module PoolParty
           self.class.send :include, mod
           self.extend mod
                     
-          @remote_base = "#{t}".preserved_module_constant          
+          @remote_base = "#{t}".preserved_module_constant
         end
       else
         puts "Unknown remote base" 

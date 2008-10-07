@@ -11,9 +11,9 @@ module PoolParty
       $clouds ||= {}
     end
     
-    def with_cloud(cloud, opts={}, &block)
-      cloud.options.merge!(opts)
-      cloud.instance_eval &block if block
+    def with_cloud(cl, opts={}, &block)
+      cl.options.merge!(opts)
+      cl.instance_eval &block if block
     end
     
     class Cloud
@@ -23,6 +23,7 @@ module PoolParty
       include Configurable
       include PrettyPrinter
       include CloudResourcer
+      extend CloudResourcer
       # Net methods
       include PoolParty::Remote::RemoterBase
       include Remote
@@ -43,7 +44,7 @@ module PoolParty
         set_parent(parent) if parent
         self.instance_eval &block if block_given?
         # this can be overridden in the spec, but ec2 is the default
-        using :ec2
+        using :ec2        
       end
                         
       # Keypairs

@@ -2,7 +2,8 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 class ResourcerTestClass
   include CloudResourcer
-  include Configurable
+  extend CloudResourcer
+  include Configurable  
   
   # Stub keypair
   def keypair
@@ -110,7 +111,6 @@ describe "CloudResourcer" do
       it "should have the child in the parent's services" do
         @testparent.services.first.should == @tc
       end
-    end
-    
+    end    
   end
 end
