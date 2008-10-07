@@ -5,5 +5,6 @@ warntime 16 # issue a warning halfway through
 initdead 60 # Don't boot instances between 60 seconds of each other
 auto_failback on
 use_logd yes
+crm on
 
 node <%= nodenames.join(" ") %>
