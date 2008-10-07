@@ -90,6 +90,7 @@ module PoolParty
       def loaded
       end
       
+      # DSL Overriders
       # Overrides for syntax
       # Allows us to send require to require a resource
       def requires(str="")

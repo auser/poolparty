@@ -56,5 +56,14 @@ describe "RemoterBase" do
       end
     end
     
+    describe "adding custom install tasks (like set_hostname, for example)" do
+      before(:each) do
+        @master = Object.new
+        @master.stub!(:ip).and_return "192.68.0.1"
+        @tr.stub!(:master).and_return @master
+      end
+      it "should have the method custom_install_tasks" do;@tr.respond_to?(:custom_install_tasks).should == true;end
+      it "should have the method custom_configure_tasks" do;@tr.respond_to?(:custom_configure_tasks).should == true;end
+    end
   end
 end

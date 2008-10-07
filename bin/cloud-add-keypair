@@ -1,0 +1,23 @@
+#!/usr/bin/env ruby
+$:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
+require "poolparty"
+require "poolpartycl"
+o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
+  opts.on('-n name', '--name name', 'Listing for cloud name')    { |c| optioner.cloudname c }
+end
+load_pool(o.spec || Binary.get_existing_spec_location)
+
+@location = o.location ? o.location : "remote"
+
+include Remote
+
+@clouds = o.cloudname ? [cloud(o.cloudname.downcase.to_sym)] : clouds
+
+@clouds.each do |name, cloud|
+  
+  with_cloud(cloud, {:location => @location}) do
+    logger.info header("Creating keypair for #{name}")
+    create_keypair unless testing
+  end  
+  
+end

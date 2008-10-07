@@ -13,7 +13,7 @@ class Array
     self.join(" \n ").runnable(quiet)
   end
   def nice_runnable(quiet=true)
-    self.join(" \n ").nice_runnable(quiet)
+    reject{|a| a.nil? || a.empty?}.join(" \n ").chomp.nice_runnable(quiet)
   end
   def to_string(prev="")
     map {|a| a.to_string(prev)}.join("\n")

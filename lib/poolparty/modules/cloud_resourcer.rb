@@ -1,4 +1,5 @@
 require "ftools"
+require File.dirname(__FILE__) + "/../helpers/provisioner_base"
 
 module PoolParty
   module CloudResourcer
@@ -27,6 +28,10 @@ module PoolParty
         end
       end
       return nil
+    end
+    
+    def new_keypair_path
+      ::File.join( keypair_paths.first, "#{possible_keypair_basenames.first}#{keypair}" )
     end
     
     def possible_keypair_basenames

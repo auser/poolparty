@@ -73,11 +73,31 @@ module PoolParty
         @list = list_from_remote
         @list.reject {|a| a unless a.name =~ /master/ }.first if @list.class != String
       end
+      # Helpers
+      def create_keypair        
+      end
       # Reset the cache of descriptions
       def reset!
       end      
       def self.included(other)
         PoolParty.register_remote_base(self.class.to_s.downcase.to_sym)
+      end
+      
+      # Callback after loaded
+      def loaded_remoter_base        
+      end
+            
+      # Custom installation tasks
+      # Allow the remoter bases to attach their own tasks on the 
+      # installation process
+      def custom_install_tasks_for(a=nil)
+        []
+      end
+      # Custom configure tasks
+      # Allows the remoter bases to attach their own
+      # custom configuration tasks to the configuration process
+      def custom_configure_tasks_for(a=nil)
+        []
       end
       
     end

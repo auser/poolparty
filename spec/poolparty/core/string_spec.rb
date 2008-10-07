@@ -132,4 +132,18 @@ listen web_proxy 127.0.0.1:3000
       "xnot.org".sanitize.should == "xnotorg"
     end
   end
+  describe "nice_runnable" do
+    before(:each) do
+      @tasks = ["ls -l", "echo 'hello'"]
+    end
+    it "should turn an array into a string" do
+        @tasks.nice_runnable.class.should == String
+    end
+    it "should add \\n between the commands" do
+      @tasks.nice_runnable.should == "ls -l \n echo 'hello'"
+    end
+    it "should strip out excess lines" do
+      (@tasks << []).nice_runnable.should == "ls -l \n echo 'hello'"
+    end
+  end
 end

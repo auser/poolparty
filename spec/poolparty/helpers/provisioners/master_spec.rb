@@ -28,6 +28,9 @@ describe "Master provisioner" do
     it "should call create_local_node" do
       @master.should_receive(:create_local_node)      
     end
+    it "should call the custom_install_tasks" do
+      @master.should_receive(:custom_install_tasks)
+    end
     after do
       @master.install
     end

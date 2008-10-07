@@ -12,26 +12,24 @@ load_pool(o.spec || Binary.get_existing_spec_location)
 
 include Remote
 
-begin
-  @cloud = cloud(o.cloudname.downcase.to_sym)
-rescue
-  puts "Cloud name required. Please specify it with -n name"
-  exit(0)
-end
+@clouds = o.cloudname ? [cloud(o.cloudname.downcase.to_sym)] : clouds
 
-with_cloud(@cloud, {:testing => o.testing, :provision_class => @provision_class}) do
-  puts header("Provisioning cloud #{name}")
-  prepare_to_configuration
+@clouds.each do |cl|
   
-  puts "Building configuration file"
-  build_and_store_new_config_file
-  
-  if provision_class == "master" || provision_class == "all"
-    Provisioner.provision_master(self, testing)
-  end
-  if provision_class == "slave" || provision_class == "all"
-    Provisioner.provision_slaves(self, testing)
-  end
-  
-  clear_base_directory unless testing
+  with_cloud(cl, {:testing => o.testing, :location => @location, :provision_class => @provision_class}) do
+    logger.info header("Provisioning cloud #{name}")
+    prepare_to_configuration
+    
+    logger.info subheader("Building configuration file")
+    build_and_store_new_config_file
+    
+    if provision_class == "master" || provision_class == "all"
+      Provisioner.provision_master(self, testing)
+    end
+    if provision_class == "slave" || provision_class == "all"
+      Provisioner.provision_slaves(self, testing)
+    end
+
+    clear_base_directory unless testing
+  end    
 end

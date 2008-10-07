@@ -1,7 +1,15 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
 
-class TestClass
-  include Ec2  
+include Remote
+
+class TestClass  
+  include RemoterBase
+  include Ec2
+  include CloudResourcer
+  
+  def keypair
+    "fake_keypair"
+  end
   
   def ec2
     @ec2 ||= EC2::Base.new( :access_key_id => "not_an_access_key", :secret_access_key => "not_a_secret_access_key")
@@ -57,6 +65,25 @@ describe "ec2 remote base" do
     end
     it "should call the third node2" do
       @tr.describe_instances[2][:name].should == "node2"
+    end
+  end
+  describe "create_keypair" do
+    before(:each) do
+      Kernel.stub!(:system).with("ec2-add-keypair fake_keypair > #{Base.base_keypair_path}/id_rsa-fake_keypair && chmod 600 #{Base.base_keypair_path}/id_rsa-fake_keypair").and_return true
+    end
+    it "should send system to the Kernel" do
+      Kernel.should_receive(:system).with("ec2-add-keypair fake_keypair > #{Base.base_keypair_path}/id_rsa-fake_keypair && chmod 600 #{Base.base_keypair_path}/id_rsa-fake_keypair").and_return true
+      @tr.create_keypair
+    end
+    it "should try to create the directory when making a new keypair" do
+      FileUtils.should_receive(:mkdir_p).and_return true
+      ::File.stub!(:directory?).and_return false
+      @tr.create_keypair
+    end
+    it "should not create a keypair if the keypair is nil" do
+      Kernel.should_not_receive(:system)
+      @tr.stub!(:keypair).and_return nil
+      @tr.create_keypair
     end
   end
 end
