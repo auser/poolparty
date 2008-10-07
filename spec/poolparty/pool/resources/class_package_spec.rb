@@ -68,11 +68,11 @@ describe "from a collection of resources to another" do
     self.respond_to?(:classpackage_with_self).should == true
   end
   it "should transfer the resources to the class" do
-    @class2 = classpackage_with_self({:name => "new_class"})
+    @class2 = classpackage_with_self(self)
     @class2.resources.should_not be_empty
   end
   it "should leave zero resources on the parent" do
-    @class2 = classpackage_with_self({:name => "new_class"})
+    @class2 = classpackage_with_self(self)
     resources.should be_empty
   end
 end

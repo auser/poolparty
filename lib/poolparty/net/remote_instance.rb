@@ -5,21 +5,12 @@ module PoolParty
     
     class RemoteInstance
       include Remote
-      
-      attr_reader :ip, :name
-      
-      def initialize(opts)
-        case opts.class.to_s.downcase
-        when "hash"
-          @ip = opts[:ip]
-          @name = opts[:name]
-          @load = opts[:load]
-          @responding = opts[:responding]
-          @status = opts[:status]
-        when "string"
-          @name, @ip, @status, @responding, @load = opts.split(" ")
-        end
-        
+      include Configurable
+      include CloudResourcer
+            
+      def initialize(opts, parent=self)
+        set_parent(parent) if parent
+        set_vars_from_options(opts) unless opts.empty?        
         on_init
       end
       
@@ -29,52 +20,47 @@ module PoolParty
       
       # Is this remote instance the master?
       def master?
-        @name == "master"
+        name == "master"
       end
       
       # The remote instances is only valid if there is an ip and a name
       def valid?
-        !(@ip.nil? || @name.nil?)
+        !(ip.nil? || name.nil?)
       end
       
       # Determine if the RemoteInstance is responding
       def responding?
-        @is_responding ||= @responding
+        !responding.nil?
       end
       
       # This is how we get the current load of the instance
       # The approach of this may change entirely, but the usage of
       # it will always be the same
       def load
-        @current_load ||= @load
+        current_load ||= 0.0
       end
-      
-      # Get the status of the instance
-      def status
-        @status ||= "running"
-      end
-      
+            
       # Is this instance running?
       def running?
-        status =~ /running/
+        !(status =~ /running/).nil?
       end
       # Is this instance pending?
       def pending?
-        status =~ /pending/
+        !(status =~ /pending/).nil?
       end
       # Is this instance terminating?
       def terminating?
-        status =~ /shutting/
+        !(status =~ /shutting/).nil?
       end
       # Has this instance been terminated?
       def terminated?
-        status =~ /terminated/
+        !(status =~ /terminated/).nil?
       end
       
       # Printing. This is how we extract the instances into the listing on the 
       # local side into the local listing file
       def to_s
-        "#{@name} #{@ip} #{responding?} #{load}"
+        "#{name} #{ip}"
       end
     end
     

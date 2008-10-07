@@ -3,7 +3,7 @@
 =end
 module Kernel
   # Nice wait instead of sleep
-  def wait(time=10)
+  def wait(time=5)
     sleep time.is_a?(String) ? eval(time) : time
   end
   def as(klass_or_obj, &block)

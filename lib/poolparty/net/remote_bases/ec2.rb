@@ -27,7 +27,7 @@ module PoolParty
     end
     # Describe an instance's status
     def describe_instance(id=nil)
-      get_instances_description.select {|a| a.instance_id == id}[0] rescue nil
+      describe_instances.select {|a| a[:instance_id] == id}[0] rescue nil
     end
     def describe_instances
       unless @describe_instances && !@describe_instances.empty?
@@ -66,11 +66,10 @@ module PoolParty
       [
         "# ec2 installation tasks",
         "# Set hostname",
-        "HOSTNAME='#{o.name}'
-        IPV4=`curl http://169.254.169.254/latest/meta-data/public-ipv4`
-        echo '$IPV4 $HOSTNAME' >> /etc/hosts
-        hostname $HOSTNAME
-        echo $HOSTNAME > /etc/hostname"
+        # "if [ -z $(grep -v '#' /etc/hosts | grep '#{o.name}') ]; then echo \"$(curl http://169.254.169.254/latest/meta-data/public-ipv4) #{o.name}\" >> /etc/hosts; fi",
+        "if [ -z \"$(grep -v '#' /etc/hosts | grep '#{o.name}')\" ]; then echo '127.0.0.1 #{o.name}' >> /etc/hosts; fi",
+        "hostname #{o.name}",
+        "echo #{o.name} > /etc/hostname"
       ]
     end
     

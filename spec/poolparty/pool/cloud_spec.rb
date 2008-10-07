@@ -23,9 +23,6 @@ describe "Cloud" do
     it "should have set the using base on intantiation to ec2" do
       @cloud1.using_remoter?.should_not == nil
     end
-    it "should have custom_install_tasks which are overriden in the ec2 base" do
-      @cloud1.custom_install_tasks.should_not be_empty
-    end
   end
   it "should return the cloud if the cloud key is already in the clouds list" do
     @cld = cloud :pop do;end
@@ -56,6 +53,7 @@ describe "Cloud" do
       reset!
       @cloud = Cloud.new(:test, @pool) do
         # Inside cloud block
+        keypair "fake_keypair"
       end
     end
     
@@ -243,12 +241,10 @@ describe "Cloud" do
             @sample_instances_list = [{:ip => "192.168.0.1", :name => "master"}, {:ip => "192.168.0.2", :name => "node1"}]
             @ris = @sample_instances_list.map {|h| PoolParty::Remote::RemoteInstance.new(h) }            
             
-            reset_all!
-            @resources = nil
             @manifest = @cloud.build_manifest
           end
           it "should return a string when calling build_manifest" do
-            @manifest.class.should == String          
+            @manifest.class.should == String
           end
           it "should have a comment of # file in the manifest as described by the has_file" do
             @manifest.should =~ /file \{/
@@ -273,7 +269,7 @@ describe "Cloud" do
     
     describe "instances" do
       before(:each) do
-        @cloud3 = cloud :pop do;end
+        @cloud3 = cloud :pop do;keypair "fake_keypair";end
         stub_list_from_remote_for(@cloud3)
       end
       it "should respond to the method master" do

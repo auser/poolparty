@@ -1,5 +1,4 @@
 require "ftools"
-require File.dirname(__FILE__) + "/../helpers/provisioner_base"
 
 module PoolParty
   module CloudResourcer

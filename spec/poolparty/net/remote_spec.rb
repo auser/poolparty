@@ -12,11 +12,16 @@ module Hype
 end
 class TestClass
   include Remote
+  
+  def keypair
+    "fake_keypair"
+  end
 end
 
 describe "Remote" do
   before(:each) do
     @tc = TestClass.new
+    
   end
   it "should have the method 'using'" do
     @tc.respond_to?(:using).should == true
@@ -128,9 +133,9 @@ describe "Remote" do
         @tc.can_start_a_new_instance?.should == true
       end
       it "should say that we cannot start a new instance because we are at the maximum instances" do
-        add_stub_instance_to(@tc, 5)
-        add_stub_instance_to(@tc, 6)
         add_stub_instance_to(@tc, 7)
+        add_stub_instance_to(@tc, 8)
+        add_stub_instance_to(@tc, 9)
         @tc.can_start_a_new_instance?.should == false
       end
     end
@@ -139,20 +144,20 @@ describe "Remote" do
         @tc.maximum_number_of_instances_are_not_running?.should == true
       end
       it "should be false because the maximum are running" do
-        add_stub_instance_to(@tc, 5)
-        add_stub_instance_to(@tc, 6)
         add_stub_instance_to(@tc, 7)
+        add_stub_instance_to(@tc, 8)
+        add_stub_instance_to(@tc, 9)
         @tc.maximum_number_of_instances_are_not_running?.should == false
       end
     end
     describe "request_launch_one_instance_at_a_time" do
       before(:each) do
-        Kernel.stub!(:sleep).and_return true
-        remove_stub_instance_from(@tc, 4)
-        remove_stub_instance_from(@tc, 6)
+        @tc.stub!(:wait).and_return "true"
+        remove_stub_instance_from(@tc, 3)
+        remove_stub_instance_from(@tc, 5)
         @tc.stub!(:launch_new_instance!).and_return {}
       end
-      it "should call reset! once" do        
+      it "should call reset! once" do
         @tc.should_receive(:reset!).once
         @tc.request_launch_one_instance_at_a_time
       end
@@ -174,6 +179,9 @@ describe "Remote" do
       it "should reject the master instance from the list of instances (we should never shut down the master unless shutting down the cloud)" do
         @master = @tc.list_of_running_instances.select {|a| a.master? }.first
         @tc.should_not_receive(:terminate_instance!).with(@master).and_return true
+        @tc.request_termination_of_non_master_instance
+      end
+      it "should call terminate on an instance" do
         @tc.should_receive(:terminate_instance!).once
         @tc.request_termination_of_non_master_instance
       end
@@ -223,24 +231,24 @@ describe "Remote" do
     describe "rsync_storage_files_to" do
       before(:each) do
         Kernel.stub!(:system).and_return true
-        @tc.extend CloudResourcer
-        @tc.stub!(:keypair).and_return "funky"
+        @tc.extend CloudResourcer        
       end
-      it "should raise an exception if it cannot find the keypair" do
-        lambda {
-          @tc.rsync_storage_files_to(@tc.master)
-        }.should raise_error
-      end
+      it "should raise an exception if it cannot find the keypair"
       it "should call exec on the kernel" do
+        @tc.stub!(:keypair).and_return "funky"
         ::File.stub!(:exists?).with("#{File.expand_path(Base.base_keypair_path)}/id_rsa-funky").and_return true
         lambda {
           @tc.rsync_storage_files_to(@tc.master)
         }.should_not raise_error
       end
       describe "run_command_on" do
+        before(:each) do
+          @tc.stub!(:keypair).and_return "fake_keypair"
+          @tc.stub!(:keypair_path).and_return "~/.ec2/fake_keypair"
+        end
         it "should call system on the kernel" do
           ::File.stub!(:exists?).with("#{File.expand_path(Base.base_keypair_path)}/id_rsa-funky").and_return true
-          Kernel.should_receive(:system).with("#{@tc.ssh_string} 127.0.0.1 'ls'").and_return true
+          Kernel.should_receive(:system).with("#{@tc.ssh_string} 192.168.0.1 'ls'").and_return true
           @tc.run_command_on("ls", @tc.master)
         end
       end      

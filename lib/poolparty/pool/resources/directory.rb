@@ -13,6 +13,10 @@ module PoolParty
         "file"
       end
       
+      def present
+        'directory'
+      end
+      
     end
     
   end

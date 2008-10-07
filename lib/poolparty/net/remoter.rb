@@ -48,7 +48,7 @@ module PoolParty
       # and then return the array of instances
       def list_from_remote(options={})
         out_array = get_remote_nodes
-        write_to_file(local_instances_list_file_locations.first, out_array.map{|a| a.to_s }.join("\n")) if options[:cache]
+        write_to_file( local_instances_list_file_locations.first, out_array.map{|a| a.to_s }.join("\n")) if options[:cache]
         out_array
       end
       # Get the names of the nodes. Mainly used for puppet templating
@@ -99,8 +99,8 @@ module PoolParty
       end
       # Let's terminate an instance that is not the master instance
       def request_termination_of_non_master_instance
-        inst = list_of_running_instances.reject {|a| a.master? }.last
-        terminate_instance!(inst.name)
+        inst = nonmaster_nonterminated_instances.last
+        terminate_instance!(inst.name) if inst
       end
       # Can we start a new instance?
       def can_start_a_new_instance?
@@ -114,11 +114,10 @@ module PoolParty
       #  to be zero before actually launching. This ensures that we only
       #  launch one instance at a time
       def request_launch_one_instance_at_a_time
-        reset!
+        reset!        
         if list_of_pending_instances.size.zero?
           launch_new_instance!
         else
-          puts "list_of_pending_instances"
           wait "5.seconds"
           request_launch_one_instance_at_a_time
         end
@@ -159,18 +158,14 @@ module PoolParty
       end
       
       # Rsync command to the instance
-      def rsync_storage_files_to(instance=nil)
-        if instance && instance.respond_to?(:ip) && !instance.ip.nil?
-          hide_output do
-            Kernel.system "#{rsync_storage_files_to_command(instance)}"
-          end          
+      def rsync_storage_files_to(instance=nil)        
+        hide_output do
+          Kernel.system "#{rsync_storage_files_to_command(instance)}" if instance
         end
       end
       
-      def run_command_on(cmd, instance=nil)
-        if instance && instance.respond_to?(:ip) && !instance.ip.nil?
-          Kernel.system "#{run_command_on_command(cmd, instance)}"
-        end
+      def run_command_on(cmd, instance=nil)        
+        Kernel.system "#{run_command_on_command(cmd, instance)}" if instance
       end
 
       def self.included(receiver)
