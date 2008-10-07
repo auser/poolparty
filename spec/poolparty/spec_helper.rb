@@ -46,8 +46,8 @@ end
 
 def stub_list_from_local_for(o)
   @list =<<-EOS
-  master 192.168.0.1
-  node1 192.168.0.2
+  master 127.0.0.1
+  node1 127.0.0.2
   EOS
   @file = "filename"
   @file.stub!(:read).and_return @list
@@ -56,13 +56,16 @@ def stub_list_from_local_for(o)
   
   @ris = @list.split(/\n/).map {|line| PoolParty::Remote::RemoteInstance.new(line) }
 end
-def stub_list_from_remote_for(o)
-  @sample_instances_list = [{:ip => "192.168.0.1", :name => "master"}, {:ip => "192.168.0.2", :name => "node1"}]
-  @ris = @sample_instances_list.map {|h| PoolParty::Remote::RemoteInstance.new(h) }
-  o.stub!(:list_from_remote).and_return @ris
-  o.stub!(:remote_instances_list).once.and_return @ris
-  o.stub!(:master).and_return @ris[0]
+def stub_remoter_for(o)
   o.stub!(:ec2).and_return EC2::Base.new( :access_key_id => "not a key",  :secret_access_key => "even more not a key")
+end
+def stub_list_from_remote_for(o)
+  stub_remoter_for(o)
+  @sample_instances_list = [{:ip => "127.0.0.1", :name => "master"}, {:ip => "127.0.0.2", :name => "node1"}]
+  @ris = @sample_instances_list.map {|h| PoolParty::Remote::RemoteInstance.new(h) }  
+  o.stub!(:list_from_remote).and_return ris
+  o.stub!(:remote_instances_list).once.and_return ris
+  o.stub!(:master).and_return @ris[0]  
   stub_list_of_instances_for(o)
 end
 

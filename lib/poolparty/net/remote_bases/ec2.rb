@@ -8,13 +8,13 @@ module PoolParty
   module Ec2
     def launch_new_instance!
       instance = ec2.run_instances(
-        :image_id => ami || Base.ami,
+        :image_id => self.respond_to?(:ami) ? ami : Base.ami,
         :user_data => "",
         :minCount => 1,
         :maxCount => 1,
-        :key_name => "#{keypair || Base.keypair}",
+        :key_name => "#{self.respond_to?(:keypair) ? keypair : Base.keypair}",
         :availability_zone => nil,
-        :size => "#{ size || Base.size}")
+        :size => "#{self.respond_to?(:size) ? size : Base.size}")
       begin
         item = instance#.instancesSet.item
         EC2ResponseObject.get_hash_from_response(item)
@@ -31,9 +31,9 @@ module PoolParty
     end
     def describe_instances
       unless @describe_instances && !@describe_instances.empty?
-        @describe_instances = get_instances_description.each do |h| 
+        @describe_instances = get_instances_description.each_with_index do |h,i|
           h.merge!({
-            :name => h[:instance_id],
+            :name => "node#{i}",
             :hostname => h[:ip],
             :ip => h[:ip].convert_from_ec2_to_ip
           })
@@ -41,14 +41,6 @@ module PoolParty
         @describe_instances.first[:name] = "master" unless @describe_instances.empty?
       end
       @describe_instances
-    end
-    # Override the master method
-    def master
-      # EC2 doesn't give us the "name" of the instance, but fortunately
-      # it returns the results in an ordered fashion, so we can safely assume the 
-      # first instance is the master
-      # PoolParty::Remote::RemoteInstance.new( list_of_instances.first )
-      remote_instances_list.select {|a| a.master? }.first
     end
     # Get the s3 description for the response in a hash format
     def get_instances_description

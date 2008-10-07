@@ -240,7 +240,7 @@ describe "Remote" do
       describe "run_command_on" do
         it "should call system on the kernel" do
           ::File.stub!(:exists?).with("#{File.expand_path(Base.base_keypair_path)}/id_rsa-funky").and_return true
-          Kernel.should_receive(:system).with("#{@tc.ssh_string} 192.168.0.1 'ls'").and_return true
+          Kernel.should_receive(:system).with("#{@tc.ssh_string} 127.0.0.1 'ls'").and_return true
           @tc.run_command_on("ls", @tc.master)
         end
       end      
