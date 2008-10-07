@@ -46,8 +46,8 @@ end
 
 def stub_list_from_local_for(o)
   @list =<<-EOS
-  master 127.0.0.1
-  node1 127.0.0.2
+  master 192.168.0.1
+  node1 192.168.0.2
   EOS
   @file = "filename"
   @file.stub!(:read).and_return @list
@@ -63,21 +63,24 @@ def stub_list_from_remote_for(o)
   stub_remoter_for(o)
   @sample_instances_list = [{:ip => "127.0.0.1", :name => "master"}, {:ip => "127.0.0.2", :name => "node1"}]
   @ris = @sample_instances_list.map {|h| PoolParty::Remote::RemoteInstance.new(h) }  
-  o.stub!(:list_from_remote).and_return ris
-  o.stub!(:remote_instances_list).once.and_return ris
-  o.stub!(:master).and_return @ris[0]  
+  # o.stub!(:list_from_remote).and_return ris
+  # o.stub!(:remote_instances_list).once.and_return ris
+  # o.stub!(:master).and_return @ris[0]
   stub_list_of_instances_for(o)
 end
 
 def stub_list_of_instances_for(o)  
-  o.stub!(:remote_instances_list).once.and_return ris
+  # o.stub!(:remote_instances_list).once.and_return ris
+  o.stub!(:keypair).and_return "fake_keypair"
   o.stub!(:describe_instances).and_return response_list_of_instances
 end
 
 def response_list_of_instances(arr=[])
   unless @response_list_of_instances
-    @a1 = stub_instance(1); @a2 = stub_instance(2); @a3 = stub_instance(3, "terminated"); @a4 = stub_instance(4, "pending")
-    @b1 = stub_instance(5, "shutting down", "blist", "b"); @c1 = stub_instance(6, "pending", "clist", "c")
+    @a1 = stub_instance(1); 
+    @a1[:name] = "master"
+    @a2 = stub_instance(1); @a3 = stub_instance(2, "terminated"); @a4 = stub_instance(3, "pending")
+    @b1 = stub_instance(4, "shutting down", "blist"); @c1 = stub_instance(5, "pending", "clist")
     @response_list_of_instances = [@a1, @a2, @a3, @a4, @b1, @c1]
   end
   @response_list_of_instances
@@ -97,11 +100,11 @@ def ris
 end
 def remove_stub_instance_from(o, num)
   reset_response!
-  response_list_of_instances.reject! {|r| r if r[:ip] =~ /127\.0\.0\.#{num}/ }  
-  o.stub!(:remote_instances_list).once.and_return ris
+  response_list_of_instances.reject! {|r| r if r[:name] == "node#{num}" }  
+  # o.stub!(:remote_instances_list).once.and_return ris
 end
-def stub_instance(num=1, status="running", keypair="alist", cat="a")
-  {:name => "i-#{cat}#{num}", :ip => "127.0.0.#{num}", :status => "#{status}", :launching_time => num.minutes.ago, :keypair => "#{keypair}"}
+def stub_instance(num=1, status="running", keypair="fake_keypair")
+  {:name => "node#{num}", :ip => "192.168.0.#{num}", :status => "#{status}", :launching_time => num.minutes.ago, :keypair => "#{keypair}"}
 end
 def drop_pending_instances_for(o)
   puts "hi"

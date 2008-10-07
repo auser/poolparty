@@ -12,8 +12,16 @@ module PoolParty
       end
       
       def configure(h={})
+        options(h).merge!(h)
+      end
+      
+      def reconfigure(h={})
         @options = nil
         options(h)
+      end
+      
+      def set_vars_from_options(opts={})
+        opts.each {|k,v| self.send k.to_sym, v } unless opts.empty?
       end
     end
     

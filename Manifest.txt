@@ -129,6 +129,7 @@ spec/poolparty/helpers/provisioner_base_spec.rb
 spec/poolparty/helpers/provisioners/master_spec.rb
 spec/poolparty/helpers/provisioners/slave_spec.rb
 spec/poolparty/modules/cloud_resourcer_spec.rb
+spec/poolparty/modules/configurable_spec.rb
 spec/poolparty/modules/definable_resource.rb
 spec/poolparty/modules/file_writer_spec.rb
 spec/poolparty/modules/s3_string_spec.rb
@@ -194,6 +195,7 @@ tmp/install_slave.sh
 tmp/namespaceauth.conf
 tmp/poolparty.pp
 tmp/tc-instances.list
+tmp/test-instances.list
 website/index.html
 website/index.txt
 website/javascripts/rounded_corners_lite.inc.js

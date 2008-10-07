@@ -1,8 +1,9 @@
 module PoolParty    
   module Resources
     
-    def classpackage_with_self(options={}, parent=self, &block)
-      @cp = PoolParty::Resources::Classpackage.new(options, parent, &block)
+    # Wrap all the resources into a class package from 
+    def classpackage_with_self(parent=self, &block)
+      @cp = PoolParty::Resources::Classpackage.new(parent.options, parent, &block)
       @cp.instance_eval {@resources = parent.resources}
       parent.instance_eval {@resources = nil}
       @cp
@@ -13,13 +14,27 @@ module PoolParty
       default_options({
         :name => nil
       })
-                  
+      
+      def initialize(opts={}, parent=self, &block)
+        # Take the options of the parents        
+        set_vars_from_options(opts) unless opts.empty?
+        self.instance_eval &block if block
+        set_parent(parent) if parent
+        
+        loaded
+      end
+                        
       def to_string
         returning String.new do |output|
-          output << "\nclass #{(self.send key).sanitize} {\n"
+          output << "# #{@parent.name.sanitize}"
+          output << "\nclass #{@parent.name.sanitize} {\n"
           output << resources_string_from_resources(resources)
           output << "\n}\n"
         end
+      end
+      
+      def include_string
+        "include #{@parent.name.sanitize}"
       end
 
     end

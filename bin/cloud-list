@@ -19,9 +19,9 @@ include Remote
 @clouds.each do |name, cloud|
   
   with_cloud(cloud, {:location => @location}) do
-    logger.info header("Listing cloud #{name}")
+    puts header("Listing cloud #{name}")
     out = location == "remote" ? list_from_remote({:cache => true}).map{|a| a.to_s} : list_from_local.map{|a| a.to_s }    
-    logger.info out
+    puts out.join("\n")
   end  
   
 end

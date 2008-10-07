@@ -5,105 +5,92 @@
 =end
 module PoolParty
   module Provisioner
+    
+    # TODO: CLEAN THESE METHODS UP
 
     def self.provision_master(cloud, testing=false)
-      with_cloud(cloud, :testing => testing) do
-        puts "Building install file"
-        provisioner_file = ::File.join(Base.storage_directory, "install_master.sh")
-                
-        ::File.open(provisioner_file, "w+") do |file|
-          file << Provisioner::Master.install(self)
-        end
-
-        puts "Syncing local configuration files with master"
-        rsync_storage_files_to(master) unless testing
-
-        puts "Logging on to the master and executing provisioning"
-        cmd = "cd #{Base.remote_storage_path}/#{Base.tmp_path} && chmod +x install_master.sh && /bin/sh install_master.sh && rm install_master.sh"
-        run_command_on(cmd, master) unless testing
-      end
+      Provisioner::Master.new(cloud).process_install!(testing)
     end
 
     def self.configure_master(cloud, testing=false)
-      with_cloud(cloud) do
-        puts "Building install file"
-        provisioner_file = ::File.join(Base.storage_directory, "configure_master.sh")
-        ::File.open(provisioner_file, "w+") do |file|
-          file << Provisioner::Master.configure(self)
-        end
-
-        puts "Syncing local configuration files with master"
-        rsync_storage_files_to(master) unless testing
-
-        puts "Logging on to the master and executing provisioning"
-        cmd = "cd #{Base.remote_storage_path}/#{Base.tmp_path} && chmod +x configure_master.sh && /bin/sh configure_master.sh && rm configure_master.sh && puppetrun --host #{master.name} --host #{list_of_running_instances.collect {|a| a.name }.join(" --host ")}"
-        run_command_on(cmd, master) unless testing
-      end
+      Provisioner::Master.new(cloud).process_configure!(testing)
     end
 
     def self.provision_slaves(cloud, testing=false)
-      slaves = cloud.list_of_running_instances.reject {|a| a.master? }
-      puts "Building slave install files"
-      provisioner_file = ::File.join(Base.storage_directory, "install_slave.sh")
-      ::File.open(provisioner_file, "w+") do |file|
-        file << Provisioner::Slave.install(cloud)
-      end
-
-      slaves.each do |instance|
-        puts "Syncing local configuration files with master"
-        cloud.rsync_storage_files_to(instance) unless testing
-
-        puts "Logging on to the slave (@ #{instance.ip}) and executing provisioning"
-        cmd = "cd #{Base.remote_storage_path}/#{Base.tmp_path} && chmod +x install_slave.sh && /bin/sh install_slave.sh && rm install_slave.sh && puppetrun --host #{instance.name}"
-        cloud.run_command_on(cmd, instance) unless testing
+      cloud.nonmaster_nonterminated_instances.each do |sl|
+        Provisioner::Slave.new(sl, cloud).process_install!(testing)
       end
     end
 
     def self.configure_slaves(cloud, testing=false)
-      with_cloud(cloud) do
-        puts "Building install file"
-        provisioner_file = ::File.join(Base.storage_directory, "configure_slave.sh")
-        ::File.open(provisioner_file, "w+") do |file|
-          file << Provisioner::Slave.configure(self)
-        end
-
-        slaves = cloud.list_of_running_instances.reject {|a| a.master? }
-        slaves.each do |instance|
-          puts "Syncing local configuration files with slave"
-          cloud.rsync_storage_files_to(instance) unless testing
-
-          puts "Logging on to the slave (@ #{instance.ip}) and executing provisioning"
-          cmd = "cd #{Base.remote_storage_path}/#{Base.tmp_path} && chmod +x configure_slave.sh && /bin/sh configure_slave.sh && rm configure_slave.sh"
-          cloud.run_command_on(cmd, instance) unless testing
-        end
+      cloud.nonmaster_nonterminated_instances.each do |sl|
+        Provisioner::Slave.new(sl, cloud).process_configure!(testing)
       end
     end
     
     class ProvisionerBase
       
-      def initialize(cloud=self, os=:ubuntu)
+      include Configurable
+      include CloudResourcer
+      
+      def initialize(instance,cloud=self, os=:ubuntu)
+        @instance = instance
         @cloud = cloud
+        
+        options(cloud.options) if cloud && cloud.respond_to?(:options)
+        set_vars_from_options(instance.options) unless instance.options.empty?                
+        options(instance.options) if instance.respond_to?(:options)
+        
         @os = os.to_s.downcase.to_sym
-        set_ip
         loaded
       end
       # Callback after initialized
       def loaded      
       end
-      # Set the master ip from the cloud if the cloud is 
-      # defined, if the master is on the cloud and
-      # if the ip is not already set on the provisioner
-      def set_ip      
-        @ip = @cloud.master.ip if @cloud && @cloud.master && !@ip
-      end
       # This is the actual runner for the installation    
       def install
-        set_ip unless @ip
         valid? ? install_string : error
       end
+      def write_install_file
+        error unless valid?
+        provisioner_file = ::File.join(Base.storage_directory, "install_#{name}.sh")
+        ::File.open(provisioner_file, "w+") {|f| f << install }
+      end
+      def process_install!(testing=false)
+        error unless valid?
+        write_install_file
+        
+        unless testing
+          puts "Logging on to #{@instance.ip}"
+          @cloud.rsync_storage_files_to(@instance)
+          
+          cmd = "cd #{Base.remote_storage_path}/#{Base.tmp_path} && 
+            chmod +x install_#{name}.sh && /bin/sh install_#{name}.sh && rm install_#{name}.sh"
+          hide_output do
+            @cloud.run_command_on(cmd, @instance)
+          end          
+        end
+        
+      end
       def configure
-        set_ip unless @ip
         valid? ? configure_string : error
+      end
+      def write_configure_file
+        error unless valid?
+        provisioner_file = ::File.join(Base.storage_directory, "configure_#{name}.sh")
+        ::File.open(provisioner_file, "w+") {|f| f << configure }
+      end
+      def process_configure!(testing=false)
+        error unless valid?
+        write_configure_file
+        
+        unless testing
+          @cloud.rsync_storage_files_to(@instance) unless testing
+
+          cmd = "cd #{Base.remote_storage_path}/#{Base.tmp_path} && 
+            chmod +x configure_#{name}.sh && /bin/sh configure_#{name}.sh && rm configure_#{name}.sh"
+          @cloud.run_command_on(cmd, @instance) unless testing
+        end
       end
       def valid?
         true
@@ -147,13 +134,13 @@ module PoolParty
       # Allow the remoter bases to attach their own tasks on the 
       # installation process
       def custom_install_tasks
-        @cloud.custom_install_tasks_for(self) || []
+        @cloud.custom_install_tasks_for(@instance) || []
       end
       # Custom configure tasks
       # Allows the remoter bases to attach their own
       # custom configuration tasks to the configuration process
       def custom_configure_tasks
-        @cloud.custom_configure_tasks_for(self) || []
+        @cloud.custom_configure_tasks_for(@instance) || []
       end
       
       # Get the packages associated with each os
@@ -178,12 +165,12 @@ module PoolParty
         self.class.installers[name.to_sym]
       end
       # Install from the class-level
-      def self.install(cl=self)
-        new(cl).install
+      def self.install(instance, cl=self)
+        new(instance, cl).install
       end
 
-      def self.configure(cl=self)
-        new(cl).configure
+      def self.configure(instance, cl=self)
+        new(instance, cl).configure
       end
 
       def template_directory

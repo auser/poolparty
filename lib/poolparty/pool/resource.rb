@@ -43,7 +43,7 @@ module PoolParty
     end
     
     class Resource
-      include MethodMissingSugar
+      include CloudResourcer
       include Configurable
       
       extend PoolParty::Resources
@@ -75,15 +75,18 @@ module PoolParty
         available_resources.map {|a| a.my_methods }
       end
       
+      # This is set in order of descending precedence
+      # The options are overwritten from the bottom up
+      # and the resource will use those as the values
+      # Then it takes the value of the block and sets whatever is sent there as 
+      # the options
+      # Finally, it uses the parent's options as the lowest priority
       def initialize(opts={}, parent=self, &block)
-        # Take the options of the parents
-        configure(parent.options) if !parent.nil? && parent.respond_to?(:options)
+        # Take the options of the parents        
+        set_parent(parent) if parent
         set_vars_from_options(opts) unless opts.empty?
         self.instance_eval &block if block
         loaded
-      end
-      def set_vars_from_options(opts={})
-        opts.each {|k,v| self.send k.to_sym, v } unless opts.empty?
       end
       
       # Stub, so you can create virtual resources
@@ -95,14 +98,27 @@ module PoolParty
       # Allows us to send require to require a resource
       def requires(str="")
         options.merge!(:require => str)
+      end 
+      def ensures(str="running")
+        str == "absent" ? is_absent : is_present
       end
       # Allows us to send an ensure to ensure the presence of a resource
-      def ensures(str="running")
-        options.merge!(:ensure => str)
+      def is_present(*args)
+        options.merge!(:ensure => present)
+      end
+      # Ensures that what we are sending is absent
+      def is_absent(*args)
+        options.merge!(:ensure => absent)
       end
       # Alias for unless
       def ifnot(str="")
         options.merge!(:unless => str)
+      end
+      def present
+        "present"
+      end
+      def absent
+        "absent"
       end
       
       # Give us a template to work with on the resource
@@ -149,7 +165,7 @@ module PoolParty
         []
       end
       def key
-        :name
+        name
       end
       def virtual_resource?
         false
@@ -177,14 +193,14 @@ module PoolParty
         returning Array.new do |output|
           
           if resources && !resources.empty?
-            @cp = classpackage_with_self({:name => name})
+            @cp = classpackage_with_self(self)
             output << @cp.to_string
             output << "include #{@cp.name.sanitize}"
           end
           
           unless virtual_resource?
             output << "#{prev}#{class_type_name} {"
-            output << "#{prev}\"#{self.send key}\":"
+            output << "#{prev}\"#{self.key}\":"
             output << opts.flush_out("#{prev*2}").join(",\n")
             output << "#{prev}}"            
           end
@@ -206,10 +222,10 @@ module PoolParty
     def self.add_has_and_does_not_have_methods_for(type=:file)
       module_eval <<-EOE
         def has_#{type}(opts={}, &block)
-          #{type}(#{type == :exec ? "opts" : "{:ensure => 'present'}.merge(opts)"}, &block)
+          #{type}(#{type == :exec ? "opts" : "{:is_present => ''}.merge(opts)"}, &block)
         end
         def does_not_have_#{type}(opts={}, &block)
-          #{type}(#{type == :exec ? "opts" : "{:ensure => 'absent'}.merge(opts)"}, &block)
+          #{type}(#{type == :exec ? "opts" : "{:is_absent => ''}.merge(opts)"}, &block)
         end
       EOE
     end

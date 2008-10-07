@@ -19,9 +19,9 @@ module PoolParty
     class Cloud
       attr_reader :name, :templates
       include PoolParty::PluginModel
-      include PoolParty::Resources
-      include Configurable
+      include PoolParty::Resources      
       include PrettyPrinter
+      include Configurable
       include CloudResourcer
       extend CloudResourcer
       # Net methods
@@ -44,7 +44,7 @@ module PoolParty
         set_parent(parent) if parent
         self.instance_eval &block if block_given?
         # this can be overridden in the spec, but ec2 is the default
-        using :ec2        
+        using :ec2
       end
                         
       # Keypairs
@@ -94,10 +94,9 @@ module PoolParty
           # Refactor this into the resources method
           # TODO
           services.each do |service|
-            @cp = classpackage_with_self(service.options.merge(:name => service.name), service)
-            str << "# #{service.name}"
+            @cp = classpackage_with_self(service)
             str << @cp.to_string
-            str << "include #{service.name.sanitize}"
+            str << @cp.include_string
           end
           
           str << "# Custom functions"

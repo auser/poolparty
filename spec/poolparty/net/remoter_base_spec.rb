@@ -32,26 +32,26 @@ describe "RemoterBase" do
         stub_list_of_instances_for(@tr)
       end
       it "should gather a list of the running instances" do
-        @tr.list_of_running_instances.map {|a| a.name }.should == ["i-a1", "i-a2"]
+        @tr.list_of_running_instances.map {|a| a.name }.should == ["master", "node1"]
       end
       it "should be able to gather a list of the pending instances" do
-        @tr.list_of_pending_instances.map {|a| a.name }.should == ["i-a4", "i-c6"]
+        @tr.list_of_pending_instances.map {|a| a.name }.should == ["node3"]
       end
       it "should be able to gather a list of the terminating instances" do
-        @tr.list_of_terminating_instances.map {|a| a.name }.should == ["i-b5"]
+        @tr.list_of_terminating_instances.map {|a| a.name }.should == []
       end
       it "should be able to gather a list of the non-terminated instances" do
-        @tr.list_of_nonterminated_instances.map {|a| a.name }.should == ["i-a1", "i-a2", "i-a4", "i-c6"]
+        @tr.list_of_nonterminated_instances.map {|a| a.name }.should == ["master", "node1", "node3"]
       end
       it "should return a list of remote instances" do
         @tr.remote_instances_list.first.class.should == RemoteInstance
       end
       describe "by keypairs" do
         it "should be able to grab all the alist keypairs" do
-          @tr.list_of_instances("alist").map {|a| a[:name] }.should == ["i-a1", "i-a2", "i-a3", "i-a4"]
+          @tr.list_of_instances("fake_keypair").map {|a| a[:name] }.should == ["master", "node1", "node2", "node3"]
         end
         it "should be able to grab all the blist keypairs" do
-          @tr.list_of_instances("blist").map {|a| a[:name] }.should == ["i-b5"]
+          @tr.list_of_instances("blist").map {|a| a[:name] }.should == ["node4"]
         end
       end
     end
@@ -62,8 +62,8 @@ describe "RemoterBase" do
         @master.stub!(:ip).and_return "192.68.0.1"
         @tr.stub!(:master).and_return @master
       end
-      it "should have the method custom_install_tasks" do;@tr.respond_to?(:custom_install_tasks).should == true;end
-      it "should have the method custom_configure_tasks" do;@tr.respond_to?(:custom_configure_tasks).should == true;end
+      it "should have the method custom_install_tasks" do;@tr.respond_to?(:custom_install_tasks_for).should == true;end
+      it "should have the method custom_configure_tasks" do;@tr.respond_to?(:custom_configure_tasks_for).should == true;end
     end
   end
 end

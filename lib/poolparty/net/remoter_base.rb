@@ -53,18 +53,22 @@ module PoolParty
       def list_of_terminating_instances(list = remote_instances_list)
         list.reject {|i| !i.terminating? }
       end
+      # Get the instances that are non-master instances
+      def nonmaster_nonterminated_instances(list = remote_instances_list)
+        list_of_nonterminated_instances.reject {|i| i.master? }
+      end
       # list all the nonterminated instances
       def list_of_nonterminated_instances(list = remote_instances_list)
         list.reject {|i| i.terminating? || i.terminated? }
       end
       def remote_instances_list
-        list_of_instances.map {|i| PoolParty::Remote::RemoteInstance.new(i)}
+        list_of_instances.map {|i| PoolParty::Remote::RemoteInstance.new(i, self) }
       end
       # List the instances for the current key pair, regardless of their states
       # If no keypair is passed, select them all
       def list_of_instances(keyp=nil)
         key = keyp ? keyp : keypair
-        describe_instances.select {|a| key ? a[:keypair] == key : a}
+        describe_instances.select {|a| key ? a[:keypair] == key : true }
       end
       # Instances
       # Get the master from the cloud
@@ -74,7 +78,7 @@ module PoolParty
         @list.reject {|a| a unless a.name =~ /master/ }.first if @list.class != String
       end
       # Helpers
-      def create_keypair        
+      def create_keypair
       end
       # Reset the cache of descriptions
       def reset!

@@ -13,7 +13,11 @@ module PoolParty
       end
       
       def key
-        (self.send :name) ? :name : :command
+        name || command
+      end
+      
+      def present
+        "running"
       end
                   
     end

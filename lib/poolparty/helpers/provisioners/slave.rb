@@ -1,14 +1,7 @@
 module PoolParty
   module Provisioner
     class Slave < ProvisionerBase
-      attr_reader :master_ip
 
-      def initialize(cloud, os=:ubuntu)
-        @cloud = cloud
-        @os = os
-
-        @master_ip = cloud.master.ip
-      end
       def install_tasks
         [
           install_puppet,        
@@ -33,7 +26,7 @@ module PoolParty
       def setup_puppet
         <<-EOE
           puppetd --mkusers
-          if [ -z "grep -v '#' /etc/hosts | grep 'puppet'" ]; then echo '#{@master_ip}           puppet master' >> /etc/hosts; fi        
+          if [ -z "$(grep -v '#' /etc/hosts | grep 'puppet')" ]; then echo "#{master_ip} puppet" >> /etc/hosts; else echo "host already set"; fi
           mv #{Base.remote_storage_path}/#{Base.tmp_path}/namespaceauth.conf /etc/puppet/namespaceauth.conf
         EOE
       end
@@ -45,7 +38,13 @@ module PoolParty
       end
 
       def start_puppet
-        "puppetd --listen"
+        <<-EOS
+puppetd --listen
+        EOS
+      end
+      
+      def master_ip
+        @cloud.master.ip
       end
 
     end

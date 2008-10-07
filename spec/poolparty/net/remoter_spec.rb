@@ -77,6 +77,7 @@ describe "Remoter" do
         @tc.list_from_remote.class.should == Array
       end
       it "should contain the master in the listing" do
+        @tc.list_from_remote.first.name.should == "master"
         @tc.list_from_remote.first.master?.should == true
       end
       it "should write to the first (preferred) local instances list file location for next time" do
@@ -94,7 +95,7 @@ describe "Remoter" do
           stub_list_from_remote_for(@tc)
         end
         it "should call local_instances_list_file_locations" do
-          @tc.should_receive(:local_instances_list_file_locations).and_return []
+          @tc.should_receive(:local_instances_list_file_locations).at_least(1).and_return [@loc]
         end
         it "should call File.file? on the local_instances_list_file_locations locations" do        
           File.should_receive(:file?).with(@loc).and_return false
@@ -129,12 +130,12 @@ describe "Remoter" do
         it "should have the name of the master and the ip in the list_from_local" do
           @tc.list_from_local[0].name.should == "master"
         end
-        it "should have responding in the listing" do
-          @ri.should_receive(:responding?).at_least(1).and_return 0.5
+        it "should have name in the listing" do
+          @ri.should_receive(:name).at_least(1).and_return "node0"
           @ri.to_s
         end
-        it "should have the load in the listing" do
-          @ri.should_receive(:load).at_least(1).and_return 0.5
+        it "should have the ip in the listing" do
+          @ri.should_receive(:ip).at_least(1).and_return "127.0.0.1"
           @ri.to_s
         end
         it "should call to_s on the RemoteInstance instances" do          
