@@ -46,9 +46,9 @@ describe "Master provisioner" do
     @master.setup_fileserver.should =~ /\[files\]/
   end
   it "should be able to create_local_node" do
-    @master.create_local_node.should =~ /ode \"192.168.0.1\" \{\}/
+    @master.create_local_node.should =~ /ode \"master\"/
   end
   it "should create a node1 node as well" do
-    @master.create_local_node.should =~ /ode \"192.168.0.2\" \{\}/
+    @master.create_local_node.should =~ /ode \"node1\"/
   end
 end
