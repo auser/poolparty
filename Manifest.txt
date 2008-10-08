@@ -13,6 +13,7 @@ bin/cloud-list
 bin/cloud-maintain
 bin/cloud-provision
 bin/cloud-reconfigure
+bin/cloud-ssh
 bin/cloud-start
 bin/pool
 bin/pool-console

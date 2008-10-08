@@ -54,6 +54,17 @@ describe "RemoterBase" do
           @tr.list_of_instances("blist").map {|a| a[:name] }.should == ["node4"]
         end
       end
+      describe "get by name" do
+        it "should fetch the instance by number " do
+          @tr.get_instance_by_number(1).name.should == "node1"
+        end
+        it "should fetch the master by number 0" do
+          @tr.get_instance_by_number(0).name.should == "master"
+        end
+        it "should not throw a fit if the node doesn't exist" do
+          lambda {@tr.get_instance_by_number(1000)}.should_not raise_error
+        end
+      end
     end
     
     describe "adding custom install tasks (like set_hostname, for example)" do

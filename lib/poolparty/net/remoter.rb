@@ -11,7 +11,10 @@ module PoolParty
         end
       end
       def run_command_on_command(cmd="ls -l", remote_instance=nil)
-        "#{ssh_string} #{remote_instance.ip} '#{cmd}'"
+        "#{ssh_command} '#{cmd}'"
+      end
+      def ssh_command(remote_instance=nil)
+        "#{ssh_string} #{remote_instance.ip}"
       end
       # Generic commandable strings
       def ssh_string
@@ -166,6 +169,10 @@ module PoolParty
       
       def run_command_on(cmd, instance=nil)        
         Kernel.system "#{run_command_on_command(cmd, instance)}" if instance
+      end
+      
+      def ssh_into(instance=nil)
+        Kernel.system "#{ssh_command(instance)}" if instance
       end
 
       def self.included(receiver)
