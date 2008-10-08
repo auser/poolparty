@@ -1,0 +1,18 @@
+#!/usr/bin/env ruby
+$:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
+require "poolparty"
+require "poolpartycl"
+o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
+  opts.on('-n name', '--name name', 'Listing for cloud name')    { |c| optioner.cloudname c }
+  opts.on('-i id', '--id id', 'Instance id to ssh (default: 0)')    { |i| optioner.id i }
+end
+load_pool(o.spec || Binary.get_existing_spec_location)
+
+unless o.cloudname && clouds.keys.size > 1
+  @cloud = cloud(o.cloudname.downcase.to_sym)
+else
+  puts "Error: You must indicate a cloud from which your instance is from"
+  exit(0)
+end
+
+instance = @cloud.ssh_into( get_instance_by_number( o.id || 0 ) )
