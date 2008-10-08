@@ -33,7 +33,9 @@ describe "Cloud" do
       reset!
       @p = pool :options do
         minimum_instances 100
+        access_key "access_key"
         cloud :apple do          
+          access_key "cloud_access_key"
         end
       end
       @c = @p.cloud(:apple)
@@ -44,8 +46,8 @@ describe "Cloud" do
     it "should take the options set on the pool" do
       @p.minimum_instances.should == 100
     end
-    it "should take the options set from the pool" do
-      @c.minimum_instances.should == 100
+    it "should take the access_key option set from the cloud" do
+      @c.access_key.should == "cloud_access_key"
     end
   end
   describe "block" do

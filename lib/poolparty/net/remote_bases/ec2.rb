@@ -31,9 +31,16 @@ module PoolParty
     end
     def describe_instances
       unless @describe_instances && !@describe_instances.empty?
+        @id = 0
         @describe_instances = get_instances_description.each_with_index do |h,i|
+          if h[:status] == "running"
+            @name = "node#{@id}"
+            @id += 1
+          else
+            @name = "#{h[:status]}_node#{i}"
+          end
           h.merge!({
-            :name => "node#{i}",
+            :name => @name,
             :hostname => h[:ip],
             :ip => h[:ip].convert_from_ec2_to_ip
           })
@@ -80,7 +87,7 @@ module PoolParty
     end
     
     def reset!
-      @cached_descriptions = nil
+      @describe_instances = @cached_descriptions = nil
     end
   end
   register_remote_base :Ec2

@@ -71,6 +71,7 @@ echo "
   allow *" > /etc/puppet/fileserver.conf
 mkdir -p /var/poolparty/facts
 mkdir -p /var/poolparty/files
+mkdir -p /etc/poolparty
         EOS
       end
       # Change this eventually for better security supportsetup_fileserver
@@ -86,7 +87,7 @@ node default {
   include poolparty
 }
         EOS
-         @cloud.list_from_remote(:do_not_cache => true).each do |ri|
+         @cloud.list_of_running_instances.each do |ri|
            str << <<-EOS           
 node "#{ri.name}" inherits default {}
            EOS

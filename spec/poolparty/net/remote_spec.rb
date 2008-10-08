@@ -192,8 +192,10 @@ describe "Remote" do
     end
     describe "expand_cloud_if_necessary" do
       before(:each) do
+        stub_list_from_remote_for(@tc)
         @tc.stub!(:request_launch_new_instances).and_return true
         @tc.stub!(:can_start_a_new_instance).and_return true
+        @tc.stub!(:list_of_pending_instances).and_return []
       end
       it "should receive can_start_a_new_instance?" do
         @tc.should_receive(:can_start_a_new_instance?).once
@@ -203,7 +205,12 @@ describe "Remote" do
       end
       it "should call request_launch_new_instances if we should_expand_cloud?" do
         @tc.should_receive(:should_expand_cloud?).once.and_return true
-        @tc.should_receive(:request_launch_new_instances).once.and_return true        
+        @tc.should_receive(:request_launch_new_instances).once.and_return [{:ip => "127.0.0.5", :name => "node2"}]
+      end
+      it "should call a new slave provisioner" do
+        @tc.stub!(:should_expand_cloud?).once.and_return true
+        @tc.stub!(:request_launch_new_instances).once.and_return [{:ip => "127.0.0.5", :name => "node2"}]
+        PoolParty::Provisioner.should_receive(:provision_slave).and_return true
       end
       after(:each) do
         @tc.expand_cloud_if_necessary
@@ -232,6 +239,9 @@ describe "Remote" do
       before(:each) do
         Kernel.stub!(:system).and_return true
         @tc.extend CloudResourcer        
+        @tc.stub!(:keypair_path).and_return "~/.ec2/fake_keypair"
+        @obj = Object.new
+        @obj.stub!(:ip).and_return "192.168.0.1"
       end
       it "should raise an exception if it cannot find the keypair"
       it "should call exec on the kernel" do
@@ -249,9 +259,21 @@ describe "Remote" do
         it "should call system on the kernel" do
           ::File.stub!(:exists?).with("#{File.expand_path(Base.base_keypair_path)}/id_rsa-funky").and_return true
           Kernel.should_receive(:system).with("#{@tc.ssh_string} 192.168.0.1 'ls'").and_return true
-          @tc.run_command_on("ls", @tc.master)
+          @tc.run_command_on("ls", @obj)
         end
-      end      
+      end
+      describe "ssh_into_instance_number" do
+        before(:each) do          
+          @tc.stub!(:keypair).and_return "fake_keypair"
+          ::File.stub!(:exists?).with("#{File.expand_path(Base.base_keypair_path)}/id_rsa-funky").and_return true
+          
+          Kernel.stub!(:system).with("#{@tc.ssh_string} 192.168.0.1").and_return true          
+        end
+        it "should find the instance" do
+          @tc.should_receive(:get_instance_by_number).with(0).and_return @obj
+          @tc.ssh_into_instance_number
+        end
+      end
     end
   end
 end

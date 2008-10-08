@@ -6,8 +6,8 @@
 module PoolParty
   module Provisioner
     
-    # TODO: CLEAN THESE METHODS UP
-
+    # Provision master
+    # Convenience method to clean 
     def self.provision_master(cloud, testing=false)
       Provisioner::Master.new(cloud).process_install!(testing)
     end
@@ -18,14 +18,22 @@ module PoolParty
 
     def self.provision_slaves(cloud, testing=false)
       cloud.nonmaster_nonterminated_instances.each do |sl|
-        Provisioner::Slave.new(sl, cloud).process_install!(testing)
+        provision_slave(sl, cloud, testing)
       end
     end
 
     def self.configure_slaves(cloud, testing=false)
       cloud.nonmaster_nonterminated_instances.each do |sl|
-        Provisioner::Slave.new(sl, cloud).process_configure!(testing)
+        configure_slave(sl, cloud, testing)
       end
+    end
+        
+    def self.provision_slave(instance, cloud, testing=false)
+      Provisioner::Slave.new(instance, cloud).process_install!(testing)
+    end
+    
+    def self.configure_slave(instance, cloud, testing=false)
+      Provisioner::Slave.new(instance, cloud).process_configure!(testing)
     end
     
     class ProvisionerBase
@@ -59,6 +67,7 @@ module PoolParty
       def process_install!(testing=false)
         error unless valid?
         write_install_file
+        setup_runner(@cloud)
         
         unless testing
           puts "Logging on to #{@instance.ip}"
@@ -68,8 +77,7 @@ module PoolParty
           hide_output do
             @cloud.run_command_on(cmd, @instance)
           end          
-        end
-        
+        end        
       end
       def configure
         valid? ? configure_string : error
@@ -81,6 +89,7 @@ module PoolParty
       end
       def process_configure!(testing=false)
         error unless valid?
+        setup_runner(@cloud)
         write_configure_file
         
         unless testing
@@ -90,6 +99,10 @@ module PoolParty
           @cloud.run_command_on(cmd, @instance)
         end
       end
+      def setup_runner(cloud)
+        cloud.prepare_to_configuration
+        cloud.build_and_store_new_config_file
+      end
       def valid?
         true
       end
@@ -98,7 +111,7 @@ module PoolParty
       end
       # Gather all the tasks into one string
       def install_string
-        (install_tasks << custom_install_tasks).each do |task|
+        (default_install_tasks << custom_install_tasks).each do |task|
           case task.class
           when String
             task
@@ -108,7 +121,7 @@ module PoolParty
         end.nice_runnable
       end
       def configure_string
-        (configure_tasks << custom_configure_tasks).each do |task|
+        (default_configure_tasks << custom_configure_tasks).each do |task|
           case task.class
           when String
             task
@@ -118,8 +131,18 @@ module PoolParty
         end.nice_runnable
       end
       # Tasks with default tasks 
-      def default_tasks
-        install_tasks
+      # These are run on all the provisioners, master or slave
+      def default_install_tasks
+        [
+          "export AWS_ACCESS_KEY_ID=#{@cloud.access_key}",
+          "export AWS_SECRET_ACCESS_ID=#{@cloud.secret_access_key}"
+        ] << install_tasks
+      end
+      # Tasks with default configuration tasks
+      # This is run on the provisioner, regardless
+      def default_configure_tasks
+        [
+        ] << configure_tasks
       end
       # Build a list of the tasks to run on the instance
       def install_tasks(a=[])
@@ -181,9 +204,9 @@ module PoolParty
     include poolparty
   }
         EOS
-         @cloud.list_from_remote(:do_not_cache => true).each do |ri|
+         @cloud.list_of_running_instances.each do |ri|
            str << <<-EOS           
-  node "#{ri.ip}" {}
+  node "#{ri.name}" {}
            EOS
          end
         "echo '#{str}' > /etc/puppet/manifests/nodes/nodes.pp"

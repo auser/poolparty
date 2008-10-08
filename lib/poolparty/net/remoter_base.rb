@@ -51,7 +51,7 @@ module PoolParty
       end
       # list of shutting down instances
       def list_of_terminating_instances(list = remote_instances_list)
-        list.reject {|i| !i.terminating? }
+        list.reject {|i| true if !i.terminating? }
       end
       # Get the instances that are non-master instances
       def nonmaster_nonterminated_instances(list = remote_instances_list)

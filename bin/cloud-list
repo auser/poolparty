@@ -20,8 +20,13 @@ include Remote
   
   with_cloud(cloud, {:location => @location}) do
     puts header("Listing cloud #{name}")
-    out = location == "remote" ? list_from_remote({:cache => true}).map{|a| a.to_s} : list_from_local.map{|a| a.to_s }    
-    puts out.join("\n")
+    puts subheader("Active instances")
+    puts list_of_running_instances.map{|a| a.to_s}.join("\n")
+    puts ""
+    if list_of_pending_instances.size > 0
+      puts subheader("Pending instances")
+      puts list_of_pending_instances.map{|a| a.to_s}.join("\n")
+    end
   end  
   
 end
