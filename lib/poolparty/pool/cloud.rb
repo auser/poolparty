@@ -61,7 +61,7 @@ module PoolParty
       end
       
       def prepare_to_configuration        
-        clear_base_directory
+        # clear_base_directory
         make_base_directory
         copy_misc_templates
       end
