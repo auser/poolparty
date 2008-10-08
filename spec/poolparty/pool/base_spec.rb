@@ -22,4 +22,77 @@ describe "Base" do
   it "should set the fileserver_base to puppet://" do
     Base.fileserver_base.should =~ /puppet:\/\//
   end
+  describe "keys" do
+    it "should have an array of key_file_locations" do
+      Base.key_file_locations.class.should == Array
+    end
+    it "should test if the files exist when looking for the file" do
+      ::File.stub!(:file?).and_return false
+      ::File.stub!(:file?).with("ppkeys").and_return true
+      Base.get_working_key_file_locations.should == "ppkeys"
+    end
+    describe "with keyfile" do
+      before(:each) do
+        @keyfile = "ppkeys"
+        @str = "---
+        :access_key: KEY
+        :secret_access_key: SECRET"
+        @keyfile.stub!(:read).and_return @str
+        Base.stub!(:get_working_key_file_locations).and_return @keyfile
+        Base.stub!(:open).with(@keyfile).and_return @keyfile
+      end
+      it "should call YAML::load on the working key file" do
+        YAML.should_receive(:load).with(@str)
+        Base.load_keys_from_file
+      end
+      it "should return a hash" do
+        Base.load_keys_from_file.class.should == Hash
+      end
+      it "should be able to fetch the access key from the loaded keys" do
+        Base.load_keys_from_file[:access_key].should == "KEY"
+      end
+      it "should be able to fetch the secret_access_key from the loaded key file" do
+        Base.load_keys_from_file[:secret_access_key].should == "SECRET"
+      end
+      describe "without keyfile" do
+        before(:each) do
+          Base.stub!(:get_working_key_file_locations).and_return nil
+          ENV.stub!(:[]).with("AWS_ACCESS_KEY_ID").and_return nil
+          ENV.stub!(:[]).with("AWS_SECRET_ACCESS_ID").and_return nil
+          Base.reset!
+        end
+        it "should render the access_key nil" do
+          Base.access_key.should == nil
+        end
+        it "should render the secret_access_key as nil" do
+          Base.secret_access_key.should == nil
+        end
+      end
+    end
+    describe "storing keyfile" do
+      before(:each) do
+        @ak = "KEY"
+        @pk = "SECRET"
+        @str = "weee"
+        @hash = {:access_key => @ak, :secret_access_key => @pk}
+        Base.stub!(:access_key).and_return @ak
+        Base.stub!(:secret_access_key).and_return @pk
+        Base.stub!(:write_to_file).and_return true
+        Base.stub!(:key_file_locations).and_return ["ppkey"]
+      end
+      it "should call access_key.nil?" do
+        @ak.should_receive(:nil?).and_return false
+        @pk.should_receive(:nil?).and_return true        
+      end
+      it "should call YAML::dump" do
+        YAML.should_receive(:dump).and_return @str
+      end
+      it "should call write_to_file with the key file location" do
+        Base.should_receive(:write_to_file).with("ppkey", YAML::dump(@hash)).and_return true
+      end
+      after(:each) do
+        Base.store_keys_in_file
+      end
+    end
+  end
 end

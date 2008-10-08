@@ -73,6 +73,9 @@ describe "ProvisionerBase" do
         def add_world
           "cruel world"
         end
+        def default_install_tasks
+          [] << install_tasks
+        end
       end
       @provisioner = BTestProvisioner.new(@remote_instance, @cloud)
     end

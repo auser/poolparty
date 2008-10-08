@@ -31,8 +31,8 @@ module PoolParty
       default_options({
         :minimum_instances => 2,
         :maximum_instances => 4,
-        :access_key => ENV["AWS_ACCESS_KEY"],
-        :secret_access_key => ENV["AWS_SECRET_ACCESS"],
+        :access_key => Base.access_key,
+        :secret_access_key => Base.secret_access_key,
         :ec2_dir => ENV["EC2_HOME"],
         :keypair => (ENV["KEYPAIR_NAME"].nil? || ENV["KEYPAIR_NAME"].empty?) ? nil : ENV["KEYPAIR_NAME"],
         :ami => 'ami-44bd592d',
@@ -64,6 +64,7 @@ module PoolParty
         # clear_base_directory
         make_base_directory
         copy_misc_templates
+        store_keys_in_file
       end
       
       def build_and_store_new_config_file

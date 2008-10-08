@@ -2,6 +2,8 @@
   This module is included by the remote module and defines the remoting methods
   that the clouds can use to rsync or run remote commands
 =end
+require File.dirname(__FILE__) + "/../helpers/provisioner_base"
+
 module PoolParty
   module Remote
     module Remoter
@@ -11,9 +13,9 @@ module PoolParty
         end
       end
       def run_command_on_command(cmd="ls -l", remote_instance=nil)
-        "#{ssh_command} '#{cmd}'"
+        "#{ssh_command(remote_instance)} '#{cmd}'"
       end
-      def ssh_command(remote_instance=nil)
+      def ssh_command(remote_instance)
         "#{ssh_string} #{remote_instance.ip}"
       end
       # Generic commandable strings
@@ -116,15 +118,23 @@ module PoolParty
       # Launch new instance while waiting for the number of pending instances
       #  to be zero before actually launching. This ensures that we only
       #  launch one instance at a time
-      def request_launch_one_instance_at_a_time
-        reset!        
-        if list_of_pending_instances.size.zero?
+      def request_launch_one_instance_at_a_time        
+        when_no_pending_instances do
           launch_new_instance!
-        else
-          wait "5.seconds"
-          request_launch_one_instance_at_a_time
         end
       end
+      # A convenience method for waiting until there are no more
+      # pending instances and then running the block
+      def when_no_pending_instances(&block)
+        reset!
+        if list_of_pending_instances.size > 0
+          wait "5.seconds"
+          when_no_pending_instances(&block)
+        else
+          block.call if block
+        end
+      end
+      
       # This will launch the minimum_instances if the minimum number of instances are not running
       # If the minimum number of instances are not running and if we can start a new instance
       def launch_minimum_number_of_instances
@@ -146,9 +156,18 @@ module PoolParty
       # Expand the cloud
       # If we can start a new instance and the load requires us to expand
       # the cloud, then we should request_launch_new_instances
+      # Wait for the instance to boot up and when it does come back
+      # online, then provision it as a slave, this way, it is ready for action from the
+      # get go
       def expand_cloud_if_necessary(force=false)
-        if can_start_a_new_instance?
-          request_launch_new_instances(1) if should_expand_cloud?(force)
+        if can_start_a_new_instance? && should_expand_cloud?(force)
+          @out = request_launch_new_instances(1)
+          
+          reset!
+          when_no_pending_instances do
+            @ri = list_of_running_instances.last
+            PoolParty::Provisioner.provision_slave(@ri, self, !force)
+          end
         end
       end
       # Contract the cloud
@@ -166,13 +185,20 @@ module PoolParty
           Kernel.system "#{rsync_storage_files_to_command(instance)}" if instance
         end
       end
-      
+      # Take the rsync command and execute it on the system
+      # if there is an instance given
       def run_command_on(cmd, instance=nil)        
         Kernel.system "#{run_command_on_command(cmd, instance)}" if instance
       end
       
+      # Ssh into the instance given
       def ssh_into(instance=nil)
         Kernel.system "#{ssh_command(instance)}" if instance
+      end
+      # Find the instance by the number given
+      # and then ssh into the instance
+      def ssh_into_instance_number(num=0)
+        ssh_into( get_instance_by_number( num || 0 ) )
       end
 
       def self.included(receiver)

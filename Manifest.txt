@@ -195,6 +195,9 @@ tmp/ha.cf
 tmp/happydayz
 tmp/heartbeat-instances.list
 tmp/install_master.sh
+tmp/install_node1.sh
+tmp/install_node2.sh
+tmp/install_node3.sh
 tmp/install_slave.sh
 tmp/namespaceauth.conf
 tmp/poolparty.pp

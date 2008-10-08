@@ -64,7 +64,7 @@ describe "ec2 remote base" do
       @tr.describe_instances[1][:name].should == "node1"
     end
     it "should call the third node2" do
-      @tr.describe_instances[2][:name].should == "node2"
+      @tr.describe_instances[2][:name].should == "terminated_node2"
     end
   end
   describe "create_keypair" do

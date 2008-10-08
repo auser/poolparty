@@ -14,11 +14,11 @@ module PoolParty
     end
     
     def header(str="")
-      "#{Time.now} #{str}"
+      "*** #{str}"
     end
     
     def subheader(str="")
-      "#{Time.now} #{str} ________"
+      "****** #{str}"
     end
     
   end
