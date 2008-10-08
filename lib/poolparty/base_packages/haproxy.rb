@@ -22,7 +22,7 @@ module PoolParty
         variable(:name => "name", :value => "#{name}")
         variable(:name => "nodenames", :value => list_of_node_names)
         variable(:name => "node_ips",  :value => list_of_node_ips)
-        variable(:name => "ports", :value => (port || Base.port))        
+        variable(:name => "ports", :value => ([port].flatten || [Base.port].flatten))        
         variable(:name => "forwarding_port", :value => (forwarding_port || Base.forwarding_port))
         variable(:name => "proxy_mode", :value => (proxy_mode || Base.proxy_mode))
         

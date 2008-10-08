@@ -64,7 +64,7 @@ module PoolParty
         # clear_base_directory
         make_base_directory
         copy_misc_templates
-        store_keys_in_file
+        Base.store_keys_in_file
       end
       
       def build_and_store_new_config_file
