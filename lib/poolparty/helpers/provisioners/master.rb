@@ -88,7 +88,7 @@ node default {
         EOS
          @cloud.list_from_remote(:do_not_cache => true).each do |ri|
            str << <<-EOS           
-node "#{ri.ip}" {}
+node "#{ri.name}" inherits default {}
            EOS
          end
 "echo '#{str}' > /etc/puppet/manifests/nodes/nodes.pp"
