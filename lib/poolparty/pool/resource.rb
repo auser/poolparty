@@ -126,8 +126,9 @@ module PoolParty
       def template(file, opts={})
         raise TemplateNotFound.new("no template given") unless file
         raise TemplateNotFound.new("template cannot be found #{file}") unless ::File.file?(file)
-        unless opts[:just_copy]
-          options.merge!(:content => "template(\"#{::File.basename(file)}\")") 
+        unless opts[:just_copy]          
+          options.merge!({:content => "template(\"#{::File.basename(file)}\")"})
+          options.delete(:source) if options.has_key?(:source)
           copy_template_to_storage_directory(file)
         else
           copy_file_to_storage_directory(file)

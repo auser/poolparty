@@ -126,6 +126,9 @@ listen web_proxy 127.0.0.1:3000
     it "should also return a string if there is a string within the string" do
       'Package["heartbeat-2"]'.to_option_string.should == 'Package["heartbeat-2"]'
     end
+    it "should return File['/etc/apache2/conf.d/base.conf'] as a string" do
+      'File["/etc/apache2/conf.d/base.conf"]'.to_option_string.should == "File[\"/etc/apache2/conf.d/base.conf\"]"
+    end
   end
   describe "sanitize" do
     it "should remove the periods from the string" do

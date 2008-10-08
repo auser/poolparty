@@ -195,6 +195,10 @@ tmp/install_slave.sh
 tmp/namespaceauth.conf
 tmp/poolparty.pp
 tmp/tc-instances.list
+tmp/templates/authkeys
+tmp/templates/cib.xml
+tmp/templates/ha.cf
+tmp/templates/haproxy.conf
 tmp/test-instances.list
 website/index.html
 website/index.txt

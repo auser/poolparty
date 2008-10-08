@@ -6,7 +6,7 @@ module PoolParty
       def has_line_in_file(line="line_in_file", file="file", opts={})
         call_function <<-EOE
         line {
-          '#{file}' :
+          '#{file}_line' :
             file => '#{file}',
             line => '#{line}',
             #{opts.flush_out("\t", ",")}

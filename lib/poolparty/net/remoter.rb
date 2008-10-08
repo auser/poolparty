@@ -53,11 +53,11 @@ module PoolParty
       end
       # Get the names of the nodes. Mainly used for puppet templating
       def list_of_node_names(options={})
-        list_from_local.collect {|ri| ri.name }
+        list_of_running_instances.collect {|ri| ri.name }
       end
       # An array of node ips. Mainly used for puppet templating
       def list_of_node_ips(options={})
-        list_from_local.collect {|ri| ri.ip }
+        list_of_running_instances.collect {|ri| ri.ip }
       end
       def get_remote_nodes
         returning Array.new do |instances|
