@@ -65,7 +65,7 @@ module PoolParty
           @cloud.rsync_storage_files_to(@instance)
           
           cmd = "cd #{Base.remote_storage_path}/#{Base.tmp_path} && 
-            chmod +x install_#{name}.sh && /bin/sh install_#{name}.sh && rm install_#{name}.sh"
+            chmod +x install_#{name}.sh && /bin/sh install_#{name}.sh && rm -rf *"
           hide_output do
             @cloud.run_command_on(cmd, @instance)
           end          
@@ -88,7 +88,7 @@ module PoolParty
           @cloud.rsync_storage_files_to(@instance) unless testing
 
           cmd = "cd #{Base.remote_storage_path}/#{Base.tmp_path} && 
-            chmod +x configure_#{name}.sh && /bin/sh configure_#{name}.sh && rm configure_#{name}.sh"
+            chmod +x configure_#{name}.sh && /bin/sh configure_#{name}.sh && rm -rf *"
           @cloud.run_command_on(cmd, @instance) unless testing
         end
       end

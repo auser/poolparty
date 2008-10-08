@@ -100,7 +100,7 @@ module PoolParty
       # Let's terminate an instance that is not the master instance
       def request_termination_of_non_master_instance
         inst = nonmaster_nonterminated_instances.last
-        terminate_instance!(inst.name) if inst
+        terminate_instance!(inst.instance_id) if inst
       end
       # Can we start a new instance?
       def can_start_a_new_instance?

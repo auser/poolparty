@@ -16,14 +16,15 @@ module PoolParty
         end
         
         # Service is required
-        has_service(:name => "haproxy")
+        has_service(:name => "#{name}")
         
         # Tempalte variables
         variable(:name => "name", :value => "#{name}")
-        has_variable({:name => "nodenames", :value => list_of_node_names})
-        has_variable({:name => "node_ips",  :value => list_of_node_ips})
-        has_variable({:name => "port", :value => (port || Base.port)})
-        has_variable(:name => "forwarding_port", :value => (forwarding_port || Base.forwarding_port))
+        variable(:name => "nodenames", :value => list_of_node_names)
+        variable(:name => "node_ips",  :value => list_of_node_ips)
+        variable(:name => "ports", :value => (port || Base.port))        
+        variable(:name => "forwarding_port", :value => (forwarding_port || Base.forwarding_port))
+        variable(:name => "proxy_mode", :value => (proxy_mode || Base.proxy_mode))
         
         # These can also be passed in via hash
         has_remotefile(:name => "/etc/haproxy.cfg") do

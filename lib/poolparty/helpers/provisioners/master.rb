@@ -103,7 +103,7 @@ mv #{Base.remote_storage_path}/#{Base.template_directory}/* #{Base.template_path
 
       def create_poolparty_manifest
         <<-EOS
-mv #{Base.remote_storage_path}/#{Base.tmp_path}/poolparty.pp /etc/puppet/manifests/classes
+mv #{Base.remote_storage_path}/#{Base.tmp_path}/poolparty.pp /etc/puppet/manifests/classes/poolparty.pp
         EOS
       end
 
