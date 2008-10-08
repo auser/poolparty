@@ -1,0 +1,37 @@
+#!/usr/bin/env ruby
+$:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
+require "poolparty"
+require "poolpartycl"
+o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
+  opts.on('-c [master|slaves|all]', '--class [master|slaves|all]', 'Provision class (default: all)')    { |c| optioner.provision_class c }
+  opts.on('-n name', '--name name', 'Listing for cloud name')    { |c| optioner.cloudname c }
+end
+load_pool(o.spec || Binary.get_existing_spec_location)
+
+@provision_class = o.provision_class || "all"
+
+include Remote
+
+begin
+  @cloud = cloud(o.cloudname.downcase.to_sym)
+rescue
+  puts "Cloud name required. Please specify it with -n name"
+  exit(0)
+end
+
+with_cloud(@cloud, {:testing => o.testing, :provision_class => @provision_class}) do
+  puts header("Provisioning cloud #{name}")
+  prepare_to_configuration
+  
+  puts "Building configuration file"
+  build_and_store_new_config_file
+  
+  if provision_class == "master" || provision_class == "all"
+    Provisioner.configure_master(self, testing)
+  end
+  if provision_class == "slave" || provision_class == "all"
+    Provisioner.configure_slaves(self, testing)
+  end
+  
+  clear_base_directory unless testing
+end
