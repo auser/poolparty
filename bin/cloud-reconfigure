@@ -12,11 +12,13 @@ load_pool(o.spec || Binary.get_existing_spec_location)
 
 include Remote
 
-@clouds = o.cloudname ? [cloud(o.cloudname.downcase.to_sym)] : clouds
+@clouds = o.cloudname ? {:cloud => cloud(o.cloudname.downcase.to_sym)} : clouds
 
-@clouds.each do |cl|
-  with_cloud(cl, {:testing => o.testing}) do
-    cmd = "puppetrun --host #{list_of_node_names.join(", --host ")}"
+@clouds.each do |name, cloud|
+  
+  with_cloud(cloud, {:testing => o.testing}) do
+    cmd = "puppetrun --host puppet #{list_of_node_names.join(", --host ")}"
     run_command_on(cmd, master)
   end
+  
 end

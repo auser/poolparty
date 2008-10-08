@@ -12,10 +12,11 @@ load_pool(o.spec || Binary.get_existing_spec_location)
 
 include Remote
 
-@clouds = o.cloudname ? [cloud(o.cloudname.downcase.to_sym)] : clouds
+@clouds = o.cloudname ? {:cloud => cloud(o.cloudname.downcase.to_sym)} : clouds
 
-@clouds.each do |cl|
-  with_cloud(cl, {:testing => o.testing, :provision_class => @provision_class}) do
+@clouds.each do |name, cloud|
+    
+  with_cloud(cloud, {:testing => o.testing, :provision_class => @provision_class}) do
     puts header("Provisioning cloud #{name}")
     prepare_to_configuration
 
