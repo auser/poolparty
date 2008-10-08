@@ -27,7 +27,7 @@ module PoolParty
     end
     # Describe an instance's status
     def describe_instance(id=nil)
-      describe_instances.select {|a| a[:instance_id] == id}[0] rescue nil
+      describe_instances.select {|a| a[:name] == id}[0] rescue nil
     end
     def describe_instances
       unless @describe_instances && !@describe_instances.empty?

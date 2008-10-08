@@ -10,8 +10,7 @@ module PoolParty
     end
     
     def get_from_options(m, *args)
-      # args.is_a?(Array) ? args : args[0]
-      args.empty? ? options[m] : options[m] = args[0]
+      args.empty? ? options[m] : options[m] = (args.is_a?(Array) && args.size > 1) ? args : args[0]
     end
     
   end

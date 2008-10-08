@@ -60,9 +60,9 @@ module PoolParty
         options[:keypair] = args.length > 0 ? args[0] : "#{@parent.respond_to?(:name) ? @parent.name : ""}_#{@name}"
       end
       
-      def prepare_to_configuration
+      def prepare_to_configuration        
+        clear_base_directory
         make_base_directory
-        # clear_base_directory
         copy_misc_templates
       end
       
