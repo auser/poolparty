@@ -8,7 +8,13 @@ module PoolParty
         :name => nil,
         :enable => true
       })
-           
+      
+      def present
+        "running"
+      end
+      def absent
+        "stopping"
+      end
     end
     
   end

@@ -166,7 +166,7 @@ describe "Resource" do
       end
       it "should be able to have_service as well" do
         has_service({:name => "apache"})
-        resource(:service).get_named("apache").first.options[:ensure].should == "present"
+        resource(:service).get_named("apache").first.options[:ensure].should == "running"
       end
     end
     describe "get_resource" do

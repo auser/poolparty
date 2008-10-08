@@ -22,6 +22,7 @@ module PoolParty
       :access_key => ENV["AWS_ACCESS_KEY_ID"] ? ENV["AWS_ACCESS_KEY_ID"] : nil,
       :secret_access_key => ENV["AWS_SECRET_ACCESS_ID"] ? ENV["AWS_SECRET_ACCESS_ID"] : nil,
       :port => "80",
+      :forwarding_port => "8080",
       :pool_logger_location => File.join(Dir.pwd, "logs"),
       # EC2 Options
       :ami => "ami-4bb05422" 
