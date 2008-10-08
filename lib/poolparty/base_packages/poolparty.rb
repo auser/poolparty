@@ -4,7 +4,7 @@ module PoolParty
       
       def enable
         has_package(:name => "erlang")
-        has_gem(:name => "auser-poolparty")
+        has_gem_package(:name => "auser-poolparty", :source => "http://gems.github.com")
                 
         # Build hostsfile
         # TODO: COME BACK AND CLEAN THIS UP
