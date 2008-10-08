@@ -17,12 +17,12 @@ include Remote
 @clouds.each do |name, cloud|
     
   with_cloud(cloud, {:testing => o.testing, :provision_class => @provision_class}) do
-    puts header("Provisioning cloud #{name}")
+    logger.info header("Provisioning cloud #{name}")
     prepare_to_configuration
-
-    puts "Building configuration file"
+    
+    logger.info subheader("Building configuration file")
     build_and_store_new_config_file
-
+    
     if provision_class == "master" || provision_class == "all"
       Provisioner.configure_master(self, testing)
     end
