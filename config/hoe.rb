@@ -7,7 +7,7 @@ DESCRIPTION =<<-EOM
 EOM
 GEM_NAME = 'PoolParty' # what ppl will type to install your gem
 RUBYFORGE_PROJECT = 'PoolParty' # The unix name for your project
-HOMEPATH = "http://#{RUBYFORGE_PROJECT}.rubyforge.org"
+HOMEPATH = "http://poolpartyrb.com"
 DOWNLOAD_PATH = "http://rubyforge.org/projects/#{RUBYFORGE_PROJECT}"
 EXTRA_DEPENDENCIES = [
 #  ['activesupport', '>= 1.3.1']
@@ -73,3 +73,35 @@ PATH    = (RUBYFORGE_PROJECT == GEM_NAME) ? RUBYFORGE_PROJECT : "#{RUBYFORGE_PRO
 $hoe.remote_rdoc_dir = File.join(PATH.gsub(/^#{RUBYFORGE_PROJECT}\/?/,''), 'rdoc')
 $hoe.rsync_args = '-av --delete --ignore-errors'
 $hoe.spec.post_install_message = File.open(File.dirname(__FILE__) + "/../PostInstall.txt").read rescue ""
+
+# Gemspec creator
+spec = Gem::Specification.new do |s|
+  s.name = GEM_NAME
+  s.version = VERS
+  s.platform = Gem::Platform::RUBY
+  s.has_rdoc = true
+  s.extra_rdoc_files = ["README.txt", "License.txt", 'History.txt']
+  s.summary = DESCRIPTION
+  s.description = s.summary
+  s.author = AUTHOR
+  s.email = EMAIL
+  s.homepage = HOMEPATH
+  
+  # Uncomment this to add a dependency
+  # s.add_dependency "foo"
+  
+  s.require_path = 'lib'
+  s.autorequire = GEM_NAME
+  s.files = %w(Rakefile History.txt README.txt) + Dir.glob("{examples,lib,specs,tasks,script,generators,bin}/**/*")
+end
+ 
+Rake::GemPackageTask.new(spec) do |pkg|
+  pkg.gem_spec = spec
+end
+  
+desc "create a gemspec file"
+task :make_spec do
+  File.open("#{GEM_NAME}.gemspec", "w") do |file|
+    file.puts spec.to_ruby
+  end
+end
