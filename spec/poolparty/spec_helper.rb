@@ -63,6 +63,8 @@ def stub_list_from_remote_for(o)
   stub_remoter_for(o)
   @sample_instances_list = [{:ip => "127.0.0.1", :name => "master"}, {:ip => "127.0.0.2", :name => "node1"}]
   @ris = @sample_instances_list.map {|h| PoolParty::Remote::RemoteInstance.new(h) }  
+  o.stub!(:access_key).and_return "NOT A KEY"
+  o.stub!(:secret_access_key).and_return "NOT A SECRET"
   # o.stub!(:list_from_remote).and_return ris
   # o.stub!(:remote_instances_list).once.and_return ris
   # o.stub!(:master).and_return @ris[0]

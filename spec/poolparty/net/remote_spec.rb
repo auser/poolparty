@@ -196,6 +196,8 @@ describe "Remote" do
         @tc.stub!(:request_launch_new_instances).and_return true
         @tc.stub!(:can_start_a_new_instance).and_return true
         @tc.stub!(:list_of_pending_instances).and_return []
+        @tc.stub!(:prepare_to_configuration).and_return true
+        @tc.stub!(:build_and_store_new_config_file).and_return true
       end
       it "should receive can_start_a_new_instance?" do
         @tc.should_receive(:can_start_a_new_instance?).once
@@ -243,7 +245,12 @@ describe "Remote" do
         @obj = Object.new
         @obj.stub!(:ip).and_return "192.168.0.1"
       end
-      it "should raise an exception if it cannot find the keypair"
+      it "should raise an exception if it cannot find the keypair" do
+        @tc.stub!(:keypair_path).and_return nil
+        lambda {
+          @tc.rsync_storage_files_to(@tc.master)
+        }.should raise_error
+      end
       it "should call exec on the kernel" do
         @tc.stub!(:keypair).and_return "funky"
         ::File.stub!(:exists?).with("#{File.expand_path(Base.base_keypair_path)}/id_rsa-funky").and_return true
