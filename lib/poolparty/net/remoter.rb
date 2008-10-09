@@ -90,11 +90,11 @@ module PoolParty
       # More functional methods
       # Are the minimum number of instances running?
       def minimum_number_of_instances_are_running?
-        list_of_running_instances.size >= minimum_instances
+        list_of_running_instances.size >= minimum_instances.to_i
       end
       # Can we shutdown an instance?
       def can_shutdown_an_instance?
-        list_of_running_instances.size > minimum_instances
+        list_of_running_instances.size > minimum_instances.to_i
       end
       # Request to launch a number of instances
       def request_launch_new_instances(num=1)
@@ -113,7 +113,7 @@ module PoolParty
       end
       # Are the maximum number of instances running?
       def maximum_number_of_instances_are_not_running?
-        list_of_running_instances.size < maximum_instances
+        list_of_running_instances.size < maximum_instances.to_i
       end
       # Launch new instance while waiting for the number of pending instances
       #  to be zero before actually launching. This ensures that we only
