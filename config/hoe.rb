@@ -101,7 +101,7 @@ end
   
 desc "create a gemspec file"
 task :make_spec do
-  File.open("#{GEM_NAME}.gemspec", "w") do |file|
+  File.open("#{GEM_NAME.downcase}.gemspec", "w") do |file|
     file.puts spec.to_ruby
   end
 end
