@@ -62,8 +62,9 @@ module PoolParty
       # Expected places for the instances.list to be located at on the machine
       def key_file_locations
         [
-          "#{Base.storage_directory}/.ppkeys",
+          ".ppkeys",
           "#{Base.base_config_directory}/.ppkeys",
+          "#{Base.storage_directory}/ppkeys",          
           "~/.ppkeys",
           "ppkeys"
         ]

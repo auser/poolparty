@@ -197,6 +197,7 @@ tmp/happydayz
 tmp/install_master.sh
 tmp/install_node1.sh
 tmp/namespaceauth.conf
+tmp/pool.spec
 tmp/poolparty.pp
 tmp/poolspec.rb
 tmp/tc-instances.list

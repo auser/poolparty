@@ -134,8 +134,7 @@ module PoolParty
       # These are run on all the provisioners, master or slave
       def default_install_tasks
         [
-          "export AWS_ACCESS_KEY_ID=#{@cloud.access_key}",
-          "export AWS_SECRET_ACCESS_ID=#{@cloud.secret_access_key}"
+          
         ] << install_tasks
       end
       # Tasks with default configuration tasks
