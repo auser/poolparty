@@ -10,7 +10,9 @@ RUBYFORGE_PROJECT = 'poolparty' # The unix name for your project
 HOMEPATH = "http://poolpartyrb.com"
 DOWNLOAD_PATH = "http://rubyforge.org/projects/#{RUBYFORGE_PROJECT}"
 EXTRA_DEPENDENCIES = [
-#  ['activesupport', '>= 1.3.1']
+ ['activesupport'],
+ ['open4'],
+ ['logging']
 ]    # An array of rubygem dependencies [name, version]
 
 @config_file = "~/.rubyforge/user-config.yml"
@@ -63,7 +65,7 @@ $hoe = Hoe.new(GEM_NAME, VERS) do |p|
 
   # == Optional
   p.changes = p.paragraphs_of("History.txt", 0..1).join("\n\n")
-  #p.extra_deps = EXTRA_DEPENDENCIES
+  p.extra_deps = EXTRA_DEPENDENCIES
 
     #p.spec_extras = {}    # A hash of extra values to set in the gemspec.
   end
@@ -88,7 +90,10 @@ spec = Gem::Specification.new do |s|
   s.homepage = HOMEPATH
   
   # Uncomment this to add a dependency
-  # s.add_dependency "foo"
+  EXTRA_DEPENDENCIES.each do |arr|
+    s.add_runtime_dependency arr
+  end  
+  # s.extra_deps = EXTRA_DEPENDENCIES
   
   s.require_path = 'lib'
   s.autorequire = GEM_NAME
@@ -101,7 +106,8 @@ end
   
 desc "create a gemspec file"
 task :make_spec do
-  File.open("#{GEM_NAME.downcase}.gemspec", "w") do |file|
+  ::File.unlink "#{GEM_NAME.downcase}.gemspec" if ::File.exists?("#{GEM_NAME.downcase}.gemspec")
+  ::File.open("#{GEM_NAME.downcase}.gemspec", "w+") do |file|
     file.puts spec.to_ruby
   end
 end

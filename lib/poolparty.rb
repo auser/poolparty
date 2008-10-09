@@ -3,7 +3,6 @@ require 'rubygems'
 # Load required gems
 require 'active_support'
 require 'open4'
-require "backcall"
 require "ftools"
 require "logging"
 
