@@ -1,38 +1,19 @@
 module PoolParty    
   class Gem
         
-    define_resource(:gem_package) do
+    virtual_resource(:gempackage) do
       
-      def has_gem_package(opts={})
-        call_function <<-EOE
-gem_package { "#{opts[:package] || opts[:name]}":
-  source => "#{opts[:source] || "http://gems.github.com" }",
-  package => "#{opts[:package] || opts[:name]}"
-}
-        EOE
+      def loaded        
+        @version_str = "--version \"#{version}\"" if version
+        @version_grep_str = "| grep #{version}"
+        @source_str = "--source \"#{source}\""
+        
+        has_exec(:name => "gem-package-#{name}", :cwd => "/tmp", :path => "/bin:/usr/bin:/usr/local/bin:/sbin:/usr/sbin:/var/lib/gems/1.8/bin") do
+          command "gem install #{@version_str} #{@source_str} #{name}"
+          ifnot "gem list --local #{name} | grep #{name} #{@version_grep_str}"
+        end
       end
       
-      custom_function <<-EOF
-      define gem_package ($source = "http://gems", $version, $package=false) {
-        include ruby
-
-        if $version {
-          exec { "gem-package-$package":
-            path => "/bin:/usr/bin:/usr/local/bin:/sbin:/usr/sbin:/var/lib/gems/1.8/bin",
-            cwd => "/tmp",
-            command => "gem install --source $source --version \"$version\" $package",
-            unless => "gem list --local $package | grep \"$package\" | grep \"$version\""
-          }
-        } else {
-          exec { "gem-package-$package":
-            path => "/bin:/usr/bin:/usr/local/bin:/sbin:/usr/sbin:/var/lib/gems/1.8/bin",
-            cwd => "/tmp",
-            command => "gem install --source $source $package",
-            unless => "gem list --local $package | grep \"$package\"
-          }
-        }
-      }
-      EOF
     end
     
   end
