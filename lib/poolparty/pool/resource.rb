@@ -86,6 +86,7 @@ module PoolParty
         set_parent(parent) if parent
         set_vars_from_options(opts) unless opts.empty?
         self.instance_eval &block if block
+        store_block(&block)
         loaded
       end
       

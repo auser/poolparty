@@ -23,7 +23,7 @@ module PoolParty
       include PrettyPrinter
       include Configurable
       include CloudResourcer
-      extend CloudResourcer
+      # extend CloudResourcer
       # Net methods
       include PoolParty::Remote::RemoterBase
       include Remote
@@ -40,9 +40,10 @@ module PoolParty
       })
       
       def initialize(name, parent, &block)
-        @name = name        
+        @name = name
+        store_block(&block)
         set_parent(parent) if parent
-        self.instance_eval &block if block_given?
+        self.instance_eval &block if block        
         # this can be overridden in the spec, but ec2 is the default
         using :ec2
       end
@@ -65,6 +66,7 @@ module PoolParty
         make_base_directory
         copy_misc_templates
         Base.store_keys_in_file
+        Script.save!
       end
       
       def build_and_store_new_config_file
@@ -103,6 +105,13 @@ module PoolParty
           str << "# Custom functions"
           str << Resources::CustomResource.custom_functions_to_string
         end.join("\n")
+      end
+      
+      # To allow the remote instances to do their job,
+      # they need a few options to run, these are the required options
+      # to be saved on the remote "master" machine
+      def minimum_runnable_options
+        [:keypair, :minimum_instances, :maximum_instances]
       end
       
       # Add all the poolparty requirements here

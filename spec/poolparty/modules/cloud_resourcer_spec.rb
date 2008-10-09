@@ -2,8 +2,11 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 class ResourcerTestClass
   include CloudResourcer
-  extend CloudResourcer
   include Configurable  
+  
+  def initialize(&block)
+    store_block(&block) if block
+  end
   
   # Stub keypair
   def keypair
@@ -111,6 +114,22 @@ describe "CloudResourcer" do
       it "should have the child in the parent's services" do
         @testparent.services.first.should == @tc
       end
-    end    
+    end
+    describe "storing block" do
+      before(:each) do
+        @new_tc = ResourcerTestClass.new do
+          "hi"
+        end
+      end
+      it "should store the block when creating a new one" do
+        @new_tc.store_block.should_not == nil
+      end
+      it "should have a reference to the stored block" do
+        @new_tc.store_block.class.should == Proc
+      end
+      it "should store the containing block" do
+        @new_tc.store_block.call.should == "hi"
+      end
+    end
   end
 end

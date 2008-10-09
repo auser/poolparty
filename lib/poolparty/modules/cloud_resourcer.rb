@@ -3,6 +3,10 @@ require "ftools"
 module PoolParty
   module CloudResourcer
     
+    # Store block
+    def store_block(&block)
+      @store_block ||= block
+    end
     # Set instances with a range
     def instances(arg)
       if arg.is_a?(Range)

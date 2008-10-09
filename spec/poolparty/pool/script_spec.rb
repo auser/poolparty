@@ -33,5 +33,19 @@ describe "Script" do
     after do
       Script.inflate(@script, @filename)
     end
+    describe "save!" do
+      before(:each) do
+        pool :appdotcom do
+          keypair "snoodle"
+          cloud :app do
+            has_file :name => "/etc/httpd/httpd.conf"
+          end
+        end
+        @saved = Script.save!(false)
+      end
+      it "should save the keypair" do
+        @saved.should =~ /keypair "snoodle"/
+      end
+    end
   end
 end
