@@ -20,9 +20,9 @@ module PoolParty
                 
     # Resources for function call
     class CallFunction < Resource
-      def initialize(str="", opts={}, &block)
+      def initialize(str="", opts={}, parent=self, &block)
         @str = str
-        super(opts, &block)
+        super(opts, parent, &block)
       end
       def to_string(prev="")
         returning Array.new do |arr|
@@ -32,9 +32,9 @@ module PoolParty
     end
         
     class CustomResource < Resource
-      def initialize(name=:custom_method, opts={}, &block)
+      def initialize(name=:custom_method, opts={}, parent=self, &block)
         @name = name
-        super(opts, &block)
+        super(opts, parent, &block)
       end
       
       def self.inherited(subclass)

@@ -17,25 +17,29 @@ module PoolParty
       
       def initialize(opts={}, parent=self, &block)
         # Take the options of the parents        
+        set_parent(parent, false) if parent
         set_vars_from_options(opts) unless opts.empty?
         self.instance_eval &block if block
-        # store_block(&block)
-        set_parent(parent) if parent
+        # store_block(&block)        
         
         loaded
       end
                         
       def to_string
         returning String.new do |output|
-          output << "# #{@parent.name.sanitize}"
-          output << "\nclass #{@parent.name.sanitize} {\n"
+          output << "# #{name.sanitize}"
+          output << "\nclass #{name.sanitize} {\n"
           output << resources_string_from_resources(resources)
           output << "\n}\n"
         end
       end
       
       def include_string
-        "include #{@parent.name.sanitize}"
+        "include #{name.sanitize}"
+      end
+      
+      def name(*args)
+        args.empty? ? (@name || parent.name) : @name ||= args.first
       end
 
     end

@@ -17,8 +17,8 @@ module PoolParty
       resources[type] ||= []
     end
     
-    def add_resource(type, opts={}, &block)
-      returning "PoolParty::Resources::#{type.to_s.camelize}".classify.constantize.new(opts, &block) do |o|
+    def add_resource(type, opts={}, parent=self, &block)
+      returning "PoolParty::Resources::#{type.to_s.camelize}".classify.constantize.new(opts, parent, &block) do |o|
         resource(type) << o
       end
     end
@@ -56,8 +56,8 @@ module PoolParty
         # Add add resource method to the Resources module
         unless PoolParty::Resources.respond_to?(lowercase_class_name.to_sym)
           method =<<-EOE
-            def #{lowercase_class_name}(opts={}, &blk)
-              add_resource(:#{lowercase_class_name}, opts, &blk)
+            def #{lowercase_class_name}(opts={}, parent=self, &blk)
+              add_resource(:#{lowercase_class_name}, opts, parent, &blk)
             end            
           EOE
           PoolParty::Resources.module_eval method
@@ -82,8 +82,8 @@ module PoolParty
       # the options
       # Finally, it uses the parent's options as the lowest priority
       def initialize(opts={}, parent=self, &block)
-        # Take the options of the parents        
-        set_parent(parent) if parent
+        # Take the options of the parents
+        set_parent(parent, false) if parent
         set_vars_from_options(opts) unless opts.empty?
         self.instance_eval &block if block
         # store_block(&block)
@@ -97,6 +97,9 @@ module PoolParty
       # DSL Overriders
       # Overrides for syntax
       # Allows us to send require to require a resource
+      def require(str="")
+        options[:require]        
+      end
       def requires(str="")
         options.merge!(:require => str)
       end 
@@ -223,11 +226,11 @@ module PoolParty
     # TODO: Refactor nicely to include other types that don't accept ensure
     def self.add_has_and_does_not_have_methods_for(type=:file)
       module_eval <<-EOE
-        def has_#{type}(opts={}, &block)
-          #{type}(#{type == :exec ? "opts" : "{:is_present => ''}.merge(opts)"}, &block)
+        def has_#{type}(opts={}, parent=self, &block)
+          #{type}(#{type == :exec ? "opts" : "{:is_present => ''}.merge(opts)"}, parent, &block)
         end
-        def does_not_have_#{type}(opts={}, &block)
-          #{type}(#{type == :exec ? "opts" : "{:is_absent => ''}.merge(opts)"}, &block)
+        def does_not_have_#{type}(opts={}, parent=self, &block)
+          #{type}(#{type == :exec ? "opts" : "{:is_absent => ''}.merge(opts)"}, parent, &block)
         end
       EOE
     end

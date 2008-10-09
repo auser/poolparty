@@ -15,12 +15,18 @@ describe "File" do
   end
   describe "with resources" do
     before(:each) do
-      @class = classpackage do
-        file({:name => "red"})
+      cloud :application_cloud do
+        classpackage do
+          file({:name => "red"})
+        end
       end
+      @class = cloud(:application_cloud).resource(:classpackage).first
     end
     it "should store a resource in the resources array" do
       @class.resources.size.should == 1
+    end
+    it "should have a file resource in the cloud" do
+      @class.resource(:file).should_not == nil
     end
     describe "to_s" do
       before(:each) do
