@@ -78,6 +78,7 @@ lib/poolparty/net/remote_instance.rb
 lib/poolparty/net/remoter.rb
 lib/poolparty/net/remoter_base.rb
 lib/poolparty/plugins/gem_package.rb
+lib/poolparty/plugins/git.rb
 lib/poolparty/plugins/line.rb
 lib/poolparty/plugins/svn.rb
 lib/poolparty/pool/base.rb
@@ -144,6 +145,7 @@ spec/poolparty/net/remote_instance_spec.rb
 spec/poolparty/net/remote_spec.rb
 spec/poolparty/net/remoter_base_spec.rb
 spec/poolparty/net/remoter_spec.rb
+spec/poolparty/plugins/git_spec.rb
 spec/poolparty/plugins/line_spec.rb
 spec/poolparty/plugins/svn_spec.rb
 spec/poolparty/pool/base_spec.rb
@@ -190,18 +192,10 @@ test/test_pool_spec_generator.rb
 test/test_poolparty.rb
 test_manifest.pp
 tmp/.ppkeys
-tmp/app-instances.list
-tmp/authkeys
-tmp/cib.xml
 tmp/fileserver.conf
-tmp/ha.cf
 tmp/happydayz
-tmp/heartbeat-instances.list
 tmp/install_master.sh
 tmp/install_node1.sh
-tmp/install_node2.sh
-tmp/install_node3.sh
-tmp/install_slave.sh
 tmp/namespaceauth.conf
 tmp/poolparty.pp
 tmp/tc-instances.list
@@ -209,7 +203,6 @@ tmp/templates/authkeys
 tmp/templates/cib.xml
 tmp/templates/ha.cf
 tmp/templates/haproxy.conf
-tmp/test-instances.list
 website/index.html
 website/index.txt
 website/javascripts/rounded_corners_lite.inc.js
