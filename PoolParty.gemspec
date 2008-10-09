@@ -14,6 +14,10 @@ Gem::Specification.new do |s|
   s.homepage = %q{http://poolparty.rubyforge.org}
   s.post_install_message = %q{Get ready to jump in the pool, you just installed PoolParty!
 
+To get started, run the generator:
+
+  pool spec <name>
+
 Please check out the documentation for any questions or check out the google groups at
   http://groups.google.com/group/PoolPartyrb
 
