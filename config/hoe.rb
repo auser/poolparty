@@ -5,8 +5,8 @@ EMAIL = "ari.lerner@citrusbyte.com"
 DESCRIPTION =<<-EOM      
   Self-healing, auto-scaling cloud computing tool
 EOM
-GEM_NAME = 'PoolParty' # what ppl will type to install your gem
-RUBYFORGE_PROJECT = 'PoolParty' # The unix name for your project
+GEM_NAME = 'poolparty' # what ppl will type to install your gem
+RUBYFORGE_PROJECT = 'poolparty' # The unix name for your project
 HOMEPATH = "http://poolpartyrb.com"
 DOWNLOAD_PATH = "http://rubyforge.org/projects/#{RUBYFORGE_PROJECT}"
 EXTRA_DEPENDENCIES = [
