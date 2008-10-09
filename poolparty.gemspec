@@ -1,10 +1,10 @@
 Gem::Specification.new do |s|
-  s.name = %q{PoolParty}
+  s.name = %q{poolparty}
   s.version = "0.2.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Ari Lerner"]
-  s.autorequire = %q{PoolParty}
+  s.autorequire = %q{poolparty}
   s.date = %q{2008-10-08}
   s.description = %q{Self-healing, auto-scaling cloud computing tool}
   s.email = %q{ari.lerner@citrusbyte.com}
