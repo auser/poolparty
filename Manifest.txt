@@ -198,6 +198,7 @@ tmp/install_master.sh
 tmp/install_node1.sh
 tmp/namespaceauth.conf
 tmp/poolparty.pp
+tmp/poolspec.rb
 tmp/tc-instances.list
 tmp/templates/authkeys
 tmp/templates/cib.xml
