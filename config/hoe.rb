@@ -7,7 +7,8 @@ DESCRIPTION =<<-EOM
 EOM
 GEM_NAME = 'poolparty' # what ppl will type to install your gem
 RUBYFORGE_PROJECT = 'poolparty' # The unix name for your project
-HOMEPATH = "http://poolpartyrb.com"
+HOMEPAGE = "http://poolpartyrb.com"
+HOMEPATH = "http://#{GEM_NAME}.rubyforge.org"
 DOWNLOAD_PATH = "http://rubyforge.org/projects/#{RUBYFORGE_PROJECT}"
 EXTRA_DEPENDENCIES = [
  ['activesupport'],
@@ -76,38 +77,38 @@ $hoe.remote_rdoc_dir = File.join(PATH.gsub(/^#{RUBYFORGE_PROJECT}\/?/,''), 'rdoc
 $hoe.rsync_args = '-av --delete --ignore-errors'
 $hoe.spec.post_install_message = File.open(File.dirname(__FILE__) + "/../PostInstall.txt").read rescue ""
 
-# Gemspec creator
-spec = Gem::Specification.new do |s|
-  s.name = GEM_NAME
-  s.version = VERS
-  s.platform = Gem::Platform::RUBY
-  s.has_rdoc = true
-  s.extra_rdoc_files = ["README.txt", "License.txt", 'History.txt']
-  s.summary = DESCRIPTION
-  s.description = s.summary
-  s.author = AUTHOR
-  s.email = EMAIL
-  s.homepage = HOMEPATH
-  
-  # Uncomment this to add a dependency
-  EXTRA_DEPENDENCIES.each do |arr|
-    s.add_runtime_dependency arr
-  end  
-  # s.extra_deps = EXTRA_DEPENDENCIES
-  
-  s.require_path = 'lib'
-  s.autorequire = GEM_NAME
-  s.files = %w(Rakefile History.txt README.txt) + Dir.glob("{examples,lib,specs,tasks,script,generators,bin}/**/*")
-end
- 
-Rake::GemPackageTask.new(spec) do |pkg|
-  pkg.gem_spec = spec
-end
-  
-desc "create a gemspec file"
-task :make_spec do
-  ::File.unlink "#{GEM_NAME.downcase}.gemspec" if ::File.exists?("#{GEM_NAME.downcase}.gemspec")
-  ::File.open("#{GEM_NAME.downcase}.gemspec", "w+") do |file|
-    file.puts spec.to_ruby
-  end
-end
+# # Gemspec creator
+# spec = Gem::Specification.new do |s|
+#   s.name = GEM_NAME
+#   s.version = VERS
+#   s.platform = Gem::Platform::RUBY
+#   s.has_rdoc = true
+#   s.extra_rdoc_files = ["README.txt", "License.txt", 'History.txt']
+#   s.summary = DESCRIPTION
+#   s.description = s.summary
+#   s.author = AUTHOR
+#   s.email = EMAIL
+#   s.homepage = HOMEPATH
+#   
+#   # Uncomment this to add a dependency
+#   EXTRA_DEPENDENCIES.each do |arr|
+#     s.add_runtime_dependency arr
+#   end  
+#   # s.extra_deps = EXTRA_DEPENDENCIES
+#   
+#   s.require_path = 'lib'
+#   s.autorequire = GEM_NAME
+#   s.files = %w(Rakefile History.txt README.txt) + Dir.glob("{examples,lib,specs,tasks,script,generators,bin}/**/*")
+# end
+#  
+# Rake::GemPackageTask.new(spec) do |pkg|
+#   pkg.gem_spec = spec
+# end
+#   
+# desc "create a gemspec file"
+# task :make_spec do
+#   ::File.unlink "#{GEM_NAME.downcase}.gemspec" if ::File.exists?("#{GEM_NAME.downcase}.gemspec")
+#   ::File.open("#{GEM_NAME.downcase}.gemspec", "w+") do |file|
+#     file.puts spec.to_ruby
+#   end
+# end

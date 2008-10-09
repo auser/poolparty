@@ -12,6 +12,7 @@ describe "Object" do
       @obj.respond_to?(:with_options).should == true
     end
     it "should set the options on the parent" do
+      allow_message_expectations_on_nil
       @a.should_receive(:clone).and_return @a
       @a.stub!(:options).and_return({})
       with_options({:nick => "name"}, @a) do
