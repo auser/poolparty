@@ -30,11 +30,8 @@ module PoolParty
         
     # Class methods
     class << self
-      def actionable_default_options
-        default_options.merge!({:access_key => self.access_key,:secret_access_key => secret_access_key})
-      end
       def options(h={})
-        @options ||= actionable_default_options.merge(h)
+        @options ||= default_options.merge(h)
       end
       # Get the access_key
       def access_key
