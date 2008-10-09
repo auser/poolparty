@@ -8,8 +8,8 @@ module PoolParty
         has_gem(:name => "open4")
         has_gem(:name => "activesupport")
         has_gem(:name => "logging")
-        has_gem_package(:name => "grempe-amazon-ec2", :source => "http://gems.github.com")
-        has_gem_package(:name => "auser-poolparty", :source => "http://gems.github.com")
+        has_gempackage(:name => "grempe-amazon-ec2", :source => "http://gems.github.com")
+        has_gempackage(:name => "auser-poolparty", :source => "http://gems.github.com")
                 
         # Build hostsfile
         # TODO: COME BACK AND CLEAN THIS UP
