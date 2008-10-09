@@ -42,7 +42,7 @@ module PoolParty
     # 
     # Which sets the virtual host's name as xnot.org
     # 
-    # This is included in the poolparty-apache-plugin
+    # An example is included in the poolparty-apache-plugin
     def virtual_resource(name=:virtual_resource, opts={}, &block)
       symc = "#{name}".classify
       eval <<-EOE
