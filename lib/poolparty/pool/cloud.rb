@@ -41,7 +41,7 @@ module PoolParty
       
       def initialize(name, parent, &block)
         @name = name
-        store_block(&block)
+        # store_block(&block)
         set_parent(parent) if parent
         self.instance_eval &block if block        
         # this can be overridden in the spec, but ec2 is the default
@@ -61,6 +61,14 @@ module PoolParty
         options[:keypair] = args.length > 0 ? args[0] : "#{@parent.respond_to?(:name) ? @parent.name : ""}_#{@name}"
       end
       
+      # Prepare to send the new configuration to the instances
+      # First, let's make sure that our base directory is made
+      # Then copy the templates that have no other reference in
+      # a spec file. Make sure the keys are stored in a file
+      # For the master to have access to them
+      # Then, send the saved containing cloud instances to give the 
+      # remote master access to the cloud options that are required
+      # for the master to run checks
       def prepare_to_configuration        
         # clear_base_directory
         make_base_directory
@@ -69,6 +77,13 @@ module PoolParty
         Script.save!
       end
       
+      # Build the new poolparty manifest
+      # Wrapping all of these requirements into the one 
+      # poolparty class.
+      # 
+      # TODO: Consider the benefits of moving all the manifest
+      # classes to separate files and keeping the containing
+      # references in the include
       def build_and_store_new_config_file
         @manifest = build_manifest
         config_file = ::File.join(Base.storage_directory, "poolparty.pp")

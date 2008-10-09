@@ -20,6 +20,7 @@ module PoolParty
       :base_config_directory => "/etc/poolparty",
       :template_directory => "tmp/templates",
       :template_path => "/var/lib/puppet/templates",
+      :default_specfile_name => "pool.spec",
       :port => "80",
       :forwarding_port => "8080",
       :proxy_mode => "http",
@@ -43,6 +44,8 @@ module PoolParty
       def load_keys_from_file
         @keys ||= get_working_key_file_locations ? YAML::load( open(get_working_key_file_locations).read ) : {}
       end
+      # Store the keys in a yaml format to give the master access
+      # So that the master has access to the files
       def store_keys_in_file
         unless access_key.nil? || secret_access_key.nil?
           write_to_file( key_file_locations.first, YAML::dump({:access_key => access_key, :secret_access_key => secret_access_key}))        

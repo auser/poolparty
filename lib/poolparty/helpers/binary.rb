@@ -14,10 +14,11 @@ module PoolParty
         "#{::File.dirname(__FILE__)}/../../../bin"
       end
       def get_existing_spec_location
-        [                
-            "pool.spec", 
-            "#{Base.remote_storage_directory}/pool.spec", 
-            "#{Base.storage_directory}/pool.spec",
+        [                            
+            "#{Base.base_config_directory}/#{Base.default_specfile_name}",
+            "#{Base.remote_storage_directory}/#{Base.default_specfile_name}", 
+            "#{Base.default_specfile_name}",
+            "#{Base.storage_directory}/#{Base.default_specfile_name}",
             ENV["POOL_SPEC"]
         ].reject {|a| a.nil?}.reject do |f|
           f unless ::File.file?(f)

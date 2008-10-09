@@ -19,7 +19,7 @@ module PoolParty
         # Take the options of the parents        
         set_vars_from_options(opts) unless opts.empty?
         self.instance_eval &block if block
-        store_block(&block)
+        # store_block(&block)
         set_parent(parent) if parent
         
         loaded
