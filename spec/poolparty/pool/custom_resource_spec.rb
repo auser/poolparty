@@ -83,7 +83,7 @@ describe "Custom Resource" do
           add_resource(:call_function, "line")
         end
         it "should create a call function in the function call array" do
-          add_resource(:call_function, "heyyohey")
+          add_resource(:call_function, @cloud, "heyyohey")
           resource(:call_function).size.should == 1
         end
         describe "defining" do

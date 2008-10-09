@@ -1,4 +1,6 @@
-require "ec2"
+require 'rubygems'
+require 'EC2'
+
 class String
   def convert_from_ec2_to_ip
     self.gsub(/.compute-1.amazonaws.com*/, '').gsub(/ec2-/, '').gsub(/-/, '.')

@@ -185,5 +185,20 @@ describe "Resource" do
         get_resource(:file, "smarties").should be_nil
       end
     end
+    describe "parent" do
+      before(:each) do
+        @cloud = cloud :app do
+          tangerine "orange"
+          file(:name => "file.txt")
+        end
+        @file = @cloud.resources[:file].first
+      end
+      it "should take the options of the parent" do        
+        @file.parent.tangerine.should_not == nil
+      end
+      it "should set the option as the same from the parent" do
+        @file.parent.tangerine.should == "orange"
+      end
+    end
   end
 end
