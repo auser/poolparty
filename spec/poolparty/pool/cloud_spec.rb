@@ -1,6 +1,13 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 include PoolParty::Cloud
+class TestServiceClass
+  plugin :test_service do
+    def enable
+      has_file(:name => "/etc/poolparty/lobos")
+    end                  
+  end
+end
 
 describe "Cloud" do
   before(:each) do
@@ -216,25 +223,24 @@ describe "Cloud" do
             it "should have an array of resources on the heartbeat" do
               @cloud.services.first.resources.class.should == Hash
             end
-            # describe "resources" do
-            #   before(:each) do
-            #     @service = @cloud.services.first
-            #     @file = @service.resource(:remotefile)
-            #   end
-            #   it "should not have a exec resource" do
-            #     puts @service.resources
-            #     @cloud.services.first.resource(:remotefile).should_not be_empty
-            #   end
-            #   it "should have a line resource" do
-            #     @file.should_not be_nil
-            #   end
-            #   it "should have an array of lines" do
-            #     @file.class.should == Array
-            #   end
-            #   it "should not be empty" do
-            #     @file.should_not be_empty
-            #   end
-            # end
+            describe "resources" do
+              before(:each) do
+                @cloud8 = Cloud.new(:tester, @pool) do     
+                  test_service             
+                end
+                @service = @cloud8.services.first
+                @files = @service.resource(:file)
+              end
+              it "should have a file resource" do
+                @files.first.nil?.should == false
+              end
+              it "should have an array of lines" do
+                @files.class.should == Array
+              end
+              it "should not be empty" do
+                @files.should_not be_empty
+              end
+            end
           end
         end
         describe "building" do
