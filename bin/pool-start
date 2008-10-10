@@ -12,21 +12,21 @@ load_pool(o.spec || Binary.get_existing_spec_location)
 
 include Remote
 
-if o.poolname
-  @pool = pool(o.poolname.downcase.to_sym)
-else
-  puts "Pool name required. Please specify it with -c name"
-  exit(0)
-end
+@pools = o.poolname ? [pool(o.poolname.downcase.to_sym)] : pools
 
-with_pool(@pool, {:testing => @testing}) do
-  puts header("Starting pool")
-  clouds.each do |name, cloud|
-    puts subheader("Cloud: #{name}")
-    puts "#{cloud.list_of_running_instances.size} running instances (#{cloud.minimum_instances} - #{cloud.maximum_instances})"
-    if (cloud.minimum_instances - cloud.list_of_running_instances.size) > 0
-      puts "Starting #{cloud.minimum_instances - cloud.list_of_running_instances.size} instances (from #{cloud.keypair})"
-      testing ? puts("\tNot launching while in testing mode") : cloud.launch_minimum_number_of_instances
+@pools.each do |name, pl|
+  
+  with_pool(pl, {:testing => @testing}) do
+    
+    puts header("Starting pool")
+    clouds.each do |name, cloud|
+      puts subheader("Cloud: #{name}")
+      puts "#{cloud.list_of_running_instances.size} running instances (#{cloud.minimum_instances} - #{cloud.maximum_instances})"
+      if (cloud.minimum_instances - cloud.list_of_running_instances.size) > 0
+        puts "Starting #{cloud.minimum_instances - cloud.list_of_running_instances.size} instances (from #{cloud.keypair})"
+        testing ? puts("\tNot launching while in testing mode") : cloud.launch_minimum_number_of_instances
+      end
     end
   end
+  
 end

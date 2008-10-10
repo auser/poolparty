@@ -17,9 +17,9 @@ module PoolParty
         [                            
             "#{Base.base_config_directory}/#{Base.default_specfile_name}",
             "#{Base.remote_storage_directory}/#{Base.default_specfile_name}", 
+            ENV["POOL_SPEC"],
             "#{Base.default_specfile_name}",
-            "#{Base.storage_directory}/#{Base.default_specfile_name}",
-            ENV["POOL_SPEC"]
+            "#{Base.storage_directory}/#{Base.default_specfile_name}",            
         ].reject {|a| a.nil?}.reject do |f|
           f unless ::File.file?(f)
         end.first

@@ -15,6 +15,7 @@ bin/cloud-provision
 bin/cloud-reconfigure
 bin/cloud-ssh
 bin/cloud-start
+bin/cloud-terminate
 bin/pool
 bin/pool-console
 bin/pool-describe
@@ -111,7 +112,6 @@ lib/poolparty/templates/namespaceauth.conf
 lib/poolparty/templates/puppet.conf
 lib/poolparty/version.rb
 lib/poolpartycl.rb
-logs/pool_log.log
 poolparty.gemspec
 script/destroy
 script/generate
@@ -191,13 +191,6 @@ test/test_helper.rb
 test/test_pool_spec_generator.rb
 test/test_poolparty.rb
 test_manifest.pp
-tmp/templates/apache2.conf
-tmp/templates/base.conf.erb
-tmp/templates/browser_fixes.conf.erb
-tmp/templates/index.html
-tmp/templates/mime-minimal.conf.erb
-tmp/templates/mpm-worker.conf.erb
-tmp/templates/virtual_host.conf.erb
 website/index.html
 website/index.txt
 website/javascripts/rounded_corners_lite.inc.js
