@@ -60,8 +60,10 @@ module PoolParty
     # This is a helper to create the keypair and add them to the cloud for you
     def create_keypair
       return false unless keypair
-      FileUtils.mkdir_p ::File.dirname(new_keypair_path) unless ::File.directory?(::File.dirname(new_keypair_path))
-      Kernel.system "ec2-add-keypair #{keypair} > #{new_keypair_path} && chmod 600 #{new_keypair_path}"
+      unless ::File.exists?( new_keypair_path )
+        FileUtils.mkdir_p ::File.dirname( new_keypair_path )
+        Kernel.system "ec2-add-keypair #{keypair} > #{new_keypair_path} && chmod 600 #{new_keypair_path}"
+      end
     end
     # EC2 connections
     def ec2
