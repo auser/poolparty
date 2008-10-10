@@ -61,6 +61,7 @@ module PoolParty
       end
       def write_install_file
         error unless valid?
+        ::FileUtils.mkdir_p Base.storage_directory unless ::File.exists?(Base.storage_directory)
         provisioner_file = ::File.join(Base.storage_directory, "install_#{name}.sh")
         ::File.open(provisioner_file, "w+") {|f| f << install }
       end
