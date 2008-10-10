@@ -83,10 +83,9 @@ module PoolParty
       # Finally, it uses the parent's options as the lowest priority
       def initialize(opts={}, parent=self, &block)
         # Take the options of the parents
-        set_parent(parent, false) if parent
+        @parent = parent
         set_vars_from_options(opts) unless opts.empty?
         self.instance_eval &block if block
-        # store_block(&block)
         loaded
       end
       

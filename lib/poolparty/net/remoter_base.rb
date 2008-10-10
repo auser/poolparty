@@ -73,7 +73,7 @@ module PoolParty
       # If no keypair is passed, select them all
       def list_of_instances(keyp=nil)
         key = keyp ? keyp : keypair
-        describe_instances.select {|a| key ? a[:keypair] == key : true }
+        describe_instances.select {|a| key ? a[:keypair] == key : true } if describe_instances
       end
       # Instances
       # Get the master from the cloud

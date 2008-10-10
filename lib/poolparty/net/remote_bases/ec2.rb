@@ -8,7 +8,7 @@ class String
 end
 module PoolParty
   module Ec2
-    def launch_new_instance(num=1)!
+    def launch_new_instance!(num=1)
       instance = ec2.run_instances(
         :image_id => self.respond_to?(:ami) ? ami : Base.ami,
         :user_data => "",
@@ -36,7 +36,7 @@ module PoolParty
         @id = 0
         @describe_instances = get_instances_description.each_with_index do |h,i|
           if h[:status] == "running"
-            @name = "node#{@id}"
+            @name = @id == 0 ? "master" : "node#{@id}"
             @id += 1
           else
             @name = "#{h[:status]}_node#{i}"
@@ -47,7 +47,6 @@ module PoolParty
             :ip => h[:ip].convert_from_ec2_to_ip
           })
         end
-        @describe_instances.first[:name] = "master" unless @describe_instances.empty?
       end
       @describe_instances
     end
