@@ -67,13 +67,11 @@ module PoolParty
     
     # Set the parent on the resource
     def set_parent(pare, sink_options=true)
-      @parent = pare
-      if sink_options
-        # Add self as a service on the parent
-        pare.add_service(self) if pare.respond_to?(:add_service)
-        # Take the options of the parents
-        configure(pare.options) if pare.respond_to?(:options)
-      end
+      @parent = pare      
+      # Add self as a service on the parent
+      pare.add_service(self) if pare.respond_to?(:add_service)
+      # Take the options of the parents
+      configure(pare.options) if pare.respond_to?(:options) && sink_options
     end
     
     def number_of_resources
