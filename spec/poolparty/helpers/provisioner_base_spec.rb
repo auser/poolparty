@@ -5,7 +5,7 @@ include Provisioner
 
 describe "ProvisionerBase" do
   before(:each) do    
-    @cloud = cloud :app do; end    
+    @cloud = cloud :app do;end    
     @remote_instance = PoolParty::Remote::RemoteInstance.new({:ip => "192.168.0.1", :status => "running", :name => "master"}, @cloud)
     @cloud.stub!(:custom_install_tasks_for).with(@remote_instance).and_return []
     stub_list_from_remote_for(@remote_instance)
@@ -99,7 +99,9 @@ describe "ProvisionerBase" do
         @provisioner = ProvisionerBase.new(@remote_instance, @cloud)
         stub_list_from_remote_for(@cloud)
         @cloud.stub!(:keypair).and_return "fake_keypair"
+        @cloud.stub!(:keypair_path).and_return "~/.ec2/fake_keypair"
         Provisioner::Master.stub!(:new).and_return @provisioner
+        @cloud.stub!(:copy_file_to_storage_directory).and_return true
       end
       describe "provision_master" do
         it "should call write_install_file" do

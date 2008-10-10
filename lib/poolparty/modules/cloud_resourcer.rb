@@ -33,6 +33,19 @@ module PoolParty
       return nil
     end
     
+    def full_keypair_name
+      keypair_paths.each do |path|
+        possible_keypair_basenames.each do |base|
+          full_path = ::File.join( File.expand_path(path), "#{base}#{keypair}")
+          return "#{base}#{keypair}" if ::File.exists?(full_path)
+        end
+      end
+      return nil
+    end
+    
+    def remote_keypair_path
+      ::File.join( keypair_paths.last, "#{possible_keypair_basenames.first}#{keypair}" )
+    end
     def new_keypair_path
       ::File.join( keypair_paths.first, "#{possible_keypair_basenames.first}#{keypair}" )
     end

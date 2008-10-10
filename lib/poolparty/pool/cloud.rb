@@ -75,6 +75,11 @@ module PoolParty
         copy_misc_templates
         Base.store_keys_in_file
         Script.save!
+        copy_ssh_key # not my favorite...
+      end
+      
+      def copy_ssh_key
+        copy_file_to_storage_directory(full_keypair_path)
       end
       
       # Build the new poolparty manifest

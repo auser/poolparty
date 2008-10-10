@@ -107,6 +107,7 @@ mv #{Base.remote_storage_path}/#{Base.template_directory}/* #{Base.template_path
 mv #{Base.remote_storage_path}/#{Base.tmp_path}/poolparty.pp /etc/puppet/manifests/classes/poolparty.pp
 mv #{Base.remote_storage_path}/#{Base.tmp_path}/#{Base.key_file_locations.first} "#{Base.base_config_directory}/.ppkeys"
 mv #{Base.remote_storage_path}/#{Base.tmp_path}/#{Base.default_specfile_name} #{Base.base_config_directory}/#{Base.default_specfile_name}
+mv #{Base.remote_storage_path}/#{Base.tmp_path}/#{@cloud.full_keypair_name} #{@cloud.remote_keypair_path}
         EOS
       end
 

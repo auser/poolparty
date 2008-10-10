@@ -23,7 +23,8 @@ module PoolParty
     # Do not print if the option is nil or empty.
     # Also, don't show the option if the option is empty or the default option on the cloud    
     def pretty_options(prev, o)
-      print_options = (o.respond_to?(:parent) && o.parent) ? 
+      return "" unless o.respond_to?(:options)
+      print_options = (o.respond_to?(:parent) && o.parent && o.parent.respond_to?(:options)) ? 
         (o.options.delete_if {|k,v| o.parent.options.has_key?(k) && o.parent.options[k] == o.options[k] && !o.options[k].nil? } ) : 
         o.options
       print_options = print_options.map {|k,v| [k, o.send(k.to_sym).to_s] }.inject({}) { |r,e| r[e[0]] = e[1] unless o.class.default_options[e[0]] == e[1] || e[1].nil? || e[1].empty?; r }
