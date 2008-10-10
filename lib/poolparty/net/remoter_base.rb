@@ -54,7 +54,7 @@ module PoolParty
         list.reject {|i| true if !i.terminating? }
       end
       # Get the instances that are non-master instances
-      def nonmaster_nonterminated_instances(list = remote_instances_list)
+      def nonmaster_nonterminated_instances(list = list_of_nonterminated_instances)
         list_of_nonterminated_instances.reject {|i| i.master? }
       end
       # list all the nonterminated instances
@@ -87,7 +87,7 @@ module PoolParty
       end
       # Reset the cache of descriptions
       def reset!
-      end      
+      end
       def self.included(other)
         PoolParty.register_remote_base(self.class.to_s.downcase.to_sym)
       end
