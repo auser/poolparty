@@ -262,7 +262,10 @@ describe "Cloud" do
             @manifest.should =~ /package \{/
           end
           it "should have the comment for heartbeat in the manifest" do
-            @manifest.should =~ /# heartbeat/            
+            @manifest.should =~ /class heartbeat/            
+          end
+          it "should include the poolparty gem" do
+            @manifest.should =~ /package \{/
           end
           it "should include custom functions" do
             @manifest.should =~ /define line\(\$file/
