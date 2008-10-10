@@ -87,7 +87,8 @@ module PoolParty
         ]
       end
       
-      # More functional methods
+      # List calculation methods
+      # 
       # Are the minimum number of instances running?
       def minimum_number_of_instances_are_running?
         list_of_running_instances.size >= minimum_instances.to_i
@@ -118,31 +119,28 @@ module PoolParty
       # Launch new instance while waiting for the number of pending instances
       #  to be zero before actually launching. This ensures that we only
       #  launch one instance at a time
-      def request_launch_one_instance_at_a_time        
-        when_no_pending_instances do
-          launch_new_instance!
-        end
+      def request_launch_one_instance_at_a_time
+        when_no_pending_instances { launch_new_instance! }
       end
       # A convenience method for waiting until there are no more
       # pending instances and then running the block
       def when_no_pending_instances(&block)
         reset!
-        if list_of_pending_instances.size > 0
+        if list_of_pending_instances.size == 0
+          block.call if block
+        else
           wait "5.seconds"
           when_no_pending_instances(&block)
-        else
-          block.call if block
         end
       end
       
       # This will launch the minimum_instances if the minimum number of instances are not running
       # If the minimum number of instances are not running and if we can start a new instance
-      def launch_minimum_number_of_instances
-        if can_start_a_new_instance?
-          while !minimum_number_of_instances_are_running?
-            request_launch_one_instance_at_a_time
-            wait "5.seconds"
-          end
+      def launch_minimum_number_of_instances        
+        if can_start_a_new_instance? && !minimum_number_of_instances_are_running?         
+          list_of_pending_instances.size == 0 ? request_launch_one_instance_at_a_time : wait("5.seconds")
+          reset!
+          launch_minimum_number_of_instances unless minimum_number_of_instances_are_running?
         end
       end
       # Stub method for the time being to handle expansion of the cloud
