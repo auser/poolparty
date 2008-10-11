@@ -18,14 +18,14 @@ load_pool(o.spec || Binary.get_existing_spec_location)
     puts header("Starting cloud")
     puts "#{list_of_running_instances.size} running instances (#{minimum_instances} - #{maximum_instances})"
     if (minimum_instances - list_of_running_instances.size) > 0
-      puts "Starting #{minimum_instances - list_of_running_instances.size} instances"    
+      puts "Starting the master instance"    
       if testing
         puts("\tNot launching while in testing mode")
       else
-        launch_minimum_number_of_instances
-        Kernel.system "cloud provision -n #{name} -c master"
+        launch_and_configure_master!
       end
-    end  
+    end
+    clear_base_directory unless testing
   end
   
 end

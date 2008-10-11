@@ -16,6 +16,7 @@ module PoolParty
 
       def install_tasks
         [
+          upgrade_system,
           install_puppet_master,
           create_local_hosts_entry,
           setup_basic_structure,
@@ -34,9 +35,18 @@ module PoolParty
           restart_puppetd
         ]
       end
+      
+      def upgrade_system
+        case @os
+        when :ubunutu
+          "apt-get update -y && apt-get upgrade -y"
+        else
+          ""
+        end
+      end
 
       def install_puppet_master
-        "#{installer_for(@os)} #{get_puppet_packages_for(@os)}"
+        "#{installer_for( puppet_packages )}"
       end
 
       def create_local_hosts_entry
@@ -112,11 +122,18 @@ mv #{Base.remote_storage_path}/#{Base.tmp_path}/#{@cloud.full_keypair_name} #{@c
       end
 
       def start_puppetmaster
-"puppetmasterd && puppetd --listen"
+        <<-EOS
+ps aux | grep puppetmasterd | awk '{print $2}' | xargs kill
+rm -rf /etc/puppet/ssl
+puppetmasterd
+        EOS
       end    
 
-      def restart_puppetd # && puppetrun --host 127.0.0.1
-        # "puppetd --listen"
+      def restart_puppetd
+        <<-EOS
+          puppetd --test
+          puppetd --listen
+        EOS
       end
     end
   end

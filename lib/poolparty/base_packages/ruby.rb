@@ -8,6 +8,16 @@ module PoolParty
         has_package(:name => "ruby1.8-dev")
         has_package(:name => "ruby1.8")
         has_package(:name => "rubygems")
+        
+        # exec(:name => "update-rubygems") do
+        #   command "gem update --system"
+        #   ifnot "gem -v | grep 1."
+        #   notify "Exec[fix-updated-rubygems]"
+        # end
+        # exec(:name => "fix-updated-rubygems") do
+        #   command "awk \'{print} NR == 9 {print \"require \"rubygems/gem_runner\"\"}\' /usr/bin/gem"
+        #   ifnot "awk \'/gem_runner/\' /usr/bin/gem"
+        # end
       end
       
       def enable_ri

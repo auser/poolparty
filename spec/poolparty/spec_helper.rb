@@ -59,7 +59,7 @@ end
 def stub_remoter_for(o)
   o.stub!(:ec2).and_return EC2::Base.new( :access_key_id => "not a key",  :secret_access_key => "even more not a key")
 end
-def stub_list_from_remote_for(o)
+def stub_list_from_remote_for(o, launch_stub=true)
   stub_remoter_for(o)
   @sample_instances_list = [{:ip => "127.0.0.1", :name => "master"}, {:ip => "127.0.0.2", :name => "node1"}]
   @ris = @sample_instances_list.map {|h| PoolParty::Remote::RemoteInstance.new(h) }  
@@ -68,11 +68,12 @@ def stub_list_from_remote_for(o)
   # o.stub!(:list_from_remote).and_return ris
   # o.stub!(:remote_instances_list).once.and_return ris
   # o.stub!(:master).and_return @ris[0]
+  o.stub!(:launch_new_instance!).and_return true if launch_stub
   stub_list_of_instances_for(o)
 end
 
 def stub_list_of_instances_for(o)  
-  # o.stub!(:remote_instances_list).once.and_return ris
+  # o.stub!(:list_of_running_instances).once.and_return running_remote_instances
   o.stub!(:keypair).and_return "fake_keypair"
   o.stub!(:describe_instances).and_return response_list_of_instances
 end
@@ -86,6 +87,10 @@ def response_list_of_instances(arr=[])
     @response_list_of_instances = [@a1, @a2, @a3, @a4, @b1, @c1]
   end
   @response_list_of_instances
+end
+
+def running_remote_instances
+  response_list_of_instances.select {|a| a[:status] =~ /running/ }
 end
 
 def reset_response!
