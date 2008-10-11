@@ -52,10 +52,10 @@ describe "ProvisionerBase" do
     ProvisionerBase.installers[:ubuntu].should_not be_nil
   end
   it "should be able to fetch the ubuntu installer with the helper method installer" do
-    ProvisionerBase.new(@remote_instance,@cloud).installer_for("ubuntu").should == "apt-get install -y"
+    ProvisionerBase.new(@remote_instance,@cloud, "ubuntu").installer_for.should == "apt-get install -y "
   end
   it "should be able to fetch the fedora installer with the helper method installer" do
-    ProvisionerBase.new(@remote_instance,@cloud).installer_for("fedora").should == "yum install"
+    ProvisionerBase.new(@remote_instance,@cloud, "fedora").installer_for.should == "yum install "
   end
   describe "install_string" do
     before(:each) do

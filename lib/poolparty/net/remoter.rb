@@ -143,6 +143,23 @@ module PoolParty
           launch_minimum_number_of_instances unless minimum_number_of_instances_are_running?
         end
       end
+      # Launch the master and let the master handle the starting of the cloud
+      # We should only launch an instance if there are no pending instances, in the case 
+      # that the master has launched, but is still pending
+      # and if the master is not running AND we can start a new instance
+      # Then wait for the master to launch
+      def launch_and_configure_master!(testing=false)
+        request_launch_new_instances(1) if list_of_pending_instances.size.zero? && can_start_a_new_instance? && !is_master_running?
+        
+        when_no_pending_instances do
+          wait "2.seconds"
+          Provisioner.provision_master(self, testing)
+        end
+        
+      end
+      def is_master_running?
+        !list_of_running_instances.select {|a| a.name == "master"}.first.nil?
+      end
       # Stub method for the time being to handle expansion of the cloud
       def should_expand_cloud?(force=false)
         force || false

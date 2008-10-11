@@ -165,8 +165,8 @@ module PoolParty
       end
       
       # Get the packages associated with each os
-      def get_puppet_packages_for(os)
-        case os
+      def puppet_packages
+        case @os
         when :fedora
           "puppet-server puppet factor"
         else
@@ -182,9 +182,11 @@ module PoolParty
         }
       end
       # Convenience method to grab the installer
-      def installer_for(name)
-        self.class.installers[name.to_sym]
+      def installer_for(names=[])
+        packages = names.is_a?(Array) ? names.join(" ") : names
+        "#{self.class.installers[@os]} #{packages}"
       end
+      
       # Install from the class-level
       def self.install(instance, cl=self)
         new(instance, cl).install

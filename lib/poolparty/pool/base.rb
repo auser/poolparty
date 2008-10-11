@@ -26,7 +26,7 @@ module PoolParty
       :proxy_mode => "http",
       :pool_logger_location => File.join(Dir.pwd, "logs"),
       # EC2 Options
-      :ami => "ami-4bb05422" 
+      :ami => "ami-1cd73375" 
     })
         
     # Class methods

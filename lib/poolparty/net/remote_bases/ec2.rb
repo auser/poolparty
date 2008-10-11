@@ -10,13 +10,13 @@ module PoolParty
   module Ec2
     def launch_new_instance!(num=1)
       instance = ec2.run_instances(
-        :image_id => self.respond_to?(:ami) ? ami : Base.ami,
+        :image_id => (ami || Base.ami),
         :user_data => "",
         :minCount => 1,
         :maxCount => num,
-        :key_name => "#{self.respond_to?(:keypair) ? keypair : Base.keypair}",
+        :key_name => (keypair || Base.keypair),
         :availability_zone => nil,
-        :size => "#{self.respond_to?(:size) ? size : Base.size}")
+        :size => "#{size || Base.size}")
       begin
         item = instance#.instancesSet.item
         EC2ResponseObject.get_hash_from_response(item)

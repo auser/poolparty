@@ -2,12 +2,13 @@ module PoolParty
   class Base
     plugin :poolparty do
       
-      def enable
+      def enable        
         has_package(:name => "erlang")
         # These should be installed automagically by poolparty, but just in case
-        has_gem(:name => "open4")
-        has_gem(:name => "activesupport")
-        has_gem(:name => "logging")
+        has_gempackage(:name => "open4")
+        has_gempackage(:name => "activesupport")
+        has_gempackage(:name => "logging")
+        
         has_gempackage(:name => "grempe-amazon-ec2", :source => "http://gems.github.com")
         has_gempackage(:name => "auser-poolparty", :source => "http://gems.github.com")
                 

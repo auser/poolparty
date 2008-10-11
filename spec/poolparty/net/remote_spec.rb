@@ -63,7 +63,7 @@ describe "Remote" do
   describe "after using" do
     before(:each) do
       @tc = TestClass.new
-      stub_list_from_remote_for(@tc)
+      stub_list_from_remote_for(@tc, false)
       @tc.using :hype
     end
     it "should now have the methods available from the module" do
