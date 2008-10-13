@@ -30,6 +30,9 @@ describe "Cloud" do
     it "should have set the using base on intantiation to ec2" do
       @cloud1.using_remoter?.should_not == nil
     end
+    it "should say the remoter_base is ec2 (by default)" do
+      @cloud1.remote_base.should == PoolParty::Ec2
+    end
   end
   it "should return the cloud if the cloud key is already in the clouds list" do
     @cld = cloud :pop do;end
@@ -176,7 +179,7 @@ describe "Cloud" do
         end
         it "should have 3 resources" do
           @cloud.add_poolparty_base_requirements
-          @cloud.number_of_resources.should == 3
+          @cloud.number_of_resources.should == 4
         end
         it "should receive add_poolparty_base_requirements before building the manifest" do
           @cloud.should_receive(:add_poolparty_base_requirements).once
@@ -248,7 +251,7 @@ describe "Cloud" do
             str = "master 192.168.0.1
             node1 192.168.0.2"
             @sample_instances_list = [{:ip => "192.168.0.1", :name => "master"}, {:ip => "192.168.0.2", :name => "node1"}]
-            @ris = @sample_instances_list.map {|h| PoolParty::Remote::RemoteInstance.new(h) }            
+            @ris = @sample_instances_list.map {|h| PoolParty::Remote::RemoteInstance.new(h, @cloud) }
             
             @manifest = @cloud.build_manifest
           end

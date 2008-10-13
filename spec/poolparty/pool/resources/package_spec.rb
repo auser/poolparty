@@ -4,7 +4,8 @@ include PoolParty::Resources
 
 describe "Package" do
   before(:each) do
-    @package = PoolParty::Resources::Package.new
+    @cloud = cloud :app do;end
+    @package = PoolParty::Resources::Package.new({}, @cloud)
   end
   describe "instances" do
     before(:each) do
@@ -19,12 +20,18 @@ describe "Package" do
     end
     describe "as included" do            
       before(:each) do
-        @package = package({:rent => "low"}) do
-          name "/www/conf/httpd.conf"
+        @cloud = cloud :included_package do
+          package({:rent => "low"}) do
+            name "/www/conf/httpd.conf"
+          end
         end
+        @package = @cloud.resource(:package).first
       end
       it "should use default values" do
         @package.name.should == "/www/conf/httpd.conf"
+      end
+      it "should have the cloud as the parent" do
+        @package.parent.should == @cloud
       end
       it "should keep the default values for the Package" do
         @package.alias.should == nil

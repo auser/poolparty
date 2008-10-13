@@ -11,6 +11,9 @@ class TestClass
     "fake_keypair"
   end
   
+  def ami;"ami-abc123";end
+  def size; "small";end
+  
   def ec2
     @ec2 ||= EC2::Base.new( :access_key_id => "not_an_access_key", :secret_access_key => "not_a_secret_access_key")
   end

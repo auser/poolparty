@@ -60,6 +60,11 @@ describe "Resource" do
     before(:each) do
       @resource = MyResource.new
     end
+    %w(requires ensures is_present is_absent ifnot).each do |method|
+      eval <<-EOE
+        it "should have the method #{method} available" do; @resource.respond_to?(:#{method}).should == true; end
+      EOE
+    end
     it "should be able to take requires method" do
       @resource.respond_to?(:requires).should == true
     end
@@ -75,6 +80,21 @@ describe "Resource" do
       @resource.options.has_key?(:ensure).should == false
       @resource.ensures("nibbles")
       @resource.options.has_key?(:ensure).should == true
+    end
+    it "should write the option ensures as present with is_present" do
+      @resource.options.has_key?(:ensure).should == false
+      @resource.is_present
+      @resource.options[:ensure].should == "present"
+    end
+    it "should write the option ensures as absent with is_absent" do
+      @resource.options.has_key?(:ensure).should == false
+      @resource.is_absent
+      @resource.options[:ensure].should == "absent"
+    end
+    it "should write the option unless for ifnot" do
+      @resource.options.has_key?(:unless).should == false
+      @resource.ifnot "str"
+      @resource.options[:unless].should == "str"
     end
     describe "templating" do
       before(:each) do
@@ -167,7 +187,7 @@ describe "Resource" do
       it "should be able to have_service as well" do
         has_service({:name => "apache"})
         resource(:service).get_named("apache").first.options[:ensure].should == "running"
-      end
+      end      
     end
     describe "get_resource" do
       before(:each) do

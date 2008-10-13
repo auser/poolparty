@@ -11,6 +11,7 @@ bin/cloud-contract
 bin/cloud-expand
 bin/cloud-list
 bin/cloud-maintain
+bin/cloud-osxcopy
 bin/cloud-provision
 bin/cloud-reconfigure
 bin/cloud-ssh
@@ -91,6 +92,7 @@ lib/poolparty/pool/plugin_model.rb
 lib/poolparty/pool/pool.rb
 lib/poolparty/pool/resource.rb
 lib/poolparty/pool/resources/class_package.rb
+lib/poolparty/pool/resources/conditional.rb
 lib/poolparty/pool/resources/cron.rb
 lib/poolparty/pool/resources/directory.rb
 lib/poolparty/pool/resources/exec.rb
@@ -160,6 +162,7 @@ spec/poolparty/pool/plugin_spec.rb
 spec/poolparty/pool/pool_spec.rb
 spec/poolparty/pool/resource_spec.rb
 spec/poolparty/pool/resources/class_package_spec.rb
+spec/poolparty/pool/resources/conditional_spec.rb
 spec/poolparty/pool/resources/cron_spec.rb
 spec/poolparty/pool/resources/directory_spec.rb
 spec/poolparty/pool/resources/exec_spec.rb

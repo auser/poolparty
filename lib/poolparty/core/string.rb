@@ -39,7 +39,7 @@ class String
   # although, it doesn't really matter as ruby will just reopen the class
   def class_constant(superclass=nil, opts={}, &block)
     symc = ((opts && opts[:preserve]) ? ("#{self.classify}Classs") : "PoolParty#{self.classify}Classs").classify
-        
+    
     kla=<<-EOE
       class #{symc} #{"< #{superclass}" if superclass}
       end

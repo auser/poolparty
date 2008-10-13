@@ -30,7 +30,7 @@ describe "Plugin" do
       @plugin.class.should == PoolPartyApacheClass
     end
     it "should have access to the cloud's container" do
-      @plugin.container.should == @p.cloud(:app).container
+      @plugin.parent.should == @c
     end
     it "should have enable_php as a method" do
       @plugin.respond_to?(:enable_php).should == true
@@ -39,7 +39,7 @@ describe "Plugin" do
       before(:each) do
         @plugin.instance_eval do
           enable_php
-          has_gem :name => "aska"
+          has_gem(:name => "aska")
         end
       end
       it "should call enable_php on the class" do

@@ -2,7 +2,7 @@ module PoolParty
   class Base
     plugin :heartbeat do
       
-      def enable
+      def enable        
         has_package(:name => "heartbeat-2", :ensure => "installed")
         has_service(:name => "heartbeat", :hasstatus => true) do
           ensures "running"
@@ -13,7 +13,7 @@ module PoolParty
         # variables for the templates
         has_variable({:name => "nodenames", :value => list_of_node_names})
         has_variable({:name => "node_ips",  :value => list_of_node_ips})
-        has_variable({:name => "port", :value => (port || Base.port)})
+        has_variable({:name => "port", :value => (self.respond_to?(:port) ? port : Base.port)})
         
         # These can also be passed in via hash
         has_remotefile(:name => "/etc/ha.d/ha.cf") do

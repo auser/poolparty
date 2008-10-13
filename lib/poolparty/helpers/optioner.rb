@@ -6,15 +6,18 @@ require 'date'
 module PoolParty
   class Optioner
     include Configurable
-    
-    attr_reader :options
-    
+    include MethodMissingSugar
+        
     def initialize(args=[], opts={}, &block)
       @arguments = args
       @parse_options = opts[:parse_options] ? opts[:parse_options] : true
       
       set_default_options
       parse_options(&block) if @parse_options
+      self
+    end
+    
+    def parent
       self
     end
     
