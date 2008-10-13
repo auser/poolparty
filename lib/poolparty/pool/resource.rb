@@ -43,6 +43,8 @@ module PoolParty
     end
     
     class Resource
+      attr_accessor :prestring, :poststring
+      
       include CloudResourcer
       include Configurable
       
@@ -196,6 +198,8 @@ module PoolParty
         opts = get_modified_options
         returning Array.new do |output|
           
+          output << @prestring || ""
+          
           if resources && !resources.empty?
             @cp = classpackage_with_self(self)
             output << @cp.to_string
@@ -208,6 +212,8 @@ module PoolParty
             output << opts.flush_out("#{prev*2}").join(",\n")
             output << "#{prev}}"            
           end
+          
+          output << @poststring || ""
                     
         end.join("\n")
       end

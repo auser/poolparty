@@ -5,7 +5,10 @@ include PoolParty::Resources
 describe "Cron" do
   describe "instances" do
     before(:each) do
-      @cron = cron({:command => "/bin/logrotate"})
+      @cloud = cloud :cron_resources do
+        cron({:command => "/bin/logrotate"})
+      end
+      @cron = @cloud.resource(:cron).first
     end
     it "should turn the one hash instance into a string" do
       @cron.to_string.should =~ /'\/bin\/logrotate'/

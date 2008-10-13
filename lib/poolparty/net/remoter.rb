@@ -46,7 +46,7 @@ module PoolParty
           out = list_from_remote(:cache => true)
         end
         return out
-      end
+      end      
       # List the instances that are known from the remoter_base
       # Create a RemoteInstance for each of the instances from the hash
       # returned by the list of instances, write them to the cached file
@@ -152,7 +152,7 @@ module PoolParty
         request_launch_new_instances(1) if list_of_pending_instances.size.zero? && can_start_a_new_instance? && !is_master_running?
         
         when_no_pending_instances do
-          wait "2.seconds"
+          wait "5.seconds"
           Provisioner.provision_master(self, testing)
         end
         

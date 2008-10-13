@@ -6,6 +6,7 @@ o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
   opts.on('-c [master|slaves|all]', '--class [master|slaves|all]', 'Provision class (default: all)')    { |c| optioner.provision_class c }
   opts.on('-n name', '--name name', 'Listing for cloud name')    { |c| optioner.cloudname c }
 end
+
 load_pool(o.spec || Binary.get_existing_spec_location)
 
 @provision_class = o.provision_class || "all"

@@ -6,14 +6,17 @@ class TestClass
   include CloudResourcer
   include Remote
   using :ec2
-  
+  attr_accessor :parent
+    
   def keypair
     "fake_keypair"
   end
 end
 describe "Remoter" do
   before(:each) do
+    @cloud = cloud :app do;end
     @tc = TestClass.new
+    @tc.parent = @cloud
     ::File.stub!(:exists?).with("#{File.expand_path(Base.base_keypair_path)}/id_rsa-fake_keypair").and_return true
     @sample_instances_list = [{:ip => "192.168.0.1", :name => "master"}, {:ip => "192.168.0.2", :name => "node1"}]
   end

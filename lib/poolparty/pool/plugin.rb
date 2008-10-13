@@ -6,7 +6,6 @@ module PoolParty
       include Configurable
       include CloudResourcer
       include Resources
-      extend Resources
       
       attr_accessor :parent
       class_inheritable_accessor :name
@@ -22,19 +21,19 @@ module PoolParty
       def enable
       end
             
-      def method_missing(m, *args, &block)
-        if block_given?
-          (args[0].class == self.class) ? args[0].instance_eval(&block) : super
-        elsif parent && parent.respond_to?(m)
-          parent.send m, *args, &block
-        else
-          get_from_options(m, *args)
-        end
-      end
-
-      def get_from_options(m, *args)
-        args.empty? ? options[m] : options[m] = args[0]
-      end
+      # def method_missing(m, *args, &block)
+      #   if block_given?
+      #     (args[0].class == self.class) ? args[0].instance_eval(&block) : super
+      #   elsif parent && parent.respond_to?(m)
+      #     parent.send m, *args, &block
+      #   else
+      #     get_from_options(m, *args)
+      #   end
+      # end
+      # 
+      # def get_from_options(m, *args)
+      #   args.empty? ? options[m] : options[m] = args[0]
+      # end
       
     end
     

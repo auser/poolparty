@@ -43,9 +43,9 @@ module PoolParty
         @name = name
         # store_block(&block)
         set_parent(parent) if parent
-        self.instance_eval &block if block        
+        self.instance_eval &block if block
         # this can be overridden in the spec, but ec2 is the default
-        using :ec2
+        self.using :ec2
       end
                         
       # Keypairs
@@ -107,7 +107,7 @@ module PoolParty
       
       # Configuration files
       def build_manifest
-        reset_resources!        
+        reset_resources!
         add_poolparty_base_requirements
         
         returning Array.new do |str|
