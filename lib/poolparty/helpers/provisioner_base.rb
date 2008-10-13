@@ -90,8 +90,8 @@ module PoolParty
       end
       def process_configure!(testing=false)
         error unless valid?
-        setup_runner(@cloud)
         write_configure_file
+        setup_runner(@cloud)        
         
         unless testing
           @cloud.rsync_storage_files_to(@instance)
@@ -112,7 +112,7 @@ module PoolParty
       end
       # Gather all the tasks into one string
       def install_string
-        (default_install_tasks << custom_install_tasks).each do |task|
+        (default_install_tasks).each do |task|
           case task.class
           when String
             task
@@ -122,7 +122,7 @@ module PoolParty
         end.nice_runnable
       end
       def configure_string
-        (default_configure_tasks << custom_configure_tasks).each do |task|
+        (default_configure_tasks).each do |task|
           case task.class
           when String
             task
@@ -135,13 +135,14 @@ module PoolParty
       # These are run on all the provisioners, master or slave
       def default_install_tasks
         [
-          
+          custom_install_tasks
         ] << install_tasks
       end
       # Tasks with default configuration tasks
       # This is run on the provisioner, regardless
       def default_configure_tasks
         [
+          custom_configure_tasks
         ] << configure_tasks
       end
       # Build a list of the tasks to run on the instance

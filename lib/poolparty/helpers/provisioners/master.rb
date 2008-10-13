@@ -3,7 +3,8 @@ module PoolParty
     class Master < ProvisionerBase
       
       def initialize(cloud=self, os=:ubuntu)
-        super(cloud.master, cloud)
+        super(cloud.master, cloud, os)
+        @master_ip = cloud.master.ip
       end
 
       def valid?
@@ -45,7 +46,8 @@ module PoolParty
           touch /etc/apt/sources.list
           echo 'deb http://mirrors.kernel.org/ubuntu hardy main universe' >> /etc/apt/sources.list
           apt-get update --fix-missing -y
-          apt-get upgrade -y"
+          apt-get upgrade -y
+          "
         else
           "# No system upgrade needed"
         end
@@ -55,17 +57,17 @@ module PoolParty
         "#{installer_for( puppet_packages )}"
       end
       
-      def install_haproxy
-        "#{installer_for( "haproxy" )}"
-      end
-      
-      def install_heartbeat        
-        "#{installer_for( "heartbeat-2" )}"
-      end
+      # def install_haproxy
+      #   "#{installer_for( "haproxy" )}"
+      # end
+      # 
+      # def install_heartbeat        
+      #   "#{installer_for( "heartbeat-2" )}"
+      # end
 
       def create_local_hosts_entry
         <<-EOS
-if [ -z "grep -v '#' /etc/hosts | grep 'puppet'" ]; then echo '#{@master_ip}           puppet master' >> /etc/hosts; fi
+if [ -z \"$(grep -v '#' /etc/hosts | grep 'master')" ]; then echo '#{@master_ip}           puppet master' >> /etc/hosts; fi
         EOS
       end
 

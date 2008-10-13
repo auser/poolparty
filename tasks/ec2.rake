@@ -1,6 +1,6 @@
 namespace(:ec2) do        
   task :init do
-    Base.options
+    %x[ec2-authorize default -P icmp -t -1:-1 -s 0.0.0.0/0]
   end
   # Start a new instance in the cloud
   desc "Add and start an instance to the pool"
