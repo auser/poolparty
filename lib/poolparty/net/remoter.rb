@@ -152,8 +152,8 @@ module PoolParty
         request_launch_new_instances(1) if list_of_pending_instances.size.zero? && can_start_a_new_instance? && !is_master_running?
         
         when_no_pending_instances do
-          wait "5.seconds"
-          Provisioner.provision_master(self, testing)
+          wait "10.seconds"
+          hide_output { Provisioner.provision_master(self, testing) }
         end
         
       end
