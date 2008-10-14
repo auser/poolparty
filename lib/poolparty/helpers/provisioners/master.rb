@@ -23,13 +23,13 @@ module PoolParty
           setup_basic_structure,
           setup_configs,        
           setup_fileserver,
-          setup_autosigning,
-          start_puppetmaster
+          setup_autosigning,          
         ] << configure_tasks
       end
 
       def configure_tasks
         [
+          start_puppetmaster,
           create_local_node,
           move_templates,
           create_poolparty_manifest,
