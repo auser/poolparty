@@ -7,4 +7,4 @@ auto_failback on
 use_logd yes
 crm on
 
-node <%= nodenames.join(" ") %>
+node <%= ha_nodenames.join(" ") %>
