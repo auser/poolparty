@@ -27,14 +27,14 @@ module PoolParty
       def to_string
         returning String.new do |output|
           output << "# #{name.sanitize}"
-          output << "\nclass #{name.sanitize} {\n"
+          output << "\nclass #{name.sanitize.downcase} {\n"
           output << resources_string_from_resources(resources)
           output << "\n}\n"
         end
       end
       
       def include_string
-        "include #{name.sanitize}"
+        "include #{name.sanitize.downcase}"
       end
       
       def name(*args)

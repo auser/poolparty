@@ -33,7 +33,11 @@ class String
   def to_option_string(ns=[])
     a_template = (self =~ /template/) == 0
     a_service = self =~ /^[A-Z][a-zA-Z]*\[[a-zA-Z0-9\-\.\"\'_\$\{\}\/]*\]/
-    (a_service || a_template) ? "#{self}" : "'#{self}'"
+    if is_a?(PoolParty::Resources::Resource)
+      self.to_s
+    else
+      (a_service || a_template) ? "#{self}" : "'#{self}'"
+    end    
   end
   # Refactor this guy to get the class if the class is defined, and not always create a new one
   # although, it doesn't really matter as ruby will just reopen the class
