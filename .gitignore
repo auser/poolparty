@@ -6,3 +6,4 @@ pkg*
 .gitignore
 logs/*
 logs/
+test_manifest.pp

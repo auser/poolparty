@@ -3,6 +3,10 @@ module PoolParty
     plugin :ruby do
       
       def enable                
+        install_base_packages
+      end
+      
+      def install_base_packages
         has_package(:name => "libreadline-ruby1.8")
         has_package(:name => "libruby1.8")                
         has_package(:name => "ruby1.8-dev")
@@ -11,12 +15,12 @@ module PoolParty
         
         # exec(:name => "update-rubygems") do
         #   command "gem update --system"
-        #   ifnot "gem -v | grep 1."
-        #   notify "Exec[fix-updated-rubygems]"
+        #   onlyif "gem -v | grep 1."
+        #   notify 'Exec["fix-updated-rubygems"]'
         # end
         # exec(:name => "fix-updated-rubygems") do
         #   command "awk \'{print} NR == 9 {print \"require \"rubygems/gem_runner\"\"}\' /usr/bin/gem"
-        #   ifnot "awk \'/gem_runner/\' /usr/bin/gem"
+        #   ifnot "awk \"/gem_runner/\" /usr/bin/gem"
         # end
       end
       

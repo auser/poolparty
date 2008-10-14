@@ -3,19 +3,36 @@ module PoolParty
         
     virtual_resource(:git) do
       
-      def loaded
+      def loaded(opts={})
+        install_git
+        has_git_repos
+      end
+      
+      def install_git
+        has_package(:name => "git-core")
+      end
+      
+      def has_git_repos        
+        has_directory(:name => "#{path}")
         
-        has_directory(:name => "#{name}", :path => "#{path}", :user => "#{user || Base.user}")
-        
-        exec({:name => "git-#{name}", :command => (user ? "git clone #{user}@#{source}" : "git clone #{source}")}) do
-          cwd "#{path}"
-          requires "File[#{name}]"
+        exec({:name => "git-#{name}"}) do
+          command @parent.user ? "git clone #{@parent.user}@#{@parent.source} #{@parent.path}" : "git clone #{@parent.source} #{@parent.path}"
+          cwd "#{::File.dirname(@parent.path) if @parent.path}"
+          creates "#{@parent.path}/.git"
         end
         
         exec(:name => "git-update-#{name}", :cwd => "#{path}") do
-          requires "Exec['git-#{name}']"
-        end        
+          command "git pull"
+          requires "Exec['git-#{@parent.name}']"
+        end
+        
+        if symlink
+          has_file(:name => "#{symlink}") do
+            ensures @parent.path
+          end
+        end
       end
+      
     end
     
   end

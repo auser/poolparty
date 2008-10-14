@@ -5,15 +5,16 @@ module PoolParty
       def enable        
         has_package(:name => "erlang")
         # These should be installed automagically by poolparty, but just in case
-        has_gempackage(:name => "open4")
-        has_gempackage(:name => "activesupport")
-        has_gempackage(:name => "logging")
-        has_gempackage(:name => "hoe")
-        has_gempackage(:name => "xml-simple")
-        
-        has_gempackage(:name => "grempe-amazon-ec2", :source => "http://gems.github.com", :requires => 'Package["xml-simple"]')
-        has_gempackage(:name => "auser-poolparty", :source => "http://gems.github.com", :requires => 'Package["activesupport", "logging", "hoe", "open4"]')
-                
+        with_options(:requires => 'Package["update-rubygems"]') do
+          has_gempackage(:name => "open4")
+          has_gempackage(:name => "activesupport")
+          has_gempackage(:name => "logging")
+          has_gempackage(:name => "hoe")
+          has_gempackage(:name => "xml-simple")
+
+          has_gempackage(:name => "grempe-amazon-ec2", :source => "http://gems.github.com", :requires => 'Package["xml-simple"]')
+          has_gempackage(:name => "auser-poolparty", :source => "http://gems.github.com", :requires => 'Package["activesupport", "logging", "hoe", "open4"]')          
+        end                
         # Build hostsfile
         # TODO: COME BACK AND CLEAN THIS UP
         (self.respond_to?(:list_of_running_instances) ? self : parent).list_of_running_instances.each do |ri|

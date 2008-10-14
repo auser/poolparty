@@ -88,11 +88,11 @@ module PoolParty
         @parent = parent
         set_vars_from_options(opts) unless opts.empty?
         self.instance_eval &block if block
-        loaded
+        loaded(opts)
       end
       
       # Stub, so you can create virtual resources
-      def loaded
+      def loaded(opts={})
       end
       
       # DSL Overriders
@@ -105,7 +105,11 @@ module PoolParty
         options.merge!(:require => str)
       end 
       def ensures(str="running")
-        str == "absent" ? is_absent : is_present
+        if %w(absent running).map {|a| self.send a.to_sym}.include?(str)
+          str == "absent" ? is_absent : is_present
+        else
+          options.merge!(:ensure => str)
+        end        
       end
       # Allows us to send an ensure to ensure the presence of a resource
       def is_present(*args)

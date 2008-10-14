@@ -42,7 +42,7 @@ module PoolParty
       def upgrade_system
         case @os
         when :ubuntu
-          "
+          "          
           touch /etc/apt/sources.list
           echo 'deb http://mirrors.kernel.org/ubuntu hardy main universe' >> /etc/apt/sources.list
           apt-get update --fix-missing -y
