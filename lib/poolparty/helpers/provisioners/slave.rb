@@ -3,8 +3,7 @@ module PoolParty
     class Slave < ProvisionerBase
 
       def install_tasks
-        [
-          install_puppet,        
+        [ 
           setup_puppet
         ] << configure_tasks
       end
@@ -14,13 +13,6 @@ module PoolParty
           setup_configs,
           start_puppet
         ]
-      end
-
-      def install_puppet
-        <<-EOE        
-          #{installer_for( puppet_packages )}
-          echo 'DAEMON_OPTS="-w 120 --server puppet"' > /etc/default/puppet
-        EOE
       end
 
       def setup_puppet

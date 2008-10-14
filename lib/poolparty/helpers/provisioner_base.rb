@@ -135,6 +135,8 @@ module PoolParty
       # These are run on all the provisioners, master or slave
       def default_install_tasks
         [
+          upgrade_system,
+          install_puppet_master,
           custom_install_tasks
         ] << install_tasks
       end
@@ -214,6 +216,24 @@ module PoolParty
            EOS
          end
         "echo '#{str}' > /etc/puppet/manifests/nodes/nodes.pp"
+      end
+      
+      def upgrade_system
+        case @os
+        when :ubuntu
+          "          
+          touch /etc/apt/sources.list
+          echo 'deb http://mirrors.kernel.org/ubuntu hardy main universe' >> /etc/apt/sources.list
+          apt-get update --fix-missing -y
+          apt-get upgrade -y
+          "
+        else
+          "# No system upgrade needed"
+        end
+      end
+      
+      def install_puppet_master
+        "#{installer_for( puppet_packages )}"
       end
 
       def create_poolparty_manifest
