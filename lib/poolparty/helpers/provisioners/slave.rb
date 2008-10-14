@@ -39,7 +39,7 @@ module PoolParty
 
       def start_puppet
         <<-EOS
-puppetd --listen
+puppetd --listen --fqdn=#{@instance.name}
         EOS
       end
       
