@@ -16,13 +16,13 @@ describe "Slave provisioner" do
   end
   describe "install_tasks" do
     it "should call install_puppet_slave" do
-      @slave.should_receive(:install_puppet)
+      @slave.should_receive(:install_puppet_master)
     end
     after do
       @slave.install
     end
   end
   it "should return install_puppet as apt-get install puppet factor" do
-    @slave.install_puppet.should =~ /        apt-get install -y puppet puppetmaster/
+    @slave.setup_puppet.should =~ /puppetd/
   end
 end

@@ -18,7 +18,7 @@ include Remote
 
 @clouds.each do |name, cloud|
 
-  with_cloud(cloud, {:location => @location}) do
+  with_cloud(cloud, {:location => @location, :testing => o.testing}) do
     logger.info header("Maintaining cloud #{name}")
     if !minimum_number_of_instances_are_running?
       logger.warn "#{list_of_running_instances.size} running instances of between #{minimum_instances} and #{maximum_instances}"

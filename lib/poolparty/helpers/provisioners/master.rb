@@ -17,8 +17,6 @@ module PoolParty
 
       def install_tasks
         [
-          upgrade_system,
-          install_puppet_master,
           install_haproxy,
           install_heartbeat,
           create_local_hosts_entry,
@@ -37,24 +35,6 @@ module PoolParty
           create_poolparty_manifest,
           restart_puppetd
         ]
-      end
-      
-      def upgrade_system
-        case @os
-        when :ubuntu
-          "          
-          touch /etc/apt/sources.list
-          echo 'deb http://mirrors.kernel.org/ubuntu hardy main universe' >> /etc/apt/sources.list
-          apt-get update --fix-missing -y
-          apt-get upgrade -y
-          "
-        else
-          "# No system upgrade needed"
-        end
-      end
-
-      def install_puppet_master
-        "#{installer_for( puppet_packages )}"
       end
       
       # def install_haproxy
