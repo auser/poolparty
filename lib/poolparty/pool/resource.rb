@@ -19,9 +19,12 @@ module PoolParty
     
     def add_resource(type, opts={}, parent=self, &block)
       resource = get_resource(type, opts[:name])
-      return resource if resource
-      returning "PoolParty::Resources::#{type.to_s.camelize}".classify.constantize.new(opts, parent, &block) do |o|
-        resource(type) << o
+      if resource
+        return resource 
+      else
+        returning "PoolParty::Resources::#{type.to_s.camelize}".classify.constantize.new(opts, parent, &block) do |o|
+          resource(type) << o
+        end
       end
     end
     
@@ -101,7 +104,7 @@ module PoolParty
       # Overrides for syntax
       # Allows us to send require to require a resource
       def require(str="")
-        options[:require]        
+        options[:require]
       end
       def requires(str="")
         options.merge!(:require => str)
@@ -225,7 +228,7 @@ module PoolParty
       end
       
       def to_s
-        "#{self.class.to_s.top_level_class.capitalize}['#{name}']"
+        "#{class_type_name.capitalize}['#{key}']"
       end
     end
     

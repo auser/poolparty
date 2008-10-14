@@ -23,4 +23,9 @@ describe "Array" do
       @array.to_os
     end
   end
+  describe "to_option_string" do
+    it "should map the to_option_strings in an array of strings" do
+      ["hi", "be"].to_option_string.should == "[ 'hi', 'be' ]"
+    end
+  end
 end

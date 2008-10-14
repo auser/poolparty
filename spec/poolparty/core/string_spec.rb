@@ -129,6 +129,13 @@ listen web_proxy 127.0.0.1:3000
     it "should return File['/etc/apache2/conf.d/base.conf'] as a string" do
       'File["/etc/apache2/conf.d/base.conf"]'.to_option_string.should == "File[\"/etc/apache2/conf.d/base.conf\"]"
     end
+    it "should turn a resource into a requires file" do
+      @cloud = cloud :app do
+        file(:name => "franke")
+      end
+      @file = @cloud.resource(:file).first
+      @file.to_option_string.should == "File['franke']"
+    end    
   end
   describe "sanitize" do
     it "should remove the periods from the string" do
