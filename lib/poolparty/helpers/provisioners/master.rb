@@ -143,11 +143,10 @@ ps aux | grep puppetmasterd | awk '{print $2}' | xargs kill
 rm -rf /etc/puppet/ssl
 puppetmasterd
         EOS
-      end    
+      end
 
       def restart_puppetd
         <<-EOS
-          puppetd --test
           puppetd --listen
         EOS
       end

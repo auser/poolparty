@@ -34,13 +34,15 @@ module PoolParty
     # which means we are retrieving the property
     # of the form
     # @cloud.name => @cloud.options[:name]
-    
+    # Finally, if the method name is not in the options, then we check to make sure it's not set on the 
+    # parent, we don't want the parent's set option and that the parent isnot itself and send it
+    # to the parent to handle. Otherwise, we'll say it's nil instead
     def get_from_options(m, *args, &block)
       if args.empty?
         if options.has_key?(m)
           options[m]
         else
-          (parent.nil? || parent.class == self.class || !parent.respond_to?(:options) || parent.options.has_key?(m)) ? nil : parent.send(m, *args, &block)
+          (parent.nil? || parent.class == self.class || !parent.respond_to?(:options)) ? nil : parent.send(m, *args, &block)
         end        
       else
         options[m] = (args.is_a?(Array) && args.size > 1) ? args : args[0]
