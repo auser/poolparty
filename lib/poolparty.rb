@@ -19,7 +19,7 @@ require "#{File.dirname(__FILE__)}/poolparty/version"
   end
 end
 
-Kernel.load_p File.dirname(__FILE__) + "/poolparty/pool/**"
+Kernel.load_p File.dirname(__FILE__) + "/poolparty/pool"
 
 module PoolParty
   include FileWriter
