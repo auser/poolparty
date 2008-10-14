@@ -30,6 +30,8 @@ class String
   def nice_runnable(quite=true)
     self.split(/ && /).join("\n")
   end
+  # This is the method we use to turn the options into a string to build the main 
+  # manifests
   def to_option_string(ns=[])
     a_template = (self =~ /template/) == 0
     a_service = self =~ /^[A-Z][a-zA-Z]*\[[a-zA-Z0-9\-\.\"\'_\$\{\}\/]*\]/
