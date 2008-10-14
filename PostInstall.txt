@@ -1,13 +1,13 @@
-Get ready to jump in the pool, you just installed PoolParty!
+Get ready to jump in the pool, you just installed poolpartyrb!
 
 To get started, run the generator:
 
   pool spec <name>
 
 Please check out the documentation for any questions or check out the google groups at
-  http://groups.google.com/group/PoolPartyrb
+  http://groups.google.com/group/poolpartyrb
 
-Don't forget to check out the plugin tutorial @ http://PoolPartyrb.com for extending PoolParty!      
+Don't forget to check out the plugin tutorial @ http://poolpartyrb.com for extending PoolParty!
 
 For more information, check http://PoolPartyrb.com
 On IRC: 
