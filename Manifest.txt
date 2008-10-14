@@ -115,6 +115,7 @@ lib/poolparty/templates/namespaceauth.conf
 lib/poolparty/templates/puppet.conf
 lib/poolparty/version.rb
 lib/poolpartycl.rb
+poolparty.gemspec
 script/destroy
 script/generate
 script/txt2html
