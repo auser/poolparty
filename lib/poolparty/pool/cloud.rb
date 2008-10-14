@@ -107,24 +107,27 @@ module PoolParty
       
       # Configuration files
       def build_manifest
-        reset_resources!
-        add_poolparty_base_requirements
-        
-        returning Array.new do |str|
-          
-          str << resources_string_from_resources(resources)
-          
-          # Refactor this into the resources method
-          # TODO
-          services.each do |service|
-            @cp = classpackage_with_self(service)
-            str << @cp.to_string
-            str << @cp.include_string
-          end
-          
-          str << "# Custom functions"
-          str << Resources::CustomResource.custom_functions_to_string
-        end.join("\n")
+        unless @build_manifest
+          reset_resources!
+          add_poolparty_base_requirements
+
+          @build_manifest = returning Array.new do |str|
+
+            str << resources_string_from_resources(resources)
+
+            # Refactor this into the resources method
+            # TODO
+            services.each do |service|
+              @cp = classpackage_with_self(service)
+              str << @cp.to_string
+              str << @cp.include_string
+            end
+
+            str << "# Custom functions"
+            str << Resources::CustomResource.custom_functions_to_string
+          end.join("\n")          
+        end
+        @build_manifest
       end
       
       # To allow the remote instances to do their job,
