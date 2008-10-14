@@ -196,7 +196,8 @@ module PoolParty
       def self.configure(instance, cl=self)
         new(instance, cl).configure
       end
-
+      
+      # Template directory from the provisioner base
       def template_directory
         File.join(File.dirname(__FILE__), "..", "templates")
       end
