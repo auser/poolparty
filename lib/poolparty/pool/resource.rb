@@ -246,3 +246,5 @@ module PoolParty
     
   end
 end
+
+Kernel.load_p File.dirname(__FILE__) + "/resources/*"

@@ -11,7 +11,7 @@ module Kernel
   end
   def load_p(dir)
     Dir["#{dir}/**"].each do |file|
-      File.directory?(file) ? load_p(file) : (require "#{file}")
+      ::File.directory?(file) ? load_p(file) : (load "#{file}")
     end
   end
   def with_warnings_suppressed
