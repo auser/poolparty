@@ -21,12 +21,13 @@ To get started, run the generator:
 Please check out the documentation for any questions or check out the google groups at
   http://groups.google.com/group/poolpartyrb
 
+
 Don't forget to check out the plugin tutorial @ http://poolpartyrb.com for extending PoolParty!
 
 For more information, check http://PoolPartyrb.com
 On IRC: 
   irc.freenode.net
-  #PoolPartyrb
+  #poolpartyrb
   
 *** Ari Lerner @ <arilerner@mac.com> ***}
   s.rdoc_options = ["--main", "README.txt"]
