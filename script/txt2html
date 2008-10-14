@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
-GEM_NAME = 'PoolParty' # what ppl will type to install your gem
-RUBYFORGE_PROJECT = 'PoolParty'
+GEM_NAME = 'poolparty' # what ppl will type to install your gem
+RUBYFORGE_PROJECT = 'poolparty'
 
 require 'rubygems'
 begin

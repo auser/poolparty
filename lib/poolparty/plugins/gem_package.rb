@@ -7,6 +7,7 @@ module PoolParty
         has_exec(:name => "gem-package-#{name}", :cwd => "/tmp", :path => "/bin:/usr/bin:/usr/local/bin:/sbin:/usr/sbin:/var/lib/gems/1.8/bin") do
           command "gem install -y --no-ri --no-rdoc #{"--version \"#{version}\"" if @parent.version} #{"--source #{@parent.source}" if @parent.source} #{@parent.name}"
           ifnot "gem list --local #{@parent.name} | grep #{@parent.name} #{"| grep #{@parent.version}" if @parent.version}"
+          requires "Package['rubygems']"
         end
       end
       
