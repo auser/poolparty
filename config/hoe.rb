@@ -13,7 +13,8 @@ DOWNLOAD_PATH = "http://rubyforge.org/projects/#{RUBYFORGE_PROJECT}"
 EXTRA_DEPENDENCIES = [
  ['activesupport'],
  ['open4'],
- ['logging']
+ ['logging'],
+ ["ruby2ruby"]
 ]    # An array of rubygem dependencies [name, version]
 
 @config_file = "~/.rubyforge/user-config.yml"
