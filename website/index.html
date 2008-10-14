@@ -8,6 +8,7 @@
       PoolParty
   </title>
   <script src="javascripts/rounded_corners_lite.inc.js" type="text/javascript"></script>
+  <link href="stylesheets/code.css" media="screen" rel="stylesheet" type="text/css" />
 <style>
 
 </style>
@@ -31,46 +32,71 @@
 <div id="main">
 
     <h1>PoolParty</h1>
-    <div id="version" class="clickable" onclick='document.location = "http://rubyforge.org/projects/PoolParty"; return false'>
+    <div id="version" class="clickable" onclick='document.location = "http://rubyforge.org/projects/poolparty"; return false'>
       <p>Get Version</p>
-      <a href="http://rubyforge.org/projects/PoolParty" class="numbers">0.2.6</a>
+      <a href="http://rubyforge.org/projects/poolparty" class="numbers">0.2.6</a>
     </div>
-    <h1>&amp;#x2192; &#8216;Easy cloud computing&#8217;</h1>
+    <h1>&#8216;Easy cloud computing&#8217;</h1>
 <h2>What</h2>
+<p>A self-healing, load-balanced cloud computing solution. Combined with the power of <a href="http://reductivelabs.com/trac/puppet/">Puppet</a>, the <a href="http://www.linux-ha.org/">High Availability</a> project, ruby and erlang, PoolParty makes it easy and fun to set up your cloud! Currently, you can use it with ec2, but it&#8217;s not tied to any particular service. You can use PoolParty to manage and monitor your home network!</p>
 <h2>Installing</h2>
-<p><pre class='syntax'><span class="ident">sudo</span> <span class="ident">gem</span> <span class="ident">install</span> <span class="constant">PoolParty</span></pre></p>
+<p><pre class='syntax'><span class="ident">sudo</span> <span class="ident">gem</span> <span class="ident">install</span> <span class="punct">--</span><span class="ident">source</span> <span class="ident">http</span><span class="punct">:/</span><span class="regex"></span><span class="punct">/</span><span class="ident">gems</span><span class="punct">.</span><span class="ident">github</span><span class="punct">.</span><span class="ident">com</span> <span class="ident">auser</span><span class="punct">-</span><span class="ident">poolparty</span></pre></p>
 <h2>The basics</h2>
 <h2>Demonstration of usage</h2>
+<pre>
+cloud spec [name]
+</pre>
+<p>This will create a basic spec for you in the spec directory. Then, write your spec file. There are examples in the repos as well as the one below:</p>
+<p><pre class='syntax'>
+  <span class="comment"># Basic poolparty template with apache plugin</span>
+  <span class="ident">require</span> <span class="punct">&quot;</span><span class="string">poolparty-apache2-plugin</span><span class="punct">&quot;</span>
+
+  <span class="ident">pool</span> <span class="symbol">:app</span> <span class="keyword">do</span>
+
+    <span class="ident">instances</span> <span class="number">2</span><span class="punct">..</span><span class="number">5</span>
+    <span class="ident">port</span> <span class="number">80</span>
+    <span class="ident">ami</span> <span class="punct">&quot;</span><span class="string">ami-1cd73375</span><span class="punct">&quot;</span> <span class="comment"># Alestic Ubuntu AMI</span>
+
+    <span class="ident">cloud</span> <span class="symbol">:app</span> <span class="keyword">do</span>
+
+      <span class="ident">apache</span> <span class="keyword">do</span>
+        <span class="ident">installed_as_worker</span>      
+
+        <span class="ident">has_virtualhost</span> <span class="keyword">do</span>
+
+          <span class="ident">name</span> <span class="punct">&quot;</span><span class="string">poolpartyrb.com</span><span class="punct">&quot;</span>
+          <span class="ident">listen</span><span class="punct">(&quot;</span><span class="string">8080</span><span class="punct">&quot;)</span>
+          <span class="ident">virtual_host_entry</span> <span class="punct">::</span><span class="constant">File</span><span class="punct">.</span><span class="ident">join</span><span class="punct">(</span><span class="constant">File</span><span class="punct">.</span><span class="ident">dirname</span><span class="punct">(</span><span class="constant">__FILE__</span><span class="punct">),</span> <span class="punct">&quot;</span><span class="string">templates</span><span class="punct">&quot;,</span> <span class="punct">&quot;</span><span class="string">virtual_host.conf.erb</span><span class="punct">&quot;)</span>
+
+          <span class="ident">has_git</span><span class="punct">(</span><span class="symbol">:name</span> <span class="punct">=&gt;</span> <span class="punct">&quot;</span><span class="string">poolpartyrepos</span><span class="punct">&quot;,</span> <span class="symbol">:source</span> <span class="punct">=&gt;</span> <span class="punct">&quot;</span><span class="string">git://github.com/auser/xnot.org.git</span><span class="punct">&quot;,</span> <span class="symbol">:path</span> <span class="punct">=&gt;</span> <span class="punct">&quot;</span><span class="string">/var/www/xnot.org/public</span><span class="punct">&quot;)</span>
+
+        <span class="keyword">end</span>
+      <span class="keyword">end</span>
+
+    <span class="keyword">end</span>
+
+  <span class="keyword">end</span>
+</pre></p>
 <h2>Forum</h2>
 <p><a href="http://groups.google.com/group/PoolParty">http://groups.google.com/group/PoolParty</a></p>
 <h2>How to submit patches</h2>
 <p>Read the <a href="http://drnicwilliams.com/2007/06/01/8-steps-for-fixing-other-peoples-code/">8 steps for fixing other people&#8217;s code</a> and for section <a href="http://drnicwilliams.com/2007/06/01/8-steps-for-fixing-other-peoples-code/#8b-google-groups">8b: Submit patch to Google Groups</a>, use the Google Group above.</p>
-<p>The trunk repository is <code>svn://rubyforge.org/var/svn/PoolParty/trunk</code> for anonymous access.</p>
-<p><span class="caps">OOOORRRR</span></p>
+<p>The trunk repository is <code>http://github.com/auser/poolparty</code> for anonymous access.</p>
 <p>You can fetch the source from either:</p>
-<ul>
-	<li>rubyforge: <span class="caps">MISSING</span> IN <span class="caps">ACTION</span></li>
-</ul>
-<p>When you do this, this message will magically disappear!</p>
-<p>Or you can hack website/index.txt and make it all go away!!</p>
 <ul>
 	<li>github: <a href="http://github.com/auser/PoolParty/tree/master">http://github.com/auser/PoolParty/tree/master</a></li>
 </ul>
 <pre>git clone git://github.com/auser/PoolParty.git</pre>
-<ul>
-	<li>gitorious: <a href="git://gitorious.org/PoolParty/mainline.git">git://gitorious.org/PoolParty/mainline.git</a></li>
-</ul>
-<pre>git clone git://gitorious.org/PoolParty/mainline.git</pre>
 <h3>Build and test instructions</h3>
-<pre>cd PoolParty
+<p><pre class='syntax'>cd PoolParty
 rake test
-rake install_gem</pre>
+rake install_gem</pre></p>
 <h2>License</h2>
 <p>This code is free to use under the terms of the <span class="caps">MIT</span> license.</p>
 <h2>Contact</h2>
 <p>Comments are welcome. Send an email to <a href="mailto:ari.lerner@citrusbyte.com">Ari Lerner</a> email via the <a href="http://groups.google.com/group/PoolParty">forum</a></p>
     <p class="coda">
-      <a href="http://blog.citrusbyte.com">Ari Lerner</a> at <a href="http://citrusbyte.com">CitrusByte</a>, 17th September 2008<br>
+      <a href="http://blog.citrusbyte.com">Ari Lerner</a> at <a href="http://citrusbyte.com">CitrusByte</a>, 14th October 2008<br>
       Theme extended from <a href="http://rb2js.rubyforge.org/">Paul Battley</a>
     </p>
 </div>

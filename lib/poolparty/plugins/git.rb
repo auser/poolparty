@@ -19,7 +19,7 @@ module PoolParty
           exec({:name => "git-#{name}"}) do
             command @parent.user ? "git clone #{@parent.user}@#{@parent.source} #{@parent.path}" : "git clone #{@parent.source} #{@parent.path}"
             cwd "#{::File.dirname(@parent.path) if @parent.path}"
-            creates "#{@parent.path}/.git"
+            creates "#{@parent.path}"
           end
 
           exec(:name => "git-update-#{name}", :cwd => "#{path}") do

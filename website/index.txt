@@ -1,21 +1,58 @@
 h1. PoolParty
 
-h1. &#x2192; 'Easy cloud computing'
+h1. 'Easy cloud computing'
 
 
 h2. What
 
+A self-healing, load-balanced cloud computing solution. Combined with the power of <a href="http://reductivelabs.com/trac/puppet/">Puppet</a>, the <a href="http://www.linux-ha.org/">High Availability</a> project, ruby and erlang, PoolParty makes it easy and fun to set up your cloud! Currently, you can use it with ec2, but it's not tied to any particular service. You can use PoolParty to manage and monitor your home network!
+
 
 h2. Installing
 
-<pre syntax="ruby">sudo gem install PoolParty</pre>
+<pre syntax="ruby">sudo gem install --source http://gems.github.com auser-poolparty</pre>
 
 h2. The basics
 
 
 h2. Demonstration of usage
 
+<pre>
+cloud spec [name]
+</pre>
 
+This will create a basic spec for you in the spec directory. Then, write your spec file. There are examples in the repos as well as the one below:
+
+<pre syntax="ruby">
+  # Basic poolparty template with apache plugin
+  require "poolparty-apache2-plugin"
+
+  pool :app do
+
+    instances 2..5
+    port 80
+    ami "ami-1cd73375" # Alestic Ubuntu AMI
+
+    cloud :app do
+
+      apache do
+        installed_as_worker      
+
+        has_virtualhost do
+
+          name "poolpartyrb.com"
+          listen("8080")
+          virtual_host_entry ::File.join(File.dirname(__FILE__), "templates", "virtual_host.conf.erb")
+
+          has_git(:name => "poolpartyrepos", :source => "git://github.com/auser/xnot.org.git", :path => "/var/www/xnot.org/public")
+
+        end
+      end
+
+    end
+
+  end
+</pre>
 
 h2. Forum
 
@@ -25,9 +62,7 @@ h2. How to submit patches
 
 Read the "8 steps for fixing other people's code":http://drnicwilliams.com/2007/06/01/8-steps-for-fixing-other-peoples-code/ and for section "8b: Submit patch to Google Groups":http://drnicwilliams.com/2007/06/01/8-steps-for-fixing-other-peoples-code/#8b-google-groups, use the Google Group above.
 
-The trunk repository is <code>svn://rubyforge.org/var/svn/PoolParty/trunk</code> for anonymous access.
-
-OOOORRRR
+The trunk repository is <code>http://github.com/auser/poolparty</code> for anonymous access.
 
 You can fetch the source from either:
 
@@ -37,27 +72,15 @@ You can fetch the source from either:
 
 <pre>git clone git://rubyforge.org/PoolParty.git</pre>
 
-<% else %>
-
-* rubyforge: MISSING IN ACTION
-
-When you do this, this message will magically disappear!
-
-Or you can hack website/index.txt and make it all go away!!
-
 <% end %>
 
 * github: "http://github.com/auser/PoolParty/tree/master":http://github.com/auser/PoolParty/tree/master
 
 <pre>git clone git://github.com/auser/PoolParty.git</pre>
 
-* gitorious: "git://gitorious.org/PoolParty/mainline.git":git://gitorious.org/PoolParty/mainline.git
-
-<pre>git clone git://gitorious.org/PoolParty/mainline.git</pre>
-
 h3. Build and test instructions
 
-<pre>cd PoolParty
+<pre syntax="bash">cd PoolParty
 rake test
 rake install_gem</pre>
 
