@@ -18,7 +18,7 @@ module PoolParty
       def setup_puppet
         <<-EOE
           puppetd --mkusers
-          if [ -z "$(grep -v '#' /etc/hosts | grep 'puppet')" ]; then echo "#{master_ip} puppet" >> /etc/hosts; else echo "host already set"; fi
+          if [ -z "$(grep -v '#' /etc/hosts | grep 'master')" ]; then echo "#{master_ip} puppet master" >> /etc/hosts; else echo "host already set"; fi
           mv #{Base.remote_storage_path}/#{Base.tmp_path}/namespaceauth.conf /etc/puppet/namespaceauth.conf
         EOE
       end
