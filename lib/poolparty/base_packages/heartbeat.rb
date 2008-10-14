@@ -15,7 +15,7 @@ module PoolParty
           has_variable({:name => "ha_nodenames", :value => list_of_node_names})
           has_variable({:name => "ha_node_ips",  :value => list_of_node_ips})
           has_variable({:name => "ha_port", :value => (self.respond_to?(:port) ? port : Base.port)})
-        
+          
           # These can also be passed in via hash
           has_remotefile(:name => "/etc/ha.d/ha.cf") do
             mode 444
