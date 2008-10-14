@@ -1,8 +1,8 @@
 module PoolParty    
   module Resources
         
-    class File < Resource
-            
+    class File < Resource      
+      
       default_options({
         :ensure => "file",
         :mode => 644,
