@@ -127,7 +127,7 @@ puppetmasterd
 
       def restart_puppetd
         <<-EOS
-          puppetd --listen --fqdn=#{@cloud.master.name}
+          puppetd --listen --fqdn=#{@instance.name} --server=master
         EOS
       end
     end

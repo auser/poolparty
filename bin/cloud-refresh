@@ -17,8 +17,10 @@ include Remote
 @clouds.each do |name, cloud|
   
   with_cloud(cloud, {:testing => o.testing}) do
-    cmd = "puppetrun --host #{list_of_node_names.join(", --host ")}"
-    run_command_on(cmd, master)
+    cmd = <<-EOE
+puppetrun --host #{list_of_node_names.join(", --host ")}
+    EOE
+    run_command_on(cmd.runnable, master)
   end
   
 end
