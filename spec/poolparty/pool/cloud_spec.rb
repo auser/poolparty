@@ -179,7 +179,7 @@ describe "Cloud" do
         end
         it "should have 3 resources" do
           @cloud.add_poolparty_base_requirements
-          @cloud.number_of_resources.should == 4
+          @cloud.number_of_resources.should > 3
         end
         it "should receive add_poolparty_base_requirements before building the manifest" do
           @cloud.should_receive(:add_poolparty_base_requirements).once

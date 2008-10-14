@@ -20,10 +20,10 @@ module PoolParty
           has_service(:name => "haproxy")
 
           # Tempalte variables
-          variable(:name => "name", :value => "#{@parent.name}")
-          variable(:name => "nodenames", :value => list_of_node_names)
-          variable(:name => "node_ips",  :value => list_of_node_ips)
-          variable(:name => "ports", :value => ([(self.respond_to?(:port) ? port : Base.port)].flatten))        
+          variable(:name => "name_haproxy", :value => "#{@parent.name}")
+          variable(:name => "nodenames_haproxy", :value => list_of_node_names)
+          variable(:name => "node_ips_haproxy",  :value => list_of_node_ips)
+          variable(:name => "ports_haproxy", :value => ([(self.respond_to?(:port) ? port : Base.port)].flatten))        
           variable(:name => "forwarding_port", :value => (respond_to?(:forwarding_port) ? forwarding_port : Base.forwarding_port))
           variable(:name => "proxy_mode", :value => (respond_to?(:proxy_mode) ? proxy_mode : Base.proxy_mode))
 
