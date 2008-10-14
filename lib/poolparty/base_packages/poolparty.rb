@@ -11,6 +11,7 @@ module PoolParty
           has_gempackage(:name => "logging")
           has_gempackage(:name => "hoe")
           has_gempackage(:name => "xml-simple")
+          has_gempackage(:name => "ruby2ruby")
 
           has_gempackage(:name => "grempe-amazon-ec2", :source => "http://gems.github.com", :requires => 'Package["xml-simple"]')
           has_gempackage(:name => "auser-poolparty", :source => "http://gems.github.com", :requires => 'Package["activesupport", "logging", "hoe", "open4"]')          
