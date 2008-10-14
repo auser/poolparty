@@ -18,6 +18,8 @@ module PoolParty
     end
     
     def add_resource(type, opts={}, parent=self, &block)
+      resource = get_resource(type, opts[:name])
+      return resource if resource
       returning "PoolParty::Resources::#{type.to_s.camelize}".classify.constantize.new(opts, parent, &block) do |o|
         resource(type) << o
       end
@@ -220,6 +222,10 @@ module PoolParty
           output << @poststring || ""
                     
         end.join("\n")
+      end
+      
+      def to_s
+        "#{self.class.to_s.top_level_class.capitalize}['#{name}']"
       end
     end
     

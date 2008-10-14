@@ -121,14 +121,14 @@ mv #{Base.remote_storage_path}/#{Base.tmp_path}/#{@cloud.full_keypair_name} #{@c
         <<-EOS
 ps aux | grep puppetmasterd | awk '{print $2}' | xargs kill
 rm -rf /etc/puppet/ssl
-puppetmasterd
+puppetmasterd --verbose
         EOS
       end
 
       def restart_puppetd
         <<-EOS
+          puppetd --test
           puppetd --listen --fqdn=#{@instance.name}
-          puppetrun --host #{@instance.name}
         EOS
       end
     end

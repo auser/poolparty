@@ -6,13 +6,13 @@ module PoolParty
         has_package(:name => "erlang")
         # These should be installed automagically by poolparty, but just in case
         with_options(:requires => 'Package["update-rubygems"]') do          
-          has_gempackage(:name => "ParseTree")          
+          has_gempackage(:name => "parsetree")          
           has_gempackage(:name => "activesupport")
           has_gempackage(:name => "logging")
           has_gempackage(:name => "hoe")
           has_gempackage(:name => "xml-simple")
           
-          has_gempackage(:name => "RubyInline", :requires => 'Exec["parsetree"]')
+          has_gempackage(:name => "rubyinline", :requires => 'Exec["parsetree"]')
           has_gempackage(:name => "open4", :requires => 'Exec["parsetree"]')
           has_gempackage(:name => "ruby2ruby", :requires => 'Exec["ParseTree", "hoe"]')
 

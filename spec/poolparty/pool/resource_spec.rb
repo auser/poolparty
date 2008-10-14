@@ -220,5 +220,24 @@ describe "Resource" do
         @file.parent.tangerine.should == "orange"
       end
     end
+    describe "fetching" do
+      before(:each) do
+        @file = file(:name => "pancakes")
+      end
+      it "should not create a new resource if the same resource exists" do
+        PoolParty::Resources::File.should_not_receive(:new)
+        file(:name => "pancakes")
+      end
+      it "should return the file previously created" do
+        get_resource(:file, "pancakes").should == @file
+      end
+      it "should be able to use the helper to grab the file" do
+        PoolParty::Resources::File.should_not_receive(:new)
+        file(:name => "pancakes").should == @file
+      end
+      it "should turn the resource into a string" do
+        @file.to_s.should == "File['pancakes']"
+      end
+    end
   end
 end
