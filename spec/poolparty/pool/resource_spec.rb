@@ -238,6 +238,15 @@ describe "Resource" do
       it "should turn the resource into a string" do
         @file.to_s.should == "File['pancakes']"
       end
+      describe "cancelled" do
+        it "should make a resource not cancelled by default" do
+          @file.cancelled?.should == false
+        end
+        it "should say cancelled? is true if it has been cancelled" do
+          @file.cancel
+          @file.cancelled?.should == true
+        end
+      end
     end
   end
 end
