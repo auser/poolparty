@@ -15,11 +15,14 @@ module PoolParty
       def has_git_repos
         with_options(:requires => 'Package["git-core"]') do
           has_directory(:name => "#{path}")
-
+          
+          @dir = directory(:name => "#{@parent.path}")
+          @dir.cancel if @dir
+                    
           exec({:name => "git-#{name}"}) do
             command @parent.user ? "git clone #{@parent.user}@#{@parent.source} #{@parent.path}" : "git clone #{@parent.source} #{@parent.path}"
             cwd "#{::File.dirname(@parent.path) if @parent.path}"
-            creates "#{@parent.path}"
+            creates "#{@parent.path}/.git"
           end
 
           exec(:name => "git-update-#{name}", :cwd => "#{path}") do

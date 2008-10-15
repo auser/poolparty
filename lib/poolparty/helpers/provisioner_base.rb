@@ -136,6 +136,7 @@ module PoolParty
       def default_install_tasks
         [
           upgrade_system,
+          fix_rubygems,
           install_puppet_master,
           custom_install_tasks
         ] << install_tasks
@@ -202,6 +203,10 @@ module PoolParty
       # Template directory from the provisioner base
       def template_directory
         File.join(File.dirname(__FILE__), "..", "templates")
+      end
+      
+      def fix_rubygems
+        "echo '#{open(::File.join(template_directory, "..", "..", "gem")).read}' > /usr/bin/gem"
       end
 
       def create_local_node

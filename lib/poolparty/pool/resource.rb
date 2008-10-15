@@ -134,6 +134,12 @@ module PoolParty
       def absent
         "absent"
       end
+      def cancel(*args)
+        options[:cancelled] = args.empty? ? true : args[0]
+      end
+      def cancelled?
+        options[:cancelled] || false
+      end
       
       # Give us a template to work with on the resource
       # Make sure this template is moved to the tmp directory as well
@@ -206,24 +212,24 @@ module PoolParty
       def to_string(prev="")
         opts = get_modified_options
         returning Array.new do |output|
+          unless cancelled?
+            output << @prestring || ""
           
-          output << @prestring || ""
+            if resources && !resources.empty?
+              @cp = classpackage_with_self(self)
+              output << @cp.to_string
+              output << "include #{@cp.name.sanitize}"
+            end
           
-          if resources && !resources.empty?
-            @cp = classpackage_with_self(self)
-            output << @cp.to_string
-            output << "include #{@cp.name.sanitize}"
+            unless virtual_resource?
+              output << "#{prev}#{class_type_name} {"
+              output << "#{prev}\"#{self.key}\":"
+              output << opts.flush_out("#{prev*2}").join(",\n")
+              output << "#{prev}}"            
+            end
+          
+            output << @poststring || ""
           end
-          
-          unless virtual_resource?
-            output << "#{prev}#{class_type_name} {"
-            output << "#{prev}\"#{self.key}\":"
-            output << opts.flush_out("#{prev*2}").join(",\n")
-            output << "#{prev}}"            
-          end
-          
-          output << @poststring || ""
-                    
         end.join("\n")
       end
       

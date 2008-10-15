@@ -8,7 +8,7 @@ describe "Remote Instance" do
     @tc = TestClass.new
   end
   it "should be a string" do
-    @tc.has_git(:name => "gitrepos.git", :source => "git://source.git").to_string.should =~ /file \{/
+    @tc.has_git(:name => "gitrepos.git", :source => "git://source.git").to_string.should =~ /exec \{/
   end
   it "should included the flushed out options" do
     @tc.has_git({:name => "git.git", :source => "git://source.git", :user => "finger"}).to_string.should =~ /finger@git:/
@@ -27,7 +27,7 @@ describe "Remote Instance" do
       end
     end
     it "should have the path set within the resource" do
-      @tc.resource(:git).first.to_string.should =~ /file \{/
+      @tc.resource(:git).first.to_string.should =~ /exec \{/
     end
   end
 end
