@@ -14,6 +14,7 @@ module PoolParty
           # variables for the templates
           has_variable({:name => "ha_nodenames", :value => list_of_node_names})
           has_variable({:name => "ha_node_ips",  :value => list_of_node_ips})
+          has_variable({:name => "ha_timeout",  :value => (self.respond_to?(:timeout) ? timeout : "5s")})
           has_variable({:name => "ha_port", :value => (self.respond_to?(:port) ? port : Base.port)})
           
           # These can also be passed in via hash

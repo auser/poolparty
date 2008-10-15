@@ -3,8 +3,10 @@ keepalive 2 # Time inbetween heartbeats
 deadtime 32 # wait 32 seconds before declaring dead
 warntime 16 # issue a warning halfway through
 initdead 60 # Don't boot instances between 60 seconds of each other
-auto_failback on
+logfacility daemon         # Log to syslog as facility "daemon"
+auto_failback off
 use_logd yes
-crm on
+bcast eth0
+crm respawn
 
 node <%= ha_nodenames.join(" ") %>
