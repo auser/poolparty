@@ -11,7 +11,7 @@ module PoolParty
         has_package(:name => "libruby1.8")                
         has_package(:name => "ruby1.8-dev")
         has_package(:name => "ruby1.8")
-        has_package(:name => "rubygems")
+        # has_package(:name => "rubygems")
         
         has_line_in_file("export PATH=$PATH:/var/lib/gems/1.8/bin/", "/etc/profile")
         

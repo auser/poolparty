@@ -3,22 +3,27 @@ $:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
 require "poolparty"
 require "poolpartycl"
 
-# Get the git-style program action
-o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
-  opts.on('-n [name]','--name [name]', 'Binary to run')    { |o| optioner.name o }
-  
-  opts.banner = <<-EOB
-  Usage: cloud <specfile> <action> <options>
-  Cloud actions:
-  #{Binary.list_binaries_for("cloud")}
-  EOB
-end
+# # Get the git-style program action
+# o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
+#   opts.on('-n [name]','--name [name]', 'Binary to run')    { |o| optioner.name o }
+#   
+#   opts.banner = <<-EOB
+#   Usage: cloud <specfile> <action> <options>
+#   Cloud actions:
+#   #{Binary.list_binaries_for("cloud")}
+#   EOB
+# end
 
 name = ARGV.shift
 
 # If there was no program action given
-if !name
+if !name || name == "-h" || name == "--help"
   puts "Binary required"
+  puts <<-EOB
+    Usage: cloud <specfile> <action> <options>
+    Cloud actions:
+    #{Binary.list_binaries_for("cloud")}
+    EOB
   exit
 end
 

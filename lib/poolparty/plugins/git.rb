@@ -27,11 +27,6 @@ module PoolParty
             requires "Exec['git-#{@parent.name}']"
           end
 
-          if symlink
-            has_file(:name => "#{symlink}") do
-              ensures @parent.path
-            end
-          end
         end
       end
       

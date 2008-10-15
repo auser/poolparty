@@ -103,6 +103,7 @@ lib/poolparty/pool/resources/package.rb
 lib/poolparty/pool/resources/remote_file.rb
 lib/poolparty/pool/resources/service.rb
 lib/poolparty/pool/resources/sshkey.rb
+lib/poolparty/pool/resources/symlink.rb
 lib/poolparty/pool/resources/variable.rb
 lib/poolparty/pool/script.rb
 lib/poolparty/templates/authkeys
@@ -174,6 +175,7 @@ spec/poolparty/pool/resources/package_spec.rb
 spec/poolparty/pool/resources/remote_file_spec.rb
 spec/poolparty/pool/resources/service_spec.rb
 spec/poolparty/pool/resources/sshkey_spec.rb
+spec/poolparty/pool/resources/symlink_spec.rb
 spec/poolparty/pool/resources/variable_spec.rb
 spec/poolparty/pool/script_spec.rb
 spec/poolparty/pool/test_plugins/sshkey_test

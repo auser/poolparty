@@ -8,6 +8,6 @@ o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
 end
 load_pool(o.spec || Binary.get_existing_spec_location)
 
-@cloud = o.cloudname ? cloud(o.cloudname) : cloud(clouds.keys.first)
+@cloud = o.cloudname ? cloud(o.cloudname.downcase.to_sym) : cloud(clouds.keys.first)
 
 instance = @cloud.ssh_into_instance_number( o.num.to_i || 0 ) if @cloud
