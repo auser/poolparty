@@ -22,7 +22,7 @@ describe "Slave provisioner" do
       @slave.install
     end
   end
-  it "should return install_puppet as apt-get install puppet factor" do
-    @slave.setup_puppet.should =~ /puppetd/
+  it "should return setup_puppet with the master" do
+    @slave.setup_puppet.should =~ /master/
   end
 end

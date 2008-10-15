@@ -107,10 +107,11 @@ module PoolParty
       
       # Configuration files
       def build_manifest
+        @build_manifest ||= build_from_existing_file
         unless @build_manifest
           reset_resources!
           add_poolparty_base_requirements
-
+          
           @build_manifest = returning Array.new do |str|
 
             str << resources_string_from_resources(resources)
@@ -128,6 +129,14 @@ module PoolParty
           end.join("\n")          
         end
         @build_manifest
+      end
+      
+      def build_from_existing_file
+        if ::FileTest.file?("/etc/puppet/manifests/classes/poolparty.pp")
+          open("/etc/puppet/manifests/classes/poolparty.pp").read
+        else
+          nil
+        end
       end
       
       # To allow the remote instances to do their job,

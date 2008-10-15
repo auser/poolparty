@@ -279,6 +279,21 @@ describe "Cloud" do
             @manifest.should =~ /host \{\n\t\t"master":/
           end
         end
+        describe "building with an existing manifest" do
+          before(:each) do
+            @file = "/etc/puppet/manifests/nodes/nodes.pp"
+            @file.stub!(:read).and_return "nodes"
+            ::FileTest.stub!(:file?).with("/etc/puppet/manifests/classes/poolparty.pp").and_return true
+            @cloud.stub!(:open).with("/etc/puppet/manifests/classes/poolparty.pp").and_return @file
+          end
+          it "should not call resources_string_from_resources if the file /etc/puppet/manifests/nodes/nodes.pp exists" do
+            @cloud.should_not_receive(:add_poolparty_base_requirements)
+            @cloud.build_manifest
+          end
+          it "should build from the existing file" do
+            @cloud.build_manifest.should == "nodes"
+          end
+        end
       end
     end
     
