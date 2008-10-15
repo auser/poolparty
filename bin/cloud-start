@@ -23,7 +23,6 @@ load_pool(o.spec || Binary.get_existing_spec_location)
         puts("\tNot launching while in testing mode")
       else
         launch_and_configure_master!
-        # run_command_on("puppetd --test", master)
       end
     end
     clear_base_directory unless testing
