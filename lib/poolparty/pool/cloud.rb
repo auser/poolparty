@@ -54,11 +54,14 @@ module PoolParty
       def keypair(*args)
         has_keypair? ? options[:keypair] : generate_keypair(*args)
       end
+      # Let's just make sure that the keypair exists on the options
       def has_keypair?
         options.has_key?(:keypair) && options[:keypair]
       end
+      # Generate a keypair based on the parent's name (if there is a parent)
+      # and the cloud's name
       def generate_keypair(*args)
-        options[:keypair] = args.length > 0 ? args[0] : "#{@parent.respond_to?(:name) ? @parent.name : ""}_#{@name}"
+        options[:keypair] = args.length > 0 ? args[0] : "#{@parent && @parent.respond_to?(:name) ? @parent.name : ""}_#{@name}"
       end
       
       # Prepare to send the new configuration to the instances
@@ -73,6 +76,7 @@ module PoolParty
         # clear_base_directory
         make_base_directory
         copy_misc_templates
+        copy_puppet_functions
         Base.store_keys_in_file
         Script.save!
         copy_ssh_key # not my favorite...
@@ -102,6 +106,12 @@ module PoolParty
       def copy_misc_templates
         ["fileserver.conf", "namespaceauth.conf"].each do |f|
           copy_file_to_storage_directory(::File.join(::File.dirname(__FILE__), "..", "templates", f))
+        end
+      end
+      
+      def copy_puppet_functions
+        ["poolparty_functions.rb"].each do |f|
+          copy_plugin_to_storage_directory(::File.join(::File.dirname(__FILE__), "..", "puppet_plugins", f))
         end
       end
       

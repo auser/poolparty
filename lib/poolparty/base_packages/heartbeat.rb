@@ -12,8 +12,8 @@ module PoolParty
           has_exec(:name => "heartbeat-update-cib", :command => "/usr/sbin/cibadmin -R -x /etc/ha.d/cib.xml", :refreshonly => true)
         
           # variables for the templates
-          has_variable({:name => "ha_nodenames", :value => list_of_node_names})
-          has_variable({:name => "ha_node_ips",  :value => list_of_node_ips})
+          has_variable({:name => "ha_nodenames", :value => "active_node_names"})
+          has_variable({:name => "ha_node_ips",  :value => "active_node_ips"})
           has_variable({:name => "ha_timeout",  :value => (self.respond_to?(:timeout) ? timeout : "5s")})
           has_variable({:name => "ha_port", :value => (self.respond_to?(:port) ? port : Base.port)})
           
@@ -37,6 +37,14 @@ module PoolParty
             requires 'Package["heartbeat-2"]'
             notify 'Exec["heartbeat-update-cib"]'
             template File.join(File.dirname(__FILE__), "..", "templates/cib.xml")
+          end
+          
+          execute_if("$hostname", "master") do
+            if list_of_node_names.size > 1
+              has_exec(:name => "update pem for heartbeat", :refreshonly => true) do
+                command "scp /etc/puppet/ssl/ca/ca_crl.pem #{user || Base.user}@#{list_of_node_ips[1]}:/etc/puppet/ssl/ca"
+              end
+            end
           end
         end
         

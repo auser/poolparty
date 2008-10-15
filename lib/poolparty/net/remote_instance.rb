@@ -61,7 +61,7 @@ module PoolParty
       # Printing. This is how we extract the instances into the listing on the 
       # local side into the local listing file
       def to_s
-        "#{name} #{ip}"
+        "#{name}\t#{ip}"
       end
     end
     

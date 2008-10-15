@@ -37,14 +37,7 @@ module PoolParty
         ]
       end
       
-      # def install_haproxy
-      #   "#{installer_for( "haproxy" )}"
-      # end
-      # 
-      # def install_heartbeat        
-      #   "#{installer_for( "heartbeat-2" )}"
-      # end
-
+      # If the master is not in the hosts file, then add it to the hosts file
       def create_local_hosts_entry
         <<-EOS
 if [ -z \"$(grep -v '#' /etc/hosts | grep 'master')" ]; then echo '#{@master_ip}           puppet master' >> /etc/hosts; fi
@@ -105,6 +98,13 @@ node "#{ri.name}" inherits default {}
         <<-EOS
 mkdir -p #{Base.template_path}
 cp #{Base.remote_storage_path}/#{Base.template_directory}/* #{Base.template_path}
+        EOS
+      end
+      
+      def move_plugins
+        <<-EOS
+mkdir -p #{Base.plugin_path}
+cp #{Base.remote_storage_path}/#{Base.plugin_directory}/* #{Base.plugin_path}
         EOS
       end
 

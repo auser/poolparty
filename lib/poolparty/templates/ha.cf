@@ -7,6 +7,13 @@ logfacility daemon         # Log to syslog as facility "daemon"
 auto_failback off
 use_logd yes
 bcast eth0
-crm respawn
+crm on
+logfile /var/log/ha.log
+
+<% ha_node_ips.each_with_index do |ip,index| -%>
+  <% if $hostname != ha_nodenames[index] -%>
+  ucast eth0 <%= ip %>
+  <% end %>
+<% end %>
 
 node <%= ha_nodenames.join(" ") %>

@@ -106,13 +106,16 @@ lib/poolparty/pool/resources/sshkey.rb
 lib/poolparty/pool/resources/symlink.rb
 lib/poolparty/pool/resources/variable.rb
 lib/poolparty/pool/script.rb
+lib/poolparty/puppet_plugins/poolparty_functions.rb
 lib/poolparty/templates/authkeys
 lib/poolparty/templates/cib.xml
 lib/poolparty/templates/fileserver.conf
 lib/poolparty/templates/gem
 lib/poolparty/templates/ha.cf
 lib/poolparty/templates/haproxy.conf
+lib/poolparty/templates/haresources
 lib/poolparty/templates/namespaceauth.conf
+lib/poolparty/templates/poolparty.monitor
 lib/poolparty/templates/puppet.conf
 lib/poolparty/version.rb
 lib/poolpartycl.rb

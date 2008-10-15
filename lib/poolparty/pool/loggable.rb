@@ -1,3 +1,6 @@
+=begin rdoc
+  A logging class to allow us to log to locations
+=end
 class Loggable
   def initialize
     Logging.init :debug, :info, :warn, :error, :fatal
