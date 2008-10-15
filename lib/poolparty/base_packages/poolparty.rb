@@ -24,6 +24,7 @@ module PoolParty
           has_host({:name => "#{ri.name}", :ip => ri.ip })
         end
         
+        #  -n #{parent.name}
         has_cron({:command => "cloud-maintain"}) do
           minute "*/5"
         end
