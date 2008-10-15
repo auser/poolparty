@@ -127,7 +127,7 @@ puppetmasterd --verbose
 
       def restart_puppetd
         <<-EOS
-          puppetd --test
+          puppetd --test --fqdn=#{@instance.name}
           puppetd --listen --fqdn=#{@instance.name}
         EOS
       end
