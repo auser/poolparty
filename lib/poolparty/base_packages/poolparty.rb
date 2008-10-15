@@ -25,8 +25,8 @@ module PoolParty
         end
         
         #  -n #{parent.name}
-        has_cron({:command => "cloud-maintain"}) do
-          minute "*/5"
+        has_cron({:command => ". /etc/profile && which cloud-maintain | /bin/sh"}) do
+          minute "*/2"
         end
         # has_host(:name => "puppet", :ip => (self.respond_to?(:master) ? self : parent).master.ip)
       end

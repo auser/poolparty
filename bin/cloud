@@ -4,17 +4,21 @@ require "poolparty"
 require "poolpartycl"
 
 # Get the git-style program action
-# o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
-#   opts.on('-n [name]','--name [name]', 'Binary to run')    { |o| optioner.name o }
-# end
+o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
+  opts.on('-n [name]','--name [name]', 'Binary to run')    { |o| optioner.name o }
+  
+  opts.banner = <<-EOB
+  Usage: cloud <specfile> <action> <options>
+  Cloud actions:
+  #{Binary.list_binaries_for("cloud")}
+  EOB
+end
 
 name = ARGV.shift
 
 # If there was no program action given
-if !name || name == "-h" || name == "--help"
-  puts "Usage: cloud <specfile> <action> <options>"
-  puts "Cloud actions:"
-  puts Binary.list_binaries_for("cloud")
+if !name
+  puts "Binary required"
   exit
 end
 
