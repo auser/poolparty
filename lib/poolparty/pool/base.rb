@@ -23,8 +23,7 @@ module PoolParty
       :default_specfile_name => "pool.spec",
       :port => "80",
       :forwarding_port => "8080",
-      :proxy_mode => "http",
-      :pool_logger_location => File.join(Dir.pwd, "logs"),
+      :proxy_mode => "http",      
       # EC2 Options
       :ami => "ami-1cd73375" 
     })
@@ -68,6 +67,10 @@ module PoolParty
           "~/.ppkeys",
           "ppkeys"
         ]
+      end
+      
+      def pool_logger_location
+        File.join(Dir.pwd, "logs")
       end
       
     end
