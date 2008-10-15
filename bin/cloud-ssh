@@ -8,11 +8,6 @@ o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
 end
 load_pool(o.spec || Binary.get_existing_spec_location)
 
-unless o.cloudname && clouds.keys.size > 1
-  @cloud = cloud(o.cloudname.downcase.to_sym)
-else
-  puts "Error: You must indicate a cloud from which your instance is from"
-  exit(0)
-end
+@cloud = o.cloudname ? cloud(o.cloudname) : cloud(clouds.keys.first)
 
-instance = @cloud.ssh_into_instance_number( o.num.to_i || 0 )
+instance = @cloud.ssh_into_instance_number( o.num.to_i || 0 ) if @cloud

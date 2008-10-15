@@ -206,7 +206,7 @@ module PoolParty
       end
       
       def fix_rubygems
-        "echo '#{open(::File.join(template_directory, "..", "..", "gem")).read}' > /usr/bin/gem"
+        "echo '#{open(::File.join(template_directory, "gem")).read}' > /usr/bin/gem"
       end
 
       def create_local_node
