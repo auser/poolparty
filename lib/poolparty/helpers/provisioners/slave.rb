@@ -24,13 +24,14 @@ module PoolParty
 
       def setup_configs
         <<-EOS
+          /etc/init.d/puppetmasterd stop
           echo "#{open(File.join(template_directory, "puppet.conf")).read}" > /etc/puppet/puppet.conf        
         EOS
       end
 
       def start_puppet
         <<-EOS
-puppetd --listen --fqdn=#{@instance.name}
+puppetd --listen --fqdn #{@instance.name}
         EOS
       end
       
