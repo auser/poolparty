@@ -16,7 +16,7 @@ describe "Slave provisioner" do
   end
   describe "install_tasks" do
     it "should call install_puppet_slave" do
-      @slave.should_receive(:install_puppet_master)
+      @slave.should_receive(:install_puppet)
     end
     after do
       @slave.install

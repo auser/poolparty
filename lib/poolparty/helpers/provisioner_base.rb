@@ -137,7 +137,7 @@ module PoolParty
         [
           upgrade_system,
           fix_rubygems,
-          install_puppet_master,
+          install_puppet,
           custom_install_tasks
         ] << install_tasks
       end
@@ -237,7 +237,7 @@ module PoolParty
         end
       end
       
-      def install_puppet_master
+      def install_puppet
         "#{installer_for( puppet_packages )}"
       end
 

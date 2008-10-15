@@ -1,0 +1,14 @@
+#!/bin/bash
+# Based on puppet High Availability recipe
+# 
+# http://reductivelabs.com/trac/puppet/wiki/Recipes/HighAvailability
+# Modified for PoolParty
+# 
+exitstatus=0
+processid=`ps aux | grep puppetmasterd | awk '{print $2}'`
+
+if [ -z $processid ] || test `netstat -apn | grep "${processid}/ruby" | wc -l` -eq 0  ; then
+  exitstatus=1
+fi
+
+exit $exitstatus

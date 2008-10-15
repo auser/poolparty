@@ -18,7 +18,7 @@ describe "Master provisioner" do
       @master.stub!(:cloud).and_return @cloud
     end
     it "should call install_puppet_master" do
-      @master.should_receive(:install_puppet_master)
+      @master.should_receive(:install_puppet)
     end
     it "should call create_local_hosts_entry" do
       @master.should_receive(:create_local_hosts_entry)
@@ -37,7 +37,7 @@ describe "Master provisioner" do
     end
   end
   it "should return install_puppet_master as apt-get install puppet factor" do
-    @master.install_puppet_master.should =~ /apt-get install -y puppet puppetmaster/
+    @master.install_puppet.should =~ /apt-get install -y puppet puppetmaster/
   end
   it "should return setup basic structure" do
     @master.setup_basic_structure.should =~ /puppetmasterd --mkusers/

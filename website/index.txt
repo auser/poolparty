@@ -56,7 +56,7 @@ This will create a basic spec for you in the spec directory. Then, write your sp
 
 h2. Forum
 
-"http://groups.google.com/group/PoolParty":http://groups.google.com/group/PoolParty
+"http://groups.google.com/group/PoolPartyRb":http://groups.google.com/group/poolpartyrb
 
 h2. How to submit patches
 
@@ -76,12 +76,12 @@ You can fetch the source from either:
 
 * github: "http://github.com/auser/PoolParty/tree/master":http://github.com/auser/PoolParty/tree/master
 
-<pre>git clone git://github.com/auser/PoolParty.git</pre>
+<pre>git clone git://github.com/auser/poolparty.git</pre>
 
 h3. Build and test instructions
 
 <pre syntax="bash">cd PoolParty
-rake test
+rake spec
 rake install_gem</pre>
 
 
