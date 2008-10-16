@@ -148,7 +148,6 @@ spec/poolparty/modules/configurable_spec.rb
 spec/poolparty/modules/definable_resource.rb
 spec/poolparty/modules/file_writer_spec.rb
 spec/poolparty/modules/s3_string_spec.rb
-spec/poolparty/modules/tmp/willy/nilly.rb
 spec/poolparty/net/remote_bases/ec2_spec.rb
 spec/poolparty/net/remote_instance_spec.rb
 spec/poolparty/net/remote_spec.rb

@@ -12,8 +12,9 @@ module PoolParty
           has_exec(:name => "heartbeat-update-cib", :command => "/usr/sbin/cibadmin -R -x /etc/ha.d/cib.xml", :refreshonly => true)
         
           # variables for the templates
-          has_variable({:name => "ha_nodenames", :value => "activenodenames()"})
-          has_variable({:name => "ha_node_ips",  :value => "activenodeips()"})
+          variable(:name => "ha_nodenames", :value => 'generate(". /etc/profile && server-list-active -c name")')
+          variable(:name => "ha_node_ips",  :value => 'generate(". /etc/profile && server-list-active -c ip")')
+          
           has_variable({:name => "ha_timeout",  :value => (self.respond_to?(:timeout) ? timeout : "5s")})
           has_variable({:name => "ha_port", :value => (self.respond_to?(:port) ? port : Base.port)})
           
