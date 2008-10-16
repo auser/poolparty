@@ -72,6 +72,7 @@ module PoolParty
         
         unless testing
           logger.debug "Logging on to #{@instance.ip}"
+          @cloud.prepare_reconfiguration
           @cloud.rsync_storage_files_to(@instance)
           
           cmd = "cd #{Base.remote_storage_path}/#{Base.tmp_path} && chmod +x install_#{name}.sh && /bin/sh install_#{name}.sh && rm install_#{name}.sh"
