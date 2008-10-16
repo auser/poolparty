@@ -1,0 +1,25 @@
+#!/usr/bin/env ruby
+$:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
+require "poolparty"
+require "poolpartycl"
+
+o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
+  opts.on('-c name', '--class name', 'Listing for cloud class (valid args: [name|ip])')    { |t| optioner.classname t }
+  opts.on('-n name', '--name name', 'Listing for cloud name')    { |c| optioner.cloudname c }
+end
+
+load_pool(o.spec || Binary.get_existing_spec_location)
+
+@ctype = (o.classname || "name").downcase.to_sym
+
+include Remote
+
+@clouds = o.cloudname ? [cloud(o.cloudname.downcase.to_sym)] : clouds
+
+@clouds.each do |name, cloud|
+  
+  with_cloud(cloud, {:location => @location, :ctype => @ctype}) do
+    puts "[ #{list_of_running_instances.map{|a| "'#{a.send ctype}'" }.join(", ")} ]"
+  end  
+  
+end

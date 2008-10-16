@@ -135,7 +135,13 @@ listen web_proxy 127.0.0.1:3000
       end
       @file = @cloud.resource(:file).first
       @file.to_option_string.should == "File['franke']"
-    end    
+    end
+    it "should turn a function into a string without quotes" do
+      "active_nodes()".to_option_string.should == "active_nodes()"
+    end
+    it "should turna function into a string outsid ethe quotes with a parameter" do
+      "active_nodes(10)".to_option_string.should == "active_nodes(10)"
+    end
   end
   describe "sanitize" do
     it "should remove the periods from the string" do

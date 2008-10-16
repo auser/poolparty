@@ -32,6 +32,7 @@ module PoolParty
           start_puppetmaster,
           create_local_node,
           move_templates,
+          move_plugins,
           create_poolparty_manifest,
           restart_puppetd
         ]
@@ -103,8 +104,10 @@ cp #{Base.remote_storage_path}/#{Base.template_directory}/* #{Base.template_path
       
       def move_plugins
         <<-EOS
-mkdir -p #{Base.plugin_path}
-cp #{Base.remote_storage_path}/#{Base.plugin_directory}/* #{Base.plugin_path}
+mkdir -p #{Base.module_path}
+cp -R #{Base.remote_storage_path}/#{Base.plugin_directory}/ #{Base.module_path}
+mkdir -p /var/lib/puppet/lib/parser/functions/
+cp -R #{Base.remote_storage_path}/#{Base.plugin_directory}/puppet/* /var/lib/puppet/lib/parser/functions/
         EOS
       end
 

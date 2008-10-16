@@ -109,10 +109,10 @@ module PoolParty
         end
       end
       
+      # TODO: Fix for windowz
       def copy_puppet_functions
-        ["poolparty_functions.rb"].each do |f|
-          copy_plugin_to_storage_directory(::File.join(::File.dirname(__FILE__), "..", "puppet_plugins", f))
-        end
+        cmd = "cp -R #{::File.join(::File.dirname(__FILE__), "..", "puppet_plugins/")} #{Base.storage_directory}/plugins"
+        %x[#{cmd}]
       end
       
       # Configuration files

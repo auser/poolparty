@@ -17,4 +17,8 @@ describe "Variable" do
     v = variable(:name => "girlfriends", :value => %w(Rachel Erica Michelle))
     v.to_string.should == "$girlfriends = [ 'Rachel', 'Erica', 'Michelle' ]"
   end
+  it "should set the string to be without a string if it's a function" do
+    v = variable(:name => "girlfriends", :value => "lookup_var()")
+    v.to_string.should == "$girlfriends = lookup_var()"
+  end
 end

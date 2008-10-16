@@ -25,6 +25,7 @@ bin/pool-provision
 bin/pool-spec
 bin/pool-start
 bin/pool-start-monitor
+bin/server-list-active
 config/hoe.rb
 config/requirements.rb
 examples/basic.rb
@@ -106,7 +107,8 @@ lib/poolparty/pool/resources/sshkey.rb
 lib/poolparty/pool/resources/symlink.rb
 lib/poolparty/pool/resources/variable.rb
 lib/poolparty/pool/script.rb
-lib/poolparty/puppet_plugins/poolparty_functions.rb
+lib/poolparty/puppet_plugins/poolparty/plugins/puppet/parser/functions/activenodeips.rb
+lib/poolparty/puppet_plugins/poolparty/plugins/puppet/parser/functions/activenodenames.rb
 lib/poolparty/templates/authkeys
 lib/poolparty/templates/cib.xml
 lib/poolparty/templates/fileserver.conf
