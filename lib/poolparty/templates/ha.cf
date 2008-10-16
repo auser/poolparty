@@ -10,10 +10,10 @@ bcast eth0
 crm on
 logfile /var/log/ha.log
 
-<% ha_node_ips.each_with_index do |ip,index| -%>
-  <% if $hostname != ha_nodenames[index] -%>
+<% ha_node_ips.chomp.split(/\t/).each_with_index do |ip,index| -%>
+  <% if $hostname != ha_nodenames.chomp.split(/\t/)[index] -%>
   ucast eth0 <%= ip %>
   <% end %>
 <% end %>
 
-node <%= ha_nodenames.join(" ") %>
+node <%= ha_nodenames %>
