@@ -9,7 +9,7 @@ module PoolParty
     module Remoter
       def rsync_storage_files_to_command(remote_instance)
         if remote_instance
-          "#{rsync_command} #{Base.storage_directory}/ #{remote_instance.ip}:#{Base.remote_storage_path}/"
+          "#{rsync_command} #{Base.storage_directory}/ #{remote_instance.ip}:#{Base.remote_storage_path}"
         end
       end
       def run_command_on_command(cmd="ls -l", remote_instance=nil)
