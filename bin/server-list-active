@@ -19,7 +19,7 @@ include Remote
 @clouds.each do |name, cloud|
   
   with_cloud(cloud, {:location => @location, :ctype => @ctype}) do
-    puts "#{list_of_running_instances.map{|a| "'#{a.send ctype}'" }.join(", ")}"
+    puts "#{list_of_running_instances.map{|a| "#{a.send ctype}" }.join("\t")}"
   end  
   
 end
