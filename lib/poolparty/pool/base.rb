@@ -20,7 +20,7 @@ module PoolParty
       :template_directory => "tmp/templates",
       :plugin_directory => "tmp/plugins",
       :template_path => "/var/lib/puppet/templates",
-      :plugin_path => "/var/lib/puppet/parser/functions",
+      :module_path => "/etc/puppet/modules/poolparty",
       :default_specfile_name => "pool.spec",
       :port => "80",
       :forwarding_port => "8080",
@@ -72,11 +72,10 @@ module PoolParty
             
       def storage_directory
         [
-            "/var/poolparty",
-           ::File.join(Dir.pwd, "tmp")
+            "/var/poolparty"           
         ].select do |dir|
           dir if ::File.directory?(dir) && ::File.readable?(dir)
-        end.first
+        end.first || ::File.join(Dir.pwd, "tmp")
       end
       
       def pool_logger_location

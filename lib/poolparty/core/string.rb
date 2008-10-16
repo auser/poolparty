@@ -35,10 +35,11 @@ class String
   def to_option_string(ns=[])
     a_template = (self =~ /template/) == 0
     a_service = self =~ /^[A-Z][a-zA-Z]*\[[a-zA-Z0-9\-\.\"\'_\$\{\}\/]*\]/
+    a_function = self =~/(.)*\((.)*\)(.)*/
     if is_a?(PoolParty::Resources::Resource)
       self.to_s
     else
-      (a_service || a_template) ? "#{self}" : "'#{self}'"
+      (a_service || a_template || a_function) ? self : "'#{self}'"
     end    
   end
   # Refactor this guy to get the class if the class is defined, and not always create a new one

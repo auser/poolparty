@@ -1,4 +1,4 @@
-# Haproxy conf
+# Heartbeat
 keepalive 2 # Time inbetween heartbeats
 deadtime 32 # wait 32 seconds before declaring dead
 warntime 16 # issue a warning halfway through

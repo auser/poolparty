@@ -13,12 +13,13 @@ module PoolParty
       end
       
       def value_string
-        case value.class.to_s
-        when "Array"
-          "[ #{value.map{|a| "'#{a}'"}.join(", ")} ]"
-        else
-          "'#{value}'"
-        end
+        value.to_option_string
+        # case value.class.to_s
+        # when "Array"
+        #   "[ #{value.map{|a| "'#{a}'"}.join(", ")} ]"
+        # else
+        #   "'#{value}'"
+        # end
       end
       
     end
