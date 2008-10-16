@@ -39,7 +39,7 @@ module PoolParty
       end
       
       def plugin_directory(*args)
-        args.each {|arg| Dir["#{arg}/*.rb"].each {|f| load f }}
+        args.each {|arg| Dir["#{arg}/*/*.rb"].each {|f| require f }}
       end
             
       # This is where the entire process starts

@@ -37,7 +37,7 @@ describe "Pool" do
         end
       end
       it "should call Dir when the plugin directory is set" do
-        Dir.should_receive(:[]).with("yaway/*.rb").once.and_return []        
+        Dir.should_receive(:[]).with("yaway/*/*.rb").once.and_return []        
       end
     end
     describe "configuration" do
