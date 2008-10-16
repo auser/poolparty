@@ -215,6 +215,11 @@ module PoolParty
       def ssh_into_instance_number(num=0)
         ssh_into( get_instance_by_number( num || 0 ) )
       end
+      
+      # Prepare reconfiguration on the master
+      def prepare_reconfiguration
+        run_command_on("rm -rf /etc/puppet/ssl/*", master)
+      end
 
       def self.included(receiver)
         receiver.extend self

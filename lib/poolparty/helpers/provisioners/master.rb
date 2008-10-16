@@ -121,6 +121,7 @@ puppetmasterd --verbose
       # puppetd --listen --fqdn #{@instance.name}
       def restart_puppetd
         <<-EOS
+          rm -rf /etc/puppet/ssl
           #{@instance.puppet_runner_command}
         EOS
       end

@@ -19,11 +19,11 @@ include Remote
   
   with_cloud(cloud, {:testing => o.testing, :location => @location, :provision_class => @provision_class}) do
         
-    if provision_class == "master" || provision_class == "all"
-      Provisioner.provision_master(self, testing)
-    end
     if provision_class == "slave" || provision_class == "all"
       Provisioner.provision_slaves(self, testing)
+    end
+    if provision_class == "master" || provision_class == "all"
+      Provisioner.provision_master(self, testing)
     end
 
     clear_base_directory unless testing
