@@ -6,7 +6,7 @@ describe "Symlink" do
   before(:each) do
     reset_resources!
     @cloud = cloud :symlink_test do
-      has_symlink(:name => "/etc/apache2/puppetmaster.conf", :from => "/etc/http/puppetmaster.conf")
+      has_symlink(:name => "/etc/apache2/puppetmaster.conf", :source => "/etc/http/puppetmaster.conf")
     end
     @symlink = @cloud.resource(:symlink).first
   end
@@ -15,5 +15,8 @@ describe "Symlink" do
   end
   it "should create a file { resource" do
     @symlink.to_string.should =~ /file \{/
+  end
+  it "should use the from for the ensures" do
+    @symlink.ensure.should == @symlink.source
   end
 end

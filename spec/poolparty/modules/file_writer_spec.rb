@@ -43,6 +43,15 @@ describe "FileWriter" do
       @test.write_to_file_in_storage_directory(@filepath, "STRING TO WRITE")
     end
   end
+  describe "trying to copy the same file" do
+    before(:each) do
+      @filepath = @path
+    end
+    it "should not try to copy a file if they are the same file" do
+      FileUtils.should_not_receive(:cp)
+      @test.copy_file_to_storage_directory(@filepath)
+    end
+  end
   after(:all) do
     ::File.unlink @path if ::File.file? @path
   end

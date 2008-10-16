@@ -18,7 +18,6 @@ module PoolParty
       :fileserver_base => "puppet:///files",
       :base_config_directory => "/etc/poolparty",
       :template_directory => "tmp/templates",
-      :plugin_directory => "tmp/plugins",
       :template_path => "/var/lib/puppet/templates",
       :module_path => "/etc/puppet/modules/poolparty",
       :default_specfile_name => "pool.spec",

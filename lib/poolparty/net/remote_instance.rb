@@ -63,6 +63,11 @@ module PoolParty
       def to_s
         "#{name}\t#{ip}"
       end
+      
+      # Commands for the servers
+      def puppet_runner_command
+        ". /etc/profile && puppetd --onetime --no-daemonize --logdest syslog --server master > /dev/null 2>&1"
+      end
     end
     
   end  

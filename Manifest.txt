@@ -26,6 +26,7 @@ bin/pool-spec
 bin/pool-start
 bin/pool-start-monitor
 bin/server-list-active
+bin/server-rerun
 config/hoe.rb
 config/requirements.rb
 examples/basic.rb
