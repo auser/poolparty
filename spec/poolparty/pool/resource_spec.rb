@@ -247,6 +247,14 @@ describe "Resource" do
           @file.cancelled?.should == true
         end
       end
+      describe "virtual_resources" do
+        before(:each) do
+          @virtual_resource = git(:name => "tank")
+        end
+        it "should fetch a virtual resource the same" do
+          git(:name => "tank").to_s.should == @virtual_resource.to_s
+        end
+      end
     end
   end
 end

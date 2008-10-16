@@ -65,6 +65,11 @@ describe "Remote Instance" do
       @ri.responding.should_not be_nil
       @ri.responding?.should == true
     end
-    
+    it "should have the puppet_runner_command" do
+      @ri.respond_to?(:puppet_runner_command).should == true
+    end
+    it "should return the puppet_runner_command with puppetd" do
+      @ri.puppet_runner_command.should =~ /puppetd/
+    end
   end
 end

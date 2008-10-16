@@ -71,7 +71,7 @@ module PoolParty
         setup_runner(@cloud)
         
         unless testing
-          puts "Logging on to #{@instance.ip}"
+          logger.debug "Logging on to #{@instance.ip}"
           @cloud.rsync_storage_files_to(@instance)
           
           cmd = "cd #{Base.remote_storage_path}/#{Base.tmp_path} && chmod +x install_#{name}.sh && /bin/sh install_#{name}.sh && rm install_#{name}.sh"
@@ -230,7 +230,6 @@ module PoolParty
           touch /etc/apt/sources.list
           echo 'deb http://mirrors.kernel.org/ubuntu hardy main universe' >> /etc/apt/sources.list
           apt-get update --fix-missing -y
-          apt-get upgrade -y
           "
         else
           "# No system upgrade needed"

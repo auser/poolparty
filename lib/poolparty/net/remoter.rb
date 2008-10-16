@@ -195,7 +195,7 @@ module PoolParty
       end
       
       # Rsync command to the instance
-      def rsync_storage_files_to(instance=nil)        
+      def rsync_storage_files_to(instance=nil)
         hide_output do
           Kernel.system "#{rsync_storage_files_to_command(instance)}" if instance
         end

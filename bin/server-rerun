@@ -1,0 +1,24 @@
+#!/usr/bin/env ruby
+$:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
+require "poolparty"
+require "poolpartycl"
+
+o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
+  opts.on('-n name', '--name name', 'Listing for cloud name')    { |c| optioner.cloudname c }
+end
+
+load_pool(o.spec || Binary.get_existing_spec_location)
+
+include Remote
+
+@clouds = o.cloudname ? [cloud(o.cloudname.downcase.to_sym)] : clouds
+
+@clouds.each do |name, cloud|
+  
+  with_cloud(cloud, {:testing => o.testing}) do
+    cmd = master.puppet_runner_command
+    %x[#{cmd}] unless testing
+    puts cmd
+  end  
+  
+end

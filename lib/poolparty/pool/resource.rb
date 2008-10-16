@@ -28,8 +28,8 @@ module PoolParty
       end
     end
     
-    def get_resource(type, name)
-      resource(type).select {|resource| resource.name == name }.first
+    def get_resource(type, key)
+      resource(type).select {|resource| resource.key == key }.first
     end
             
     #:nodoc:
@@ -114,7 +114,8 @@ module PoolParty
           str == "absent" ? is_absent : is_present
         else
           options.merge!(:ensure => str)
-        end        
+        end
+        str
       end
       # Allows us to send an ensure to ensure the presence of a resource
       def is_present(*args)
