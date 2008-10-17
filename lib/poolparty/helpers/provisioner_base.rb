@@ -17,7 +17,6 @@ module PoolParty
     end
 
     def self.provision_slaves(cloud, testing=false)
-      puts "provisioning: #{cloud.name} (#{cloud.nonmaster_nonterminated_instances.map {|a| a.name}.join(", ")})"
       cloud.nonmaster_nonterminated_instances.each do |sl|        
         provision_slave(sl, cloud, testing)
       end
@@ -231,7 +230,7 @@ module PoolParty
           "          
           touch /etc/apt/sources.list
           echo 'deb http://mirrors.kernel.org/ubuntu hardy main universe' >> /etc/apt/sources.list
-          apt-get --fix-missing -y
+          apt-get update --fix-missing -y
           "
         else
           "# No system upgrade needed"

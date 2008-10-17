@@ -197,10 +197,6 @@ tasks/instance.rake
 tasks/server.rake
 tasks/spec.rake
 tasks/website.rake
-templates/authkeys
-templates/cib.xml
-templates/ha.cf
-templates/haproxy.conf
 test/test_generator_helper.rb
 test/test_helper.rb
 test/test_pool_spec_generator.rb
