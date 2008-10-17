@@ -1,8 +1,8 @@
 module PoolParty
   module FileWriter
-    def copy_file_to_storage_directory(file)
+    def copy_file_to_storage_directory(file, preceded="")
       make_base_directory
-      path = ::File.join( Base.storage_directory, ::File.basename(file) )      
+      path = ::File.join( Base.storage_directory, preceded, ::File.basename(file) )      
       FileUtils.cp file, path unless file == path || ::File.exists?(path)
     end
     def copy_template_to_storage_directory(file)
@@ -10,12 +10,12 @@ module PoolParty
       path = ::File.join( Base.template_directory, ::File.basename(file) )
       FileUtils.cp file, path unless file == path || ::File.exists?(path)
     end
-    def write_to_file_in_storage_directory(file, str, &block)
-      path = ::File.join( Base.storage_directory, ::File.basename(file) )
+    def write_to_file_in_storage_directory(file, str, preceded="", &block)
+      path = ::File.join( Base.storage_directory, preceded, ::File.basename(file) )
       write_to_file(path, str, &block)
     end
-    def write_to_file(file, str, &block)
-      path = ::File.join( Base.storage_directory, ::File.basename(file) )
+    def write_to_file(file, str, preceded="", &block)
+      path = ::File.join( Base.storage_directory, preceded, ::File.basename(file) )
       make_base_path( Base.storage_directory )
       ::File.open(path, "w+") do |f|
         f.print str

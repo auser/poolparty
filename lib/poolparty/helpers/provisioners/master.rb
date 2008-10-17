@@ -110,11 +110,11 @@ cp #{Base.remote_storage_path}/#{@cloud.full_keypair_name} #{@cloud.remote_keypa
         EOS
       end
 
+      # ps aux | grep puppetmasterd | awk '{print $2}' | xargs kill
+      # rm -rf /etc/puppet/ssl
+      # puppetmasterd --verbose
       def start_puppetmaster
         <<-EOS
-ps aux | grep puppetmasterd | awk '{print $2}' | xargs kill
-rm -rf /etc/puppet/ssl
-puppetmasterd --verbose
         EOS
       end
 

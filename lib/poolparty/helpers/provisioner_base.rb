@@ -230,7 +230,7 @@ module PoolParty
           "          
           touch /etc/apt/sources.list
           echo 'deb http://mirrors.kernel.org/ubuntu hardy main universe' >> /etc/apt/sources.list
-          apt-get update --fix-missing -y
+          apt-get --fix-missing -y
           "
         else
           "# No system upgrade needed"
