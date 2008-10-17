@@ -22,7 +22,9 @@ load_pool(o.spec || Binary.get_existing_spec_location)
       if testing
         puts("\tNot launching while in testing mode")
       else
+        provisioning_in_progress
         launch_and_configure_master!
+        provisioning_complete
       end
     end
     clear_base_directory unless testing

@@ -6,9 +6,9 @@ module PoolParty
         has_package(:name => "erlang")
         has_package(:name => "rubygems")
         # These should be installed automagically by poolparty, but just in case
-        # TODO: Fix the requires method with a helper
-        has_gempackage(:name => "activesupport", :requires => 'Package["rubygems"]')
+        # TODO: Fix the requires method with a helper        
         has_gempackage(:name => "logging", :requires => 'Package["rubygems"]')
+        has_gempackage(:name => "activesupport", :requires => 'Package["rubygems"], Exec["gem-package-ParseTree"]')
         has_gempackage(:name => "hoe", :requires => 'Package["rubygems"]')
         has_gempackage(:name => "xml-simple", :requires => 'Package["rubygems"]')
         has_gempackage(:name => "ParseTree", :version => "2.2.0", :requires => 'Exec["gem-package-hoe"]')
