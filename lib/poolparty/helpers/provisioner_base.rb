@@ -17,7 +17,8 @@ module PoolParty
     end
 
     def self.provision_slaves(cloud, testing=false)
-      cloud.nonmaster_nonterminated_instances.each do |sl|
+      puts "provisioning: #{cloud.name} (#{cloud.nonmaster_nonterminated_instances.map {|a| a.name}.join(", ")})"
+      cloud.nonmaster_nonterminated_instances.each do |sl|        
         provision_slave(sl, cloud, testing)
       end
     end

@@ -18,8 +18,9 @@ include Remote
 @clouds.each do |name, cloud|
   
   with_cloud(cloud, {:testing => o.testing, :location => @location, :provision_class => @provision_class}) do
-        
+    
     if provision_class == "slave" || provision_class == "all"
+      puts "self: #{self}: Provsing slaves on testing: #{testing}"
       Provisioner.provision_slaves(self, testing)
     end
     if provision_class == "master" || provision_class == "all"
