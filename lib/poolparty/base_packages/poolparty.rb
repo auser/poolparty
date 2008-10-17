@@ -34,7 +34,7 @@ module PoolParty
         
         # These are all requirements on the master
         execute_if("$hostname", "master") do
-          has_cron({:command => ". /etc/profile && which cloud-maintain | /bin/sh", :minute => "*/5"})
+          has_cron({:command => ". /etc/profile && which cloud-maintain | /bin/sh", :minute => "*/3"})
         end
         # has_host(:name => "puppet", :ip => (self.respond_to?(:master) ? self : parent).master.ip)
       end
