@@ -106,8 +106,14 @@ cp #{Base.remote_storage_path}/#{Base.template_directory}/* #{Base.template_path
 cp #{Base.remote_storage_path}/poolparty.pp /etc/puppet/manifests/classes/poolparty.pp
 cp #{Base.remote_storage_path}/#{Base.key_file_locations.first} "#{Base.base_config_directory}/.ppkeys"
 cp #{Base.remote_storage_path}/#{Base.default_specfile_name} #{Base.base_config_directory}/#{Base.default_specfile_name}
-cp #{Base.remote_storage_path}/#{@cloud.full_keypair_name} #{@cloud.remote_keypair_path}
+#{copy_ssh_app}
         EOS
+      end
+      
+      def copy_ssh_app
+        if @cloud.remote_keypair_path != "#{Base.remote_storage_path}/#{@cloud.full_keypair_name}"
+          "cp #{Base.remote_storage_path}/#{@cloud.full_keypair_name} #{@cloud.remote_keypair_path}"
+        end
       end
 
       # ps aux | grep puppetmasterd | awk '{print $2}' | xargs kill
