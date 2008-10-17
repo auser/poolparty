@@ -1,0 +1,29 @@
+#!/usr/bin/env ruby
+$:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
+require "poolparty"
+require "poolpartycl"
+
+available_monitors = PoolParty::Monitors.available_monitors
+o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
+  opts.on('-n name', '--name name', 'Listing for cloud name')    { |c| optioner.cloudname c }
+  opts.on('-m name', '--monitor monitor_name', "Monitor name (default: cpu) (Available monitors: #{available_monitors.join(", ")})") {|c| optioner.monitorname c}
+end
+
+load_pool(o.spec || Binary.get_existing_spec_location)
+
+include Remote
+
+@clouds = o.cloudname ? [cloud(o.cloudname.downcase.to_sym)] : clouds
+@monitor = o.monitorname ? o.monitorname : "cpu"
+
+@clouds.each do |name, cloud|
+  
+  with_cloud(cloud, {:testing => o.testing, :monitorname => @monitor }) do
+    if PoolParty::Monitors.available_monitors.include?(monitorname.downcase.to_sym)
+      puts "PoolParty::Monitors::#{monitorname.capitalize}Monitor".constantize.run
+    else
+      puts "Unknown monitor"
+    end
+  end  
+  
+end

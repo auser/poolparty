@@ -8,7 +8,7 @@ module PoolParty
   
   def remote_bases
     $remote_bases ||= []
-  end  
+  end
 
   module Remote    
     # This class is the base class for all remote types
