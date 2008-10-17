@@ -7,91 +7,62 @@
 %%% 
 %%%***************************************
 
--module().
+% The name of our module
+-module (eb_server).
+% We are using the gen_server behaviour
+-behaviour (gen_server).
+-export ([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
 
--behaviour(gen_server).
+% Client function definitions
+-export ([start_link/0, get_load/1, stop/0]).
 
-%% API
--export([start_link/0]).
-
-%% gen_server callbacks
--export([init/1, handle_call/3, handle_cast/2, handle_info/2,
-	 terminate/2, code_change/3]).
-
--record(state, {}).
-
-%%====================================================================
-%% API
-%%====================================================================
-%%--------------------------------------------------------------------
-%% Function: start_link() -> {ok,Pid} | ignore | {error,Error}
-%% Description: Starts the server
-%%--------------------------------------------------------------------
+% Client Functions
 start_link() ->
-    gen_server:start_link({local, ?SERVER}, ?MODULE, [], []).
+  gen_server:start_link({local, ?MODULE}, ?MODULE, [], []).
 
-%%====================================================================
-%% gen_server callbacks
-%%====================================================================
+get_load(Type) ->
+	gen_server:call(?MODULE, {get_load, Type}).
 
-%%--------------------------------------------------------------------
-%% Function: init(Args) -> {ok, State} |
-%%                         {ok, State, Timeout} |
-%%                         ignore               |
-%%                         {stop, Reason}
-%% Description: Initiates the server
-%%--------------------------------------------------------------------
-init([]) ->
-    {ok, #state{}}.
+stop() ->
+	gen_server:cast(?MODULE, stop).
+		
+% Load monitor methods
+% 	TODO: Make this dynamic
+% get_system_load() ->
 
-%%--------------------------------------------------------------------
-%% Function: %% handle_call(Request, From, State) -> {reply, Reply, State} |
-%%                                      {reply, Reply, State, Timeout} |
-%%                                      {noreply, State} |
-%%                                      {noreply, State, Timeout} |
-%%                                      {stop, Reason, Reply, State} |
-%%                                      {stop, Reason, State}
-%% Description: Handling call messages
-%%--------------------------------------------------------------------
-handle_call(_Request, _From, State) ->
-    Reply = ok,
-    {reply, Reply, State}.
+% Gen server callbacks
+% Sends the response and state back
+init([]) -> 
+	{ok, []}.
 
-%%--------------------------------------------------------------------
-%% Function: handle_cast(Msg, State) -> {noreply, State} |
-%%                                      {noreply, State, Timeout} |
-%%                                      {stop, Reason, State}
-%% Description: Handling cast messages
-%%--------------------------------------------------------------------
+% Handle synchronous messages
+% Signature:
+%  handle_call(_Request, _From, State) ->
+% 	{reply, ignored, State} 
+% 
+% Gets the load on the server
+handle_call({get_load, Type}, _From, State) ->
+	String = string:concat("server-get-load -m ",Type),
+	{reply, {ok, os:cmd(String)}, State};
+handle_call(_Request, _From, State) -> % The catch-all
+	{reply, ignored, State}.
+
+% Handle asynchronous messages
+handle_cast(stop, State) ->
+	{stop, normal, State};	
 handle_cast(_Msg, State) ->
-    {noreply, State}.
+	{noreply, State}.
 
-%%--------------------------------------------------------------------
-%% Function: handle_info(Info, State) -> {noreply, State} |
-%%                                       {noreply, State, Timeout} |
-%%                                       {stop, Reason, State}
-%% Description: Handling all non call/cast messages
-%%--------------------------------------------------------------------
+% Handle other messages
 handle_info(_Info, State) ->
-    {noreply, State}.
+	io:format("Info message received from: ~p~n", [_Info]),
+	{noreply, State}.
 
-%%--------------------------------------------------------------------
-%% Function: terminate(Reason, State) -> void()
-%% Description: This function is called by a gen_server when it is about to
-%% terminate. It should be the opposite of Module:init/1 and do any necessary
-%% cleaning up. When it returns, the gen_server terminates with Reason.
-%% The return value is ignored.
-%%--------------------------------------------------------------------
-terminate(_Reason, _State) ->
-    ok.
+% Exit
+terminate(_Reason, State) ->
+	io:format("Server is stopping...~n"),
+	{ok, State}.
 
-%%--------------------------------------------------------------------
-%% Func: code_change(OldVsn, State, Extra) -> {ok, NewState}
-%% Description: Convert process state when code is changed
-%%--------------------------------------------------------------------
+% If the code changes
 code_change(_OldVsn, State, _Extra) ->
-    {ok, State}.
-
-%%--------------------------------------------------------------------
-%%% Internal functions
-%%--------------------------------------------------------------------
+  {ok, State}.
