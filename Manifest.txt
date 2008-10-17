@@ -37,7 +37,13 @@ examples/with_apache_plugin.rb
 generators/poolspec/USAGE
 generators/poolspec/poolspec_generator.rb
 generators/poolspec/templates/pool_spec_template.erb
+lib/erlang/eb_server.beam
 lib/erlang/eb_server.erl
+lib/erlang/tmp/templates/apache2.conf
+lib/erlang/tmp/templates/base.conf.erb
+lib/erlang/tmp/templates/browser_fixes.conf.erb
+lib/erlang/tmp/templates/mime-minimal.conf.erb
+lib/erlang/tmp/templates/virtual_host.conf.erb
 lib/poolparty.rb
 lib/poolparty/base_packages/haproxy.rb
 lib/poolparty/base_packages/heartbeat.rb
