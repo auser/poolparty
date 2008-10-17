@@ -217,8 +217,13 @@ module PoolParty
       end
       
       # Prepare reconfiguration on the master
+      # TODO: Fix the killall
       def prepare_reconfiguration
-        run_command_on("rm -rf /etc/puppet/ssl/*", master)
+        unless @prepared
+          cmd = "killall ruby && rm -rf /etc/puppet/ssl/*; puppetmasterd --verbose; puppetd --test"
+          run_command_on(cmd, master)
+          @prepared = true
+        end
       end
 
       def self.included(receiver)

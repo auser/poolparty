@@ -18,7 +18,7 @@ module PoolParty
       def setup_puppet
         <<-EOE
           if [ -z "$(grep -v '#' /etc/hosts | grep 'master')" ]; then echo "#{master_ip} puppet master" >> /etc/hosts; else echo "host already set"; fi
-          cp #{Base.remote_storage_path}/#{Base.tmp_path}/namespaceauth.conf /etc/puppet/namespaceauth.conf
+          cp #{Base.remote_storage_path}/namespaceauth.conf /etc/puppet/namespaceauth.conf
         EOE
       end
 
@@ -28,10 +28,11 @@ module PoolParty
         EOS
       end
 
+      # /etc/init.d/puppetmasterd stop
+      # puppetd --listen --fqdn #{@instance.name}
       def start_puppet
         <<-EOS
-/etc/init.d/puppetmasterd stop
-puppetd --listen --fqdn #{@instance.name}
+          rm -rf /etc/puppet/ssl*
         EOS
       end
       
