@@ -127,8 +127,10 @@ cp #{Base.remote_storage_path}/#{Base.default_specfile_name} #{Base.base_config_
       # puppetd --listen --fqdn #{@instance.name}
       def restart_puppetd
         <<-EOS
+          killall ruby
           rm -rf /etc/puppet/ssl/*
-          #{@instance.puppet_runner_command}
+          puppetmasterd --verbose
+          . /etc/profile && #{@instance.puppet_runner_command}
         EOS
       end
     end
