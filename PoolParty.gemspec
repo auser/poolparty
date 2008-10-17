@@ -21,7 +21,9 @@ To get started, run the generator:
 Please check out the documentation for any questions or check out the google groups at
   http://groups.google.com/group/poolpartyrb
 
-Don't forget to check out the plugin tutorial @ http://poolpartyrb.com for extending PoolParty!
+Tutorials are at http://poolpartyrb.com
+
+Don't forget to check out the plugin tutorial @ http://poolpartyrb.com to extend PoolParty for your needs!
 
 For more information, check http://PoolPartyrb.com
 On IRC: 
