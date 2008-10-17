@@ -47,7 +47,7 @@ module PoolParty
         # this can be overridden in the spec, but ec2 is the default
         self.using :ec2
       end
-                        
+                              
       # Keypairs
       # If the parent (pool) doesn't have a keypair defined on it, then generate one based on the 
       # pool_name and the cloud_name
@@ -167,6 +167,18 @@ module PoolParty
         haproxy
         ruby
         poolparty
+      end
+      
+      def provisioning?
+        @provisioning_in_progress == true
+      end
+      
+      def provisioning_in_progress
+        @provisioning_in_progress = true
+      end
+      
+      def provisioning_complete
+        @provisioning_in_progress = false
       end
             
       # Add to the services pool for the manifest listing

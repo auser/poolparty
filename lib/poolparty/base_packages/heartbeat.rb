@@ -10,10 +10,15 @@ module PoolParty
           end
         
           has_exec(:name => "heartbeat-update-cib", :command => "/usr/sbin/cibadmin -R -x /etc/ha.d/cib.xml", :refreshonly => true)
-        
-          # variables for the templates
-          variable(:name => "ha_nodenames", :value => "generate('/usr/bin/env', '/var/lib/gems/1.8/bin/server-list-active', '-c', 'name')")
-          variable(:name => "ha_node_ips",  :value => "generate('/usr/bin/env', '/var/lib/gems/1.8/bin/server-list-active', '-c', 'ip')")
+          
+          if @parent.provisioning?
+            variable(:name => "ha_nodenames", :value => "#{list_of_running_instances.map{|a| "#{a.send :name}" }.join("\t")}")
+            variable(:name => "ha_node_ips",  :value => "#{list_of_running_instances.map{|a| "#{a.send :ip}" }.join("\t")}")
+          else
+            # variables for the templates
+            variable(:name => "ha_nodenames", :value => "generate('/usr/bin/env', '/var/lib/gems/1.8/bin/server-list-active', '-c', 'name')")
+            variable(:name => "ha_node_ips",  :value => "generate('/usr/bin/env', '/var/lib/gems/1.8/bin/server-list-active', '-c', 'ip')")
+          end
           
           has_variable({:name => "ha_timeout",  :value => (self.respond_to?(:timeout) ? timeout : "5s")})
           has_variable({:name => "ha_port", :value => (self.respond_to?(:port) ? port : Base.port)})

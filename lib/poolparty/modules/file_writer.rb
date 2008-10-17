@@ -7,7 +7,7 @@ module PoolParty
     end
     def copy_template_to_storage_directory(file)
       make_template_directory
-      path = ::File.join( Base.template_directory, ::File.basename(file) )
+      path = ::File.join( Base.tmp_path, Base.template_directory, ::File.basename(file) )
       FileUtils.cp file, path unless file == path || ::File.exists?(path)
     end
     def write_to_file_in_storage_directory(file, str, preceded="", &block)
@@ -46,7 +46,8 @@ module PoolParty
       FileUtils.mkdir_p Base.storage_directory unless ::File.directory?(Base.storage_directory)
     end
     def make_template_directory
-      FileUtils.mkdir_p Base.template_directory unless ::File.directory?(Base.template_directory)      
+      path = ::File.join(Base.tmp_path, Base.template_directory)
+      FileUtils.mkdir_p path unless ::File.directory?(path)
     end
     def clear_base_directory
       FileUtils::rm_rf "#{Base.storage_directory}"
