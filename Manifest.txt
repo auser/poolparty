@@ -25,6 +25,7 @@ bin/pool-provision
 bin/pool-spec
 bin/pool-start
 bin/pool-start-monitor
+bin/server-get-load
 bin/server-list-active
 bin/server-rerun
 config/hoe.rb
@@ -76,6 +77,8 @@ lib/poolparty/modules/pretty_printer.rb
 lib/poolparty/modules/s3_string.rb
 lib/poolparty/modules/safe_instance.rb
 lib/poolparty/monitors/base_monitor.rb
+lib/poolparty/monitors/monitors/cpu_monitor.rb
+lib/poolparty/monitors/monitors/memory_monitor.rb
 lib/poolparty/net/remote.rb
 lib/poolparty/net/remote_bases/ec2.rb
 lib/poolparty/net/remote_instance.rb
@@ -149,6 +152,8 @@ spec/poolparty/modules/configurable_spec.rb
 spec/poolparty/modules/definable_resource.rb
 spec/poolparty/modules/file_writer_spec.rb
 spec/poolparty/modules/s3_string_spec.rb
+spec/poolparty/monitors/base_monitor_spec.rb
+spec/poolparty/monitors/monitors/cpu_monitor_spec.rb
 spec/poolparty/net/remote_bases/ec2_spec.rb
 spec/poolparty/net/remote_instance_spec.rb
 spec/poolparty/net/remote_spec.rb
