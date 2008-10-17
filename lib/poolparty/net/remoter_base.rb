@@ -61,6 +61,10 @@ module PoolParty
       def list_of_nonterminated_instances(list = remote_instances_list)
         list.reject {|i| i.terminating? || i.terminated? }
       end
+      # get the master instance
+      def master
+        get_instance_by_number(0)
+      end
       # Get instance by number
       def get_instance_by_number(i=0, list = remote_instances_list)
         name = (i.zero? ? "master" : "node#{i}")

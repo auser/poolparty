@@ -29,7 +29,7 @@ module PoolParty
 
       def configure_tasks
         [
-          start_puppetmaster,
+          # start_puppetmaster,
           create_local_node,
           move_templates,
           create_poolparty_manifest,
@@ -52,7 +52,7 @@ echo "import 'nodes/*.pp'" > /etc/puppet/manifests/site.pp
 echo "import 'classes/*.pp'" >> /etc/puppet/manifests/site.pp
 mkdir -p /etc/puppet/manifests/nodes 
 mkdir -p /etc/puppet/manifests/classes
-cp #{Base.remote_storage_path}/#{Base.tmp_path}/namespaceauth.conf /etc/puppet/namespaceauth.conf
+cp #{Base.remote_storage_path}/namespaceauth.conf /etc/puppet/namespaceauth.conf
         EOS
       end
 
@@ -66,7 +66,7 @@ echo "#{open(File.join(template_directory, "puppet.conf")).read}" > /etc/puppet/
         <<-EOS
 echo "
 [files]
-  path #{Base.remote_storage_path}/#{Base.tmp_path}
+  path #{Base.remote_storage_path}
   allow *" > /etc/puppet/fileserver.conf
 mkdir -p /var/poolparty/facts
 mkdir -p /var/poolparty/files
@@ -103,10 +103,10 @@ cp #{Base.remote_storage_path}/#{Base.template_directory}/* #{Base.template_path
       
       def create_poolparty_manifest
         <<-EOS
-cp #{Base.remote_storage_path}/#{Base.tmp_path}/poolparty.pp /etc/puppet/manifests/classes/poolparty.pp
-cp #{Base.remote_storage_path}/#{Base.tmp_path}/#{Base.key_file_locations.first} "#{Base.base_config_directory}/.ppkeys"
-cp #{Base.remote_storage_path}/#{Base.tmp_path}/#{Base.default_specfile_name} #{Base.base_config_directory}/#{Base.default_specfile_name}
-cp #{Base.remote_storage_path}/#{Base.tmp_path}/#{@cloud.full_keypair_name} #{@cloud.remote_keypair_path}
+cp #{Base.remote_storage_path}/poolparty.pp /etc/puppet/manifests/classes/poolparty.pp
+cp #{Base.remote_storage_path}/#{Base.key_file_locations.first} "#{Base.base_config_directory}/.ppkeys"
+cp #{Base.remote_storage_path}/#{Base.default_specfile_name} #{Base.base_config_directory}/#{Base.default_specfile_name}
+cp #{Base.remote_storage_path}/#{@cloud.full_keypair_name} #{@cloud.remote_keypair_path}
         EOS
       end
 
@@ -121,7 +121,7 @@ puppetmasterd --verbose
       # puppetd --listen --fqdn #{@instance.name}
       def restart_puppetd
         <<-EOS
-          rm -rf /etc/puppet/ssl
+          rm -rf /etc/puppet/ssl/*
           #{@instance.puppet_runner_command}
         EOS
       end
