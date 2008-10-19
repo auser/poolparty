@@ -3,7 +3,7 @@
 % Ari Lerner
 % CitrusByte
 
--module (pm_server_supervisor).
+-module (pm_node_supervisor).
 -behaviour (supervisor).
 
 -ifdef(EUNIT).
