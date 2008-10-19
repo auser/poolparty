@@ -8,7 +8,7 @@
 %%%***************************************
 
 % The name of our module
--module (pm_server).
+-module (pm_node).
 
 -ifdef(EUNIT).
 -include_lib("eunit/include/eunit.hrl").
@@ -19,18 +19,19 @@
 -export ([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
 
 % Client function definitions
--export ([start_link/0, stop/0]).
+-export ([start_link/1, stop/0]).
 -export ([get_load_for_type/2]).
 
 % Client Function API Calls
 get_load_for_type(From, Type) ->
 	io:format("Getting load for "++Type++" on ~p~n", [From]),
 	String = string:concat("server-get-load -m ",Type),
-	{ok, {load, os:cmd(String)}}.
-	
-start_link() ->
-	io:format("Starting load_server...~n"),
-  gen_server:start_link({local, ?MODULE}, ?MODULE, [], []).
+	gen_server:reply(From, {load, os:cmd(String)}).
+
+start_link(Index) ->
+	io:format("Starting pm_node~p...~n", [Index]),
+	String = string:concat("pm_node", Index),
+	gen_server:start_link({global, String}, String, [], []).
 
 stop() ->
 	gen_server:cast(?MODULE, stop).
