@@ -30,7 +30,7 @@ describe "Hash" do
   it "should be able to flush out into a string into an array" do
     @a.flush_out.should == ["a => '10'","b => '20'","c => '30'"]
   end
-  it "should be able to flush out with prev and posts" do
+  it "should be able to flush out with pre and posts" do
     @a.flush_out("hi", "ho").should == ["hia => '10'ho","hib => '20'ho","hic => '30'ho"]
   end
   describe "select" do
@@ -58,6 +58,24 @@ describe "Hash" do
       lambda {
         {}.extract!
       }.should_not raise_error
+    end
+  end
+  describe "append" do
+    before(:each) do
+      @hash = {:game => "token", :required => "for_play"}
+    end
+    it "should not destroy an option salready on the hash" do
+      @hash.append(:required => "to_play")[:game].should == "token"
+    end
+    it "should change the entry to an array if it already exists" do
+      @hash.append(:game => "coin")[:game].class.should == Array
+    end
+    it "should append the other hash's key to the end of the array" do
+      @hash.append(:game => "coin")[:game][-1].should == "coin"
+    end
+    it "should change the hash with the append(bang) option" do
+      @hash.append!(:game => "coin")
+      @hash[:game][-1].should == "coin"
     end
   end
 end

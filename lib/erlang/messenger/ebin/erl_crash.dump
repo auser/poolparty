@@ -8077,7 +8077,7 @@ maybe_utc
 write_event
 write_events1
 write_events
-install_prev
+install_pre
 '-wait_nodes/2-fun-0-'
 sync_nodes_optional
 get_sync_optional_nodes
@@ -8616,7 +8616,7 @@ log_terms
 '-table/2-lc$^0/1-0-'
 '-table/2-fun-9-'
 '-qlc_next/2-fun-0-'
-'-qlc_prev/2-fun-0-'
+'-qlc_pre/2-fun-0-'
 '-qlc_select/1-fun-0-'
 '-i/0-fun-0-'
 '-hform/6-lc$^0/1-0-'
@@ -8650,7 +8650,7 @@ default
 n_objects
 traverse
 qlc_select
-qlc_prev
+qlc_pre
 qlc_next
 is_unique_objects
 is_sorted_key
@@ -8661,7 +8661,7 @@ post_fun
 info_fun
 lookup_fun
 first_next
-last_prev
+last_pre
 tabfile_info
 cannot_create_table
 create_tab
@@ -11470,7 +11470,7 @@ safe_fixtable
 rename
 insert_new
 insert
-prev
+pre
 is_key
 member
 match_object

@@ -15,8 +15,8 @@ class Array
   def nice_runnable(quiet=true)
     self.flatten.reject{|e| (e.nil? || e.empty?) }.join(" \n ").chomp.nice_runnable(quiet)
   end
-  def to_string(prev="")
-    map {|a| a.to_string(prev)}.join("\n")
+  def to_string(pre="")
+    map {|a| a.to_string(pre)}.join("\n")
   end
   def get_named(str="")
     map {|a| a.name == str ? a : nil }.reject {|a| a.nil? }

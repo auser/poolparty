@@ -25,7 +25,7 @@ module PoolParty
         true
       end
       
-      def to_string(prev="")
+      def to_string(pre="")
         returning Array.new do |output|
           output << "# #{name.sanitize}"
           output << "case #{attribute} {"

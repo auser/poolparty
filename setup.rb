@@ -1363,7 +1363,7 @@ class Installer
 
   def install_dir_conf(rel)
     # FIXME: should not remove current config files
-    # (rename previous file to .old/.org)
+    # (rename preious file to .old/.org)
     install_files targetfiles(), "#{config('sysconfdir')}/#{rel}", 0644
   end
 
@@ -1542,12 +1542,12 @@ class Installer
 
     dir = File.basename(rel)
     Dir.mkdir dir unless File.dir?(dir)
-    prevdir = Dir.pwd
+    predir = Dir.pwd
     Dir.chdir dir
     $stderr.puts '---> ' + rel if verbose?
     @currdir = rel
     yield
-    Dir.chdir prevdir
+    Dir.chdir predir
     $stderr.puts '<--- ' + rel if verbose?
     @currdir = File.dirname(rel)
   end

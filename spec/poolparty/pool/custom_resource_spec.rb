@@ -80,11 +80,11 @@ describe "Custom Resource" do
         end
         it "should create a new CallFunction instance when calling call_function with a string" do
           PoolParty::Resources::CallFunction.should_receive(:new).and_return "bunk"
-          add_resource(:call_function, "line")
+          add_resource(:call_function, :name => "line")
         end
         it "should create a call function in the function call array" do
-          add_resource(:call_function, @cloud, "heyyohey")
-          resource(:call_function).size.should == 1
+          add_resource(:call_function, {:name => "custom_function"}, @cloud)
+          @cloud.resource(:call_function).size.should == 1
         end
         describe "defining" do
           it "should add the methods to the class through module_eval" do
