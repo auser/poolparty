@@ -148,14 +148,17 @@ module PoolParty
       # Only runs on objects that have options defined, otherwise 
       # it returns an empty hash
       def get_modified_options
-        if options
-          opts = options.inject({}) do |sum,h| 
-            sum.merge!({h[0].to_sym => ((h[1].nil?) ? self.send(h[0].to_sym) : h[1]) })
+        unless @modified_options
+          if options
+            opts = options.inject({}) do |sum,h| 
+              sum.merge!({h[0].to_sym => ((h[1].nil?) ? self.send(h[0].to_sym) : h[1]) })
+            end
+          else
+            opts = {}
           end
-        else
-          opts = {}
+          @modified_options = opts.reject {|k,v| disallowed_options.include?(k) }
         end
-        opts.reject {|k,v| disallowed_options.include?(k) }
+        @modified_options
       end
       
       # Generic to_s
