@@ -1,0 +1,11 @@
+Package: poolparty_messenger
+Version: 0.1
+Section: poolparty
+Priority: optional
+Architecture: all
+Essential: no
+Depends: erlang
+Installed-Size: 1024
+Maintainer: Ari Lerner <arilerner@mac.com>
+Provides: poolparty_messenger
+Description: PoolParty Messenger
