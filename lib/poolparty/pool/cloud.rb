@@ -76,7 +76,6 @@ module PoolParty
         # clear_base_directory
         make_base_directory
         copy_misc_templates
-        copy_puppet_functions
         Base.store_keys_in_file
         Script.save!
         copy_ssh_key # not my favorite...
@@ -108,13 +107,7 @@ module PoolParty
           copy_file_to_storage_directory(::File.join(::File.dirname(__FILE__), "..", "templates", f))
         end
       end
-      
-      # TODO: Fix for windowz
-      def copy_puppet_functions
-        cmd = "cp -R #{::File.join(::File.dirname(__FILE__), "..", "puppet_plugins/")} #{Base.storage_directory}/plugins"
-        %x[#{cmd}]
-      end
-      
+            
       # Configuration files
       def build_manifest
         @build_manifest ||= build_from_existing_file
