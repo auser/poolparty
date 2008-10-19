@@ -30,7 +30,7 @@ get_load_for_type(From, Type) ->
 
 start_link(Index) ->
 	io:format("Starting pm_node~p...~n", [Index]),
-	String = string:concat("pm_node", Index),
+	String = list_to_atom(string:concat("pm_node", Index)),
 	gen_server:start_link({global, String}, String, [], []).
 
 stop() ->
