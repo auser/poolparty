@@ -1,0 +1,5 @@
+Empty Erlang Project
+
+TODO
+* Refactor the test runner to only require one function for a test file
+

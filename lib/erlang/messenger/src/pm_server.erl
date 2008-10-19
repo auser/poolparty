@@ -8,20 +8,29 @@
 %%%***************************************
 
 % The name of our module
--module (eb_server).
+-module (pm_server).
+
+-ifdef(EUNIT).
+-include_lib("eunit/include/eunit.hrl").
+-endif.
+
 % We are using the gen_server behaviour
 -behaviour (gen_server).
 -export ([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
 
 % Client function definitions
--export ([start_link/0, get_load/1, stop/0]).
+-export ([start_link/0, stop/0]).
+-export ([get_load_for_type/2]).
 
-% Client Functions
+% Client Function API Calls
+get_load_for_type(From, Type) ->
+	io:format("Getting load for "++Type++" on ~p~n", [From]),
+	String = string:concat("server-get-load -m ",Type),
+	{ok, {load, os:cmd(String)}}.
+	
 start_link() ->
+	io:format("Starting load_server...~n"),
   gen_server:start_link({local, ?MODULE}, ?MODULE, [], []).
-
-get_load(Type) ->
-	gen_server:call(?MODULE, {get_load, Type}).
 
 stop() ->
 	gen_server:cast(?MODULE, stop).
@@ -33,6 +42,7 @@ stop() ->
 % Gen server callbacks
 % Sends the response and state back
 init([]) -> 
+	process_flag(trap_exit, true),
 	{ok, []}.
 
 % Handle synchronous messages
@@ -41,9 +51,9 @@ init([]) ->
 % 	{reply, ignored, State} 
 % 
 % Gets the load on the server
-handle_call({get_load, Type}, _From, State) ->
-	String = string:concat("server-get-load -m ",Type),
-	{reply, {ok, os:cmd(String)}, State};
+handle_call({get_load, Type}, From, State) ->
+	spawn(?MODULE, get_load_for_type, [From, Type]),
+	{noreply, State};
 handle_call(_Request, _From, State) -> % The catch-all
 	{reply, ignored, State}.
 
@@ -53,7 +63,7 @@ handle_cast(stop, State) ->
 handle_cast(_Msg, State) ->
 	{noreply, State}.
 
-% Handle other messages
+% Handle other messages	
 handle_info(_Info, State) ->
 	io:format("Info message received from: ~p~n", [_Info]),
 	{noreply, State}.
