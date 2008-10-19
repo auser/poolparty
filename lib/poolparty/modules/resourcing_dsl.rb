@@ -6,13 +6,13 @@ module PoolParty
       options[:require]
     end
     def requires(str="")
-      options.merge!(:require => str)
+      options.append!(:require => str)
     end 
     def ensures(str="running")
       if %w(absent running).map {|a| self.send a.to_sym}.include?(str)
         str == "absent" ? is_absent : is_present
       else
-        options.merge!(:ensure => str)
+        options.append!(:ensure => str)
       end
       str
     end

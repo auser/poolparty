@@ -131,6 +131,13 @@ describe "Resource" do
     include PoolParty::Resources
     before(:each) do
       reset_resources!
+      @cloud = cloud :command_cloud do; end
+    end
+    it "should call add_resource when creating using the command: file" do
+      @cloud.should_receive(:add_resource).with(:file, {:name => "frank"}, @cloud)
+      @cloud.instance_eval do
+        file(:name => "frank")
+      end
     end
     it "should create the new 'resource' as a resource" do
       resource(:file).class.should == Array
@@ -220,6 +227,29 @@ describe "Resource" do
         @file.parent.tangerine.should == "orange"
       end
     end
+    describe "appending to resource" do
+      before(:each) do
+        @cloud1 = cloud :apples do
+          directory(:name => "/var/www") do
+            file(:name => "/var/www/file.html")
+          end
+        end        
+        @dir = @cloud1.get_resource(:directory, "/var/www")
+        @file = @dir.get_resource(:file, "/var/www/file.html")
+      end
+      it "should say there is 1 resource because the lower-level resources should be contained on the parenting resource" do
+        @cloud1.resources.size.should == 1
+      end
+      it "should say there is one resource on the outer resource" do
+        @dir.resources.size.should == 1
+      end
+      it "should contain the file as a resource" do
+        @dir.resource(:file)[0].to_s.should == @file.to_s
+      end
+      it "should set the parent as the parenting resource" do
+        @file.parent.to_s.should == @dir.to_s
+      end
+    end
     describe "fetching" do
       before(:each) do
         @file = file(:name => "pancakes")
@@ -228,7 +258,7 @@ describe "Resource" do
         PoolParty::Resources::File.should_not_receive(:new)
         file(:name => "pancakes")
       end
-      it "should return the file previously created" do
+      it "should return the file preiously created" do
         get_resource(:file, "pancakes").should == @file
       end
       it "should be able to use the helper to grab the file" do

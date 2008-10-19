@@ -22,11 +22,11 @@ module PoolParty
     class CallFunction < Resource
       def initialize(str="", opts={}, parent=self, &block)
         @str = str
-        super(opts, parent, &block)
+        # super(opts, parent, &block)
       end
-      def to_string(prev="")
+      def to_string(pre="")
         returning Array.new do |arr|
-          arr << "#{prev}#{@str}"
+          arr << "#{pre}#{@str}"
         end.join("\n")
       end
     end
@@ -42,10 +42,10 @@ module PoolParty
         super(subclass)
       end
       
-      def to_string(prev="")
+      def to_string(pre="")
         returning Array.new do |output|
-          output << "#{prev} # Custom Functions\n"
-          output << self.class.custom_functions_to_string(prev)
+          output << "#{pre} # Custom Functions\n"
+          output << self.class.custom_functions_to_string(pre)
         end.join("\n")        
       end
     end

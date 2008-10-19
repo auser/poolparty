@@ -17,13 +17,13 @@ module PoolParty
       resources[type] ||= []
     end
     
-    def add_resource(type, opts={}, parent=self, &block)
-      resource = get_resource(type, opts[:name])
+    def add_resource(type, opts={}, parent=self, &block)      
+      resource = parent.get_resource(type, opts[:name])
       if resource
         return resource 
       else
         returning "PoolParty::Resources::#{type.to_s.camelize}".classify.constantize.new(opts, parent, &block) do |o|
-          resource(type) << o
+          parent.resource(type) << o
         end
       end
     end
@@ -37,7 +37,7 @@ module PoolParty
       @resources = nil
     end
         
-    def resources_string(prev="")
+    def resources_string(pre="")
       returning Array.new do |output|        
         output << resources_string_from_resources(resources)
       end.join("\n")
@@ -53,7 +53,7 @@ module PoolParty
       include CloudResourcer
       include Configurable
       
-      extend PoolParty::Resources
+      # extend PoolParty::Resources
       include PoolParty::Resources
       
       def self.inherited(subclass)
@@ -90,10 +90,17 @@ module PoolParty
       # Finally, it uses the parent's options as the lowest priority
       def initialize(opts={}, parent=self, &block)
         # Take the options of the parents
-        @parent = parent
+        set_resource_parent(parent)
         set_vars_from_options(opts) unless opts.empty?
         self.instance_eval &block if block
         loaded(opts)
+      end
+      
+      def set_resource_parent(parent=nil)
+        if parent
+          @parent = parent
+          requires parent.to_s if parent.is_a?(PoolParty::Resources::Resource) && parent != self
+        end        
       end
       
       # Stub, so you can create virtual resources
@@ -123,11 +130,11 @@ module PoolParty
         self.class.custom_functions << str
       end
       
-      def self.custom_functions_to_string(prev="")
+      def self.custom_functions_to_string(pre="")
         returning Array.new do |output|
           PoolParty::Resources.available_custom_resources.each do |resource|
             resource.custom_functions.each do |func|
-              output << "#{prev*2}#{func}"
+              output << "#{pre*2}#{func}"
             end
           end
         end.join("\n")
@@ -163,7 +170,7 @@ module PoolParty
       
       # Generic to_s
       # Most Resources won't need to extend this
-      def to_string(prev="")
+      def to_string(pre="")
         opts = get_modified_options
         returning Array.new do |output|
           unless cancelled?
@@ -176,10 +183,10 @@ module PoolParty
             end
           
             unless virtual_resource?
-              output << "#{prev}#{class_type_name} {"
-              output << "#{prev}\"#{self.key}\":"
-              output << opts.flush_out("#{prev*2}").join(",\n")
-              output << "#{prev}}"            
+              output << "#{pre}#{class_type_name} {"
+              output << "#{pre}\"#{self.key}\":"
+              output << opts.flush_out("#{pre*2}").join(",\n")
+              output << "#{pre}}"            
             end
           
             output << @poststring || ""

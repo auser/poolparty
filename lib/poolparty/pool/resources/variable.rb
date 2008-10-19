@@ -8,7 +8,7 @@ module PoolParty
         :value => ""
       })
       
-      def to_string(prev="\t")
+      def to_string(pre="\t")
         "$#{name} = #{value_string}"
       end
       
