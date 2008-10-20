@@ -84,7 +84,7 @@ describe "Custom Resource" do
         end
         it "should create a call function in the function call array" do
           add_resource(:call_function, {:name => "custom_function"}, @cloud)
-          @cloud.resource(:call_function).size.should == 1
+          resource(:call_function).size.should == 1
         end
         describe "defining" do
           it "should add the methods to the class through module_eval" do

@@ -20,16 +20,16 @@ module PoolParty
     def add_resource(type, opts={}, parent=self, &block)      
       resource = get_resource(type, opts[:name], parent)
       if resource
-        return resource 
+        resource 
       else
         returning "PoolParty::Resources::#{type.to_s.camelize}".classify.constantize.new(opts, parent, &block) do |o|
-          parent.resource(type) << o
+          resource(type) << o
         end
       end
     end
     
     def get_resource(type, key, parent=self)
-      parent.resource(type).select {|resource| resource.key == key }.first
+      resource(type).select {|resource| resource.key == key }.first
     end
             
     #:nodoc:
@@ -99,20 +99,20 @@ module PoolParty
       def set_resource_parent(parent=nil)
         if parent && parent != self
           @parent = parent
-          requires parent.to_s if @parent.is_a?(PoolParty::Resources::Resource) && !virtual_resource?
+          requires parent.to_s if @parent.is_a?(PoolParty::Resources::Resource) && printable? && @parent.printable?
         end
       end
       
-      def requirement_tree
-        p = @parent
-        returning Array.new do |arr|
-          arr << p.to_s
-          while p && p != self && p.is_a?(PoolParty::Resources::Resource) && p.requires
-            arr << p.requires
-            p = p.parent
-          end
-        end.flatten.uniq
-      end
+      # def requirement_tree
+      #   p = @parent
+      #   returning Array.new do |arr|
+      #     arr << p.to_s
+      #     while p && p != self && p.is_a?(PoolParty::Resources::Resource) && p.requires
+      #       arr << p.requires
+      #       p = p.parent
+      #     end
+      #   end.flatten.uniq
+      # end
       
       # Stub, so you can create virtual resources
       # This is called after the resource is initialized
@@ -182,35 +182,9 @@ module PoolParty
         @modified_options
       end
       
-      # Generic to_s
-      # Most Resources won't need to extend this
-      def to_string(pre="")
-        opts = get_modified_options
-        returning Array.new do |output|
-          unless cancelled?
-            output << @prestring || ""
-          
-            if resources && !resources.empty?
-              @cp = classpackage_with_self(self)
-              output << @cp.to_string
-              output << "include #{@cp.name.sanitize}"
-            end
-            
-            unless virtual_resource?
-              output << "#{pre}#{class_type_name} {"
-              output << "#{pre}\"#{self.key}\":"
-              output << opts.flush_out("#{pre*2}").join(",\n")
-              output << "#{pre}}"            
-            end
-          
-            output << @poststring || ""
-          end
-        end.join("\n")
-      end
-      
-      def to_s
-        "#{class_type_name.capitalize}['#{key}']"
-      end
+      # For the time being, we'll make puppet the only available dependency resolution
+      # base, but in the future, we can rip this out and make it an option
+      include PoolParty::DependencyResolutions::Puppet
     end
     
     # Adds two methods to the module

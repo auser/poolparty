@@ -13,18 +13,17 @@ module PoolParty
         end
       end
       
-      def has_git_repos                    
+      def has_git_repos
         exec({:name => "git-#{name}"}) do
-          command @parent.user ? "git clone #{@parent.user}@#{@parent.source} #{@parent.path}" : "git clone #{@parent.source} #{@parent.path}"
-          cwd "#{::File.dirname(@parent.path) if @parent.path}"
-          creates "#{cwd}/.git"
-          ifnot "/bin/test -d #{cwd}"
-        end
-
-        exec(:name => "git-update-#{name}", :require => nil) do
-          cwd "#{@parent.path ? @parent.path : path}"
-          command "git pull"
-          onlyif "/usr/bin/test -d #{cwd}/.git"
+          command @parent.user ? "git clone #{@parent.user}@#{@parent.source} #{@parent.path}" : "git clone #{@parent.source} #{@parent.to ? @parent.to : ""}"
+          cwd "#{@parent.cwd if @parent.cwd}"
+          creates "#{::File.join( (@parent.cwd ? @parent.cwd : cwd), ::File.basename(@parent.source, ::File.extname(@parent.source)) )}/.git"
+          
+          exec(:name => "update-#{name}") do
+            cwd ::File.dirname(@parent.creates)
+            command "git pull"
+          end
+          
         end
       end
       
