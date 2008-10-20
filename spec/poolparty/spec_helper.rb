@@ -38,6 +38,7 @@ def wait_launch(time=5)
   Process.wait(pid, 0)
 end
 def reset_all!
+  $cloud = nil
 end
 def read_file(path)
   require "open-uri"

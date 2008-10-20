@@ -7,23 +7,19 @@ module PoolParty
       # we also only want it to run if there is NOT a local gem already installed with
       # the package details (version and name)
       def loaded(opts={}, parent=self)
-        has_exec(opts.merge({:name => key, :cwd => "/tmp", :path => "/bin:/usr/bin:/usr/local/bin:/sbin:/usr/sbin:/var/lib/gems/1.8/bin"}), parent) do          
-          command "gem install -y --no-ri --no-rdoc #{"--version #{version}" if @parent.version} #{"--source #{@parent.source}" if @parent.source} #{@parent.name}"
-          ifnot "gem list --local #{@parent.name} | grep #{@parent.name} #{"| grep #{@parent.version}" if @parent.version}"
+        has_exec(opts.merge({:name => name, :cwd => "/tmp", :path => "/bin:/usr/bin:/usr/local/bin:/sbin:/usr/sbin:/var/lib/gems/1.8/bin"}), parent) do          
+          command "gem install -y --no-ri --no-rdoc #{"--version #{version}" if version} #{"--source #{source}" if source} #{name}"
+          ifnot "gem list --local #{name} | grep #{name} #{"| grep #{version}" if version}"
         end
       end
-
+      def virtual_resource?
+        true
+      end
       def printable?
-        false
+        true
       end
       def class_type_name
         "Exec"
-      end
-      # Additionally, because we change the name in the exec when required, we have to reflect
-      # it here in the key. This is just so poolparty is aware of the resource when looking for 
-      # it in a requires statement
-      def key
-        "gem-package-#{name}"
       end
       
     end

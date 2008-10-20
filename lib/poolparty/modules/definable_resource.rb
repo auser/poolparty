@@ -52,6 +52,7 @@ module PoolParty
       klass = "PoolParty::Resources::#{symc}".constantize
       klass.module_eval &block if block
       klass.send :define_method, :virtual_resource?, Proc.new{true}
+      klass.send :define_method, :printable?, Proc.new{false}
       klass
     end
     
