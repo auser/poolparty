@@ -170,7 +170,7 @@ describe "Cloud" do
                 hello my lady
               EOE
             end
-            has_gem(:name => "poolparty")
+            has_gempackage(:name => "poolparty")
             has_package(:name => "dummy")            
           end
         end

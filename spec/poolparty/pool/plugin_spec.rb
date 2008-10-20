@@ -39,7 +39,7 @@ describe "Plugin" do
       before(:each) do
         @plugin.instance_eval do
           enable_php
-          has_gem(:name => "aska")
+          has_gempackage(:name => "aska")
         end
       end
       it "should call enable_php on the class" do
@@ -49,13 +49,13 @@ describe "Plugin" do
         @plugin.resources.class.should == Hash
       end
       it "should have an array of gem resources" do
-        @plugin.resource(:package).class.should == Array
+        @plugin.resource(:gempackage).class.should == Array
       end
       it "should have 1 gem in the resources defined" do
-        @plugin.resource(:package).size.should == 1
+        @plugin.resource(:gempackage).size.should == 1
       end
       it "should have the gem named aska in the gem resource" do
-        @plugin.resource(:package).first.name.should == "aska"
+        @plugin.resource(:gempackage).first.name.should == "aska"
       end
       it "should have its resources visible to its parent" do
         @plugin.parent = @c

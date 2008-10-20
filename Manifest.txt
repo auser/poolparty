@@ -43,10 +43,16 @@ lib/erlang/messenger/Rakefile
 lib/erlang/messenger/control
 lib/erlang/messenger/ebin/erl_crash.dump
 lib/erlang/messenger/ebin/load_app.beam
+lib/erlang/messenger/ebin/pm_cluster.beam
 lib/erlang/messenger/ebin/pm_master.beam
 lib/erlang/messenger/ebin/pm_master_supervisor.beam
 lib/erlang/messenger/ebin/pm_node.beam
 lib/erlang/messenger/ebin/pm_node_supervisor.beam
+lib/erlang/messenger/ebin/tmp/templates/apache2.conf
+lib/erlang/messenger/ebin/tmp/templates/base.conf.erb
+lib/erlang/messenger/ebin/tmp/templates/browser_fixes.conf.erb
+lib/erlang/messenger/ebin/tmp/templates/mime-minimal.conf.erb
+lib/erlang/messenger/ebin/tmp/templates/virtual_host.conf.erb
 lib/erlang/messenger/lib/load_app.app
 lib/erlang/messenger/src/load_app.erl
 lib/erlang/messenger/src/pm_cluster.erl
@@ -101,7 +107,6 @@ lib/poolparty/net/remote_bases/ec2.rb
 lib/poolparty/net/remote_instance.rb
 lib/poolparty/net/remoter.rb
 lib/poolparty/net/remoter_base.rb
-lib/poolparty/plugins/gem_package.rb
 lib/poolparty/plugins/git.rb
 lib/poolparty/plugins/line.rb
 lib/poolparty/plugins/svn.rb
@@ -128,8 +133,6 @@ lib/poolparty/pool/resources/sshkey.rb
 lib/poolparty/pool/resources/symlink.rb
 lib/poolparty/pool/resources/variable.rb
 lib/poolparty/pool/script.rb
-lib/poolparty/puppet_plugins/poolparty/plugins/puppet/parser/functions/activenodeips.rb
-lib/poolparty/puppet_plugins/poolparty/plugins/puppet/parser/functions/activenodenames.rb
 lib/poolparty/templates/authkeys
 lib/poolparty/templates/cib.xml
 lib/poolparty/templates/fileserver.conf

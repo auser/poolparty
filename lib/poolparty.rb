@@ -1,11 +1,14 @@
 require 'rubygems'
 
 # Load required gems
-require 'active_support'
-require 'open4'
-require "ftools"
-require "logging"
-require "ruby2ruby"
+%w(active_support open4 ftools logging ruby2ruby).each do |lib|
+  begin
+    require lib
+  rescue Exception => e
+    puts "Could not find library #{lib}: #{e}"
+  end
+  
+end
 
 # Use active supports auto load mechanism
 ActiveSupport::Dependencies.load_paths << File.dirname(__FILE__)

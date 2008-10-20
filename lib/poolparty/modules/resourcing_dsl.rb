@@ -3,10 +3,10 @@ module PoolParty
     # Overrides for syntax
     # Allows us to send require to require a resource
     def require(str="")
-      options[:require]
+      str ? options.merge!(:require => str) : options[:require]
     end
-    def requires(str="")
-      options.append!(:require => str)
+    def requires(str=nil)
+      str ? options.append!(:require => str) : options[:require]
     end 
     def ensures(str="running")
       if %w(absent running).map {|a| self.send a.to_sym}.include?(str)
