@@ -3,31 +3,28 @@ module PoolParty
         
     virtual_resource(:git) do
       
-      def loaded(opts={})
+      def loaded(opts={}, parent=self)
         install_git
-        has_git_repos
       end
       
       def install_git
-        has_package(:name => "git-core")
+        has_package(:name => "git-core") do
+          has_git_repos
+        end
       end
       
-      def has_git_repos
-        with_options(:requires => 'Package["git-core"]') do
-          # has_directory(:name => "#{path}")
-                    
-          exec({:name => "git-#{name}"}) do
-            command @parent.user ? "git clone #{@parent.user}@#{@parent.source} #{@parent.path}" : "git clone #{@parent.source} #{@parent.path}"
-            cwd "#{::File.dirname(@parent.path) if @parent.path}"
-            creates "#{cwd}/.git"
-          end
+      def has_git_repos                    
+        exec({:name => "git-#{name}"}) do
+          command @parent.user ? "git clone #{@parent.user}@#{@parent.source} #{@parent.path}" : "git clone #{@parent.source} #{@parent.path}"
+          cwd "#{::File.dirname(@parent.path) if @parent.path}"
+          creates "#{cwd}/.git"
+          ifnot "/bin/test -d #{cwd}"
+        end
 
-          exec(:name => "git-update-#{name}") do
-            cwd "#{@parent.path ? @parent.path : path}"
-            command "git pull"
-            requires "Exec['git-#{@parent.name}']"
-          end
-
+        exec(:name => "git-update-#{name}", :require => nil) do
+          cwd "#{@parent.path ? @parent.path : path}"
+          command "git pull"
+          onlyif "/usr/bin/test -d #{cwd}/.git"
         end
       end
       

@@ -18,7 +18,7 @@ module PoolParty
     end
     
     def add_resource(type, opts={}, parent=self, &block)      
-      resource = parent.get_resource(type, opts[:name])
+      resource = get_resource(type, opts[:name], parent)
       if resource
         return resource 
       else
@@ -28,8 +28,8 @@ module PoolParty
       end
     end
     
-    def get_resource(type, key)
-      resource(type).select {|resource| resource.key == key }.first
+    def get_resource(type, key, parent=self)
+      parent.resource(type).select {|resource| resource.key == key }.first
     end
             
     #:nodoc:
@@ -37,11 +37,11 @@ module PoolParty
       @resources = nil
     end
         
-    def resources_string(pre="")
-      returning Array.new do |output|        
-        output << resources_string_from_resources(resources)
-      end.join("\n")
-    end
+    # def resources_string(pre="")
+    #   returning Array.new do |output|        
+    #     output << resources_string_from_resources(resources)
+    #   end.join("\n")
+    # end
     
     def custom_file(path, str)
       write_to_file_in_storage_directory(path, str)
@@ -53,7 +53,7 @@ module PoolParty
       include CloudResourcer
       include Configurable
       
-      # extend PoolParty::Resources
+      extend PoolParty::Resources
       include PoolParty::Resources
       
       def self.inherited(subclass)
@@ -61,11 +61,11 @@ module PoolParty
         lowercase_class_name = subclass.to_s.downcase
         
         # Add add resource method to the Resources module
-        unless PoolParty::Resources.respond_to?(lowercase_class_name.to_sym)
+        unless PoolParty::Resources.respond_to?(lowercase_class_name.to_sym)          
           method =<<-EOE
             def #{lowercase_class_name}(opts={}, parent=self, &blk)
               add_resource(:#{lowercase_class_name}, opts, parent, &blk)
-            end            
+            end
           EOE
           PoolParty::Resources.module_eval method
           PoolParty::Resources.add_has_and_does_not_have_methods_for(lowercase_class_name.to_sym)
@@ -93,20 +93,31 @@ module PoolParty
         set_resource_parent(parent)
         set_vars_from_options(opts) unless opts.empty?
         self.instance_eval &block if block
-        loaded(opts)
+        loaded(opts, @parent)
       end
       
       def set_resource_parent(parent=nil)
-        if parent
+        if parent && parent != self
           @parent = parent
-          requires parent.to_s if parent.is_a?(PoolParty::Resources::Resource) && parent != self
-        end        
+          requires parent.to_s if @parent.is_a?(PoolParty::Resources::Resource) && !virtual_resource?
+        end
+      end
+      
+      def requirement_tree
+        p = @parent
+        returning Array.new do |arr|
+          arr << p.to_s
+          while p && p != self && p.is_a?(PoolParty::Resources::Resource) && p.requires
+            arr << p.requires
+            p = p.parent
+          end
+        end.flatten.uniq
       end
       
       # Stub, so you can create virtual resources
       # This is called after the resource is initialized
       # with the options given to it in the init-block
-      def loaded(opts={})
+      def loaded(opts={}, parent=self)
       end
       
       # DSL Overriders
@@ -149,6 +160,9 @@ module PoolParty
       def virtual_resource?
         false
       end
+      def printable?
+        true
+      end
       # We want to gather the options, but if the option sent is nil
       # then we want to override the option value by sending the key as
       # a method so that we can override this if necessary. 
@@ -181,7 +195,7 @@ module PoolParty
               output << @cp.to_string
               output << "include #{@cp.name.sanitize}"
             end
-          
+            
             unless virtual_resource?
               output << "#{pre}#{class_type_name} {"
               output << "#{pre}\"#{self.key}\":"

@@ -4,22 +4,29 @@ module PoolParty
       
       def enable        
         has_package(:name => "erlang")
-        has_package(:name => "rubygems")
-        # These should be installed automagically by poolparty, but just in case
-        # TODO: Fix the requires method with a helper        
-        has_gempackage(:name => "logging", :requires => 'Package["rubygems"]')
-        has_gempackage(:name => "activesupport", :requires => 'Exec["gem-package-ParseTree"]')
-        has_gempackage(:name => "hoe", :requires => 'Package["rubygems"]')
-        has_gempackage(:name => "xml-simple", :requires => 'Package["rubygems"]')
-        has_gempackage(:name => "ParseTree", :version => "2.2.0", :requires => 'Exec["gem-package-hoe"]')
         
-        has_gempackage(:name => "RubyInline", :requires => 'Exec["gem-package-ParseTree"]')
-        has_gempackage(:name => "open4", :requires => 'Exec["gem-package-hoe"]')
-        has_gempackage(:name => "ruby2ruby", :requires => 'Exec["gem-package-ParseTree"]')
-
-        has_gempackage(:name => "grempe-amazon-ec2", :source => "http://gems.github.com", :requires => 'Exec["gem-package-xml-simple"]')
-        has_gempackage(:name => "auser-poolparty", :source => "http://gems.github.com", :requires => ['Exec["gem-package-activesupport"]', 'Exec["gem-package-ParseTree"]'])
-        
+        has_package(:name => "rubygems") do
+          # These should be installed automagically by poolparty, but just in case
+          # TODO: Fix the requires method with a helper          
+          has_gempackage(:name => "logging")
+          has_gempackage(:name => "xml-simple") do
+            has_gempackage(:name => "grempe-amazon-ec2", :source => "http://gems.github.com")
+          end
+          
+          has_gempackage(:name => "hoe") do
+            has_gempackage(:name => "open4")
+            
+            has_gempackage(:name => "ParseTree", :version => "2.2.0") do
+              has_gempackage(:name => "ruby2ruby")
+              has_gempackage(:name => "activesupport") do
+                has_gempackage(:name => "auser-poolparty", :source => "http://gems.github.com")
+              end
+              has_gempackage(:name => "RubyInline")
+            end
+          end          
+          
+        end
+                
         # Build hostsfile
         # TODO: COME BACK AND CLEAN THIS UP
         (self.respond_to?(:list_of_running_instances) ? self : parent).list_of_running_instances.each do |ri|

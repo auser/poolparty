@@ -53,7 +53,7 @@ module PoolParty
         loaded
       end
       # Callback after initialized
-      def loaded      
+      def loaded(opts={}, parent=self)      
       end
       # This is the actual runner for the installation    
       def install

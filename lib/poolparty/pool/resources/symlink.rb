@@ -15,6 +15,10 @@ module PoolParty
         source
       end
       
+      def printable?
+        true
+      end
+      
     end
     
   end

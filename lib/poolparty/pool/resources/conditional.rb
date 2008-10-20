@@ -25,6 +25,10 @@ module PoolParty
         true
       end
       
+      def printable?
+        false
+      end
+      
       def to_string(pre="")
         returning Array.new do |output|
           output << "# #{name.sanitize}"
