@@ -181,7 +181,7 @@ module PoolParty
           reset!
           when_no_pending_instances do
             wait "20.seconds" # Give some time for ssh to startup
-            PoolParty::Provisioner.configure_slaves(self)
+            PoolParty::Provisioner.provision_slaves(self)
           end
         end
       end
@@ -225,7 +225,7 @@ module PoolParty
       # TODO: Fix the killall
       def prepare_reconfiguration
         unless @prepared
-          cmd = "killall ruby && rm -rf /etc/puppet/ssl/*; puppetmasterd --verbose; puppetd --test"
+          cmd = "killall ruby && rm -rf /etc/puppet/ssl/*; puppetmasterd --verbose; puppetd --test --no-daemonize 2>&1 &"
           run_command_on(cmd, master)
           @prepared = true
         end

@@ -21,11 +21,11 @@ end
 program_name = "#{File.basename($0)}-#{name}"
 program_location = File.join(Binary.binary_directory, program_name)
 
-command_line = "#{program_location} #{ARGV.join(" ")}"
+command_line = "#{program_location}"
 
 # Run it from the command-line first
 if Binary.available_binaries_for("pool").include?(name)
-  Kernel.exec "#{command_line}"
+  system command_line, *ARGV
 else
   puts "Unknown poolparty binary: #{program_name}"
 end

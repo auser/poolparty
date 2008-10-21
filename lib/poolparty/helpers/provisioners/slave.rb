@@ -35,7 +35,7 @@ module PoolParty
         <<-EOS
           ps aux | grep "puppetmasterd" | awk '{print $2}' | xargs kill
           rm -rf /etc/puppet/ssl*
-          . /etc/profile && #{@instance.puppet_runner_command}
+          puppetd --test  2>&1 &
         EOS
       end
       
