@@ -1,0 +1,14 @@
+#!/usr/bin/env ruby
+$:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
+require "poolparty"
+require "poolpartycl"
+o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
+  opts.on('-n name', '--name name', 'Listing for cloud name')    { |c| optioner.cloudname c }
+  opts.on('-i num', '--id num', 'Instance num to ssh (default: 0)')    { |i| optioner.num i }
+end
+load_pool(o.spec || Binary.get_existing_spec_location)
+
+@cmd = ARGV.shift
+@cloud = o.cloudname ? cloud(o.cloudname.downcase.to_sym) : cloud(clouds.keys.first)
+
+instance = @cloud.run_command_on_instance_number( @cmd, o.num.to_i || 0 ) if @cloud

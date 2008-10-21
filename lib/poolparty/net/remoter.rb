@@ -215,6 +215,11 @@ module PoolParty
         ssh_into( get_instance_by_number( num || 0 ) )
       end
       
+      # Run command on the instance by the number
+      def run_command_on_instance_number(cmd="ls -l", num=0)
+        run_command_on(cmd, get_instance_by_number( num || 0 ) )
+      end
+      
       # Prepare reconfiguration on the master
       # TODO: Fix the killall
       def prepare_reconfiguration
