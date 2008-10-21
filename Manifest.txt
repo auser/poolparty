@@ -14,6 +14,7 @@ bin/cloud-maintain
 bin/cloud-osxcopy
 bin/cloud-provision
 bin/cloud-refresh
+bin/cloud-run
 bin/cloud-ssh
 bin/cloud-start
 bin/cloud-terminate
@@ -60,6 +61,11 @@ lib/erlang/messenger/src/pm_master.erl
 lib/erlang/messenger/src/pm_master_supervisor.erl
 lib/erlang/messenger/src/pm_node.erl
 lib/erlang/messenger/src/pm_node_supervisor.erl
+lib/erlang/messenger/tmp/templates/apache2.conf
+lib/erlang/messenger/tmp/templates/base.conf.erb
+lib/erlang/messenger/tmp/templates/browser_fixes.conf.erb
+lib/erlang/messenger/tmp/templates/mime-minimal.conf.erb
+lib/erlang/messenger/tmp/templates/virtual_host.conf.erb
 lib/poolparty.rb
 lib/poolparty/base_packages/haproxy.rb
 lib/poolparty/base_packages/heartbeat.rb

@@ -9,12 +9,16 @@ module PoolParty
     include MethodMissingSugar
         
     def initialize(args=[], opts={}, &block)
-      @arguments = args
+      @arguments = parse_args(args)
       @parse_options = opts[:parse_options] ? opts[:parse_options] : true
       
       set_default_options
       parse_options(&block) if @parse_options
       self
+    end
+    
+    def parse_args(argv, safe=[])
+      argv
     end
     
     def parent
@@ -47,7 +51,7 @@ module PoolParty
         exit
       end
       
-      opts.parse!(@arguments)
+      opts.parse(@arguments.dup)
       
       process_options      
       output_options if verbose

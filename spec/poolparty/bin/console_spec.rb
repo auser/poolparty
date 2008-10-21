@@ -3,7 +3,7 @@ require File.dirname(__FILE__) + '/../../../lib/poolparty/helpers/console'
 
 describe "Console" do
   before(:each) do
-    ::File.stub!(:file?).with("pop").and_return true
+    ::File.stub!(:readable?).with("pop").and_return true
   end
   describe "load_pool" do
     before(:each) do
