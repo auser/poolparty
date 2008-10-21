@@ -4,23 +4,17 @@ module PoolParty
     virtual_resource(:git) do
       
       def loaded(opts={}, parent=self)
-        install_git
+        has_git_repos
       end
-      
-      def install_git
-        has_package(:name => "git-core") do
-          has_git_repos
-        end
-      end
-      
+            
       def has_git_repos
         exec({:name => "git-#{name}"}) do
-          command @parent.user ? "git clone #{@parent.user}@#{@parent.source} #{@parent.path}" : "git clone #{@parent.source} #{@parent.to ? @parent.to : ""}"
-          cwd "#{@parent.cwd if @parent.cwd}"
-          creates "#{::File.join( (@parent.cwd ? @parent.cwd : cwd), ::File.basename(@parent.source, ::File.extname(@parent.source)) )}/.git"
+          command parent.user ? "git clone #{parent.user}@#{parent.source} #{parent.path}" : "git clone #{parent.source} #{parent.to ? parent.to : ""}"
+          cwd "#{parent.cwd if parent.cwd}"
+          creates "#{::File.join( (parent.cwd ? parent.cwd : cwd), ::File.basename(parent.source, ::File.extname(parent.source)) )}/.git"
           
           exec(:name => "update-#{name}") do
-            cwd ::File.dirname(@parent.creates)
+            cwd ::File.dirname(parent.creates)
             command "git pull"
           end
           
