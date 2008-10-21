@@ -71,7 +71,7 @@ module PoolParty
         setup_runner(@cloud)
         
         unless testing
-          logger.debug "Logging on to #{@instance.ip}"
+          puts "Logging on to #{@instance.ip}" if verbose
           @cloud.prepare_reconfiguration
           @cloud.rsync_storage_files_to(@instance)
           
@@ -95,6 +95,7 @@ module PoolParty
         setup_runner(@cloud)        
         
         unless testing
+          puts "Logging on to #{@instance.ip}" if verbose
           @cloud.rsync_storage_files_to(@instance)
 
           cmd = "cd #{Base.remote_storage_path} && chmod +x configure_#{name}.sh && /bin/sh configure_#{name}.sh && rm configure_#{name}.sh"

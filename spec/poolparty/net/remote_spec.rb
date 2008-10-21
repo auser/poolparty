@@ -198,7 +198,8 @@ describe "Remote" do
         @tc.stub!(:list_of_pending_instances).and_return []
         @tc.stub!(:prepare_to_configuration).and_return true
         @tc.stub!(:build_and_store_new_config_file).and_return true
-        PoolParty::Provisioner.stub!(:configure_slaves).and_return true
+        @tc.stub!(:wait).and_return true
+        PoolParty::Provisioner.stub!(:provision_slaves).and_return true
       end
       it "should receive can_start_a_new_instance?" do
         @tc.should_receive(:can_start_a_new_instance?).once
@@ -212,7 +213,7 @@ describe "Remote" do
       end
       it "should call a new slave provisioner" do
         @tc.stub!(:should_expand_cloud?).once.and_return true
-        PoolParty::Provisioner.should_receive(:configure_slaves).and_return true
+        PoolParty::Provisioner.should_receive(:provision_slaves).and_return true
       end
       after(:each) do
         @tc.expand_cloud_if_necessary
@@ -222,6 +223,7 @@ describe "Remote" do
       before(:each) do
         @tc.stub!(:request_termination_of_non_master_instance).and_return true
         @tc.stub!(:can_shutdown_an_instance?).and_return true
+        @tc.stub!(:wait).and_return true
       end
       it "should receive can_shutdown_an_instance?" do
         @tc.should_receive(:can_shutdown_an_instance?).once
