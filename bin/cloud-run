@@ -2,13 +2,17 @@
 $:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
 require "poolparty"
 require "poolpartycl"
+
+@cmd = ARGV.pop
+
 o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
   opts.on('-n name', '--name name', 'Listing for cloud name')    { |c| optioner.cloudname c }
   opts.on('-i num', '--id num', 'Instance num to ssh (default: 0)')    { |i| optioner.num i }
+  opts.on('-c command', '--command command', 'Command to run on the instance')    { |c| optioner.command c }
 end
 load_pool(o.spec || Binary.get_existing_spec_location)
 
-@cmd = ARGV.shift
+@cmd = o.command if (o.command)
 @cloud = o.cloudname ? cloud(o.cloudname.downcase.to_sym) : cloud(clouds.keys.first)
 
 instance = @cloud.run_command_on_instance_number( @cmd, o.num.to_i || 0 ) if @cloud

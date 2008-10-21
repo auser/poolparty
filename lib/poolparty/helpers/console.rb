@@ -7,8 +7,9 @@ module PoolParty
     
     # Load a file that contains a pool into memory
     def load_pool(filename)
-      unless filename && ::File.file?(filename)
-        puts "Could not load pool"
+      filename = filename.chomp
+      unless filename && ::File.readable?(filename)
+        puts "Could not load pool: #{filename}"
         exit
       else
         PoolParty::Script.inflate(open(filename).read, File.dirname(filename))
