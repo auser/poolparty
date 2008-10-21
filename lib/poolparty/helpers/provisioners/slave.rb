@@ -33,6 +33,7 @@ module PoolParty
       def start_puppet
         <<-EOS
           rm -rf /etc/puppet/ssl*
+          . /etc/profile && #{@instance.puppet_runner_command}
         EOS
       end
       

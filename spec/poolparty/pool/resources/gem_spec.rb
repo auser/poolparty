@@ -36,7 +36,6 @@ describe "Gem" do
       @gem.version.should == "2.2.0"
     end
     it "should not take the version of the parent on the child" do
-      puts @gem.to_string
       @gem2.version.should == nil
     end
   end
