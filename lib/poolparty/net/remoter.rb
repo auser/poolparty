@@ -180,8 +180,7 @@ module PoolParty
           
           reset!
           when_no_pending_instances do
-            @ri = list_of_running_instances.last
-            PoolParty::Provisioner.provision_slave(@ri, self, !force)
+            PoolParty::Provisioner.configure_slaves(self)
           end
         end
       end
