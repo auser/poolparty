@@ -9,19 +9,14 @@
 -endif.
 
 % Client function definitions
--export ([get_load/2]).
+-export ([get_load/1]).
 
 % pm_master:get_load("0", "cpu").
-get_load(Index, Type) ->
-	Pid = get_pid_from_index(Index),
-	gen_server:call(Pid, get_load_for_type, [Type]).
+get_load(Type) ->
+	Nodes = get_live_nodes(),
+	{Loads, _} = rpc:multicall(Nodes, pm_node, get_load_for_type, [Type]),
+	{utils:convert_responses_to_int_list(Loads)}.
 
 % Private methods
-get_pid_from_index(Index) ->
-	String = lists:append(["pm_node", Index]),
-	io:format("Looking for ~p~n", [String]),
-	whereis(str).
-
-% Tests
-basic_test_() ->
-	?_assert(get_pid_from_index == 0).
+get_live_nodes() ->
+	nodes().

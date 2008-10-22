@@ -4,7 +4,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Ari Lerner"]
-  s.date = %q{2008-10-21}
+  s.date = %q{2008-10-22}
   s.description = %q{Self-healing, auto-scaling cloud computing tool}
   s.email = ["ari.lerner@citrusbyte.com"]
   s.executables = ["cloud", "cloud-add-keypair", "cloud-configure", "cloud-contract", "cloud-expand", "cloud-list", "cloud-maintain", "cloud-osxcopy", "cloud-provision", "cloud-refresh", "cloud-run", "cloud-ssh", "cloud-start", "cloud-terminate", "pool", "pool-console", "pool-describe", "pool-list", "pool-provision", "pool-spec", "pool-start", "pool-start-monitor", "server-get-load", "server-list-active", "server-rerun"]
