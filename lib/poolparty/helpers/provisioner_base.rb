@@ -182,7 +182,7 @@ module PoolParty
       # Package installers for general *nix operating systems
       def self.installers
         @installers ||= {
-          :ubuntu => "apt-get install -y",
+          :ubuntu => "aptitude install -y",
           :fedora => "yum install",
           :gentoo => "emerge"
         }
@@ -231,7 +231,8 @@ module PoolParty
           "          
           touch /etc/apt/sources.list
           echo 'deb http://mirrors.kernel.org/ubuntu hardy main universe' >> /etc/apt/sources.list
-          apt-get update --fix-missing -y
+          aptitude update -y
+          aptitude autoclean
           "
         else
           "# No system upgrade needed"
