@@ -19,32 +19,28 @@
 -export ([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
 
 % Client function definitions
--export ([start_link/1, stop/0]).
--export ([get_load_for_type/2]).
+-export ([start_link/0, stop/0]).
+-export ([get_load_for_type/1]).
 
 % Client Function API Calls
-get_load_for_type(From, Type) ->
-	io:format("Getting load for "++Type++" on ~p~n", [From]),
-	String = string:concat("server-get-load -m ",Type),
-	gen_server:reply(From, {load, os:cmd(String)}).
 
-start_link(Index) ->
-	io:format("Starting pm_node~p...~n", [Index]),
-	String = list_to_atom(string:concat("pm_node", Index)),
-	gen_server:start_link({global, String}, String, [], []).
+% Get the load for the type sent...
+get_load_for_type(Type) ->
+	String = string:concat(". /etc/profile && server-get-load -m ",Type),
+	{os:cmd(String)}.
+
+start_link() ->
+	gen_server:start_link({global, ?MODULE}, ?MODULE, [], []).
 
 stop() ->
 	gen_server:cast(?MODULE, stop).
-		
-% Load monitor methods
-% 	TODO: Make this dynamic
-% get_system_load() ->
 
 % Gen server callbacks
 % Sends the response and state back
 init([]) -> 
 	process_flag(trap_exit, true),
-	{ok, []}.
+	io:format("~p starting ~n", [?MODULE]),
+	{ok, 0}.
 
 % Handle synchronous messages
 % Signature:
@@ -52,7 +48,7 @@ init([]) ->
 % 	{reply, ignored, State} 
 % 
 % Gets the load on the server
-handle_call({get_load, Type}, From, State) ->
+handle_call({load, Type}, From, State) ->
 	spawn(?MODULE, get_load_for_type, [From, Type]),
 	{noreply, State};
 handle_call(_Request, _From, State) -> % The catch-all
@@ -71,7 +67,7 @@ handle_info(_Info, State) ->
 
 % Exit
 terminate(_Reason, State) ->
-	io:format("Server is stopping...~n"),
+	io:format("[~p] Server is stopping...~n", [?MODULE]),
 	{ok, State}.
 
 % If the code changes

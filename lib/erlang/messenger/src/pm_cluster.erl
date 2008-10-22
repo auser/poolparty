@@ -29,3 +29,6 @@ erl_system_args()->
 	]).
 %% Do not forget to start erlang with a command like:
 %% erl -rsh ssh -sname clustmaster
+
+basic_test_() ->
+	?_assert(true).
