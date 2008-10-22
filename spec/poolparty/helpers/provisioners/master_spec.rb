@@ -37,7 +37,7 @@ describe "Master provisioner" do
     end
   end
   it "should return install_puppet_master as apt-get install puppet factor" do
-    @master.install_puppet.should =~ /apt-get install -y puppet puppetmaster/
+    @master.install_puppet.should =~ /install -y puppet puppetmaster/
   end
   it "should return setup basic structure" do
     @master.setup_basic_structure.should =~ /puppetmasterd --mkusers/
