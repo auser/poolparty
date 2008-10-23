@@ -17,6 +17,10 @@ extend PoolParty
 Base.environment = "test"
 Base.verbose = false
 
+def setup_cl
+  require 'poolpartycl'
+end
+
 def stub_option_load
     @str=<<-EOS
 :access_key:    
