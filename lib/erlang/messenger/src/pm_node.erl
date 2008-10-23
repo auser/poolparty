@@ -29,6 +29,7 @@
 %% Description: Starts the server
 %%--------------------------------------------------------------------
 start_link() ->
+	net_adm:ping(master@auser),
   gen_server:start_link({local, ?SERVER}, ?MODULE, [], []).
 
 %%====================================================================
