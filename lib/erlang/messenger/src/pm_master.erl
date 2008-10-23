@@ -19,6 +19,7 @@
 
 % Client function definitions
 -export ([get_load/1, reconfigure_cloud/0, fire_cmd/1, get_live_nodes/0]).
+-export ([shutdown_cloud/0]).
 
 %%====================================================================
 %% API
@@ -113,6 +114,12 @@ fire_cmd(Cmd) ->
 	Nodes = get_live_nodes(),
 	{_, _} = rpc:multicall(Nodes, pm_node, fire_cmd, [Cmd]),
 	{ok}.
+
+% Shutdown
+shutdown_cloud() ->
+	Nodes = get_live_nodes(),
+	{Resp, _} = rpc:multicall(Nodes, pm_node, stop, []),
+	{ok, Resp}.
 
 % Get the live nodes
 get_live_nodes() ->

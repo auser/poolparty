@@ -15,7 +15,7 @@ describe "Base" do
     Base.base_keypair_path.should == "~/.ec2"
   end
   it "should set the storage_directory to the tmp directory of the current working directory" do
-    Base.storage_directory.should == "#{Dir.pwd}/tmp"
+    Base.storage_directory.should =~ /tmp/
   end
   it "should set the tmp path to tmp" do
     Base.tmp_path.should == "tmp"

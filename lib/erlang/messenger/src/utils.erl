@@ -13,9 +13,9 @@ convert_responses_to_int_list(L) ->
 
 % Start a timer to fire off Fun after Time number of milliseconds
 start_timer(Time, Fun) -> 
-	register(clock, spawn(fun() -> tick_timer(Time, Fun) end)). 
+	register(?MODULE, spawn(fun() -> tick_timer(Time, Fun) end)). 
 
-stop_timer() -> clock ! stop. 
+stop_timer() -> ?MODULE ! stop. 
 
 tick_timer(Time, Fun) -> 
 	receive 

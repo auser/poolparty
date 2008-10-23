@@ -5,7 +5,7 @@ module PoolParty
       
       def run
         str = %x[uptime]
-        str.split(/\s+/)[-3].to_f rescue 0.0
+        str.split(/\s+/)[-2].to_f rescue 0.0
       end
             
     end
