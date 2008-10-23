@@ -11,6 +11,22 @@ convert_responses_to_int_list(L) ->
 	Sum = lists:foldr( fun(Int, Sum) -> Int + Sum end, 0, [erlang:list_to_float(F) || {F} <- L] ),
 	average_for_list(Sum, L).
 
+% Start a timer to fire off Fun after Time number of milliseconds
+start_timer(Time, Fun) -> 
+	register(clock, spawn(fun() -> tick_timer(Time, Fun) end)). 
+
+stop_timer() -> clock ! stop. 
+
+tick_timer(Time, Fun) -> 
+	receive 
+		stop -> 
+			void 
+	after Time -> 
+		Fun(), 
+		tick_timer(Time, Fun) 
+end. 
+
+
 % Private
 % Get the average of the list
 average_for_list(Num, L) ->
@@ -20,5 +36,10 @@ average_for_list(Num, L) ->
 		_ ->
 			Num / length(L)
 	end.
+
+% Recompiles the boot scripts
+recompile_scripts(Vers) ->
+	systools:make_script("pm_node_rel-"++Vers, [local]),
+	systools:make_script("pm_master_rel-"++Vers, [local]).
 
 % Tests

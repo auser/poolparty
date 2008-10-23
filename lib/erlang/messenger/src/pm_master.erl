@@ -18,7 +18,7 @@
 -define(SERVER, ?MODULE).
 
 % Client function definitions
--export ([get_load/1]).
+-export ([get_load/1, reconfigure_cloud/0, fire_cmd/1, get_live_nodes/0]).
 
 %%====================================================================
 %% API
@@ -102,6 +102,18 @@ get_load(Type) ->
 	{Loads, _} = rpc:multicall(Nodes, pm_node, get_load_for_type, [Type]),
 	{utils:convert_responses_to_int_list(Loads)}.
 
-% Private methods
+% Send reconfigure tasks to every node
+reconfigure_cloud() ->
+	Nodes = get_live_nodes(),
+	{_, _} = rpc:multicall(Nodes, pm_node, run_reconfig, []),
+	{ok}.
+
+% Fire the given command on all nodes
+fire_cmd(Cmd) ->
+	Nodes = get_live_nodes(),
+	{_, _} = rpc:multicall(Nodes, pm_node, fire_cmd, [Cmd]),
+	{ok}.
+
+% Get the live nodes
 get_live_nodes() ->
 	nodes().

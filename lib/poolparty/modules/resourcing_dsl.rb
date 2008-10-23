@@ -42,6 +42,10 @@ module PoolParty
     end
     # Give us a template to work with on the resource
     # Make sure this template is moved to the tmp directory as well
+    # 
+    # TODO: Change this method to store the template files for later
+    # copying to prevent unnecessary copying and tons of directories
+    # everywhere
     def template(file, opts={})
       raise TemplateNotFound.new("no template given") unless file
       raise TemplateNotFound.new("template cannot be found #{file}") unless ::File.file?(file)
