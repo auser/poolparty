@@ -19,7 +19,7 @@
 
 % Client function definitions
 -export ([stop/0]).
--export ([get_load_for_type/1]).
+-export ([get_load_for_type/1, fire_cmd/1, run_reconfig/0]).
 
 %%====================================================================
 %% API
@@ -27,9 +27,14 @@
 %%--------------------------------------------------------------------
 %% Function: start_link() -> {ok,Pid} | ignore | {error,Error}
 %% Description: Starts the server
+%% 
+%% Starts the timer to fire off a ping to the master to let the master
+%% know that it is alive
+%% 
+%% Fires a ping every 10 seconds
 %%--------------------------------------------------------------------
 start_link() ->
-	net_adm:ping(master@auser),
+	utils:start_timer(10000, fun() -> net_adm:ping(master@auser) end),
   gen_server:start_link({local, ?SERVER}, ?MODULE, [], []).
 
 %%====================================================================
@@ -87,6 +92,7 @@ handle_info(_Info, State) ->
 %% The return value is ignored.
 %%--------------------------------------------------------------------
 terminate(_Reason, _State) ->
+	utils:stop_timer(),
   ok.
 
 %%--------------------------------------------------------------------
@@ -105,5 +111,14 @@ get_load_for_type(Type) ->
 	String = string:concat(". /etc/profile && server-get-load -m ",Type),
 	{os:cmd(String)}.
 
+% Rerun the configuration
+run_reconfig() ->	{os:cmd(". /etc/profile && server-rerun")}.
+
+% Allows us to fire off any command (allowed by poolparty on the check)
+fire_cmd(Cmd) ->
+	String = string:concat(". /etc/profile && server-fire-cmd -c ",Cmd),
+	{os:cmd(String)}.
+
+% Stop the pm_node entirely
 stop() ->
 	gen_server:cast(?MODULE, stop).

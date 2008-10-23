@@ -21,6 +21,14 @@ task :recompile => [:clean, :compile]
 desc "Compile all the sources"
 task :compile => ['ebin'] + OBJ
 
+desc "Rebuild the boot scripts"
+task :build_boot_scripts => [:recompile] do
+  puts "Rebuilding boot scripts"
+  @version = "0.1"
+  cmd = "erl -pa ./ebin/ -run utils recompile_scripts #{@version} -run init stop -noshell"
+  Kernel.system cmd
+end
+
 task :default => :compile
 
 task :test => [:compile] do
