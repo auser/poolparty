@@ -3,25 +3,14 @@ $:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
 require "poolparty"
 require "poolpartycl"
 
-available_monitors = PoolParty::Monitors.available_monitors
+@command = ARGV[-1] || ""
+
 o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
   opts.on('-c command', '--command command', 'Command to run')    { |c| optioner.command c }
 end
 
-load_pool(o.spec || Binary.get_existing_spec_location)
+@command = o.command if o.command
 
-include Remote
-
-@clouds = o.cloudname ? [cloud(o.cloudname.downcase.to_sym)] : clouds
-@command = o.command ? o.command : "ls -l"
-
-@clouds.each do |name, cloud|
-  
-  with_cloud(cloud, {:testing => o.testing, :command => @command }) do
-    # TODO: Add a whitelist of commands the 
-    # server can run for SECURITY
-    
-    Kernel.system command
-  end  
-  
-end
+# TODO: Add a whitelist of commands the 
+# server can run for SECURITY    
+puts %x[#{@command}].chomp
