@@ -1,18 +1,19 @@
-{application, load_app,
+{application, master,
   [
 		% Quick description of the server
-		{description, "Load Server"},
+		{description, "Master Server for PoolParty"},
 		% Version
 		{vsn, "0.1"},
 		% All modules used by the application.  
-		{modules, [load_supervisor, load_server, load_app, load_client]},
+		{modules, [master_app, pm_master, pm_master_supervisor, utils]},
 		% All the registered names in the application
-		{registered, [load_server]},
+		{registered, [pm_master, pm_master_supervisor]},
 		% These must be started for application to run
 		{applications, [kernel, stdlib]},
 		% Environment vars
 		{env, []},
 		% Module and Args used to start
-		{mod, {load_app, []}}
+		{mod, {master_app, []}},
+		{start_phases, []}
 	]
 }.

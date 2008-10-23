@@ -15,6 +15,10 @@ rule ".beam" => ["%{ebin,src}X.erl"] do |t|
   sh "erlc -D EUNIT -pa ebin -W #{ERLC_FLAGS} -o ebin #{t.source}"
 end
 
+desc "Recompile the sources"
+task :recompile => [:clean, :compile]
+
+desc "Compile all the sources"
 task :compile => ['ebin'] + OBJ
 
 task :default => :compile
