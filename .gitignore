@@ -8,3 +8,4 @@ logs/*
 logs/
 test_manifest.pp
 *erl_crash.dump*
+logs
