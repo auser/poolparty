@@ -22,7 +22,7 @@ include Remote
     # SECURITY RISK
     append_dir = ::File.join( ::File.dirname(__FILE__), "..", "lib/erlang/messenger" )
     command_line_opts = "-pa #{append_dir}/ebin -sname #{hostname} -setcookie poolparty -detached -heart"
-    boot_file = "#{append_dir}/pm_master_rel-0.1"
+    boot_file = "#{append_dir}/pm_node_rel-0.1"
     
     command = "erl -boot #{boot_file} #{command_line_opts}"
     
