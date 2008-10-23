@@ -28,6 +28,7 @@ bin/pool-start
 bin/server-fire-cmd
 bin/server-get-load
 bin/server-list-active
+bin/server-list-responding
 bin/server-rerun
 bin/server-start-master
 bin/server-start-node
@@ -58,6 +59,7 @@ lib/erlang/messenger/ebin/pm_node.beam
 lib/erlang/messenger/ebin/pm_node_rel-0.1.rel
 lib/erlang/messenger/ebin/pm_node_supervisor.beam
 lib/erlang/messenger/ebin/utils.beam
+lib/erlang/messenger/pm_cluster.beam
 lib/erlang/messenger/pm_master_rel-0.1.boot
 lib/erlang/messenger/pm_master_rel-0.1.script
 lib/erlang/messenger/pm_node_rel-0.1.boot
@@ -106,6 +108,7 @@ lib/poolparty/exceptions/UnacceptableCommand.rb
 lib/poolparty/helpers/binary.rb
 lib/poolparty/helpers/console.rb
 lib/poolparty/helpers/display.rb
+lib/poolparty/helpers/messenger.rb
 lib/poolparty/helpers/optioner.rb
 lib/poolparty/helpers/provisioner_base.rb
 lib/poolparty/helpers/provisioners/master.rb
@@ -191,6 +194,7 @@ spec/poolparty/core/time_spec.rb
 spec/poolparty/dependency_resolutions/base_spec.rb
 spec/poolparty/helpers/binary_spec.rb
 spec/poolparty/helpers/display_spec.rb
+spec/poolparty/helpers/messenger_spec.rb
 spec/poolparty/helpers/optioner_spec.rb
 spec/poolparty/helpers/provisioner_base_spec.rb
 spec/poolparty/helpers/provisioners/master_spec.rb

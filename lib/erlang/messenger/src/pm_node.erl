@@ -35,7 +35,7 @@
 %%--------------------------------------------------------------------
 start_link() ->
 	utils:start_timer(10000, fun() -> net_adm:ping(master) end),
-  gen_server:start_link({local, ?SERVER}, ?MODULE, [], []).
+  gen_server:start_link({global, ?SERVER}, ?MODULE, [], []).
 
 %%====================================================================
 %% gen_server callbacks

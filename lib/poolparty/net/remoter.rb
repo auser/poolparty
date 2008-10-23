@@ -225,6 +225,7 @@ module PoolParty
       
       # Prepare reconfiguration on the master
       # TODO: Fix the killall
+      # TODO: Curious about the puppet/ssl problems...
       def prepare_reconfiguration
         unless @prepared
           cmd = "killall ruby && rm -rf /etc/puppet/ssl/*; puppetmasterd --verbose; puppetd --test --no-daemonize 2>&1 &"

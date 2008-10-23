@@ -13,19 +13,14 @@ load_pool(o.spec || Binary.get_existing_spec_location)
 include Remote
 
 @clouds = o.cloudname ? [cloud(o.cloudname.downcase.to_sym)] : clouds
-@hostname = o.hostname ? o.hostname : "master"
 
 @clouds.each do |name, cloud|
   
-  with_cloud(cloud, {:testing => o.testing, :hostname => @hostname }) do
-    # TODO: Change this to be app specfic
-    # SECURITY RISK
-    append_dir = ::File.join( ::File.dirname(__FILE__), "..", "lib/erlang/messenger" )
-    command_line_opts = "-pa #{append_dir}/ebin -sname #{hostname} -setcookie poolparty -detached -heart"
-    boot_file = "#{append_dir}/pm_master_rel-0.1"
+  with_cloud(cloud, {:testing => o.testing }) do
     
-    command = "erl -boot #{boot_file} #{command_line_opts}"
-    
+    boot_file = "#{Messenger.append_dir}/pm_master_rel-0.1"
+    command = Messenger.erl_command("master", "-boot #{boot_file} #{noshell ? "" : "-detached -heart"}")
+
     Kernel.system command
   end  
   

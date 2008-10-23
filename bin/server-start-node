@@ -6,6 +6,7 @@ require "poolpartycl"
 available_monitors = PoolParty::Monitors.available_monitors
 o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
   opts.on('-n name', '--name name', 'Host name')    { |h| optioner.hostname h }
+  opts.on('-l', '--no-shell', 'No shell') {optioner.noshell true}
 end
 
 load_pool(o.spec || Binary.get_existing_spec_location)
@@ -13,18 +14,16 @@ load_pool(o.spec || Binary.get_existing_spec_location)
 include Remote
 
 @clouds = o.cloudname ? [cloud(o.cloudname.downcase.to_sym)] : clouds
-@hostname = o.hostname ? o.hostname : "master"
+@hostname = o.hostname ? o.hostname : "node1"
 
 @clouds.each do |name, cloud|
   
-  with_cloud(cloud, {:testing => o.testing, :hostname => @hostname }) do
+  with_cloud(cloud, {:testing => o.testing, :hostname => @hostname, :noshell => o.noshell }) do
     # TODO: Change this to be app specfic
     # SECURITY RISK
-    append_dir = ::File.join( ::File.dirname(__FILE__), "..", "lib/erlang/messenger" )
-    command_line_opts = "-pa #{append_dir}/ebin -sname #{hostname} -setcookie poolparty -detached -heart"
-    boot_file = "#{append_dir}/pm_node_rel-0.1"
     
-    command = "erl -boot #{boot_file} #{command_line_opts}"
+    boot_file = "#{Messenger.append_dir}/pm_node_rel-0.1"
+    command = Messenger.erl_command(hostname, "-boot #{boot_file} #{noshell ? "" : "-detached -heart"}")
     
     Kernel.system command
   end  
