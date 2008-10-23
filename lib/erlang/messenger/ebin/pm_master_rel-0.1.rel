@@ -1,0 +1,7 @@
+{release, {"pm_master_rel", "0.1"},
+          {erts, "5.6.3"},
+          [{kernel, "2.12.2"},
+           {stdlib, "1.15.2"},
+           {sasl, "2.1.5.2"},
+           {master, "0.1"}]
+}.

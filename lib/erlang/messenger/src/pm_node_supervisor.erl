@@ -1,33 +1,40 @@
-% Supervisor for the poolparty_messenger server
-% 
-% Ari Lerner
-% CitrusByte
+% This supervisor is responsible for monitoring the 
+% client service
 
 -module (pm_node_supervisor).
--behaviour (supervisor).
+-behaviour(supervisor).
+
+-export([start/0, start_in_shell_for_testing/0, start_link/1, init/1]).
 
 -ifdef(EUNIT).
 -include_lib("eunit/include/eunit.hrl").
 -endif.
 
--define (SERVER, ?MODULE).
+start() ->
+	spawn(fun() ->
+			supervisor:start_link({local, ?MODULE}, ?MODULE, _Arg = [])
+		end).
 
--export ([start_link/0, init/1]).
+start_in_shell_for_testing() ->
+	{ok, Pid} = supervisor:start_link({local, ?MODULE}, ?MODULE, _Arg = []),
+	unlink(Pid).
 
-start_link() ->
-	io:format("Starting load_supervisor...~n"),
-	supervisor:start_link({local, ?SERVER}, ?MODULE, []).
+start_link(Args) ->
+	supervisor:start_link({local, ?MODULE}, ?MODULE, Args).
 
 init([]) ->
 	RestartStrategy = one_for_one,
 	MaxRestarts = 3, % 1000
 	MaxTimeBetRestarts = 30, % 3600
-	
+
 	SupFlags = {RestartStrategy, MaxRestarts, MaxTimeBetRestarts},
-  
+
 	LoadServers = [
-		{load_server, {load_server, start_link, []}, permanent, 5000, worker, [load_server, load_client]}
+		{pm_node1,
+			{pm_node, start_link, []}, 
+			permanent, 5000, worker, 
+			[pm_node]
+		}
 	],
-							
+
 	{ok, {SupFlags, LoadServers}}.
-							
