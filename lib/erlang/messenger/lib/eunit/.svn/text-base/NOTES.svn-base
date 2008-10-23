@@ -1,0 +1,276 @@
+
+EUnit Developer notebook
+========================
+
+Concepts and features
+---------------------
+
+ - Separation of tests and test runners (different ways of reporting)
+
+   * Tests are represented by data structures
+   * Traversal and execution are separated
+   * TODO: Cannot enumerate all tests in advance for really large sets
+
+ - Test engine as a producer/iterator: run next, step back, repeat...
+
+   * Iterators working (reverse/single stepping currently not used)
+   * TODO: Need to be able to stop after N failures
+
+ - Test module - a container (as in 'eunit:run(M)'); automatic test collection
+
+   * Works; a module name can be used to represent its set of tests.
+
+ - Single tests (exported nullary functions, to be called directly)
+
+   * Works; has drawbacks (no comments, context, or order, many
+     functions)
+
+ - Abstraction of tests, for reuse
+
+   * Tests are just nullary funs; this is both simple and powerful
+   * You can use 'fun name/arity' or 'fun module:name/arity' for sharing code
+   * Generator functions are used to create specialized test funs
+
+ - Executing a test by calling directly should have observable
+   failure/success, and tests should not in themselves output test
+   results to console or otherwise
+
+   * Tests succeed by returning properly (any return value)
+   * Tests fail by throwing an exception (any exception)
+
+ - It should be possible to run single tests without eunit runtime support
+
+   * Just apply a test function to an empty argument list and see if it
+     throws an exception or not
+   * More complex test representations (grouping, setup/teardown etc.)
+     need eunit support functions
+
+ - It should be possible to write tests without requiring eunit headers
+
+   * Using plain tuples, funs, atoms, and lists to represent tests; not
+     more difficult, just less convenient.
+
+ - Tests are identified by: module/sourcefile, test function name, and
+   line number (if available)
+
+   * This is also used in listings of test sets
+   * Funs have useful metadata, which allows most of the identifying
+     info to be extracted automatically
+
+ - Test functions must be identified as either directly callable or as
+   returning one or more test representations (the latter is referred to
+   as a "generator"). We cannot just try to call any function and check
+   the result - it would not be possible to _collect_ tests without
+   accidentally _executing_ tests in that case. So, the simplest form of
+   test generator function should return a nullary fun. This can be
+   tested directly and easily by a user.
+
+   * Using a '_test_' suffix (as opposed to a '_test' suffix) for test
+     generator functions (that return test *representations*) is a good
+     idea, since it makes it easy to accomodate both styles of writing
+     tests, does not break existing code, allows both types of functions
+     to be automatically detected, and makes it easy to write wrapper
+     functions. The underscore just before the opening parenthesis makes
+     it more visible than most other variants.
+
+ - Conditional compilation of test code
+
+   * Defining the NOTEST macro is used to disable testing code; this is
+     used by all the eunit header files.
+   * Testing can be disabled by default by including eunit_off.hrl
+     instead of eunit.hrl, or before any other eunit header file; then,
+     defining the TEST macro externally will enable the testing code.
+     The same effect is achieved by defining NOTEST before including
+     eunit.hrl or any other eunit header file, but using eunit_off.hrl
+     is always independent of the actual macro name used for control.
+
+ - Exporting test functions manually is annoying and easy to forget
+ - Decorating a normal module with common eunit entry functions
+
+   * Including eunit.hrl inserts a parse transform (unless NOTEST or
+     EUNIT_NOAUTO is defined) which automatically exports functions
+     identified as test functions with the proper suffixes and arity,
+     and adds a test/0 function to the module (unless it exists).
+
+ - Label of a single test
+
+   * {"...", Test}, also works for groups.
+
+ - Context of a single test; set up and tear down of context; multiple
+   tests within same context (single set up/tear down)
+
+   * {setup, Setup, Teardown, Generator}
+   * {setup, Setup, Generator} works as a simple let-binding
+
+ - Multiple tests using same context (individual set up/tear down)
+
+   * {foreach, Setup, Teardown, [Generator]}
+     {foreach1, Setup, Teardown, [{Arg, Generator}]}
+
+ - Aggregation of tests in an order-dependent sequence; aggregation of
+   tests in explicitly parallel sets
+
+   * {inorder, T} | {inparallel, T}
+
+ - Aggregation of tests in unspecified-order sets
+
+   * Deep lists represent generic test sets
+
+ - Test suites: label of a test suite, composition of test suites
+
+   * Deep lists and {"label", DeepList} work fine for this purpose
+
+ - Defining test suites without modifying code or creating new modules.
+
+   * This does not create new tests - just select specific modules or
+     functions. If there is need for expressiveness beyond a simple list
+     of constant terms (no funs), it should be put in a module. Hence, a
+     facility for "consulting" files should be sufficient.
+   * Works (simply writing "filename" or {file, "filename"}).
+
+ - Extra header files for better macro namespace separation (eunit_...)
+
+   * Seems to be overkill - the leading underscore in the normal macros
+     lessens the need for such double definitions
+
+ - Running tests in parallel
+
+   * Works (also running N tests at a time)
+   * TODO: Restructure to start new job as soon as slot is available
+
+ - Running a test or set of tests in a new process (like setup/teardown)
+
+   * Works
+
+ - Running tests on a separate (existing) node
+
+   * Implemented as {spawn, Node, Tests}: assuming a specific node
+     exists, run a set of tests on that node, rather than locally, the
+     main idea being that a number of test sets could be run in parallel
+     on separate machines (and maybe none are run locally)
+
+ - Running OS commands, testing output and result values
+
+   * Works; output is normalized to LF only for linebreaks on all platforms
+   * TODO: Better Windows support (not much tested)
+   * TODO: Is it possible to capture stderr separately somehow?
+
+ - Starting one or more additional nodes to run tests or suites on
+
+   * {node, foo@bar.baz, Instantiator}
+   * {node, foo, Instantiator}
+
+ - Whole-application testing (using .app files?)
+
+   * {application, AppName}
+   * {file, AppFile}
+
+ - Identification of tests within a test set (e.g., which succeeded,
+   which failed, repeating selected tests or groups of tests, etc.)
+
+   * The numbering scheme in listings take care of this point
+
+ - Running EUnit from command line, as a standalone tool
+
+   * TODO: Command line interface similar to that of edoc
+
+ - Open source (licensed under the GNU Lesser General Public Licence)
+
+   * Header files can be used without tainting, according to LGPL
+
+ - Marking tests as known failures, for handling known bugs
+
+   * TODO: Known-failure is necessary to avoid writing "inverted-logic" tests
+   * TODO: Is it possible to handle known timout/setup failures?
+
+ - Diagnostic tests which never fail, but may cause warnings
+
+Assorted notes which may or may not be useful, e.g. for documentation
+---------------------------------------------------------------------
+
+Tests for exported functions of a module should preferably be in a
+separate module. This is good in many ways, but mainly boils down to
+that modifying test code should not have to imply modifying source code,
+and vice versa. At the same time, it should be possible for a module to
+export test functions for private functions, and to have these tests
+conditionally compiled (use -ifdef(EUNIT) or -ifdef(TEST) for this).
+
+Pyunit uses 'failIf' and 'failUnless' as standard test names, and
+'assert' as a synonym for 'failUnless'. I have settled on 'assert' and
+'assertNot' as the standard names. Maybe I'll add 'failUnless' and
+'failIf' as synonyms, if users ask for it.
+
+Junit/Pyunit get a lot of context embedding for free due to the object
+oriented languages (using class members and inheritance); in Erlang,
+context must be passed to tests as arguments or through local variable
+bindings if there are multiple tests within a function clause. This is
+particularly important for reuse of tests with small variations. To be
+able to instantiate the environment of a set of tests when executing a
+setup, the setup must be a function which returns the test set and the
+cleanup function.
+
+A list of tests represents an order-independent set. Usually, the tests
+will be run in order, but it is not required and tests may also be
+executed in parallel if they are included in an 'inparallel'-context.
+Labeling a set of tests does not change its meaning in any way.
+
+Wrapping a set of tests in a 'setup' implies that the setup is executed,
+then _all_ the tests (those returned by the generator fun) are executed,
+and finally the cleanup is executed regardless of whether any tests
+failed or not. If the setup itself failed, the whole test set _and_ the
+cleanup is skipped (there is no setup-result that can be passed to the
+cleanup).
+
+Wrapping a (deep) list of generators in a 'foreach' is equivalent to
+wrapping each individual generator in the list in a corresponding
+'setup', regardless of nesting depth. E.g., foreach(a, [foreach(b, [t1,
+t2]), foreach(c, [t3, t4])]) is equivalent to [setup(a, setup(b, t1)),
+setup(a, setup(b, t2)), setup(a, setup(c, t3)), setup(a, setup(c, t4))].
+Note that 'foreach' does not distribute over 'setup', since the nesting
+level of 'setup' must be preserved.
+
+While a plain 'foreach' can be done over any set of generators, a
+'foreach1' requires that there is a pairing of argument+generator for
+each element.
+
+See the file eunit_data.erl for a description of test representations.
+
+Lists of tests/generators/arg-generator-pairs can all be deep, but every
+sublist must be a proper list, i.e., nil-terminated.
+
+Test Set Traversal Operations (traversal only - no execution here):
+
+     Init: create iterator from test representation.
+     Next: the most common operation - get the next test or group
+     Previous: step back to the previous operation (in the group)
+     Enter: enter a group, executing any side effects
+     Browse: enter a group without triggering side effects
+     Up: leave the current group
+
+Problem: cannot browse a 'setup'-group unless you are able to instantiate
+the generator fun, and to do that you either need the actual result from
+the 'setup' fun, or you need to know if the generator fun expects an
+argument matching a certain pattern, such as a 3-tuple. You could then
+pass dummy values such as 'undefined' for the components, since they
+will not be used unless you try to run one of the instantiated tests or
+a setup fun of a subgroup.
+
+If there was never a fun that returned a list of tests, but only funs
+around single tests, it would be simple - just don't apply any funs
+while traversing. But then it would be necessary to wrap each test
+within a 'setup' in its own generator fun, which would be a pain, and it
+would not be possible to nest 'setup' groups in an easy way (variables
+bound in the outer group would have to be explicitly passed to the
+generator funs in the inner group, using manual closure conversion). This
+is simply not tolerable. So, dummy value instantiation is the only way
+to go, if it should be possible at all to browse test groups without
+executing setup/cleanup funs.
+
+Solution: a 'browser' function that tries to pass variants of dummy
+values to a fun until it either succeeds or fails with some other error
+than 'fun_clause'. This has been implemented and is the basis of the
+test listing function.
+
+When a setup-group is being browsed, its tests cannot be executed (since
+they are instantiated with dummy values), and its subgroups can only be
+further Browsed, not Entered, for the same reason.

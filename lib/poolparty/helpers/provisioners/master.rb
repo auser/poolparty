@@ -34,6 +34,7 @@ module PoolParty
           move_templates,
           create_poolparty_manifest,
           restart_puppetd,
+          start_poolparty_messenger_master,
           start_poolparty_messenger
         ]
       end

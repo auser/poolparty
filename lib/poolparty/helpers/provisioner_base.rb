@@ -248,8 +248,11 @@ module PoolParty
           cp #{Base.remote_storage_path}/poolparty.pp /etc/puppet/manifests/classes
         EOS
       end
-      def start_poolparty_messenger
+      def start_poolparty_messenger_master
         "server-start-master"
+      end
+      def start_poolparty_messenger
+        "server-start-master -n #{hostname}"
       end
     end
   end  

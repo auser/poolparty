@@ -1,0 +1,14 @@
+2007-04-05 Richard Carlsson <richardc@it.uu.se>
+
+	* Preparing for Beta release of EUnit 2.0 (after months in alpha)
+
+2005-12-13 Mickaël Rémond <mickael.remond@process-one.net>
+
+	* doc/NOTES.txt, include/unit.hrl, src/unit.erl, src/test.erl: Added
+	Richard Carlsson unit test tool to prepare integration in eunit.
+	* AUTHORS: Update
+
+2005-11-26 Mickaël Rémond <mickael.remond@process-one.net>
+
+	* This version is a complete rewrite of eunit 1.0. Eunit 1.1 is
+	simpler and compliant with Aegis development tool.
