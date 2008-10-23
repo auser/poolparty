@@ -12,5 +12,9 @@ end
 @command = o.command if o.command
 
 # TODO: Add a whitelist of commands the 
-# server can run for SECURITY    
-puts %x[#{@command}].chomp
+# server can run for SECURITY
+if Base.allowed_commands.include? @command
+  puts %x[#{@command}].chomp
+else
+  raise UnacceptableCommand.new( @command )
+end

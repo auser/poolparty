@@ -104,5 +104,23 @@ describe "Base" do
         Base.store_keys_in_file
       end
     end
+    describe "allowed_commands" do
+      before(:each) do
+        @str =<<-EOE
+echo 'hello world'
+        EOE
+        @str.stub!(:read).and_return @str
+        Base.stub!(:open).and_return @str
+      end
+      it "should load the yaml file allowed_commands.yml" do
+        Base.allowed_commands.class.should == Array
+      end
+      it "should have the command echo 'hello world' in the list of allowed_commands" do
+        Base.allowed_commands.include?("echo 'hello world'").should == true
+      end
+      it "should not have the command rm -rf / in the list of allowed commands" do
+        Base.allowed_commands.include?("rm -rf /").should == false
+      end
+    end
   end
 end

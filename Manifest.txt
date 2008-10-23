@@ -58,7 +58,6 @@ lib/erlang/messenger/ebin/pm_node.beam
 lib/erlang/messenger/ebin/pm_node_rel-0.1.rel
 lib/erlang/messenger/ebin/pm_node_supervisor.beam
 lib/erlang/messenger/ebin/utils.beam
-lib/erlang/messenger/logs/pool_log.log
 lib/erlang/messenger/pm_master_rel-0.1.boot
 lib/erlang/messenger/pm_master_rel-0.1.script
 lib/erlang/messenger/pm_node_rel-0.1.boot
@@ -83,6 +82,7 @@ lib/poolparty/base_packages/haproxy.rb
 lib/poolparty/base_packages/heartbeat.rb
 lib/poolparty/base_packages/poolparty.rb
 lib/poolparty/base_packages/ruby.rb
+lib/poolparty/config/allowed_commands.yml
 lib/poolparty/core/array.rb
 lib/poolparty/core/exception.rb
 lib/poolparty/core/float.rb
@@ -102,6 +102,7 @@ lib/poolparty/exceptions/ResourceException.rb
 lib/poolparty/exceptions/RuntimeException.rb
 lib/poolparty/exceptions/SpecException.rb
 lib/poolparty/exceptions/TemplateNotFound.rb
+lib/poolparty/exceptions/UnacceptableCommand.rb
 lib/poolparty/helpers/binary.rb
 lib/poolparty/helpers/console.rb
 lib/poolparty/helpers/display.rb
@@ -153,6 +154,12 @@ lib/poolparty/pool/resources/sshkey.rb
 lib/poolparty/pool/resources/symlink.rb
 lib/poolparty/pool/resources/variable.rb
 lib/poolparty/pool/script.rb
+lib/poolparty/pool/tmp/.ppkeys
+lib/poolparty/pool/tmp/happydayz
+lib/poolparty/pool/tmp/install_master.sh
+lib/poolparty/pool/tmp/pool.spec
+lib/poolparty/pool/tmp/poolparty.pp
+lib/poolparty/pool/tmp/tc-instances.list
 lib/poolparty/templates/authkeys
 lib/poolparty/templates/cib.xml
 lib/poolparty/templates/fileserver.conf

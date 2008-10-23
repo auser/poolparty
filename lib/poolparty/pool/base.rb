@@ -81,6 +81,10 @@ module PoolParty
         File.join(Dir.pwd, "logs")
       end
       
+      def allowed_commands
+        @allowed_commands ||= open(::File.join( ::File.dirname(__FILE__), "..", "config", "allowed_commands.yml")).read.split(/\n/).map {|a| a.chomp }
+      end
+      
     end
   end    
 end
