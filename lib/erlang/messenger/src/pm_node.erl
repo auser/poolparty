@@ -116,7 +116,8 @@ run_reconfig() ->	{os:cmd(". /etc/profile && server-rerun")}.
 
 % Allows us to fire off any command (allowed by poolparty on the check)
 fire_cmd(Cmd) ->
-	String = string:concat(". /etc/profile && server-fire-cmd -c ",Cmd),
+	String = ". /etc/profile && server-fire-cmd \""++Cmd++"\"",
+	io:format("Sending command "++String),
 	{os:cmd(String)}.
 
 % Stop the pm_node entirely
