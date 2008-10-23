@@ -1,5 +1,3 @@
-require "erlectricity"
-
 module PoolParty
   module Messenger
     
