@@ -14,7 +14,6 @@ module PoolParty
           has_gempackage(:name => "xml-simple") do
             has_gempackage(:name => "grempe-amazon-ec2", :source => "http://gems.github.com")
           end
-          has_gempackage(:name => "rake")
           
           has_gempackage(:name => "hoe") do
             has_gempackage(:name => "open4")
