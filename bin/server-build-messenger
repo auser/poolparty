@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby
+$:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
+require "poolparty"
+require "poolpartycl"
+
+@root_dir = ::File.expand_path( ::File.dirname(__FILE__), "..", "lib/erlang/messenger")
+
+out = %x[cd #{@root_dir} && rake repackage]

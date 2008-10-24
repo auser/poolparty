@@ -41,6 +41,7 @@ examples/with_apache_plugin.rb
 generators/poolspec/USAGE
 generators/poolspec/poolspec_generator.rb
 generators/poolspec/templates/pool_spec_template.erb
+lib/erlang/messenger/Emakefile
 lib/erlang/messenger/Makefile
 lib/erlang/messenger/README
 lib/erlang/messenger/Rakefile
@@ -58,6 +59,7 @@ lib/erlang/messenger/ebin/pm_master_supervisor.beam
 lib/erlang/messenger/ebin/pm_node.beam
 lib/erlang/messenger/ebin/pm_node_rel-0.1.rel
 lib/erlang/messenger/ebin/pm_node_supervisor.beam
+lib/erlang/messenger/ebin/pm_packager.beam
 lib/erlang/messenger/ebin/utils.beam
 lib/erlang/messenger/lib/eunit/AUTHORS
 lib/erlang/messenger/lib/eunit/CHANGELOG
@@ -114,7 +116,6 @@ lib/erlang/messenger/lib/eunit/src/eunit_tty.erl
 lib/erlang/messenger/lib/eunit/src/file_monitor.erl
 lib/erlang/messenger/lib/eunit/sys.config
 lib/erlang/messenger/lib/eunit/vsn.mk
-lib/erlang/messenger/pm_cluster.beam
 lib/erlang/messenger/pm_master_rel-0.1.boot
 lib/erlang/messenger/pm_master_rel-0.1.script
 lib/erlang/messenger/pm_node_rel-0.1.boot
@@ -128,6 +129,7 @@ lib/erlang/messenger/src/pm_master.erl
 lib/erlang/messenger/src/pm_master_supervisor.erl
 lib/erlang/messenger/src/pm_node.erl
 lib/erlang/messenger/src/pm_node_supervisor.erl
+lib/erlang/messenger/src/pm_packager.erl
 lib/erlang/messenger/src/utils.erl
 lib/poolparty.rb
 lib/poolparty/base_packages/haproxy.rb
