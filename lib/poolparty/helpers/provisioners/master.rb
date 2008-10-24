@@ -33,9 +33,7 @@ module PoolParty
           create_local_node,
           move_templates,
           create_poolparty_manifest,
-          restart_puppetd,
-          start_poolparty_messenger_master,
-          start_poolparty_messenger
+          restart_puppetd
         ]
       end
       
@@ -133,7 +131,6 @@ cp #{Base.remote_storage_path}/#{Base.default_specfile_name} #{Base.base_config_
           rm -rf /etc/puppet/ssl/*
           puppetmasterd --verbose
           . /etc/profile && #{@instance.puppet_runner_command}
-          server-start-master
         EOS
       end
     end

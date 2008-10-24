@@ -56,18 +56,6 @@ To work on this cloud, source the file like:
   end
   desc "initialize setup"
   task :init => [:setup_pemkeys]
-  
-  desc "Just an argv test"
-  task :test => :initialize do
-    puts "---- Testing ----"
-    puts PoolParty.options(ARGV.dup)
-    puts "Using keypair at: #{Base.keypair_path}"
-  end
-  desc "Installation listing"
-  task :list_install => :initialize do
-    puts "-- packages to install --"
-    Provider.install_PoolParty(true)
-  end
   desc "Authorize base ports for application"
   task :authorize_ports => :initialize do
     run <<-EOR

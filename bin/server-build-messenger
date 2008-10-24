@@ -3,6 +3,9 @@ $:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
 require "poolparty"
 require "poolpartycl"
 
-@root_dir = ::File.expand_path( ::File.dirname(__FILE__), "..", "lib/erlang/messenger")
+root_dir = ::File.expand_path( ::File.join(::File.dirname(__FILE__), "..", "lib/erlang/messenger") )
+cmd = "cd #{root_dir} && erl -pa ./ebin -s pm_packager start -s init stop"
 
-out = %x[cd #{@root_dir} && rake repackage]
+puts cmd
+
+out = %x[#{cmd}]

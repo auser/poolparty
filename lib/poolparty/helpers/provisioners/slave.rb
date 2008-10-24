@@ -11,8 +11,7 @@ module PoolParty
       def configure_tasks
         [
           setup_configs,
-          start_puppet,
-          start_poolparty_messenger
+          start_puppet
         ]
       end
 

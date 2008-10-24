@@ -74,7 +74,7 @@ module PoolParty
             "/var/poolparty"           
         ].select do |dir|
           dir if ::File.directory?(dir) && ::File.readable?(dir)
-        end.first || ::File.join( (ENV.is_a?(Hash) ? ENV["HOME"] : Dir.pwd), "tmp")
+        end.first || ::File.join( "/tmp")
       end
       
       def pool_logger_location
