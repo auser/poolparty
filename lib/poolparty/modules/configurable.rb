@@ -21,7 +21,7 @@ module PoolParty
       end
       
       def set_vars_from_options(opts={})
-        opts.each {|k,v| self.send k.to_sym, v } unless opts.empty?
+        opts.each {|k,v| self.send k.to_sym, send_if_method(v) } unless opts.empty?
       end
     end
     

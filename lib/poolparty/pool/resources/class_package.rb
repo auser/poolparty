@@ -12,7 +12,7 @@ module PoolParty
     class Classpackage < Resource
             
       default_options({
-        :name => nil
+        :name => "custom"
       })
       
       def initialize(opts={}, parent=self, &block)
@@ -38,7 +38,7 @@ module PoolParty
       end
       
       def name(*args)
-        args.empty? ? (@name || parent.name) : @name ||= args.first
+        args.empty? ? (@name || parent.name || "custom_#{Time.now.to_i}") : @name ||= args.first
       end
 
     end
