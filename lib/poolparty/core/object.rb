@@ -26,6 +26,14 @@ class Object
     block.in_context(self).call
     self
   end
+  def send_if_method(v, *args)
+    if (v.nil? || v.to_s.empty? || v.is_a?(Array) || v.is_a?(Integer))
+      v
+    else
+      vs = v.to_s.to_sym
+      respond_to?(vs) ? self.send(vs, *args) : v
+    end
+  end
   def to_option_string
     case self.class
     when String

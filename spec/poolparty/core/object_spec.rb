@@ -4,6 +4,26 @@ describe "Object" do
   it "should respond to to_os" do
     Object.new.respond_to?(:to_os).should == true
   end
+  describe "methodable object" do
+    before(:each) do
+      @obj.stub!(:run).and_return "true"
+    end
+    it "should run the method :run because it exists" do
+      @obj.send_if_method(:run).should == "true"
+    end
+    it "should not run the method :bah because it doesn't exist" do
+      @obj.send_if_method("bah").should == "bah"
+    end
+    it "should not run the method if it is sent nil" do
+      @obj.send_if_method(nil).should == nil
+    end
+    it "should not run an empty string method" do
+      @obj.send_if_method("").should == ""
+    end
+    it "should not run a method that is an integer" do
+      @obj.send_if_method(2).should == 2
+    end
+  end
   describe "with_options" do
     before(:each) do
       @obj = Class.new

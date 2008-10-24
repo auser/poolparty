@@ -340,6 +340,23 @@ describe "Resource" do
           it "should be able to get the resource from the global_resources_store by the name and type" do
             @cloud2.get_from_global_resource_store(:directory, "/var/www").key.should == "/var/www"
           end
+          describe "grabbing after already instantiated" do
+            before(:each) do
+              @cloud2.instance_eval do
+                has_package(:name => "apache2") do
+                  has_exec(:name => "Add apache2 module") do
+                    command "a2enmod mpm_worker"
+                  end
+                end
+                has_package(:name => "boxers") do
+                  has_file(:name => "/var/list_of_boxers.txt", :requires => (package(:name => "apache2")) )
+                end
+              end
+            end
+            it "should grab the resource when called in in a block" do
+              @cloud2.resources_string_from_resources(@cloud2.resources).should =~ /\[ Package\['boxers'\], Package\['apache2'\] \]/
+            end
+          end
         end
       end
     end    

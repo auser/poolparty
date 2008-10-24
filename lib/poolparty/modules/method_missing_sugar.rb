@@ -45,7 +45,12 @@ module PoolParty
           (parent.nil? || parent.class == self.class || !parent.respond_to?(:options) || parent.options.has_key?(m)) ? nil : parent.send(m, *args, &block)
         end        
       else
-        options[m] = (args.is_a?(Array) && args.size > 1) ? args : args[0]
+        options[m] = 
+        if (args.is_a?(Array) && args.size > 1)
+          args
+        else
+          args[0]
+        end
       end
     end
     
