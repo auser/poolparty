@@ -22,7 +22,10 @@ module PoolParty
             has_gempackage(:name => "ParseTree", :version => "2.2.0") do
               has_gempackage(:name => "ruby2ruby")
               has_gempackage(:name => "activesupport") do
-                has_gempackage(:name => "auser-poolparty", :source => "http://gems.github.com")
+                has_gempackage(:name => "auser-poolparty", :source => "http://gems.github.com") do
+                  has_exec(:name => "build_messenger", :command => ". /etc/profile && server-build-messenger")
+                  has_exec(:name => "start_node", :command => ". /etc/profile && server-start-node", :requires => 'Exec["build_messenger"]')
+                end
               end
               has_gempackage(:name => "RubyInline")
             end
@@ -41,9 +44,6 @@ module PoolParty
         has_cron(:name => "puppetd runner", :user => Base.user, :minute => [0,15,30,45]) do
           command((self.respond_to?(:master) ? self : parent).master.puppet_runner_command)
         end
-        
-        has_exec(:name => ". /etc/profile && server-build-messenger")
-        has_exec(:name => ". /etc/profile && server-start-node")
         
         # These are all requirements on the master
         execute_if("$hostname", "master") do

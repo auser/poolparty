@@ -13,7 +13,7 @@ module PoolParty
       :environment => "production",
       :user => "root", # This should change here
       :base_keypair_path => "~/.ec2",
-      :tmp_path => "tmp",
+      :tmp_path => "/tmp/poolparty",
       :remote_storage_path => "/var/poolparty",      
       :fileserver_base => "puppet:///files",
       :base_config_directory => "/etc/poolparty",
@@ -74,7 +74,7 @@ module PoolParty
             "/var/poolparty"           
         ].select do |dir|
           dir if ::File.directory?(dir) && ::File.readable?(dir)
-        end.first || ::File.join( "/tmp")
+        end.first || ::File.join( "/tmp/poolparty")
       end
       
       def pool_logger_location

@@ -14,7 +14,9 @@ load_pool(o.spec || Binary.get_existing_spec_location)
 include Remote
 
 @clouds = o.cloudname ? [cloud(o.cloudname.downcase.to_sym)] : clouds
-@hostname = o.hostname ? o.hostname : `hostname`
+@hostname = o.hostname ? o.hostname : `hostname`.chomp
+
+@hostname = "node0" if @hostname == "master" # Quick fix to make sure we have a node running on the master as well
 
 @clouds.each do |name, cloud|
   
