@@ -25,6 +25,7 @@ bin/pool-list
 bin/pool-provision
 bin/pool-spec
 bin/pool-start
+bin/server-build-messenger
 bin/server-fire-cmd
 bin/server-get-load
 bin/server-list-active
@@ -131,6 +132,11 @@ lib/erlang/messenger/src/pm_node.erl
 lib/erlang/messenger/src/pm_node_supervisor.erl
 lib/erlang/messenger/src/pm_packager.erl
 lib/erlang/messenger/src/utils.erl
+lib/erlang/messenger/tmp/templates/apache2.conf
+lib/erlang/messenger/tmp/templates/base.conf.erb
+lib/erlang/messenger/tmp/templates/browser_fixes.conf.erb
+lib/erlang/messenger/tmp/templates/mime-minimal.conf.erb
+lib/erlang/messenger/tmp/templates/virtual_host.conf.erb
 lib/poolparty.rb
 lib/poolparty/base_packages/haproxy.rb
 lib/poolparty/base_packages/heartbeat.rb

@@ -14,7 +14,7 @@ load_pool(o.spec || Binary.get_existing_spec_location)
 include Remote
 
 @clouds = o.cloudname ? [cloud(o.cloudname.downcase.to_sym)] : clouds
-@hostname = o.hostname ? o.hostname : "node1"
+@hostname = o.hostname ? o.hostname : `hostname`
 
 @clouds.each do |name, cloud|
   
