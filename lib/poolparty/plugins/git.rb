@@ -8,16 +8,16 @@ module PoolParty
       end
             
       def has_git_repos
-        exec({:name => "git-#{name}"}) do
+        has_package(:name => "git-core")
+        exec({:name => "git-#{name}", :requires => package(:name => "git-core")}) do
           command parent.user ? "git clone #{parent.user}@#{parent.source} #{parent.path}" : "git clone #{parent.source} #{parent.to ? parent.to : ""}"
           cwd "#{parent.cwd if parent.cwd}"
           creates "#{::File.join( (parent.cwd ? parent.cwd : cwd), ::File.basename(parent.source, ::File.extname(parent.source)) )}/.git"
-          
+
           exec(:name => "update-#{name}") do
             cwd ::File.dirname(parent.creates)
             command "git pull"
           end
-          
         end
       end
       

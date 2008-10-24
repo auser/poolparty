@@ -21,12 +21,12 @@ include Remote
     
     provisioning_in_progress
     
-    if provision_class == "slave" || provision_class == "all"
-      Provisioner.provision_slaves(self, testing)
-    end
-    if provision_class == "master" || provision_class == "all"
+    # if provision_class == "slave" || provision_class == "all"
+    #   Provisioner.provision_slaves(self, testing)
+    # end
+    # if provision_class == "master" || provision_class == "all"
       Provisioner.provision_master(self, testing)
-    end
+    # end
     
     provisioning_complete
 
