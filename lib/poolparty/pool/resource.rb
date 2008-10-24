@@ -18,23 +18,36 @@ module PoolParty
     end
     
     def add_resource(type, opts={}, parent=self, &block)      
-      resource = get_resource(type, opts[:name], parent)
-      if resource
-        resource 
+      if in_resources?(type, opts[:name])
+        get_resource(type, opts[:name], parent)
       else
-        returning "PoolParty::Resources::#{type.to_s.camelize}".classify.constantize.new(opts, parent, &block) do |o|
-          resource(type) << o
+        returning "PoolParty::Resources::#{type.to_s.camelize}".classify.constantize.new(opts, parent, &block) do |o|                    
+          store_into_global_resource_store(o)
+          resource(type) << o          
         end
       end
-    end
-    
+    end    
     def get_resource(type, key, parent=self)
-      resource(type).select {|resource| resource.key == key }.first
+      resource(type).select {|r| r.key == key }.first || get_from_global_resource_store(type, key)
     end
-            
+    def in_resources?(type, key, parent=self)
+      !(get_resource(type, key) && in_global_resource_store?(type, key)).nil?
+    end
+    def global_resources_store
+      @@global_resources ||= []
+    end
+    def store_into_global_resource_store(r)
+      global_resources_store << r unless in_global_resource_store?(r.class_name_sym, r.key)
+    end
+    def get_from_global_resource_store(ty, key)
+      global_resources_store.select {|r| r if r.same_resources_of(ty, key) }.first
+    end
+    def in_global_resource_store?(ty, key)
+      !get_from_global_resource_store(ty, key).nil?
+    end
     #:nodoc:
     def reset_resources!
-      @resources = nil
+      @@global_resources = @resources = nil
     end
         
     # def resources_string(pre="")
@@ -102,18 +115,7 @@ module PoolParty
           requires parent.to_s if @parent.is_a?(PoolParty::Resources::Resource) && printable? && @parent.printable?
         end
       end
-      
-      # def requirement_tree
-      #   p = @parent
-      #   returning Array.new do |arr|
-      #     arr << p.to_s
-      #     while p && p != self && p.is_a?(PoolParty::Resources::Resource) && p.requires
-      #       arr << p.requires
-      #       p = p.parent
-      #     end
-      #   end.flatten.uniq
-      # end
-      
+            
       # Stub, so you can create virtual resources
       # This is called after the resource is initialized
       # with the options given to it in the init-block
@@ -123,14 +125,19 @@ module PoolParty
       # DSL Overriders
       include PoolParty::ResourcingDsl
       
+      def same_resources_of(t, k)
+        key == k && class_name_sym == t && !duplicatable?
+      end
+      def duplicatable?
+        false
+      end
       # This way we can subclass resources without worry
       def class_type_name
         self.class.to_s.top_level_class
-      end      
+      end
       def self.custom_function(str)
         custom_functions << str
       end
-      
       def self.custom_function(str)
         custom_functions << str
       end      
@@ -162,6 +169,10 @@ module PoolParty
       end
       def printable?
         true
+      end
+      # Private method just for resource retrievling purposes
+      def class_name_sym
+        self.class.to_s.top_level_class.downcase.to_sym
       end
       # We want to gather the options, but if the option sent is nil
       # then we want to override the option value by sending the key as

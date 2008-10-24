@@ -4,7 +4,7 @@ include PoolParty::Resources
 
 describe "Variable" do
   before(:each) do
-    reset!
+    reset_resources!
     @variable = variable(:name => "name", :value => "ari Lerner")
   end
   it "should have a package" do

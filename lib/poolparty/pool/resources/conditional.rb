@@ -2,12 +2,12 @@ module PoolParty
   module Resources
     
     def execute_if(attr_s="$hostname", str="", parent=self, &block)
-      parent = parent.is_a?(PoolParty::Cloud::Cloud) ? parent : parent.parent
+      # parent = parent.is_a?(PoolParty::Cloud::Cloud) ? parent : parent.parent
       opts = {:attribute => attr_s, :equal => str}
       options = parent.respond_to?(:options) ? parent.options.merge!(opts) : opts
-      @c = PoolParty::Resources::Conditional.new(options, parent, &block)
-      parent.instance_eval {add_resource(:conditional, options, parent, &block) }
-      @c
+      # @c = PoolParty::Resources::Conditional.new(options, parent, &block)
+      parent.add_resource(:conditional, options, parent, &block)
+      # @c
     end
     
     class Conditional < Resource
@@ -26,6 +26,10 @@ module PoolParty
       end
       
       def printable?
+        false
+      end
+      
+      def duplicatable?
         false
       end
       

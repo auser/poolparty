@@ -10,7 +10,7 @@ describe "Gem" do
         has_gempackage(:name => "rails")
       end
     end
-    @gem = @cloud.resource(:gempackage).first
+    @gem = @cloud.get_resource(:gempackage, "activesupport")
   end
   it "should have a package" do
     @cloud.resource(:gempackage).should_not be_empty
@@ -19,24 +19,28 @@ describe "Gem" do
     @gem.name.should == "activesupport"
   end
   it "should have the 'rails' gem in the packages" do
-    @cloud.resource(:gempackage).first.to_string.should =~ /rails/
+    @cloud.get_resource(:gempackage, "activesupport").to_string.should =~ /activesupport/
   end
   describe "with parent options" do
     before(:each) do
-      reset_all!
-      @cloud1 = cloud :gem_version_cloud do
-        has_gempackage(:name => "ParseTree", :version => "2.2.0") do
-          has_gempackage(:name => "edge-rails")
+      reset_resources!
+    end
+    describe "reset" do
+      before(:each) do      
+        @cloud1 = cloud :gem_version_cloud do
+          has_gempackage(:name => "ParseTree", :version => "2.2.0") do
+            has_gempackage(:name => "edge-rails")
+          end
         end
+        @gem = @cloud1.resource(:gempackage).first
+        @gem2 = @gem.resource(:gempackage).first
       end
-      @gem = @cloud1.resource(:gempackage).first
-      @gem2 = @gem.resource(:gempackage).first
-    end
-    it "should have the version set on the parent" do
-      @gem.version.should == "2.2.0"
-    end
-    it "should not take the version of the parent on the child" do
-      @gem2.version.should == nil
+      it "should have the version set on the parent" do
+        @gem.version.should == "2.2.0"
+      end
+      it "should not take the version of the parent on the child" do
+        @gem.resource(:gempackage).first.version.should == nil
+      end
     end
   end
 end
