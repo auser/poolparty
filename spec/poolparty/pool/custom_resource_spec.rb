@@ -75,11 +75,16 @@ describe "Custom Resource" do
         resource(:rockstar).class.should == Array
       end
       describe "call function" do
+        before(:each) do
+          @res = Class.new
+          @res.stub!(:class_name_sym).and_return :bunk
+          @res.stub!(:key).and_return "bunk"
+        end
         it "should have the class CallFunction available" do
           lambda {PoolParty::Resources::CallFunction}.should_not raise_error
         end
         it "should create a new CallFunction instance when calling call_function with a string" do
-          PoolParty::Resources::CallFunction.should_receive(:new).and_return "bunk"
+          PoolParty::Resources::CallFunction.should_receive(:new).and_return @res
           add_resource(:call_function, :name => "line")
         end
         it "should create a call function in the function call array" do
