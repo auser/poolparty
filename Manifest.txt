@@ -51,6 +51,7 @@ lib/erlang/messenger/ebin/master.app
 lib/erlang/messenger/ebin/master_app.beam
 lib/erlang/messenger/ebin/node.app
 lib/erlang/messenger/ebin/node_app.beam
+lib/erlang/messenger/ebin/packager.app
 lib/erlang/messenger/ebin/pm_client.beam
 lib/erlang/messenger/ebin/pm_cluster.beam
 lib/erlang/messenger/ebin/pm_event_handler.beam
