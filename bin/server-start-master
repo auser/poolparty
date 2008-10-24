@@ -19,7 +19,7 @@ include Remote
   with_cloud(cloud, {:testing => o.testing }) do
     
     boot_file = "#{Messenger.append_dir}/pm_master_rel-0.1"
-    command = Messenger.erl_command("master", "-boot #{boot_file} #{noshell ? "" : "-detached -heart"}")
+    command = Messenger.erl_command("pp_master", "-boot #{boot_file} #{noshell ? "" : "-detached -heart"}")
 
     Kernel.system command
   end  

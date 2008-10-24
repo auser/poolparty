@@ -103,7 +103,7 @@ cp #{Base.remote_storage_path}/#{Base.template_directory}/* #{Base.template_path
       
       def create_poolparty_manifest
         <<-EOS
-cp #{Base.remote_storage_path}/poolparty.pp /etc/puppet/manifests/classes/poolparty.pp
+mv #{Base.remote_storage_path}/poolparty.pp /etc/puppet/manifests/classes/poolparty.pp
 cp #{Base.remote_storage_path}/#{Base.key_file_locations.first} "#{Base.base_config_directory}/.ppkeys"
 cp #{Base.remote_storage_path}/#{Base.default_specfile_name} #{Base.base_config_directory}/#{Base.default_specfile_name}
 #{copy_ssh_app}

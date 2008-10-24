@@ -18,7 +18,7 @@ describe "Base" do
     Base.storage_directory.should =~ /tmp/
   end
   it "should set the tmp path to tmp" do
-    Base.tmp_path.should == "tmp"
+    Base.tmp_path.should =~ /\/tmp/
   end
   it "should set the remote storage path to /var/poolparty" do
     Base.remote_storage_path.should == "/var/poolparty"
