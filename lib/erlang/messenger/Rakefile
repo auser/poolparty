@@ -11,8 +11,9 @@ CLEAN.include("ebin/*.beam")
 
 directory 'ebin'
 
+# -D EUNIT
 rule ".beam" => ["%{ebin,src}X.erl"] do |t|
-  sh "erlc -D EUNIT -pa ebin -W #{ERLC_FLAGS} -o ebin #{t.source}"
+  sh "erlc -pa ebin -W #{ERLC_FLAGS} -o ebin #{t.source}"
 end
 
 desc "Recompile the sources"
