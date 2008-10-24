@@ -36,10 +36,3 @@ average_for_list(Num, L) ->
 		_ ->
 			Num / length(L)
 	end.
-
-% Recompiles the boot scripts
-recompile_scripts(Vers) ->
-	systools:make_script("pm_node_rel-"++Vers, [local]),
-	systools:make_script("pm_master_rel-"++Vers, [local]).
-
-% Tests

@@ -140,7 +140,8 @@ module PoolParty
           upgrade_system,
           fix_rubygems,
           install_puppet,
-          custom_install_tasks
+          custom_install_tasks,
+          build_poolparty_messenger
         ] << install_tasks
       end
       # Tasks with default configuration tasks
@@ -248,11 +249,14 @@ module PoolParty
           cp #{Base.remote_storage_path}/poolparty.pp /etc/puppet/manifests/classes
         EOS
       end
+      def build_poolparty_messenger
+        "cd #{::File.join(::File.dirname(__FILE__), "../../erlang/messenger")} && rake repackage"
+      end
       def start_poolparty_messenger_master
         "server-start-master"
       end
       def start_poolparty_messenger
-        "server-start-master -n #{hostname}"
+        "server-start-master -n #{@instance.name}"
       end
     end
   end  

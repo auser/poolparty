@@ -1,19 +1,36 @@
 require 'rake/clean'
 
 INCLUDE = "include"
-
 ERLC_FLAGS = "-I#{INCLUDE} +warn_unused_vars +warn_unused_import"
 
 SRC = FileList['src/*.erl']
 OBJ = SRC.pathmap("%{src,ebin}X.beam")
-
 CLEAN.include("ebin/*.beam")
 
 directory 'ebin'
 
-# -D EUNIT
-rule ".beam" => ["%{ebin,src}X.erl"] do |t|
+rule ".beam" =>  ["%{ebin,src}X.erl"] do |t|
   sh "erlc -pa ebin -W #{ERLC_FLAGS} -o ebin #{t.source}"
+end
+
+task :compile => ['ebin'] + OBJ
+task :default => :compile
+
+task :run_tests => [:compile] do
+  puts "Modules under test:"
+  OBJ.each do |obj|
+    obj[%r{.*/(.*).beam}]
+    mod = $1
+    test_output = `erl -pa ebin -run #{mod} test -run init stop`
+
+    if /\*failed\*/ =~ test_output
+      test_output[/(Failed.*Aborted.*Skipped.*Succeeded.*$)/]
+    else
+      test_output[/1>\s*(.*)\n/]
+    end
+
+    puts "#{mod}: #{$1}"
+  end
 end
 
 desc "Recompile the sources"
@@ -26,27 +43,18 @@ desc "Rebuild the boot scripts"
 task :build_boot_scripts => [:recompile] do
   puts "Rebuilding boot scripts"
   @version = "0.1"
-  cmd = "erl -pa ./ebin/ -run utils recompile_scripts #{@version} -run init stop -noshell"
+  cmd = "erl -pa ./ebin/ -run pm_packager recompile_scripts #{@version} -run init stop -noshell"
   Kernel.system cmd
 end
 
-task :default => :compile
+desc "Rebuild and repackage"
+task :repackage => [:build_boot_scripts] do  
+  cmd = "erl -pa ./ebin -s pm_packager start -s init stop"
+  Kernel.system cmd
+end
 
-task :test => [:compile] do
-  puts "Modules under test:"
-  OBJ.each do |obj|
-    obj[%r{.*/(.*).beam}]
-    mod = $1
-    puts "running #{mod}"
-    test_output = `erl -pa ebin -run #{mod} test -run init stop`
-
-    if /\*failed\*/ =~ test_output
-      puts test_output
-      test_output[/(Failed.*Aborted.*Skipped.*Succeeded.*$)/]
-    else
-      test_output[/1>\s*(.*)\n/]
-    end
-
-    puts "#{mod}: #{$1}"
-  end
+desc "Install messenger"
+task :install_messenger do
+  cmd = "erl -pa ./ebin/ -run pm_packager install_messenger #{@version} -run init stop -noshell"
+  Kernel.system cmd
 end
