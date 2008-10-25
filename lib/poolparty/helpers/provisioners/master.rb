@@ -17,8 +17,6 @@ module PoolParty
 
       def install_tasks
         [
-          install_haproxy,
-          install_heartbeat,
           create_local_hosts_entry,
           setup_basic_structure,
           setup_configs,        
@@ -40,18 +38,16 @@ module PoolParty
       # If the master is not in the hosts file, then add it to the hosts file
       def create_local_hosts_entry
         <<-EOS
-if [ -z \"$(grep -v '#' /etc/hosts | grep 'master')" ]; then echo '#{@master_ip}           puppet master' >> /etc/hosts; fi
+if [ -z \"$(grep -v '#' /etc/hosts | grep 'puppet')" ]; then echo '#{@master_ip}           puppet master' >> /etc/hosts; fi
         EOS
       end
 
       def setup_basic_structure
         <<-EOS
-puppetmasterd --mkusers
-mkdir -p #{Base.remote_storage_path}
-echo "import 'nodes/*.pp'" > /etc/puppet/manifests/site.pp
-echo "import 'classes/*.pp'" >> /etc/puppet/manifests/site.pp
 mkdir -p /etc/puppet/manifests/nodes 
 mkdir -p /etc/puppet/manifests/classes
+echo "import 'nodes/*.pp'" > /etc/puppet/manifests/site.pp
+echo "import 'classes/*.pp'" >> /etc/puppet/manifests/site.pp
 cp #{Base.remote_storage_path}/namespaceauth.conf /etc/puppet/namespaceauth.conf
         EOS
       end
@@ -103,7 +99,7 @@ cp #{Base.remote_storage_path}/#{Base.template_directory}/* #{Base.template_path
       
       def create_poolparty_manifest
         <<-EOS
-mv #{Base.remote_storage_path}/poolparty.pp /etc/puppet/manifests/classes/poolparty.pp
+cp #{Base.remote_storage_path}/poolparty.pp /etc/puppet/manifests/classes/poolparty.pp
 cp #{Base.remote_storage_path}/#{Base.key_file_locations.first} "#{Base.base_config_directory}/.ppkeys"
 cp #{Base.remote_storage_path}/#{Base.default_specfile_name} #{Base.base_config_directory}/#{Base.default_specfile_name}
 #{copy_ssh_app}

@@ -2,6 +2,7 @@ module PoolParty
   module PrettyPrinter
     
     def pretty_print(pre="\t")
+      pre = "\t" unless pre.is_a?(String)
       returning Array.new do |out|
         out << pretty_name(pre, self)
         out << pretty_options(pre, self)

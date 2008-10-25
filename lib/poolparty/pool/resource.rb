@@ -27,14 +27,14 @@ module PoolParty
         end
       end
     end    
-    def get_resource(type, key, parent=self)
-      resource(type).select {|r| r.key == key }.first || get_from_global_resource_store(type, key)
+    def get_resource(ty, key, parent=self)
+      resource(ty).select {|r| r.key == key }.first || get_from_global_resource_store(ty, key)
     end
     def in_resources?(type, key, parent=self)
       !(get_resource(type, key) && in_global_resource_store?(type, key)).nil?
     end
     def global_resources_store
-      @@global_resources ||= []
+      $global_resources ||= []
     end
     def store_into_global_resource_store(r)
       global_resources_store << r unless in_global_resource_store?(r.class_name_sym, r.key)
@@ -47,7 +47,7 @@ module PoolParty
     end
     #:nodoc:
     def reset_resources!
-      @@global_resources = @resources = nil
+      $global_resources = @resources = nil
     end
         
     # def resources_string(pre="")
@@ -78,6 +78,9 @@ module PoolParty
           method =<<-EOE
             def #{lowercase_class_name}(opts={}, parent=self, &blk)
               add_resource(:#{lowercase_class_name}, opts, parent, &blk)
+            end
+            def get_#{lowercase_class_name}(name)              
+              get_resource(:#{lowercase_class_name}, name) if in_resources?(:#{lowercase_class_name}, name)
             end
           EOE
           PoolParty::Resources.module_eval method

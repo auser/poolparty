@@ -202,7 +202,7 @@ lib/poolparty/pool/resources/cron.rb
 lib/poolparty/pool/resources/directory.rb
 lib/poolparty/pool/resources/exec.rb
 lib/poolparty/pool/resources/file.rb
-lib/poolparty/pool/resources/gem.rb
+lib/poolparty/pool/resources/gem_package.rb
 lib/poolparty/pool/resources/host.rb
 lib/poolparty/pool/resources/package.rb
 lib/poolparty/pool/resources/remote_file.rb

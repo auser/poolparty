@@ -284,6 +284,9 @@ describe "Resource" do
             @file.cancel
             @file.cancelled?.should == true
           end
+          it "should be able to get the file from the helper" do
+            get_file("pancakes").should == @file
+          end
         end
         describe "virtual_resources" do
           before(:each) do
@@ -349,7 +352,7 @@ describe "Resource" do
                   end
                 end
                 has_package(:name => "boxers") do
-                  has_file(:name => "/var/list_of_boxers.txt", :requires => (package(:name => "apache2")) )
+                  has_file(:name => "/var/list_of_boxers.txt", :requires => (get_package("apache2")) )
                 end
               end
             end

@@ -39,8 +39,8 @@ describe "Master provisioner" do
   it "should return install_puppet_master as apt-get install puppet factor" do
     @master.install_puppet.should =~ /install -y puppet puppetmaster/
   end
-  it "should return setup basic structure" do
-    @master.setup_basic_structure.should =~ /puppetmasterd --mkusers/
+  it "should return setup basic structure and set classes into the manifest" do
+    @master.setup_basic_structure.should =~ /echo "import 'classes\/\*\.pp'" >> \/etc\/puppet\/manifests\/site\.pp/
   end
   it "should return setup_fileserver with the setup" do
     @master.setup_fileserver.should =~ /\[files\]/

@@ -1,7 +1,6 @@
 namespace(:dev) do
   task :initialize do
-    setup_application
-    run "mkdir ~/.ec2 >/dev/null 2>/dev/null" unless File.directory?("~/.ec2")      
+    Kernel.system"mkdir ~/.ec2 >/dev/null 2>/dev/null" unless File.directory?("~/.ec2")      
   end
   # Setup a basic development environment for the user 
   desc "Setup development environment specify the config_file"
@@ -62,5 +61,15 @@ To work on this cloud, source the file like:
       ec2-authorize -p 22 default
       ec2-authorize -p 80 default
     EOR
+  end
+  desc "Turn the gemspec into a yaml file"
+  task :gemspec_to_yaml => [:initialize, :gemspec] do
+    filepath = ::File.join(::File.dirname(__FILE__), "..", "poolparty.gemspec")
+    data = open(filepath).read
+    spec = eval("$SAFE = 3\n#{data}")
+    yml = YAML.dump spec
+    File.open(filepath, "w+") do |f|
+      f << yml
+    end
   end
 end
