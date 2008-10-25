@@ -23,3 +23,14 @@ task :gemspec  => [:spec, :clean_tmp, :"manifest:refresh", :local_deploy, :clean
     f << res
   end
 end
+
+desc "Generate gemspec for github"
+task :githubspec => [:gemspec] do
+  filepath = ::File.join(::File.dirname(__FILE__), "poolparty.gemspec")
+  data = open(filepath).read
+  spec = eval("$SAFE = 3\n#{data}")
+  yml = YAML.dump spec
+  File.open(filepath, "w+") do |f|
+    f << yml
+  end
+end

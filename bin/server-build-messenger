@@ -6,14 +6,14 @@ require "poolpartycl"
 root_dir = ::File.expand_path( ::File.join(::File.dirname(__FILE__), "..", "lib/erlang/messenger") )
 
 INCLUDE = "include"
-ERLC_FLAGS = "-I#{INCLUDE} +warn_unused_vars +warn_unused_import"
+ERLC_FLAGS = "-I#{INCLUDE}"
 @version = "0.1"
 
+# erl -pa ./ebin/ -run pm_packager recompile_scripts #{@version} -run init stop -noshell
 cmd =<<-EOE
   cd #{root_dir}
-  rm ebin/*
-  erlc -pa ./ebin -W #{ERLC_FLAGS} -o ebin ./src/*.erl
-  erl -pa ./ebin/ -run pm_packager recompile_scripts #{@version} -run init stop -noshell
+  rm ebin/*.beam
+  erlc -pa ./ebin -o ebin ./src/*.erl
   erl -pa ./ebin -s pm_packager start -s init stop
 EOE
 

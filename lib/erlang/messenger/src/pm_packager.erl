@@ -20,7 +20,7 @@ start() ->
 %% OTP design principles as a supervision tree, this means starting the
 %% top supervisor of the tree.
 %%--------------------------------------------------------------------
-start(_Type, _) ->
+start(_, _) ->
 	recompile_scripts("0.1").
 
 %%--------------------------------------------------------------------
