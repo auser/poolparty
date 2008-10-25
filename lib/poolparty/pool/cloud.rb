@@ -115,9 +115,7 @@ module PoolParty
           reset_resources!
           add_poolparty_base_requirements
           
-          @build_manifest = returning Array.new do |str|
-
-            str << resources_string_from_resources(resources)
+          @build_manifest = returning Array.new do |str|            
 
             # Refactor this into the resources method
             # TODO
@@ -126,6 +124,8 @@ module PoolParty
               str << @cp.to_string
               str << @cp.include_string
             end
+            
+            str << resources_string_from_resources(resources)
 
             str << "# Custom functions"
             str << Resources::CustomResource.custom_functions_to_string

@@ -71,9 +71,9 @@ module PoolParty
         setup_runner(@cloud)
         
         unless testing
-          puts "Logging on to #{@instance.ip}" if verbose
-          @cloud.prepare_reconfiguration
+          puts "Logging on to #{@instance.ip}" if verbose          
           @cloud.rsync_storage_files_to(@instance)
+          @cloud.prepare_reconfiguration
           
           cmd = "cd #{Base.remote_storage_path} && chmod +x install_#{name}.sh && /bin/sh install_#{name}.sh && rm install_#{name}.sh"
           hide_output do
@@ -229,10 +229,10 @@ module PoolParty
         case @os
         when :ubuntu
           "          
-          touch /etc/apt/sources.list
-          echo 'deb http://mirrors.kernel.org/ubuntu hardy main universe' >> /etc/apt/sources.list
-          aptitude update -y
-          aptitude autoclean
+touch /etc/apt/sources.list
+echo 'deb http://mirrors.kernel.org/ubuntu hardy main universe' >> /etc/apt/sources.list
+# aptitude update -y 2>&1
+# aptitude autoclean 2>&1 &
           "
         else
           "# No system upgrade needed"
