@@ -5,7 +5,7 @@
 % erl -pa ./ebin/ -run pm_client get_load cpu -run init stop -noshell
 
 % Connect to the master
-init() -> net_adm:ping(master).
+init() -> net_adm:ping(master@master).
 % Send the command Cmd to the pm_master process
 send_cmd(Cmd) ->	pm_master:fire_cmd(Cmd).
 % Reconfigure the cloud
