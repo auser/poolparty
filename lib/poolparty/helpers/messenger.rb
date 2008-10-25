@@ -3,7 +3,7 @@ module PoolParty
     
     # TODO: Fix cookie setting
     def self.erl_command(hostname, extra="")
-      command_line_opts = "-pa #{append_dir}/ebin -sname #{hostname} -setcookie poolparty"
+      command_line_opts = "-pa #{append_dir}/ebin -kernel inet_dist_listen_min 7000 inet_dist_listen_max 7050 -sname #{hostname} -setcookie poolparty"
       
       "erl #{command_line_opts} #{extra}"
     end
