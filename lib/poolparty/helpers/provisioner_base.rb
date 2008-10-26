@@ -102,6 +102,9 @@ module PoolParty
           @cloud.run_command_on(cmd, @instance)
         end
       end
+      def process_reconfigure!(testing=false)
+        @cloud.run_command_on("puppetd --test  2>&1 &", @instance) unless testing
+      end
       def setup_runner(cloud)
         cloud.prepare_to_configuration
         cloud.build_and_store_new_config_file

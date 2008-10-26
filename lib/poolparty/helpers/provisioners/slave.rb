@@ -4,13 +4,13 @@ module PoolParty
 
       def install_tasks
         [ 
-          setup_puppet
+          setup_puppet,
+          setup_configs
         ] << configure_tasks
       end
 
       def configure_tasks
-        [
-          setup_configs,
+        [          
           start_puppet
         ]
       end
