@@ -182,7 +182,7 @@ module PoolParty
           when_no_pending_instances do
             wait "20.seconds" # Give some time for ssh to startup
             PoolParty::Provisioner.provision_slaves(self)
-            PoolParty::Provisioner::Master.new(self).process_reconfigure!(!force)
+            PoolParty::Provisioner.reconfigure_master(self, force)
             # prepare_reconfiguration
           end
         end
