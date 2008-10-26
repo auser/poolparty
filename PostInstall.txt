@@ -1,4 +1,4 @@
-Get ready to jump in the pool, you just installed poolpartyrb!
+Get ready to jump in the pool, you just installed PoolParty!
 
 To get started, run the generator:
 
