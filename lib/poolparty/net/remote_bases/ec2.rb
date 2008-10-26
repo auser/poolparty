@@ -20,8 +20,9 @@ module PoolParty
       begin
         item = instance#.instancesSet.item
         EC2ResponseObject.get_hash_from_response(item)
-      rescue Exception => e          
+      rescue Exception => e
       end
+      instance
     end
     # Terminate an instance by id
     def terminate_instance!(instance_id=nil)
