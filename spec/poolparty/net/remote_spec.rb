@@ -194,7 +194,7 @@ describe "Remote" do
       before(:each) do
         @tc.stub!(:copy_ssh_app).and_return true
         @tc.stub!(:prepare_reconfiguration).and_return "full"
-        PoolParty::Provisioner.stub!(:configure_master).and_return true
+        PoolParty::Provisioner.stub!(:reconfigure_master).and_return true
         @tc.stub!(:wait).and_return true
       end
       describe "expand_cloud_if_necessary" do

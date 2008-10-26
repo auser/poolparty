@@ -15,6 +15,10 @@ module PoolParty
     def self.configure_master(cloud, testing=false)
       Provisioner::Master.new(cloud).process_configure!(testing)
     end
+    
+    def self.reconfigure_master(cloud, testing=false)
+      Provisioner::Master.new(cloud).process_reconfigure!(testing)
+    end
 
     def self.provision_slaves(cloud, testing=false)
       cloud.nonmaster_nonterminated_instances.each do |sl|        
