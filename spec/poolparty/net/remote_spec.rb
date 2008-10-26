@@ -196,6 +196,13 @@ describe "Remote" do
         @tc.stub!(:prepare_reconfiguration).and_return "full"
         PoolParty::Provisioner.stub!(:reconfigure_master).and_return true
         @tc.stub!(:wait).and_return true
+        @tc.stub!(:nonmaster_nonterminated_instances).and_return true
+        @inst = stub_instance(9, "running")
+        @tc.nonmaster_nonterminated_instances.stub!(:last).and_return @inst
+        @inst.stub!(:options).and_return({:name => "red"})
+        @tc.stub!(:rsync_storage_files_to).and_return true
+        @tc.stub!(:run_command_on).and_return true
+        @tc.stub!(:full_keypair_path).and_return "true"
       end
       describe "expand_cloud_if_necessary" do
         before(:each) do
@@ -219,7 +226,11 @@ describe "Remote" do
         end
         it "should call a new slave provisioner" do
           @tc.stub!(:should_expand_cloud?).once.and_return true
-          PoolParty::Provisioner.should_receive(:provision_slaves).and_return true
+          PoolParty::Provisioner.should_receive(:provision_slave).and_return true
+        end
+        it "should call reconfigure on the master to pick up the new slave" do
+          @tc.stub!(:should_expand_cloud?).once.and_return true
+          PoolParty::Provisioner.should_receive(:reconfigure_master).once
         end
         after(:each) do
           @tc.expand_cloud_if_necessary
