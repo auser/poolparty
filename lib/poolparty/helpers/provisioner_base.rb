@@ -92,7 +92,7 @@ module PoolParty
       def process_configure!(testing=false)
         error unless valid?
         write_configure_file
-        setup_runner(@cloud)        
+        setup_runner(@cloud)
         
         unless testing
           puts "Logging on to #{@instance.ip}" if verbose

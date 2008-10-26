@@ -3,13 +3,11 @@ $:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
 require "poolparty"
 require "poolpartycl"
 o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
-  opts.on('-c [master|slaves|all]', '--class [master|slave|all]', 'Provision class (default: all)')    { |c| optioner.provision_class c }
+  opts.on('-s', '--slave', 'Provision slave (default: false)')    { optioner.provision_slave true }
   opts.on('-n name', '--name name', 'Listing for cloud name')    { |c| optioner.cloudname c }
 end
 
 load_pool(o.spec || Binary.get_existing_spec_location)
-
-@provision_class = o.provision_class || "all"
 
 include Remote
 
@@ -17,15 +15,13 @@ include Remote
 
 @clouds.each do |name, cloud|
   
-  with_cloud(cloud, {:testing => o.testing, :location => @location, :provision_class => @provision_class}) do
+  with_cloud(cloud, {:testing => o.testing, :location => @location, :provision_slave => o.provision_slave, :provision_master => true}) do
     
     provisioning_in_progress
     
-    # if provision_class == "slave" || provision_class == "all"
-    #   Provisioner.provision_slaves(self, testing)
-    # end
-    # if provision_class == "master" || provision_class == "all"
-      Provisioner.provision_master(self, testing)
+    Provisioner.provision_master(self, testing) if provision_master
+    Provisioner.provision_slaves(self, testing) if provision_slave
+    # if provision_class == "master" || provision_class == "all"    
     # end
     
     provisioning_complete
