@@ -443,8 +443,7 @@ post_install_message: |-
   
   Don't forget to check out the plugin tutorial @ http://poolpartyrb.com to extend PoolParty for your needs!
   
-  For more information, check http://PoolPartyrb.com
-  On IRC: 
+  For more information, check http://PoolPartyrb.com or visit us on IRC at:
     irc.freenode.net
     #poolpartyrb
     
