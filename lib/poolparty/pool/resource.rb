@@ -143,9 +143,6 @@ module PoolParty
       def self.custom_function(str)
         custom_functions << str
       end
-      def self.custom_function(str)
-        custom_functions << str
-      end      
       def self.custom_functions
         @custom_functions ||= []
       end

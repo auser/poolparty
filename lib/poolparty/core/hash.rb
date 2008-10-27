@@ -16,13 +16,13 @@ class Hash
     returning Hash.new do |h|
       h.merge!(self)
       other_hash.each do |k,v|
-        h[k] = has_key?(k) ? [self[k], v].flatten : v
+        h[k] = has_key?(k) ? [self[k], v].flatten.uniq : v
       end
     end
   end
   def append!(other_hash)
     other_hash.each do |k,v|
-      self[k] = has_key?(k) ? [self[k], v].flatten : v
+      self[k] = has_key?(k) ? [self[k], v].flatten.uniq : v
     end
     self
   end

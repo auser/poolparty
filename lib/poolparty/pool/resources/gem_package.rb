@@ -16,6 +16,7 @@ module PoolParty
           has_exec(opts.merge({:name => "#{name}", :cwd => "/tmp", :path => "/bin:/usr/bin:/usr/local/bin:/sbin:/usr/sbin:/var/lib/gems/1.8/bin"})) do
             command "gem install -y --no-ri --no-rdoc #{Base.fileserver_base}/#{name}.gem"
             ifnot "gem list --local #{name} | grep #{name} #{"| grep #{version}" if version}"
+            requires get_exec("download-#{name}")
           end
         else
           has_exec(opts.merge({:name => "#{name}", :cwd => "/tmp", :path => "/bin:/usr/bin:/usr/local/bin:/sbin:/usr/sbin:/var/lib/gems/1.8/bin"})) do

@@ -32,7 +32,7 @@ module PoolParty
           end
           
           has_gempackage(:name => "ParseTree", :download_url => "http://rubyforge.org/frs/download.php/45600/ParseTree-3.0.1.gem") do |pt|
-            pt.has_gempackage(:name => "ruby2ruby")
+            pt.has_gempackage(:name => "ruby2ruby", :download_url => "http://rubyforge.org/frs/download.php/45587/ruby2ruby-1.2.0.gem")
             pt.has_gempackage(:name => "activesupport", :download_url => "http://rubyforge.org/frs/download.php/45627/activesupport-2.1.2.gem") do |a|
               a.has_gempackage(:name => "auser-poolparty", :source => "http://gems.github.com") do |pool|
                 pool.has_exec(:name => "build_messenger", :command => ". /etc/profile && server-build-messenger") do |mess|
@@ -57,6 +57,25 @@ module PoolParty
           command((self.respond_to?(:master) ? self : parent).master.puppet_runner_command)
         end
         # has_host(:name => "puppet", :ip => (self.respond_to?(:master) ? self : parent).master.ip)
+        custom_function <<-EOE
+define download_file(
+        $site="",
+        $cwd="",
+        $creates="",
+        $require="",
+        $user="") {                                                                                         
+
+    exec { $name:                                                                                                                     
+        command => "wget ${site}/${name}",                                                         
+        cwd => $cwd,
+        creates => "${cwd}/${name}",                                                              
+        require => $require,
+        user => $user,                                                                                                          
+    }
+
+}
+        
+        EOE
       end
       
     end  
