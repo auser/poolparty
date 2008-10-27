@@ -56,5 +56,14 @@ describe "Object" do
         @b.dude.should == "totally"
       end
     end
+    describe "contextual running" do
+      before(:each) do
+        @obj.stub!(:default_options).and_return {}
+        @a = @obj.run_in_context { @a = "hello world" }
+      end
+      it "should have the method meta_eval" do
+        @obj.respond_to?(:meta_eval).should == true
+      end
+    end
   end
 end

@@ -33,5 +33,5 @@ module Kernel
       STDOUT.flush
       STDOUT.reopen(old_stdout)
     end
-  end  
+  end
 end

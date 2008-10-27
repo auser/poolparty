@@ -9,6 +9,8 @@ module PoolParty
             
       def has_git_repos
         has_package(:name => "git-core")
+        has_directory(:name => "#{cwd}")
+        
         exec({:name => "git-#{name}", :requires => package(:name => "git-core")}) do
           command parent.user ? "git clone #{parent.user}@#{parent.source} #{parent.path}" : "git clone #{parent.source} #{parent.to ? parent.to : ""}"
           cwd "#{parent.cwd if parent.cwd}"

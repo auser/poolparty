@@ -25,7 +25,7 @@ task :gemspec  => [:spec, :clean_tmp, :"manifest:refresh", :local_deploy, :clean
 end
 
 desc "Generate gemspec for github"
-task :githubspec => [:gemspec] do
+task :gh => [:gemspec] do
   filepath = ::File.join(::File.dirname(__FILE__), "poolparty.gemspec")
   data = open(filepath).read
   spec = eval("$SAFE = 3\n#{data}")

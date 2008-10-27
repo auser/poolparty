@@ -3,6 +3,7 @@ module PoolParty
     class Master < ProvisionerBase
       
       def initialize(cloud=self, os=:ubuntu)
+        raise MasterException.new(:no_ip) unless cloud.master && cloud.master.ip
         super(cloud.master, cloud, os)
         @master_ip = cloud.master.ip
       end

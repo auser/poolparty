@@ -17,7 +17,7 @@ load_pool(o.spec || Binary.get_existing_spec_location)
   with_cloud(cloud, {:testing => @testing}) do
     puts header("Starting cloud")
     puts "#{list_of_running_instances.size} running instances (#{minimum_instances} - #{maximum_instances})"
-    if (minimum_instances - list_of_running_instances.size) > 0
+    if list_of_running_instances.size != 1
       puts "Starting the master instance"    
       if testing
         puts("\tNot launching while in testing mode")
