@@ -1,7 +1,7 @@
 --- !ruby/object:Gem::Specification 
 name: poolparty
 version: !ruby/object:Gem::Version 
-  version: 0.2.23
+  version: 0.2.24
 platform: ruby
 authors: 
 - Ari Lerner
@@ -140,7 +140,6 @@ files:
 - generators/poolspec/USAGE
 - generators/poolspec/poolspec_generator.rb
 - generators/poolspec/templates/pool_spec_template.erb
-- lib/erlang/messenger/.hosts.erlang
 - lib/erlang/messenger/Emakefile
 - lib/erlang/messenger/Makefile
 - lib/erlang/messenger/README
