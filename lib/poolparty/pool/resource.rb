@@ -105,9 +105,9 @@ module PoolParty
       # the options
       # Finally, it uses the parent's options as the lowest priority
       def initialize(opts={}, parent=self, &block)
-        # Take the options of the parents
-        set_resource_parent(parent)
+        # Take the options of the parents        
         set_vars_from_options(opts) unless opts.empty?
+        set_resource_parent(parent)
         self.run_in_context &block if block
         loaded(opts, @parent)
       end
@@ -115,7 +115,9 @@ module PoolParty
       def set_resource_parent(parent=nil)
         if parent && parent != self
           @parent = parent
-          requires parent.to_s if @parent.is_a?(PoolParty::Resources::Resource) && printable? && @parent.printable?
+          if @parent.is_a?(PoolParty::Resources::Resource) && @parent.printable? && @parent.name != name
+            requires @parent.to_s
+          end
         end
       end
             
@@ -164,6 +166,13 @@ module PoolParty
       def disallowed_options
         []
       end
+      def allowed_options
+        [
+          :subscribe, :owner, :group, :path, :mode, :source, :notify, :subscribe, :check, :creates, :cwd, :command, :ensure,
+          :require, :schedule, :range, :alias, :hour, :minute, :user, :month, :monthday, :name, :onlyif, :unless, :refreshonly,
+          :refresh, :content, :template, :ip, :repeat, :provider, :key
+        ]
+      end
       def key
         name
       end
@@ -191,7 +200,8 @@ module PoolParty
           else
             opts = {}
           end
-          @modified_options = opts.reject {|k,v| disallowed_options.include?(k) }
+          @full_allowed_options ||= allowed_options.reject {|ele| disallowed_options.include?(ele) }
+          @modified_options = opts.reject {|k,v| !@full_allowed_options.include?(k) }
         end
         @modified_options
       end

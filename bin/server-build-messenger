@@ -12,7 +12,7 @@ ERLC_FLAGS = "-I#{INCLUDE}"
 # erl -pa ./ebin/ -run pm_packager recompile_scripts #{@version} -run init stop -noshell
 cmd =<<-EOE
   cd #{root_dir}
-  rm ebin/*.beam
+  rm ebin/*.beam 2>&1
   erlc -pa ./ebin -o ebin ./src/*.erl
   erl -pa ./ebin -s pm_packager start -s init stop
 EOE

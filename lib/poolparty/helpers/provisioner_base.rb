@@ -241,8 +241,10 @@ module PoolParty
           "          
 touch /etc/apt/sources.list
 echo 'deb http://mirrors.kernel.org/ubuntu hardy main universe' >> /etc/apt/sources.list
-aptitude update -y 2>&1
-aptitude autoclean 2>&1
+aptitude update -y <<heredoc
+Y
+heredoc
+aptitude autoclean
           "
         else
           "# No system upgrade needed"
