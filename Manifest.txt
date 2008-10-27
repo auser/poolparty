@@ -140,10 +140,12 @@ lib/poolparty/base_packages/poolparty.rb
 lib/poolparty/base_packages/ruby.rb
 lib/poolparty/config/allowed_commands.yml
 lib/poolparty/core/array.rb
+lib/poolparty/core/class.rb
 lib/poolparty/core/exception.rb
 lib/poolparty/core/float.rb
 lib/poolparty/core/hash.rb
 lib/poolparty/core/kernel.rb
+lib/poolparty/core/metaid.rb
 lib/poolparty/core/module.rb
 lib/poolparty/core/my_open_struct.rb
 lib/poolparty/core/object.rb
