@@ -9,21 +9,11 @@ autorequire:
 bindir: bin
 cert_chain: []
 
-date: 2008-10-26 00:00:00 -07:00
+date: 2008-10-27 00:00:00 -07:00
 default_executable: 
 dependencies: 
 - !ruby/object:Gem::Dependency 
   name: activesupport
-  type: :runtime
-  version_requirement: 
-  version_requirements: !ruby/object:Gem::Requirement 
-    requirements: 
-    - - ">="
-      - !ruby/object:Gem::Version 
-        version: "0"
-    version: 
-- !ruby/object:Gem::Dependency 
-  name: open4
   type: :runtime
   version_requirement: 
   version_requirements: !ruby/object:Gem::Requirement 
@@ -248,10 +238,12 @@ files:
 - lib/poolparty/base_packages/ruby.rb
 - lib/poolparty/config/allowed_commands.yml
 - lib/poolparty/core/array.rb
+- lib/poolparty/core/class.rb
 - lib/poolparty/core/exception.rb
 - lib/poolparty/core/float.rb
 - lib/poolparty/core/hash.rb
 - lib/poolparty/core/kernel.rb
+- lib/poolparty/core/metaid.rb
 - lib/poolparty/core/module.rb
 - lib/poolparty/core/my_open_struct.rb
 - lib/poolparty/core/object.rb
