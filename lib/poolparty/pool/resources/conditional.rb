@@ -13,7 +13,7 @@ module PoolParty
     class Conditional < Resource
       
       def initialize(opts={}, parent=self, &block)
-        name "#{opts[:attribute]} == #{opts[:equal]}"
+        name "#{opts[:name] ? opts[:name] : opts[:attribute]} == #{opts[:equal]}"
         attribute opts[:attribute]
         equal opts[:equal]
         super

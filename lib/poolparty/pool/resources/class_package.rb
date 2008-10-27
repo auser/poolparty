@@ -40,6 +40,9 @@ module PoolParty
       def name(*args)
         args.empty? ? (@name || parent.name || "custom_#{Time.now.to_i}") : @name ||= args.first
       end
+      def printable?
+        false
+      end
 
     end
     
