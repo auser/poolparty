@@ -253,6 +253,7 @@ files:
 - lib/poolparty/core/time.rb
 - lib/poolparty/dependency_resolutions/base.rb
 - lib/poolparty/dependency_resolutions/puppet.rb
+- lib/poolparty/exceptions/MasterException.rb
 - lib/poolparty/exceptions/RemoteException.rb
 - lib/poolparty/exceptions/ResourceException.rb
 - lib/poolparty/exceptions/RuntimeException.rb

@@ -69,6 +69,9 @@ module PoolParty
         provisioner_file = ::File.join(Base.storage_directory, "install_#{name}.sh")
         ::File.open(provisioner_file, "w+") {|f| f << install }
       end
+      def name
+        @instance.name
+      end
       def process_install!(testing=false)
         error unless valid?
         write_install_file
@@ -238,8 +241,8 @@ module PoolParty
           "          
 touch /etc/apt/sources.list
 echo 'deb http://mirrors.kernel.org/ubuntu hardy main universe' >> /etc/apt/sources.list
-# aptitude update -y 2>&1
-# aptitude autoclean 2>&1 &
+aptitude update -y 2>&1
+aptitude autoclean 2>&1
           "
         else
           "# No system upgrade needed"

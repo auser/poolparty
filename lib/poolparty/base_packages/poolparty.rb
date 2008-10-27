@@ -11,11 +11,11 @@ module PoolParty
           # These should be installed automagically by poolparty, but just in case
           # TODO: Fix the requires method with a helper          
           g.has_gempackage(:name => "logging")
-          g.has_gempackage(:name => "xml-simple", :source => "/var/poolparty/xml-simple.gem") do |x|            
+          g.has_gempackage(:name => "xml-simple") do |x|
             x.has_gempackage(:name => "grempe-amazon-ec2", :source => "http://gems.github.com")
           end
           
-          has_gempackage(:name => "ParseTree", :version => "2.2.0") do |pt|
+          has_gempackage(:name => "ParseTree", :version => "3.0.1") do |pt|
             pt.has_gempackage(:name => "ruby2ruby")
             pt.has_gempackage(:name => "activesupport") do |a|
               a.has_gempackage(:name => "auser-poolparty", :source => "http://gems.github.com") do |pool|
