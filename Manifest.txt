@@ -42,7 +42,6 @@ examples/with_apache_plugin.rb
 generators/poolspec/USAGE
 generators/poolspec/poolspec_generator.rb
 generators/poolspec/templates/pool_spec_template.erb
-lib/erlang/messenger/.hosts.erlang
 lib/erlang/messenger/Emakefile
 lib/erlang/messenger/Makefile
 lib/erlang/messenger/README
