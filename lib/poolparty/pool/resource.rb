@@ -116,7 +116,7 @@ module PoolParty
         if parent && parent != self
           @parent = parent
           if @parent.is_a?(PoolParty::Resources::Resource) && @parent.printable? && @parent.name != name
-            requires @parent.to_s
+            # requires @parent.to_s
           end
         end
       end

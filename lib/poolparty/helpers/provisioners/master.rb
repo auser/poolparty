@@ -74,6 +74,9 @@ mkdir -p /etc/poolparty
       def setup_autosigning
         <<-EOS
 echo "*" > /etc/puppet/autosign.conf
+killall ruby
+rm -rf /etc/puppet/ssl/*
+puppetmasterd --verbose
         EOS
       end
 
@@ -124,9 +127,6 @@ cp #{Base.remote_storage_path}/#{Base.default_specfile_name} #{Base.base_config_
       # puppetd --listen --fqdn #{@instance.name}
       def restart_puppetd
         <<-EOS
-          killall ruby
-          rm -rf /etc/puppet/ssl/*
-          puppetmasterd --verbose
           . /etc/profile && #{@instance.puppet_runner_command}
         EOS
       end

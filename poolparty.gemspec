@@ -140,6 +140,7 @@ files:
 - generators/poolspec/USAGE
 - generators/poolspec/poolspec_generator.rb
 - generators/poolspec/templates/pool_spec_template.erb
+- lib/erlang/messenger/.hosts.erlang
 - lib/erlang/messenger/Emakefile
 - lib/erlang/messenger/Makefile
 - lib/erlang/messenger/README
@@ -161,6 +162,7 @@ files:
 - lib/erlang/messenger/ebin/pm_node_supervisor.beam
 - lib/erlang/messenger/ebin/pm_packager.beam
 - lib/erlang/messenger/ebin/utils.beam
+- lib/erlang/messenger/erl_crash.dump
 - lib/erlang/messenger/lib/eunit/AUTHORS
 - lib/erlang/messenger/lib/eunit/CHANGELOG
 - lib/erlang/messenger/lib/eunit/COPYING
@@ -320,7 +322,6 @@ files:
 - lib/poolparty/pool/tmp/tc-instances.list
 - lib/poolparty/templates/authkeys
 - lib/poolparty/templates/cib.xml
-- lib/poolparty/templates/fileserver.conf
 - lib/poolparty/templates/gem
 - lib/poolparty/templates/ha.cf
 - lib/poolparty/templates/haproxy.conf
