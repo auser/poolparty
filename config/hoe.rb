@@ -12,7 +12,6 @@ HOMEPATH = "http://#{GEM_NAME}.rubyforge.org"
 DOWNLOAD_PATH = "http://rubyforge.org/projects/#{RUBYFORGE_PROJECT}"
 EXTRA_DEPENDENCIES = [
  ['activesupport'],
- ['open4'],
  ['logging'],
  ["ruby2ruby"]
 ]    # An array of rubygem dependencies [name, version]

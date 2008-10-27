@@ -55,8 +55,17 @@ class Object
       self.class.send(:remove_method, :__)
     end
     block_method.bind(self).call(*args)
-  end
+  end  
   def meta_def name, &blk
-    (class << self; self; end).instance_eval { define_method name, &blk }
+    meta_eval { define_method name, &blk }
+  end
+  def meta_undef name
+    meta_eval { remove_method name }
+  end
+  def run_in_context(&block)
+    name="temp_#{self.class}_#{parent.to_s}".to_sym
+    meta_def name, &block
+    self.send name, self
+    meta_undef name
   end
 end
