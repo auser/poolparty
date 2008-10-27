@@ -7,22 +7,20 @@ module PoolParty
         has_package(:name => "erlang-dev")
         has_package(:name => "erlang-src")
         
-        has_package(:name => "rubygems") do
+        has_package(:name => "rubygems") do |g|
           # These should be installed automagically by poolparty, but just in case
           # TODO: Fix the requires method with a helper          
-          has_gempackage(:name => "logging")
-          has_gempackage(:name => "xml-simple", :source => "/var/poolparty/xml-simple.gem") do
-            has_gempackage(:name => "grempe-amazon-ec2", :source => "http://gems.github.com")
+          g.has_gempackage(:name => "logging")
+          g.has_gempackage(:name => "xml-simple", :source => "/var/poolparty/xml-simple.gem") do |x|            
+            x.has_gempackage(:name => "grempe-amazon-ec2", :source => "http://gems.github.com")
           end
           
-          has_gempackage(:name => "open4")
-          
-          has_gempackage(:name => "ParseTree", :version => "2.2.0") do
-            has_gempackage(:name => "ruby2ruby")
-            has_gempackage(:name => "activesupport") do
-              has_gempackage(:name => "auser-poolparty", :source => "http://gems.github.com") do
-                has_exec(:name => "build_messenger", :command => ". /etc/profile && server-build-messenger") do
-                  has_exec(:name => "start_node", :command => ". /etc/profile && server-start-node")
+          has_gempackage(:name => "ParseTree", :version => "2.2.0") do |pt|
+            pt.has_gempackage(:name => "ruby2ruby")
+            pt.has_gempackage(:name => "activesupport") do |a|
+              a.has_gempackage(:name => "auser-poolparty", :source => "http://gems.github.com") do |pool|
+                pool.has_exec(:name => "build_messenger", :command => ". /etc/profile && server-build-messenger") do |mess|
+                  mess.has_exec(:name => "start_node", :command => ". /etc/profile && server-start-node")
                 end                
               end
             end

@@ -108,7 +108,7 @@ module PoolParty
         # Take the options of the parents
         set_resource_parent(parent)
         set_vars_from_options(opts) unless opts.empty?
-        self.instance_eval &block if block
+        self.run_in_context &block if block
         loaded(opts, @parent)
       end
       
