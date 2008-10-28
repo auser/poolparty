@@ -3,7 +3,7 @@ require File.dirname(__FILE__) + "/resource"
 
 module PoolParty    
   module Cloud
-    def cloud(name=:main, &block)
+    def cloud(name=:app, &block)
       clouds.has_key?(name) ? clouds[name] : (clouds[name] = Cloud.new(name, self, &block))
     end
 
@@ -96,9 +96,9 @@ module PoolParty
         @manifest = build_manifest
         config_file = ::File.join(Base.storage_directory, "poolparty.pp")
         ::File.open(config_file, "w") do |file|
-          file << "class poolparty {"
+          # file << "class poolparty {"
           file << @manifest
-          file << "}"
+          # file << "}"
         end
       end      
       
@@ -111,7 +111,7 @@ module PoolParty
       # Configuration files
       def build_manifest
         @build_manifest ||= build_from_existing_file
-        unless @build_manifest
+        if @build_manifest.nil? || !(@build_manifest =~ /generate/)
           reset_resources!
           add_poolparty_base_requirements
           
@@ -139,11 +139,7 @@ module PoolParty
       end
       
       def build_from_existing_file
-        if ::FileTest.file?("/etc/puppet/manifests/classes/poolparty.pp")
-          open("/etc/puppet/manifests/classes/poolparty.pp").read
-        else
-          nil
-        end
+        ::FileTest.file?("/etc/puppet/manifests/classes/poolparty.pp") ? open("/etc/puppet/manifests/classes/poolparty.pp").read : nil
       end
       
       # To allow the remote instances to do their job,
