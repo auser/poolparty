@@ -434,7 +434,8 @@ post_install_message: |-
   Please check out the documentation for any questions or check out the google groups at
     http://groups.google.com/group/poolpartyrb
   
-  Tutorials are at http://poolpartyrb.com
+  More tutorials can be found at 
+    http://poolpartyrb.com
   
   Don't forget to check out the plugin tutorial @ http://poolpartyrb.com to extend PoolParty for your needs!
   
