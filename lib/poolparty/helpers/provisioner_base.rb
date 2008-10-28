@@ -21,18 +21,20 @@ module PoolParty
     end
 
     def self.provision_slaves(cloud, testing=false)
-      cloud.nonmaster_nonterminated_instances.each do |sl|        
+      cloud.nonmaster_nonterminated_instances.each do |sl|
         provision_slave(sl, cloud, testing)
       end
     end
 
     def self.configure_slaves(cloud, testing=false)
       cloud.nonmaster_nonterminated_instances.each do |sl|
+        puts "Slave: #{sl.name} (#{sl.ip})"
         configure_slave(sl, cloud, testing)
       end
     end
         
     def self.provision_slave(instance, cloud, testing=false)
+      process_clean_reconfigure_for!(instance, cloud, testing)
       Provisioner::Slave.new(instance, cloud).process_install!(testing)
     end
     
@@ -82,17 +84,16 @@ module PoolParty
         setup_runner(@cloud)
         
         unless testing
-          puts "Logging on to #{@instance.ip}" if verbose
+          puts "Logging on to #{@instance.ip} (#{@instance.name})" if verbose
           @cloud.rsync_storage_files_to(@instance)
           # @cloud.prepare_reconfiguration if @instance.master?
           
           cmd = "cd #{Base.remote_storage_path} && chmod +x install_#{name}.sh && /bin/sh install_#{name}.sh && rm install_#{name}.sh"
-          hide_output do
-            @cloud.run_command_on(cmd, @instance)
-          end          
+          verbose ? hide_output { @cloud.run_command_on(cmd, @instance) } : @cloud.run_command_on(cmd, @instance)
         end
         # We have to get the right generated data into the manifest
-        process_configure!(testing)        
+        cloud.reset!
+        process_configure!(testing)
       end
       def configure
         valid? ? configure_string : error

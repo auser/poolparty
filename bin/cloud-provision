@@ -3,6 +3,7 @@ $:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
 require "poolparty"
 require "poolpartycl"
 o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
+  opts.on('-s', '--slave', 'Provision slave (default: false)')    { optioner.provision_slave true }
 end
 
 load_pool(o.spec || Binary.get_existing_spec_location)
@@ -13,12 +14,17 @@ include Remote
 
 @clouds.each do |name, cloud|
 
-  with_cloud(cloud, {:testing => o.testing}) do
-    logger.info header("Maintaining cloud validity #{name}")
-    if 
+  with_cloud(cloud, {:verbose => o.verbose, :testing => o.testing, :provision_slave => (o.provision_slave || false)}) do
+        
+    if provision_slave
+      Provisioner.provision_slaves(self, testing)
+      Provisioner.reconfigure_master(self, force)
     else
-      logger.info "Cloud is maintained"
+      provisioning_in_progress
+      Provisioner.provision_master(self, testing)
+      provisioning_complete
     end    
-  end  
+    
+  end
 
 end
