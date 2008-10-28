@@ -30,7 +30,7 @@ module PoolParty
         ["-o StrictHostKeyChecking=no", "-l '#{Base.user}'", '-i "'+full_keypair_path+'"']
       end
       def rsync_command
-        "rsync --delete -azP --exclude cache -e '#{ssh_string}'"
+        "rsync -azP --exclude cache -e '#{ssh_string}'"
       end
       # Open the cached local copy of the instances list and 
       # create a new RemoteInstance from each line

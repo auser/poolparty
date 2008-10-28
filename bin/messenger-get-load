@@ -14,16 +14,11 @@ load_pool(o.spec || Binary.get_existing_spec_location)
 include Remote
 
 @clouds = extract_cloud_from_options o
-@monitor = o.monitorname ? o.monitorname : "cpu"
 
 @clouds.each do |cl|
   
   with_cloud(cl, {:testing => o.testing, :monitorname => @monitor }) do
-    if PoolParty::Monitors.available_monitors.include?(monitorname.downcase.to_sym)
-      print "PoolParty::Monitors::#{monitorname.capitalize}Monitor".constantize.run
-    else
-      puts "Unknown monitor"
-    end
+    print PoolParty::Messenger.messenger_send!("get_load cpu", testing)
   end
   
 end

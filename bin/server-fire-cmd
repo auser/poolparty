@@ -11,4 +11,4 @@ end
 
 @command = o.command if o.command
 
-puts %x[#{@command}].chomp
+print %x[#{@command}].chomp
