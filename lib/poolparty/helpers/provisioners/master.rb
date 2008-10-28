@@ -119,7 +119,7 @@ cp #{Base.remote_storage_path}/#{Base.default_specfile_name} #{Base.base_config_
       
       def install_poolparty
         <<-EOE
-gem install -y --no-ri --no-rdoc Ruby2Ruby RubyInline xml-simple 
+gem install -y --no-ri --no-rdoc ruby2ruby RubyInline xml-simple 
 gem install -y --no-ri --no-rdoc ParseTree<<heredoc
 1
 heredoc
