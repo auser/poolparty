@@ -78,15 +78,17 @@ module PoolParty
         setup_runner(@cloud)
         
         unless testing
-          puts "Logging on to #{@instance.ip}" if verbose          
+          puts "Logging on to #{@instance.ip}" if verbose
           @cloud.rsync_storage_files_to(@instance)
-          @cloud.prepare_reconfiguration
+          # @cloud.prepare_reconfiguration if @instance.master?
           
           cmd = "cd #{Base.remote_storage_path} && chmod +x install_#{name}.sh && /bin/sh install_#{name}.sh && rm install_#{name}.sh"
           hide_output do
             @cloud.run_command_on(cmd, @instance)
           end          
-        end        
+        end
+        # We have to get the right generated data into the manifest
+        process_configure!(testing)        
       end
       def configure
         valid? ? configure_string : error

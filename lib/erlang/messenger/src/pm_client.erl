@@ -13,7 +13,7 @@ reconfigure_cloud() -> pm_master:reconfigure_cloud().
 % Get the load on the cloud of type Type
 get_load(Type) -> pm_master:get_load(Type).
 % Get a list of the live nodes
-get_live_nodes() -> pm_master:get_live_nodes().
+get_live_nodes() -> pm_cluster:get_live_nodes().
 % Terminate the cloud messenger
 % This sends a shutdown to the whole cloud
 shutdown() -> pm_master:shutdown_cloud().

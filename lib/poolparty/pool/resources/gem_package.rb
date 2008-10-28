@@ -10,13 +10,15 @@ module PoolParty
       # TODO: Add it so that it tries to pull the gem off the master fileserver first...
       def loaded(opts={}, parent=self)
         if download_url
-          execute_if("$hostname", "master") do
-            has_exec(:name => "download-#{name}", :cwd => Base.remote_storage_path, :command => "wget #{download_url} -O #{name}.gem", :ifnot => "test -f #{Base.remote_storage_path}/#{name}.gem")
-          end
+          
           has_file(:name => "#{Base.remote_storage_path}/#{name}.gem", :source => "#{Base.fileserver_base}/#{name}.gem")
           
+          execute_if("$hostname", "master") do
+            has_exec(:name => "download-#{name}", :cwd => Base.remote_storage_path, :command => "wget #{download_url} -O #{name}.gem", :ifnot => "test -f #{Base.remote_storage_path}/#{name}.gem", :notify => get_file("#{Base.remote_storage_path}/#{name}.gem"))
+          end          
+          
           has_exec(opts.merge({:name => "#{name}", :cwd =>"#{Base.remote_storage_path}", :path => "/bin:/usr/bin:/usr/local/bin:/sbin:/usr/sbin:/var/lib/gems/1.8/bin"})) do
-            command "gem install -y --no-ri --no-rdoc #{Base.fileserver_base}/#{name}.gem"
+            command "gem install -y --no-ri --no-rdoc #{Base.remote_storage_path}/#{name}.gem"
             ifnot "gem list --local #{name} | grep #{name} #{"| grep #{version}" if version}"
             requires get_file("#{Base.remote_storage_path}/#{name}.gem")
           end
