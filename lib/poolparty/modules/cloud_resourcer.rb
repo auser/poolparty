@@ -27,6 +27,7 @@ module PoolParty
       keypair_paths.each do |path|
         possible_keypair_basenames.each do |base|
           full_path = ::File.join( File.expand_path(path), "#{base}#{keypair}")
+          puts "testing: #{full_path}"
           return full_path if ::File.exists?(full_path)
         end
       end
