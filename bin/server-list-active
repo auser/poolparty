@@ -14,7 +14,7 @@ load_pool(o.spec || Binary.get_existing_spec_location)
 
 include Remote
 
-@clouds = o.cloudname ? [cloud(o.cloudname.downcase.to_sym)] : clouds
+@clouds = extract_cloud_from_options o
 
 @clouds.each do |name, cloud|
   

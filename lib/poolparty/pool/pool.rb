@@ -1,7 +1,7 @@
 module PoolParty
   module Pool
     
-    def pool(name=:main, &block)
+    def pool(name=:app, &block)
       pools.has_key?(name) ? pools[name] : (pools[name] = Pool.new(name, &block))
     end    
     

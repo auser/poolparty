@@ -288,7 +288,7 @@ describe "Cloud" do
           describe "building with an existing manifest" do
             before(:each) do
               @file = "/etc/puppet/manifests/nodes/nodes.pp"
-              @file.stub!(:read).and_return "nodes"
+              @file.stub!(:read).and_return "nodes generate"
               ::FileTest.stub!(:file?).with("/etc/puppet/manifests/classes/poolparty.pp").and_return true
               @cloud.stub!(:open).with("/etc/puppet/manifests/classes/poolparty.pp").and_return @file
             end
@@ -297,7 +297,7 @@ describe "Cloud" do
               @cloud.build_manifest
             end
             it "should build from the existing file" do
-              @cloud.build_manifest.should == "nodes"
+              @cloud.build_manifest.should == "nodes generate"
             end
           end
         end
