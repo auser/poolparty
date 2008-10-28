@@ -13,7 +13,7 @@ module PoolParty
         end
       end
       def run_command_on_command(cmd="ls -l", remote_instance=nil)
-        remote_instance.name == %x[hostname] ? %x[cmd] : "#{ssh_command(remote_instance)} '#{cmd}'"
+        remote_instance.name == %x[hostname].chomp ? %x[cmd] : "#{ssh_command(remote_instance)} '#{cmd}'"
       end
       def ssh_command(remote_instance)
         "#{ssh_string} #{remote_instance.ip}"
