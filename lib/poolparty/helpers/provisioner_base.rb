@@ -162,7 +162,6 @@ module PoolParty
           upgrade_system,
           fix_rubygems,
           install_puppet,
-          install_poolparty,
           custom_install_tasks
         ] << install_tasks
       end
@@ -268,15 +267,6 @@ aptitude autoclean
         "#{installer_for( puppet_packages )}"
       end
       
-      def install_poolparty
-        <<-EOE
-gem install -y --include-dependencies --no-ri --no-rdoc  --source http://gems.github.com ParseTree
-gem install -y --include-dependencies --no-ri --no-rdoc  --source http://gems.github.com RubyInline
-gem install -y --include-dependencies --no-ri --no-rdoc  --source http://gems.github.com Ruby2Ruby
-gem install -y --include-dependencies --no-ri --no-rdoc  --source http://gems.github.com auser-poolparty
-        EOE
-      end
-
       def create_poolparty_manifest
         <<-EOS
           cp #{Base.remote_storage_path}/poolparty.pp /etc/puppet/manifests/classes
