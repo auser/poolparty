@@ -15,7 +15,7 @@ module PoolParty
       :base_keypair_path => "~/.ec2",
       :tmp_path => "/tmp/poolparty",
       :remote_storage_path => "/var/poolparty",      
-      :fileserver_base => "puppet:///files",
+      :fileserver_base => "puppet://master/files",
       :base_config_directory => "/etc/poolparty",
       :template_directory => "templates",
       :template_path => "/var/lib/puppet/templates",
