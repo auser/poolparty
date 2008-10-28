@@ -25,7 +25,7 @@ module PoolParty
 
       def setup_configs
         <<-EOS          
-          echo "#{open(File.join(template_directory, "puppet.conf")).read}" > /etc/puppet/puppet.conf        
+          echo "#{open(File.join(template_directory, "puppet.conf")).read}" > /etc/puppet/puppet.conf
         EOS
       end
 
@@ -34,7 +34,6 @@ module PoolParty
       def start_puppet
         <<-EOS
           ps aux | grep "puppetmasterd" | awk '{print $2}' | xargs kill
-          rm -rf /etc/puppet/ssl*
           puppetd --test  2>&1 &
           rm -rf /etc/puppet/ssl*
         EOS
