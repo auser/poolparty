@@ -92,12 +92,13 @@ module PoolParty
       # TODO: Consider the benefits of moving all the manifest
       # classes to separate files and keeping the containing
       # references in the include
-      def build_and_store_new_config_file
-        @manifest = build_manifest
+      def build_and_store_new_config_file(force=false)
+        vputs "Building new manifest configuration file (forced: #{force})"
+        manifest = force ? rebuild_manifest : build_manifest
         config_file = ::File.join(Base.storage_directory, "poolparty.pp")
         ::File.open(config_file, "w") do |file|
           # file << "class poolparty {"
-          file << @manifest
+          file << manifest
           # file << "}"
         end
       end      
@@ -110,14 +111,21 @@ module PoolParty
             
       # Configuration files
       def build_manifest
+        vputs "Building manifest"
         @build_manifest ||= build_from_existing_file
-        if @build_manifest.nil?
-          reset_resources!
+        unless @build_manifest
+          
+          # reset_resources!
           add_poolparty_base_requirements
           
-          @build_manifest = build_short_manifest
+          @build_manifest = "class poolparty {\n #{build_short_manifest}\n}"
         end
         @build_manifest
+      end
+      
+      def rebuild_manifest
+        @build_manifest = nil
+        build_manifest
       end
       
       def build_short_manifest

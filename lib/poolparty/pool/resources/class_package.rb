@@ -5,7 +5,7 @@ module PoolParty
     def classpackage_with_self(parent=self, &block)
       @cp = PoolParty::Resources::Classpackage.new(parent.options, parent, &block)
       @cp.instance_eval {@resources = parent.resources}
-      parent.instance_eval {@resources = nil}
+      # parent.instance_eval {@resources = nil}
       @cp
     end
                 

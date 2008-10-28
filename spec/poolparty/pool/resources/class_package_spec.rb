@@ -81,9 +81,9 @@ describe "File" do
         @class2 = classpackage_with_self(self)
         @class2.resources.should_not be_empty
       end
-      it "should leave zero resources on the parent" do
-        @class2 = classpackage_with_self(self)
-        resources.should be_empty
-      end
+      # it "should leave zero resources on the parent" do
+      #   @class2 = classpackage_with_self(self)
+      #   resources.should be_empty
+      # end
   end
 end

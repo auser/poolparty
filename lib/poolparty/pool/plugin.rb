@@ -20,6 +20,15 @@ module PoolParty
       # Overwrite this method
       def enable
       end
+      
+      # Call the cloud from within the plugin
+      def cloud
+        @p = parent
+        while !@p.is_a?(PoolParty::Cloud)
+          @p = @p.parent
+        end
+        @p
+      end
             
       # def method_missing(m, *args, &block)
       #   if block_given?
