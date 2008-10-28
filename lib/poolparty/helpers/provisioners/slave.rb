@@ -34,7 +34,8 @@ module PoolParty
       def start_puppet
         <<-EOS
           ps aux | grep "puppetmasterd" | awk '{print $2}' | xargs kill
-          puppetd --test  2>&1 &
+          rm -rf /etc/puppet/ssl*
+          /usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master 2>&1
           rm -rf /etc/puppet/ssl*
         EOS
       end

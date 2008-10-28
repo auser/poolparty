@@ -95,7 +95,7 @@ module PoolParty
       def build_and_store_new_config_file
         @manifest = build_manifest
         config_file = ::File.join(Base.storage_directory, "poolparty.pp")
-        ::File.open(config_file, "w+") do |file|
+        ::File.open(config_file, "w") do |file|
           file << "class poolparty {"
           file << @manifest
           file << "}"
@@ -176,6 +176,10 @@ module PoolParty
       
       def provisioning_complete
         @provisioning_in_progress = false
+      end
+      
+      def reset!
+        @build_manifest = nil
       end
             
       # Add to the services pool for the manifest listing
