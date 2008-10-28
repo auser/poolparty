@@ -22,7 +22,8 @@ module PoolParty
           setup_basic_structure,
           setup_configs,        
           setup_fileserver,
-          setup_autosigning,          
+          setup_autosigning,
+          install_poolparty
         ] << configure_tasks
       end
 
@@ -114,6 +115,17 @@ cp #{Base.remote_storage_path}/#{Base.default_specfile_name} #{Base.base_config_
         if @cloud.remote_keypair_path != "#{Base.remote_storage_path}/#{@cloud.full_keypair_name}"
           "cp #{Base.remote_storage_path}/#{@cloud.full_keypair_name} #{@cloud.remote_keypair_path}"
         end
+      end
+      
+      def install_poolparty
+        <<-EOE
+gem install -y --no-ri --no-rdoc Ruby2Ruby RubyInline xml-simple 
+gem install -y --no-ri --no-rdoc ParseTree<<heredoc
+1
+heredoc
+gem install -y --no-ri --no-rdoc  --source http://gems.github.com grempe-amazon-ec2
+gem install -y --no-ri --no-rdoc  --source http://gems.github.com auser-poolparty
+        EOE
       end
 
       # ps aux | grep puppetmasterd | awk '{print $2}' | xargs kill
