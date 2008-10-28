@@ -196,7 +196,7 @@ describe "Remote" do
         @tc.stub!(:prepare_reconfiguration).and_return "full"
         PoolParty::Provisioner.stub!(:reconfigure_master).and_return true
         @tc.stub!(:wait).and_return true
-        @tc.stub!(:nonmaster_nonterminated_instances).and_return true
+        @tc.stub!(:nonmaster_nonterminated_instances).and_return response_list_of_instances
         @inst = stub_instance(9, "running")
         @tc.nonmaster_nonterminated_instances.stub!(:last).and_return @inst
         @inst.stub!(:options).and_return({:name => "red"})

@@ -176,13 +176,17 @@ module PoolParty
       # get go
       def expand_cloud_if_necessary(force=false)
         if can_start_a_new_instance? && should_expand_cloud?(force)
-          @out = request_launch_new_instances(1)
+          @num = 1
+          @out = request_launch_new_instances(@num)
           
           reset!
           when_no_pending_instances do
             wait "20.seconds" # Give some time for ssh to startup
-            last_instance = nonmaster_nonterminated_instances.last
-            PoolParty::Provisioner.provision_slave(last_instance, self)
+            @num_instances = nonmaster_nonterminated_instances.size
+            last_instances = nonmaster_nonterminated_instances[(@num_instances - @num)..(@num_instances)]
+            last_instances.each do |inst|
+              PoolParty::Provisioner.provision_slave(inst, self)
+            end
             PoolParty::Provisioner.reconfigure_master(self, force)
             # prepare_reconfiguration
           end
