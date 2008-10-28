@@ -282,6 +282,7 @@ describe "Remote" do
         before(:each) do
           @tc.stub!(:keypair).and_return "fake_keypair"
           @tc.stub!(:keypair_path).and_return "~/.ec2/fake_keypair"
+          @obj.stub!(:name).and_return "pop"
         end
         it "should call system on the kernel" do
           ::File.stub!(:exists?).with("#{File.expand_path(Base.base_keypair_path)}/id_rsa-funky").and_return true
