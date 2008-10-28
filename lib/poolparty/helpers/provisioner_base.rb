@@ -40,6 +40,10 @@ module PoolParty
       Provisioner::Slave.new(instance, cloud).process_configure!(testing)
     end
     
+    def self.process_clean_reconfigure_for!(instance, cloud, testing=false)
+      Provisioner::Master.new(cloud).process_clean_reconfigure_for!(instance, testing)
+    end
+    
     class ProvisionerBase
       
       include Configurable
@@ -110,6 +114,9 @@ module PoolParty
           cmd = "cd #{Base.remote_storage_path} && chmod +x configure_#{name}.sh && /bin/sh configure_#{name}.sh && rm configure_#{name}.sh"
           @cloud.run_command_on(cmd, @instance)
         end
+      end
+      def process_clean_reconfigure_for!(instance, testing=false)
+        @cloud.run_command_on("puppetca --clean #{instance.name}.compute-1.internal", @cloud.master) unless testing
       end
       def process_reconfigure!(testing=false)
         @cloud.run_command_on("puppetd --test  2>&1 &", @instance) unless testing

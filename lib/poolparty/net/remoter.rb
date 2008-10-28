@@ -13,7 +13,7 @@ module PoolParty
         end
       end
       def run_command_on_command(cmd="ls -l", remote_instance=nil)
-        "#{ssh_command(remote_instance)} '#{cmd}'"
+        remote_instance.name == `hostname` ? %x[cmd] : "#{ssh_command(remote_instance)} '#{cmd}'"
       end
       def ssh_command(remote_instance)
         "#{ssh_string} #{remote_instance.ip}"
@@ -186,6 +186,7 @@ module PoolParty
             last_instances = nonmaster_nonterminated_instances[(@num_instances - @num)..(@num_instances)]
             last_instances.each do |inst|
               PoolParty::Provisioner.provision_slave(inst, self)
+              PoolParty::Provisioner.process_clean_reconfigure_for!(inst, self)
             end
             PoolParty::Provisioner.reconfigure_master(self, force)
             # prepare_reconfiguration
