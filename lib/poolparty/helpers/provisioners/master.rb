@@ -119,10 +119,19 @@ cp #{Base.remote_storage_path}/#{Base.default_specfile_name} #{Base.base_config_
       
       def install_poolparty
         <<-EOE
-gem install -y --no-ri --no-rdoc ruby2ruby RubyInline xml-simple 
-gem install -y --no-ri --no-rdoc ParseTree<<heredoc
-1
-heredoc
+cd /var/poolparty
+wget http://rubyforge.org/frs/download.php/44731/logging-0.9.4.gem -O logging.gem
+wget http://rubyforge.org/frs/download.php/45600/ParseTree-3.0.1.gem -O parsetree.gem
+wget http://rubyforge.org/frs/download.php/45587/ruby2ruby-1.2.0.gem -O ruby2ruby.gem
+wget http://rubyforge.org/frs/download.php/45627/activesupport-2.1.2.gem -O activesupport.gem
+wget http://rubyforge.org/frs/download.php/18366/xml-simple-1.0.11.gem -O xml-simple.gem
+
+gem install -y --no-ri --no-rdoc logging.gem
+gem install -y --no-ri --no-rdoc parsetree.gem 
+gem install -y --no-ri --no-rdoc activesupport.gem 
+gem install -y --no-ri --no-rdoc ruby2ruby.gem 
+gem install -y --no-ri --no-rdoc xml-simple.gem
+
 gem install -y --no-ri --no-rdoc  --source http://gems.github.com grempe-amazon-ec2
 gem install -y --no-ri --no-rdoc  --source http://gems.github.com auser-poolparty
         EOE

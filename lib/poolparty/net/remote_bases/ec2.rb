@@ -33,27 +33,24 @@ module PoolParty
       describe_instances.select {|a| a[:name] == id}[0] rescue nil
     end
     def describe_instances
-      unless @describe_instances && !@describe_instances.empty?
-        @id = 0
-        @describe_instances = get_instances_description.each_with_index do |h,i|
-          if h[:status] == "running"
-            @name = @id == 0 ? "master" : "node#{@id}"
-            @id += 1
-          else
-            @name = "#{h[:status]}_node#{i}"
-          end
-          h.merge!({
-            :name => @name,
-            :hostname => h[:ip],
-            :ip => h[:ip].convert_from_ec2_to_ip
-          })
+      @id = 0
+      get_instances_description.each_with_index do |h,i|
+        if h[:status] == "running"
+          @name = @id == 0 ? "master" : "node#{@id}"
+          @id += 1
+        else
+          @name = "#{h[:status]}_node#{i}"
         end
-      end
-      @describe_instances
+        h.merge!({
+          :name => @name,
+          :hostname => h[:ip],
+          :ip => h[:ip].convert_from_ec2_to_ip
+        })
+      end      
     end
     # Get the s3 description for the response in a hash format
     def get_instances_description
-      @cached_descriptions ||= EC2ResponseObject.get_descriptions(ec2.describe_instances).sort_by {|a| a[:launching_time]}
+      EC2ResponseObject.get_descriptions(ec2.describe_instances).sort_by {|a| a[:launching_time]}
     end
     
     # Help create a keypair for the cloud

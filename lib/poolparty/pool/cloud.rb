@@ -183,7 +183,7 @@ module PoolParty
       end
       
       def reset!
-        @build_manifest = nil
+        @build_manifest = @describe_instances = nil
       end
             
       # Add to the services pool for the manifest listing
