@@ -77,7 +77,7 @@ module PoolParty
       # If no keypair is passed, select them all
       def list_of_instances(keyp=nil)
         key = keyp ? keyp : keypair
-        describe_instances.select {|a| key ? a[:keypair] == key : true } if describe_instances
+        @describe_instances ||= describe_instances.select {|a| key ? a[:keypair] == key : true } if describe_instances
       end
       # Instances
       # Get the master from the cloud
@@ -91,6 +91,7 @@ module PoolParty
       end
       # Reset the cache of descriptions
       def reset!
+        @describe_instances = nil
       end
       def self.included(other)
         PoolParty.register_remote_base(self.class.to_s.downcase.to_sym)

@@ -1,7 +1,7 @@
 --- !ruby/object:Gem::Specification 
 name: poolparty
 version: !ruby/object:Gem::Version 
-  version: 0.2.32
+  version: 0.2.33
 platform: ruby
 authors: 
 - Ari Lerner
@@ -71,6 +71,7 @@ executables:
 - cloud-ssh
 - cloud-start
 - cloud-terminate
+- messenger-get-load
 - pool
 - pool-console
 - pool-describe
@@ -118,6 +119,7 @@ files:
 - bin/cloud-ssh
 - bin/cloud-start
 - bin/cloud-terminate
+- bin/messenger-get-load
 - bin/pool
 - bin/pool-console
 - bin/pool-describe
@@ -135,6 +137,7 @@ files:
 - bin/server-start-node
 - config/hoe.rb
 - config/requirements.rb
+- erl_crash.dump
 - examples/basic.rb
 - examples/plugin_without_plugin_directory.rb
 - examples/poolparty.rb

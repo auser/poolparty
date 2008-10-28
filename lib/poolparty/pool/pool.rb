@@ -15,7 +15,7 @@ module PoolParty
     end
         
     def reset!
-      $pools = $clouds = $plugins = nil
+      $pools = $clouds = $plugins = @describe_instances = nil
     end
 
     class Pool
