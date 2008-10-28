@@ -121,16 +121,24 @@ cp #{Base.remote_storage_path}/#{Base.default_specfile_name} #{Base.base_config_
         <<-EOE
 cd /var/poolparty
 wget http://rubyforge.org/frs/download.php/44731/logging-0.9.4.gem -O logging.gem
+wget http://rubyforge.org/frs/download.php/45581/ZenTest-3.11.0.gem -O zentest.gem
 wget http://rubyforge.org/frs/download.php/45600/ParseTree-3.0.1.gem -O parsetree.gem
 wget http://rubyforge.org/frs/download.php/45587/ruby2ruby-1.2.0.gem -O ruby2ruby.gem
 wget http://rubyforge.org/frs/download.php/45627/activesupport-2.1.2.gem -O activesupport.gem
 wget http://rubyforge.org/frs/download.php/18366/xml-simple-1.0.11.gem -O xml-simple.gem
+wget http://rubyforge.org/frs/download.php/45683/RubyInline-3.8.1.gem -O rubyinline.gem
+wget http://rubyforge.org/frs/download.php/42580/flexmock-0.8.3.gem -O flexmock.gem
+wget http://rubyforge.org/frs/download.php/45685/hoe-1.8.2.gem -O hoe.gem
+wget http://rubyforge.org/frs/download.php/18698/lockfile-1.4.3.gem -O lockfile.gem
+wget http://rubyforge.org/frs/download.php/45546/rubyforge-1.0.1.gem -O rubyforge.gem
+wget http://rubyforge.org/frs/download.php/43954/rake-0.8.3.gem -O rake.gem
+wget http://rubyforge.org/frs/download.php/45589/sexp_processor-3.0.0.gem -O sexp_processor.gem
 
-gem install -y --no-ri --no-rdoc logging.gem
-gem install -y --no-ri --no-rdoc parsetree.gem 
-gem install -y --no-ri --no-rdoc activesupport.gem 
-gem install -y --no-ri --no-rdoc ruby2ruby.gem 
-gem install -y --no-ri --no-rdoc xml-simple.gem
+#{
+  %w(rake lockfile rubyforge hoe zentest sexp_processor flexmock logging activesupport rubyinline parsetree ruby2ruby xml-simple).map do |dep|
+    "gem install -y --no-ri --no-rdoc #{dep}.gem\n"
+  end
+}
 
 gem install -y --no-ri --no-rdoc  --source http://gems.github.com grempe-amazon-ec2
 gem install -y --no-ri --no-rdoc  --source http://gems.github.com auser-poolparty
