@@ -57,25 +57,6 @@ module PoolParty
           command((self.respond_to?(:master) ? self : parent).master.puppet_runner_command)
         end
         # has_host(:name => "puppet", :ip => (self.respond_to?(:master) ? self : parent).master.ip)
-        custom_function <<-EOE
-define download_file(
-        $site="",
-        $cwd="",
-        $creates="",
-        $require="",
-        $user="") {                                                                                         
-
-    exec { $name:                                                                                                                     
-        command => "wget ${site}/${name}",                                                         
-        cwd => $cwd,
-        creates => "${cwd}/${name}",                                                              
-        require => $require,
-        user => $user,                                                                                                          
-    }
-
-}
-        
-        EOE
       end
       
     end  

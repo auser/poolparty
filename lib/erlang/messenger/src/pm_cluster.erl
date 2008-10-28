@@ -45,8 +45,8 @@ refresh_live_nodes() ->
 	io:format("nodes: ~p~n", [Nodes]),
 	lists:map(
 		fun(No) ->
-			io:format("pinging ~p~n", [list_to_atom(lists:append("pp_cluster@",No))]),
-			net_adm:ping(list_to_atom(lists:append("@pp_cluster", No)))
+			io:format("pinging ~p~n", [list_to_atom(lists:append([No,"@",No]))]),
+			net_adm:ping(list_to_atom(lists:append([No, "@", No])))
 		end,
 		Nodes),
 	ok.
