@@ -50,7 +50,7 @@ module PoolParty
         @cloud = cloud
         
         options(cloud.options) if cloud && cloud.respond_to?(:options)
-        set_vars_from_options(instance.options) unless instance.nil? || !instance.options.empty?
+        set_vars_from_options(instance.options) unless instance.nil? || !instance.options || !instance.options.empty?
         options(instance.options) if instance.respond_to?(:options)
         
         @os = os.to_s.downcase.to_sym
