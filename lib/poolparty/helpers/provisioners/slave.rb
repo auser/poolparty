@@ -19,7 +19,7 @@ module PoolParty
         <<-EOE
           if [ -z "$(grep -v '#' /etc/hosts | grep 'master')" ]; then echo "#{master_ip} puppet master" >> /etc/hosts; else echo "host already set"; fi
           cp #{Base.remote_storage_path}/namespaceauth.conf /etc/puppet/namespaceauth.conf
-          echo 'DAEMON_OPTS="-w 120 –fqdn #{@instance.name} –server master"' > /etc/default/puppet
+          echo 'DAEMON_OPTS="-w 120 --fqdn #{@instance.name} --server master"' > /etc/default/puppet
         EOE
       end
 
