@@ -102,6 +102,7 @@ describe "ProvisionerBase" do
         @cloud.stub!(:keypair_path).and_return "~/.ec2/fake_keypair"
         Provisioner::Master.stub!(:new).and_return @provisioner
         @cloud.stub!(:copy_file_to_storage_directory).and_return true
+        @provisioner.stub!(:process_clean_reconfigure_for!).and_return true
       end
       describe "provision_master" do
         it "should call write_install_file" do
