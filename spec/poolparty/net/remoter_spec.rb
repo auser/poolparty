@@ -45,7 +45,7 @@ describe "Remoter" do
       @ri.stub!(:ip).and_return "192.168.0.22"
     end
     it "should have rsync in the rsync_command" do
-      @tc.rsync_command.should == "rsync --delete -azP --exclude cache -e '#{@tc.ssh_string}'"
+      @tc.rsync_command.should == "rsync -azP --exclude cache -e '#{@tc.ssh_string}'"
     end
     it "should be able to rsync storage commands" do
       @tc.rsync_storage_files_to_command(@ri).should == "#{@tc.rsync_command} #{Base.storage_directory}/ 192.168.0.22:/var/poolparty"

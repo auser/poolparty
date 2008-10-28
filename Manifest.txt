@@ -19,6 +19,7 @@ bin/cloud-run
 bin/cloud-ssh
 bin/cloud-start
 bin/cloud-terminate
+bin/messenger-get-load
 bin/pool
 bin/pool-console
 bin/pool-describe
@@ -36,6 +37,7 @@ bin/server-start-master
 bin/server-start-node
 config/hoe.rb
 config/requirements.rb
+erl_crash.dump
 examples/basic.rb
 examples/plugin_without_plugin_directory.rb
 examples/poolparty.rb

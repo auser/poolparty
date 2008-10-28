@@ -154,8 +154,7 @@ module PoolParty
         when_no_pending_instances do
           wait "20.seconds"
           hide_output { Provisioner.provision_master(self, testing) }
-        end
-        
+        end        
       end
       def is_master_running?
         !list_of_running_instances.select {|a| a.name == "master"}.first.nil?
