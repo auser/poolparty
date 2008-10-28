@@ -12,12 +12,7 @@ load_pool(o.spec || Binary.get_existing_spec_location)
 
 include Remote
 
-begin
-  @cloud = cloud(o.cloudname.downcase.to_sym)
-rescue
-  puts "Cloud name required. Please specify it with -n name"
-  exit(0)
-end
+@cloud = extract_cloud_from_options(o).first
 
 with_cloud(@cloud, {:testing => @testing}) do
   puts header("Contracting cloud #{name}")

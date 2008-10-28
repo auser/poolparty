@@ -84,7 +84,14 @@ describe "Plugin" do
             site("frank")
           end
         end
-
+      end
+    end
+    describe "DSL" do
+      it "should have a cloud method from within the plugin" do
+        @plugin.respond_to?(:cloud).should == true
+      end
+      it "should get a hold of the containing cloud" do
+        @plugin.cloud.should == @c
       end
     end
   end
