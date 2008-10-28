@@ -12,7 +12,7 @@ include Remote
 
 @clouds = extract_cloud_from_options o
 
-@clouds.each do |name, cloud|
+@clouds.each do |cloud|
 
   with_cloud(cloud, {:verbose => o.verbose, :testing => o.testing, :provision_slave => (o.provision_slave || false)}) do
         

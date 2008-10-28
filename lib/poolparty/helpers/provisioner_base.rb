@@ -94,6 +94,7 @@ module PoolParty
         # We have to get the right generated data into the manifest
         cloud.reset!
         process_configure!(testing)
+        process_clean_reconfigure_for!(@instance)
       end
       def configure
         valid? ? configure_string : error
@@ -113,7 +114,7 @@ module PoolParty
           @cloud.rsync_storage_files_to(@instance)
 
           cmd = "cd #{Base.remote_storage_path} && chmod +x configure_#{name}.sh && /bin/sh configure_#{name}.sh && rm configure_#{name}.sh"
-          @cloud.run_command_on(cmd, @instance)
+          @cloud.run_command_on(cmd, @instance)          
         end
       end
       def process_clean_reconfigure_for!(instance, testing=false)
