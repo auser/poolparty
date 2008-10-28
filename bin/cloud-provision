@@ -21,9 +21,8 @@ include Remote
       Provisioner.reconfigure_master(self, force)
     else
       provisioning_in_progress
-      Provisioner.provision_master(self, testing)
+      verbose ? Provisioner.provision_master(self, testing) : hide_output { Provisioner.provision_master(self, testing) }
       provisioning_complete
-      Provisioner.reconfigure_master(self, force)
     end    
     
   end

@@ -86,15 +86,16 @@ module PoolParty
         unless testing
           puts "Logging on to #{@instance.ip} (#{@instance.name})" if verbose
           @cloud.rsync_storage_files_to(@instance)
-          # @cloud.prepare_reconfiguration if @instance.master?
+          @cloud.prepare_reconfiguration if @instance.master?
           
           cmd = "cd #{Base.remote_storage_path} && chmod +x install_#{name}.sh && /bin/sh install_#{name}.sh && rm install_#{name}.sh"
           verbose ? hide_output { @cloud.run_command_on(cmd, @instance) } : @cloud.run_command_on(cmd, @instance)
         end
         # We have to get the right generated data into the manifest
-        cloud.reset!
-        process_configure!(testing)
-        process_clean_reconfigure_for!(@instance)
+        # TODO: Clean this setup
+        @cloud.provisioning_complete
+        vputs "Cleaning master for final setup"
+        @cloud.process_configure!(testing)
       end
       def configure
         valid? ? configure_string : error
@@ -123,9 +124,9 @@ module PoolParty
       def process_reconfigure!(testing=false)
         @cloud.run_command_on("puppetd --test  2>&1 &", @instance) unless testing
       end
-      def setup_runner(cloud)
+      def setup_runner(cloud, force=false)
         cloud.prepare_to_configuration
-        cloud.build_and_store_new_config_file
+        cloud.build_and_store_new_config_file(force)
       end
       def valid?
         true
@@ -161,6 +162,7 @@ module PoolParty
           upgrade_system,
           fix_rubygems,
           install_puppet,
+          install_poolparty,
           custom_install_tasks
         ] << install_tasks
       end
@@ -264,6 +266,15 @@ aptitude autoclean
       
       def install_puppet
         "#{installer_for( puppet_packages )}"
+      end
+      
+      def install_poolparty
+        <<-EOE
+gem install -y --include-dependencies --no-ri --no-rdoc  --source http://gems.github.com ParseTree
+gem install -y --include-dependencies --no-ri --no-rdoc  --source http://gems.github.com RubyInline
+gem install -y --include-dependencies --no-ri --no-rdoc  --source http://gems.github.com Ruby2Ruby
+gem install -y --include-dependencies --no-ri --no-rdoc  --source http://gems.github.com auser-poolparty
+        EOE
       end
 
       def create_poolparty_manifest
