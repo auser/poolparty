@@ -111,7 +111,7 @@ module PoolParty
       # Configuration files
       def build_manifest
         @build_manifest ||= build_from_existing_file
-        if @build_manifest.nil? || !(@build_manifest =~ /generate/)
+        if @build_manifest.nil?
           reset_resources!
           add_poolparty_base_requirements
           
