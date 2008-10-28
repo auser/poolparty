@@ -23,6 +23,7 @@ include Remote
       provisioning_in_progress
       Provisioner.provision_master(self, testing)
       provisioning_complete
+      Provisioner.reconfigure_master(self, force)
     end    
     
   end
