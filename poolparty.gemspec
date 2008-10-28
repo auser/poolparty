@@ -1,7 +1,7 @@
 --- !ruby/object:Gem::Specification 
 name: poolparty
 version: !ruby/object:Gem::Version 
-  version: 0.2.29
+  version: 0.2.30
 platform: ruby
 authors: 
 - Ari Lerner
@@ -60,6 +60,7 @@ executables:
 - cloud-add-keypair
 - cloud-configure
 - cloud-contract
+- cloud-ensure-provisioning
 - cloud-expand
 - cloud-list
 - cloud-maintain
@@ -106,6 +107,7 @@ files:
 - bin/cloud-add-keypair
 - bin/cloud-configure
 - bin/cloud-contract
+- bin/cloud-ensure-provisioning
 - bin/cloud-expand
 - bin/cloud-list
 - bin/cloud-maintain

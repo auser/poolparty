@@ -8,6 +8,7 @@ bin/cloud
 bin/cloud-add-keypair
 bin/cloud-configure
 bin/cloud-contract
+bin/cloud-ensure-provisioning
 bin/cloud-expand
 bin/cloud-list
 bin/cloud-maintain
