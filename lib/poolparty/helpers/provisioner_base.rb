@@ -96,6 +96,7 @@ module PoolParty
         @cloud.provisioning_complete
         vputs "Cleaning master for final setup"
         @cloud.process_configure!(testing)
+        @cloud.process_clean_reconfigure_for!(@instance)
       end
       def configure
         valid? ? configure_string : error

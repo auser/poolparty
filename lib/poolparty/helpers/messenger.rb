@@ -9,12 +9,12 @@ module PoolParty
     end
     
     def self.append_dir
-      ::File.join( ::File.dirname(__FILE__), "..", "..", "erlang/messenger" )
+      ::File.expand_path(::File.join( ::File.dirname(__FILE__), "..", "..", "erlang/messenger" ))
     end
     
-    def messenger_send!(cmd="", testing=false)
+    def self.messenger_send!(cmd="", testing=false)
       cmd = Messenger.erl_command("client", "-rsh ssh -noshell -run pm_client #{cmd} -s erlang halt")
-      testing ? cmd : Kernel.system(cmd)
+      testing ? cmd : %x[#{cmd}]
     end
     
   end
