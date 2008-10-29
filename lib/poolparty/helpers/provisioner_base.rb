@@ -84,10 +84,12 @@ module PoolParty
         setup_runner(@cloud)
         
         unless testing
-          puts "Logging on to #{@instance.ip} (#{@instance.name})" if verbose
+          vputs "Logging on to #{@instance.ip} (#{@instance.name})"
           @cloud.rsync_storage_files_to(@instance)
-          @cloud.prepare_reconfiguration if @instance.master?
+          vputs "Preparing configuration on the master"
+          @cloud.prepare_reconfiguration
           
+          vputs "Logging in and running provisioning on slave"
           cmd = "cd #{Base.remote_storage_path} && chmod +x install_#{name}.sh && /bin/sh install_#{name}.sh && rm install_#{name}.sh"
           verbose ? hide_output { @cloud.run_command_on(cmd, @instance) } : @cloud.run_command_on(cmd, @instance)
         end
