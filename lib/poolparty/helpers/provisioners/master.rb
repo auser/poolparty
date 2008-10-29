@@ -145,9 +145,9 @@ gem install -y --no-ri --no-rdoc  --source http://gems.github.com auser-poolpart
 
       # ps aux | grep puppetmasterd | awk '{print $2}' | xargs kill
       # rm -rf /etc/puppet/ssl
-      # puppetmasterd --verbose
       def start_puppetmaster
         <<-EOS
+puppetmasterd --verbose
         EOS
       end
 
