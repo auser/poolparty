@@ -98,7 +98,6 @@ module PoolParty
         @cloud.provisioning_complete
         vputs "Cleaning master for final setup"
         @cloud.process_configure!(testing)
-        process_clean_reconfigure_for!(@instance)
       end
       def configure
         valid? ? configure_string : error
@@ -120,11 +119,17 @@ module PoolParty
 
           cmd = "cd #{Base.remote_storage_path} && chmod +x configure_#{name}.sh && /bin/sh configure_#{name}.sh && rm configure_#{name}.sh"
           @cloud.run_command_on(cmd, @instance)          
+          process_clean_reconfigure_for!(@instance)
         end
       end
       def process_clean_reconfigure_for!(instance, testing=false)
         vputs "Cleaning certs from master: #{instance.name}"
-        @cloud.run_command_on("puppetca --clean #{instance.name}.compute-1.internal; puppetca --clean #{instance.name}.ec2.internal", @cloud.master) unless testing
+        
+        command = <<-EOE
+puppetca --clean #{instance.name}.compute-1.internal; puppetca --clean #{instance.name}.ec2.internal
+find /etc/puppet/ssl -type f -exec rm {} \;
+        EOE
+        @cloud.run_command_on(command, @cloud.master) unless testing
       end
       def process_reconfigure!(testing=false)        
         @cloud.run_command_on("puppetd --test  2>&1 &", @instance) unless testing
