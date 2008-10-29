@@ -23,13 +23,13 @@ module PoolParty
           setup_configs,        
           setup_fileserver,
           setup_autosigning,
-          install_poolparty
+          install_poolparty,
+          start_puppetmaster
         ] << configure_tasks
       end
 
       def configure_tasks
         [
-          # start_puppetmaster,
           create_local_node,
           move_templates,
           create_poolparty_manifest,
@@ -130,7 +130,6 @@ wget http://rubyforge.org/frs/download.php/18698/lockfile-1.4.3.gem -O lockfile.
 wget http://rubyforge.org/frs/download.php/45546/rubyforge-1.0.1.gem -O rubyforge.gem
 wget http://rubyforge.org/frs/download.php/43954/rake-0.8.3.gem -O rake.gem
 wget http://rubyforge.org/frs/download.php/45589/sexp_processor-3.0.0.gem -O sexp_processor.gem
-wget http://rubyforge.org/frs/download.php/43666/amazon-ec2-0.3.1.gem -O amazon-ec2.gem
 
 #{
   %w(rake lockfile rubyforge hoe zentest sexp_processor flexmock logging activesupport RubyInline ParseTree ruby2ruby xml-simple amazon-ec2).map do |dep|
@@ -147,6 +146,7 @@ gem install -y --no-ri --no-rdoc  --source http://gems.github.com auser-poolpart
       # rm -rf /etc/puppet/ssl
       def start_puppetmaster
         <<-EOS
+/etc/init.d/puppetmaster start        
 puppetmasterd --verbose
         EOS
       end

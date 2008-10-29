@@ -77,7 +77,8 @@ module PoolParty
         # "if [ -z $(grep -v '#' /etc/hosts | grep '#{o.name}') ]; then echo \"$(curl http://169.254.169.254/latest/meta-data/public-ipv4) #{o.name}\" >> /etc/hosts; fi",
         "if [ -z \"$(grep -v '#' /etc/hosts | grep '#{o.name}')\" ]; then echo '127.0.0.1 #{o.name}' >> /etc/hosts; fi",
         "hostname #{o.name}",
-        "echo #{o.name} > /etc/hostname"
+        "echo #{o.name} > /etc/hostname",
+        "cd /var/poolparty && wget http://rubyforge.org/frs/download.php/43666/amazon-ec2-0.3.1.gem -O amazon-ec2.gem && gem install -y --no-ri --no-rdoc amazon-ec2.gem"
       ]
     end
     
