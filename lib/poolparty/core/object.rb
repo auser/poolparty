@@ -69,7 +69,7 @@ class Object
     # self.instance_eval &block if block
     meta_undef name
   end
-  def vputs(m="")
-    puts m if verbose
+  def vputs(m="", o=self)
+    puts m if o.verbose
   end
 end
