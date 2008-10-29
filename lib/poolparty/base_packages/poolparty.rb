@@ -14,7 +14,7 @@ module PoolParty
           g.has_gempackage(:name => "hoe", :download_url => "http://rubyforge.org/frs/download.php/45685/hoe-1.8.2.gem")
           g.has_gempackage(:name => "rake", :download_url => "http://rubyforge.org/frs/download.php/43954/rake-0.8.3.gem")
           g.has_gempackage(:name => "xml-simple") do |x|
-            x.has_gempackage(:name => "grempe-amazon-ec2", :source => "http://gems.github.com")
+            x.has_gempackage(:name => "grempe-amazon-ec2", :source => "http://rubyforge.org/frs/download.php/43666/amazon-ec2-0.3.1.gem")
           end
           
           has_gempackage(:name => "ParseTree", :download_url => "http://rubyforge.org/frs/download.php/45600/ParseTree-3.0.1.gem") do |pt|
