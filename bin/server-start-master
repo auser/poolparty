@@ -21,9 +21,9 @@ include Remote
     boot_file = "#{Messenger.append_dir}/pm_master_rel-0.1"
     command = Messenger.erl_command("master", "-boot #{boot_file} #{noshell ? "" : "-detached -heart"}")
     
-    puts "Running #{command}" if verbose
+    vputs "Running #{command}"
     
-    Kernel.system command
+    Kernel.system command unless testing
   end  
   
 end

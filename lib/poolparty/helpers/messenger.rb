@@ -6,9 +6,9 @@ module PoolParty
     
     # TODO: Fix cookie setting
     def self.erl_command(hostname, extra="")
-      command_line_opts = "-pa #{append_dir}/ebin -kernel inet_dist_listen_min 7000 inet_dist_listen_max 7050 -sname #{hostname} -setcookie poolparty"
+      command_line_opts = "-pa #{append_dir}/ebin -kernel inet_dist_listen_min 7000 inet_dist_listen_max 7050 -name pp@#{hostname} -setcookie poolparty"
       
-      "erl #{command_line_opts} #{extra} 2>&1 &"
+      "erl #{command_line_opts} #{extra} 2>&1"
     end
     
     def self.append_dir
@@ -16,8 +16,8 @@ module PoolParty
     end
     
     def self.messenger_send!(cmd="", testing=false)
-      cmd = Messenger.erl_command("client", "-rsh ssh -noshell -run pm_client #{cmd} -s erlang halt")
-      testing ? (puts(cmd); cmd) : %x[#{cmd}]
+      command = Messenger.erl_command("client", "-rsh ssh -noshell -run pm_client #{cmd} -s erlang halt")
+      testing ? command : %x[#{command}]
     end
     
   end
