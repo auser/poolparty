@@ -9,6 +9,6 @@ describe "Messenger" do
     Messenger.respond_to?(:messenger_send!).should == true
   end
   it "should call send_cmd on the client" do
-    Messenger.messenger_send!('send_cmd ["echo hi"]', true).should =~ /-run pm_client send_cmd/
+    hide_output {Messenger.messenger_send!('send_cmd ["echo hi"]', true).should =~ /-run pm_client send_cmd/}
   end
 end
