@@ -155,7 +155,8 @@ puppetmasterd --verbose
       # puppetd --listen --fqdn #{@instance.name}
       def restart_puppetd
         <<-EOS
-          . /etc/profile && #{@instance.puppet_runner_command}
+. /etc/profile && /usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master 2>&1
+. /etc/profile && /usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master 2>&1 & 
         EOS
       end
     end

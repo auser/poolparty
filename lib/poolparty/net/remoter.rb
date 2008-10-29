@@ -230,7 +230,6 @@ module PoolParty
       end
       
       # Prepare reconfiguration on the master
-      # TODO: Fix the killall
       # TODO: Curious about the puppet/ssl problems...
       # puppetd --test --no-daemonize 2>&1 &
       # rm -rf /etc/puppet/ssl/*; 
