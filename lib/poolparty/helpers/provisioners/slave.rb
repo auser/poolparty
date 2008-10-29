@@ -33,7 +33,7 @@ module PoolParty
       # puppetd --listen --fqdn #{@instance.name}
       def start_puppet
         <<-EOS
-          ps aux | grep "puppetmasterd" | awk '{print $2}' | xargs kill
+          /etc/init.d/puppetmaster stop
           rm -rf /etc/puppet/ssl*
           /usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master 2>&1
           rm -rf /etc/puppet/ssl*
