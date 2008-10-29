@@ -34,7 +34,7 @@
 %% Fires a ping every 10 seconds
 %%--------------------------------------------------------------------
 start_link() ->
-	utils:start_timer(10000, fun() -> net_adm:ping(master) end),
+	utils:start_timer(10000, fun() -> net_adm:ping(pp@master) end),
   gen_server:start_link({global, ?SERVER}, ?MODULE, [], []).
 
 %%====================================================================

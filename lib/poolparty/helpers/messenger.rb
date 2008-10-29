@@ -17,7 +17,7 @@ module PoolParty
     
     def self.messenger_send!(cmd="", testing=false)
       cmd = Messenger.erl_command("client", "-rsh ssh -noshell -run pm_client #{cmd} -s erlang halt")
-      testing ? cmd : %x[#{cmd}]
+      testing ? (puts(cmd); cmd) : %x[#{cmd}]
     end
     
   end
