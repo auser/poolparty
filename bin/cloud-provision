@@ -4,6 +4,7 @@ require "poolparty"
 require "poolpartycl"
 o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
   opts.on('-s', '--slave', 'Provision slave (default: false)')    { optioner.provision_slave true }
+  opts.on('-i num', '--id num', 'Instance num to provision')    { |i| optioner.num i }
 end
 
 load_pool(o.spec || Binary.get_existing_spec_location)
@@ -11,19 +12,24 @@ load_pool(o.spec || Binary.get_existing_spec_location)
 include Remote
 
 @clouds = extract_cloud_from_options o
+@instance = o.num.to_i || nil
 
 @clouds.each do |cloud|
 
-  with_cloud(cloud, {:verbose => o.verbose, :testing => o.testing, :provision_slave => (o.provision_slave || false)}) do
-        
-    if provision_slave
-      Provisioner.provision_slaves(self, testing)
-      Provisioner.reconfigure_master(self, force)
+  with_cloud(cloud, {:verbose => o.verbose, :testing => o.testing, :provision_slave => (o.provision_slave || false), :instance_num => @instance_num}) do
+    
+    if instance_num
+      @instance = get_instance_by_number( instance_num )
+      Provisioner.provision_slave(@instance, self, testing)
     else
-      provisioning_in_progress
-      verbose ? Provisioner.provision_master(self, testing) : hide_output { Provisioner.provision_master(self, testing) }
-      provisioning_complete
-    end    
+      if provision_slave
+        Provisioner.provision_slaves(self, testing)
+      else
+        provisioning_in_progress
+        verbose ? Provisioner.provision_master(self, testing) : hide_output { Provisioner.provision_master(self, testing) }
+        provisioning_complete
+      end
+    end
     
   end
 
