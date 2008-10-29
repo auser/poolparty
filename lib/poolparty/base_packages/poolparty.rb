@@ -2,23 +2,7 @@ module PoolParty
   class Base
     plugin :poolparty do
       
-      def enable        
-        # These are all requirements on the master
-        execute_if("$hostname", "master") do
-          has_cron({:name => "maintain script ", :command => ". /etc/profile && which cloud-maintain | /bin/sh", :minute => "*/3"})
-          # TODO: Update this so it only runs when needed
-          has_exec(:name => ". /etc/profile && server-start-master")
-          # has_exec(:name => "download-activesupport", :cwd => Base.remote_storage_path) do            
-          #   command "wget http://rubyforge.org/frs/download.php/45627/activesupport-2.1.2.gem -O activesupport.gem"
-          # end
-          # has_exec(:name => "download-ParseTree", :cwd => Base.remote_storage_path) do            
-          #   command "wget http://rubyforge.org/frs/download.php/45600/ParseTree-3.0.1.gem -O ParseTree.gem"
-          # end
-          # has_exec(:name => "download-RubyInline", :cwd => Base.remote_storage_path) do            
-          #   command "wget http://rubyforge.org/frs/download.php/45683/RubyInline-3.8.1.gem -O RubyInline.gem"
-          # end          
-        end
-        
+      def enable                
         has_package(:name => "erlang")
         has_package(:name => "erlang-dev")
         has_package(:name => "erlang-src")
@@ -55,6 +39,23 @@ module PoolParty
         has_cron(:name => "puppetd runner", :user => Base.user, :minute => [0,15,30,45]) do
           command((self.respond_to?(:master) ? self : parent).master.puppet_runner_command)
         end
+        
+        # These are all requirements on the master
+        execute_if("$hostname", "master") do
+          has_cron({:name => "maintain script ", :command => ". /etc/profile && which cloud-maintain | /bin/sh", :minute => "*/3"})
+          # TODO: Update this so it only runs when needed
+          has_exec(:name => ". /etc/profile && server-start-master", :requires => get_gempackage("auser-poolparty"))
+          # has_exec(:name => "download-activesupport", :cwd => Base.remote_storage_path) do            
+          #   command "wget http://rubyforge.org/frs/download.php/45627/activesupport-2.1.2.gem -O activesupport.gem"
+          # end
+          # has_exec(:name => "download-ParseTree", :cwd => Base.remote_storage_path) do            
+          #   command "wget http://rubyforge.org/frs/download.php/45600/ParseTree-3.0.1.gem -O ParseTree.gem"
+          # end
+          # has_exec(:name => "download-RubyInline", :cwd => Base.remote_storage_path) do            
+          #   command "wget http://rubyforge.org/frs/download.php/45683/RubyInline-3.8.1.gem -O RubyInline.gem"
+          # end          
+        end
+        
         # has_host(:name => "puppet", :ip => (self.respond_to?(:master) ? self : parent).master.ip)
       end
       
