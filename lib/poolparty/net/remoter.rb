@@ -13,6 +13,7 @@ module PoolParty
         end
       end
       def run_command_on_command(cmd="ls -l", remote_instance=nil)
+        puts "Running: #{cmd} #{remote_instance.name} = #{%x[hostname].chomp}"
         remote_instance.name == %x[hostname].chomp ? %x[#{cmd}] : "#{ssh_command(remote_instance)} '#{cmd}'"
       end
       def ssh_command(remote_instance)
@@ -234,7 +235,7 @@ module PoolParty
       # puppetd --test --no-daemonize 2>&1 &
       def prepare_reconfiguration
         unless @prepared
-          cmd = "killall ruby 2>&1 && rm -rf /etc/puppet/ssl/*; puppetmasterd --verbose 2>&1"
+          cmd = "/etc/init.d/puppetmaster start && rm -rf /etc/puppet/ssl/*; puppetmasterd --verbose 2>&1"
           run_command_on(cmd, master)
           @prepared = true
         end
