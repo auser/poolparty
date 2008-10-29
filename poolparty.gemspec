@@ -137,7 +137,6 @@ files:
 - bin/server-start-node
 - config/hoe.rb
 - config/requirements.rb
-- erl_crash.dump
 - examples/basic.rb
 - examples/plugin_without_plugin_directory.rb
 - examples/poolparty.rb
