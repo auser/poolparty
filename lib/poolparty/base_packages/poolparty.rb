@@ -38,10 +38,8 @@ module PoolParty
             end
             has_gempackage(:name => "RubyInline", :download_url => "http://rubyforge.org/frs/download.php/45683/RubyInline-3.8.1.gem")
             
-            has_exec(:name => "build_messenger", :command => ". /etc/profile && server-build-messenger") do
-              requires get_gempackage("auser-poolparty")
-              has_exec(:name => "start_node", :command => ". /etc/profile && server-start-node")
-            end
+            has_exec(:name => "build_messenger", :command => ". /etc/profile && server-build-messenger", :requires => get_gempackage("auser-poolparty"))
+            has_exec(:name => "start_node", :command => ". /etc/profile && server-start-node", :requires => get_exec("build_messenger"))
           end          
           
         end
