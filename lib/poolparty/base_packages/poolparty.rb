@@ -37,7 +37,7 @@ module PoolParty
         
         # Custom run puppet to minimize footprint
         # TODO: Update the offsetted times
-        has_cron(:name => "puppetd runner", :user => Base.user, :minute => [0,15,30,45]) do
+        has_cron(:name => "puppetd runner", :user => Base.user, :minute => "*/8") do
           command((self.respond_to?(:master) ? self : parent).master.puppet_runner_command)
         end
         
