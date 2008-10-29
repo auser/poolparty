@@ -14,11 +14,13 @@ load_pool(o.spec || Binary.get_existing_spec_location)
 include Remote
 
 @clouds = extract_cloud_from_options o
+@monitor = o.monitorname || "cpu"
 
 @clouds.each do |cl|
   
   with_cloud(cl, {:testing => o.testing, :monitorname => @monitor }) do
-    print PoolParty::Messenger.messenger_send!("get_load cpu", testing)
+    vputs "Getting #{monitorname} load through the messenger"
+    print PoolParty::Messenger.messenger_send!("get_load #{monitorname}", testing)
   end
   
 end
