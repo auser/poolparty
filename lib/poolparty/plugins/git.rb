@@ -14,13 +14,11 @@ module PoolParty
         exec({:name => "git-#{name}", :requires => package(:name => "git-core")}) do
           command parent.user ? "git clone #{parent.user}@#{parent.source} #{parent.path}" : "git clone #{parent.source} #{parent.to ? parent.to : ""}"
           cwd "#{parent.cwd if parent.cwd}"
-          creates "#{::File.join( (parent.cwd ? parent.cwd : cwd), ::File.basename(parent.source, ::File.extname(parent.source)) )}/.git"
-          
-          exec(:name => "update-#{name}", :requires => get_exec("#{name}")) do          
-            cwd ::File.dirname(parent.creates)
-            command "git pull"
-          end
-          
+          creates "#{::File.join( (parent.cwd ? parent.cwd : cwd), ::File.basename(parent.source, ::File.extname(parent.source)) )}/.git"          
+        end
+        exec(:name => "update-#{name}", :requires => get_exec("git-#{name}")) do          
+          cwd "#{parent.cwd}"
+          command "git pull"
         end
       end
       
