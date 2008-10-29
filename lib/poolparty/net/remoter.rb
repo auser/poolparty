@@ -184,6 +184,7 @@ module PoolParty
             @num_instances = nonmaster_nonterminated_instances.size
             last_instances = nonmaster_nonterminated_instances[(@num_instances - @num)..(@num_instances)]
             last_instances.each do |inst|
+              vputs "Provisioning #{inst.name} slave"
               PoolParty::Provisioner.provision_slave(inst, self)
               PoolParty::Provisioner.process_clean_reconfigure_for!(inst, self)
             end

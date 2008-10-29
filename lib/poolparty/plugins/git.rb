@@ -15,10 +15,12 @@ module PoolParty
           command parent.user ? "git clone #{parent.user}@#{parent.source} #{parent.path}" : "git clone #{parent.source} #{parent.to ? parent.to : ""}"
           cwd "#{parent.cwd if parent.cwd}"
           creates "#{::File.join( (parent.cwd ? parent.cwd : cwd), ::File.basename(parent.source, ::File.extname(parent.source)) )}/.git"
-        end
-        exec(:name => "update-#{name}", :requires => "#{name}") do          
-          cwd ::File.dirname(parent.creates)
-          command "git pull"
+          
+          exec(:name => "update-#{name}", :requires => get_exec("#{name}")) do          
+            cwd ::File.dirname(parent.creates)
+            command "git pull"
+          end
+          
         end
       end
       
