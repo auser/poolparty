@@ -20,7 +20,7 @@ slaves([]) ->
 
 slaves([Host|Hosts]) ->
 	Args = erl_system_args(),
-	NodeName = "pp_cluster",
+	NodeName = "pp",
 	{ok, Node} = slave:start_link(Host, NodeName, Args),
 	io:format("Erlang node started = [~p]~n", [Node]),
 	slaves(Hosts).
@@ -45,8 +45,8 @@ refresh_live_nodes() ->
 	io:format("nodes: ~p~n", [Nodes]),
 	lists:map(
 		fun(No) ->
-			io:format("pinging ~p~n", [list_to_atom(lists:append([No,"@",No]))]),
-			net_adm:ping(list_to_atom(lists:append([No, "@", No])))
+			io:format("pinging ~p~n", [list_to_atom(lists:append(["pp@",No]))]),
+			net_adm:ping(list_to_atom(lists:append(["pp@", No])))
 		end,
 		Nodes),
 	ok.

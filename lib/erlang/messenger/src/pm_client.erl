@@ -5,7 +5,7 @@
 % erl -pa ./ebin/ -run pm_client get_load cpu -run init stop -noshell
 
 % Connect to the master
-init_conn() -> net_adm:ping(master@master).
+init_conn() -> net_adm:ping(pp@master).
 % Send the command Cmd to the pm_master process
 send_cmd(Cmd) ->	
 	init_conn(),
