@@ -130,15 +130,16 @@ wget http://rubyforge.org/frs/download.php/18698/lockfile-1.4.3.gem -O lockfile.
 wget http://rubyforge.org/frs/download.php/45546/rubyforge-1.0.1.gem -O rubyforge.gem
 wget http://rubyforge.org/frs/download.php/43954/rake-0.8.3.gem -O rake.gem
 wget http://rubyforge.org/frs/download.php/45589/sexp_processor-3.0.0.gem -O sexp_processor.gem
+wget http://github.com/auser/poolparty/tree/master%2Fpkg%2Fpoolparty-latest.gem?raw=true -O poolparty-latest.gem
 
 #{
-  %w(rake lockfile rubyforge hoe zentest sexp_processor flexmock logging activesupport RubyInline ParseTree ruby2ruby xml-simple amazon-ec2).map do |dep|
+  %w(rake lockfile rubyforge hoe zentest sexp_processor flexmock logging activesupport RubyInline ParseTree ruby2ruby xml-simple poolparty-latest).map do |dep|
     "gem install -y --no-ri --no-rdoc #{dep}.gem\n"
   end
 }
 gem sources add http://gems.github.com
 gem install -y --no-ri --no-rdoc  --source http://gems.github.com grempe-amazon-ec2
-gem install -y --no-ri --no-rdoc  --source http://gems.github.com auser-poolparty
+# gem install -y --no-ri --no-rdoc  --source http://gems.github.com auser-poolparty
         EOE
       end
 
