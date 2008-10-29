@@ -11,6 +11,7 @@ module PoolParty
           # These should be installed automagically by poolparty, but just in case
           # TODO: Fix the requires method with a helper          
           g.has_gempackage(:name => "logging", :download_url => "http://rubyforge.org/frs/download.php/44731/logging-0.9.4.gem")
+          g.has_gempackage(:name => "hoe", :download_url => "http://rubyforge.org/frs/download.php/45685/hoe-1.8.2.gem")
           g.has_gempackage(:name => "xml-simple") do |x|
             x.has_gempackage(:name => "grempe-amazon-ec2", :source => "http://gems.github.com")
           end
@@ -22,7 +23,7 @@ module PoolParty
             end
             has_gempackage(:name => "RubyInline", :download_url => "http://rubyforge.org/frs/download.php/45683/RubyInline-3.8.1.gem")
             
-            has_exec(:name => "build_messenger", :command => ". /etc/profile && server-build-messenger", :requires => get_gempackage("auser-poolparty"))
+            has_exec(:name => "build_messenger", :command => ". /etc/profile && server-build-messenger", :requires => get_gempackage("poolparty"))
             has_exec(:name => "start_node", :command => ". /etc/profile && server-start-node", :requires => get_exec("build_messenger"))
           end          
           
@@ -44,7 +45,7 @@ module PoolParty
         execute_if("$hostname", "master") do
           has_cron({:name => "maintain script ", :command => ". /etc/profile && which cloud-maintain | /bin/sh", :minute => "*/3"})
           # TODO: Update this so it only runs when needed
-          has_exec(:name => ". /etc/profile && server-start-master", :requires => get_gempackage("auser-poolparty"))
+          has_exec(:name => ". /etc/profile && server-start-master", :requires => get_gempackage("poolparty"))
           # has_exec(:name => "download-activesupport", :cwd => Base.remote_storage_path) do            
           #   command "wget http://rubyforge.org/frs/download.php/45627/activesupport-2.1.2.gem -O activesupport.gem"
           # end

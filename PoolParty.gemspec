@@ -1,7 +1,7 @@
 --- !ruby/object:Gem::Specification 
 name: poolparty
 version: !ruby/object:Gem::Version 
-  version: 0.2.33
+  version: 0.2.34
 platform: ruby
 authors: 
 - Ari Lerner
