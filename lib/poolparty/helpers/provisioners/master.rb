@@ -126,7 +126,7 @@ wget http://rubyforge.org/frs/download.php/45600/ParseTree-3.0.1.gem -O parsetre
 wget http://rubyforge.org/frs/download.php/45587/ruby2ruby-1.2.0.gem -O ruby2ruby.gem
 wget http://rubyforge.org/frs/download.php/45627/activesupport-2.1.2.gem -O activesupport.gem
 wget http://rubyforge.org/frs/download.php/18366/xml-simple-1.0.11.gem -O xml-simple.gem
-wget http://rubyforge.org/frs/download.php/45683/RubyInline-3.8.1.gem -O rubyinline.gem
+wget http://rubyforge.org/frs/download.php/45683/RubyInline-3.8.1.gem -O RubyInline.gem
 wget http://rubyforge.org/frs/download.php/42580/flexmock-0.8.3.gem -O flexmock.gem
 wget http://rubyforge.org/frs/download.php/45685/hoe-1.8.2.gem -O hoe.gem
 wget http://rubyforge.org/frs/download.php/18698/lockfile-1.4.3.gem -O lockfile.gem
@@ -136,7 +136,7 @@ wget http://rubyforge.org/frs/download.php/45589/sexp_processor-3.0.0.gem -O sex
 wget http://rubyforge.org/frs/download.php/43666/amazon-ec2-0.3.1.gem -O amazon-ec2.gem
 
 #{
-  %w(rake lockfile rubyforge hoe zentest sexp_processor flexmock logging activesupport rubyinline parsetree ruby2ruby xml-simple amazon-ec2).map do |dep|
+  %w(rake lockfile rubyforge hoe zentest sexp_processor flexmock logging activesupport RubyInline parsetree ruby2ruby xml-simple amazon-ec2).map do |dep|
     "gem install -y --no-ri --no-rdoc #{dep}.gem\n"
   end
 }
