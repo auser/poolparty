@@ -5,6 +5,9 @@ require "poolpartycl"
 
 root_dir = ::File.expand_path( ::File.join(::File.dirname(__FILE__), "..", "lib/erlang/messenger") )
 
+o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
+end
+
 INCLUDE = "include"
 ERLC_FLAGS = "-I#{INCLUDE}"
 @version = "0.1"
@@ -16,7 +19,7 @@ cmd =<<-EOE
   erl -pa ./ebin -s pm_packager start -s init stop
 EOE
 
-vputs "** Building messenger **"
-vputs "Running command #{cmd.runnable}"
+vputs "** Building messenger **", o
+vputs "Running command #{cmd.runnable}", o
 
 out = %x[#{cmd.runnable}]
