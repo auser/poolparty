@@ -84,7 +84,7 @@ module PoolParty
         setup_runner(@cloud)
         
         unless testing
-          vputs "Logging on to #{@instance.ip} (#{@instance.name})"          
+          vputs "Logging on to #{@instance.ip} (#{@instance.name})"
           @cloud.rsync_storage_files_to(@instance)
           vputs "Preparing configuration on the master"
           process_clean_reconfigure_for!(@instance)
