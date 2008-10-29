@@ -117,27 +117,27 @@ cp #{Base.remote_storage_path}/#{Base.default_specfile_name} #{Base.base_config_
       def install_poolparty
         <<-EOE
 cd /var/poolparty
-wget http://rubyforge.org/frs/download.php/44731/logging-0.9.4.gem -O logging.gem
-wget http://rubyforge.org/frs/download.php/45581/ZenTest-3.11.0.gem -O zentest.gem
-wget http://rubyforge.org/frs/download.php/45600/ParseTree-3.0.1.gem -O ParseTree.gem
-wget http://rubyforge.org/frs/download.php/45587/ruby2ruby-1.2.0.gem -O ruby2ruby.gem
-wget http://rubyforge.org/frs/download.php/45627/activesupport-2.1.2.gem -O activesupport.gem
-wget http://rubyforge.org/frs/download.php/18366/xml-simple-1.0.11.gem -O xml-simple.gem
-wget http://rubyforge.org/frs/download.php/45683/RubyInline-3.8.1.gem -O RubyInline.gem
-wget http://rubyforge.org/frs/download.php/42580/flexmock-0.8.3.gem -O flexmock.gem
-wget http://rubyforge.org/frs/download.php/45685/hoe-1.8.2.gem -O hoe.gem
-wget http://rubyforge.org/frs/download.php/18698/lockfile-1.4.3.gem -O lockfile.gem
-wget http://rubyforge.org/frs/download.php/45546/rubyforge-1.0.1.gem -O rubyforge.gem
-wget http://rubyforge.org/frs/download.php/43954/rake-0.8.3.gem -O rake.gem
-wget http://rubyforge.org/frs/download.php/45589/sexp_processor-3.0.0.gem -O sexp_processor.gem
-wget http://github.com/auser/poolparty/tree/master%2Fpkg%2Fpoolparty-latest.gem?raw=true -O poolparty-latest.gem
+wget http://rubyforge.org/frs/download.php/44731/logging-0.9.4.gem -O logging.gem 2>&1
+wget http://rubyforge.org/frs/download.php/45581/ZenTest-3.11.0.gem -O zentest.gem 2>&1
+wget http://rubyforge.org/frs/download.php/45600/ParseTree-3.0.1.gem -O ParseTree.gem 2>&1
+wget http://rubyforge.org/frs/download.php/45587/ruby2ruby-1.2.0.gem -O ruby2ruby.gem 2>&1
+wget http://rubyforge.org/frs/download.php/45627/activesupport-2.1.2.gem -O activesupport.gem 2>&1
+wget http://rubyforge.org/frs/download.php/18366/xml-simple-1.0.11.gem -O xml-simple.gem 2>&1
+wget http://rubyforge.org/frs/download.php/45683/RubyInline-3.8.1.gem -O RubyInline.gem 2>&1
+wget http://rubyforge.org/frs/download.php/42580/flexmock-0.8.3.gem -O flexmock.gem 2>&1
+wget http://rubyforge.org/frs/download.php/45685/hoe-1.8.2.gem -O hoe.gem 2>&1
+wget http://rubyforge.org/frs/download.php/18698/lockfile-1.4.3.gem -O lockfile.gem 2>&1
+wget http://rubyforge.org/frs/download.php/45546/rubyforge-1.0.1.gem -O rubyforge.gem 2>&1
+wget http://rubyforge.org/frs/download.php/43954/rake-0.8.3.gem -O rake.gem 2>&1
+wget http://rubyforge.org/frs/download.php/45589/sexp_processor-3.0.0.gem -O sexp_processor.gem 2>&1
+wget http://github.com/auser/poolparty/tree/master%2Fpkg%2Fpoolparty-latest.gem?raw=true -O poolparty-latest.gem 2>&1
 
 #{
   %w(rake lockfile rubyforge hoe zentest sexp_processor flexmock logging activesupport RubyInline ParseTree ruby2ruby xml-simple poolparty-latest).map do |dep|
     "gem install -y --no-ri --no-rdoc #{dep}.gem\n"
   end
 }
-gem sources add http://gems.github.com
+
 gem install -y --no-ri --no-rdoc  --source http://gems.github.com grempe-amazon-ec2
 # gem install -y --no-ri --no-rdoc  --source http://gems.github.com auser-poolparty
         EOE
@@ -146,8 +146,7 @@ gem install -y --no-ri --no-rdoc  --source http://gems.github.com grempe-amazon-
       # ps aux | grep puppetmasterd | awk '{print $2}' | xargs kill
       # rm -rf /etc/puppet/ssl
       def start_puppetmaster
-        <<-EOS
-/etc/init.d/puppetmaster start        
+        <<-EOS        
 puppetmasterd --verbose
         EOS
       end
