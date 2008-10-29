@@ -33,9 +33,9 @@ module PoolParty
       # puppetd --listen --fqdn #{@instance.name}
       def start_puppet
         <<-EOS
-          /etc/init.d/puppetmaster stop
+          /etc/init.d/puppetmaster start
           /usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master 2>&1
-          rm -rf /etc/puppet/ssl/*
+          # rm -rf /etc/puppet/ssl/*
         EOS
       end
       

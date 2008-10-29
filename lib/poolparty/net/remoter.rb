@@ -232,9 +232,10 @@ module PoolParty
       # TODO: Fix the killall
       # TODO: Curious about the puppet/ssl problems...
       # puppetd --test --no-daemonize 2>&1 &
+      # rm -rf /etc/puppet/ssl/*; 
       def prepare_reconfiguration
         unless @prepared
-          cmd = "/etc/init.d/puppetmaster start && rm -rf /etc/puppet/ssl/*; puppetmasterd --verbose 2>&1"
+          cmd = "/etc/init.d/puppetmaster restart"
           run_command_on(cmd, master)
           @prepared = true
         end
