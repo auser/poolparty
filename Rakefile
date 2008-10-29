@@ -16,7 +16,7 @@ task :clean_pkg do |t|
   end
 end
 desc "Generate gemspec"
-task :gemspec  => [:spec, :clean_tmp, :"manifest:refresh", :local_deploy, :clean_pkg] do |t|
+task :gemspec  => [:spec, :clean_tmp, :"manifest:refresh", :local_deploy] do |t|
   res = %x[rake debug_gem]
   res = res.split("\n")[1..-1].join("\n")
   ::File.open("#{GEM_NAME.downcase}.gemspec", "w+") do |f|
@@ -25,7 +25,7 @@ task :gemspec  => [:spec, :clean_tmp, :"manifest:refresh", :local_deploy, :clean
 end
 
 desc "Generate gemspec for github"
-task :gh => [:gemspec] do
+task :gh => [:gemspec, :ghgem] do
   filepath = ::File.join(::File.dirname(__FILE__), "poolparty.gemspec")
   data = open(filepath).read
   spec = eval("$SAFE = 3\n#{data}")
@@ -33,4 +33,10 @@ task :gh => [:gemspec] do
   File.open(filepath, "w+") do |f|
     f << yml
   end
+end
+
+desc "Generate github gemspec and latest gem"
+task :ghgem => [:local_deploy] do
+  `mv #{::File.expand_path(::File.dirname(__FILE__))}/pkg/*.gem #{::File.expand_path(::File.dirname(__FILE__))}/pkg/poolparty-latest.gem`
+  `git add pkg/poolparty-latest.gem -f`
 end
