@@ -16,4 +16,7 @@ cmd =<<-EOE
   erl -pa ./ebin -s pm_packager start -s init stop
 EOE
 
+vputs "** Building messenger **"
+vputs "Running command #{cmd.runnable}"
+
 out = %x[#{cmd.runnable}]
