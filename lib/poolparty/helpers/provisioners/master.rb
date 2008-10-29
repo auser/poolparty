@@ -75,9 +75,6 @@ mkdir -p /etc/poolparty
       def setup_autosigning
         <<-EOS
 echo "*" > /etc/puppet/autosign.conf
-/etc/init.d/puppetmaster stop
-rm -rf /etc/puppet/ssl/*
-/etc/init.d/puppetmaster start
         EOS
       end
 
