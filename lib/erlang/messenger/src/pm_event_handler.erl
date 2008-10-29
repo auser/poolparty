@@ -1,21 +1,26 @@
-% Handles generic events
--module (pm_event_handler).
--export ([make/0, add_handler/1, event/1]).
+-module(pm_event_manager).
 
-% Make a new event handler
-make() ->
-	register(?MODULE, spawn(fun() -> handle_events(fun no_op/1) end )).
+%% API
+-export([start_link/0, add_handler/1, notify/1]).
+-define(SERVER, ?MODULE).
 
-add_handler(Fun) ->
-	whereis(?MODULE) ! {add, Fun}.
+%%--------------------------------------------------------------------
+%% Function: start_link() -> {ok,Pid} | {error,Error}
+%% Description: Creates an event manager.
+%%--------------------------------------------------------------------
+start_link() ->
+  gen_event:start_link({global, ?SERVER}).
 
-event(X) -> whereis(?MODULE) ! {event, X}.
+%%--------------------------------------------------------------------
+%% Function: add_handler(Module) -> ok | {'EXIT',Reason} | term()
+%% Description: Adds an event handler
+%%--------------------------------------------------------------------
+add_handler(Module) ->
+  gen_event:add_handler(?SERVER, Module, []).
 
-handle_events(Fun) ->
-	receive
-		{event, Any} ->
-			(catch Fun(Any)),
-			handle_events(Fun)
-	end.
-
-no_op(_) -> void.
+%%--------------------------------------------------------------------
+%% Function: notify(Event) -> ok | {error, Reason}
+%% Description: Sends the Event through the event manager.
+%%--------------------------------------------------------------------
+notify(Event) ->
+  gen_event:notify(?SERVER, Event).
