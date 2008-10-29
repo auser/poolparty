@@ -86,10 +86,11 @@ module PoolParty
         
         unless testing
           vputs "Logging on to #{@instance.ip} (#{@instance.name})"
+          process_clean_reconfigure_for!(@instance)
+          
           @cloud.rsync_storage_files_to(@instance)
           vputs "Preparing configuration on the master"
-          @cloud.prepare_reconfiguration
-          process_clean_reconfigure_for!(@instance)
+          @cloud.prepare_reconfiguration          
           
           vputs "Logging in and running provisioning on #{@instance.name}"
           cmd = "cd #{Base.remote_storage_path} && chmod +x install_#{name}.sh && /bin/sh install_#{name}.sh && rm install_#{name}.sh"
