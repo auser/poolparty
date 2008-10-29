@@ -1,3 +1,6 @@
+=begin rdoc
+  The connection to the messenger from poolparty, the client
+=end
 module PoolParty
   module Messenger
     

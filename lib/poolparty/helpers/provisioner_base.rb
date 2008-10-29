@@ -34,7 +34,6 @@ module PoolParty
     end
         
     def self.provision_slave(instance, cloud, testing=false)
-      process_clean_reconfigure_for!(instance, cloud, testing)
       Provisioner::Slave.new(instance, cloud).process_install!(testing)
     end
     
@@ -85,12 +84,10 @@ module PoolParty
         setup_runner(@cloud)
         
         unless testing
-          vputs "Logging on to #{@instance.ip} (#{@instance.name})"
-          process_clean_reconfigure_for!(@instance)
-          
+          vputs "Logging on to #{@instance.ip} (#{@instance.name})"          
           @cloud.rsync_storage_files_to(@instance)
           vputs "Preparing configuration on the master"
-          @cloud.prepare_reconfiguration          
+          process_clean_reconfigure_for!(@instance)
           
           vputs "Logging in and running provisioning on #{@instance.name}"
           cmd = "cd #{Base.remote_storage_path} && chmod +x install_#{name}.sh && /bin/sh install_#{name}.sh && rm install_#{name}.sh"
@@ -126,9 +123,10 @@ module PoolParty
         end
       end
       def process_clean_reconfigure_for!(instance, testing=false)
-        @cloud.run_command_on("puppetca --clean #{instance.name}.compute-1.internal", @cloud.master) unless testing
+        vputs "Cleaning certs from master: #{instance.name}"
+        @cloud.run_command_on("puppetca --clean #{instance.name}.compute-1.internal; puppetca --clean #{instance.name}.ec2.internal", @cloud.master) unless testing
       end
-      def process_reconfigure!(testing=false)
+      def process_reconfigure!(testing=false)        
         @cloud.run_command_on("puppetd --test  2>&1 &", @instance) unless testing
       end
       def setup_runner(cloud, force=false)
