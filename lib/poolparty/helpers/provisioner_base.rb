@@ -78,6 +78,7 @@ module PoolParty
       def name
         @instance.name
       end
+      # TODO: Clean up this method
       def process_install!(testing=false)
         error unless valid?
         write_install_file
@@ -88,6 +89,7 @@ module PoolParty
           @cloud.rsync_storage_files_to(@instance)
           vputs "Preparing configuration on the master"
           @cloud.prepare_reconfiguration
+          @cloud.process_clean_reconfigure_for!(@instance)
           
           vputs "Logging in and running provisioning on #{@instance.name}"
           cmd = "cd #{Base.remote_storage_path} && chmod +x install_#{name}.sh && /bin/sh install_#{name}.sh && rm install_#{name}.sh"
@@ -116,6 +118,7 @@ module PoolParty
         unless testing
           vputs "Logging on to #{@instance.ip}"
           @cloud.rsync_storage_files_to(@instance)
+          @cloud.process_clean_reconfigure_for!(@instance)
 
           cmd = "cd #{Base.remote_storage_path} && chmod +x configure_#{name}.sh && /bin/sh configure_#{name}.sh && rm configure_#{name}.sh"
           @cloud.run_command_on(cmd, @instance)          
