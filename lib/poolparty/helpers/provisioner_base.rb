@@ -89,7 +89,7 @@ module PoolParty
           @cloud.rsync_storage_files_to(@instance)
           vputs "Preparing configuration on the master"
           @cloud.prepare_reconfiguration
-          @cloud.process_clean_reconfigure_for!(@instance)
+          process_clean_reconfigure_for!(@instance)
           
           vputs "Logging in and running provisioning on #{@instance.name}"
           cmd = "cd #{Base.remote_storage_path} && chmod +x install_#{name}.sh && /bin/sh install_#{name}.sh && rm install_#{name}.sh"
@@ -100,7 +100,7 @@ module PoolParty
         @cloud.provisioning_complete
         vputs "Cleaning master for final setup"
         @cloud.process_configure!(testing)
-        @cloud.process_clean_reconfigure_for!(@instance)
+        process_clean_reconfigure_for!(@instance)
       end
       def configure
         valid? ? configure_string : error
@@ -118,7 +118,7 @@ module PoolParty
         unless testing
           vputs "Logging on to #{@instance.ip}"
           @cloud.rsync_storage_files_to(@instance)
-          @cloud.process_clean_reconfigure_for!(@instance)
+          process_clean_reconfigure_for!(@instance)
 
           cmd = "cd #{Base.remote_storage_path} && chmod +x configure_#{name}.sh && /bin/sh configure_#{name}.sh && rm configure_#{name}.sh"
           @cloud.run_command_on(cmd, @instance)          
