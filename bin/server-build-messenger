@@ -23,4 +23,4 @@ EOE
 vputs "** Building messenger **", o
 vputs "Running command #{cmd.runnable}", o
 
-out = %x[ exec #{cmd.runnable} ]
+out = %x[#{cmd.runnable}]
