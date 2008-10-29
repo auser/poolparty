@@ -23,7 +23,7 @@ include Remote
     
     vputs "Running #{command}"
     
-    Kernel.system command unless testing
+    Kernel.system "exec #{command}" unless testing
   end  
   
 end
