@@ -60,7 +60,9 @@ describe "Remoter" do
       @tc.stub!(:list_of_running_instances).and_return []
       @tc.stub!(:master).and_return ris.first
       @tc.stub!(:after_launched).and_return true
+      @tc.stub!(:verbose).and_return false
       Provisioner.stub!(:provision_master).and_return true
+      Provisioner.stub!(:reconfigure_master).and_return true
     end
     it "should have the method launch_master!" do
       @tc.respond_to?(:launch_and_configure_master!).should == true

@@ -158,7 +158,7 @@ module PoolParty
           wait "20.seconds"
           vputs "Provisioning master..."
           hide_output { Provisioner.provision_master(self, testing) }
-          PoolParty::Provisioner.reconfigure_master(self, force)
+          PoolParty::Provisioner.reconfigure_master(self, !testing)
           after_launched
         end        
       end
