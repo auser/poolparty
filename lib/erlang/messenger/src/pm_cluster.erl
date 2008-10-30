@@ -45,7 +45,10 @@ erl_system_args()->
 
 any_new_servers() ->
 	String = ". /etc/profile && server-list-active -c name",
-	Nodes = string:tokens(os:cmd(String), "\n\t"),
+	Nodes = lists:map(fun
+		(No) ->
+			erlang:list_to_atom(lists:append([No, "@", No]))
+	end,string:tokens(os:cmd(String), "\n\t")),
 	NewServers = Nodes -- get_live_nodes(),
 	NewServers.
 	

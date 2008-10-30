@@ -103,8 +103,6 @@ module PoolParty
         # We have to get the right generated data into the manifest
         # TODO: Clean this setup
         @cloud.provisioning_complete
-        vputs "Cleaning master for final setup"
-        @cloud.process_configure!(testing)
       end
       # Install callbacks
       # Before installation callback
