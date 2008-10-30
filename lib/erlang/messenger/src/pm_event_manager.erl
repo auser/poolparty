@@ -1,4 +1,5 @@
 -module (pm_event_manager).
+-include_lib("../include/defines.hrl").
 
 %% API
 -export([start_link/0, add_handler/1, notify/1]).
