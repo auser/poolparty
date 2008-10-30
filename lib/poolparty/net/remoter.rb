@@ -155,6 +155,7 @@ module PoolParty
         when_no_pending_instances do
           wait "20.seconds"
           hide_output { Provisioner.provision_master(self, testing) }
+          after_launched
         end        
       end
       def is_master_running?
@@ -186,11 +187,9 @@ module PoolParty
             last_instances = nonmaster_nonterminated_instances[(@num_instances - @num)..(@num_instances)]
             last_instances.each do |inst|
               vputs "Provisioning #{inst.name} slave"
-              PoolParty::Provisioner.provision_slave(inst, self)
-              PoolParty::Provisioner.process_clean_reconfigure_for!(inst, self)
+              PoolParty::Provisioner.provision_slave(inst, self)              
             end
-            PoolParty::Provisioner.reconfigure_master(self, force)
-            # prepare_reconfiguration
+            after_launched
           end
         end
       end
@@ -198,9 +197,23 @@ module PoolParty
       # If we can shutdown an instnace and the load allows us to contract
       # the cloud, then we should request_termination_of_non_master_instance
       def contract_cloud_if_necessary(force=false)
-        if can_shutdown_an_instance?          
+        if can_shutdown_an_instance?
+          before_shutdown
           request_termination_of_non_master_instance if should_contract_cloud?(force)
         end
+      end
+      
+      # Callbacks
+      
+      # After launch callback
+      # This is called after a new instance is launched
+      def after_launched(force=false)
+        PoolParty::Provisioner.reconfigure_master(self, force)
+      end
+      
+      # Before shutdown callback
+      # This is called before the cloud is contracted
+      def before_shutdown
       end
       
       # Rsync command to the instance

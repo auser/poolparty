@@ -8,6 +8,8 @@
 -module(pm_master).
 -behaviour(gen_server).
 
+-include_lib("../include/defines.hrl").
+
 %% API
 -export([start_link/0]).
 
@@ -15,7 +17,8 @@
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2,
          terminate/2, code_change/3]).
 -record(state, {}).
--define(SERVER, ?MODULE).
+
+-define (SERVER, global:whereis_name(?MODULE)).
 
 % Client function definitions
 -export ([get_load/1, reconfigure_cloud/0, fire_cmd/1]).
@@ -24,6 +27,29 @@
 %%====================================================================
 %% API
 %%====================================================================
+%%--------------------------------------------------------------------
+%%% Internal functions
+%%--------------------------------------------------------------------
+
+% pm_master:get_load("0", "cpu").
+get_load(Type) ->
+	{Loads, _} = pm_cluster:send_call(get_load_for_type, [Type]),
+	{utils:convert_responses_to_int_list(Loads)}.
+
+% Send reconfigure tasks to every node
+reconfigure_cloud() ->
+	pm_cluster:send_call(run_reconfig, []),
+	{ok}.
+
+% Fire the given command on all nodes
+fire_cmd(Cmd) ->
+	pm_cluster:send_call(fire_cmd, [Cmd]),
+	{ok}.
+
+% Shutdown
+shutdown_cloud() ->
+	pm_cluster:send_call(stop, []),
+	{ok}.
 %%--------------------------------------------------------------------
 %% Function: start_link() -> {ok,Pid} | ignore | {error,Error}
 %% Description: Starts the server
@@ -43,6 +69,7 @@ start_link() ->
 %% Description: Initiates the server
 %%--------------------------------------------------------------------
 init([]) ->
+	% pm_event_manager:add_handler(pm_master_event_handler),
   {ok, #state{}}.
 
 %%--------------------------------------------------------------------
@@ -92,27 +119,3 @@ terminate(_Reason, _State) ->
 %%--------------------------------------------------------------------
 code_change(_OldVsn, State, _Extra) ->
   {ok, State}.
-
-%%--------------------------------------------------------------------
-%%% Internal functions
-%%--------------------------------------------------------------------
-
-% pm_master:get_load("0", "cpu").
-get_load(Type) ->
-	{Loads, _} = pm_cluster:send_call(get_load_for_type, [Type]),
-	{utils:convert_responses_to_int_list(Loads)}.
-
-% Send reconfigure tasks to every node
-reconfigure_cloud() ->
-	pm_cluster:send_call(run_reconfig, []),
-	{ok}.
-
-% Fire the given command on all nodes
-fire_cmd(Cmd) ->
-	pm_cluster:send_call(fire_cmd, [Cmd]),
-	{ok}.
-
-% Shutdown
-shutdown_cloud() ->
-	pm_cluster:send_call(stop, []),
-	{ok}.

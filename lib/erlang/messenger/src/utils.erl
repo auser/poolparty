@@ -36,3 +36,22 @@ average_for_list(Num, L) ->
 		_ ->
 			Num / length(L)
 	end.
+
+
+
+% Provisioning utils
+distribute_modules_to(Modules, Nodes) ->
+	% transfer the modules to all the nodes
+	io:format("Sending ~p to ~p~n", [Modules, Nodes]),
+	lists:foreach(fun(Node) ->
+			transfer_modules(Node, Modules)
+	end, Nodes).
+
+% Transfer modules of code to this node
+transfer_modules(Node, Modules) ->
+	[transfer_module(Node, M) || M <- Modules].
+
+% Transfer one module to the Node
+transfer_module(Node, Module) ->
+	{_Module, Binary, Filename} = code:get_object_code(Module),
+	rpc:call(Node, code, load_binary, [Module, Filename, Binary]).

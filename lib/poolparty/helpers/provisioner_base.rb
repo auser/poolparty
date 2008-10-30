@@ -87,17 +87,27 @@ module PoolParty
           vputs "Logging on to #{@instance.ip} (#{@instance.name})"
           @cloud.rsync_storage_files_to(@instance)
           vputs "Preparing configuration on the master"
-          process_clean_reconfigure_for!(@instance)
+          before_install(@instance)
           
           vputs "Logging in and running provisioning on #{@instance.name}"
           cmd = "cd #{Base.remote_storage_path} && chmod +x install_#{name}.sh && /bin/sh install_#{name}.sh && rm install_#{name}.sh"
           verbose ? hide_output { @cloud.run_command_on(cmd, @instance) } : @cloud.run_command_on(cmd, @instance)
+          
+          after_install(@instance)
         end
         # We have to get the right generated data into the manifest
         # TODO: Clean this setup
         @cloud.provisioning_complete
         vputs "Cleaning master for final setup"
         @cloud.process_configure!(testing)
+      end
+      # Install callbacks
+      # Before installation callback
+      def before_install(instance)
+        process_clean_reconfigure_for!(instance)
+      end
+      def after_install(instance)
+        process_clean_reconfigure_for!(instance)
       end
       def configure
         valid? ? configure_string : error
@@ -134,9 +144,9 @@ find /etc/puppet/ssl -type f -exec rm {} \;
       def process_reconfigure!(testing=false)        
         @cloud.run_command_on("puppetd --test  2>&1 &", @instance) unless testing
       end
-      def setup_runner(cloud, force=false)
-        cloud.prepare_to_configuration
-        cloud.build_and_store_new_config_file(force)
+      def setup_runner(force=false)
+        @cloud.prepare_to_configuration
+        @cloud.build_and_store_new_config_file(force)
       end
       def valid?
         true
