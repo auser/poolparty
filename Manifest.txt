@@ -56,8 +56,9 @@ lib/erlang/messenger/ebin/node_app.beam
 lib/erlang/messenger/ebin/packager.app
 lib/erlang/messenger/ebin/pm_client.beam
 lib/erlang/messenger/ebin/pm_cluster.beam
-lib/erlang/messenger/ebin/pm_event_handler.beam
+lib/erlang/messenger/ebin/pm_event_manager.beam
 lib/erlang/messenger/ebin/pm_master.beam
+lib/erlang/messenger/ebin/pm_master_event_handler.beam
 lib/erlang/messenger/ebin/pm_master_rel-0.1.rel
 lib/erlang/messenger/ebin/pm_master_supervisor.beam
 lib/erlang/messenger/ebin/pm_node.beam
@@ -65,7 +66,7 @@ lib/erlang/messenger/ebin/pm_node_rel-0.1.rel
 lib/erlang/messenger/ebin/pm_node_supervisor.beam
 lib/erlang/messenger/ebin/pm_packager.beam
 lib/erlang/messenger/ebin/utils.beam
-lib/erlang/messenger/erl_crash.dump
+lib/erlang/messenger/include/defines.hrl
 lib/erlang/messenger/lib/eunit/AUTHORS
 lib/erlang/messenger/lib/eunit/CHANGELOG
 lib/erlang/messenger/lib/eunit/COPYING
@@ -129,8 +130,9 @@ lib/erlang/messenger/src/master_app.erl
 lib/erlang/messenger/src/node_app.erl
 lib/erlang/messenger/src/pm_client.erl
 lib/erlang/messenger/src/pm_cluster.erl
-lib/erlang/messenger/src/pm_event_handler.erl
+lib/erlang/messenger/src/pm_event_manager.erl
 lib/erlang/messenger/src/pm_master.erl
+lib/erlang/messenger/src/pm_master_event_handler.erl
 lib/erlang/messenger/src/pm_master_supervisor.erl
 lib/erlang/messenger/src/pm_node.erl
 lib/erlang/messenger/src/pm_node_supervisor.erl
