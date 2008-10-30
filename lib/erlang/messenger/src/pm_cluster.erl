@@ -4,9 +4,13 @@
 -include_lib("eunit/include/eunit.hrl").
 -endif.
 
+-include_lib("../include/defines.hrl").
+
 -export ([slaves/1, slaves/0]).
--export ([get_live_nodes/0,refresh_live_nodes/0]).
+-export ([get_live_nodes/0]).
 -export ([send_call/2, master/0]).
+
+-export ([any_new_servers/0]).
 
 send_call(Type, Args) ->
 	Nodes = get_live_nodes(),
@@ -39,17 +43,12 @@ erl_system_args()->
 		Shared, " +Mea r10b "
 	]).
 
-refresh_live_nodes() ->
+any_new_servers() ->
 	String = ". /etc/profile && server-list-active -c name",
 	Nodes = string:tokens(os:cmd(String), "\n\t"),
-	io:format("nodes: ~p~n", [Nodes]),
-	lists:map(
-		fun(No) ->
-			io:format("pinging ~p~n", [list_to_atom(lists:append(["pp@",No]))]),
-			net_adm:ping(list_to_atom(lists:append(["pp@", No])))
-		end,
-		Nodes),
-	ok.
+	NewServers = Nodes -- get_live_nodes(),
+	NewServers.
+	
 % Get the live nodes
 get_live_nodes() ->
 	nodes().
