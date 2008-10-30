@@ -156,7 +156,6 @@ puppetmasterd --verbose
       def restart_puppetd
         <<-EOS
 . /etc/profile && /usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master 2>&1
-. /etc/profile && /usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master 2>&1 & 
         EOS
       end
     end
