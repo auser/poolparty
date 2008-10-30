@@ -1,5 +1,6 @@
 -module (pm_client).
 -include_lib("../include/defines.hrl").
+-define (SERVER, global:whereis_name(?MODULE)).
 
 -export ([init_conn/0, send_cmd/1, reconfigure_cloud/0, get_load/1, get_live_nodes/0]).
 -export ([provision_orphan_running_servers/0]).
@@ -8,7 +9,7 @@
 % erl -pa ./ebin/ -run pm_client get_load cpu -run init stop -noshell
 
 % Connect to the master
-init_conn() -> net_adm:ping(?MASTER_NODE_NAME).
+init_conn() -> net_adm:ping(?MASTER_LOCATION).
 % Send the command Cmd to the pm_master process
 send_cmd(Cmd) ->	
 	init_conn(),

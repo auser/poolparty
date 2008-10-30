@@ -31,6 +31,7 @@
 %%% Internal functions
 %%--------------------------------------------------------------------
 
+
 % Get the load for the type sent...
 get_load_for_type(Type) ->
 	String = string:concat(". /etc/profile && server-get-load -m ",Type),
