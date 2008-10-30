@@ -10,18 +10,17 @@
 
 -include_lib("../include/defines.hrl").
 
+-record(state, {}).
+
 %% API
 -export([start_link/0]).
 
 %% gen_server callbacks
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2,
          terminate/2, code_change/3]).
--record(state, {}).
-
--define (SERVER, global:whereis_name(?MODULE)).
 
 % Client function definitions
--export ([get_load/1, reconfigure_cloud/0, fire_cmd/1]).
+-export ([get_load/1, reconfigure_cloud/0, fire_cmd/1, get_live_nodes/0]).
 -export ([shutdown_cloud/0]).
 
 %%====================================================================
@@ -46,6 +45,9 @@ fire_cmd(Cmd) ->
 	pm_cluster:send_call(fire_cmd, [Cmd]),
 	{ok}.
 
+get_live_nodes() ->
+	?MASTER_SERVER ! nodes().
+	
 % Shutdown
 shutdown_cloud() ->
 	pm_cluster:send_call(stop, []),
@@ -55,7 +57,7 @@ shutdown_cloud() ->
 %% Description: Starts the server
 %%--------------------------------------------------------------------
 start_link() ->
-  gen_server:start_link({global, ?SERVER}, ?MODULE, [], []).
+  gen_server:start_link({global, ?MASTER_SERVER}, ?MASTER_SERVER, [], []).
 
 %%====================================================================
 %% gen_server callbacks
@@ -81,6 +83,10 @@ init([]) ->
 %%                                      {stop, Reason, State}
 %% Description: Handling call messages
 %%--------------------------------------------------------------------
+handle_call({Type, Args}, _From, _State) ->
+	Nodes = get_live_nodes(),
+	rpc:multicall(Nodes, pm_node, Type, [Args]);
+	
 handle_call(_Request, _From, State) ->
   Reply = ok,
   {reply, Reply, State}.
