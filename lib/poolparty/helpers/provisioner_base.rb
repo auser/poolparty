@@ -94,7 +94,7 @@ module PoolParty
           
           vputs "Logging in and running provisioning on #{@instance.name}"
           cmd = "cd #{Base.remote_storage_path} && chmod +x install_#{name}.sh && /bin/sh install_#{name}.sh && rm install_#{name}.sh"
-          verbose ? hide_output { @cloud.run_command_on(cmd, @instance) } : @cloud.run_command_on(cmd, @instance)
+          verbose ? @cloud.run_command_on(cmd, @instance) : hide_output {@cloud.run_command_on(cmd, @instance)}
           
           process_clean_reconfigure_for!(@instance)
           after_install(@instance)
@@ -129,7 +129,7 @@ module PoolParty
           process_clean_reconfigure_for!(@instance)
 
           cmd = "cd #{Base.remote_storage_path} && chmod +x configure_#{name}.sh && /bin/sh configure_#{name}.sh && rm configure_#{name}.sh"
-          @cloud.run_command_on(cmd, @instance)          
+          verbose ? @cloud.run_command_on(cmd, @instance) : hide_output {@cloud.run_command_on(cmd, @instance)}
           process_clean_reconfigure_for!(@instance)
         end
       end
@@ -138,7 +138,7 @@ module PoolParty
         # puppetca --clean #{instance.name}.compute-1.internal; puppetca --clean #{instance.name}.ec2.internal
         # find /etc/puppet/ssl -type f -exec rm {} \;
         command = <<-EOE
-/usr/bin/puppetcleaner
+if [ -f '/usr/bin/puppetcleaner' ]; then /usr/bin/puppetcleaner; fi
         EOE
         @cloud.run_command_on(command, @cloud.master) unless testing
       end
@@ -180,6 +180,7 @@ module PoolParty
       # These are run on all the provisioners, master or slave
       def default_install_tasks
         [
+          "#!/usr/bin/env bash"
           upgrade_system,
           fix_rubygems,
           install_puppet,
@@ -271,13 +272,18 @@ module PoolParty
       def upgrade_system
         case @os
         when :ubuntu
-          "          
-touch /etc/apt/sources.list
-echo 'deb http://mirrors.kernel.org/ubuntu hardy main universe' >> /etc/apt/sources.list
-aptitude update -y <<heredoc
-Y
-heredoc
-aptitude autoclean
+          "
+if grep -q 'http://mirrors.kernel.org/ubuntu hardy main universe' /etc/apt/sources.list
+then 
+  echo 'Updated already'
+else
+  touch /etc/apt/sources.list
+  echo 'deb http://mirrors.kernel.org/ubuntu hardy main universe' >> /etc/apt/sources.list
+  aptitude update -y <<heredoc
+  Y
+  heredoc
+  aptitude autoclean
+fi
           "
         else
           "# No system upgrade needed"
