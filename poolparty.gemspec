@@ -239,6 +239,7 @@ files:
 - lib/erlang/messenger/src/pm_node_supervisor.erl
 - lib/erlang/messenger/src/pm_packager.erl
 - lib/erlang/messenger/src/utils.erl
+- lib/erlang/messenger/useful_snippets
 - lib/poolparty.rb
 - lib/poolparty/base_packages/haproxy.rb
 - lib/poolparty/base_packages/heartbeat.rb
