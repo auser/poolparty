@@ -23,6 +23,7 @@ load_pool(o.spec || Binary.get_existing_spec_location)
         puts("\tNot launching while in testing mode")
       else
         provisioning_in_progress
+        vputs "Launching and configuring the master"
         launch_and_configure_master!
         provisioning_complete
       end
