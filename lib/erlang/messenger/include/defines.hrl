@@ -4,6 +4,6 @@
 
 -define (MASTER, master).
 -define (MASTER_SERVER, global:whereis_name(pm_master)).
--define (MASTER_NODE_NAME, pp@master).
+-define (MASTER_NODE_NAME, master).
 
 -endif.
