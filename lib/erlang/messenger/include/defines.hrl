@@ -2,7 +2,7 @@
 
 -ifndef (MASTER).
 
--define (MASTER, master).
+-define (MASTER, master@master).
 -define (MASTER_SERVER, global:whereis_name(pm_master)).
 -define (MASTER_NODE_NAME, master).
 
