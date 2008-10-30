@@ -135,10 +135,12 @@ module PoolParty
       end
       def process_clean_reconfigure_for!(instance, testing=false)
         vputs "Cleaning certs from master: #{instance.name}"
-        
+        # puppetca --clean #{instance.name}.compute-1.internal; puppetca --clean #{instance.name}.ec2.internal
+        # find /etc/puppet/ssl -type f -exec rm {} \;
         command = <<-EOE
-puppetca --clean #{instance.name}.compute-1.internal; puppetca --clean #{instance.name}.ec2.internal
-find /etc/puppet/ssl -type f -exec rm {} \;
+/etc/init.d/puppetmaster stop
+rm -rf /etc/puppet/ssl
+/etc/init.d/puppetmaster start
         EOE
         @cloud.run_command_on(command, @cloud.master) unless testing
       end
