@@ -10,6 +10,7 @@ module PoolParty
     # Convenience method to clean 
     def self.provision_master(cloud, testing=false)
       Provisioner::Master.new(cloud).process_install!(testing)
+      process_clean_reconfigure_for!(cloud.master, cloud, testing)
     end
 
     def self.configure_master(cloud, testing=false)

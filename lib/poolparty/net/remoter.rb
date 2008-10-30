@@ -208,7 +208,7 @@ module PoolParty
       # After launch callback
       # This is called after a new instance is launched
       def after_launched(force=false)
-        PoolParty::Provisioner.reconfigure_master(self, force)
+        PoolParty::Provisioner.reconfigure_master(self, force)        
       end
       
       # Before shutdown callback
