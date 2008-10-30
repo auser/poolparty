@@ -140,9 +140,7 @@ module PoolParty
         # puppetca --clean #{instance.name}.compute-1.internal; puppetca --clean #{instance.name}.ec2.internal
         # find /etc/puppet/ssl -type f -exec rm {} \;
         command = <<-EOE
-ps aux | grep puppetmaster | awk '{print $2}' | xargs kill
-rm -rf /etc/puppet/ssl
-puppetmasterd --verbose
+puppetca --clean #{instance.name}.compute-1.internal; puppetca --clean #{instance.name}.ec2.internal
         EOE
         @cloud.run_command_on(command, @cloud.master) unless testing
       end
