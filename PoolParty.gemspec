@@ -1,7 +1,7 @@
 --- !ruby/object:Gem::Specification 
 name: poolparty
 version: !ruby/object:Gem::Version 
-  version: 0.2.34
+  version: 0.2.35
 platform: ruby
 authors: 
 - Ari Lerner
@@ -9,7 +9,7 @@ autorequire:
 bindir: bin
 cert_chain: []
 
-date: 2008-10-29 00:00:00 -07:00
+date: 2008-10-30 00:00:00 -07:00
 default_executable: 
 dependencies: 
 - !ruby/object:Gem::Dependency 
@@ -156,8 +156,9 @@ files:
 - lib/erlang/messenger/ebin/packager.app
 - lib/erlang/messenger/ebin/pm_client.beam
 - lib/erlang/messenger/ebin/pm_cluster.beam
-- lib/erlang/messenger/ebin/pm_event_handler.beam
+- lib/erlang/messenger/ebin/pm_event_manager.beam
 - lib/erlang/messenger/ebin/pm_master.beam
+- lib/erlang/messenger/ebin/pm_master_event_handler.beam
 - lib/erlang/messenger/ebin/pm_master_rel-0.1.rel
 - lib/erlang/messenger/ebin/pm_master_supervisor.beam
 - lib/erlang/messenger/ebin/pm_node.beam
@@ -165,7 +166,7 @@ files:
 - lib/erlang/messenger/ebin/pm_node_supervisor.beam
 - lib/erlang/messenger/ebin/pm_packager.beam
 - lib/erlang/messenger/ebin/utils.beam
-- lib/erlang/messenger/erl_crash.dump
+- lib/erlang/messenger/include/defines.hrl
 - lib/erlang/messenger/lib/eunit/AUTHORS
 - lib/erlang/messenger/lib/eunit/CHANGELOG
 - lib/erlang/messenger/lib/eunit/COPYING
@@ -229,8 +230,9 @@ files:
 - lib/erlang/messenger/src/node_app.erl
 - lib/erlang/messenger/src/pm_client.erl
 - lib/erlang/messenger/src/pm_cluster.erl
-- lib/erlang/messenger/src/pm_event_handler.erl
+- lib/erlang/messenger/src/pm_event_manager.erl
 - lib/erlang/messenger/src/pm_master.erl
+- lib/erlang/messenger/src/pm_master_event_handler.erl
 - lib/erlang/messenger/src/pm_master_supervisor.erl
 - lib/erlang/messenger/src/pm_node.erl
 - lib/erlang/messenger/src/pm_node_supervisor.erl
