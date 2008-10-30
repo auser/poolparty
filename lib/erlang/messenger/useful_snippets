@@ -1,0 +1,2 @@
+% Snippets
+% lists:map(fun(No) -> net_adm:ping(No) end, pm_cluster:any_new_servers()).
