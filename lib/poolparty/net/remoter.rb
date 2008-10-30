@@ -130,6 +130,7 @@ module PoolParty
         if list_of_pending_instances.size == 0
           block.call if block
         else
+          vputs "Waiting for there to be no pending instances..."
           wait "5.seconds"
           when_no_pending_instances(&block)
         end
@@ -150,11 +151,14 @@ module PoolParty
       # and if the master is not running AND we can start a new instance
       # Then wait for the master to launch
       def launch_and_configure_master!(testing=false)
+        vputs "Requesting to launch new instance"
         request_launch_new_instances(1) if list_of_pending_instances.size.zero? && can_start_a_new_instance? && !is_master_running?
         
         when_no_pending_instances do
           wait "20.seconds"
+          vputs "Provisioning master..."
           hide_output { Provisioner.provision_master(self, testing) }
+          PoolParty::Provisioner.reconfigure_master(self, force)
           after_launched
         end        
       end
@@ -189,6 +193,7 @@ module PoolParty
               vputs "Provisioning #{inst.name} slave"
               PoolParty::Provisioner.provision_slave(inst, self)              
             end
+            PoolParty::Provisioner.reconfigure_master(self, force)
             after_launched
           end
         end
@@ -207,8 +212,7 @@ module PoolParty
       
       # After launch callback
       # This is called after a new instance is launched
-      def after_launched(force=false)
-        PoolParty::Provisioner.reconfigure_master(self, force)        
+      def after_launched(force=false)        
       end
       
       # Before shutdown callback
