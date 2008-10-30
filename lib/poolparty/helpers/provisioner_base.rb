@@ -180,7 +180,7 @@ if [ -f '/usr/bin/puppetcleaner' ]; then /usr/bin/puppetcleaner; fi
       # These are run on all the provisioners, master or slave
       def default_install_tasks
         [
-          "#!/usr/bin/env bash",
+          "#!/usr/bin/env sh",
           upgrade_system,
           fix_rubygems,
           install_puppet,
