@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+. /etc/profile
+ps aux | grep puppetmaster | awk '{print $2}' | xargs kill
+rm -rf /etc/puppet/ssl
+/usr/bin/env puppetmasterd --verbose
