@@ -88,13 +88,17 @@ module PoolParty
           vputs "Logging on to #{@instance.ip} (#{@instance.name})"
           @cloud.rsync_storage_files_to(@instance)
           vputs "Preparing configuration on the master"
+          process_clean_reconfigure_for!(@instance)
+          
           before_install(@instance)
           
           vputs "Logging in and running provisioning on #{@instance.name}"
           cmd = "cd #{Base.remote_storage_path} && chmod +x install_#{name}.sh && /bin/sh install_#{name}.sh && rm install_#{name}.sh"
           verbose ? hide_output { @cloud.run_command_on(cmd, @instance) } : @cloud.run_command_on(cmd, @instance)
           
+          process_clean_reconfigure_for!(@instance)
           after_install(@instance)
+          
         end
         # We have to get the right generated data into the manifest
         # TODO: Clean this setup
@@ -104,11 +108,9 @@ module PoolParty
       end
       # Install callbacks
       # Before installation callback
-      def before_install(instance)
-        process_clean_reconfigure_for!(instance)
+      def before_install(instance)        
       end
-      def after_install(instance)
-        process_clean_reconfigure_for!(instance)
+      def after_install(instance)        
       end
       def configure
         valid? ? configure_string : error
@@ -138,9 +140,9 @@ module PoolParty
         # puppetca --clean #{instance.name}.compute-1.internal; puppetca --clean #{instance.name}.ec2.internal
         # find /etc/puppet/ssl -type f -exec rm {} \;
         command = <<-EOE
-/etc/init.d/puppetmaster stop
+ps aux | grep puppetmaster | awk '{print $2}' | xargs kill
 rm -rf /etc/puppet/ssl
-/etc/init.d/puppetmaster start
+puppetmasterd --verbose
         EOE
         @cloud.run_command_on(command, @cloud.master) unless testing
       end
