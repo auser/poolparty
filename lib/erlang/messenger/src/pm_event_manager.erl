@@ -1,4 +1,4 @@
--module(pm_event_manager).
+-module (pm_event_manager).
 
 %% API
 -export([start_link/0, add_handler/1, notify/1]).
@@ -9,7 +9,7 @@
 %% Description: Creates an event manager.
 %%--------------------------------------------------------------------
 start_link() ->
-  gen_event:start_link({global, ?SERVER}).
+  gen_event:start_link({local, ?SERVER}).
 
 %%--------------------------------------------------------------------
 %% Function: add_handler(Module) -> ok | {'EXIT',Reason} | term()

@@ -20,6 +20,12 @@ module PoolParty
       testing ? command : %x[#{command}]
     end
     
+    # Helper methods
+    def self.startup_remote_messenger(hostname, testing=false)
+      messenger_send!("")
+      testing ? command : %x[#{command}]
+    end
+    
   end
 end
 

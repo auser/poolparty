@@ -24,17 +24,15 @@ start_link(Args) ->
 
 init([]) ->
 	RestartStrategy = one_for_one,
-	MaxRestarts = 3, % 1000
-	MaxTimeBetRestarts = 30, % 3600
+	MaxRestarts = 1000,
+	MaxTimeBetRestarts = 3600,
+	TimeoutTime = 5000,
 
 	SupFlags = {RestartStrategy, MaxRestarts, MaxTimeBetRestarts},
+	
+	EventManager = {pm_event_manager,  {pm_event_manager, start_link, []}, permanent, TimeoutTime, worker, dynamic},
+	NodeServer = {pm_node1, {pm_node, start_link, []}, permanent, TimeoutTime, worker, [pm_node]},
 
-	LoadServers = [
-		{pm_node1,
-			{pm_node, start_link, []}, 
-			permanent, 5000, worker, 
-			[pm_node]
-		}
-	],
+	LoadServers = [EventManager, NodeServer],
 
 	{ok, {SupFlags, LoadServers}}.

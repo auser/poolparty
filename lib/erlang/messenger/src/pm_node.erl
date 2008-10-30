@@ -8,12 +8,15 @@
 -module(pm_node).
 -behaviour(gen_server).
 
+-include_lib("../include/defines.hrl").
+
 %% API
 -export([start_link/0]).
 
 %% gen_server callbacks
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2,
          terminate/2, code_change/3]).
+
 -record(state, {}).
 -define(SERVER, ?MODULE).
 
@@ -25,6 +28,27 @@
 %% API
 %%====================================================================
 %%--------------------------------------------------------------------
+%%% Internal functions
+%%--------------------------------------------------------------------
+
+% Get the load for the type sent...
+get_load_for_type(Type) ->
+	String = string:concat(". /etc/profile && server-get-load -m ",Type),
+	{os:cmd(String)}.
+
+% Rerun the configuration
+run_reconfig() ->	{os:cmd(". /etc/profile && server-rerun")}.
+
+% Allows us to fire off any command (allowed by poolparty on the check)
+fire_cmd(Cmd) ->
+	String = ". /etc/profile && server-fire-cmd \""++Cmd++"\"",
+	{os:cmd(String)}.
+
+% Stop the pm_node entirely
+stop() ->
+	gen_server:cast(?MODULE, stop).
+	
+%%--------------------------------------------------------------------
 %% Function: start_link() -> {ok,Pid} | ignore | {error,Error}
 %% Description: Starts the server
 %% 
@@ -34,8 +58,8 @@
 %% Fires a ping every 10 seconds
 %%--------------------------------------------------------------------
 start_link() ->
-	utils:start_timer(10000, fun() -> net_adm:ping(pp@master) end),
-  gen_server:start_link({global, ?SERVER}, ?MODULE, [], []).
+	utils:start_timer(10000, fun() -> net_adm:ping(?MASTER_NODE_NAME) end),
+  gen_server:start_link({local, ?SERVER}, ?MODULE, [], []).
 
 %%====================================================================
 %% gen_server callbacks
@@ -101,24 +125,3 @@ terminate(_Reason, _State) ->
 %%--------------------------------------------------------------------
 code_change(_OldVsn, State, _Extra) ->
   {ok, State}.
-
-%%--------------------------------------------------------------------
-%%% Internal functions
-%%--------------------------------------------------------------------
-
-% Get the load for the type sent...
-get_load_for_type(Type) ->
-	String = string:concat(". /etc/profile && server-get-load -m ",Type),
-	{os:cmd(String)}.
-
-% Rerun the configuration
-run_reconfig() ->	{os:cmd(". /etc/profile && server-rerun")}.
-
-% Allows us to fire off any command (allowed by poolparty on the check)
-fire_cmd(Cmd) ->
-	String = ". /etc/profile && server-fire-cmd \""++Cmd++"\"",
-	{os:cmd(String)}.
-
-% Stop the pm_node entirely
-stop() ->
-	gen_server:cast(?MODULE, stop).
