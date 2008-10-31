@@ -9,7 +9,7 @@ autorequire:
 bindir: bin
 cert_chain: []
 
-date: 2008-10-30 00:00:00 -07:00
+date: 2008-10-31 00:00:00 -07:00
 default_executable: 
 dependencies: 
 - !ruby/object:Gem::Dependency 
@@ -137,6 +137,7 @@ files:
 - bin/server-start-node
 - config/hoe.rb
 - config/requirements.rb
+- erl_crash.dump
 - examples/basic.rb
 - examples/plugin_without_plugin_directory.rb
 - examples/poolparty.rb
@@ -243,7 +244,6 @@ files:
 - lib/erlang/messenger/src/pm_packager.erl
 - lib/erlang/messenger/src/utils.erl
 - lib/erlang/messenger/useful_snippets
-- lib/erlang/messenger/utils.beam
 - lib/poolparty.rb
 - lib/poolparty/base_packages/haproxy.rb
 - lib/poolparty/base_packages/heartbeat.rb
@@ -276,7 +276,6 @@ files:
 - lib/poolparty/helpers/binary.rb
 - lib/poolparty/helpers/console.rb
 - lib/poolparty/helpers/display.rb
-- lib/poolparty/helpers/messenger.rb
 - lib/poolparty/helpers/optioner.rb
 - lib/poolparty/helpers/provisioner_base.rb
 - lib/poolparty/helpers/provisioners/master.rb
@@ -294,6 +293,7 @@ files:
 - lib/poolparty/monitors/base_monitor.rb
 - lib/poolparty/monitors/monitors/cpu_monitor.rb
 - lib/poolparty/monitors/monitors/memory_monitor.rb
+- lib/poolparty/net/messenger.rb
 - lib/poolparty/net/remote.rb
 - lib/poolparty/net/remote_bases/ec2.rb
 - lib/poolparty/net/remote_instance.rb
@@ -325,12 +325,6 @@ files:
 - lib/poolparty/pool/resources/symlink.rb
 - lib/poolparty/pool/resources/variable.rb
 - lib/poolparty/pool/script.rb
-- lib/poolparty/pool/tmp/.ppkeys
-- lib/poolparty/pool/tmp/happydayz
-- lib/poolparty/pool/tmp/install_master.sh
-- lib/poolparty/pool/tmp/pool.spec
-- lib/poolparty/pool/tmp/poolparty.pp
-- lib/poolparty/pool/tmp/tc-instances.list
 - lib/poolparty/templates/authkeys
 - lib/poolparty/templates/cib.xml
 - lib/poolparty/templates/gem
@@ -362,7 +356,6 @@ files:
 - spec/poolparty/dependency_resolutions/base_spec.rb
 - spec/poolparty/helpers/binary_spec.rb
 - spec/poolparty/helpers/display_spec.rb
-- spec/poolparty/helpers/messenger_spec.rb
 - spec/poolparty/helpers/optioner_spec.rb
 - spec/poolparty/helpers/provisioner_base_spec.rb
 - spec/poolparty/helpers/provisioners/master_spec.rb
@@ -374,6 +367,7 @@ files:
 - spec/poolparty/modules/s3_string_spec.rb
 - spec/poolparty/monitors/base_monitor_spec.rb
 - spec/poolparty/monitors/monitors/cpu_monitor_spec.rb
+- spec/poolparty/net/messenger_spec.rb
 - spec/poolparty/net/remote_bases/ec2_spec.rb
 - spec/poolparty/net/remote_instance_spec.rb
 - spec/poolparty/net/remote_spec.rb
