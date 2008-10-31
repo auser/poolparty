@@ -2,5 +2,7 @@
 
 . /etc/profile
 ps aux | grep puppetmaster | awk '{print $2}' | xargs kill
+/etc/init.d/puppetmaster stop
 rm -rf /etc/puppet/ssl
 puppetmasterd --verbose
+/etc/init.d/puppetmaster start

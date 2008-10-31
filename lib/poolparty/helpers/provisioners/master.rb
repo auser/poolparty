@@ -148,15 +148,15 @@ wget http://rubyforge.org/frs/download.php/43666/amazon-ec2-0.3.1.gem -O amazon-
       # rm -rf /etc/puppet/ssl
       def start_puppetmaster
         <<-EOS        
-. /etc/profile && puppetcleaner        
-puppetmasterd --verbose
+. /etc/profile && puppetcleaner 2>&1 > /dev/null
+puppetmasterd --verbose  2>&1 > /dev/null
         EOS
       end
 
       # puppetd --listen --fqdn #{@instance.name}
       def restart_puppetd
         <<-EOS
-. /etc/profile && /usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master 2>&1
+. /etc/profile && /usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master  2>&1 > /dev/null
         EOS
       end
     end
