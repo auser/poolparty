@@ -275,6 +275,7 @@ if [ -f '/usr/bin/puppetcleaner' ]; then /usr/bin/puppetcleaner; fi
           "
 if grep -q 'http://mirrors.kernel.org/ubuntu hardy main universe' /etc/apt/sources.list
 then 
+echo 'Updated already'
 else
 touch /etc/apt/sources.list
 echo 'deb http://mirrors.kernel.org/ubuntu hardy main universe' >> /etc/apt/sources.list
