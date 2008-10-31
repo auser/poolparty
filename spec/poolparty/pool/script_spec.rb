@@ -47,6 +47,10 @@ describe "Script" do
           pool :appdotcom do
             keypair "snoodle"
             ami "ami-123456"
+            
+            expand_when "cpu > 90", "memory > 80"
+            contract_when "cpu < 10", "memory < 10"
+            
             cloud :app do
               has_file :name => "/etc/httpd/httpd.conf"
             end
@@ -58,6 +62,9 @@ describe "Script" do
         end
         it "should save the ami" do
           @saved.should =~ /ami "ami-123456"/
+        end
+        it "should save the expansions" do
+          @saved.should =~ /expand_when \"cpu > 90\", \"memory > 80\"/
         end
       end
     end

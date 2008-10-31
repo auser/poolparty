@@ -247,6 +247,7 @@ describe "Remote" do
           @tc.stub!(:request_termination_of_non_master_instance).and_return true
           @tc.stub!(:can_shutdown_an_instance?).and_return true
           @tc.stub!(:wait).and_return true
+          @tc.stub!(:valid_rules?).and_return false
         end
         it "should receive can_shutdown_an_instance?" do
           @tc.should_receive(:can_shutdown_an_instance?).once
