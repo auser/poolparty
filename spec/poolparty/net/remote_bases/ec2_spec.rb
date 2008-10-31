@@ -20,6 +20,7 @@ class TestClass
 end
 describe "ec2 remote base" do
   before(:each) do
+    setup
     @tr = TestClass.new
     stub_remoter_for(@tr)
     @tr.stub!(:get_instances_description).and_return response_list_of_instances

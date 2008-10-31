@@ -3,9 +3,6 @@
 =end
 require "enumerator"
 class Array
-  def to_s
-    "#{self.join('", "')}"
-  end
   def to_os
     map {|a| a.to_os }
   end
@@ -26,5 +23,8 @@ class Array
   end
   def to_option_string(ns=[])
     "[ #{map {|e| e.to_option_string }.join(", ")} ]"
+  end
+  def respec_string(ns=[])
+    "'#{map {|e| e.to_option_string }.join("', '")}'"
   end
 end

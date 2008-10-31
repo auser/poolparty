@@ -7,34 +7,23 @@ module PoolParty
   module Monitors    
     
     module ClassMethods
-      def expansions(arr=[])
-        @expansions ||= rules(:expansions, arr)
-      end
-
-      def contractions(arr=[])
-        @contractions ||= rules(:contractions, arr)
-      end
-
-      def expand_when(*args)
-        expansions(args)
-      end
-      
-      def contract_when(*args)
-        contractions(args)
-      end
     end
     
     module InstanceMethods
-      def expansions;self.class.expansions;end
-      def contractions;self.class.contractions;end
+      def expand_when(*arr)
+        @expand_when ||= ((arr && arr.empty?) ? options[:expand_when] : configure(:expand_when => self.class.send(:rules, :expand_when, arr)))
+      end
+      
+      def contract_when(*arr)
+        @contract_when ||= ((arr && arr.empty?) ? options[:contract_when] : configure(:contract_when => self.class.send(:rules, :contract_when, arr)))
+      end
     end
     
     def self.register_monitor(*args)
       args.each do |arg|
         (available_monitors << "#{arg}".downcase.to_sym)
         
-        ClassMethods.module_eval "def #{arg}; PoolParty::Messenger.messenger_send!(\"get_load #{arg}\"); end"
-        InstanceMethods.module_eval "def #{arg}; self.class.#{arg}; end"
+        InstanceMethods.module_eval "def #{arg}; PoolParty::Messenger.messenger_send!(\"get_load #{arg}\"); end"
       end
     end
 

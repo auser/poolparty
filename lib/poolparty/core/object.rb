@@ -44,6 +44,16 @@ class Object
       "#{self}"
     end
   end
+  def respec_string
+    case self.class
+    when String
+      self.to_option_string
+    when Array
+      self.map {|a| "#{a.respec_string}" }.join(" ")
+    else
+      "'#{self}'"
+    end
+  end
   def block_instance_eval(*args, &block)
     return instance_eval(*args,&block) unless block_given? && !block.arity.zero?
     old_method = (self.class.instance_method(:__) rescue nil)

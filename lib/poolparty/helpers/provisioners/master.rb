@@ -132,7 +132,7 @@ wget http://rubyforge.org/frs/download.php/43954/rake-0.8.3.gem -O rake.gem 2>&1
 wget http://rubyforge.org/frs/download.php/45589/sexp_processor-3.0.0.gem -O sexp_processor.gem 2>&1
 wget http://github.com/auser/poolparty/tree/master%2Fpkg%2Fpoolparty-latest.gem?raw=true -O poolparty-latest.gem 2>&1
 wget http://rubyforge.org/frs/download.php/43666/amazon-ec2-0.3.1.gem -O amazon-ec2.gem 2>&1
-wget http://rubyforge.org/frs/download.php/46062/aska-0.0.6.gem -O aska.gem 2>&1
+wget http://rubyforge.org/frs/download.php/46085/aska-0.0.8.gem -O aska.gem 2>&1
 
 #{
   %w(rake lockfile rubyforge hoe zentest sexp_processor flexmock logging activesupport 
