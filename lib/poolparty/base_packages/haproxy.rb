@@ -17,7 +17,7 @@ module PoolParty
           end
 
           # Service is required
-          has_service(:name => "haproxy")
+          has_service(:name => "haproxy", :ensures => "running")
 
           # Tempalte variables
           variable(:name => "name_haproxy", :value => "#{cloud.name}")
