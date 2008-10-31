@@ -137,8 +137,8 @@ wget http://rubyforge.org/frs/download.php/46062/aska-0.0.6.gem -O aska.gem 2>&1
 #{
   %w(rake lockfile rubyforge hoe zentest sexp_processor flexmock logging activesupport 
       RubyInline ParseTree ruby2ruby xml-simple aska poolparty-latest amazon-ec2).map do |dep|
-    "gem install -y --no-ri --no-rdoc #{dep}.gem\n"
-  end
+    "gem install -y --no-ri --no-rdoc #{dep}.gem"
+  end.join("\n")
 }
 
 # gem install -y --no-ri --no-rdoc  --source http://gems.github.com grempe-amazon-ec2
