@@ -126,8 +126,7 @@ module PoolParty
       # A convenience method for waiting until there are no more
       # pending instances and then running the block
       def when_no_pending_instances(&block)
-        reset!
-        vputs "Waiting for there to be no pending instances..."
+        reset!        
         if list_of_pending_instances.size == 0
           block.call if block
         else
@@ -155,8 +154,10 @@ module PoolParty
         vputs "Requesting to launch new instance"
         request_launch_new_instances(1) if list_of_pending_instances.size.zero? && can_start_a_new_instance? && !is_master_running?
         
+        vputs "Waiting for there to be no pending instances..."
         when_no_pending_instances do
           wait "20.seconds"
+          vputs ""
           vputs "Provisioning master..."
           hide_output { Provisioner.provision_master(self, testing) }
           PoolParty::Provisioner.reconfigure_master(self, !testing)
