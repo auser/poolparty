@@ -11,12 +11,12 @@ load_pool(o.spec || Binary.get_existing_spec_location)
 
 include Remote
 
-@clouds = o.cloudname ? [cloud(o.cloudname.downcase.to_sym)] : clouds
+@clouds = extract_cloud_from_options o
 
-@clouds.each do |name, cloud|
+@clouds.each do |cl|
   
-  with_cloud(cloud, {:testing => o.testing}) do
-    cmd = master.puppet_runner_command
+  with_cloud(cl, {:testing => o.testing}) do
+    cmd = PoolParty::Remote::RemoteInstance.puppet_runner_command
     %x[#{cmd}] unless testing
     puts cmd
   end  

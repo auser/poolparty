@@ -12,8 +12,10 @@
 
 -export ([any_new_servers/0]).
 
+% gen_server:call(?MASTER_SERVER, {Type, Args}).
 send_call(Type, Args) ->
-	gen_server:call(?MASTER_SERVER, {Type, Args}).
+	Nodes = get_live_nodes(),
+	rpc:multicall(Nodes, pm_node, Type, [Args]).
 
 master() ->
 	{erlang:node()}.

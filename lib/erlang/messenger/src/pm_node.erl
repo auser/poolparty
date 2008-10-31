@@ -22,7 +22,8 @@
 
 % Client function definitions
 -export ([stop/0]).
--export ([get_load_for_type/1, fire_cmd/1, run_reconfig/0]).
+-export ([get_load_for_type/1, run_cmd/1, fire_cmd/1]).
+-export ([run_reconfig/0]).
 
 %%====================================================================
 %% API
@@ -38,12 +39,12 @@ get_load_for_type(Type) ->
 	{os:cmd(String)}.
 
 % Rerun the configuration
-run_reconfig() ->	{os:cmd(". /etc/profile && server-rerun")}.
+run_reconfig() ->
+	gen_server:cast(?MODULE, reconfig).
 
 % Allows us to fire off any command (allowed by poolparty on the check)
-fire_cmd(Cmd) ->
-	String = ". /etc/profile && server-fire-cmd \""++Cmd++"\"",
-	{os:cmd(String)}.
+run_cmd(Cmd) -> gen_server:call(?MODULE, {run_command, Cmd}).
+fire_cmd(Cmd) -> gen_server:cast(?MODULE, {fire_command, Cmd}).
 
 % Stop the pm_node entirely
 stop() ->
@@ -59,8 +60,9 @@ stop() ->
 %% Fires a ping every 10 seconds
 %%--------------------------------------------------------------------
 start_link() ->
-	utils:start_timer(10000, fun() -> net_adm:ping(?MASTER_NODE_NAME) end),
-  gen_server:start_link({local, ?SERVER}, ?MODULE, [], []).
+	io:format("Pinging master at ~p~n", [?MASTER_LOCATION]),
+	utils:start_timer(10000, fun() -> net_adm:ping(?MASTER_LOCATION) end),
+  gen_server:start_link({local, ?MODULE}, ?MODULE, [], []).
 
 %%====================================================================
 %% gen_server callbacks
@@ -86,6 +88,9 @@ init([]) ->
 %%                                      {stop, Reason, State}
 %% Description: Handling call messages
 %%--------------------------------------------------------------------
+handle_call({run_command, Cmd}, _From, State) ->
+	Reply = os:cmd(". /etc/profile && server-fire-cmd \""++Cmd++"\""),
+	{reply, Reply, State};
 handle_call(_Request, _From, State) ->
   Reply = ok,
   {reply, Reply, State}.
@@ -96,8 +101,19 @@ handle_call(_Request, _From, State) ->
 %%                                      {stop, Reason, State}
 %% Description: Handling cast messages
 %%--------------------------------------------------------------------
-handle_cast(_Msg, State) ->
-  {noreply, State}.
+handle_cast({Msg, Cmd}, State) ->
+	case Msg of
+		reconfig ->
+			io:format("Running reconfig~n"),
+			os:cmd(". /etc/profile && server-rerun"),
+			{ok};
+		fire_command ->
+			io:format("Running command: ~p~n", [Cmd]),
+			os:cmd(". /etc/profile && server-fire-cmd \""++Cmd++"\" 2>&1 > /dev/null"),
+			{ok};
+		_ ->
+			{ok, State}
+	end.
 
 %%--------------------------------------------------------------------
 %% Function: handle_info(Info, State) -> {noreply, State} |
