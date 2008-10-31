@@ -26,16 +26,15 @@ module PoolParty
       def setup_configs
         <<-EOS          
           echo "#{open(File.join(template_directory, "puppet.conf")).read}" > /etc/puppet/puppet.conf
+          rm -rf /etc/puppet/ssl
         EOS
       end
 
       # /etc/init.d/puppetmasterd stop
       # puppetd --listen --fqdn #{@instance.name}
       def start_puppet
-        <<-EOS
-          /etc/init.d/puppetmaster start
-          /usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master 2>&1
-          # rm -rf /etc/puppet/ssl/*
+        <<-EOS          
+          /usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master 2>&1          
         EOS
       end
       
