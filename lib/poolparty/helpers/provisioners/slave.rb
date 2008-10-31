@@ -35,7 +35,7 @@ module PoolParty
       def start_puppet
         <<-EOS
           rm -rf /etc/puppet/ssl
-          /usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master 2>&1          
+          /usr/bin/puppetrerun
         EOS
       end
       

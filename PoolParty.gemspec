@@ -336,6 +336,7 @@ files:
 - lib/poolparty/templates/poolparty.monitor
 - lib/poolparty/templates/puppet.conf
 - lib/poolparty/templates/puppetcleaner
+- lib/poolparty/templates/puppetrerun
 - lib/poolparty/version.rb
 - lib/poolpartycl.rb
 - poolparty.gemspec

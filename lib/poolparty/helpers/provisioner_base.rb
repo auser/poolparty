@@ -139,7 +139,7 @@ if [ -f '/usr/bin/puppetcleaner' ]; then /usr/bin/env puppetcleaner; fi
         @cloud.run_command_on(command, @cloud.master) unless testing
       end
       def process_reconfigure!(testing=false)        
-        @cloud.run_command_on("puppetd --test  2>&1 &", @instance) unless testing
+        @cloud.run_command_on(RemoteInstance.puppet_runner_command, @instance) unless testing
       end
       def setup_runner(force=false)
         @cloud.prepare_to_configuration
