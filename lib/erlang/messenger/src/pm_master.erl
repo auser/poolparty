@@ -36,7 +36,7 @@
 get_load(Type) ->
 	% {Loads, _} = pm_cluster:send_call(get_load_for_type, [Type]),
 	{Loads, _} = gen_server:call(?SERVER, {get_load_for_type, [Type]}),
-	TRACE("Loads: ~p~n", [Loads]),
+	io:format("Loads: ~p~n", [Loads]),
 	utils:convert_responses_to_int_list(Loads).
 
 % Send reconfigure tasks to every node
