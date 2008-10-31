@@ -148,6 +148,7 @@ wget http://rubyforge.org/frs/download.php/43666/amazon-ec2-0.3.1.gem -O amazon-
       # rm -rf /etc/puppet/ssl
       def start_puppetmaster
         <<-EOS        
+. /etc/profile && puppetcleaner        
 puppetmasterd --verbose
         EOS
       end

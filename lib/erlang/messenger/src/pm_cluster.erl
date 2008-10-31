@@ -55,6 +55,7 @@ any_new_servers() ->
 	
 % Get the live nodes
 get_live_nodes() ->
+	[[X] || X <- nodes(), ]
 	nodes().
 %% Do not forget to start erlang with a command like:
 %% erl -rsh ssh -sname clustmaster
