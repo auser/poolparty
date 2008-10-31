@@ -26,17 +26,15 @@ module PoolParty
     
     module InstanceMethods
       def expansions;self.class.expansions;end
-      def contractions;self.class.contractions;end      
+      def contractions;self.class.contractions;end
     end
     
     def self.register_monitor(*args)
       args.each do |arg|
         (available_monitors << "#{arg}".downcase.to_sym)
         
-        clmeth = "def #{arg}; PoolParty::Messenger.messenger_send!(\"get_load #{arg}\"); end"
-        ClassMethods.module_eval clmeth
-        meth = "def #{arg}; self.class.#{arg}; end"
-        InstanceMethods.module_eval meth  
+        ClassMethods.module_eval "def #{arg}; PoolParty::Messenger.messenger_send!(\"get_load #{arg}\"); end"
+        InstanceMethods.module_eval "def #{arg}; self.class.#{arg}; end"
       end
     end
 
