@@ -21,7 +21,7 @@
          terminate/2, code_change/3]).
 
 % Client function definitions
--export ([get_load/1, reconfigure_cloud/0, get_live_nodes/0]).
+-export ([get_load/1, reconfigure_cloud/0]).
 -export ([run_cmd/1, fire_cmd/1]).
 -export ([shutdown_cloud/0]).
 
@@ -46,9 +46,6 @@ reconfigure_cloud() ->
 % Fire the given command on all nodes
 run_cmd(Cmd) -> gen_server:call(?SERVER, {run_cmd, Cmd}).
 fire_cmd(Cmd) -> gen_server:call(?SERVER, {fire_cmd, Cmd}).
-
-get_live_nodes() ->
-	nodes().
 	
 % Shutdown
 shutdown_cloud() ->
@@ -87,11 +84,14 @@ init([]) ->
 %%--------------------------------------------------------------------
 % Handle load messages
 handle_call({Type, Args}, _From, _State) ->
-	io:format("Calling ~p with ~p on slaves~n", [Type, Args]),
-	List = rpc:multicall(get_live_nodes(), pm_node, Type, [Args]),
+	Nodes = pm_cluster:get_live_nodes(),
+	io:format("Calling ~p with ~p on slaves ~p~n", [Type, Args, Nodes]),
+	List = rpc:multicall(Nodes, pm_node, Type, [Args]),
 	{reply, List, nostate};
 handle_call(Request, _From, State) ->
-	Reply = Reply = rpc:multicall(get_live_nodes(), pm_node, Request, []),
+	Nodes = pm_cluster:get_live_nodes(),
+	io:format("Calling ~p with on slaves ~p~n", [Request, Nodes]),
+	Reply = Reply = rpc:multicall(Nodes, pm_node, Request, []),
 	{reply, Reply, State}.
 
 %%--------------------------------------------------------------------
