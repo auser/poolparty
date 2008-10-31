@@ -53,9 +53,9 @@ any_new_servers() ->
 	NewServers = Nodes -- get_live_nodes(),
 	NewServers.
 	
-% Get the live nodes
+% Get the live nodes that are NOT client nodes
 get_live_nodes() ->
-	[[X] || X <- nodes(), ]
-	nodes().
+	ClientString = "client",
+	[X || X <- nodes(), (erlang:is_atom(regexp:first_match(erlang:atom_to_list(X), ClientString))) ].
 %% Do not forget to start erlang with a command like:
 %% erl -rsh ssh -sname clustmaster
