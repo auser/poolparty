@@ -26,7 +26,7 @@ module PoolParty
           with_cloud(cl) do
             out << <<-EOE
 cloud :#{name} do
-#{cl.minimum_runnable_options.map {|o| "\t#{o} \"#{cl.send o}\""}.join("\n")}
+#{cl.minimum_runnable_options.map {|o| "\t#{o} #{cl.send(o).respec_string}"}.join("\n")}
 end
             EOE
           end  
