@@ -277,7 +277,7 @@ touch /etc/apt/sources.list
 echo 'deb http://mirrors.kernel.org/ubuntu hardy main universe' >> /etc/apt/sources.list
 aptitude update -y <<heredoc
 Y
-heredoc #{unix_hide_string}
+heredoc
 aptitude autoclean #{unix_hide_string}
 fi
           "
