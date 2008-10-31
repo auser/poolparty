@@ -245,6 +245,7 @@ files:
 - lib/erlang/messenger/src/utils.erl
 - lib/erlang/messenger/useful_snippets
 - lib/poolparty.rb
+- lib/poolparty/aska/aska.rb
 - lib/poolparty/base_packages/haproxy.rb
 - lib/poolparty/base_packages/heartbeat.rb
 - lib/poolparty/base_packages/poolparty.rb
@@ -342,6 +343,7 @@ files:
 - script/generate
 - script/txt2html
 - setup.rb
+- spec/poolparty/aska/aska_spec.rb
 - spec/poolparty/base_packages/haproxy_spec.rb
 - spec/poolparty/base_packages/heartbeat_spec.rb
 - spec/poolparty/bin/console_spec.rb
