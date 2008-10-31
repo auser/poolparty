@@ -3,6 +3,9 @@
 =end
 require "enumerator"
 class Array
+  def to_s
+    "#{self.join('", "')}"
+  end
   def to_os
     map {|a| a.to_os }
   end

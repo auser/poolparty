@@ -2,6 +2,10 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 include PoolParty::Remote
 
+def valid_rules?(*args)
+  false
+end
+
 class TestClass
   include CloudResourcer
   include Remote
