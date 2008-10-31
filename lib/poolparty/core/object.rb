@@ -82,6 +82,9 @@ class Object
   def vputs(m="", o=self)
     puts m if o.verbose
   end
+  def vprint(m="", o=self)
+    print m if o.verbose
+  end
   def unix_hide_string
     "2>&1 > /dev/null"
   end

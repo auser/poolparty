@@ -14,7 +14,7 @@ load_pool(o.spec || Binary.get_existing_spec_location)
 
 @clouds.each do |name, cloud|
   
-  with_cloud(cloud, {:testing => @testing}) do
+  with_cloud(cloud, {:testing => @testing, :verbose => (o.verbose || false)}) do
     puts header("Starting cloud")
     puts "#{list_of_running_instances.size} running instances (#{minimum_instances} - #{maximum_instances})"
     if list_of_running_instances.size != 1
