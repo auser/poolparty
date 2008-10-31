@@ -1,4 +1,10 @@
 class Symbol
+  # def >(num);"#{self} > #{num}";end
+  # def <(num);"#{self} < #{num}";end
+  # def >=(num);"#{self} >= #{num}";end
+  # def <=(num);"#{self} <= #{num}";end
+  # def ==(num);"#{self} > #{num}";end
+  
   def to_string(pre="")
     "#{pre}#{self.to_s}"
   end
