@@ -1,9 +1,9 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
 
-include Remote
+# include Remote
 
 class TestClass  
-  include RemoterBase
+  include PoolParty::Remote::RemoterBase
   include Ec2
   include CloudResourcer
   
