@@ -1,2 +1,6 @@
 % Snippets
 % lists:map(fun(No) -> net_adm:ping(No) end, pm_cluster:any_new_servers()).
+
+% Start test nodes, defining testing
+% erl -pa ./ebin -kernel inet_dist_listen_min 7000 inet_dist_listen_max 7050 -setcookie poolparty -boot pm_node_rel-0.1 -sname node0
+% erl -pa ./ebin -kernel inet_dist_listen_min 7000 inet_dist_listen_max 7050 -setcookie poolparty -boot pm_node_rel-0.1 -sname node1

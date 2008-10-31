@@ -64,8 +64,11 @@ module PoolParty
         "#{name}\t#{ip}"
       end
       
-      # Commands for the servers
       def puppet_runner_command
+        self.class.send :puppet_runner_command
+      end
+      # Commands for the servers
+      def self.puppet_runner_command
         ". /etc/profile && /usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master 2>&1"
       end
     end

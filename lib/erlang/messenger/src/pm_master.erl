@@ -11,6 +11,7 @@
 -include_lib("../include/defines.hrl").
 
 -record(state, {}).
+-define (SERVER, global:whereis_name(?MODULE)).
 
 %% API
 -export([start_link/0]).
@@ -20,7 +21,8 @@
          terminate/2, code_change/3]).
 
 % Client function definitions
--export ([get_load/1, reconfigure_cloud/0, fire_cmd/1, get_live_nodes/0]).
+-export ([get_load/1, reconfigure_cloud/0, get_live_nodes/0]).
+-export ([run_cmd/1, fire_cmd/1]).
 -export ([shutdown_cloud/0]).
 
 %%====================================================================
@@ -32,21 +34,21 @@
 
 % pm_master:get_load("0", "cpu").
 get_load(Type) ->
-	{Loads, _} = pm_cluster:send_call(get_load_for_type, [Type]),
-	{utils:convert_responses_to_int_list(Loads)}.
+	% {Loads, _} = pm_cluster:send_call(get_load_for_type, [Type]),
+	{Loads, _} = gen_server:call(?SERVER, {get_load_for_type, [Type]}),
+	TRACE("Loads: ~p~n", [Loads]),
+	utils:convert_responses_to_int_list(Loads).
 
 % Send reconfigure tasks to every node
 reconfigure_cloud() ->
-	pm_cluster:send_call(run_reconfig, []),
-	{ok}.
+	gen_server:call(?SERVER, {run_reconfig}).
 
 % Fire the given command on all nodes
-fire_cmd(Cmd) ->
-	pm_cluster:send_call(fire_cmd, [Cmd]),
-	{ok}.
+run_cmd(Cmd) -> gen_server:call(?SERVER, {run_cmd, Cmd}).
+fire_cmd(Cmd) -> gen_server:call(?SERVER, {fire_cmd, Cmd}).
 
 get_live_nodes() ->
-	?MASTER_SERVER ! nodes().
+	nodes().
 	
 % Shutdown
 shutdown_cloud() ->
@@ -57,7 +59,7 @@ shutdown_cloud() ->
 %% Description: Starts the server
 %%--------------------------------------------------------------------
 start_link() ->
-  gen_server:start_link({global, ?MASTER_SERVER}, ?MASTER_SERVER, [], []).
+  gen_server:start_link({global, ?MODULE}, ?MODULE, [], []).
 
 %%====================================================================
 %% gen_server callbacks
@@ -83,13 +85,14 @@ init([]) ->
 %%                                      {stop, Reason, State}
 %% Description: Handling call messages
 %%--------------------------------------------------------------------
+% Handle load messages
 handle_call({Type, Args}, _From, _State) ->
-	Nodes = get_live_nodes(),
-	rpc:multicall(Nodes, pm_node, Type, [Args]);
-	
-handle_call(_Request, _From, State) ->
-  Reply = ok,
-  {reply, Reply, State}.
+	io:format("Calling ~p with ~p on slaves~n", [Type, Args]),
+	List = rpc:multicall(get_live_nodes(), pm_node, Type, [Args]),
+	{reply, List, nostate};
+handle_call(Request, _From, State) ->
+	Reply = Reply = rpc:multicall(get_live_nodes(), pm_node, Request, []),
+	{reply, Reply, State}.
 
 %%--------------------------------------------------------------------
 %% Function: handle_cast(Msg, State) -> {noreply, State} |
