@@ -127,10 +127,11 @@ module PoolParty
       # pending instances and then running the block
       def when_no_pending_instances(&block)
         reset!
+        vputs "Waiting for there to be no pending instances..."
         if list_of_pending_instances.size == 0
           block.call if block
         else
-          vputs "Waiting for there to be no pending instances..."
+          vprint "."
           wait "5.seconds"
           when_no_pending_instances(&block)
         end

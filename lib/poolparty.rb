@@ -1,7 +1,7 @@
 require 'rubygems'
 
 # Load required gems
-%w(activesupport ftools logging ruby2ruby aska).each do |lib|
+%w(activesupport ftools logging ruby2ruby).each do |lib|
   begin
     require lib
   rescue Exception => e
@@ -16,7 +16,7 @@ ActiveSupport::Dependencies.load_paths << File.dirname(__FILE__)
 ## Load PoolParty
 require "#{File.dirname(__FILE__)}/poolparty/version"
 
-%w(core modules exceptions dependency_resolutions monitors net).each do |dir|
+%w(core modules exceptions aska dependency_resolutions monitors net).each do |dir|
   Dir[File.dirname(__FILE__) + "/poolparty/#{dir}/**.rb"].each do |file|
     require file
   end

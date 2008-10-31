@@ -30,7 +30,7 @@ module PoolParty
           
           has_gempackage(:name => "activesupport", :download_url => "http://rubyforge.org/frs/download.php/45627/activesupport-2.1.2.gem")
 
-          has_gempackage(:name => "aska", :download_url => "http://rubyforge.org/frs/download.php/46092/aska-0.0.9.gem", :requires => get_gempackage("ruby2ruby"))            
+          has_gempackage(:name => "aska", :download_url => "http://github.com/auser/aska/tree/master%2Fpkg%2Faska-latest.gem?raw=true", :requires => get_gempackage("ruby2ruby"))            
           has_gempackage(:name => "RubyInline", :download_url => "http://rubyforge.org/frs/download.php/45683/RubyInline-3.8.1.gem")
           
           has_gempackage(:name => "poolparty", :download_url => "http://github.com/auser/poolparty/tree/master%2Fpkg%2Fpoolparty-latest.gem?raw=true", :requires => [get_gempackage("ruby2ruby"), get_gempackage("RubyInline"), get_gempackage("aska"), get_gempackage("ParseTree")])
