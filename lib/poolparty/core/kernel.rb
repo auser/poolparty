@@ -10,10 +10,10 @@ module Kernel
     block.in_context(klass_or_obj).call
   end
   def load_p(dir)
-    Dir["#{dir}/*.rb"].each do |file|
+    Dir["#{dir}/*.rb"].sort.each do |file|
       require "#{file}" if ::FileTest.file?(file)
     end
-    Dir["#{dir}/*"].each do |dir|
+    Dir["#{dir}/*"].sort.each do |dir|
       load_p(dir) if ::FileTest.directory?(dir)
     end
   end
