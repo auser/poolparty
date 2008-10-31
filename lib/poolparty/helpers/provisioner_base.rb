@@ -97,12 +97,8 @@ module PoolParty
           verbose ? @cloud.run_command_on(cmd, @instance) : hide_output {@cloud.run_command_on(cmd, @instance)}
           
           process_clean_reconfigure_for!(@instance)
-          after_install(@instance)
-          
+          after_install(@instance)          
         end
-        # We have to get the right generated data into the manifest
-        # TODO: Clean this setup
-        @cloud.provisioning_complete
       end
       # Install callbacks
       # Before installation callback

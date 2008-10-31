@@ -16,12 +16,16 @@ class TestClass
   def keypair
     "fake_keypair"
   end
+  def verbose
+    false
+  end
 end
 
 describe "Remote" do
   before(:each) do
     @tc = TestClass.new
-    
+    @tc.stub!(:verbose).and_return false
+    setup
   end
   it "should have the method 'using'" do
     @tc.respond_to?(:using).should == true
@@ -192,6 +196,7 @@ describe "Remote" do
     end
     describe "expansions" do
       before(:each) do
+        setup
         @tc.stub!(:copy_ssh_app).and_return true
         @tc.stub!(:prepare_reconfiguration).and_return "full"
         PoolParty::Provisioner.stub!(:reconfigure_master).and_return true
@@ -206,6 +211,7 @@ describe "Remote" do
       end
       describe "expand_cloud_if_necessary" do
         before(:each) do
+          setup
           stub_list_from_remote_for(@tc)
           @tc.stub!(:request_launch_new_instances).and_return true
           @tc.stub!(:can_start_a_new_instance).and_return true

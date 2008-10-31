@@ -4,6 +4,8 @@ setup_cl
 
 include PoolParty::Messenger
 
+Object.send :undef_method, :messenger_send!
+
 describe "Messenger" do
   it "should have the method messenger_send!" do
     Messenger.respond_to?(:messenger_send!).should == true

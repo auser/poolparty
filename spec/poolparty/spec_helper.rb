@@ -17,6 +17,10 @@ extend PoolParty
 Base.environment = "test"
 Base.verbose = false
 
+def setup
+  PoolParty::Messenger.stub!(:messenger_send!).and_return false
+end
+
 def setup_cl
   require 'poolpartycl'
 end
@@ -62,7 +66,7 @@ def stub_list_from_local_for(o)
   @ris = @list.split(/\n/).map {|line| PoolParty::Remote::RemoteInstance.new(line) }
 end
 def stub_remoter_for(o)
-  o.stub!(:ec2).and_return EC2::Base.new( :access_key_id => "not a key",  :secret_access_key => "even more not a key")
+  o.stub!(:ec2).and_return EC2::Base.new( :access_key_id => "not a key",  :secret_access_key => "even more not a key")  
 end
 def stub_list_from_remote_for(o, launch_stub=true)
   stub_remoter_for(o)
@@ -99,6 +103,7 @@ def running_remote_instances
 end
 
 def reset_response!
+  setup
   @ris = nil
 end
 
@@ -122,4 +127,11 @@ def drop_pending_instances_for(o)
   puts "hi"
   o.list_of_pending_instances.stub!(:size).and_return 0
   1
+end
+
+# Stub for messenger_send!
+class Object
+  def messenger_send!(*args)
+    true
+  end
 end
