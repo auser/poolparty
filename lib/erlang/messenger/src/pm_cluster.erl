@@ -50,7 +50,7 @@ any_new_servers() ->
 			erlang:list_to_atom(lists:append([No, "@", No]))
 	end,string:tokens(os:cmd(String), "\n\t")),
 	% Nodes -- get_live_nodes(),
-	NewServers = [X || X <- NodesFromActive, (lists:member(X, get_live_nodes())) ],
+	NewServers = [X || X <- NodesFromActive, (lists:member(X, get_live_nodes()) /= true) ],
 	NewServers.
 	
 % Get the live nodes that are NOT client nodes
