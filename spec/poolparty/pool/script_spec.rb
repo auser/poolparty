@@ -5,6 +5,7 @@ include PoolParty::Resources
 describe "Script" do
   before(:each) do
     reset_resources!
+    setup
   end
   describe "wrapped" do
     it "should have inflate as a class method" do

@@ -10,6 +10,9 @@ class MyResource < PoolParty::Resources::Resource
   end
 end
 describe "Resource" do
+  before(:each) do
+    setup
+  end
   describe "wrapped" do
     before(:each) do
       @resource = MyResource.new({:a => 10}) do

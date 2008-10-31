@@ -16,15 +16,21 @@ module PoolParty
       $available_monitors ||= []
     end
     
-    class BaseMonitor
-      
+    class BaseMonitor      
       def self.run
         new.run
-      end
-            
+      end            
     end
     
   end
 end
 
 Dir["#{File.dirname(__FILE__)}/monitors/*.rb"].each {|f| require f}
+
+module PoolParty
+  module Cloud
+    class Cloud
+      include PoolParty::Monitors
+    end
+  end
+end

@@ -4,6 +4,7 @@ include Remote
 
 describe "Remote Instance" do
   before(:each) do
+    setup
     @valid_hash = {:ip => "127.0.0.1", :name => "master", :responding => "true"}
   end
   describe "configurable" do
