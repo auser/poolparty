@@ -158,15 +158,12 @@ files:
 - lib/erlang/messenger/ebin/pm_client.beam
 - lib/erlang/messenger/ebin/pm_cluster.beam
 - lib/erlang/messenger/ebin/pm_event_manager.beam
-- lib/erlang/messenger/ebin/pm_master.beam
 - lib/erlang/messenger/ebin/pm_master_event_handler.beam
 - lib/erlang/messenger/ebin/pm_master_rel-0.1.rel
 - lib/erlang/messenger/ebin/pm_master_supervisor.beam
-- lib/erlang/messenger/ebin/pm_node.beam
 - lib/erlang/messenger/ebin/pm_node_rel-0.1.rel
 - lib/erlang/messenger/ebin/pm_node_supervisor.beam
 - lib/erlang/messenger/ebin/pm_packager.beam
-- lib/erlang/messenger/ebin/utils.beam
 - lib/erlang/messenger/erl_crash.dump
 - lib/erlang/messenger/include/defines.hrl
 - lib/erlang/messenger/lib/eunit/AUTHORS
@@ -224,6 +221,7 @@ files:
 - lib/erlang/messenger/lib/eunit/src/file_monitor.erl
 - lib/erlang/messenger/lib/eunit/sys.config
 - lib/erlang/messenger/lib/eunit/vsn.mk
+- lib/erlang/messenger/pm_master.beam
 - lib/erlang/messenger/pm_master_rel-0.1.boot
 - lib/erlang/messenger/pm_master_rel-0.1.script
 - lib/erlang/messenger/pm_node.beam
@@ -242,6 +240,7 @@ files:
 - lib/erlang/messenger/src/pm_packager.erl
 - lib/erlang/messenger/src/utils.erl
 - lib/erlang/messenger/useful_snippets
+- lib/erlang/messenger/utils.beam
 - lib/poolparty.rb
 - lib/poolparty/base_packages/haproxy.rb
 - lib/poolparty/base_packages/heartbeat.rb
