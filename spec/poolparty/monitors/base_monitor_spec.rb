@@ -1,6 +1,11 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
-include PoolParty::Monitors
+class TestMonitorClass
+  include PoolParty::Monitors
+  
+  expand_when "cpu > 95", "memory > 90"
+  contract_when "cpu < 15", "memory < 10"
+end
 
 describe "Monitors" do
   it "should have a list of available monitors" do
@@ -11,9 +16,71 @@ describe "Monitors" do
     PoolParty::Monitors.register_monitor :fake
     size.should == PoolParty::Monitors.available_monitors.size - 1
   end
+  it "should define the mehtod fake when register_monitor :fake" do
+    PoolParty::Monitors.register_monitor :fake
+    TestMonitorClass.new.respond_to?(:fake).should == true
+  end
+  it "should call the Messenger with messenger_send!('get_load fake')" do
+    PoolParty::Messenger.should_receive(:messenger_send!).with("get_load fake").and_return true
+    TestMonitorClass.new.fake
+  end
+  describe "expansions" do
+    before(:each) do
+      @tmc = TestMonitorClass.new
+    end
+    it "should have the method expand_when as a class method" do
+      TestMonitorClass.respond_to?(:expand_when).should == true
+    end
+    it "should have expansions as an array on the object" do
+      @tmc.expansions.class.should == Array
+    end
+    it "should have the expansion in the array on the instance" do
+      TestMonitorClass.expansions.first.should == {"cpu" => [">", "95"]}
+    end
+    it "should have the memory expansion in the array on the instance" do
+      @tmc.expansions[1].should == {"memory" => [">", "90"]}
+    end
+    it "should have 2 expansions" do
+      @tmc.expansions.size.should == 2
+    end
+    it "should give us the method cpu for free" do
+      @tmc.respond_to?(:cpu).should == true
+    end
+    describe "when memory is over the limit" do
+      before(:each) do
+        @tmc.stub!(:memory).and_return 99
+      end
+      it "should say it should not expand if the cpu is short of the limit" do
+        @tmc.stub!(:cpu).and_return 43
+        @tmc.valid_rules?(:expansions).should == false
+      end
+      it "should say that it has the valid expansion rules when the cpu is higher than the limit" do
+        @tmc.stub!(:cpu).and_return 98
+        @tmc.valid_rules?(:expansions).should == true
+      end
+    end
+    describe "when cpu is over the limit" do
+      before(:each) do
+        @tmc.stub!(:cpu).and_return 98
+      end
+      it "should say it should not expand if the cpu is short of the limit" do
+        @tmc.stub!(:memory).and_return 43
+        @tmc.valid_rules?(:expansions).should == false
+      end
+      it "should say that it has the valid expansion rules when the cpu is higher than the limit" do
+        @tmc.stub!(:memory).and_return 98
+        @tmc.valid_rules?(:expansions).should == true
+      end
+    end
+    describe "when neither is over the limits" do
+      it "should not expand" do
+        @tmc.valid_rules?(:expansions).should == false
+      end
+    end
+  end
 end
 describe "BaseMonitor" do
   it "should have the singleton method run defined" do
-    BaseMonitor.respond_to?(:run).should == true
+    PoolParty::Monitors::BaseMonitor.respond_to?(:run).should == true
   end
 end

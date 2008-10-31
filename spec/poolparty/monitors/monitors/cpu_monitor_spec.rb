@@ -5,7 +5,6 @@ include PoolParty::Monitors
 describe "CpuMonitor" do
   before(:each) do
     @mon = CpuMonitor.new
-    CpuMonitor.stub!(:new).and_return @mon
   end
   it "should have the singleton method run defined" do
     CpuMonitor.respond_to?(:run).should == true

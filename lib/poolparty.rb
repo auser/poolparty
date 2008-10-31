@@ -1,7 +1,7 @@
 require 'rubygems'
 
 # Load required gems
-%w(activesupport ftools logging ruby2ruby).each do |lib|
+%w(activesupport ftools logging ruby2ruby aska).each do |lib|
   begin
     require lib
   rescue Exception => e

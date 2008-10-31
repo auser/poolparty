@@ -63,7 +63,7 @@ class Object
     meta_eval { remove_method name }
   end
   def run_in_context(&block)
-    name="temp_#{self.class}_#{parent.to_s}".to_sym
+    name="temp_#{self.class}_#{respond_to?(:parent) ? parent.to_s : Time.now.to_i}".to_sym
     meta_def name, &block
     self.send name, self
     # self.instance_eval &block if block
