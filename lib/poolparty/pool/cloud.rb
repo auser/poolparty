@@ -154,7 +154,7 @@ module PoolParty
       # they need a few options to run, these are the required options
       # to be saved on the remote "master" machine
       def minimum_runnable_options
-        [:keypair, :minimum_instances, :maximum_instances]
+        [:keypair, :minimum_instances, :maximum_instances, :ami]
       end
       
       # Add all the poolparty requirements here
