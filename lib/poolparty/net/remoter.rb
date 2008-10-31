@@ -167,11 +167,11 @@ module PoolParty
       end
       # Stub method for the time being to handle expansion of the cloud
       def should_expand_cloud?(force=false)
-        force || false
+        messenger_send!("get_load cpu") || force || false
       end
       # Stub method for the time being to handle the contraction of the cloud
       def should_contract_cloud?(force=false)
-        force || false
+        messenger_send!("get_load cpu") || force || false
       end
       # Expand the cloud
       # If we can start a new instance and the load requires us to expand

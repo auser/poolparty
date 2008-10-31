@@ -14,6 +14,7 @@ class TestClass
 end
 describe "Remoter" do
   before(:each) do
+    setup
     @cloud = cloud :app do;end
     @tc = TestClass.new
     @tc.parent = @cloud

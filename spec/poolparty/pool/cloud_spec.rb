@@ -13,6 +13,7 @@ end
 
 describe "Cloud" do
   before(:each) do
+    setup
     reset_resources!
   end
   describe "wrapped" do
@@ -47,6 +48,7 @@ describe "Cloud" do
     describe "options" do
       before(:each) do
         reset!
+        setup
         @p = pool :options do
           minimum_instances 100
           access_key "access_key"

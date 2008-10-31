@@ -36,7 +36,6 @@
 get_load(Type) ->
 	% {Loads, _} = pm_cluster:send_call(get_load_for_type, [Type]),
 	{Loads, _} = gen_server:call(?SERVER, {get_load_for_type, [Type]}),
-	io:format("Loads: ~p~n", [Loads]),
 	utils:convert_responses_to_int_list(Loads).
 
 % Send reconfigure tasks to every node
@@ -85,12 +84,10 @@ init([]) ->
 % Handle load messages
 handle_call({Type, Args}, _From, _State) ->
 	Nodes = pm_cluster:get_live_nodes(),
-	io:format("Calling ~p with ~p on slaves ~p~n", [Type, Args, Nodes]),
 	List = rpc:multicall(Nodes, pm_node, Type, [Args]),
 	{reply, List, nostate};
 handle_call(Request, _From, State) ->
 	Nodes = pm_cluster:get_live_nodes(),
-	io:format("Calling ~p with on slaves ~p~n", [Request, Nodes]),
 	Reply = Reply = rpc:multicall(Nodes, pm_node, Request, []),
 	{reply, Reply, State}.
 

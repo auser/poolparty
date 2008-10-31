@@ -7,9 +7,12 @@ class TestRemoter
 end
 
 describe "RemoterBase" do
+  before(:each) do
+    setup
+  end
   describe "methods" do
     before(:each) do
-      @tr = TestRemoter.new
+      @tr = TestRemoter.new      
     end
     %w(launch_new_instance! terminate_instance describe_instance instances_list).each do |method|
       eval <<-EOE
