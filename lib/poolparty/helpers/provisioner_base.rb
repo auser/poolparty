@@ -122,11 +122,9 @@ module PoolParty
         unless testing
           vputs "Logging on to #{@instance.ip}"
           @cloud.rsync_storage_files_to(@instance)
-          process_clean_reconfigure_for!(@instance)
 
           cmd = "cd #{Base.remote_storage_path} && chmod +x configure_#{name}.sh && /bin/sh configure_#{name}.sh && rm configure_#{name}.sh"
           verbose ? @cloud.run_command_on(cmd, @instance) : hide_output {@cloud.run_command_on(cmd, @instance)}
-          process_clean_reconfigure_for!(@instance)
         end
       end
       def process_clean_reconfigure_for!(instance, testing=false)
