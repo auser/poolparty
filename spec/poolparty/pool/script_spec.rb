@@ -45,6 +45,7 @@ describe "Script" do
           reset_resources!
           pool :appdotcom do
             keypair "snoodle"
+            ami "ami-123456"
             cloud :app do
               has_file :name => "/etc/httpd/httpd.conf"
             end
@@ -53,6 +54,9 @@ describe "Script" do
         end
         it "should save the keypair" do
           @saved.should =~ /keypair "snoodle"/
+        end
+        it "should save the ami" do
+          @saved.should =~ /ami "ami-123456"/
         end
       end
     end
