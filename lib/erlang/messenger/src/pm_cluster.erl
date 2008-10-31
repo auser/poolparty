@@ -30,8 +30,7 @@ slaves([Host|Hosts]) ->
 	io:format("Erlang node started = [~p]~n", [Node]),
 	slaves(Hosts).
 
-slaves() ->
-	get_live_nodes().
+slaves() ->	get_live_nodes().
 
 erl_system_args()->
 	Shared = case init:get_argument(shared) of
@@ -46,11 +45,12 @@ erl_system_args()->
 
 any_new_servers() ->
 	String = ". /etc/profile && server-list-active -c name",
-	Nodes = lists:map(fun
+	NodesFromActive = lists:map(fun
 		(No) ->
 			erlang:list_to_atom(lists:append([No, "@", No]))
 	end,string:tokens(os:cmd(String), "\n\t")),
-	NewServers = Nodes -- get_live_nodes(),
+	% Nodes -- get_live_nodes(),
+	NewServers = [X || X <- NodesFromActive, (lists:member(X, get_live_nodes())) ],
 	NewServers.
 	
 % Get the live nodes that are NOT client nodes
