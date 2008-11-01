@@ -52,7 +52,7 @@ module PoolParty
         end
         
         # These are all requirements on the master
-        execute_if("$hostname", "master") do
+        execute_on_master do
           has_cron({:name => "maintain script ", :command => ". /etc/profile && which cloud-maintain | /bin/sh", :minute => "*/3"})
           # TODO: Update this so it only runs when needed
           has_exec(:name => "start master messenger", :command => ". /etc/profile && server-start-master", :requires => [get_gempackage("poolparty"), get_exec("build_messenger")])

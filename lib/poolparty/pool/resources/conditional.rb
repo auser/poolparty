@@ -1,6 +1,10 @@
 module PoolParty    
   module Resources
     
+    def execute_on_master(parent=self, &block)
+      execute_if("$hostname", "master", parent &block)
+    end
+    
     def execute_if(attr_s="$hostname", str="", parent=self, &block)
       # parent = parent.is_a?(PoolParty::Cloud::Cloud) ? parent : parent.parent
       opts = {:attribute => attr_s, :equal => str}
