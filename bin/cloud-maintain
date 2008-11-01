@@ -30,6 +30,8 @@ include Remote
       contract_cloud_if_necessary( !testing )
     else
       logger.info "Cloud is maintained"
+      expand_cloud_if_necessary( !testing )
+      contract_cloud_if_necessary( !testing )
     end    
   end  
 
