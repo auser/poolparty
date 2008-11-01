@@ -88,7 +88,6 @@ module PoolParty
           vputs "Logging on to #{@instance.ip} (#{@instance.name})"
           @cloud.rsync_storage_files_to(@instance)
           vputs "Preparing configuration on the master"
-          process_clean_reconfigure_for!(@instance)
           
           before_install(@instance)
           
@@ -96,7 +95,6 @@ module PoolParty
           cmd = "cd #{Base.remote_storage_path} && chmod +x install_#{name}.sh && /bin/sh install_#{name}.sh && rm install_#{name}.sh"
           verbose ? @cloud.run_command_on(cmd, @instance) : hide_output {@cloud.run_command_on(cmd, @instance)}
           
-          process_clean_reconfigure_for!(@instance)
           after_install(@instance)          
         end
       end
