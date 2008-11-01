@@ -2,7 +2,7 @@ module PoolParty
   module Resources
     
     def execute_on_master(parent=self, &block)
-      execute_if("$hostname", "master", parent &block)
+      execute_if("$hostname", "master", parent, &block)
     end
     
     def execute_if(attr_s="$hostname", str="", parent=self, &block)
