@@ -32,7 +32,7 @@ end.
 average_for_list(Num, L) ->
 	case length(L) of
 		0 ->
-			0;
+			-1;
 		_ ->
 			Num / length(L)
 	end.
