@@ -69,6 +69,9 @@ module PoolParty
       end
       # Commands for the servers
       def self.puppet_runner_command
+        ". /etc/profile && /usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master 2>&1"
+      end
+      def self.puppet_rerun_commad
         "/usr/bin/puppetrerun 2>&1 > /dev/null"
       end
     end
