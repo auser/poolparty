@@ -10,7 +10,6 @@ module PoolParty
     # Convenience method to clean 
     def self.provision_master(cloud, testing=false)
       Provisioner::Master.new(cloud).process_install!(testing)
-      process_clean_reconfigure_for!(cloud.master, cloud, testing)
     end
 
     def self.configure_master(cloud, testing=false)
@@ -65,10 +64,14 @@ module PoolParty
       # Callback after initialized
       def loaded(opts={}, parent=self)      
       end
+      
+      ### Installation tasks
+      
       # This is the actual runner for the installation    
       def install
         valid? ? install_string : error
       end
+      # Write the installation tasks to a file in the storage directory
       def write_install_file
         error unless valid?
         ::FileUtils.mkdir_p Base.storage_directory unless ::File.exists?(Base.storage_directory)
@@ -92,10 +95,12 @@ module PoolParty
           before_install(@instance)
           
           vputs "Logging in and running provisioning on #{@instance.name}"
-          cmd = "cd #{Base.remote_storage_path} && chmod +x install_#{name}.sh && /bin/sh install_#{name}.sh && rm install_#{name}.sh"
+          cmd = "cd #{Base.remote_storage_path} && chmod +x install_#{name}.sh && /bin/sh install_#{name}.sh; rm install_#{name}.sh"
           verbose ? @cloud.run_command_on(cmd, @instance) : hide_output {@cloud.run_command_on(cmd, @instance)}
           
-          after_install(@instance)          
+          process_clean_reconfigure_for!(@instance, testing)
+          
+          after_install(@instance)
         end
       end
       # Install callbacks
@@ -104,6 +109,9 @@ module PoolParty
       end
       def after_install(instance)        
       end
+      
+      ### Configuraton tasks
+      
       def configure
         valid? ? configure_string : error
       end
@@ -129,14 +137,14 @@ module PoolParty
         vputs "Cleaning certs from master: #{instance.name}"
         # puppetca --clean #{instance.name}.compute-1.internal; puppetca --clean #{instance.name}.ec2.internal
         # find /etc/puppet/ssl -type f -exec rm {} \;
-        command = <<-EOE
-if [ -f '/usr/bin/puppetcleaner' ]; then /usr/bin/env puppetcleaner; fi
-        EOE
+        command = instance.master? ?  "if [ -f '/usr/bin/puppetcleaner' ]; then /usr/bin/env puppetcleaner; fi" : "rm -rf /etc/puppet/ssl"
         @cloud.run_command_on(command, @cloud.master) unless testing
       end
       def process_reconfigure!(testing=false)        
         @cloud.run_command_on(RemoteInstance.puppet_runner_command, @instance) unless testing
       end
+      # Tasks that need to be performed everytime we do any
+      # remote ssh'ing into any instance
       def setup_runner(force=false)
         @cloud.prepare_to_configuration
         @cloud.build_and_store_new_config_file(force)
