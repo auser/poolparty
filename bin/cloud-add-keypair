@@ -15,8 +15,8 @@ include Remote
 
 @clouds.each do |name, cloud|
   
-  with_cloud(cloud, {:location => @location}) do
-    logger.info header("Creating keypair for #{name}")
+  with_cloud(cloud, {:location => @location, :verbose => o.verbose}) do
+    vputs header("Creating keypair for #{name}")
     create_keypair unless testing
   end  
   

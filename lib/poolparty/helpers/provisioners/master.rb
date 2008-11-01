@@ -24,6 +24,7 @@ module PoolParty
           setup_fileserver,
           setup_autosigning,
           install_poolparty,
+          setup_poolparty,
           start_puppetmaster
         ] << configure_tasks
       end
@@ -77,41 +78,16 @@ mkdir -p /etc/poolparty
 echo "*" > /etc/puppet/autosign.conf
         EOS
       end
-
-      def create_local_node
-        str = <<-EOS
-node default {
-  include poolparty
-}
-        EOS
-         @cloud.list_of_running_instances.each do |ri|
-           str << <<-EOS           
-node "#{ri.name}" inherits default {}
-           EOS
-         end
-"echo '#{str}' > /etc/puppet/manifests/nodes/nodes.pp"
-      end
-
-      def move_templates
-        <<-EOS
-mkdir -p #{Base.template_path}
-cp #{Base.remote_storage_path}/#{Base.template_directory}/* #{Base.template_path}
-        EOS
-      end
       
-      def create_poolparty_manifest
+      def setup_poolparty
         <<-EOS
-cp #{Base.remote_storage_path}/poolparty.pp /etc/puppet/manifests/classes/poolparty.pp
 cp #{Base.remote_storage_path}/#{Base.key_file_locations.first} "#{Base.base_config_directory}/.ppkeys"
 cp #{Base.remote_storage_path}/#{Base.default_specfile_name} #{Base.base_config_directory}/#{Base.default_specfile_name}
-#{copy_ssh_app}
         EOS
       end
-      
+            
       def copy_ssh_app
-        if @cloud.remote_keypair_path != "#{Base.remote_storage_path}/#{@cloud.full_keypair_name}"
-          "cp #{Base.remote_storage_path}/#{@cloud.full_keypair_name} #{@cloud.remote_keypair_path}"
-        end
+        "cp #{Base.remote_storage_path}/#{@cloud.full_keypair_name} #{@cloud.remote_keypair_path}" if @cloud.remote_keypair_path != "#{Base.remote_storage_path}/#{@cloud.full_keypair_name}"
       end
       
       def install_poolparty
@@ -144,16 +120,45 @@ wget http://rubyforge.org/frs/download.php/43666/amazon-ec2-0.3.1.gem -O amazon-
 # gem install -y --no-ri --no-rdoc  --source http://gems.github.com auser-poolparty
         EOE
       end
-
+      
       # ps aux | grep puppetmasterd | awk '{print $2}' | xargs kill
       # rm -rf /etc/puppet/ssl
       def start_puppetmaster
         <<-EOS
-/usr/bin/env puppetcleaner 2>&1 > /dev/null
 puppetmasterd --verbose  2>&1 > /dev/null
         EOS
       end
 
+      # TODO:
+      # Consider this method in the manifest
+      def create_local_node
+        str = <<-EOS
+node default {
+  include poolparty
+}
+        EOS
+         @cloud.list_of_running_instances.each do |ri|
+           str << <<-EOS           
+node "#{ri.name}" inherits default {}
+           EOS
+         end
+"echo '#{str}' > /etc/puppet/manifests/nodes/nodes.pp"
+      end
+
+      def move_templates
+        <<-EOS
+mkdir -p #{Base.template_path}
+cp #{Base.remote_storage_path}/#{Base.template_directory}/* #{Base.template_path}
+        EOS
+      end
+      
+      def create_poolparty_manifest
+        <<-EOS
+cp #{Base.remote_storage_path}/poolparty.pp /etc/puppet/manifests/classes/poolparty.pp
+#{copy_ssh_app}
+        EOS
+      end
+      
       # puppetd --listen --fqdn #{@instance.name}
       def restart_puppetd
         <<-EOS

@@ -18,21 +18,18 @@ include Remote
 
 @clouds.each do |name, cloud|
 
-  with_cloud(cloud, {:location => @location, :testing => o.testing}) do
-    logger.info header("Maintaining cloud #{name}")
+  with_cloud(cloud, {:location => @location, :testing => o.testing, :verbose => o.verbose}) do
+    vputs header("Maintaining cloud #{name}")
     if !minimum_number_of_instances_are_running?
-      logger.warn "#{list_of_running_instances.size} running instances of between #{minimum_instances} and #{maximum_instances}"
-      logger.warn "Launching new instance"
-      expand_cloud_if_necessary( !testing )
+      vputs "#{list_of_running_instances.size} running instances of between #{minimum_instances} and #{maximum_instances}"
+      vputs "Launching new instance"
     elsif !maximum_number_of_instances_are_not_running?
-      logger.warn "#{list_of_running_instances.size} running instances of between #{minimum_instances} and #{maximum_instances}"
-      logger.warn "Shutting down non-master instance"
-      contract_cloud_if_necessary( !testing )
-    else
-      logger.info "Cloud is maintained"
-      expand_cloud_if_necessary( !testing )
-      contract_cloud_if_necessary( !testing )
-    end    
+      vputs "#{list_of_running_instances.size} running instances of between #{minimum_instances} and #{maximum_instances}"
+      vputs "Shutting down non-master instance"
+    end
+    vputs "Cloud is maintained"
+    expand_cloud_if_necessary( !testing )
+    contract_cloud_if_necessary( !testing )    
   end  
 
 end

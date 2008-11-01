@@ -26,9 +26,7 @@ reconfigure_cloud() -> pm_master:reconfigure_cloud().
 % Get the load on the cloud of type Type
 get_load(Type) -> 
 	start(),
-	Load = pm_master:get_load(Type),
-	io:format("~p", [Load]),
-	Load.
+	pm_master:get_load(Type).
 	
 % Check to see if there are servers that are unprovisioned
 % And if there are, log in to them and start their messenger
