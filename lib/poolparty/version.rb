@@ -2,7 +2,7 @@ module PoolParty
   module VERSION #:nodoc:
     MAJOR = 0
     MINOR = 2
-    TINY  = 37
+    TINY  = 38
 
     STRING = [MAJOR, MINOR, TINY].join('.')
   end
