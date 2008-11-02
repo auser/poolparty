@@ -6,10 +6,7 @@ class Loggable
     Logging.init :debug, :info, :warn, :error, :fatal
     
     self.class.loggers << file_logger
-    file_logger.level = :debug
-
-    self.class.loggers << stdout_logger
-    stdout_logger.level = :debug
+    file_logger.level = :info
   end
   def file_logger
     @file_logger ||= Logging.logger( Base.pool_logger_location, logging_opts )
