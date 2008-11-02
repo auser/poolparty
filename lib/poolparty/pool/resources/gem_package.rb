@@ -18,7 +18,8 @@ module PoolParty
           has_file({
             :name => "#{Base.remote_storage_path}/#{name}.gem", 
             :source => "#{Base.fileserver_base}/#{name}.gem",
-            :unless => "test -f #{Base.remote_storage_path}/#{name}.gem"
+            :unless => "test -f #{Base.remote_storage_path}/#{name}.gem",
+            :requires => get_host("master")
           })
                     
           has_exec(opts.merge({:name => "#{name}", :cwd =>"#{Base.remote_storage_path}", :path => "/bin:/usr/bin:/usr/local/bin:/sbin:/usr/sbin:/var/lib/gems/1.8/bin"})) do

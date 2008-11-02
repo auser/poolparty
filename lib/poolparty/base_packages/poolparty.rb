@@ -3,6 +3,12 @@ module PoolParty
     plugin :poolparty do
       
       def enable                
+        # Build hostsfile
+        # TODO: COME BACK AND CLEAN THIS UP
+        (self.respond_to?(:list_of_running_instances) ? self : parent).list_of_running_instances.each do |ri|
+          has_host({:name => "#{ri.name}", :ip => ri.ip })
+        end
+        
         has_package(:name => "erlang")
         has_package(:name => "erlang-dev")
         has_package(:name => "erlang-src")
@@ -37,12 +43,6 @@ module PoolParty
           has_exec(:name => "build_messenger", :command => ". /etc/profile && server-build-messenger", :requires => get_gempackage("poolparty"))
           has_exec(:name => "start_node", :command => ". /etc/profile && server-start-node", :requires => get_exec("build_messenger"))
           
-        end
-                
-        # Build hostsfile
-        # TODO: COME BACK AND CLEAN THIS UP
-        (self.respond_to?(:list_of_running_instances) ? self : parent).list_of_running_instances.each do |ri|
-          has_host({:name => "#{ri.name}", :ip => ri.ip })
         end
         
         # Custom run puppet to minimize footprint
