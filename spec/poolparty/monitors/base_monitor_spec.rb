@@ -85,6 +85,10 @@ describe "Monitors" do
       end
     end
     describe "when neither is over the limits" do
+      before(:each) do
+        @tmc.stub!(:cpu).and_return 87
+        @tmc.stub!(:memory).and_return 40
+      end
       it "should not expand" do
         @tmc.valid_rules?(:expand_when).should == false
       end

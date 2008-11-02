@@ -4,7 +4,7 @@
 =end
 module Aska
   module ClassMethods
-    def rules(name=:rules, arr=[])
+    def rules(name=:rules, arr=[], create_vars=true)
       returning look_up_rules(name) do |rs|
         arr.each do |line|
           next unless line
@@ -12,7 +12,7 @@ module Aska
           v = line[/(.+)[=\\<>](.*)/, 2].gsub(/\s+/, '')
           m = line[/[=\\<>]/, 0].gsub(/\s+/, '')
           
-          create_instance_variable(k)
+          create_instance_variable(k, create_vars)
           rs << {k => [m, v]}
           rs << {k => [">", "0"]} unless rs.reject {|a| a.to_s == "#{k}>0" }
         end
@@ -21,10 +21,12 @@ module Aska
         end        
       end
     end
-    def create_instance_variable(k)
+    def create_instance_variable(k, create_vars=true)
       aska_attr_accessors << k.to_sym unless aska_attr_accessors.include?(k.to_sym)
-      attr_reader k.to_sym unless respond_to?("#{k}".to_sym)
-      attr_writer k.to_sym unless respond_to?("#{k}=".to_sym)
+      if create_vars
+        attr_reader k.to_sym unless respond_to?("#{k}".to_sym)
+        attr_writer k.to_sym unless respond_to?("#{k}=".to_sym)
+      end
     end
     def look_up_rules(name)
       defined_rules[name.to_sym] ||= Rules.new
