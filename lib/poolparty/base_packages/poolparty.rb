@@ -47,8 +47,15 @@ module PoolParty
         
         # Custom run puppet to minimize footprint
         # TODO: Update the offsetted times
-        has_cron(:name => "puppetd runner", :user => Base.user, :minute => "*/5") do
-          command(PoolParty::Remote::RemoteInstance.puppet_rerun_commad)
+        execute_on_master do          
+          has_cron(:name => "puppetd runner", :user => Base.user, :minute => "*/5") do
+            command(PoolParty::Remote::RemoteInstance.puppet_master_rerun_command)
+          end
+        end
+        execute_on_node do
+          has_cron(:name => "puppetd runner", :user => Base.user, :minute => "*/5") do
+            command(PoolParty::Remote::RemoteInstance.puppet_rerun_commad)
+          end
         end
         
         # These are all requirements on the master
