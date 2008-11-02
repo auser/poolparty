@@ -218,7 +218,8 @@ describe "Remote" do
           @tc.stub!(:list_of_pending_instances).and_return []
           @tc.stub!(:prepare_to_configuration).and_return true
           @tc.stub!(:build_and_store_new_config_file).and_return true          
-          PoolParty::Provisioner.stub!(:provision_slaves).and_return true        
+          PoolParty::Provisioner.stub!(:provision_slaves).and_return true
+          Kernel.stub!(:system).and_return true
         end
         it "should receive can_start_a_new_instance?" do
           @tc.should_receive(:can_start_a_new_instance?).once
@@ -232,7 +233,7 @@ describe "Remote" do
         end
         it "should call a new slave provisioner" do
           @tc.stub!(:should_expand_cloud?).once.and_return true
-          Kernel.should_receive(:system).with("#{PoolParty::Remote::RemoteInstance.puppet_runner_command} -i 5").and_return true
+          Kernel.should_receive(:system).with(". /etc/profile && cloud-provision -i 5").and_return true
         end
         it "should call reconfigure on the master to pick up the new slave" do
           @tc.stub!(:should_expand_cloud?).once.and_return true
