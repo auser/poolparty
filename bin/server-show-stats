@@ -16,6 +16,7 @@ include Remote
 @clouds.each do |cloud|
   
   with_cloud(cloud, {:testing => o.testing }) do    
+    puts header("Stats")
     puts rules_values
   end  
   

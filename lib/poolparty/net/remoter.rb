@@ -187,7 +187,7 @@ module PoolParty
         if can_start_a_new_instance? && should_expand_cloud?(force)
           logger.debug "Expanding the cloud based on load"
           @num = 1
-          @out = request_launch_new_instances(@num)
+          request_launch_new_instances(@num)
           
           reset!
           when_no_pending_instances do
@@ -196,7 +196,7 @@ module PoolParty
             last_instances = nonmaster_nonterminated_instances[(@num_instances - @num)..(@num_instances)]
             last_instances.each do |inst|
               vputs "Provisioning #{inst.name} slave"
-              PoolParty::Provisioner.provision_slave(inst, self)              
+              Kernel.system "#{PoolParty::Remote::RemoteInstance.puppet_runner_command} -i #{inst.name.gsub(/node/, '')}"
             end
             PoolParty::Provisioner.reconfigure_master(self, force)
             after_launched

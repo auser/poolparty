@@ -26,7 +26,7 @@ module PoolParty
       def setup_configs
         <<-EOS          
           echo "#{open(File.join(template_directory, "puppet.conf")).read}" > /etc/puppet/puppet.conf
-          /usr/bin/puppetrerun
+          # /usr/bin/puppetrerun
         EOS
       end
 

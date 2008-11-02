@@ -373,6 +373,7 @@ files:
 - lib/poolparty/templates/puppetrerun
 - lib/poolparty/version.rb
 - lib/poolpartycl.rb
+- log/pool.logs/pool_log.log
 - poolparty.gemspec
 - script/destroy
 - script/generate
