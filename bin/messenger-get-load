@@ -21,7 +21,8 @@ include Remote
   with_cloud(cl, {:testing => o.testing, :monitorname => @monitor, :verbose => o.verbose }) do
     vputs "Getting #{monitorname} load through the messenger"
     load = PoolParty::Messenger.messenger_send!("get_load #{monitorname}", testing)
-    load =~ /[0-9\.]+/ ? print load : vputs "-1"
+    msg = load =~ /[0-9\.]+/ ? load : "-1"
+    print msg
   end
   
 end
