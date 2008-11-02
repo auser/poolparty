@@ -6,13 +6,13 @@ class Loggable
     Logging.init :debug, :info, :warn, :error, :fatal
     
     self.class.loggers << file_logger
-    file_logger.level = :warn
+    file_logger.level = :debug
 
     self.class.loggers << stdout_logger
-    stdout_logger.level = :info
+    stdout_logger.level = :debug
   end
   def file_logger
-    @file_logger ||= Logging.logger( ::File.join(Base.pool_logger_location, "pool_log.log"), logging_opts )
+    @file_logger ||= Logging.logger( Base.pool_logger_location, logging_opts )
   end
   def stdout_logger
     @stdout_logger ||= Logging.logger(STDOUT, logging_opts.merge({:pattern => "%m\n"}))
