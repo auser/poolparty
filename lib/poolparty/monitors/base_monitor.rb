@@ -11,11 +11,11 @@ module PoolParty
     
     module InstanceMethods
       def expand_when(*arr)
-        @expand_when ||= ((arr && arr.empty?) ? options[:expand_when] : configure(:expand_when => self.class.send(:rules, :expand_when, arr)))
+        @expand_when ||= ((arr && arr.empty?) ? options[:expand_when] : configure(:expand_when => self.class.send(:rules,:expand_when,arr,false)))
       end
       
       def contract_when(*arr)
-        @contract_when ||= ((arr && arr.empty?) ? options[:contract_when] : configure(:contract_when => self.class.send(:rules, :contract_when, arr)))
+        @contract_when ||= ((arr&&arr.empty?) ? options[:contract_when] : configure(:contract_when => self.class.send(:rules,:contract_when,arr,false)))
       end
     end
     
