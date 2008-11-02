@@ -72,7 +72,7 @@ module PoolParty
         ". /etc/profile && /usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master 2>&1"
       end
       def self.puppet_master_rerun_command
-        "/usr/bin/puppetcleaner; #{puppet_runner_command}"
+        "#{puppet_runner_command}"
       end
       def self.puppet_rerun_commad
         "/usr/bin/puppetrerun 2>&1 > /dev/null"

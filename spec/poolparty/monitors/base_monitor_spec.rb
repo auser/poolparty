@@ -25,6 +25,10 @@ describe "Monitors" do
     PoolParty::Messenger.should_receive(:messenger_send!).with("get_load fake").and_return true
     TestMonitorClass.new.fake
   end
+  it "should have the cpu method on the class" do
+    PoolParty::Messenger.should_receive(:messenger_send!).with("get_load cpu").and_return true
+    TestMonitorClass.new.cpu
+  end
   describe "expansions" do
     before(:each) do
       @tmc = TestMonitorClass.new

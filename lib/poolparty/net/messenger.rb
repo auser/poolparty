@@ -16,7 +16,7 @@ module PoolParty
     end
     
     def self.messenger_send!(cmd="", testing=false)
-      command = Messenger.erl_command("client", "-s pm_client -run pm_client #{cmd} -s erlang halt -noshell")
+      command = Messenger.erl_command("client#{Time.now.to_i}", "-s pm_client -run pm_client #{cmd} -s erlang halt -noshell")
       testing ? command : %x[#{command}]
     end
     
