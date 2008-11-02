@@ -9,7 +9,7 @@ autorequire:
 bindir: bin
 cert_chain: []
 
-date: 2008-11-01 00:00:00 -07:00
+date: 2008-11-02 00:00:00 -07:00
 default_executable: 
 dependencies: 
 - !ruby/object:Gem::Dependency 
@@ -139,7 +139,6 @@ files:
 - bin/server-start-node
 - config/hoe.rb
 - config/requirements.rb
-- erl_crash.dump
 - examples/basic.rb
 - examples/plugin_without_plugin_directory.rb
 - examples/poolparty.rb

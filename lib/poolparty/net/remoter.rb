@@ -184,7 +184,7 @@ module PoolParty
       # get go
       def expand_cloud_if_necessary(force=false)
         if can_start_a_new_instance? && should_expand_cloud?(force)
-          logger.debug "Expanding the cloud based on load" if should_expand_cloud?
+          logger.debug "Expanding the cloud based on load"
           @num = 1
           @out = request_launch_new_instances(@num)
           
