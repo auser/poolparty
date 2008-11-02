@@ -151,7 +151,7 @@ module PoolParty
         @cloud.run_command_on("if [ -f '/usr/bin/puppetcleaner' ]; then /usr/bin/env puppetcleaner; fi", @cloud.master)
       end
       def process_reconfigure!(testing=false)
-        @cloud.run_command_on(RemoteInstance.puppet_runner_command, @instance) unless testing
+        @cloud.run_command_on(PoolParty::Remote::RemoteInstance.puppet_runner_command, @instance) unless testing
       end
       # Tasks that need to be performed everytime we do any
       # remote ssh'ing into any instance
