@@ -94,7 +94,7 @@ cp #{Base.remote_storage_path}/#{Base.default_specfile_name} #{Base.base_config_
         <<-EOE
 cd /var/poolparty
 wget http://rubyforge.org/frs/download.php/44731/logging-0.9.4.gem -O logging.gem 2>&1
-wget http://rubyforge.org/frs/download.php/45581/ZenTest-3.11.0.gem -O zentest.gem 2>&1
+wget http://rubyforge.org/frs/download.php/45581/ZenTest-3.11.0.gem -O ZenTest.gem 2>&1
 wget http://rubyforge.org/frs/download.php/45600/ParseTree-3.0.1.gem -O ParseTree.gem 2>&1
 wget http://rubyforge.org/frs/download.php/45587/ruby2ruby-1.2.0.gem -O ruby2ruby.gem 2>&1
 wget http://rubyforge.org/frs/download.php/45627/activesupport-2.1.2.gem -O activesupport.gem 2>&1
@@ -106,12 +106,12 @@ wget http://rubyforge.org/frs/download.php/18698/lockfile-1.4.3.gem -O lockfile.
 wget http://rubyforge.org/frs/download.php/45546/rubyforge-1.0.1.gem -O rubyforge.gem 2>&1
 wget http://rubyforge.org/frs/download.php/43954/rake-0.8.3.gem -O rake.gem 2>&1
 wget http://rubyforge.org/frs/download.php/45589/sexp_processor-3.0.0.gem -O sexp_processor.gem 2>&1
-wget http://github.com/auser/poolparty/tree/master%2Fpkg%2Fpoolparty-latest.gem?raw=true -O poolparty-latest.gem 2>&1
-wget http://rubyforge.org/frs/download.php/43666/amazon-ec2-0.3.1.gem -O amazon-ec2.gem 2>&1
+wget http://github.com/auser/poolparty/tree/master%2Fpkg%2Fpoolparty-latest.gem?raw=true -O poolparty.gem 2>&1
+wget http://rubyforge.org/frs/download.php/43666/amazon-ec2-0.3.1.gem -O grempe-amazon-ec2.gem 2>&1
 
 #{
-  %w(rake lockfile rubyforge hoe zentest sexp_processor flexmock logging activesupport 
-      RubyInline ParseTree ruby2ruby xml-simple poolparty-latest amazon-ec2).map do |dep|
+  %w(rake lockfile rubyforge hoe ZenTest sexp_processor flexmock logging activesupport 
+      RubyInline ParseTree ruby2ruby xml-simple poolparty grempe-amazon-ec2).map do |dep|
     "gem install --ignore-dependencies -y --no-ri --no-rdoc #{dep}.gem"
   end.join("\n")
 }
