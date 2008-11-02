@@ -78,8 +78,16 @@ module PoolParty
         end.first || ::File.join( "/tmp/poolparty")
       end
       
+      def logger_location
+        [
+            "/var/logs/poolparty"
+        ].select do |dir|
+          dir if ::File.directory?(dir) && ::File.readable?(dir)
+        end.first || ::File.join(Dir.pwd, "logs")
+      end
+      
       def pool_logger_location
-        File.join(Dir.pwd, "logs")
+        ::File.join(logger_location, "pool.logs")
       end
       
       # Array of allowed_commands that you can run on the remote nodes
