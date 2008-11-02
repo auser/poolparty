@@ -161,6 +161,7 @@ module PoolParty
           vputs ""
           vputs "Provisioning master..."
           hide_output { Provisioner.provision_master(self, testing) }
+          PoolParty::Provisioner.clear_master_ssl_certs(self)
           PoolParty::Provisioner.reconfigure_master(self, !testing)
           after_launched
         end        

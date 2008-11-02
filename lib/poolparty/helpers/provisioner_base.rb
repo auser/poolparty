@@ -44,6 +44,10 @@ module PoolParty
       Provisioner::Master.new(cloud).process_clean_reconfigure_for!(instance, testing)
     end
     
+    def self.clear_master_ssl_certs(cloud, testing=false)
+      Provisioner::Master.new(cloud).clear_master_ssl_certs
+    end
+    
     class ProvisionerBase
       
       include Configurable
@@ -138,9 +142,13 @@ module PoolParty
         vputs "Cleaning certs from master: #{instance.name}"
         # puppetca --clean #{instance.name}.compute-1.internal; puppetca --clean #{instance.name}.ec2.internal
         # find /etc/puppet/ssl -type f -exec rm {} \;
-        @cloud.run_command_on("rm -rf /etc/puppet/ssl", instance) unless testing || instance.master?
-        # @cloud.run_command_on("if [ -f '/usr/bin/puppetcleaner' ]; then /usr/bin/env puppetcleaner; fi", @cloud.master) unless testing
-        @cloud.run_command_on("puppetca --clean #{instance.name}.compute-1.internal ; puppetca --clean #{instance.name}.ec2.internal", @cloud.master) unless testing
+        unless testing
+          @cloud.run_command_on("rm -rf /etc/puppet/ssl", instance) unless instance.master?          
+          @cloud.run_command_on("puppetca --clean #{instance.name}.compute-1.internal; puppetca --clean #{instance.name}.ec2.internal", @cloud.master)
+        end
+      end
+      def clear_master_ssl_certs
+        @cloud.run_command_on("if [ -f '/usr/bin/puppetcleaner' ]; then /usr/bin/env puppetcleaner; fi", @cloud.master)
       end
       def process_reconfigure!(testing=false)        
         @cloud.run_command_on(RemoteInstance.puppet_runner_command, @instance) unless testing
