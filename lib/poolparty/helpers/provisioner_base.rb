@@ -140,7 +140,7 @@ module PoolParty
         # find /etc/puppet/ssl -type f -exec rm {} \;
         @cloud.run_command_on("rm -rf /etc/puppet/ssl", instance) unless testing || instance.master?
         # @cloud.run_command_on("if [ -f '/usr/bin/puppetcleaner' ]; then /usr/bin/env puppetcleaner; fi", @cloud.master) unless testing
-        @cloud.run_command_on("puppetca --clean #{instance.name}.compute-1.internal; puppetca --clean #{instance.name}.ec2.internal", @cloud.master) unless testing
+        @cloud.run_command_on("puppetca --clean #{instance.name}.compute-1.internal ; puppetca --clean #{instance.name}.ec2.internal", @cloud.master) unless testing
       end
       def process_reconfigure!(testing=false)        
         @cloud.run_command_on(RemoteInstance.puppet_runner_command, @instance) unless testing
