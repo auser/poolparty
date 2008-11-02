@@ -150,7 +150,7 @@ module PoolParty
       def clear_master_ssl_certs
         @cloud.run_command_on("if [ -f '/usr/bin/puppetcleaner' ]; then /usr/bin/env puppetcleaner; fi", @cloud.master)
       end
-      def process_reconfigure!(testing=false)        
+      def process_reconfigure!(testing=false)
         @cloud.run_command_on(RemoteInstance.puppet_runner_command, @instance) unless testing
       end
       # Tasks that need to be performed everytime we do any
