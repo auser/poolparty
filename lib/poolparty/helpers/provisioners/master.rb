@@ -161,6 +161,7 @@ cp #{Base.remote_storage_path}/poolparty.pp /etc/puppet/manifests/classes/poolpa
       
       def restart_puppetd
         <<-EOS
+. /etc/profile && /usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master  2>&1 > /dev/null        
 . /etc/profile && /usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master  2>&1 > /dev/null &
         EOS
       end
