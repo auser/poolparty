@@ -6,18 +6,18 @@ module PoolParty
         execute_on_master do
           package({:name => "haproxy"})
 
-          # Startup haproxy and enable it
-          has_line_in_file("ENABLED=1", "/etc/default/haproxy")
-          has_line_in_file("SYSLOGD=\"-r\"", "/etc/default/syslogd")
-          has_line_in_file("local0.* /var/log/haproxy.log", "/etc/syslog.conf", {:notify => 'Service["sysklogd"]'})
-
           # Restart sysklogd after we update the haproxy.log
           has_service(:name => "sysklogd") do
             ensures "running"
           end
+          
+          # Startup haproxy and enable it
+          has_line_in_file("ENABLED=1", "/etc/default/haproxy", :requires => get_package("haproxy"))
+          has_line_in_file("SYSLOGD=\"-r\"", "/etc/default/syslogd", :requires => get_package("haproxy"))
+          has_line_in_file("local0.* /var/log/haproxy.log", "/etc/syslog.conf", {:notify => [get_service("sysklogd"), get_package("haproxy")] })
 
           # Service is required
-          has_service(:name => "haproxy", :ensures => "running")
+          has_service(:name => "haproxy", :ensures => "running", :requires => get_line_in_file("/etc/default/haproxy_line"))
 
           # Tempalte variables
           variable(:name => "name_haproxy", :value => "#{cloud.name}")
@@ -37,9 +37,8 @@ module PoolParty
           # These can also be passed in via hash
           has_remotefile(:name => "/etc/haproxy.cfg") do
             mode 644
-            # onlyif '$hostname == "master"'
-            requires 'Package["haproxy"]'
-            notify 'Service["haproxy"]'
+            requires get_package("haproxy")
+            notify get_service("haproxy")
             template File.join(File.dirname(__FILE__), "..", "templates/haproxy.conf")
           end
         end
