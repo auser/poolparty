@@ -12,11 +12,15 @@ load_pool(o.spec || Binary.get_existing_spec_location)
 
 include Remote
 
-@cloud = extract_cloud_from_options(o).first
+@clouds = extract_cloud_from_options o
 
-with_cloud(@cloud, {:testing => @testing}) do
-  puts header("Expanding cloud #{name}")
-  puts "#{list_of_running_instances.size} running instances of #{maximum_instances} possible instances"
-  puts testing ? "Not expanding (test mode)" : "Expanding the cloud"
-  expand_cloud_if_necessary( !testing )
+@clouds.each do |cloud|
+
+  with_cloud(cloud, {:testing => @testing, :verbose => o.verbose}) do
+    vputs header("Expanding cloud #{name}")
+    vputs "#{list_of_running_instances.size} running instances of #{maximum_instances} possible instances"
+    vputs testing ? "Not expanding (test mode)" : "Expanding the cloud"
+    expand_cloud_if_necessary( !testing )
+  end
+  
 end
