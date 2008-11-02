@@ -4,9 +4,9 @@ pkg/*
 pkg*
 .git/
 .gitignore
-logs/*
-logs/
+log/
+log/*
 test_manifest.pp
 *erl_crash.dump*
-logs
+log
 *.beam
