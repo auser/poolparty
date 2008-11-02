@@ -11,12 +11,12 @@ module PoolParty
         has_package(:name => "git-core")
         has_directory(:name => "#{cwd}")
         
-        exec({:name => "git-#{name}", :requires => get_package(:name => "git-core"), :requires => get_directory("#{cwd}")}) do          
+        has_exec({:name => "git-#{name}", :requires => get_package("git-core"), :requires => get_directory("#{cwd}")}) do          
           command parent.user ? "git clone #{parent.user}@#{parent.source} #{parent.path}" : "git clone #{parent.source} #{parent.to ? parent.to : ""}"
           cwd "#{parent.cwd if parent.cwd}"
           creates "#{::File.join( (parent.cwd ? parent.cwd : cwd), ::File.basename(parent.source, ::File.extname(parent.source)) )}/.git"
         end
-        exec(:name => "update-#{name}", :requires => get_exec("git-#{name}")) do
+        has_exec(:name => "update-#{name}", :requires => get_exec("git-#{name}")) do
           cwd get_exec("git-#{parent.name}").cwd
           command "git pull"
         end
