@@ -152,6 +152,7 @@ module PoolParty
       # Then wait for the master to launch
       def launch_and_configure_master!(testing=false)
         vputs "Requesting to launch new instance"
+        logger.debug "Launching master"
         request_launch_new_instances(1) if list_of_pending_instances.size.zero? && can_start_a_new_instance? && !is_master_running?
         
         vputs "Waiting for there to be no pending instances..."
@@ -183,6 +184,7 @@ module PoolParty
       # get go
       def expand_cloud_if_necessary(force=false)
         if can_start_a_new_instance? && should_expand_cloud?(force)
+          logger.debug "Expanding the cloud based on load" if should_expand_cloud?
           @num = 1
           @out = request_launch_new_instances(@num)
           
@@ -205,9 +207,12 @@ module PoolParty
       # If we can shutdown an instnace and the load allows us to contract
       # the cloud, then we should request_termination_of_non_master_instance
       def contract_cloud_if_necessary(force=false)
-        if can_shutdown_an_instance?
-          before_shutdown
-          request_termination_of_non_master_instance if should_contract_cloud?(force)
+        if can_shutdown_an_instance?          
+          if should_contract_cloud?(force)
+            logger.debug "Shrinking the cloud by 1"
+            before_shutdown
+            request_termination_of_non_master_instance
+          end
         end
       end
       

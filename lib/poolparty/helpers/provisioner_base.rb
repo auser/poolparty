@@ -93,6 +93,8 @@ module PoolParty
           
           before_install(@instance)
           
+          process_clean_reconfigure_for!(@instance, testing)
+          
           vputs "Logging in and running provisioning on #{@instance.name}"
           cmd = "cd #{Base.remote_storage_path} && chmod +x install_#{name}.sh && /bin/sh install_#{name}.sh; rm install_#{name}.sh"
           verbose ? @cloud.run_command_on(cmd, @instance) : hide_output {@cloud.run_command_on(cmd, @instance)}
@@ -136,8 +138,8 @@ module PoolParty
         vputs "Cleaning certs from master: #{instance.name}"
         # puppetca --clean #{instance.name}.compute-1.internal; puppetca --clean #{instance.name}.ec2.internal
         # find /etc/puppet/ssl -type f -exec rm {} \;
-        command = instance.master? ?  "if [ -f '/usr/bin/puppetcleaner' ]; then /usr/bin/env puppetcleaner; fi" : "rm -rf /etc/puppet/ssl"
-        @cloud.run_command_on(command, instance) unless testing
+        @cloud.run_command_on(command, "rm -rf /etc/puppet/ssl") unless testing
+        @cloud.run_command_on(command, "if [ -f '/usr/bin/puppetcleaner' ]; then /usr/bin/env puppetcleaner; fi") unless testing
       end
       def process_reconfigure!(testing=false)        
         @cloud.run_command_on(RemoteInstance.puppet_runner_command, @instance) unless testing
@@ -182,6 +184,7 @@ module PoolParty
           "#!/usr/bin/env sh",
           upgrade_system,
           fix_rubygems,
+          make_logger_directory,
           install_puppet,
           custom_install_tasks
         ] << install_tasks
@@ -291,6 +294,10 @@ fi
       
       def install_puppet
         "#{installer_for( puppet_packages )}"
+      end
+      
+      def make_logger_directory
+        "mkdir -p /var/logs/poolparty"
       end
       
       def create_poolparty_manifest

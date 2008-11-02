@@ -27,6 +27,7 @@ include Remote
       vputs "#{list_of_running_instances.size} running instances of between #{minimum_instances} and #{maximum_instances}"
       vputs "Shutting down non-master instance"
     end
+    
     vputs "Cloud is maintained"
     expand_cloud_if_necessary( !testing )
     contract_cloud_if_necessary( !testing )    
