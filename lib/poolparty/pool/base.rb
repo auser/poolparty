@@ -80,10 +80,10 @@ module PoolParty
       
       def logger_location
         [
-            "/var/logs/poolparty"
+            "/var/log/poolparty"
         ].select do |dir|
           dir if ::File.directory?(dir) && ::File.readable?(dir)
-        end.first || ::File.join(Dir.pwd, "logs")
+        end.first || ::File.join(Dir.pwd, "log")
       end
       
       def pool_logger_location
