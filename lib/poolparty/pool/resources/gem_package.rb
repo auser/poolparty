@@ -10,11 +10,15 @@ module PoolParty
       # TODO: Add it so that it tries to pull the gem off the master fileserver first...
       def loaded(opts={}, parent=self)
         if download_url
+                    
+          execute_on_master do
+            has_exec(:name => "download-#{name}", :cwd => Base.remote_storage_path, :command => "wget #{download_url} -O #{name}.gem", :ifnot => "test -f #{Base.remote_storage_path}/#{name}.gem")
+          end
           
           has_file({
             :name => "#{Base.remote_storage_path}/#{name}.gem", 
             :source => "#{Base.fileserver_base}/#{name}.gem",
-            :requires => get_host("master")
+            :unless => "test -f #{Base.remote_storage_path}/#{name}.gem"
           })
                     
           has_exec(opts.merge({:name => "#{name}", :cwd =>"#{Base.remote_storage_path}", :path => "/bin:/usr/bin:/usr/local/bin:/sbin:/usr/sbin:/var/lib/gems/1.8/bin"})) do
@@ -23,9 +27,6 @@ module PoolParty
             requires get_file("#{Base.remote_storage_path}/#{name}.gem")
           end
           
-          execute_if("$hostname", "master") do
-            has_exec(:name => "download-#{name}", :cwd => Base.remote_storage_path, :command => "wget #{download_url} -O #{name}.gem", :ifnot => "test -f #{Base.remote_storage_path}/#{name}.gem")
-          end
         else
           has_exec(opts.merge({:name => "#{name}", :cwd => "/tmp", :path => "/bin:/usr/bin:/usr/local/bin:/sbin:/usr/sbin:/var/lib/gems/1.8/bin"})) do
             command "gem install -y --no-ri --no-rdoc #{"--version #{version}" if version} #{"--source #{source}" if source} #{name} <<heredoc

@@ -9,7 +9,7 @@ describe "Conditional" do
   describe "wrapped" do
     before(:each) do
       @cloud = cloud :conditional_cloud_spec do
-          execute_if("$hostname", "'master'", self) do
+          execute_if("$hostname", "==", "'master'", self) do
             has_file({:name => "/etc/apache2/puppetmaster2.conf"})
           end
       end
@@ -25,7 +25,7 @@ describe "Conditional" do
       @cond.resources.size.should == 1
     end
     it "should have a file resource on the conditional" do
-      @cond.get_resource(:file, "/etc/apache2/puppetmaster2.conf").name.should == "/etc/apache2/puppetmaster2.conf"
+      @cond.get_file("/etc/apache2/puppetmaster2.conf").name.should == "/etc/apache2/puppetmaster2.conf"
     end
     it "should have the parent as the cloud" do
       @cond.parent.should == @cloud
