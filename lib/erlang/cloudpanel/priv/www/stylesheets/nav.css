@@ -1,0 +1,18 @@
+#nav {
+  padding-right: 0 10px;
+  margin: 0 10px 10px 0; }
+  #nav #navmenu ul {
+    display: inline;
+    list-style-type: none; }
+    #nav #navmenu ul li {
+      padding: 0;
+      margin: 0; }
+    #nav #navmenu ul a {
+      color: #FFF;
+      background: #036;
+      display: block;
+      padding: .3em 0;
+      text-decoration: none; }
+    #nav #navmenu ul a:hover {
+      background: #369;
+      color: #EEE; }
