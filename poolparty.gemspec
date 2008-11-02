@@ -1,7 +1,7 @@
 --- !ruby/object:Gem::Specification 
 name: poolparty
 version: !ruby/object:Gem::Version 
-  version: 0.2.39
+  version: 0.2.40
 platform: ruby
 authors: 
 - Ari Lerner
@@ -62,6 +62,7 @@ executables:
 - cloud-contract
 - cloud-ensure-provisioning
 - cloud-expand
+- cloud-handle-load
 - cloud-list
 - cloud-maintain
 - cloud-osxcopy
@@ -111,6 +112,7 @@ files:
 - bin/cloud-contract
 - bin/cloud-ensure-provisioning
 - bin/cloud-expand
+- bin/cloud-handle-load
 - bin/cloud-list
 - bin/cloud-maintain
 - bin/cloud-osxcopy
@@ -173,6 +175,7 @@ files:
 - lib/erlang/cloudpanel/src/cloudpanel_deps.erl
 - lib/erlang/cloudpanel/src/cloudpanel_sup.erl
 - lib/erlang/cloudpanel/src/cloudpanel_web.erl
+- lib/erlang/cloudpanel/src/webservice.erl
 - lib/erlang/cloudpanel/start-dev.sh
 - lib/erlang/cloudpanel/start.sh
 - lib/erlang/cloudpanel/support/include.mk
