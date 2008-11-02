@@ -68,6 +68,7 @@ describe "Remoter" do
       @tc.stub!(:verbose).and_return false
       Provisioner.stub!(:provision_master).and_return true
       Provisioner.stub!(:reconfigure_master).and_return true
+      Provisioner.stub!(:clear_master_ssl_certs).and_return true
     end
     it "should have the method launch_master!" do
       @tc.respond_to?(:launch_and_configure_master!).should == true
