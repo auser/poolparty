@@ -4,7 +4,7 @@ module PoolParty
       
       def enable
         execute_on_master do
-          package({:name => "haproxy"})
+          has_package({:name => "haproxy"})
 
           # Restart sysklogd after we update the haproxy.log
           has_service(:name => "sysklogd") do

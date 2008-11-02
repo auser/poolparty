@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+<head>
+    <title>MochiWeb - chat</title>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+    <style type="text/css">
+.js .nojs{display:none;}
+
+html, body {margin:0;padding:0;}
+body {background:#fff;color:#222;font:62.5% "Helvetica Neue",Helvetica,Arial,sans-serif;text-align:center;}
+#doc {text-align:left;margin:0 auto;font-size:2em;width:40em;}
+#header {text-align:center;margin:2em 0;}
+#header * {margin:0;}
+#header h1 {color:#333;}
+h1, h2, h3 {letter-spacing:-1px;}
+
+.source {font-size:.8em;color:#000;}
+pre {font-size:.9em;background-color:#ffc;overflow-x:auto;}
+pre em {color:#009;}
+pre b {color:#900;}
+pre strong {color:#099;}
+pre i,
+pre i *{color:#090;}
+
+/* Chat */
+#chat {border:2px solid #000;width:100%;height:20em;overflow:auto;}
+#chat ol {margin:0px;padding:5px;list-style:none;}
+#chat li {border-bottom:1px solid #eee;padding:5px 10px;}
+#chat .error {color:#f00;}
+
+#chatter {padding:5px;}
+#chatter label {color:#999;width:18%;text-align:right;display:block;float:left;line-height:1.5em;}
+#chatter input {width:60%;font-size:1em;margin:0 2px;}
+#chatter .submit {width:auto;width:18%;}
+    </style>
+    <script type="text/javascript">
+        document.documentElement.className = "js";
+    </script>
+</head>
+<body>
+    <div id="doc">
+
+        <div id="header">
+            <h1><a href=".">Minimal Chat</a></h1>
+            <p>powered by MochiWeb.</p>
+        </div>
+        <div id="content">
+            <p class="nojs">JavaScript <strong>must</strong> be enabled to fully enjoy this game.</p>
+            <div id="chat">
+                <ol>
+                </ol>
+            </div>
+            <form id="chatter">
+                <label for="message">Message: </label>
+                <input type="text" name="message" id="message">
+                <input type="submit" class="submit" value="say it!">
+            </form>
+        </div>
+
+        <div id="footer">
+            <p>by <a href="http://yoan.dosimple.ch/">Ari Lerner</a>, doSimple 2008</p>
+        </div>
+    </div>
+<script type="text/javascript" src="javascripts/jquery.js"></script>
+<script type="text/javascript" id="script">
+(function($) {
+    $(document).ready(function() {
+        var url = "/chat";
+
+        $("#chat").bind("message", function(event, message) {
+            $(this).triggerHandler("append", [message]);
+            $(this).triggerHandler("poll");
+
+        }).bind("error", function(event, message) {
+            $(this).triggerHandler("poll");
+            
+        }).bind("append", function(event, message) {
+            $("ol", this).append([
+                '<li>',
+                message,
+                "</li>"].join(""));
+            this.scrollTop = $("ol", this).get(0).offsetHeight;
+
+        }).bind("poll", function(event) {
+            var self = this;
+            $.ajax({
+                url: url + "?t=" + new Date().getTime().toString(),
+                dataType: "json",
+                method: "get",
+                success: function(data) {
+                    if("ok" in data) {
+                        $(self).triggerHandler("message", [data.ok]);
+                    } else if("error" in data) {
+                        $(self).triggerHandler("error", [data.error]);
+                    } else {
+                        alert("epic fail!");
+                    }
+                }
+            });
+        }).triggerHandler("poll");
+
+        $("#chatter").submit(function(event){
+            $.ajax({
+                url: url,
+                dataType: "json",
+                type: "POST",
+                data: "message="+$("#message").val(),
+                success: function(data) {
+                    $("#message").val("").focus();
+                    var chat = $("#chat");
+                    if("ok" in data) {
+                        chat.triggerHandler("posted", [data.ok]);
+                    } else if("error" in data) {
+                        chat.triggerHandler("error", [data.error]);
+                    } else {
+                        alert("epic fail!");
+                    }
+                }
+            });
+            return false;
+        });
+
+        $("#message").attr("autocomplete", "off").focus();
+    });
+})(jQuery);
+</script>
+</body>
+</html>
