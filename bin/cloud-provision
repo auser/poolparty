@@ -15,7 +15,9 @@ include Remote
 
 @clouds.each do |cloud|
 
-  with_cloud(cloud, {:verbose => o.verbose, :testing => o.testing, :provision_slave => (o.provision_slave || false), :instance_num => o.instance_num}) do
+  with_cloud(cloud, {:verbose => o.verbose, :testing => o.testing, :provision_slave => (o.provision_slave || false), :instance_number => o.instance_num}) do
+
+    instance_num = instance_number.to_i if instance_number
     
     if instance_num
       @instance = get_instance_by_number( instance_num )
