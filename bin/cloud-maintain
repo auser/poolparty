@@ -20,6 +20,8 @@ include Remote
 
   with_cloud(cloud, {:location => @location, :testing => o.testing, :verbose => o.verbose}) do
     vputs header("Maintaining cloud #{name}")
+    logger.warn "Maintaining cloud"
+    logger.warn rules_values
     if !minimum_number_of_instances_are_running?
       vputs "#{list_of_running_instances.size} running instances of between #{minimum_instances} and #{maximum_instances}"
       vputs "Launching new instance"
