@@ -26,7 +26,7 @@ module PoolParty
           has_line_in_file("local0.* /var/log/haproxy.log", "/etc/syslog.conf", {:notify => get_service("sysklogd")})
 
           # Service is required
-          has_service(:name => "haproxy", :ensures => "running", :requires => get_line_in_file("/etc/default/haproxy_line"))
+          has_service(:name => "haproxy", :ensures => "running")
 
           # These can also be passed in via hash
           has_remotefile(:name => "/etc/haproxy.cfg") do
