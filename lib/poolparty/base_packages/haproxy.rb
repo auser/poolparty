@@ -3,7 +3,7 @@ module PoolParty
     plugin :haproxy do
       
       def enable
-        execute_if("$hostname", "master") do
+        execute_on_master do
           package({:name => "haproxy"})
 
           # Startup haproxy and enable it
