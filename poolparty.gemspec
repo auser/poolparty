@@ -85,6 +85,7 @@ executables:
 - server-list-active
 - server-list-responding
 - server-rerun
+- server-show-stats
 - server-start-master
 - server-start-node
 extensions: []
@@ -133,6 +134,7 @@ files:
 - bin/server-list-active
 - bin/server-list-responding
 - bin/server-rerun
+- bin/server-show-stats
 - bin/server-start-master
 - bin/server-start-node
 - config/hoe.rb
