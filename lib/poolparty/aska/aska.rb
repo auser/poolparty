@@ -72,10 +72,10 @@ module Aska
     def rules_values
       returning Array.new do |arr|
         self.class.defined_rules.each do |name,rule_array|
-          arr << name
+          arr << "#{name} : #{valid_rule?(rule_array)}"
           rule_array.each do |rule|
             rule.map do |k,v|
-              arr << "#{k} -> #{__aska_aska_stuff(k)} (#{v[0]} #{v[1]})"
+              arr << "  #{k} -> #{__aska_aska_stuff(k)} (#{v[0]} #{v[1]})"
             end
           end
         end
