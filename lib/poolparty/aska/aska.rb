@@ -14,6 +14,7 @@ module Aska
           
           create_instance_variable(k)
           rs << {k => [m, v]}
+          rs << {k => [">", "0"]}
         end
         self.send(:define_method, name) do
           look_up_rules(name)
