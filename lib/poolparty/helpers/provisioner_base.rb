@@ -28,7 +28,6 @@ module PoolParty
 
     def self.configure_slaves(cloud, testing=false)
       cloud.nonmaster_nonterminated_instances.each do |sl|
-        puts "Slave: #{sl.name} (#{sl.ip})"
         configure_slave(sl, cloud, testing)
       end
     end

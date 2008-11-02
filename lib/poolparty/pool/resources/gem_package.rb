@@ -18,7 +18,6 @@ module PoolParty
           has_file({
             :name => "#{Base.remote_storage_path}/#{name}.gem", 
             :source => "#{Base.fileserver_base}/#{name}.gem",
-            :ifnot => "test -f #{Base.remote_storage_path}/#{name}.gem",
             :requires => get_host("master")
           })
                     
