@@ -33,6 +33,7 @@ bin/server-get-load
 bin/server-list-active
 bin/server-list-responding
 bin/server-rerun
+bin/server-show-stats
 bin/server-start-master
 bin/server-start-node
 config/hoe.rb
