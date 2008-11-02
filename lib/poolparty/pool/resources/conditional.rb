@@ -2,12 +2,16 @@ module PoolParty
   module Resources
     
     def execute_on_master(parent=self, &block)
-      execute_if("$hostname", "master", parent, &block)
+      execute_if("$hostname", "==", "master", parent, &block)
     end
     
-    def execute_if(attr_s="$hostname", str="", parent=self, &block)
+    def execute_on_node(parent=self, &block)
+      execute_if("$hostname", "!=", "master", parent, &block)
+    end
+    
+    def execute_if(attr_s="$hostname", comparison="==", str="", parent=self, &block)
       # parent = parent.is_a?(PoolParty::Cloud::Cloud) ? parent : parent.parent
-      opts = {:attribute => attr_s, :equal => str}
+      opts = {:attribute => attr_s, :equal => str, :comparison => comparison}
       options = parent.respond_to?(:options) ? parent.options.merge!(opts) : opts
       # @c = PoolParty::Resources::Conditional.new(options, parent, &block)
       parent.add_resource(:conditional, options, parent, &block)
@@ -17,7 +21,7 @@ module PoolParty
     class Conditional < Resource
       
       def initialize(opts={}, parent=self, &block)
-        name "#{opts[:name] ? opts[:name] : opts[:attribute]} == #{opts[:equal]}"
+        name "#{opts[:name] ? opts[:name] : opts[:attribute]} #{opts[:comparison]} #{opts[:equal]}"
         attribute opts[:attribute]
         equal opts[:equal]
         super
@@ -27,6 +31,10 @@ module PoolParty
       # itself as a resource
       def virtual_resource?
         true
+      end
+      
+      def disallowed_options
+        [:comparison]
       end
       
       def printable?
