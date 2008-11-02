@@ -193,10 +193,12 @@ module PoolParty
           when_no_pending_instances do
             wait "20.seconds" # Give some time for ssh to startup
             @num_instances = nonmaster_nonterminated_instances.size
-            last_instances = nonmaster_nonterminated_instances[(@num_instances - @num)..(@num_instances)]
+            last_instances = nonmaster_nonterminated_instances[(@num_instances - @num)...(@num_instances)]
             last_instances.each do |inst|
-              vputs "Provisioning #{inst.name} slave"
-              Kernel.system "#{PoolParty::Remote::RemoteInstance.puppet_runner_command} -i #{inst.name.gsub(/node/, '')}"
+              vputs "Provisioning #{inst.name}"
+              cmd = ". /etc/profile && cloud-provision -i #{inst.name.gsub(/node/, '')}"
+              logger.debug "Provisioning slave with #{cmd}"
+              Kernel.system cmd 
             end
             PoolParty::Provisioner.reconfigure_master(self, force)
             after_launched
