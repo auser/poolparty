@@ -47,13 +47,13 @@ module PoolParty
         
         # Custom run puppet to minimize footprint
         # TODO: Update the offsetted times
-        has_cron(:name => "puppetd runner", :user => Base.user, :minute => "*/8") do
-          command((self.respond_to?(:master) ? self : parent).master.puppet_runner_command)
+        has_cron(:name => "puppetd runner", :user => Base.user, :minute => "*/5") do
+          command(PoolParty::Remote::RemoteInstance.puppet_rerun_commad)
         end
         
         # These are all requirements on the master
         execute_on_master do
-          has_cron({:name => "maintain script ", :command => ". /etc/profile && which cloud-maintain | /bin/sh", :minute => "*/3"})
+          has_cron({:name => "maintain script", :command => ". /etc/profile && which cloud-maintain | /bin/sh", :minute => "*/3"})
           # TODO: Update this so it only runs when needed
           has_exec(:name => "start master messenger", :command => ". /etc/profile && server-start-master", :requires => [get_gempackage("poolparty-latest"), get_exec("build_messenger")])
           
@@ -61,10 +61,11 @@ module PoolParty
             mode 744
             template File.join(File.dirname(__FILE__), "..", "templates/puppetcleaner")
           end
-          has_remotefile(:name => "/usr/bin/puppetrerun") do
-            mode 744
-            template File.join(File.dirname(__FILE__), "..", "templates/puppetrerun")
-          end
+        end
+        
+        has_remotefile(:name => "/usr/bin/puppetrerun") do
+          mode 744
+          template File.join(File.dirname(__FILE__), "..", "templates/puppetrerun")
         end
         
         # has_host(:name => "puppet", :ip => (self.respond_to?(:master) ? self : parent).master.ip)
