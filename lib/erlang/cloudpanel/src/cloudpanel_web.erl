@@ -22,22 +22,79 @@ start(Options) ->
 stop() ->
     mochiweb_http:stop(?MODULE).
 
-loop(Req, DocRoot) ->
-    "/" ++ Path = Req:get(path),
-    case Req:get(method) of
-        Method when Method =:= 'GET'; Method =:= 'HEAD' ->
-            case Path of
-                _ ->
-                    Req:serve_file(Path, DocRoot)
-            end;
-        'POST' ->
-            case Path of
-                _ ->
-                    Req:not_found()
-            end;
-        _ ->
-            Req:respond({501, [], []})
-    end.
+		loop(Req, DocRoot) ->
+		 log(Req),
+		 case string:tokens(Req:get(path), "/") of
+		  [ "dump" ] ->
+		   Req:ok({"text/plain",
+		    io_lib:format("~p~n", [Req:dump()])});
+
+		  [ "favicon.ico" ] ->
+		   Req:respond({404, [], ""});
+
+		  [ "codepath" ] ->
+		   Req:ok({"text/plain",
+		    io_lib:format("codepath: ~p~n", [code:get_path()])});
+
+		  [ "codepath", "json" ] ->
+		   Req:ok({"text/plain",
+		    mochijson:encode({array, code:get_path()})});
+
+		  [ Path, Fun | Elems ] ->
+		   % Every module name should begin with 'w'
+		   dispatch(Req, DocRoot, list_to_atom("w" ++ Path), Fun, Elems);
+
+		  [] ->
+				Req:serve_file(index, DocRoot),
+				launch(Req, DocRoot, wdefault, do, []);
+
+		  _ ->
+		   Req:respond({502, [], []})
+
+		 end.
+
+		dispatch(Req, DocRoot, Module, Fun, Elems) ->
+		 M = Req:get(method),
+		 case M of
+		  'GET' ->
+		   launch(Req, DocRoot, Module, Fun, Elems);
+		  'POST' ->
+		   launch(Req, DocRoot, Module, Fun, Elems);
+		  'PUT' ->
+		   launch(Req, DocRoot, Module, Fun, Elems);
+		  'DELETE' ->
+		   launch(Req, DocRoot, Module, Fun, Elems);
+		  'HEAD' ->
+		   launch(Req, DocRoot, Module, Fun, Elems);
+		  _Any ->
+		   launch(Req, DocRoot, wdefault, get, [])
+		 end.
+
+		launch(Req, DocRoot, wcontent, Fun, Args) ->
+		 case catch wcontent:default(Req, DocRoot, [ Fun | Args] ) of
+		  {'EXIT', {Type, _Error}} ->
+		   Req:ok({"text/plain",  
+		    io_lib:format("GET Error: '~p' for '~p' ~p ~p~n~p~n", [Type, wcontent, Fun, Args, _Error])});
+		  _ ->
+		   ok
+		 end;
+
+		launch(Req, DocRoot, Module, Fun, Args) ->
+		 F = list_to_atom(Fun),
+		 case catch Module:F(Req, DocRoot, Args) of
+		  {'EXIT', {Type, _Error}} ->
+		   Req:ok({"text/plain",  
+		    io_lib:format("~p Error: '~p' for ~p ~p ~p~n~p~n", [Req:get(method), Type, Module, Fun, Args, _Error])});
+		  _ ->
+		   ok
+		 end.
+
+		log(Req) ->
+		 Ip = Req:get(peer),
+		 spawn(?MODULE, dolog, [Req, Ip]).
+
+		dolog(Req, Ip) ->
+		 stat_logger:log("~p ~p", [Ip, Req:get(path)]).
 
 %% Internal API
 
