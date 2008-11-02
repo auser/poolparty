@@ -306,7 +306,7 @@ fi
       end
       
       def make_logger_directory
-        "mkdir -p /var/logs/poolparty"
+        "mkdir -p /var/log/poolparty"
       end
       
       def create_poolparty_manifest

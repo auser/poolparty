@@ -28,7 +28,7 @@ module PoolParty
   include FileWriter
   
   def logger
-    @pool_logger ||= make_new_logger
+    @logger ||= make_new_logger
   end
   
   private
