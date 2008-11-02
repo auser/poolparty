@@ -67,6 +67,18 @@ module Aska
         end
       end
     end
+    def rules_values
+      returning Array.new do |arr|
+        self.class.defined_rules.each do |name,rule_array|
+          arr << name
+          rule_array.each do |rule|
+            rule.map do |k,v|
+              arr << "#{k} -> #{__aska_aska_stuff(k)} (#{v[0]} #{v[1]})"
+            end
+          end
+        end
+      end.join("\n")
+    end
     # Get the variable from the class
     # If it's defined as an attr_accessor, we know it has been defined as a rule
     # Otherwise, if we are passing it as a 
