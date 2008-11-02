@@ -23,14 +23,21 @@ include Remote
     if !minimum_number_of_instances_are_running?
       vputs "#{list_of_running_instances.size} running instances of between #{minimum_instances} and #{maximum_instances}"
       vputs "Launching new instance"
+      expand_cloud_if_necessary( !testing )
     elsif !maximum_number_of_instances_are_not_running?
       vputs "#{list_of_running_instances.size} running instances of between #{minimum_instances} and #{maximum_instances}"
       vputs "Shutting down non-master instance"
-    end
-    
+      contract_cloud_if_necessary( !testing )
+    end    
     vputs "Cloud is maintained"
-    expand_cloud_if_necessary( !testing )
-    contract_cloud_if_necessary( !testing )    
+    
+    if should_expand_cloud?
+      vputs "Expanding cloud based on load"
+      expand_cloud_if_necessary
+    elsif should_contract_cloud?
+      vputs "Contracting cloud based on load"
+      contract_cloud_if_necessary
+    end
   end  
 
 end
