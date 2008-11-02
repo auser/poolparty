@@ -158,8 +158,13 @@ files:
 - lib/erlang/cloudpanel/ebin/cloudpanel_deps.beam
 - lib/erlang/cloudpanel/ebin/cloudpanel_sup.beam
 - lib/erlang/cloudpanel/ebin/cloudpanel_web.beam
+- lib/erlang/cloudpanel/priv/www/images/bg_content.gif
 - lib/erlang/cloudpanel/priv/www/index.html
 - lib/erlang/cloudpanel/priv/www/javascripts/jquery.js
+- lib/erlang/cloudpanel/priv/www/stylesheets/application.css
+- lib/erlang/cloudpanel/priv/www/stylesheets/classes.css
+- lib/erlang/cloudpanel/priv/www/stylesheets/colors.css
+- lib/erlang/cloudpanel/priv/www/stylesheets/nav.css
 - lib/erlang/cloudpanel/src/Makefile
 - lib/erlang/cloudpanel/src/cloudpanel.app
 - lib/erlang/cloudpanel/src/cloudpanel.erl
