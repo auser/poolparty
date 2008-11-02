@@ -213,7 +213,7 @@ describe "Remote" do
         before(:each) do
           setup
           stub_list_from_remote_for(@tc)
-          @tc.stub!(:request_launch_new_instances).and_return true
+          @tc.stub!(:request_launch_new_instances).and_return PoolParty::Remote::RemoteInstance.new(:ip => "127.0.0.1", :num => 1)
           @tc.stub!(:can_start_a_new_instance).and_return true
           @tc.stub!(:list_of_pending_instances).and_return []
           @tc.stub!(:prepare_to_configuration).and_return true
@@ -232,7 +232,7 @@ describe "Remote" do
         end
         it "should call a new slave provisioner" do
           @tc.stub!(:should_expand_cloud?).once.and_return true
-          PoolParty::Provisioner.should_receive(:provision_slave).and_return true
+          Kernel.should_receive(:system).with("#{PoolParty::Remote::RemoteInstance.puppet_runner_command} -i 5").and_return true
         end
         it "should call reconfigure on the master to pick up the new slave" do
           @tc.stub!(:should_expand_cloud?).once.and_return true
