@@ -73,7 +73,6 @@ lib/erlang/cloudpanel/src/cloudpanel_app.erl
 lib/erlang/cloudpanel/src/cloudpanel_deps.erl
 lib/erlang/cloudpanel/src/cloudpanel_sup.erl
 lib/erlang/cloudpanel/src/cloudpanel_web.erl
-lib/erlang/cloudpanel/src/webservice.erl
 lib/erlang/cloudpanel/start-dev.sh
 lib/erlang/cloudpanel/start.sh
 lib/erlang/cloudpanel/support/include.mk

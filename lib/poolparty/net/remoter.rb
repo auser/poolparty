@@ -196,9 +196,9 @@ module PoolParty
             last_instances = nonmaster_nonterminated_instances[(@num_instances - @num)...(@num_instances)]
             last_instances.each do |inst|
               vputs "Provisioning #{inst.name}"
-              cmd = ". /etc/profile && cloud-provision -i #{inst.name.gsub(/node/, '')}"
+              cmd = ". /etc/profile && cloud-provision -i #{inst.name.gsub(/node/, '')} &"
               logger.debug "Provisioning slave with #{cmd}"
-              Kernel.system cmd 
+              Kernel.system cmd
             end
             PoolParty::Provisioner.reconfigure_master(self, force)
             after_launched
