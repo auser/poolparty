@@ -34,7 +34,7 @@ module PoolParty
       # puppetd --listen --fqdn #{@instance.name}
       def start_puppet
         <<-EOS
-          . /etc/profile && /usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master 2>&1
+. /etc/profile && /usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master  2>&1 > /dev/null
         EOS
       end
       
