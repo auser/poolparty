@@ -143,7 +143,7 @@ module PoolParty
         # puppetca --clean #{instance.name}.compute-1.internal; puppetca --clean #{instance.name}.ec2.internal
         # find /etc/puppet/ssl -type f -exec rm {} \;
         unless testing
-          @cloud.run_command_on("rm -rf /etc/puppet/ssl", instance) unless instance.master?          
+          # @cloud.run_command_on("rm -rf /etc/puppet/ssl", instance) unless instance.master?          
           @cloud.run_command_on("puppetca --clean #{instance.name}.compute-1.internal; puppetca --clean #{instance.name}.ec2.internal", @cloud.master)
         end
       end
