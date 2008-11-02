@@ -11,6 +11,15 @@ module PoolParty
             ensures "running"
           end
           
+          # Template variables
+          has_variable(:name => "name_haproxy", :value => "#{cloud.name}")          
+          has_variable(:name => "nodenames_haproxy", :value => "generate('/usr/bin/env', '/var/lib/gems/1.8/bin/server-list-active', '-c', 'name')")
+          has_variable(:name => "node_ips_haproxy",  :value => "generate('/usr/bin/env', '/var/lib/gems/1.8/bin/server-list-active', '-c', 'ip')")
+          
+          has_variable(:name => "ports_haproxy", :value => ([(self.respond_to?(:port) ? port : Base.port)].flatten))        
+          has_variable(:name => "forwarding_port", :value => (respond_to?(:forwarding_port) ? forwarding_port : Base.forwarding_port))
+          has_variable(:name => "proxy_mode", :value => (respond_to?(:proxy_mode) ? proxy_mode : Base.proxy_mode))
+          
           # Startup haproxy and enable it
           has_line_in_file("ENABLED=1", "/etc/default/haproxy", :requires => get_package("haproxy"))
           has_line_in_file("SYSLOGD=\"-r\"", "/etc/default/syslogd", :requires => get_package("haproxy"))
@@ -18,21 +27,6 @@ module PoolParty
 
           # Service is required
           has_service(:name => "haproxy", :ensures => "running", :requires => get_line_in_file("/etc/default/haproxy_line"))
-
-          # Tempalte variables
-          variable(:name => "name_haproxy", :value => "#{cloud.name}")
-          
-          # if cloud.provisioning?
-          #   variable(:name => "nodenames_haproxy", :value => "#{list_of_running_instances.map{|a| "#{a.send :name}" }.join("\t")}")
-          #   variable(:name => "node_ips_haproxy",  :value => "#{list_of_running_instances.map{|a| "#{a.send :ip}" }.join("\t")}")
-          # else
-            variable(:name => "nodenames_haproxy", :value => "generate('/usr/bin/env', '/var/lib/gems/1.8/bin/server-list-active', '-c', 'name')")
-            variable(:name => "node_ips_haproxy",  :value => "generate('/usr/bin/env', '/var/lib/gems/1.8/bin/server-list-active', '-c', 'ip')")
-          # end
-          
-          variable(:name => "ports_haproxy", :value => ([(self.respond_to?(:port) ? port : Base.port)].flatten))        
-          variable(:name => "forwarding_port", :value => (respond_to?(:forwarding_port) ? forwarding_port : Base.forwarding_port))
-          variable(:name => "proxy_mode", :value => (respond_to?(:proxy_mode) ? proxy_mode : Base.proxy_mode))
 
           # These can also be passed in via hash
           has_remotefile(:name => "/etc/haproxy.cfg") do
