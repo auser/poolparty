@@ -233,7 +233,7 @@ describe "Remote" do
         end
         it "should call a new slave provisioner" do
           @tc.stub!(:should_expand_cloud?).once.and_return true
-          Kernel.should_receive(:system).with(". /etc/profile && cloud-provision -i 5 &").and_return true
+          Kernel.should_receive(:system).with(". /etc/profile && cloud-provision -i 5 2>&1 > /dev/null &").and_return true
         end
         it "should call reconfigure on the master to pick up the new slave" do
           @tc.stub!(:should_expand_cloud?).once.and_return true
