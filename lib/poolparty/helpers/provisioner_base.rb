@@ -143,8 +143,12 @@ module PoolParty
         # puppetca --clean #{instance.name}.compute-1.internal; puppetca --clean #{instance.name}.ec2.internal
         # find /etc/puppet/ssl -type f -exec rm {} \;
         unless testing
-          # @cloud.run_command_on("rm -rf /etc/puppet/ssl", instance) unless instance.master?          
-          @cloud.run_command_on("puppetca --clean #{instance.name}.compute-1.internal; puppetca --clean #{instance.name}.ec2.internal", @cloud.master)
+          # @cloud.run_command_on("rm -rf /etc/puppet/ssl", instance) unless instance.master?
+          str = returning String.new do |s|
+            s << "puppetca --clean #{instance.name}.compute-1.internal 2>&1 > /dev/null;"
+            s << "puppetca --clean #{instance.name}.ec2.internal 2>&1 > /dev/null"
+          end
+          @cloud.run_command_on(str, @cloud.master)
         end
       end
       def clear_master_ssl_certs
@@ -290,10 +294,10 @@ echo 'Updated already'
 else
 touch /etc/apt/sources.list
 echo 'deb http://mirrors.kernel.org/ubuntu hardy main universe' >> /etc/apt/sources.list
-aptitude update -y <<heredoc
+aptitude update -y #{unix_hide_string} <<heredoc
 Y
 heredoc
-aptitude autoclean #{unix_hide_string}
+aptitude autoclean #{unix_hide_string} 
 fi
           "
         else
