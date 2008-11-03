@@ -16,16 +16,16 @@ include Remote
 
 @clouds.each do |name, cloud|
   
-  with_cloud(cloud, {:testing => o.testing, :location => @location, :provision_class => @provision_class}) do
+  with_cloud(cloud, {:testing => o.testing, :location => @location, :provision_class => @provision_class, :verbose => o.verbose}) do
     
-    hide_output do
+    # hide_output do
       # if provision_class == "master" || provision_class == "all"
         Provisioner.configure_master(self, testing)
       # end
       # if provision_class == "slave" || provision_class == "all"
       #   Provisioner.configure_slaves(self, testing)
       # end
-    end    
+    # end    
     clear_base_directory unless testing
   end    
 end

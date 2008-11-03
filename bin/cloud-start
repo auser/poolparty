@@ -17,7 +17,7 @@ load_pool(o.spec || Binary.get_existing_spec_location)
   with_cloud(cloud, {:testing => @testing, :verbose => (o.verbose || false)}) do
     puts header("Starting cloud")
     puts "#{list_of_running_instances.size} running instances (#{minimum_instances} - #{maximum_instances})"
-    if list_of_running_instances.size != 1
+    if list_of_running_instances.size <= 1
       puts "Starting the master instance"    
       if testing
         puts("\tNot launching while in testing mode")
@@ -28,6 +28,7 @@ load_pool(o.spec || Binary.get_existing_spec_location)
         provisioning_complete
       end
     end
+    puts open(::File.join(File.dirname(__FILE__), "..", "lib", "poolparty", "config", "postlaunchmessage.txt")).read ^ {:master_ip => master.ip.chomp}
     clear_base_directory unless testing
   end
   
