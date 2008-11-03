@@ -12,6 +12,7 @@ module PoolParty
         has_package(:name => "erlang")
         has_package(:name => "erlang-dev")
         has_package(:name => "erlang-src")
+        has_package(:name => "yaws")
         
         has_package(:name => "rubygems") do |g|
           # These should be installed automagically by poolparty, but just in case
@@ -24,10 +25,9 @@ module PoolParty
           g.has_gempackage(:name => "hoe", :download_url => "http://rubyforge.org/frs/download.php/45685/hoe-1.8.2.gem", :version => "1.8", :requires => get_gempackage("rubyforge"))
           g.has_gempackage(:name => "ZenTest", :download_url => "http://rubyforge.org/frs/download.php/45581/ZenTest-3.11.0.gem", :requires => [get_gempackage("hoe"), get_gempackage("rubyforge")])
           
-          g.has_gempackage(:name => "rake", :download_url => "http://rubyforge.org/frs/download.php/43954/rake-0.8.3.gem")
-          g.has_gempackage(:name => "xml-simple", :download_url => "http://rubyforge.org/frs/download.php/18366/xml-simple-1.0.11.gem") do |x|
-            x.has_gempackage(:name => "grempe-amazon-ec2", :download_url => "http://rubyforge.org/frs/download.php/43666/amazon-ec2-0.3.1.gem")
-          end
+          has_gempackage(:name => "rake", :download_url => "http://rubyforge.org/frs/download.php/43954/rake-0.8.3.gem")
+          has_gempackage(:name => "xml-simple", :download_url => "http://rubyforge.org/frs/download.php/18366/xml-simple-1.0.11.gem")
+          has_gempackage(:name => "grempe-amazon-ec2", :download_url => "http://rubyforge.org/frs/download.php/43666/amazon-ec2-0.3.1.gem", :requires => get_gempackage("xml-simple"))
           
           has_gempackage(:name => "sexp_processor", :download_url => "http://rubyforge.org/frs/download.php/45589/sexp_processor-3.0.0.gem")
           has_gempackage(:name => "ParseTree", :download_url => "http://rubyforge.org/frs/download.php/45600/ParseTree-3.0.1.gem", :requires => [get_gempackage("sexp_processor"), get_gempackage("ZenTest")])
@@ -43,6 +43,14 @@ module PoolParty
           has_exec(:name => "build_messenger", :command => ". /etc/profile && server-build-messenger", :requires => get_gempackage("poolparty-latest"), :onlyif => "ps aux | grep beam | grep node")
           has_exec(:name => "start_node", :command => ". /etc/profile && server-start-node", :requires => get_exec("build_messenger"), :onlyif => "ps aux | grep beam | grep node")
           
+        end
+        
+        # Cloud panel setup
+        
+        has_directory(:name => "/var/www/cloudpanel")
+        
+        has_file(:name => "/etc/yaws/conf.d/localhost.conf") do
+          template File.join(File.dirname(__FILE__), "..", "templates/yaws.conf")
         end
         
         # Custom run puppet to minimize footprint
