@@ -34,6 +34,7 @@ module PoolParty
   private
   #:nodoc:#
   def make_new_logger
+    FileUtils.mkdir_p ::File.dirname(Base.pool_logger_location) unless ::File.directory?(::File.dirname(Base.pool_logger_location))
     Loggable.new
   end
 end
