@@ -15,7 +15,7 @@ module PoolParty
           mod.send :include, PoolParty::Remote::RemoterBase
           self.class.send :include, mod
           self.extend mod
-                    
+          
           @remote_base = "#{t}".preserved_module_constant
         end
       else

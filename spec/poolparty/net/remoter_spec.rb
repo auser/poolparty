@@ -80,7 +80,7 @@ describe "Remoter" do
       @tc.should_receive(:is_master_running?).and_return false
     end
     it "should ask to request_launch_new_instances when the master is not running and we can start a new instance" do
-      @tc.should_receive(:request_launch_new_instances).with(1)
+      @tc.should_receive(:request_launch_master_instance)
       @tc.stub!(:can_start_a_new_instance?).and_return true
       @tc.stub!(:is_master_running?).and_return false
     end
