@@ -25,7 +25,7 @@ class String
     self.split("::")[-1].downcase rescue self
   end
   def sanitize
-    self.gsub(/[\.\/]*/, '')
+    self.gsub(/[ \.\/]*/, '')
   end
   def nice_runnable(quite=true)
     self.split(/ && /).join("\n")
