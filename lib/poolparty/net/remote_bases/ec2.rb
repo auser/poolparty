@@ -19,8 +19,7 @@ module PoolParty
         :size => "#{size || Base.size}")
       begin
         item = instance#.instancesSet.item
-        inst = EC2ResponseObject.get_hash_from_response(item)
-        associate_address_with_master_ip(inst) if inst.master?
+        inst = EC2ResponseObject.get_hash_from_response(item)        
       rescue Exception => e
       end
       inst
@@ -54,7 +53,7 @@ module PoolParty
       EC2ResponseObject.get_descriptions(ec2.describe_instances).sort_by {|a| a[:launching_time]}
     end
         
-    def associate_address_with_master_ip(instance=nil)      
+    def after_launch_master(instance=nil)      
       ec2.associate_address(:instance_id => instance.instance_id, :public_ip => set_master_ip_to) if set_master_ip_to && instance
     end
     
