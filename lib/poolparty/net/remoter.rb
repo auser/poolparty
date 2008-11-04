@@ -150,13 +150,10 @@ module PoolParty
       def provision_slaves_from_n(num=1)
         reset!
         when_no_pending_instances do
-          vputs "Waiting for ssh to startup on the instance"
           wait "10.seconds" # Give some time for ssh to startup
           @num_instances = list_of_running_instances.size
           last_instances = nonmaster_nonterminated_instances[(@num_instances - (num))..(@num_instances)]
-          vputs "Running provision_slave on #{(@num_instances - (num))..(@num_instances)} slaves"
           last_instances.each do |inst|
-            vputs "provision_slave(#{inst}, #{self})"
             PoolParty::Provisioner.provision_slave(inst, self, false) unless inst.master?
             cmd = ". /etc/profile && cloud-provision -i #{inst.name.gsub(/node/, '')} #{unix_hide_string} &"
             Kernel.system cmd
