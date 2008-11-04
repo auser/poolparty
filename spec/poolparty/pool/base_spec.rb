@@ -18,7 +18,7 @@ describe "Base" do
     Base.storage_directory.should =~ /tmp/
   end
   it "should set the tmp path to tmp" do
-    Base.tmp_path.should =~ /\/tmp/
+    Base.tmp_path.should == "/tmp/poolparty"
   end
   it "should set the remote storage path to /var/poolparty" do
     Base.remote_storage_path.should == "/var/poolparty"
@@ -41,6 +41,13 @@ describe "Base" do
       ::File.stub!(:file?).with("ppkeys").and_return true
       Base.get_working_key_file_locations.should == "ppkeys"
     end
+    it "should call get_working_key_file_locations" do
+      @str = "foo"
+      @str.stub!(:read).and_return true
+      Base.stub!(:open).and_return @str
+      Base.should_receive(:get_working_key_file_locations)
+      Base.read_keyfile
+    end
     describe "with keyfile" do
       before(:each) do
         @keyfile = "ppkeys"
@@ -49,7 +56,9 @@ describe "Base" do
         :secret_access_key: SECRET"
         @keyfile.stub!(:read).and_return @str
         Base.stub!(:get_working_key_file_locations).and_return @keyfile
-        Base.stub!(:open).with(@keyfile).and_return @keyfile
+        Base.stub!(:read_keyfile).and_return @str
+        Base.stub!(:open).and_return @str
+        Base.reset!
       end
       it "should call YAML::load on the working key file" do
         YAML.should_receive(:load).with(@str)
