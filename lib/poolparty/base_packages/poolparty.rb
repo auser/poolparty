@@ -12,7 +12,7 @@ module PoolParty
         has_package(:name => "erlang")
         has_package(:name => "erlang-dev")
         has_package(:name => "erlang-src")
-        has_package(:name => "yaws")
+        # has_package(:name => "yaws")
         
         has_package(:name => "rubygems") do |g|
           # These should be installed automagically by poolparty, but just in case
@@ -56,7 +56,7 @@ module PoolParty
         # Custom run puppet to minimize footprint
         # TODO: Update the offsetted times
         execute_on_master do          
-          has_cron(:name => "puppetd runner", :user => Base.user, :minute => "0,15,30,45") do
+          has_cron(:name => "puppetd runner", :user => Base.user, :minute => "*/15") do
             command(PoolParty::Remote::RemoteInstance.puppet_master_rerun_command)
           end
         end

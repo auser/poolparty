@@ -34,7 +34,8 @@ module PoolParty
           create_local_node,
           move_templates,
           create_poolparty_manifest,
-          restart_puppetd
+          restart_puppetd,
+          start_puppetmaster
         ]
       end
       
@@ -125,7 +126,12 @@ wget http://rubyforge.org/frs/download.php/43666/amazon-ec2-0.3.1.gem -O grempe-
       # rm -rf /etc/puppet/ssl
       def start_puppetmaster
         <<-EOS
-puppetmasterd --verbose  2>&1 > /dev/null
+. /etc/profile
+ps aux | grep puppetmaster | awk '{print $2}' | xargs kill
+/etc/init.d/puppetmaster stop
+rm -rf /etc/puppet/ssl
+puppetmasterd --verbose
+/etc/init.d/puppetmaster start
         EOS
       end
 
