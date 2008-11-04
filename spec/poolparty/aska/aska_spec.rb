@@ -12,6 +12,39 @@ describe "Rules" do
   before(:each) do
     @car = Car.new
   end
+  describe "malformed rules" do
+    it "should not put a malformed rule in the rules" do
+      lambda {
+        @plaster = Class.new do
+          include Aska
+          rules :names, "x runs b"
+        end
+      }.should raise_error()
+    end
+    [
+      "k > 10",
+      "x == 2",
+      "x >= 2",
+      "x <= 4",
+      "y < 10"
+    ].each do |str|
+      eval <<-EOE
+        it "should have the rule #{str} be valid" do
+          (str =~ /(.+)[=\\\<\>](.*)/).nil?.should == false
+        end
+      EOE
+    end
+    [
+      "k running 10",
+      "10 is larger than 2"
+    ].each do |str|
+      eval <<-EOE
+        it "should have the rule #{str} not be valid" do
+          (str =~ /(.+)[=\\\<\>](.*)/).nil?.should == true
+        end
+      EOE
+    end
+  end
   it "should be able to define rules as an array and they should be set as the rules on the class" do
     @car.rules.class.should == Hash
   end
