@@ -57,11 +57,13 @@ module PoolParty
         # TODO: Update the offsetted times
         execute_on_master do          
           has_cron(:name => "puppetd runner", :user => Base.user, :minute => "*/15") do
+            requires get_gempackage("poolparty-latest")
             command(PoolParty::Remote::RemoteInstance.puppet_master_rerun_command)
           end
         end
         execute_on_node do
           has_cron(:name => "puppetd runner", :user => Base.user, :minute => "*/5") do
+            requires get_gempackage("poolparty-latest")
             command(PoolParty::Remote::RemoteInstance.puppet_rerun_commad)
           end
         end
@@ -70,6 +72,7 @@ module PoolParty
         execute_on_master do
           has_cron({:name => "maintain script", :command => ". /etc/profile && which cloud-maintain | /bin/sh", :minute => "*/3"})
           # TODO: Update this so it only runs when needed
+          requires get_gempackage("poolparty-latest")
           has_exec(:name => "start master messenger", :command => ". /etc/profile && server-start-master", :requires => [get_gempackage("poolparty-latest"), get_exec("build_messenger")], :onlyif => "ps aux | grep beam | grep master")
           
           has_remotefile(:name => "/usr/bin/puppetcleaner") do
