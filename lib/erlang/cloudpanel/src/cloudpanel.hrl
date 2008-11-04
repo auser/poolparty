@@ -1,2 +1,2 @@
 
--define (TIMEOUT, 10000).
+-define (TIMEOUT, 1000).

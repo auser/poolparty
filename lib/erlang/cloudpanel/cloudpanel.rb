@@ -9,3 +9,7 @@ Kernel.system cmd
 get '/' do
   "body"
 end
+
+get '/tail' do
+  
+end

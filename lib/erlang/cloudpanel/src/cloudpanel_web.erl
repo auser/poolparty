@@ -26,7 +26,7 @@ loop(Req, _DocRoot) ->
 		Path = Req:get(path),
 		case {Path, Req:get(method)} of
 			{"/tail", 'GET'} ->
-				Body = tailor:go(Req:parse_qs()),
+				Body = tailor:go(Req:parse_qs()),				
 				Req:ok({"text/html", [], Body});
 			{"/", 'GET'} ->
 				Body = views:wrap_page("index"),
