@@ -2,4 +2,4 @@ Your cloud is launching
 -----------------------
 Your master's ip address is: :master_ip
 
-Depending on how your cloud is setup
+Depending on how your cloud is setup, this process may take a while.

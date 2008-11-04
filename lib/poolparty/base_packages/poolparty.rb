@@ -49,9 +49,9 @@ module PoolParty
         
         has_directory(:name => "/var/www/cloudpanel")
         
-        has_file(:name => "/etc/yaws/conf.d/localhost.conf") do
-          template File.join(File.dirname(__FILE__), "..", "templates/yaws.conf")
-        end
+        # has_file(:name => "/etc/yaws/conf.d/localhost.conf") do
+        #   template File.join(File.dirname(__FILE__), "..", "templates/yaws.conf")
+        # end
         
         # Custom run puppet to minimize footprint
         # TODO: Update the offsetted times
