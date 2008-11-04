@@ -160,6 +160,7 @@ lib/erlang/cloudpanel/ebin/web_utils.beam
 lib/erlang/cloudpanel/priv/www/images/bg_content.gif
 lib/erlang/cloudpanel/priv/www/index.html
 lib/erlang/cloudpanel/priv/www/javascripts/jquery.js
+lib/erlang/cloudpanel/priv/www/javascripts/site.js
 lib/erlang/cloudpanel/priv/www/pages/index.html
 lib/erlang/cloudpanel/priv/www/pages/tail.html
 lib/erlang/cloudpanel/priv/www/partials/error.html
