@@ -19,10 +19,11 @@ module PoolParty
         :size => "#{size || Base.size}")
       begin
         item = instance#.instancesSet.item
-        EC2ResponseObject.get_hash_from_response(item)
+        inst = EC2ResponseObject.get_hash_from_response(item)
+        associate_address_with_master_ip(inst) if inst.master?
       rescue Exception => e
       end
-      instance
+      inst
     end
     # Terminate an instance by id
     def terminate_instance!(instance_id=nil)
@@ -52,11 +53,7 @@ module PoolParty
     def get_instances_description
       EC2ResponseObject.get_descriptions(ec2.describe_instances).sort_by {|a| a[:launching_time]}
     end
-    
-    def before_install(instance)        
-      associate_address_with_master_ip(instance) if instance.master?
-    end
-    
+        
     def associate_address_with_master_ip(instance=nil)      
       ec2.associate_address(:instance_id => instance.instance_id, :public_ip => set_master_ip_to) if set_master_ip_to && instance
     end
