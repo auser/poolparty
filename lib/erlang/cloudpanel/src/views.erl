@@ -13,6 +13,9 @@ wrap_page(Name) ->
 			"error"
 	end.
 
+json(Content) ->
+	mochijson2:encode(Content).
+
 wrap(Content) ->
 	Header = read_partial("header"),
 	Menu = read_partial("menu"),
