@@ -152,7 +152,11 @@ module PoolParty
         end
       end
       def clear_master_ssl_certs
-        @cloud.run_command_on("if [ -f '/usr/bin/puppetcleaner' ]; then /usr/bin/env puppetcleaner; fi", @cloud.master)
+        str = returning String.new do |s|
+          s << "puppetca --clean master.compute-1.internal 2>&1 > /dev/null;"
+          s << "puppetca --clean master.ec2.internal 2>&1 > /dev/null"
+        end
+        @cloud.run_command_on("if [ -f '/usr/bin/puppetcleaner' ]; then /usr/bin/env puppetcleaner; else #{str}; fi", @cloud.master)
       end
       def process_reconfigure!(testing=false)
         @cloud.run_command_on(PoolParty::Remote::RemoteInstance.puppet_runner_command, @instance) unless testing
