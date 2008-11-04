@@ -11,7 +11,7 @@ module PoolParty
         has_package(:name => "git-core")
         has_directory(:name => "#{cwd}")
         
-        has_exec({:name => "git-#{name}", :requires => get_package("git-core"), :requires => get_directory("#{cwd}")}) do          
+        has_exec({:name => "git-#{name}", :requires => get_package("git-core"), :requires => [get_directory("#{cwd}"), get_package("git-core")]}) do          
           command parent.user ? "git clone #{parent.user}@#{parent.source} #{parent.path}" : "git clone #{parent.source} #{parent.to ? parent.to : ""}"
           cwd "#{parent.cwd if parent.cwd}"
           creates "#{::File.join( (parent.cwd ? parent.cwd : cwd), ::File.basename(parent.source, ::File.extname(parent.source)) )}/.git"
