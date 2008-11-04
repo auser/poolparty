@@ -27,7 +27,7 @@ module PoolParty
           
           has_gempackage(:name => "rake", :download_url => "http://rubyforge.org/frs/download.php/43954/rake-0.8.3.gem")
           has_gempackage(:name => "xml-simple", :download_url => "http://rubyforge.org/frs/download.php/18366/xml-simple-1.0.11.gem")
-          has_gempackage(:name => "grempe-amazon-ec2", :download_url => "http://rubyforge.org/frs/download.php/43666/amazon-ec2-0.3.1.gem", :requires => get_gempackage("xml-simple"))
+          has_gempackage(:name => "amazon-ec2", :download_url => "http://rubyforge.org/frs/download.php/43666/amazon-ec2-0.3.1.gem", :requires => get_gempackage("xml-simple"))
           
           has_gempackage(:name => "sexp_processor", :download_url => "http://rubyforge.org/frs/download.php/45589/sexp_processor-3.0.0.gem")
           has_gempackage(:name => "ParseTree", :download_url => "http://rubyforge.org/frs/download.php/45600/ParseTree-3.0.1.gem", :requires => [get_gempackage("sexp_processor"), get_gempackage("ZenTest")])
