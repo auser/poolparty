@@ -12,7 +12,7 @@ module PoolParty
           self.class.send :attr_reader, :remote_base
           mod = "#{t}".preserved_module_constant
           
-          mod.send :include, PoolParty::Remote::RemoterBase
+          # mod.send :include, PoolParty::Remote::RemoterBase
           self.class.send :include, mod
           self.extend mod
           
