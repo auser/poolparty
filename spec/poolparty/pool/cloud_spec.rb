@@ -108,8 +108,8 @@ describe "Cloud" do
         it "should set the minimum_instances to 2" do
           @cloud.minimum_instances.should == 2
         end
-        it "should set the maximum_instances to 4" do
-          @cloud.maximum_instances.should == 4
+        it "should set the maximum_instances to 5" do
+          @cloud.maximum_instances.should == 5
         end
         it "should be able to set the minimum instances" do
           @cloud.minimum_instances 3
