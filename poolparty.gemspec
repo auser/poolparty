@@ -1,7 +1,7 @@
 --- !ruby/object:Gem::Specification 
 name: poolparty
 version: !ruby/object:Gem::Version 
-  version: 0.2.40
+  version: 0.2.41
 platform: ruby
 authors: 
 - Ari Lerner
@@ -439,6 +439,7 @@ files:
 - lib/poolparty/modules/resourcing_dsl.rb
 - lib/poolparty/modules/s3_string.rb
 - lib/poolparty/modules/safe_instance.rb
+- lib/poolparty/modules/thread_pool.rb
 - lib/poolparty/monitors/base_monitor.rb
 - lib/poolparty/monitors/monitors/cpu_monitor.rb
 - lib/poolparty/monitors/monitors/memory_monitor.rb
