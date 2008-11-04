@@ -2,7 +2,6 @@ require 'thread'
 begin
   require 'fasttread'
 rescue LoadError
-  puts "Using the ruby-core thread implementation"
 end
 
 class ThreadPool
