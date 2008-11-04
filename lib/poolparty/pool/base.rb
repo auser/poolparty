@@ -41,8 +41,11 @@ module PoolParty
       def secret_access_key
         ENV["AWS_SECRET_ACCESS_ID"] ? ENV["AWS_SECRET_ACCESS_ID"] : load_keys_from_file[:secret_access_key]
       end
+      def read_keyfile
+        open(get_working_key_file_locations).read
+      end
       def load_keys_from_file
-        @keys ||= get_working_key_file_locations ? YAML::load( open(get_working_key_file_locations).read ) : {}
+        @keys ||= get_working_key_file_locations ? YAML::load( read_keyfile ) : {}
       end
       # Store the keys in a yaml format to give the master access
       # So that the master has access to the files
