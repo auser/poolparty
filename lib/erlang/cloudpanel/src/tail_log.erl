@@ -17,7 +17,7 @@ stop(Pid) ->
 
 init(File, Callback, Dir) ->	
   Cmd = "/usr/bin/tail -f "++ Dir ++ "/" ++ File,
-  Port = open_port({spawn, Cmd}, [ {cd, Dir}, stderr_to_stdout, {line, 256}, exit_status, binary]), 
+  Port = open_port({spawn, Cmd}, [ {cd, Dir}, stderr_to_stdout, {line, 256}, exit_status, binary]), 	
 	tail_loop(Port, Callback).
 
 snap(Pid) ->	
@@ -46,8 +46,18 @@ tail_loop(Port, Callback) ->
 		stop ->
 			port_close(Port),
 			{ok, stop};
+		{From, post, Mess} ->
+			io:format("Received post message: ~p ~p~n", [From, Mess]),
+			From ! {From, post, Mess};
+		{From, subscribe} ->
+			io:format("Received subscribe message from ~p~n", [From]),
+			From ! {From, subscribe};
+		{_, {exit_status, Num}} ->
+			io:format("Received error messate: ~p~n", [Num]),
+			port_close(Port),
+			{ok, stop};
 		Any ->
-			io:format("Received: ~p~n", [Any]),
+			io:format("Received unknown Message: ~p~n", [Any]),
 			tail_loop(Port, Callback)
 	end.
 
