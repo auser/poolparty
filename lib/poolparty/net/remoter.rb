@@ -197,6 +197,7 @@ module PoolParty
             last_instances = nonmaster_nonterminated_instances[(@num_instances - @num)...(@num_instances)]
             last_instances.each do |inst|
               vputs "Provisioning #{inst.name}"
+              Provisioner.provision_slave(inst, self, false)
               cmd = ". /etc/profile && cloud-provision -i #{inst.name.gsub(/node/, '')} #{unix_hide_string} &"
               Kernel.system cmd
             end
