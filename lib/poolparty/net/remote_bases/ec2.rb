@@ -37,14 +37,15 @@ module PoolParty
       get_instances_description.each_with_index do |h,i|
         if h[:status] == "running"
           @name = @id == 0 ? "master" : "node#{@id}"
-          @id += 1
+          @id += 1          
         else
           @name = "#{h[:status]}_node#{i}"
         end
+        @ip = @name == "master" && set_master_ip_to ? set_master_ip_to : h[:ip].convert_from_ec2_to_ip
         h.merge!({
           :name => @name,
           :hostname => h[:ip],
-          :ip => h[:ip].convert_from_ec2_to_ip
+          :ip => @ip
         })
       end      
     end
