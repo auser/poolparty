@@ -8,10 +8,12 @@ module Aska
       returning look_up_rules(name) do |rs|
         arr.each do |line|
           next unless line
-          k = line[/(.+)[=\\\<\>](.*)/, 1].gsub(/\s+/, '')
-          v = line[/(.+)[=\\<>](.*)/, 2].gsub(/\s+/, '')
-          m = line[/[=\\<>]/, 0].gsub(/\s+/, '')
-          
+          rule = Rule.new(line)
+          raise LoadRulesException.new(line) unless rule.valid?
+          k = rule.key
+          v = rule.var
+          m = rule.comparison
+
           create_instance_variable(k, create_vars)
           rs << {k => [m, v]}
           rs << {k => [">", "0"]} unless rs.reject {|a| a.to_s == "#{k}>0" }
@@ -116,6 +118,29 @@ module Aska
   def self.included(receiver)
     receiver.extend         ClassMethods
     receiver.send :include, InstanceMethods
+  end
+  
+  class Rule < String
+    attr_accessor :value
+    
+    def initialize(v)
+      @value = v
+    end
+    def valid?
+      value =~ /(.+)[=\\\<\>](.*)/
+    end
+    def key
+      value[/(.+)[=\\\<\>](.*)/, 1].gsub(/\s+/, '')
+    end
+    def comparison
+      value[/[=\\<>]/, 0].gsub(/\s+/, '')
+    end
+    def var
+      value[/(.+)[=\\<>](.*)/, 2].gsub(/\s+/, '')
+    end
+    def value
+      @value ||= ""
+    end
   end
   
   class Rules < Array
