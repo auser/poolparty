@@ -144,6 +144,7 @@ module PoolParty
           reset!
           launch_minimum_number_of_instances
           provision_slaves_from_n(minimum_instances.to_i)
+          after_launched
         end
       end
       
@@ -158,8 +159,7 @@ module PoolParty
             cmd = ". /etc/profile && cloud-provision -i #{inst.name.gsub(/node/, '')} #{unix_hide_string} &"
             Kernel.system cmd
           end
-          PoolParty::Provisioner.reconfigure_master(self, force)
-          after_launched
+          PoolParty::Provisioner.reconfigure_master(self, force)          
         end
       end
       # Launch the master and let the master handle the starting of the cloud
