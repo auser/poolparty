@@ -9,7 +9,7 @@ autorequire:
 bindir: bin
 cert_chain: []
 
-date: 2008-11-03 00:00:00 -08:00
+date: 2008-11-04 00:00:00 -08:00
 default_executable: 
 dependencies: 
 - !ruby/object:Gem::Dependency 
@@ -263,6 +263,7 @@ files:
 - lib/erlang/cloudpanel/priv/www/images/bg_content.gif
 - lib/erlang/cloudpanel/priv/www/index.html
 - lib/erlang/cloudpanel/priv/www/javascripts/jquery.js
+- lib/erlang/cloudpanel/priv/www/javascripts/site.js
 - lib/erlang/cloudpanel/priv/www/pages/index.html
 - lib/erlang/cloudpanel/priv/www/pages/tail.html
 - lib/erlang/cloudpanel/priv/www/partials/error.html
