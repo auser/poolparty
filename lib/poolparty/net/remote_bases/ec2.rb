@@ -53,6 +53,10 @@ module PoolParty
       EC2ResponseObject.get_descriptions(ec2.describe_instances).sort_by {|a| a[:launching_time]}
     end
     
+    def after_launched(force=false)      
+      ec2.associate_address(:instance_id => master.instance_id, :public_ip => set_master_ip_to) if set_master_ip_to
+    end
+    
     # Help create a keypair for the cloud
     # This is a helper to create the keypair and add them to the cloud for you
     def create_keypair
