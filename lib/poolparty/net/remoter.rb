@@ -142,7 +142,28 @@ module PoolParty
         if can_start_a_new_instance? && !minimum_number_of_instances_are_running?         
           list_of_pending_instances.size == 0 ? request_launch_one_instance_at_a_time : wait("5.seconds")
           reset!
-          launch_minimum_number_of_instances unless minimum_number_of_instances_are_running?
+          launch_minimum_number_of_instances
+          provision_slaves_from_n(minimum_instances.to_i)
+        end
+      end
+      
+      def provision_slaves_from_n(num=1)
+        reset!
+        when_no_pending_instances do
+          vputs "Waiting for ssh to startup on the instance"
+          wait "10.seconds" # Give some time for ssh to startup
+          reset!
+          @num_instances = list_of_running_instances.size
+          last_instances = nonmaster_nonterminated_instances[(@num_instances - (num + 1))..(@num_instances)]
+          vputs "Running provision_slave on #{(@num_instances - (num+1))..(@num_instances)} slaves"
+          last_instances.each do |inst|
+            vputs "provision_slave(#{inst}, #{self})"
+            PoolParty::Provisioner.provision_slave(inst, self, false) unless inst.master?
+            cmd = ". /etc/profile && cloud-provision -i #{inst.name.gsub(/node/, '')} #{unix_hide_string} &"
+            Kernel.system cmd
+          end
+          PoolParty::Provisioner.reconfigure_master(self, force)
+          after_launched
         end
       end
       # Launch the master and let the master handle the starting of the cloud
@@ -189,18 +210,8 @@ module PoolParty
           @num = 1
           request_launch_new_instances(@num)
           
-          reset!
-          when_no_pending_instances do
-            reset!
-            wait "20.seconds" # Give some time for ssh to startup
-            @num_instances = nonmaster_nonterminated_instances.size
-            last_instances = nonmaster_nonterminated_instances[(@num_instances - (@num + 1))..(@num_instances)]
-            last_instances.each do |inst|
-              PoolParty::Provisioner.provision_slave(inst, self, false)
-            end
-            PoolParty::Provisioner.reconfigure_master(self, force)
-            after_launched
-          end
+          vputs "request_launch_new_instances: #{@num}"
+          provision_slaves_from_n(@num)
         end
       end
       # Contract the cloud
