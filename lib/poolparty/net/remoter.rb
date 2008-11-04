@@ -104,6 +104,11 @@ module PoolParty
         num.times {out << launch_new_instance!}
         out
       end
+      def request_launch_master_instance
+        after_launch_master(launch_new_instance!)
+      end
+      def after_launch_master(h={})        
+      end
       # Let's terminate an instance that is not the master instance
       def request_termination_of_non_master_instance
         inst = nonmaster_nonterminated_instances.last
@@ -170,7 +175,7 @@ module PoolParty
       def launch_and_configure_master!(testing=false)
         vputs "Requesting to launch new instance"
         logger.debug "Launching master"
-        request_launch_new_instances(1) if list_of_pending_instances.size.zero? && can_start_a_new_instance? && !is_master_running?
+        request_launch_master_instance if list_of_pending_instances.size.zero? && can_start_a_new_instance? && !is_master_running?
         
         vputs "Waiting for there to be no pending instances..."
         when_no_pending_instances do
