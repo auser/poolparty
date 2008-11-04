@@ -25,13 +25,13 @@ describe "Hash" do
     @a.to_os.to_hash.should == @a
   end
   it "should not put quotes around integers" do
-    {:a => 10, :b => "q"}.flush_out.should == ["a => 10", "b => 'q'"]
+    {:a => 10, :b => "q"}.flush_out.sort.should == ["a => 10", "b => 'q'"]
   end
   it "should be able to flush out into a string into an array" do
-    @a.flush_out.should == ["a => '10'","b => '20'","c => '30'"]
+    @a.flush_out.sort.should == ["a => '10'","b => '20'","c => '30'"]
   end
   it "should be able to flush out with pre and posts" do
-    @a.flush_out("hi", "ho").should == ["hia => '10'ho","hib => '20'ho","hic => '30'ho"]
+    @a.flush_out("hi", "ho").sort.should == ["hia => '10'ho","hib => '20'ho","hic => '30'ho"]
   end
   describe "select" do
     before(:each) do
