@@ -113,12 +113,9 @@ wget http://rubyforge.org/frs/download.php/43666/amazon-ec2-0.3.1.gem -O grempe-
 #{
   %w(rake lockfile rubyforge hoe ZenTest sexp_processor flexmock logging activesupport 
       RubyInline ParseTree ruby2ruby xml-simple poolparty-latest grempe-amazon-ec2).map do |dep|
-    "gem install --ignore-dependencies -y --no-ri --no-rdoc #{dep}.gem"
+    "gem install --ignore-dependencies -y --no-ri --no-rdoc #{dep}.gem #{unix_hide_string}"
   end.join("\n")
 }
-
-# gem install -y --no-ri --no-rdoc  --source http://gems.github.com grempe-amazon-ec2
-# gem install -y --no-ri --no-rdoc  --source http://gems.github.com auser-poolparty
         EOE
       end
       
@@ -127,11 +124,11 @@ wget http://rubyforge.org/frs/download.php/43666/amazon-ec2-0.3.1.gem -O grempe-
       def start_puppetmaster
         <<-EOS
 . /etc/profile
-ps aux | grep puppetmaster | awk '{print $2}' | xargs kill
-/etc/init.d/puppetmaster stop
+/etc/init.d/puppetmaster stop #{unix_hide_string}
+ps aux | grep puppetmaster | awk '{print $2}' | xargs kill #{unix_hide_string} # just in case
 rm -rf /etc/puppet/ssl
-puppetmasterd --verbose
-/etc/init.d/puppetmaster start
+# Start it back up
+/etc/init.d/puppetmaster start #{unix_hide_string}
         EOS
       end
 
@@ -167,7 +164,7 @@ cp #{Base.remote_storage_path}/poolparty.pp /etc/puppet/manifests/classes/poolpa
       
       def restart_puppetd
         <<-EOS
-. /etc/profile && /usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master  2>&1 > /dev/null
+. /etc/profile && /usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master #{unix_hide_string}
         EOS
       end
     end
