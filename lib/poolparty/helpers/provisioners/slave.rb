@@ -25,7 +25,7 @@ module PoolParty
       def setup_configs
         <<-EOS          
           echo "#{open(File.join(template_directory, "puppet.conf")).read}" > /etc/puppet/puppet.conf
-          /etc/init.d/puppetmaster stop
+          /etc/init.d/puppetmaster stop #{unix_hide_string}
           # /usr/bin/puppetrerun
         EOS
       end
@@ -34,8 +34,7 @@ module PoolParty
       # puppetd --listen --fqdn #{@instance.name}
       def start_puppet
         <<-EOS
-. /etc/profile && /usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master  2>&1 > /dev/null
-. /etc/profile && /usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master  2>&1 > /dev/null &
+. /etc/profile && /usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master #{unix_hide_string}
         EOS
       end
       
