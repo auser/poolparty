@@ -194,9 +194,8 @@ module PoolParty
             reset!
             wait "20.seconds" # Give some time for ssh to startup
             @num_instances = nonmaster_nonterminated_instances.size
-            last_instances = nonmaster_nonterminated_instances[(@num_instances - @num)...(@num_instances)]
+            last_instances = nonmaster_nonterminated_instances[(@num_instances - (@num + 1))...(@num_instances)]
             last_instances.each do |inst|
-              vputs "Provisioning #{inst.name}"
               Provisioner.provision_slave(inst, self, false)
               cmd = ". /etc/profile && cloud-provision -i #{inst.name.gsub(/node/, '')} #{unix_hide_string} &"
               Kernel.system cmd
