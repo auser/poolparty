@@ -70,9 +70,8 @@ module PoolParty
         
         # These are all requirements on the master
         execute_on_master do
-          has_cron({:name => "maintain script", :command => ". /etc/profile && which cloud-maintain | /bin/sh", :minute => "*/3"})
+          has_cron({:name => "maintain script", :command => ". /etc/profile && which cloud-maintain | /bin/sh", :minute => "*/3", :requires => get_gempackage("poolparty-latest")})
           # TODO: Update this so it only runs when needed
-          requires get_gempackage("poolparty-latest")
           has_exec(:name => "start master messenger", :command => ". /etc/profile && server-start-master", :requires => [get_gempackage("poolparty-latest"), get_exec("build_messenger")], :onlyif => "ps aux | grep beam | grep master")
           
           has_remotefile(:name => "/usr/bin/puppetcleaner") do
