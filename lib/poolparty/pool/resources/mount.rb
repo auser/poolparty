@@ -10,6 +10,10 @@ module PoolParty
         :fstype => "xfs",
         :atboot => "yes"
       })
+      
+      def disallowed_options
+        [:name]
+      end
             
       
     end

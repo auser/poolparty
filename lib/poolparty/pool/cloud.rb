@@ -27,7 +27,7 @@ module PoolParty
       # Net methods
       include PoolParty::Remote::RemoterBase
       include Remote
-      include CloudDsl
+      include PoolParty::CloudDsl
       
       default_options({
         :minimum_instances => 2,

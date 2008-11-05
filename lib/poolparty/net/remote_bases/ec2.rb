@@ -59,7 +59,7 @@ module PoolParty
         when_no_pending_instances do
           if instance
             ec2.associate_address(:instance_id => instance.instanceId, :public_ip => set_master_ip_to) if set_master_ip_to
-            ec2.attach_volume(:volume_id => ebs_volume_id, :instance_id => instance.instanceId, :device => ebs_volume_mount_point) if ebs_volume_id && ebs_volume_mount_point
+            ec2.attach_volume(:volume_id => ebs_volume_id, :instance_id => instance.instanceId, :device => ebs_volume_device) if ebs_volume_id && ebs_volume_mount_point
           end
         end
       rescue Exception => e        
