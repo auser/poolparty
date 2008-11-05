@@ -174,15 +174,19 @@ module PoolParty
       end
       
       def provision_slaves_from_n(num=1)
+        vputs "In provision_slaves_from_n: #{num}"
         reset!
         when_no_pending_instances do
+          vputs "Waiting for 10 seconds"
           wait "10.seconds" # Give some time for ssh to startup
           @num_instances = list_of_running_instances.size
           vputs "(@num_instances - (num))..(@num_instances): #{(@num_instances - (num))..(@num_instances)}"
           last_instances = nonmaster_nonterminated_instances[(@num_instances - (num))..(@num_instances)]
           last_instances.each do |inst|
-            PoolParty::Provisioner.provision_slave(inst, self, false) unless inst.master?
+            vputs "Provision slave: #{inst}"
+            PoolParty::Provisioner.provision_slave(inst, self, false) unless inst.master? rescue vputs "Error"
             cmd = ". /etc/profile && cloud-provision -i #{inst.name.gsub(/node/, '')} #{unix_hide_string} &"
+            vputs "Provision slave with command #{cmd}"
             Kernel.system cmd
           end
           PoolParty::Provisioner.reconfigure_master(self)
@@ -215,11 +219,11 @@ module PoolParty
       end
       # Stub method for the time being to handle expansion of the cloud
       def should_expand_cloud?(force=false)
-        valid_rules?(:expansions) || force || false
+        valid_rules?(:expand_when) || force || false
       end
       # Stub method for the time being to handle the contraction of the cloud
       def should_contract_cloud?(force=false)
-        valid_rules?(:contractions) || force || false
+        valid_rules?(:contract_when) || force || false
       end
       # Expand the cloud
       # If we can start a new instance and the load requires us to expand
@@ -229,7 +233,7 @@ module PoolParty
       # get go
       def expand_cloud_if_necessary(force=false)
         if can_start_a_new_instance? && should_expand_cloud?(force)
-          logger.debug "Expanding the cloud based on load"
+          vputs "Expanding the cloud based on load"
           @num = 1
           request_launch_new_instances(@num)
           
