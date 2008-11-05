@@ -1,5 +1,5 @@
 Description:
-  
+  Create a basic pool.spec template
   
 Usage:
-  
+  pool spec [name]
