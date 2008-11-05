@@ -6,9 +6,12 @@
 % erl -pa ./ebin -kernel inet_dist_listen_min 7000 inet_dist_listen_max 7050 -setcookie poolparty -boot pm_node_rel-0.1 -sname node1
 
 % Starting the client on the master
-% erl -pa /var/lib/gems/1.8/gems/poolparty-0.2.37/lib/erlang/messenger/ebin -kernel inet_dist_listen_min 7000 inet_dist_listen_max 7050 -sname client -setcookie poolparty -run pm_client start
+% erl -pa /var/lib/gems/1.8/gems/poolparty-0.2.42/lib/erlang/messenger/ebin -kernel inet_dist_listen_min 7000 inet_dist_listen_max 7050 -sname client -setcookie poolparty -run pm_client start
 
 % Get the load
-% erl -pa /var/lib/gems/1.8/gems/poolparty-0.2.40/lib/erlang/messenger/ebin -kernel inet_dist_listen_min 7000 inet_dist_listen_max 7050 -sname client -setcookie poolparty -run pm_client start -run pm_client get_load cpu -run erlang init stop
+% erl -pa /var/lib/gems/1.8/gems/poolparty-0.2.42/lib/erlang/messenger/ebin -kernel inet_dist_listen_min 7000 inet_dist_listen_max 7050 -sname client -setcookie poolparty -run pm_client start -run pm_client get_load cpu -run erlang init stop
 
 % cd /var/poolparty && gem uninstall poolparty && wget http://github.com/auser/poolparty/tree/master%2Fpkg%2Fpoolparty-latest.gem?raw=true -O poolparty-latest.gem 2>&1 && gem install --no-ri --no-rdoc poolparty-latest.gem
+
+% LOAD TESTING
+% ab -n 10000 -c 5 http://75.101.162.232/
