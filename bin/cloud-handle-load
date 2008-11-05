@@ -2,20 +2,14 @@
 $:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
 require "poolparty"
 require "poolpartycl"
+
 o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
   opts.on('-n name', '--name name', 'Listing for cloud name')    { |c| optioner.cloudname c }
 end
-load_pool(o.spec || Binary.get_existing_spec_location)
 
-@location = o.location ? o.location : "remote"
+o.loaded_clouds.each do |cloud|
 
-include Remote
-
-@clouds = o.cloudname ? [cloud(o.cloudname.downcase.to_sym)] : clouds
-
-@clouds.each do |name, cloud|
-
-  with_cloud(cloud, {:location => @location, :testing => o.testing, :verbose => o.verbose}) do
+  with_cloud(cloud) do
     vputs header("Load handling cloud #{name}")
     if should_expand_cloud?
       vputs "Expanding cloud based on load"

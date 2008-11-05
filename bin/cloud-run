@@ -11,9 +11,8 @@ o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
   opts.on('-c command', '--command command', 'Command to run on the instance')    { |c| optioner.command c }
 end
 
-load_pool(o.spec || Binary.get_existing_spec_location)
-
 @cmd = o.command if (o.command)
-@cloud = o.cloudname ? cloud(o.cloudname.downcase.to_sym) : cloud(clouds.keys.first)
 
-instance = @cloud.run_command_on_instance_number( @cmd, o.num.to_i || 0 ) if @cloud
+o.loaded_clouds.each do |cl|
+  @cloud.run_command_on_instance_number( @cmd, o.num.to_i || 0 ) if @cloud
+end

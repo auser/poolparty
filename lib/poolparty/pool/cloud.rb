@@ -12,7 +12,8 @@ module PoolParty
     end
     
     def with_cloud(cl, opts={}, &block)
-      cl.options.merge!(opts)
+      raise CloudNotFoundException.new("Cloud not found") unless cl
+      cl.options.merge!(opts) if opts
       cl.instance_eval &block if block
     end
     
@@ -157,7 +158,10 @@ module PoolParty
       # they need a few options to run, these are the required options
       # to be saved on the remote "master" machine
       def minimum_runnable_options
-        [:keypair, :minimum_instances, :maximum_instances, :ami, :expand_when, :contract_when]
+        [
+          :keypair, :minimum_instances, :maximum_instances, :ami, 
+          :expand_when, :contract_when, :set_master_ip_to
+        ]
       end
       
       # Add all the poolparty requirements here

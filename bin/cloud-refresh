@@ -6,17 +6,10 @@ require "poolpartycl"
 o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
   opts.on('-n name', '--name name', 'Listing for cloud name')    { |c| optioner.cloudname c }
 end
-load_pool(o.spec || Binary.get_existing_spec_location)
 
-@provision_class = o.provision_class || "all"
-
-include Remote
-
-@clouds = o.cloudname ? {:cloud => cloud(o.cloudname.downcase.to_sym)} : clouds
-
-@clouds.each do |name, cloud|
+o.loaded_clouds.each do |cloud|
   
-  with_cloud(cloud, {:testing => o.testing}) do
+  with_cloud(cloud) do
     cmd = <<-EOE
 puppetrun --host #{list_of_node_names.join(", --host ")}
     EOE

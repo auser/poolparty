@@ -3,7 +3,7 @@ require File.dirname(__FILE__) + '/../spec_helper'
 describe "Base" do
   before(:each) do
     ENV.stub!(:[]).with("AWS_ACCESS_KEY_ID").and_return "KEY"
-    ENV.stub!(:[]).with("AWS_SECRET_ACCESS_ID").and_return "SECRET"
+    ENV.stub!(:[]).with("AWS_SECRET_ACCESS_KEY").and_return "SECRET"
   end
   it "should set the environment, if not set to production" do
     Base.environment.should == "production"
@@ -77,7 +77,7 @@ describe "Base" do
         before(:each) do
           Base.stub!(:get_working_key_file_locations).and_return nil
           ENV.stub!(:[]).with("AWS_ACCESS_KEY_ID").and_return nil
-          ENV.stub!(:[]).with("AWS_SECRET_ACCESS_ID").and_return nil
+          ENV.stub!(:[]).with("AWS_SECRET_ACCESS_KEY").and_return nil
           Base.reset!
         end
         it "should render the access_key nil" do

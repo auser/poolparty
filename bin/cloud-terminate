@@ -2,17 +2,14 @@
 $:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
 require "poolparty"
 require "poolpartycl"
+
 o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
-  opts.on('-c [master|slaves|all]', '--class [master|slaves|all]', 'Provision class (default: all)')    { |c| optioner.provision_class c }
-  opts.on('-n name', '--name name', 'Listing for cloud name')    { |c| optioner.cloudname c }
+  opts.on('-n name', '--name name', 'Terminate the cloud of this name')    { |c| optioner.cloudname c }
 end
-load_pool(o.spec || Binary.get_existing_spec_location)
 
-@clouds = o.cloudname ? {:cloud => cloud(o.cloudname.downcase.to_sym)} : clouds
-
-@clouds.each do |name, cloud|
+o.loaded_clouds.each do |cloud|
   
-  with_cloud(cloud, {:testing => o.testing, :location => @location, :provision_class => @provision_class}) do
+  with_cloud(cloud) do
     
     list_of_running_instances.each do |inst|
       puts "Shutting down #{inst.instance_id}"
