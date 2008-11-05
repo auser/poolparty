@@ -60,7 +60,7 @@ module PoolParty
             requires get_gempackage("poolparty-latest")
             command(PoolParty::Remote::RemoteInstance.puppet_master_rerun_command)
           end
-          has_cron(:name => "Load handler", :user => Base.user, :minute => "*/2") do
+          has_cron(:name => "Load handler", :user => Base.user, :minute => "*/4") do
             requires get_gempackage("poolparty-latest")
             command(". /etc/profile && cloud-handle-load")
           end          
