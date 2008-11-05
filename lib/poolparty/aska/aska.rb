@@ -54,7 +54,7 @@ module Aska
     def valid_rules?(name=:rules)
       self.class.look_up_rules(name).reject {|rule| valid_rule?(rule) }.empty?
     end
-    def __aska_aska_stuff(m)
+    def __aska_send_value(m)
       if respond_to?(m.to_sym)
         self.send(m.to_sym)
       else
@@ -63,9 +63,8 @@ module Aska
     end
     def valid_rule?(rule)
       rule.each do |key,value|
-        begin
-          # puts "#{aska(key)} #{value[0].to_sym} #{get_var(value[1])} (#{attr_accessor?(value[1])})"
-          return __aska_aska_stuff(key).send(value[0].to_sym, __aska_get_var(value[1]))
+        begin          
+          return __aska_send_value(key).send(value[0].to_sym, __aska_get_var(value[1]))
         rescue Exception => e
           return false
         end
@@ -74,10 +73,10 @@ module Aska
     def rules_values
       returning Array.new do |arr|
         self.class.defined_rules.each do |name,rule_array|
-          arr << "#{name} : #{valid_rule?(rule_array)}"
+          arr << "#{name} : #{valid_rules?(name.to_sym)}"
           rule_array.each do |rule|
             rule.map do |k,v|
-              arr << "  #{k} -> #{__aska_aska_stuff(k)} (#{v[0]} #{v[1]})"
+              arr << "  #{k} -> #{__aska_send_value(k)} (#{v[0]} #{v[1]})"
             end
           end
         end
