@@ -12,6 +12,7 @@ module Hype
 end
 class TestClass
   include Remote
+  include RemoterBase
   
   def keypair
     "fake_keypair"
@@ -134,7 +135,7 @@ describe "Remote" do
     end
     describe "can_start_a_new_instance?" do
       it "should be true because the maximum instances are not running" do
-        @tc.can_start_a_new_instance?.should == true
+        @tc.can_start_a_new_instance?.should == false
       end
       it "should say that we cannot start a new instance because we are at the maximum instances" do
         add_stub_instance_to(@tc, 7)
