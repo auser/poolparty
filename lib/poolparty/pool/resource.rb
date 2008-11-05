@@ -167,7 +167,7 @@ module PoolParty
         [
           :subscribe, :owner, :group, :path, :mode, :source, :notify, :subscribe, :check, :creates, :cwd, :command, :ensure,
           :require, :schedule, :range, :alias, :hour, :minute, :user, :month, :monthday, :name, :onlyif, :unless, :refreshonly,
-          :refresh, :content, :template, :ip, :repeat, :provider, :key
+          :refresh, :content, :template, :ip, :repeat, :provider, :key, :device, :fstype, :remounts, :options, :atboot
         ]
       end
       def key
