@@ -4,6 +4,5 @@ require "poolparty"
 require "poolpartycl"
 
 o = PoolParty::Optioner.new(ARGV)
-load_pool(o.spec || Binary.get_existing_spec_location)
 
 puts pool_describe

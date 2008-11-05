@@ -2,21 +2,14 @@
 $:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
 require "poolparty"
 require "poolpartycl"
+
 o = PoolParty::Optioner.new(ARGV) do |opts, optioner|  
   opts.on('-p poolname', '--pool name', 'Start pool by this name')    { |p| optioner.poolname p }
 end
 
-load_pool(o.spec || Binary.get_existing_spec_location)
-
-@testing = o.testing
-
-include Remote
-
-@pools = o.poolname ? [pool(o.poolname.downcase.to_sym)] : pools
-
-@pools.each do |name, pl|
+o.loaded_pools.each do |pl|
   
-  with_pool(pl, {:testing => @testing}) do
+  with_pool(pl) do
     
     puts header("Starting pool")
     clouds.each do |name, cloud|

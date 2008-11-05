@@ -12,7 +12,7 @@ module PoolParty
           end
           
           # Template variables
-          has_variable(:name => "name_haproxy", :value => "#{cloud.name}")          
+          has_variable(:name => "name_haproxy", :value => "#{cloud.name}")
           has_variable(:name => "nodenames_haproxy", :value => "generate('/usr/bin/env', '/var/lib/gems/1.8/bin/server-list-active', '-c', 'name')")
           has_variable(:name => "node_ips_haproxy",  :value => "generate('/usr/bin/env', '/var/lib/gems/1.8/bin/server-list-active', '-c', 'ip')")
           

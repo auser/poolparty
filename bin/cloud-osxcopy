@@ -2,18 +2,12 @@
 $:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
 require "poolparty"
 require "poolpartycl"
+
 o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
-  opts.on('-n name', '--name name', 'Listing for cloud name')    { |c| optioner.cloudname c }
+  opts.on('-n name', '--name name', 'Copy the master ip for this cloud')    { |c| optioner.cloudname c }
 end
-load_pool(o.spec || Binary.get_existing_spec_location)
 
-@location = o.location ? o.location : "remote"
-
-include Remote
-
-@clouds = o.cloudname ? [cloud(o.cloudname.downcase.to_sym)] : clouds
-
-@clouds.each do |name, cloud|
+o.loaded_clouds.each do |cloud|
   
   with_cloud(cloud, {:location => @location}) do
     Kernel.system "echo #{master.ip.chomp} | pbcopy"

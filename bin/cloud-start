@@ -2,21 +2,15 @@
 $:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
 require "poolparty"
 require "poolpartycl"
+
 o = PoolParty::Optioner.new(ARGV) do |opts, optioner|  
-  opts.on('-c cloudname', '--cloud name', 'Start cloud by this name')    { |c| optioner.cloudname c }
+  opts.on('-n cloudname', '--name name', 'Start cloud by this name')    { |c| optioner.cloudname c }
 end
 
-load_pool(o.spec || Binary.get_existing_spec_location)
-
-@testing = o.testing
-
-@clouds = o.cloudname ? {:cloud => cloud(o.cloudname.downcase.to_sym)} : clouds
-
-@clouds.each do |name, cloud|
-  
-  with_cloud(cloud, {:testing => @testing, :verbose => (o.verbose || false)}) do
-    puts header("Starting cloud")
-    puts "#{list_of_running_instances.size} running instances (#{minimum_instances} - #{maximum_instances})"
+o.loaded_clouds.each do |cloud|
+  with_cloud(cloud) do
+    vputs header("Starting cloud")
+    vputs "#{list_of_running_instances.size} running instances (#{minimum_instances} - #{maximum_instances})"
     if list_of_running_instances.size <= 1
       puts "Starting the master instance"    
       if testing
@@ -28,7 +22,7 @@ load_pool(o.spec || Binary.get_existing_spec_location)
         provisioning_complete
       end
     end
-    puts open(::File.join(File.dirname(__FILE__), "..", "lib", "poolparty", "config", "postlaunchmessage.txt")).read ^ {:master_ip => master.ip.chomp}
+    vputs open(::File.join(File.dirname(__FILE__), "..", "lib", "poolparty", "config", "postlaunchmessage.txt")).read ^ {:master_ip => master.ip.chomp}
     clear_base_directory unless testing
   end
   

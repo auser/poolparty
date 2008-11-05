@@ -2,12 +2,13 @@
 $:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
 require "poolparty"
 require "poolpartycl"
+
 o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
   opts.on('-n name', '--name name', 'Listing for cloud name')    { |c| optioner.cloudname c }
   opts.on('-i num', '--id num', 'Instance num to ssh (default: 0)')    { |i| optioner.num i }
 end
 load_pool(o.spec || Binary.get_existing_spec_location)
 
-@cloud = o.cloudname ? cloud(o.cloudname.downcase.to_sym) : cloud(clouds.keys.first)
+@cloud = o.loaded_clouds.first
 
-instance = @cloud.ssh_into_instance_number( o.num.to_i || 0 ) if @cloud
+@cloud.ssh_into_instance_number( o.num.to_i || 0 ) if @cloud

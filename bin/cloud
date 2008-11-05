@@ -3,28 +3,18 @@ $:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
 require "poolparty"
 require "poolpartycl"
 
-# # Get the git-style program action
-# o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
-#   opts.on('-n [name]','--name [name]', 'Binary to run')    { |o| optioner.name o }
-#   
-#   opts.banner = <<-EOB
-#   Usage: cloud <specfile> <action> <options>
-#   Cloud actions:
-#   #{Binary.list_binaries_for("cloud")}
-#   EOB
-# end
+name = ARGV.select {|arg| arg if Binary.available_binaries_for("cloud").include?(arg) }.first
+# If the options include -h and they don't include a valid command, then we can just pass the 
+# original options back, but if they do contain a binary, we don't want -h getting through to 
+# these options, so we'll strip it if it's included
+DUP_ARG = ARGV.dup
+new_args = DUP_ARG.reject {|arg| Binary.available_binaries_for("cloud").include?(arg) }.empty? ? ARGV : (name ? (DUP_ARG.delete("-h"); DUP_ARG) : DUP_ARG)
 
-name = ARGV.shift
+# Let's make sure if no command is passed in that we show the help message
+new_args.push("-h") unless name
 
-# If there was no program action given
-if !name || name == "-h" || name == "--help"
-  puts "Binary required"
-  puts <<-EOB
-    Usage: cloud <specfile> <action> <options>
-    Cloud actions:
-    #{Binary.list_binaries_for("cloud")}
-    EOB
-  exit
+o = PoolParty::Optioner.new(new_args, {:extra_help => "\nCloud actions\n#{Binary.list_binaries_for("cloud")}\n\n", :abstract => true}) do |opts, optioner|  
+  opts.on('-n cloudname', '--name name', 'Address this cloud')    { |c| optioner.cloudname c }
 end
 
 program_name = "#{File.basename($0)}-#{name}"
@@ -36,5 +26,5 @@ command_line = "#{program_location}"
 if Binary.available_binaries_for("cloud").include?(name)
   system command_line, *ARGV
 else
-  puts "Unknown poolparty binary: #{program_name}"
+  puts "Unknown poolparty binary: #{name}"
 end
