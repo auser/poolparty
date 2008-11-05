@@ -34,7 +34,7 @@ module PoolParty
           has_remotefile(:name => "/etc/haproxy.cfg") do
             mode 644
             requires get_package("haproxy")
-            notify get_exec("reloadhaproxy")
+            notify get_service("haproxy")
             template File.join(File.dirname(__FILE__), "..", "templates/haproxy.conf")
           end
         end
