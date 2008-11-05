@@ -41,7 +41,7 @@ describe "ec2 remote base" do
       @tr.launch_new_instance!
     end
     it "should get the hash response from EC2ResponseObject" do
-      EC2ResponseObject.should_receive(:get_hash_from_response).with(true).and_return true
+      EC2ResponseObject.should_receive(:get_hash_from_response).and_return true
       @tr.launch_new_instance!
     end
   end

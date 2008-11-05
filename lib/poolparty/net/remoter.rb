@@ -148,7 +148,6 @@ module PoolParty
       # around on the instances
       def when_all_assigned_ips(&block)
         reset!
-        list_of_nonterminated_instances.select {|a| puts "i: #{a.ip}" }
         if list_of_nonterminated_instances.select {|a| a.ip == "not.assigned" }.empty?          
           block.call if block
         else
