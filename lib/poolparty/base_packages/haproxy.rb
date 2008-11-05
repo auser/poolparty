@@ -27,12 +27,14 @@ module PoolParty
 
           # Service is required
           has_service(:name => "haproxy", :ensures => "running")
+          
+          has_exec(:name => "reloadhaproxy", :command => "/etc/init.d/haproxy reload", :requires => get_package("haproxy"))
 
           # These can also be passed in via hash
           has_remotefile(:name => "/etc/haproxy.cfg") do
             mode 644
             requires get_package("haproxy")
-            notify get_service("haproxy")
+            notify get_exec("reloadhaproxy")
             template File.join(File.dirname(__FILE__), "..", "templates/haproxy.conf")
           end
         end
