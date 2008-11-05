@@ -18,10 +18,9 @@ module PoolParty
         :availability_zone => nil,
         :size => "#{size || Base.size}")
       begin
-        h = EC2ResponseObject.get_hash_from_response(item)
+        h = EC2ResponseObject.get_hash_from_response(instance)
         h = instance.instancesSet.item.first
       rescue Exception => e
-        puts "There was an error: #{e}"
         h = instance
       end
       h
@@ -61,7 +60,6 @@ module PoolParty
           ec2.associate_address(:instance_id => instance.instanceId, :public_ip => set_master_ip_to) if set_master_ip_to && instance
         end
       rescue Exception => e        
-        puts "Error in after_launch_master: #{e}"
       end
       reset_remoter_base!
       when_all_assigned_ips {wait "2.seconds"}
