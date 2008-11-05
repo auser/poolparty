@@ -121,10 +121,11 @@ module PoolParty
       def can_start_a_new_instance?
         maximum_number_of_instances_are_not_running? && list_of_pending_instances.size == 0
       end
-      # Are the maximum number of instances running?
+      # Are the maximum number of instances not running?
       def maximum_number_of_instances_are_not_running?
         list_of_running_instances.size < maximum_instances.to_i
       end
+      # Are the maximum number of instances running?
       def maximum_number_of_instances_are_running?
         list_of_running_instances.size >= maximum_instances.to_i
       end
