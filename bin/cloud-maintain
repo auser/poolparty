@@ -26,7 +26,7 @@ include Remote
       vputs "#{list_of_running_instances.size} running instances of between #{minimum_instances} and #{maximum_instances}"
       vputs "Launching new instance"
       launch_minimum_number_of_instances
-    elsif !maximum_number_of_instances_are_not_running?
+    elsif maximum_number_of_instances_are_running?
       vputs "#{list_of_running_instances.size} running instances of between #{minimum_instances} and #{maximum_instances}"
       vputs "Shutting down non-master instance"
       contract_cloud_if_necessary( !testing )

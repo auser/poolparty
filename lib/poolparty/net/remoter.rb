@@ -125,6 +125,9 @@ module PoolParty
       def maximum_number_of_instances_are_not_running?
         list_of_running_instances.size < maximum_instances.to_i
       end
+      def maximum_number_of_instances_are_running?
+        list_of_running_instances.size >= maximum_instances.to_i
+      end
       # Launch new instance while waiting for the number of pending instances
       #  to be zero before actually launching. This ensures that we only
       #  launch one instance at a time
