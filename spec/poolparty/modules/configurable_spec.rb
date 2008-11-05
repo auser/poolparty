@@ -9,7 +9,6 @@ describe "configurable" do
     @tc = TestClass.new
   end
   it "should set the name as frank" do
-    @tc.name.should == nil
     @tc.configure({:name => "frank"})
     @tc.name.should == "frank"
   end
@@ -22,5 +21,9 @@ describe "configurable" do
     @tc.configure(:name => "walter")
     @tc.reconfigure(:name => "dewey")
     @tc.name.should == "dewey"
+  end
+  it "should send an array if two arguments are given" do
+    @tc.configure({:name => ["array", "ishere"]})
+    @tc.name.should == ["array", "ishere"]
   end
 end
