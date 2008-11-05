@@ -18,11 +18,13 @@ module PoolParty
         :availability_zone => nil,
         :size => "#{size || Base.size}")
       begin
-        item = instance#.instancesSet.item
-        inst = EC2ResponseObject.get_hash_from_response(item)        
+        h = EC2ResponseObject.get_hash_from_response(item)
+        h = instance.instancesSet.item.first
       rescue Exception => e
+        puts "There was an error: #{e}"
+        h = instance
       end
-      inst
+      h
     end
     # Terminate an instance by id
     def terminate_instance!(instance_id=nil)
@@ -46,15 +48,23 @@ module PoolParty
           :hostname => h[:ip],
           :ip => h[:ip].convert_from_ec2_to_ip
         })
-      end      
+      end
     end
     # Get the s3 description for the response in a hash format
     def get_instances_description
       EC2ResponseObject.get_descriptions(ec2.describe_instances).sort_by {|a| a[:launching_time]}
     end
         
-    def after_launch_master(instance=nil)      
-      ec2.associate_address(:instance_id => instance.instance_id, :public_ip => set_master_ip_to) if set_master_ip_to && instance
+    def after_launch_master(instance=nil)
+      begin
+        when_no_pending_instances do
+          ec2.associate_address(:instance_id => instance.instanceId, :public_ip => set_master_ip_to) if set_master_ip_to && instance
+        end
+      rescue Exception => e        
+        puts "Error in after_launch_master: #{e}"
+      end
+      reset_remoter_base!
+      when_all_assigned_ips {wait "2.seconds"}
     end
     
     # Help create a keypair for the cloud
@@ -92,7 +102,7 @@ module PoolParty
       ]
     end
     
-    def reset!
+    def reset_base!
       @describe_instances = @cached_descriptions = nil
     end
   end
@@ -131,6 +141,7 @@ class EC2ResponseObject
       rs ||= rs.respond_to?(:instancesSet) ? rs.instancesSet : rs
       rs.reject! {|a| a.nil? || a.empty? }
     rescue Exception => e
+      resp
     end
     rs
   end

@@ -185,6 +185,7 @@ module PoolParty
       end
       
       def reset!
+        reset_remoter_base!
         @build_manifest = @describe_instances = nil
       end
             
