@@ -105,9 +105,12 @@ module PoolParty
         out
       end
       def request_launch_master_instance
-        after_launch_master(launch_new_instance!)
+        inst = launch_new_instance!
+        wait "5.seconds"
+        when_no_pending_instances {after_launch_master(inst)}
       end
-      def after_launch_master(h={})        
+      def after_launch_master(h={})
+        vputs "After launch master in remoter"
       end
       # Let's terminate an instance that is not the master instance
       def request_termination_of_non_master_instance
@@ -138,6 +141,20 @@ module PoolParty
           vprint "."
           wait "5.seconds"
           when_no_pending_instances(&block)
+        end
+      end
+      # A convenience method for waiting until all the instances have an ip
+      # assigned to them. This is useful when shifting the ip addresses
+      # around on the instances
+      def when_all_assigned_ips(&block)
+        reset!
+        list_of_nonterminated_instances.select {|a| puts "i: #{a.ip}" }
+        if list_of_nonterminated_instances.select {|a| a.ip == "not.assigned" }.empty?          
+          block.call if block
+        else
+          vprint "."
+          wait "5.seconds"
+          when_all_assigned_ips(&block)
         end
       end
       
@@ -176,6 +193,7 @@ module PoolParty
         vputs "Requesting to launch new instance"
         logger.debug "Launching master"
         request_launch_master_instance if list_of_pending_instances.size.zero? && can_start_a_new_instance? && !is_master_running?
+        reset!
         
         vputs "Waiting for there to be no pending instances..."
         when_no_pending_instances do
