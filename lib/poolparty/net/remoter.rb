@@ -119,7 +119,7 @@ module PoolParty
       end
       # Can we start a new instance?
       def can_start_a_new_instance?
-        maximum_number_of_instances_are_not_running?
+        maximum_number_of_instances_are_not_running? && list_of_pending_instances.size == 0
       end
       # Are the maximum number of instances running?
       def maximum_number_of_instances_are_not_running?
@@ -174,13 +174,14 @@ module PoolParty
         when_no_pending_instances do
           wait "10.seconds" # Give some time for ssh to startup
           @num_instances = list_of_running_instances.size
+          vputs "(@num_instances - (num))..(@num_instances): #{(@num_instances - (num))..(@num_instances)}"
           last_instances = nonmaster_nonterminated_instances[(@num_instances - (num))..(@num_instances)]
           last_instances.each do |inst|
             PoolParty::Provisioner.provision_slave(inst, self, false) unless inst.master?
             cmd = ". /etc/profile && cloud-provision -i #{inst.name.gsub(/node/, '')} #{unix_hide_string} &"
             Kernel.system cmd
           end
-          PoolParty::Provisioner.reconfigure_master(self, force)          
+          PoolParty::Provisioner.reconfigure_master(self)
         end
       end
       # Launch the master and let the master handle the starting of the cloud
