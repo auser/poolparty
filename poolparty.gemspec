@@ -429,6 +429,7 @@ files:
 - lib/poolparty/helpers/provisioner_base.rb
 - lib/poolparty/helpers/provisioners/master.rb
 - lib/poolparty/helpers/provisioners/slave.rb
+- lib/poolparty/modules/cloud_dsl.rb
 - lib/poolparty/modules/cloud_resourcer.rb
 - lib/poolparty/modules/configurable.rb
 - lib/poolparty/modules/definable_resource.rb
@@ -468,6 +469,7 @@ files:
 - lib/poolparty/pool/resources/file.rb
 - lib/poolparty/pool/resources/gem_package.rb
 - lib/poolparty/pool/resources/host.rb
+- lib/poolparty/pool/resources/mount.rb
 - lib/poolparty/pool/resources/package.rb
 - lib/poolparty/pool/resources/remote_file.rb
 - lib/poolparty/pool/resources/service.rb
