@@ -21,7 +21,7 @@ module PoolParty
             "#{Base.default_specfile_name}",
             "#{Base.storage_directory}/#{Base.default_specfile_name}",            
         ].reject {|a| a.nil?}.reject do |f|
-          f unless ::File.file?(f)
+          f unless ::File.readable?(f)
         end.first
       end
       

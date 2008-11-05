@@ -8,21 +8,12 @@ o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
   opts.on('-n name', '--name name', 'Host name')    { |h| optioner.hostname h }
   opts.on('-l', '--no-shell', 'No shell') {optioner.noshell true}
 end
-
-load_pool(o.spec || Binary.get_existing_spec_location)
-
-include Remote
-
-@clouds = o.cloudname ? [cloud(o.cloudname.downcase.to_sym)] : clouds
 @hostname = o.hostname ? o.hostname : `hostname`.chomp
-
 @hostname = "node0" if @hostname == "master" # Quick fix to make sure we have a node running on the master as well
 
-@clouds.each do |name, cloud|
+o.loaded_clouds.each do |cloud|
   
-  with_cloud(cloud, {:testing => o.testing, :hostname => @hostname, :noshell => o.noshell }) do
-    # TODO: Change this to be app specfic
-    # SECURITY RISK
+  with_cloud(cloud, {:hostname => @hostname}) do
     
     boot_file = "#{Messenger.append_dir}/pm_node_rel-0.1"
     command = Messenger.erl_command(hostname, "-boot #{boot_file} #{noshell ? "" : "-detached -heart"}")
