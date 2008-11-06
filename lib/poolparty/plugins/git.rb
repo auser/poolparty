@@ -16,7 +16,7 @@ module PoolParty
           creates "#{::File.join( (parent.cwd ? parent.cwd : cwd), ::File.basename(parent.source, ::File.extname(parent.source)) )}/.git"
         end
         has_exec(:name => "update-#{name}", :requires => get_exec("git-#{name}")) do
-          cwd get_exec("git-#{parent.name}").cwd
+          cwd get_exec("git-#{parent.name}").creates
           command "git pull"
         end
       end
