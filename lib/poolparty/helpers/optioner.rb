@@ -42,21 +42,22 @@ module PoolParty
       opts.banner = "Usage: #{progname} #{@abstract ? "[command] " : ""}[options]"
 
       opts.separator ""
-      opts.separator "Options:"
-      
-      opts.on('-V', '--version', 'Display the version')    { output_version ; exit 0 }
-      opts.on('-v', '--verbose', 'Be verbose')    { self.verbose true }  
-      opts.on('-s [file]', '--spec-file [file]', 'Set the spec file')      { |file| self.spec file }
-      opts.on('-t', '--test', 'Testing mode')    { self.testing true }
-                  
-      blk.call(opts, self) if blk
       
       unless @abstract
-        opts.on_tail("-h", "--help", "Show this message") do
-          puts opts
-          puts @extra_help
-          exit
-        end
+        opts.separator "Options:"
+
+        opts.on('-V', '--version', 'Display the version')    { output_version ; exit 0 }
+        opts.on('-v', '--verbose', 'Be verbose')    { self.verbose true }  
+        opts.on('-s [file]', '--spec-file [file]', 'Set the spec file')      { |file| self.spec file }
+        opts.on('-t', '--test', 'Testing mode')    { self.testing true }
+
+        blk.call(opts, self) if blk      
+      end
+      
+      opts.on_tail("-h", "--help", "Show this message") do
+        puts opts
+        puts @extra_help
+        exit
       end
       
       opts.parse(@arguments.dup)
@@ -75,7 +76,7 @@ module PoolParty
       end
     end
     def reject_junk_options!
-      %w(loaded_pool cloudname).each do |opt|
+      %w(loaded_pool cloudname extract_pool_from_options).each do |opt|
         @options.delete(opt.to_sym)
       end
     end
