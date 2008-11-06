@@ -16,14 +16,14 @@ module PoolParty
           creates "#{::File.join( (parent.cwd ? parent.cwd : cwd), ::File.basename(parent.source, ::File.extname(parent.source)) )}/.git"
         end
         has_exec(:name => "update-#{name}", :requires => get_exec("git-#{name}")) do
-          cwd get_exec("git-#{parent.name}").creates
+          cwd ::File.dirname(get_exec("git-#{parent.name}").creates)
           command "git pull"
         end
       end
       
       def at(dir)
         cwd dir
-        has_directory(:name => "#{dir}", :requires => "#{::File.dirname(dir)}")
+        has_directory(:name => "#{dir}", :requires => get_directory("#{::File.dirname(dir)}"))
       end
       
       # Since git is not a native type, we have to say which core resource
