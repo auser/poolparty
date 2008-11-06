@@ -77,7 +77,6 @@ executables:
 - pool-console
 - pool-describe
 - pool-list
-- pool-provision
 - pool-spec
 - pool-start
 - server-build-messenger
@@ -128,7 +127,6 @@ files:
 - bin/pool-console
 - bin/pool-describe
 - bin/pool-list
-- bin/pool-provision
 - bin/pool-spec
 - bin/pool-start
 - bin/server-build-messenger
@@ -414,6 +412,7 @@ files:
 - lib/poolparty/core/time.rb
 - lib/poolparty/dependency_resolutions/base.rb
 - lib/poolparty/dependency_resolutions/puppet.rb
+- lib/poolparty/exceptions/CloudNotFoundException.rb
 - lib/poolparty/exceptions/LoadRulesException.rb
 - lib/poolparty/exceptions/MasterException.rb
 - lib/poolparty/exceptions/RemoteException.rb

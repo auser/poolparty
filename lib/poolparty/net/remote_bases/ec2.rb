@@ -73,6 +73,7 @@ begin
         return false unless keypair
         unless ::File.exists?( new_keypair_path )
           FileUtils.mkdir_p ::File.dirname( new_keypair_path )
+          vputs "Creating keypair: #{keypair} in #{new_keypair_path}"
           Kernel.system "ec2-add-keypair #{keypair} > #{new_keypair_path} && chmod 600 #{new_keypair_path}"
         end
       end
