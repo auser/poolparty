@@ -64,15 +64,17 @@ module PoolParty
       
       process_options
       output_options if verbose
-      self.loaded_pool load_pool(self.spec || Binary.get_existing_spec_location)
-      
-      self.loaded_clouds extract_cloud_from_options(self)
-      self.loaded_pools extract_pool_from_options(self)
-      
-      reject_junk_options!
-      raise CloudNotFoundException.new("Please specify your cloud with -s, move it to ./pool.spec or in your POOL_SPEC environment variable") unless loaded_clouds && !loaded_clouds.empty?
-      loaded_clouds.each do |cl|
-        cl.configure(self.options)
+      unless @abstract
+        self.loaded_pool load_pool(self.spec || Binary.get_existing_spec_location)
+
+        self.loaded_clouds extract_cloud_from_options(self)
+        self.loaded_pools extract_pool_from_options(self)
+
+        reject_junk_options!
+        raise CloudNotFoundException.new("Please specify your cloud with -s, move it to ./pool.spec or in your POOL_SPEC environment variable") unless loaded_clouds && !loaded_clouds.empty?
+        loaded_clouds.each do |cl|
+          cl.configure(self.options)
+        end
       end
     end
     def reject_junk_options!
