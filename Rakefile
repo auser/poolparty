@@ -15,6 +15,8 @@ task :clean_pkg do |t|
     FileUtils.rm_rf("#{File.dirname(__FILE__)}/#{dir}") if ::File.exists?("#{File.dirname(__FILE__)}/#{dir}")
   end
 end
+desc "Generate a new manifest and a new gem"
+task :build_local_gem => [:spec, :clean_tmp, :"manifest:refresh", :local_deploy]
 desc "Generate gemspec"
 task :gemspec  => [:spec, :clean_tmp, :"manifest:refresh", :local_deploy] do |t|
   res = %x[rake debug_gem]
