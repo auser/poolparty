@@ -9,7 +9,6 @@ module PoolParty
             
       def has_git_repos
         has_package(:name => "git-core")
-        has_directory(:name => "#{cwd}")
         
         has_exec({:name => "git-#{name}", :requires => get_package("git-core"), :requires => [get_directory("#{cwd}"), get_package("git-core")]}) do          
           command parent.user ? "git clone #{parent.user}@#{parent.source} #{parent.path}" : "git clone #{parent.source} #{parent.to ? parent.to : ""}"
@@ -20,6 +19,11 @@ module PoolParty
           cwd get_exec("git-#{parent.name}").cwd
           command "git pull"
         end
+      end
+      
+      def at(dir)
+        cwd dir
+        has_directory(:name => "#{dir}", :requires => "#{::File.dirname(dir)}")
       end
       
       # Since git is not a native type, we have to say which core resource

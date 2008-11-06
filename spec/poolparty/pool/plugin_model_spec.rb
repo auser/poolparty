@@ -3,7 +3,6 @@ require File.dirname(__FILE__) + '/test_plugins/webserver'
 
 describe "Plugin" do
   before(:each) do
-    setup
     @p = pool :poolpartyrb do
       cloud :app do
         apache do                
@@ -56,8 +55,8 @@ describe "Plugin" do
         @plugin.respond_to?(:site).should == true
       end
       it "should be able to call the plugin method site" do
-        @plugin.should_receive(:virtual_host).once
-        @plugin.site("hi", {:document_root => "/root"})
+        @plugin.should_receive(:virtual_host).with("hop", {:document_root => "/root"})
+        @plugin.virtual_host("hop", {:document_root => "/root"})
       end
     end
   end

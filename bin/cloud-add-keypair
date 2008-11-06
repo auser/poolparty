@@ -5,13 +5,24 @@ require "poolpartycl"
 
 o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
   opts.on('-n name', '--name name', 'Add the keypair for cloud name')    { |c| optioner.cloudname c }
+  opts.on('-l', '--listing', 'List the keypairs for the clouds')    { optioner.listkeys true }
 end
 
-o.loaded_clouds.each do |cloud|
+if o.listkeys
   
-  with_cloud(cloud, {:location => @location, :verbose => o.verbose}) do
-    vputs header("Creating keypair for #{name}")
-    create_keypair unless testing
-  end  
+  puts "Cloud\t\tKeypair"
+  puts "--------------------------"
+  o.loaded_clouds.each do |cloud|
+    puts "#{cloud.name}\t--\t#{cloud.keypair}"
+  end
+  
+else
+  
+  o.loaded_clouds.each do |cloud|  
+    with_cloud(cloud) do
+      vputs header("Creating keypair for #{name}")
+      create_keypair unless testing
+    end  
+  end
   
 end
