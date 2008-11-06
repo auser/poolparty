@@ -4,7 +4,7 @@ require File.dirname(__FILE__) + '/../../../lib/poolparty/helpers/optioner'
 describe "Option Parser" do
   describe "options" do
     before(:each) do
-      @op = PoolParty::Optioner.new
+      @op = PoolParty::Optioner.new({:abstract => true})
       @op.parse_options
     end
     it "should set the options as an Hash" do
