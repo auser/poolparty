@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/svn/!svn/ver/65/trunk/priv/skel/src
+END
+skel.erl
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/65/trunk/priv/skel/src/skel.erl
+END
+skel_app.erl
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/30/trunk/priv/skel/src/skel_app.erl
+END
+skel.hrl
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/30/trunk/priv/skel/src/skel.hrl
+END
+skel_sup.erl
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/65/trunk/priv/skel/src/skel_sup.erl
+END
+skel_deps.erl
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/!svn/ver/30/trunk/priv/skel/src/skel_deps.erl
+END
+skel_web.erl
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/65/trunk/priv/skel/src/skel_web.erl
+END
+Makefile
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/30/trunk/priv/skel/src/Makefile
+END
+skel.app
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/30/trunk/priv/skel/src/skel.app
+END
