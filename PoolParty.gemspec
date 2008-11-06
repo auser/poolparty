@@ -9,7 +9,7 @@ autorequire:
 bindir: bin
 cert_chain: []
 
-date: 2008-11-05 00:00:00 -08:00
+date: 2008-11-06 00:00:00 -08:00
 default_executable: 
 dependencies: 
 - !ruby/object:Gem::Dependency 
@@ -153,53 +153,6 @@ files:
 - lib/erlang/cloudpanel/deps/mochiweb/LICENSE
 - lib/erlang/cloudpanel/deps/mochiweb/Makefile
 - lib/erlang/cloudpanel/deps/mochiweb/README
-- lib/erlang/cloudpanel/deps/mochiweb/doc/mochifmt.html
-- lib/erlang/cloudpanel/deps/mochiweb/doc/mochifmt_records.html
-- lib/erlang/cloudpanel/deps/mochiweb/doc/mochifmt_std.html
-- lib/erlang/cloudpanel/deps/mochiweb/doc/mochihex.html
-- lib/erlang/cloudpanel/deps/mochiweb/doc/mochijson.html
-- lib/erlang/cloudpanel/deps/mochiweb/doc/mochijson2.html
-- lib/erlang/cloudpanel/deps/mochiweb/doc/mochinum.html
-- lib/erlang/cloudpanel/deps/mochiweb/doc/mochiweb.html
-- lib/erlang/cloudpanel/deps/mochiweb/doc/mochiweb_app.html
-- lib/erlang/cloudpanel/deps/mochiweb/doc/mochiweb_charref.html
-- lib/erlang/cloudpanel/deps/mochiweb/doc/mochiweb_cookies.html
-- lib/erlang/cloudpanel/deps/mochiweb/doc/mochiweb_echo.html
-- lib/erlang/cloudpanel/deps/mochiweb/doc/mochiweb_headers.html
-- lib/erlang/cloudpanel/deps/mochiweb/doc/mochiweb_html.html
-- lib/erlang/cloudpanel/deps/mochiweb/doc/mochiweb_http.html
-- lib/erlang/cloudpanel/deps/mochiweb/doc/mochiweb_multipart.html
-- lib/erlang/cloudpanel/deps/mochiweb/doc/mochiweb_request.html
-- lib/erlang/cloudpanel/deps/mochiweb/doc/mochiweb_response.html
-- lib/erlang/cloudpanel/deps/mochiweb/doc/mochiweb_skel.html
-- lib/erlang/cloudpanel/deps/mochiweb/doc/mochiweb_socket_server.html
-- lib/erlang/cloudpanel/deps/mochiweb/doc/mochiweb_sup.html
-- lib/erlang/cloudpanel/deps/mochiweb/doc/mochiweb_util.html
-- lib/erlang/cloudpanel/deps/mochiweb/doc/reloader.html
-- lib/erlang/cloudpanel/deps/mochiweb/ebin/mochifmt.beam
-- lib/erlang/cloudpanel/deps/mochiweb/ebin/mochifmt_records.beam
-- lib/erlang/cloudpanel/deps/mochiweb/ebin/mochifmt_std.beam
-- lib/erlang/cloudpanel/deps/mochiweb/ebin/mochihex.beam
-- lib/erlang/cloudpanel/deps/mochiweb/ebin/mochijson.beam
-- lib/erlang/cloudpanel/deps/mochiweb/ebin/mochijson2.beam
-- lib/erlang/cloudpanel/deps/mochiweb/ebin/mochinum.beam
-- lib/erlang/cloudpanel/deps/mochiweb/ebin/mochiweb.app
-- lib/erlang/cloudpanel/deps/mochiweb/ebin/mochiweb.beam
-- lib/erlang/cloudpanel/deps/mochiweb/ebin/mochiweb_app.beam
-- lib/erlang/cloudpanel/deps/mochiweb/ebin/mochiweb_charref.beam
-- lib/erlang/cloudpanel/deps/mochiweb/ebin/mochiweb_cookies.beam
-- lib/erlang/cloudpanel/deps/mochiweb/ebin/mochiweb_echo.beam
-- lib/erlang/cloudpanel/deps/mochiweb/ebin/mochiweb_headers.beam
-- lib/erlang/cloudpanel/deps/mochiweb/ebin/mochiweb_html.beam
-- lib/erlang/cloudpanel/deps/mochiweb/ebin/mochiweb_http.beam
-- lib/erlang/cloudpanel/deps/mochiweb/ebin/mochiweb_multipart.beam
-- lib/erlang/cloudpanel/deps/mochiweb/ebin/mochiweb_request.beam
-- lib/erlang/cloudpanel/deps/mochiweb/ebin/mochiweb_response.beam
-- lib/erlang/cloudpanel/deps/mochiweb/ebin/mochiweb_skel.beam
-- lib/erlang/cloudpanel/deps/mochiweb/ebin/mochiweb_socket_server.beam
-- lib/erlang/cloudpanel/deps/mochiweb/ebin/mochiweb_sup.beam
-- lib/erlang/cloudpanel/deps/mochiweb/ebin/mochiweb_util.beam
-- lib/erlang/cloudpanel/deps/mochiweb/ebin/reloader.beam
 - lib/erlang/cloudpanel/deps/mochiweb/priv/skel/Makefile
 - lib/erlang/cloudpanel/deps/mochiweb/priv/skel/priv/www/index.html
 - lib/erlang/cloudpanel/deps/mochiweb/priv/skel/src/Makefile
