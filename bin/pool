@@ -9,8 +9,8 @@ name = ARGV.select {|arg| arg if Binary.available_binaries_for("pool").include?(
 # these options, so we'll strip it if it's included
 help_array = ["-h", "help", "--help"]
 DUP_ARG = ARGV.dup
-DUP_ARG.reject {|arg| true unless help_array.include?(arg) || Binary.available_binaries_for("pool").include?(arg) }
-new_args = DUP_ARG.reject {|arg| Binary.available_binaries_for("pool").include?(arg) }.empty? ? ARGV : (name ? (help_array.each {|arg| DUP_ARG.delete(arg)}; DUP_ARG) : DUP_ARG)
+new_args = DUP_ARG.map {|arg| DUP_ARG.delete(arg) unless help_array.include?(arg) || Binary.available_binaries_for("pool").include?(arg) }
+new_args = new_args.reject {|arg| Binary.available_binaries_for("pool").include?(arg) }.empty? ? ARGV : (name ? (help_array.each {|arg| DUP_ARG.delete(arg)}; DUP_ARG) : DUP_ARG)
 
 # Let's make sure if no command is passed in that we show the help message
 new_args.push("-h") unless name
