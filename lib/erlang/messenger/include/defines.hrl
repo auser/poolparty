@@ -1,5 +1,7 @@
 % Includes file for the PoolParty Messenger
 
+-define (debug, true).
+
 -ifdef(debug).
 
 -define (MASTER_LOCATION, erlang:list_to_atom(lists:append("master@", element(2, inet:gethostname()))) ).
@@ -14,3 +16,6 @@
 
 -define (MASTER_NODE_NAME, master).
 -define (MASTER_SERVER, global:whereis_name(pm_master)).
+
+-record (node, 
+					{load}).
