@@ -106,7 +106,7 @@ handle_cast({update_node_load, From, Loads}, State) ->
 	?TRACE("Cast with load message", [From, Loads]),
 	StoredLoad = get_node_load(From, State),
 	?TRACE("StoredLoad", [StoredLoad]),
-	[dict:update(load, Load, ?DICT) || Load <- Loads],
+	[?DICT:update(load, Load, State#state.nodes) || Load <- Loads],
 	{noreply, State}.
 	
 % handle_cast(Msg, State) ->
@@ -142,16 +142,16 @@ code_change(_OldVsn, State, _Extra) ->
 % Private methods
 get_node_listing(Name, State) ->
 	% Find or create the stored node
-	StoredNodeDict = case ?DICT:is_key(Name, State#state.nodes) of
-		true -> ?DICT:fetch(Name, State#state.nodes);
-		false -> ?DICT:store(Name, ?DICT:new(), State#state.nodes)
+	case ?DICT:is_key(Name, State#state.nodes) of
+		true -> StoredNodeDict = ?DICT:fetch(Name, State#state.nodes);
+		false -> StoredNodeDict = ?DICT:store(Name, ?DICT:new(), State#state.nodes)
 	end,
 	StoredNodeDict.
 get_node_load(Name, State) ->
 	% Find or create the stored load
 	StoredNodeDict = get_node_listing(Name, State),
-	StoredLoadDict = case ?DICT:is_key(Name, StoredNodeDict) of
-		true -> ?DICT:fetch(Name, StoredNodeDict);
-		false -> ?DICT:store(Name, ?DICT:new(), StoredNodeDict)
+	case ?DICT:is_key(Name, StoredNodeDict) of
+		true -> StoredLoadDict = ?DICT:fetch(Name, StoredNodeDict);
+		false -> StoredLoadDict = ?DICT:store(Name, ?DICT:new(), StoredNodeDict)
 	end,
 	StoredLoadDict.
