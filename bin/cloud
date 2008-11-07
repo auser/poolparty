@@ -7,7 +7,6 @@ name = ARGV.select {|arg| arg if Binary.available_binaries_for("cloud").include?
 # If the options include -h and they don't include a valid command, then we can just pass the 
 # original options back, but if they do contain a binary, we don't want -h getting through to 
 # these options, so we'll strip it if it's included
-help_array = ["-h", "help", "--help"]
 DUP_ARG = ARGV.dup
 new_args = DUP_ARG.map {|arg| DUP_ARG.delete(arg) unless help_array.include?(arg) || Binary.available_binaries_for("cloud").include?(arg) }
 new_args = new_args.reject {|arg| Binary.available_binaries_for("cloud").include?(arg) }.empty? ? ARGV : (name ? (help_array.each {|arg| DUP_ARG.delete(arg)}; DUP_ARG) : DUP_ARG)

@@ -104,6 +104,8 @@ handle_call(Request, _From, State) ->
 %%--------------------------------------------------------------------
 handle_cast({update_node_load, From, Loads}, State) ->
 	?TRACE("Cast with load message", [From, Loads]),
+	StoredLoad = get_node_load(From, State),
+	?DICT:update(load, fun() -> Loads end, StoredLoad),
 	{noreply, State}.
 	
 % handle_cast(Msg, State) ->
@@ -137,5 +139,18 @@ code_change(_OldVsn, State, _Extra) ->
   {ok, State}.
 
 % Private methods
-get_node_listing(Name) ->
-	Name.
+get_node_listing(Name, State) ->
+	% Find or create the stored node
+	StoredNodeDict = case ?DICT:is_key(Name, ?DICT) of
+		true -> ?DICT:fetch(Name, State#state.nodes);
+		false -> ?DICT:store(Name, ?DICT:new(), State#state.nodes)
+	end,
+	StoredNodeDict.
+get_node_load(Name, State) ->
+	% Find or create the stored load
+	StoredNodeDict = get_node_listing(Name, State),
+	StoredLoadDict = case ?DICT:is_key(Name, StoredNodeDict) of
+		true -> ?DICT:fetch(Name, StoredNodeDict);
+		false -> ?DICT:store(Name, ?DICT:new(), StoredNodeDict)
+	end,
+	StoredLoadDict.
