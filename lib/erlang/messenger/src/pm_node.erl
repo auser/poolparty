@@ -11,7 +11,7 @@
 -include_lib("../include/defines.hrl").
 
 %% API
--export([start_link/0]).
+-export([start_link/1]).
 
 %% gen_server callbacks
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2,
@@ -19,11 +19,12 @@
 
 -record(state, {}).
 -define(SERVER, ?MODULE).
+-define (UPDATE_TIME, 10000).
 
 % Client function definitions
 -export ([stop/0]).
 -export ([get_load_for_type/1, run_cmd/1, fire_cmd/1]).
--export ([run_reconfig/0]).
+-export ([run_reconfig/0, local_update/1]).
 
 %%====================================================================
 %% API
@@ -49,6 +50,13 @@ fire_cmd(Cmd) -> gen_server:cast(?MODULE, {fire_command, Cmd}).
 % Stop the pm_node entirely
 stop() ->
 	gen_server:cast(?MODULE, stop).
+
+% Run every UPDATE_TIME seconds
+local_update(Types) ->
+	net_adm:ping(?MASTER_LOCATION),
+	Load = [get_load_for_type(Ty) || Ty <- Types],
+	?TRACE("Load", [Load, ?MASTER_LOCATION]),
+	gen_server:cast(?MASTER_SERVER, {update_node_load, node(), Load}).
 	
 %%--------------------------------------------------------------------
 %% Function: start_link() -> {ok,Pid} | ignore | {error,Error}
@@ -59,10 +67,8 @@ stop() ->
 %% 
 %% Fires a ping every 10 seconds
 %%--------------------------------------------------------------------
-start_link() ->
-	io:format("Pinging master at ~p~n", [?MASTER_LOCATION]),
-	utils:start_timer(10000, fun() -> net_adm:ping(?MASTER_LOCATION) end),
-  gen_server:start_link({local, ?MODULE}, ?MODULE, [], []).
+start_link(Args) ->		
+  gen_server:start_link({local, ?MODULE}, ?MODULE, Args, Args).
 
 %%====================================================================
 %% gen_server callbacks
@@ -75,8 +81,9 @@ start_link() ->
 %%                         {stop, Reason}
 %% Description: Initiates the server
 %%--------------------------------------------------------------------
-init([]) ->
+init(Args) ->
 	process_flag(trap_exit, true),
+	utils:start_timer(?UPDATE_TIME, fun() -> pm_node:local_update(Args) end),
   {ok, #state{}}.
 
 %%--------------------------------------------------------------------
