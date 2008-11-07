@@ -17,6 +17,7 @@ task :clean_pkg do |t|
   
   %x[rm Manifest.txt; touch Manifest.txt]
 end
+
 desc "Generate a new manifest and a new gem"
 task :build_local_gem => [:spec, :clean_tmp, :"manifest:refresh", :package]
 desc "Generate gemspec"
