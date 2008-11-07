@@ -105,6 +105,7 @@ handle_call(Request, _From, State) ->
 handle_cast({update_node_load, From, Loads}, State) ->
 	?TRACE("Cast with load message", [From, Loads]),
 	StoredLoad = get_node_load(From, State),
+	?TRACE("StoredLoad", [StoredLoad]),
 	?DICT:update(load, fun() -> Loads end, StoredLoad),
 	{noreply, State}.
 	
