@@ -5,7 +5,7 @@ module PoolParty
       
       default_options({
         :command => nil,
-        :key => "ALONGSTRINGOFDIGITS",
+        # :key => "ALONGSTRINGOFDIGITS",
         :target => "~/.ssh/poolparty_id_rsa"
       })
       
