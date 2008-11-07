@@ -45,15 +45,15 @@ module PoolParty
       
       unless @abstract
         opts.separator "Options:"
-
-        opts.on('-V', '--version', 'Display the version')    { output_version ; exit 0 }
+        
         opts.on('-v', '--verbose', 'Be verbose')    { self.verbose true }  
         opts.on('-s [file]', '--spec-file [file]', 'Set the spec file')      { |file| self.spec file }
         opts.on('-t', '--test', 'Testing mode')    { self.testing true }
 
-        blk.call(opts, self) if blk      
+        blk.call(opts, self) if blk
       end
       
+      opts.on('-V', '--version', 'Display the version')    { puts PoolParty::VERSION::STRING ; exit 0 }
       opts.on_tail("-h", "--help", "Show this message") do
         puts opts
         puts @extra_help
