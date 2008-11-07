@@ -17,16 +17,21 @@
 -define (SERVER, global:whereis_name(?MODULE)).
 
 %% API
--export([start_link/0]).
 
 %% gen_server callbacks
--export([init/1, handle_call/3, handle_cast/2, handle_info/2,
-         terminate/2, code_change/3]).
+-export([start_link/0,
+         stop/0,
+         init/1,
+         handle_call/3,
+         handle_cast/2,
+         handle_info/2,
+         terminate/2,
+         code_change/3]).
 
 % Client function definitions
 -export ([get_load/1, reconfigure_cloud/0]).
--export ([run_cmd/1, fire_cmd/1]).
--export ([shutdown_cloud/0, stop/0]).
+-export ([run_cmd/1, fire_cmd/1, get_current_nodes/0]).
+-export ([shutdown_cloud/0]).
 
 %%====================================================================
 %% API
@@ -38,7 +43,7 @@
 % pm_master:get_load("0", "cpu").
 get_load(Type) ->
 	% {Loads, _} = pm_cluster:send_call(get_load_for_type, [Type]),
-	{Loads, _} = gen_server:call(?SERVER, {get_load_for_type, [Type]}),
+	{Loads, _} = gen_server:call(?SERVER, {get_load, [Type]}),
 	utils:convert_responses_to_int_list(Loads).
 
 % Send reconfigure tasks to every node
@@ -53,6 +58,9 @@ fire_cmd(Cmd) -> gen_server:call(?SERVER, {fire_cmd, Cmd}).
 shutdown_cloud() ->
 	pm_cluster:send_call(stop, []),
 	{ok}.
+
+get_current_nodes() ->
+	gen_server:call(?SERVER, {get_live_nodes}).
 
 stop() ->
 	gen_server:cast(?MODULE, stop).	
@@ -76,7 +84,9 @@ start_link() ->
 %%--------------------------------------------------------------------
 init([]) ->
 	% pm_event_manager:add_handler(pm_master_event_handler),
-  {ok, #state{}}.
+  {ok, #state{
+		nodes = ?DICT:new()
+	}}.
 
 %%--------------------------------------------------------------------
 %% Function: %% handle_call(Request, From, State) -> {reply, Reply, State} |
@@ -88,14 +98,17 @@ init([]) ->
 %% Description: Handling call messages
 %%--------------------------------------------------------------------
 % Handle load messages
-handle_call({Type, Args}, _From, _State) ->
-	Nodes = pm_cluster:get_live_nodes(),
-	List = rpc:multicall(Nodes, pm_node, Type, [Args]),
-	{reply, List, nostate};
-handle_call(Request, _From, State) ->
-	Nodes = pm_cluster:get_live_nodes(),
-	Reply = Reply = rpc:multicall(Nodes, pm_node, Request, []),
-	{reply, Reply, State}.
+handle_call({get_load, Args}, _From, State) ->
+		Nodes = pm_cluster:get_live_nodes(),
+		List = rpc:multicall(Nodes, pm_node, get_load_for_type, [Args]),
+		{reply, List, State};		
+handle_call({get_live_nodes}, _From, State) ->
+	{reply, dict:fetch_keys(State#state.nodes), State}.
+	
+% handle_call(_Request, _From, State) ->
+	% Nodes = pm_cluster:get_live_nodes(),
+	% Reply = Reply = rpc:multicall(Nodes, pm_node, Request, []),
+	% {reply, Reply, State}.
 
 %%--------------------------------------------------------------------
 %% Function: handle_cast(Msg, State) -> {noreply, State} |
@@ -104,14 +117,27 @@ handle_call(Request, _From, State) ->
 %% Description: Handling cast messages
 %%--------------------------------------------------------------------
 handle_cast({update_node_load, From, Loads}, State) ->
-	?TRACE("Cast with load message", [From, Loads]),
-	StoredLoad = get_node_load(From, State),
-	[?DICT:update(load, Load, StoredLoad) || Load <- Loads],
-	{noreply, State}.
-	
-% handle_cast(Msg, State) ->
-% 	?TRACE("Cast with unknown message", [Msg]),
-%   {noreply, State}.
+	% ?TRACE("Cast with load message", [From, Loads]),
+	% {_Nodes, NewState} = get_node_listing(From, State),
+	% {noreply, NewState};
+	{LoadStore, NewState} = get_load_for(From, State),
+	[?TRACE("Type Load", [Type, Load]) || {Type, Load} <- Loads],
+	NewLoadStore = lists:map(
+		fun(Type, Load) ->
+			BinType = erlang:list_to_binary(Type),
+			case ?DICT:is_key(BinType, LoadStore) of
+				true -> ?DICT:update(BinType, Load, LoadStore);
+				false ->
+					LoadStore = ?DICT:new(), 
+					NewState = ?DICT:store(BinType, Load, LoadStore)
+			end, Loads),
+	?TRACE("Load", [dict:fetch_keys(LoadStore)]),
+	{noreply, NewState};
+handle_cast(stop, _State) ->
+	{ok};
+handle_cast(Msg, State) ->
+	?TRACE("Cast with unknown message", [Msg]),
+  {noreply, State}.
 
 %%--------------------------------------------------------------------
 %% Function: handle_info(Info, State) -> {noreply, State} |
@@ -119,7 +145,8 @@ handle_cast({update_node_load, From, Loads}, State) ->
 %%                                       {stop, Reason, State}
 %% Description: Handling all non call/cast messages
 %%--------------------------------------------------------------------
-handle_info(_Info, State) ->
+handle_info(Info, State) ->
+	?TRACE("Handling info", [Info]),
   {noreply, State}.
 
 %%--------------------------------------------------------------------
@@ -141,17 +168,25 @@ code_change(_OldVsn, State, _Extra) ->
 
 % Private methods
 get_node_listing(Name, State) ->
-	% Find or create the stored node
+	% Find or create the stored node	
+	?TRACE("Find ", [Name, ?DICT:is_key(Name, State#state.nodes)]),
 	case ?DICT:is_key(Name, State#state.nodes) of
-		true -> StoredNodeDict = ?DICT:fetch(Name, State#state.nodes);
-		false -> StoredNodeDict = ?DICT:store(Name, ?DICT:new(), State#state.nodes)
-	end,
-	StoredNodeDict.
-get_node_load(Name, State) ->
-	% Find or create the stored load
-	StoredNodeDict = get_node_listing(Name, State),
-	case ?DICT:is_key(Name, StoredNodeDict) of
-		true -> StoredLoadDict = ?DICT:fetch(Name, StoredNodeDict);
-		false -> StoredLoadDict = ?DICT:store(Name, ?DICT:new(), StoredNodeDict)
-	end,
-	StoredLoadDict.
+		true -> 
+			NodeStore = dict:fetch(Name, State#state.nodes),
+			{NodeStore, State};
+		false -> 
+			NodeStore = ?DICT:new(), 
+			NewState = State#state{nodes = ?DICT:store(Name, NodeStore, State#state.nodes)},
+			{NodeStore, NewState}
+	end.
+
+get_load_for(Name, State) ->
+	{Node, NewState} = get_node_listing(Name, State),	
+	case ?DICT:is_key(load, Node) of
+		true -> 
+			{dict:fetch(load, Node), NewState};
+		false -> 
+			LoadStore = ?DICT:new(),
+			NewState1 = NewState#state{nodes = ?DICT:store(Name, LoadStore, NewState#state.nodes)},
+			{LoadStore, NewState1}
+	end.
