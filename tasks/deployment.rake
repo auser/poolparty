@@ -7,8 +7,12 @@ task :deploy => [:check_version, :website, :release] do
   puts "Tagging release #{CHANGES}"
 end
 
-desc 'Runs tasks website_generate and install_gem as a local deployment of the gem'
-task :local_deploy => [:website_generate, :install_gem]
+# desc 'Runs tasks website_generate and install_gem as a local deployment of the gem'
+# task :local_deploy => [:website_generate, :install_gem]
+desc "Deploy the gem locally"
+task :local_deploy => [:build_local_gem] do
+  sh "#{'sudo ' unless Hoe::WINDOZE }gem install pkg/*.gem --no-rdoc --no-ri"
+end
 
 task :check_version do
   unless ENV['VERSION']
