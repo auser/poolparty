@@ -77,7 +77,21 @@ module PoolParty
       # If no keypair is passed, select them all
       def list_of_instances(keyp=nil)
         key = keyp ? keyp : keypair
-        @describe_instances ||= describe_instances.select {|a| key ? a[:keypair] == key : true }
+        unless @describe_instances
+          tmpInstanceList = describe_instances.select {|a| key ? a[:keypair] == key : true }
+          has_master = tmpInstanceList.collect {|a| a[:name] }.include?("master")
+          if has_master
+            @describe_instances = tmpInstanceList
+          else            
+            @id = 0
+            @describe_instances = tmpInstanceList.map do |inst|
+              inst.name(@id == 0 ? "master" : "node#{@id}")
+              @id += 1
+              inst
+            end
+          end
+        end
+        @describe_instances
       end
       # Instances
       # Get the master from the cloud
