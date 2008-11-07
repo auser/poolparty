@@ -54,7 +54,7 @@ stop() ->
 % Run every UPDATE_TIME seconds
 local_update(Types) ->
 	net_adm:ping(?MASTER_LOCATION),
-	Load = [get_load_for_type(Ty) || Ty <- Types],
+	Load = [{Ty, element(1, get_load_for_type(Ty))} || Ty <- Types],
 	?TRACE("Load", [Load, ?MASTER_LOCATION]),
 	gen_server:cast(?MASTER_SERVER, {update_node_load, node(), Load}).
 	

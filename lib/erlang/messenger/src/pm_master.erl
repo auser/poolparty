@@ -10,7 +10,9 @@
 
 -include_lib("../include/defines.hrl").
 
--record(state, {}).
+-record(state, {
+					nodes = ?DICT:new()  % Dictionary of running nodes
+				}).
 -define (SERVER, global:whereis_name(?MODULE)).
 
 %% API
@@ -23,7 +25,7 @@
 % Client function definitions
 -export ([get_load/1, reconfigure_cloud/0]).
 -export ([run_cmd/1, fire_cmd/1]).
--export ([shutdown_cloud/0]).
+-export ([shutdown_cloud/0, stop/0]).
 
 %%====================================================================
 %% API
@@ -50,6 +52,9 @@ fire_cmd(Cmd) -> gen_server:call(?SERVER, {fire_cmd, Cmd}).
 shutdown_cloud() ->
 	pm_cluster:send_call(stop, []),
 	{ok}.
+
+stop() ->
+	gen_server:cast(?MODULE, stop).	
 %%--------------------------------------------------------------------
 %% Function: start_link() -> {ok,Pid} | ignore | {error,Error}
 %% Description: Starts the server
