@@ -141,7 +141,7 @@ code_change(_OldVsn, State, _Extra) ->
 % Private methods
 get_node_listing(Name, State) ->
 	% Find or create the stored node
-	StoredNodeDict = case ?DICT:is_key(Name, ?DICT) of
+	StoredNodeDict = case ?DICT:is_key(Name, State#state.nodes) of
 		true -> ?DICT:fetch(Name, State#state.nodes);
 		false -> ?DICT:store(Name, ?DICT:new(), State#state.nodes)
 	end,
