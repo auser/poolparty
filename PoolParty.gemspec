@@ -152,7 +152,6 @@ files:
 - lib/erlang/messenger/README
 - lib/erlang/messenger/Rakefile
 - lib/erlang/messenger/control
-- lib/erlang/messenger/ebin/erl_crash.dump
 - lib/erlang/messenger/ebin/master.app
 - lib/erlang/messenger/ebin/master_app.beam
 - lib/erlang/messenger/ebin/node.app

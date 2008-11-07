@@ -17,5 +17,6 @@
 -define (MASTER_NODE_NAME, master).
 -define (MASTER_SERVER, global:whereis_name(pm_master)).
 
+-define(DICT, dict).
 -record (node, 
 					{load}).
