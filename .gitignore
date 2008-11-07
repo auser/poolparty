@@ -7,6 +7,7 @@ pkg*
 log/
 log/*
 test_manifest.pp
+# erl_crash.dump
 *erl_crash.dump*
 log
 *.beam
