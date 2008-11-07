@@ -100,7 +100,7 @@ describe "Base" do
         Base.stub!(:key_file_locations).and_return ["ppkey"]
       end
       it "should call access_key.nil?" do
-        @ak.should_receive(:nil?).once
+        @ak.should_receive(:nil?).once.and_return true
       end
       it "should call YAML::dump" do
         YAML.should_receive(:dump).and_return @str
