@@ -31,7 +31,7 @@ module PoolParty
       $available_monitors ||= []
     end
     
-    class BaseMonitor      
+    class BaseMonitor
       def self.run
         new.run
       end
