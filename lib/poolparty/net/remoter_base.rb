@@ -84,7 +84,7 @@ module PoolParty
             @describe_instances = tmpInstanceList
           else            
             @id = 0
-            @describe_instances = tmpInstanceList.map do |inst|
+            @describe_instances = tmpInstanceList.sort_by {|a| a[:status] }.map do |inst|
               inst[:name] = (@id == 0 ? "master" : "node#{@id}")
               @id += 1
               inst
