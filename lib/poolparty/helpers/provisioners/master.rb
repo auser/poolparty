@@ -93,6 +93,7 @@ cp #{Base.remote_storage_path}/#{Base.default_specfile_name} #{Base.base_config_
       
       def install_poolparty
         <<-EOE
+#{installer_for("ruby rubygems")}
 cd /var/poolparty
 wget http://rubyforge.org/frs/download.php/44731/logging-0.9.4.gem -O logging.gem 2>&1
 wget http://rubyforge.org/frs/download.php/45581/ZenTest-3.11.0.gem -O ZenTest.gem 2>&1

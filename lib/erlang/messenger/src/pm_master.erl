@@ -13,6 +13,7 @@
 -record(state, {
 					nodes = ?DICT:new()  % Dictionary of running nodes
 				}).
+				
 -define (SERVER, global:whereis_name(?MODULE)).
 
 %% API
@@ -106,7 +107,7 @@ handle_cast({update_node_load, From, Loads}, State) ->
 	?TRACE("Cast with load message", [From, Loads]),
 	StoredLoad = get_node_load(From, State),
 	?TRACE("StoredLoad", [StoredLoad]),
-	[?DICT:update(load, Load, State#state.nodes) || Load <- Loads],
+	[?DICT:update(load, fun() -> element(1, Load) end, State#state.nodes) || Load <- Loads],
 	{noreply, State}.
 	
 % handle_cast(Msg, State) ->

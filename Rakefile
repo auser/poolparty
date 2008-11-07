@@ -14,8 +14,6 @@ task :clean_pkg do |t|
   %w(pkg).each do |dir|
     FileUtils.rm_rf("#{File.dirname(__FILE__)}/#{dir}") if ::File.exists?("#{File.dirname(__FILE__)}/#{dir}")
   end
-  
-  %x[rm Manifest.txt; touch Manifest.txt]
 end
 
 desc "Generate a new manifest and a new gem"
