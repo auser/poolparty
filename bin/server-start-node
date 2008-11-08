@@ -3,22 +3,17 @@ $:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
 require "poolparty"
 require "poolpartycl"
 
-available_monitors = PoolParty::Monitors.available_monitors
 o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
   opts.on('-n name', '--name name', 'Host name')    { |h| optioner.hostname h }
   opts.on('-l', '--no-shell', 'No shell') {optioner.noshell true}
 end
 
-load_pool(o.spec || Binary.get_existing_spec_location)
-
-include Remote
+available_monitors = PoolParty::Monitors.available_monitors
 
 @hostname = o.hostname ? o.hostname : `hostname`.chomp
 @hostname = "node0" if @hostname == "master" # Quick fix to make sure we have a node running on the master as well
 
-@clouds = extract_cloud_from_options o
-
-@clouds.each do |cloud|
+o.loaded_clouds.each do |cloud|
   
   with_cloud(cloud, {:testing => o.testing, :hostname => @hostname, :noshell => o.noshell }) do
     # TODO: Change this to be app specfic

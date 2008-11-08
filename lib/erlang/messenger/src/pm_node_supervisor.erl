@@ -4,16 +4,16 @@
 -module (pm_node_supervisor).
 -behaviour(supervisor).
 
--export([start/0, start_in_shell_for_testing/0, start_link/1, init/1]).
+-export ([start/0, start/1]).
+-export([start_in_shell_for_testing/0, start_link/1, init/1]).
 
 -ifdef(EUNIT).
 -include_lib("eunit/include/eunit.hrl").
 -endif.
 
-start() ->
-	spawn(fun() ->
-			supervisor:start_link({local, ?MODULE}, ?MODULE, _Arg = [])
-		end).
+start() -> spawn(fun() -> supervisor:start_link({local, ?MODULE}, ?MODULE, _Arg = []) end).
+start(Args) -> spawn(fun() -> supervisor:start_link({local, ?MODULE}, ?MODULE, Args) end).
+	
 
 start_in_shell_for_testing() ->
 	{ok, Pid} = supervisor:start_link({local, ?MODULE}, ?MODULE, _Arg = []),
@@ -22,7 +22,7 @@ start_in_shell_for_testing() ->
 start_link(Args) ->
 	supervisor:start_link({local, ?MODULE}, ?MODULE, Args).
 
-init([]) ->
+init(Args) ->
 	RestartStrategy = one_for_one,
 	MaxRestarts = 1000,
 	MaxTimeBetRestarts = 3600,
@@ -31,7 +31,7 @@ init([]) ->
 	SupFlags = {RestartStrategy, MaxRestarts, MaxTimeBetRestarts},
 	
 	EventManager = {pm_event_manager,  {pm_event_manager, start_link, []}, permanent, TimeoutTime, worker, dynamic},
-	NodeServer = {pm_node1, {pm_node, start_link, []}, permanent, TimeoutTime, worker, [pm_node]},
+	NodeServer = {pm_node1, {pm_node, start_link, Args}, permanent, TimeoutTime, worker, [pm_node]},
 
 	LoadServers = [EventManager, NodeServer],
 

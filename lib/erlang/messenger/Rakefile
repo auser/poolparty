@@ -39,6 +39,12 @@ task :run_tests => [:compile] do
   end
 end
 
+desc "Clean the beams from the ebin directory"
+task :clean do
+  cmd = "rm ebin/*.beam"
+  Kernel.system cmd
+end
+
 desc "Recompile the sources"
 task :recompile => [:clean, :compile]
 
