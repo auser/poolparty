@@ -5,7 +5,8 @@ module PoolParty
       def install_tasks
         [ 
           setup_puppet,
-          setup_configs
+          setup_configs,
+          run_once_and_clean
         ] << configure_tasks
       end
 
@@ -28,6 +29,13 @@ module PoolParty
           /etc/init.d/puppetmaster stop #{unix_hide_string}
           # /usr/bin/puppetrerun
         EOS
+      end
+      
+      def run_once_and_clean
+        <<-EOS
+. /etc/profile && /usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master #{unix_hide_string}
+rm -rf /etc/puppet/ssl
+        EOS        
       end
 
       # /etc/init.d/puppetmasterd stop
