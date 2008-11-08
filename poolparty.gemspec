@@ -9,7 +9,7 @@ autorequire:
 bindir: bin
 cert_chain: []
 
-date: 2008-11-06 00:00:00 -08:00
+date: 2008-11-07 00:00:00 -08:00
 default_executable: 
 dependencies: 
 - !ruby/object:Gem::Dependency 
@@ -300,6 +300,7 @@ files:
 - lib/poolparty/monitors/base_monitor.rb
 - lib/poolparty/monitors/monitors/cpu_monitor.rb
 - lib/poolparty/monitors/monitors/memory_monitor.rb
+- lib/poolparty/monitors/monitors/web_monitor.rb
 - lib/poolparty/net/messenger.rb
 - lib/poolparty/net/remote.rb
 - lib/poolparty/net/remote_bases/ec2.rb
@@ -379,6 +380,7 @@ files:
 - spec/poolparty/modules/s3_string_spec.rb
 - spec/poolparty/monitors/base_monitor_spec.rb
 - spec/poolparty/monitors/monitors/cpu_monitor_spec.rb
+- spec/poolparty/monitors/monitors/memory_monitor_spec.rb
 - spec/poolparty/net/messenger_spec.rb
 - spec/poolparty/net/remote_bases/ec2_spec.rb
 - spec/poolparty/net/remote_instance_spec.rb

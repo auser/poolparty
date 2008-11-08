@@ -43,8 +43,9 @@
 % pm_master:get_load("0", "cpu").
 get_load(Type) ->
 	% {Loads, _} = pm_cluster:send_call(get_load_for_type, [Type]),
-	{Loads, _} = gen_server:call(?SERVER, {get_load, [Type]}),
-	utils:convert_responses_to_int_list(Loads).
+	% {Loads, _} = gen_server:call(?SERVER, {get_load, [Type]}),
+	Loads = gen_server:call(?SERVER, {get_current_load, Type}),
+	utils:average_of_list(Loads).
 
 % Send reconfigure tasks to every node
 reconfigure_cloud() ->
@@ -62,8 +63,7 @@ shutdown_cloud() ->
 get_current_nodes() ->
 	gen_server:call(?SERVER, {get_live_nodes}).
 
-stop() ->
-	gen_server:cast(?MODULE, stop).	
+stop() -> gen_server:cast(?MODULE, stop).	
 %%--------------------------------------------------------------------
 %% Function: start_link() -> {ok,Pid} | ignore | {error,Error}
 %% Description: Starts the server
@@ -84,6 +84,7 @@ start_link() ->
 %%--------------------------------------------------------------------
 init([]) ->
 	% pm_event_manager:add_handler(pm_master_event_handler),
+	process_flag(trap_exit, true),
   {ok, #state{
 		nodes = ?DICT:new()
 	}}.
@@ -102,8 +103,12 @@ handle_call({get_load, Args}, _From, State) ->
 		Nodes = pm_cluster:get_live_nodes(),
 		List = rpc:multicall(Nodes, pm_node, get_load_for_type, [Args]),
 		{reply, List, State};		
+handle_call({get_current_load, Type}, _From, State) ->
+	LoadForType = get_load_for_type(Type, State),
+	?TRACE("LoadForType: ",[LoadForType]),
+	{reply, LoadForType, State};
 handle_call({get_live_nodes}, _From, State) ->
-	{reply, dict:fetch_keys(State#state.nodes), State}.
+	{reply, get_live_nodes(State), State}.
 	
 % handle_call(_Request, _From, State) ->
 	% Nodes = pm_cluster:get_live_nodes(),
@@ -120,21 +125,8 @@ handle_cast({update_node_load, From, Loads}, State) ->
 	% ?TRACE("Cast with load message", [From, Loads]),
 	% {_Nodes, NewState} = get_node_listing(From, State),
 	% {noreply, NewState};
-	{LoadStore, NewState} = get_load_for(From, State),
-	[?TRACE("Type Load", [Type, Load]) || {Type, Load} <- Loads],
-	NewLoadStore = lists:map(
-		fun(Type, Load) ->
-			BinType = erlang:list_to_binary(Type),
-			case ?DICT:is_key(BinType, LoadStore) of
-				true -> ?DICT:update(BinType, Load, LoadStore);
-				false ->
-					LoadStore = ?DICT:new(), 
-					NewState = ?DICT:store(BinType, Load, LoadStore)
-			end, Loads),
-	?TRACE("Load", [dict:fetch_keys(LoadStore)]),
+	{_LoadState, NewState} = store_load_for(From, Loads, State),
 	{noreply, NewState};
-handle_cast(stop, _State) ->
-	{ok};
 handle_cast(Msg, State) ->
 	?TRACE("Cast with unknown message", [Msg]),
   {noreply, State}.
@@ -169,24 +161,41 @@ code_change(_OldVsn, State, _Extra) ->
 % Private methods
 get_node_listing(Name, State) ->
 	% Find or create the stored node	
-	?TRACE("Find ", [Name, ?DICT:is_key(Name, State#state.nodes)]),
 	case ?DICT:is_key(Name, State#state.nodes) of
-		true -> 
-			NodeStore = dict:fetch(Name, State#state.nodes),
-			{NodeStore, State};
+		true -> NodeStore = ?DICT:fetch(Name, State#state.nodes), {NodeStore, State};
 		false -> 
-			NodeStore = ?DICT:new(), 
-			NewState = State#state{nodes = ?DICT:store(Name, NodeStore, State#state.nodes)},
-			{NodeStore, NewState}
+			NodeStore = {},  NewState = State#state{nodes = ?DICT:store(Name, NodeStore, State#state.nodes)}, {NodeStore, NewState}
 	end.
 
-get_load_for(Name, State) ->
-	{Node, NewState} = get_node_listing(Name, State),	
-	case ?DICT:is_key(load, Node) of
-		true -> 
-			{dict:fetch(load, Node), NewState};
-		false -> 
-			LoadStore = ?DICT:new(),
-			NewState1 = NewState#state{nodes = ?DICT:store(Name, LoadStore, NewState#state.nodes)},
-			{LoadStore, NewState1}
+get_load_for_type(Type, State) ->
+	Loads = [ get_load_for_node(Type, Name, State) || Name <- get_live_nodes(State) ],
+	[Load || Load <- Loads, Load =/= false, Load > 0.0].
+
+get_load_for_node(Type, Name, State) ->
+	{NodeStore, _} = get_node_listing(Name, State),
+	case proplists:is_defined(erlang:list_to_atom(Type), NodeStore) of
+		true -> proplists:get_value(erlang:list_to_atom(Type), NodeStore);
+		_ -> false
 	end.
+
+get_live_nodes(State) ->
+	Nodes = dict:fetch_keys(State#state.nodes),	
+	NodePids = [ {Node, global:whereis_name(Node)} || Node <- Nodes, global:whereis_name(Node) =/= undefined],
+	RespondingNodes = lists:map(
+	fun(NodeEntry) ->
+		{Node, Pid} = NodeEntry,
+		case is_pid(Pid) of
+			true ->
+				case gen_server:call(Pid, {still_there}) of
+					{still_here} -> Node;
+					_ -> false
+				end;
+			false -> false
+		end
+	end, NodePids),
+	[ Node || Node <- RespondingNodes, RespondingNodes =/= false].
+	
+store_load_for(Name, Loads, State) ->
+	NewNodeEntry = [ {erlang:list_to_atom(Key), erlang:list_to_float(proplists:get_value(Key, Loads))} || Key <- proplists:get_keys(Loads) ],
+	NewState = ?DICT:store(Name, NewNodeEntry, State#state.nodes),
+	{NewNodeEntry, State#state{nodes = NewState}}.

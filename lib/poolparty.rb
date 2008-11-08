@@ -23,6 +23,7 @@ require "#{File.dirname(__FILE__)}/poolparty/version"
 end
 
 Kernel.load_p File.dirname(__FILE__) + "/poolparty/pool"
+Logging.init :debug, :info, :warn, :error, :fatal
 
 module PoolParty
   include FileWriter
