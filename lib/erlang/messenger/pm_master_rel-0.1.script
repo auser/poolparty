@@ -1,4 +1,4 @@
-%% script generated at {2008,10,25} {16,17,48}
+%% script generated at {2008,11,8} {15,46,50}
 {script,
     {"master","0.1"},
     [{preLoaded,
@@ -68,7 +68,9 @@
           overload,misc_supp,format_lib_supp,erlsrv,alarm_handler]},
      {path,
          ["/Users/auser/Sites/work/citrusbyte/internal/gems/pool-party/poolparty/lib/erlang/messenger/ebin"]},
-     {primLoad,[utils,pm_master_supervisor,pm_master,master_app]},
+     {primLoad,
+         [utils,pm_master_supervisor,pm_master_event_handler,
+          pm_master,pm_event_manager,master_app]},
      {progress,modules_loaded},
      {path,
          ["/opt/local/lib/erlang/lib/kernel-2.12.2/ebin",
@@ -222,7 +224,9 @@
                   [{description,"Master Server for PoolParty"},
                    {vsn,"0.1"},
                    {id,[]},
-                   {modules,[master_app,pm_master,pm_master_supervisor,utils]},
+                   {modules,
+                       [master_app,pm_master,pm_master_supervisor,utils,
+                        pm_event_manager,pm_master_event_handler]},
                    {registered,[pm_master,pm_master_supervisor]},
                    {applications,[kernel,stdlib]},
                    {included_applications,[]},

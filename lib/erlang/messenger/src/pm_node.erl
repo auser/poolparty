@@ -11,7 +11,7 @@
 -include_lib("../include/defines.hrl").
 
 %% API
--export([start_link/1,start_link/0]).
+-export([start_link/1, start_link/0]).
 
 %% gen_server callbacks
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2,
@@ -53,6 +53,7 @@ stop() -> gen_server:cast(server_location(), stop).
 
 % Run every UPDATE_TIME seconds
 local_update(Types) ->
+	?TRACE("Updating", [?MASTER_LOCATION]),	
 	net_adm:ping(?MASTER_LOCATION),
 	Load = [{Ty, element(1, get_load_for_type(Ty))} || Ty <- Types],
 	gen_server:cast(?MASTER_SERVER, {update_node_load, node(), Load}).
@@ -81,6 +82,7 @@ start_link(Args) -> gen_server:start_link({global, node()}, ?MODULE, Args, Args)
 %% Description: Initiates the server
 %%--------------------------------------------------------------------
 init(Args) ->
+	io:format("Master location ~p~n", [?MASTER_LOCATION]),
 	process_flag(trap_exit, true),
 	utils:start_timer(?UPDATE_TIME, fun() -> pm_node:local_update(Args) end),
   {ok, #state{}}.
@@ -118,8 +120,7 @@ handle_cast({run_reconfig}, State) ->
 	?TRACE("Running Reconfig", ["server-rerun"]),
 	os:cmd(". /etc/profile && server-rerun"),
 	{noreply, State};
-handle_cast(Msg, State) ->
-	?TRACE("Got cast", [Msg]),
+handle_cast(_Msg, State) ->
 	{noreply, State}.
 
 %%--------------------------------------------------------------------

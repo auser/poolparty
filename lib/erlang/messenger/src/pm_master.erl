@@ -132,8 +132,7 @@ handle_cast({force_reconfig}, State) ->
 		gen_server:cast(Pid, {reconfig}) end,
 	run_on_nodes(Fun, State),
 	{noreply, State};
-handle_cast(Msg, State) ->
-	?TRACE("Cast with unknown message", [Msg]),
+handle_cast(_Msg, State) ->
   {noreply, State}.
 
 %%--------------------------------------------------------------------
@@ -142,8 +141,7 @@ handle_cast(Msg, State) ->
 %%                                       {stop, Reason, State}
 %% Description: Handling all non call/cast messages
 %%--------------------------------------------------------------------
-handle_info(Info, State) ->
-	?TRACE("Handling info", [Info]),
+handle_info(_Info, State) ->
   {noreply, State}.
 
 %%--------------------------------------------------------------------
