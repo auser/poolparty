@@ -3,7 +3,8 @@ require 'PoolParty/version'
 AUTHOR = 'Ari Lerner'  # can also be an array of Authors
 EMAIL = "ari.lerner@citrusbyte.com"
 DESCRIPTION =<<-EOM      
-  Self-healing, auto-scaling cloud computing tool
+  Self-healing, auto-scaling system administration, provisioning
+  and maintaining tool that makes cloud computing fun and easy
 EOM
 GEM_NAME = 'poolparty' # what ppl will type to install your gem
 RUBYFORGE_PROJECT = 'poolparty' # The unix name for your project
