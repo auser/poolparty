@@ -198,6 +198,7 @@ lib/poolparty/modules/thread_pool.rb
 lib/poolparty/monitors/base_monitor.rb
 lib/poolparty/monitors/monitors/cpu_monitor.rb
 lib/poolparty/monitors/monitors/memory_monitor.rb
+lib/poolparty/monitors/monitors/web_monitor.rb
 lib/poolparty/net/messenger.rb
 lib/poolparty/net/remote.rb
 lib/poolparty/net/remote_bases/ec2.rb
@@ -277,6 +278,7 @@ spec/poolparty/modules/file_writer_spec.rb
 spec/poolparty/modules/s3_string_spec.rb
 spec/poolparty/monitors/base_monitor_spec.rb
 spec/poolparty/monitors/monitors/cpu_monitor_spec.rb
+spec/poolparty/monitors/monitors/memory_monitor_spec.rb
 spec/poolparty/net/messenger_spec.rb
 spec/poolparty/net/remote_bases/ec2_spec.rb
 spec/poolparty/net/remote_instance_spec.rb

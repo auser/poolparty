@@ -2,9 +2,7 @@
   A logging class to allow us to log to locations
 =end
 class Loggable
-  def initialize
-    Logging.init :debug, :info, :warn, :error, :fatal
-    
+  def initialize    
     self.class.loggers << file_logger
     file_logger.level = :info
   end

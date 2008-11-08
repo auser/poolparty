@@ -26,8 +26,10 @@ tick_timer(Time, Fun) ->
 		tick_timer(Time, Fun) 
 end. 
 
+average_of_list(L) ->
+	Sum = lists:foldr( fun(Int, Sum) -> Int + Sum end, 0, [F || F <- L] ),
+	average_for_list(Sum, L).
 
-% Private
 % Get the average of the list
 average_for_list(Num, L) ->
 	case length(L) of
