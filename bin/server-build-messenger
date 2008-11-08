@@ -3,7 +3,7 @@ $:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
 require "poolparty"
 require "poolpartycl"
 
-root_dir = ::File.expand_path( ::File.join(::File.dirname(__FILE__), "..", "lib/erlang/messenger") )
+root_dir = ::File.expand_path( ::File.join(::File.dirname(__FILE__), "..", "lib/erlang/messenger/ebin") )
 
 o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
 end
@@ -17,6 +17,7 @@ ERLC_FLAGS = "-I#{INCLUDE}"
 # erl -pa ./ebin -s pm_packager start -s init stop
 cmd =<<-EOE
   cd #{root_dir}
+  rake recompile
   rake build_boot_scripts
 EOE
 
