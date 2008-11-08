@@ -169,7 +169,6 @@ files:
 - lib/erlang/messenger/ebin/pm_node_supervisor.beam
 - lib/erlang/messenger/ebin/pm_packager.beam
 - lib/erlang/messenger/ebin/utils.beam
-- lib/erlang/messenger/erl_crash.dump
 - lib/erlang/messenger/include/defines.hrl
 - lib/erlang/messenger/lib/eunit/AUTHORS
 - lib/erlang/messenger/lib/eunit/CHANGELOG
