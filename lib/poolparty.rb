@@ -32,6 +32,12 @@ module PoolParty
     @logger ||= make_new_logger
   end
   
+  class PoolParty
+    def initialize(spec)
+      Script.inflate(spec) if spec
+    end
+  end
+  
   private
   #:nodoc:#
   def make_new_logger
