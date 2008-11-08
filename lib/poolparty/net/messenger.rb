@@ -2,6 +2,9 @@
   The connection to the messenger from poolparty, the client
 =end
 module PoolParty
+  def reconfigure_cloud!
+    Messenger.messenger_send!("reconfigure_cloud")
+  end
   module Messenger
     
     # TODO: Fix cookie setting
@@ -22,8 +25,8 @@ module PoolParty
     
     # Helper methods
     def self.startup_remote_messenger(hostname, testing=false)
-      messenger_send!("")
-      testing ? command : %x[#{command}]
+      # messenger_send!("")
+      # testing ? command : %x[#{command}]
     end
     
   end
