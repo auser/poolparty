@@ -25,7 +25,7 @@
 -export ([stop/0]).
 -export ([get_load_for_type/1, run_cmd/1, fire_cmd/1]).
 -export ([run_reconfig/0, local_update/1, still_here/0]).
-
+-export ([server_location/0]).
 %%====================================================================
 %% API
 %%====================================================================
@@ -40,7 +40,7 @@ get_load_for_type(Type) ->
 	{os:cmd(String)}.
 
 % Rerun the configuration
-run_reconfig() -> gen_server:cast(server_location(), reconfig).
+run_reconfig() -> gen_server:cast(server_location(), {run_reconfig}).
 
 % Allows us to fire off any command (allowed by poolparty on the check)
 run_cmd(Cmd) -> gen_server:call(server_location(), {run_command, Cmd}).
@@ -110,19 +110,17 @@ handle_call(_Request, _From, State) ->
 %%                                      {stop, Reason, State}
 %% Description: Handling cast messages
 %%--------------------------------------------------------------------
-handle_cast({Msg, Cmd}, State) ->
-	case Msg of
-		reconfig ->
-			io:format("Running reconfig~n"),
-			os:cmd(". /etc/profile && server-rerun"),
-			{ok};
-		fire_command ->
-			io:format("Running command: ~p~n", [Cmd]),
-			os:cmd(". /etc/profile && server-fire-cmd \""++Cmd++"\" 2>&1 > /dev/null"),
-			{ok};
-		_ ->
-			{ok, State}
-	end.
+handle_cast({fire_command, Cmd}, State) ->
+	?TRACE("Running command: ~p~n", [Cmd]),
+	os:cmd(". /etc/profile && server-fire-cmd \""++Cmd++"\" 2>&1 > /dev/null"),
+	{noreply, State};
+handle_cast({run_reconfig}, State) ->
+	?TRACE("Running Reconfig", ["server-rerun"]),
+	os:cmd(". /etc/profile && server-rerun"),
+	{noreply, State};
+handle_cast(Msg, State) ->
+	?TRACE("Got cast", [Msg]),
+	{noreply, State}.
 
 %%--------------------------------------------------------------------
 %% Function: handle_info(Info, State) -> {noreply, State} |

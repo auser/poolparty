@@ -48,8 +48,7 @@ get_load(Type) ->
 	utils:average_of_list(Loads).
 
 % Send reconfigure tasks to every node
-reconfigure_cloud() ->
-	gen_server:call(?SERVER, {run_reconfig}).
+reconfigure_cloud() -> gen_server:cast(?SERVER, {force_reconfig}).
 
 % Fire the given command on all nodes
 run_cmd(Cmd) -> gen_server:call(?SERVER, {run_cmd, Cmd}).
@@ -127,6 +126,12 @@ handle_cast({update_node_load, From, Loads}, State) ->
 	% {noreply, NewState};
 	{_LoadState, NewState} = store_load_for(From, Loads, State),
 	{noreply, NewState};
+handle_cast({force_reconfig}, State) ->
+	Fun = fun(NodeEntry) ->
+		{_Node, Pid} = NodeEntry,
+		gen_server:cast(Pid, {reconfig}) end,
+	run_on_nodes(Fun, State),
+	{noreply, State};
 handle_cast(Msg, State) ->
 	?TRACE("Cast with unknown message", [Msg]),
   {noreply, State}.
@@ -178,22 +183,29 @@ get_load_for_node(Type, Name, State) ->
 		_ -> false
 	end.
 
-get_live_nodes(State) ->
+get_node_pids(State) ->
 	Nodes = dict:fetch_keys(State#state.nodes),	
-	NodePids = [ {Node, global:whereis_name(Node)} || Node <- Nodes, global:whereis_name(Node) =/= undefined],
+	[ {Node, global:whereis_name(Node)} || Node <- Nodes, global:whereis_name(Node) =/= undefined].
+	
+get_live_nodes(State) ->
+	NodePids = get_node_pids(State),
 	RespondingNodes = lists:map(
 	fun(NodeEntry) ->
 		{Node, Pid} = NodeEntry,
 		case is_pid(Pid) of
 			true ->
 				case gen_server:call(Pid, {still_there}) of
-					{still_here} -> Node;
+					still_here -> Node;
 					_ -> false
 				end;
 			false -> false
 		end
 	end, NodePids),
-	[ Node || Node <- RespondingNodes, RespondingNodes =/= false].
+	[ Node || Node <- RespondingNodes, Node =/= false].
+
+run_on_nodes(Fun, State) ->
+	NodePids = get_node_pids(State),
+	lists:map(Fun, NodePids).
 	
 store_load_for(Name, Loads, State) ->
 	NewNodeEntry = [ {erlang:list_to_atom(Key), erlang:list_to_float(proplists:get_value(Key, Loads))} || Key <- proplists:get_keys(Loads) ],
