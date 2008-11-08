@@ -11,7 +11,7 @@
 -include_lib("../include/defines.hrl").
 
 %% API
--export([start_link/1]).
+-export([start_link/1,start_link/0]).
 
 %% gen_server callbacks
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2,
@@ -24,7 +24,7 @@
 % Client function definitions
 -export ([stop/0]).
 -export ([get_load_for_type/1, run_cmd/1, fire_cmd/1]).
--export ([run_reconfig/0, local_update/1]).
+-export ([run_reconfig/0, local_update/1, still_here/0]).
 
 %%====================================================================
 %% API
@@ -40,22 +40,21 @@ get_load_for_type(Type) ->
 	{os:cmd(String)}.
 
 % Rerun the configuration
-run_reconfig() ->
-	gen_server:cast(?MODULE, reconfig).
+run_reconfig() -> gen_server:cast(server_location(), reconfig).
 
 % Allows us to fire off any command (allowed by poolparty on the check)
-run_cmd(Cmd) -> gen_server:call(?MODULE, {run_command, Cmd}).
-fire_cmd(Cmd) -> gen_server:cast(?MODULE, {fire_command, Cmd}).
+run_cmd(Cmd) -> gen_server:call(server_location(), {run_command, Cmd}).
+fire_cmd(Cmd) -> gen_server:cast(server_location(), {fire_command, Cmd}).
+
+still_here() -> gen_server:call(server_location(), {still_there}).
 
 % Stop the pm_node entirely
-stop() ->
-	gen_server:cast(?MODULE, stop).
+stop() -> gen_server:cast(server_location(), stop).
 
 % Run every UPDATE_TIME seconds
 local_update(Types) ->
 	net_adm:ping(?MASTER_LOCATION),
 	Load = [{Ty, element(1, get_load_for_type(Ty))} || Ty <- Types],
-	?TRACE("Load", [Load, ?MASTER_LOCATION]),
 	gen_server:cast(?MASTER_SERVER, {update_node_load, node(), Load}).
 	
 %%--------------------------------------------------------------------
@@ -67,8 +66,8 @@ local_update(Types) ->
 %% 
 %% Fires a ping every 10 seconds
 %%--------------------------------------------------------------------
-start_link(Args) ->		
-  gen_server:start_link({local, ?MODULE}, ?MODULE, Args, Args).
+start_link() -> start_link(["cpu"]).
+start_link(Args) -> gen_server:start_link({global, node()}, ?MODULE, Args, Args).
 
 %%====================================================================
 %% gen_server callbacks
@@ -97,6 +96,9 @@ init(Args) ->
 %%--------------------------------------------------------------------
 handle_call({run_command, Cmd}, _From, State) ->
 	Reply = os:cmd(". /etc/profile && server-fire-cmd \""++Cmd++"\""),
+	{reply, Reply, State};
+handle_call({still_there}, _From, State) ->
+	Reply = still_here,
 	{reply, Reply, State};
 handle_call(_Request, _From, State) ->
   Reply = ok,
@@ -149,3 +151,7 @@ terminate(_Reason, _State) ->
 %%--------------------------------------------------------------------
 code_change(_OldVsn, State, _Extra) ->
   {ok, State}.
+
+% Private
+server_location() ->
+	global:whereis_name(node()).
