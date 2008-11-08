@@ -17,9 +17,6 @@ describe "Option Parser" do
       @op.options.should_receive(:[]).with(:verbose).once.and_return true
       @op.verbose
     end
-    it "should be able to display the version" do
-      @op.version.should == PoolParty::VERSION::STRING
-    end
     it "should exit after displaying the help message" do
       hide_output do
         lambda {

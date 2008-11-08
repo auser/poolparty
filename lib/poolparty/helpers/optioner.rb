@@ -33,7 +33,6 @@ module PoolParty
     def set_default_options
       self.verbose false
       self.quiet false
-      self.version PoolParty::VERSION::STRING
     end
     
     def parse_options(&blk)
@@ -53,7 +52,7 @@ module PoolParty
         blk.call(opts, self) if blk
       end
       
-      opts.on('-V', '--version', 'Display the version')    { puts PoolParty::VERSION::STRING ; exit 0 }
+      opts.on('-V', '--version', 'Display the version')    { puts @version ; exit 0 }
       opts.on_tail("-h", "--help", "Show this message") do
         puts opts
         puts @extra_help
@@ -86,7 +85,7 @@ module PoolParty
     end
         
     def output_version
-      puts version
+      puts @version
     end
     
   end

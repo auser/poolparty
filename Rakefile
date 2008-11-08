@@ -5,6 +5,7 @@ Dir['tasks/**/*.rake'].each { |rake| load rake }
 
 desc "Clean tmp directory"
 task :clean_tmp do |t|
+  %x[rm #{File.dirname(__FILE__)}/Manifest.txt; touch #{File.dirname(__FILE__)}/Manifest.txt]
   %w(logs tmp).each do |dir|
     FileUtils.rm_rf("#{File.dirname(__FILE__)}/#{dir}") if ::File.exists?("#{File.dirname(__FILE__)}/#{dir}")
   end
