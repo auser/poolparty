@@ -108,7 +108,7 @@ handle_call({still_there}, _From, State) ->
 	Reply = still_here,
 	{reply, Reply, State};
 handle_call({print_monitors}, _From, State) ->
-	[ io:format("TYpe: ~p ", [Monitor]) || Monitor <- State#state.monitors ],
+	[ io:format("Type: ~p ", [Monitor]) || Monitor <- State#state.monitors ],
 	io:format("~n"),
 	{reply, ok, State};
 handle_call(_Request, _From, State) ->

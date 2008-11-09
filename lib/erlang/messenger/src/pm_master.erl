@@ -40,7 +40,7 @@
 %%% Internal functions
 %%--------------------------------------------------------------------
 
-% pm_master:get_load("0", "cpu").
+% pm_master:get_load("cpu").
 get_load(Type) ->
 	% {Loads, _} = pm_cluster:send_call(get_load_for_type, [Type]),
 	% {Loads, _} = gen_server:call(?SERVER, {get_load, [Type]}),
