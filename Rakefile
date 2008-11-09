@@ -18,7 +18,7 @@ task :clean_pkg do |t|
 end
 
 desc "Generate a new manifest and a new gem"
-task :build_local_gem => [:spec, :clean_tmp, :clean_pkg, :"manifest:refresh", :package]
+task :build_local_gem => [:clean_tmp, :spec, :clean_pkg, :"manifest:refresh", :package]
 
 desc "Generate gemspec"
 task :gemspec  => [:spec, :clean_tmp, :"manifest:refresh", :local_deploy] do |t|
