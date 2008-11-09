@@ -17,14 +17,16 @@
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2,
          terminate/2, code_change/3]).
 
--record(state, {}).
+-record(state, {
+					monitors = {}  % Tuple of monitors
+				}).
 -define(SERVER, ?MODULE).
 -define (UPDATE_TIME, 2000).
 
 % Client function definitions
 -export ([stop/0]).
 -export ([get_load_for_type/1, run_cmd/1, fire_cmd/1]).
--export ([run_reconfig/0, local_update/1, still_here/0]).
+-export ([run_reconfig/0, local_update/1, still_here/0, print_monitors/0]).
 -export ([server_location/0]).
 %%====================================================================
 %% API
@@ -41,6 +43,7 @@ get_load_for_type(Type) ->
 
 % Rerun the configuration
 run_reconfig() -> gen_server:cast(server_location(), {run_reconfig}).
+print_monitors() -> gen_server:call(server_location(), {print_monitors}).
 
 % Allows us to fire off any command (allowed by poolparty on the check)
 run_cmd(Cmd) -> gen_server:call(server_location(), {run_command, Cmd}).
@@ -67,7 +70,7 @@ local_update(Types) ->
 %% 
 %% Fires a ping every 10 seconds
 %%--------------------------------------------------------------------
-start_link() -> start_link(["cpu"]).
+start_link() -> start_link(erlang:get_plain_arguments()).
 start_link(Args) -> gen_server:start_link({global, node()}, ?MODULE, Args, Args).
 
 %%====================================================================
@@ -85,7 +88,9 @@ init(Args) ->
 	io:format("Master location ~p~n", [?MASTER_LOCATION]),
 	process_flag(trap_exit, true),
 	utils:start_timer(?UPDATE_TIME, fun() -> pm_node:local_update(Args) end),
-  {ok, #state{}}.
+  {ok, #state{
+					monitors=Args
+				}}.
 
 %%--------------------------------------------------------------------
 %% Function: %% handle_call(Request, From, State) -> {reply, Reply, State} |
@@ -102,6 +107,10 @@ handle_call({run_command, Cmd}, _From, State) ->
 handle_call({still_there}, _From, State) ->
 	Reply = still_here,
 	{reply, Reply, State};
+handle_call({print_monitors}, _From, State) ->
+	[ io:format("TYpe: ~p ", [Monitor]) || Monitor <- State#state.monitors ],
+	io:format("~n"),
+	{reply, ok, State};
 handle_call(_Request, _From, State) ->
   Reply = ok,
   {reply, Reply, State}.
