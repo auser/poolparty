@@ -1,4 +1,4 @@
-require 'PoolParty/version'
+require 'poolparty'
 
 AUTHOR = 'Ari Lerner'  # can also be an array of Authors
 EMAIL = "ari.lerner@citrusbyte.com"
