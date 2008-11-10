@@ -70,7 +70,7 @@ local_update(Types) ->
 %% 
 %% Fires a ping every 10 seconds
 %%--------------------------------------------------------------------
-start_link() -> start_link(erlang:get_plain_arguments()).
+start_link() -> start_link(init:get_plain_arguments()).
 start_link(Args) -> gen_server:start_link({global, node()}, ?MODULE, Args, Args).
 
 %%====================================================================
