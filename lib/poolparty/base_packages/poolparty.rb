@@ -40,8 +40,8 @@ module PoolParty
           
           has_gempackage(:name => "poolparty-latest", :download_url => "http://github.com/auser/poolparty/tree/master%2Fpkg%2Fpoolparty-latest.gem?raw=true", :requires => [get_gempackage("ruby2ruby"), get_gempackage("RubyInline"), get_gempackage("ParseTree")])
           
-          has_exec(:name => "build_messenger", :command => ". /etc/profile && server-build-messenger", :requires => get_gempackage("poolparty-latest"), :ifnot => "ps aux | grep beam | grep node")
-          has_exec(:name => "start_node", :command => ". /etc/profile && server-start-node", :requires => get_exec("build_messenger"), :ifnot => "ps aux | grep beam | grep node")
+          has_exec(:name => "build_messenger", :command => ". /etc/profile && server-build-messenger", :requires => get_gempackage("poolparty-latest"), :onlyif => "ps aux | grep beam | grep node")
+          has_exec(:name => "start_node", :command => ". /etc/profile && server-start-node", :requires => get_exec("build_messenger"), :onlyif => "ps aux | grep beam | grep node")
           
         end
         
@@ -63,7 +63,7 @@ module PoolParty
           has_cron(:name => "Load handler", :user => Base.user, :minute => "*/4") do
             requires get_gempackage("poolparty-latest")
             command(". /etc/profile && cloud-handle-load")
-          end          
+          end
         end
         execute_on_node do
           has_cron(:name => "puppetd runner", :user => Base.user, :minute => "*/5") do
@@ -75,7 +75,7 @@ module PoolParty
         # These are all requirements on the master
         execute_on_master do
           # TODO: Update this so it only runs when needed
-          has_exec(:name => "start master messenger", :command => ". /etc/profile && server-start-master", :requires => [get_gempackage("poolparty-latest"), get_exec("build_messenger")], :ifnot => "ps aux | grep beam | grep master")
+          has_exec(:name => "start master messenger", :command => ". /etc/profile && server-start-master", :requires => [get_gempackage("poolparty-latest"), get_exec("build_messenger")], :onlyif => "ps aux | grep beam | grep master")
           
           has_cron({:name => "maintain script", :command => ". /etc/profile && which cloud-maintain | /bin/sh", :minute => "*/3", :requires => [get_gempackage("poolparty-latest"), get_cron("puppetd runner"), get_cron("Load handler"), get_exec("start master messenger"), get_service("haproxy")]})
           
