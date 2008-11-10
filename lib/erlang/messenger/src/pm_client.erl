@@ -45,8 +45,7 @@ provision_orphan_running_servers() ->
 	end.
 
 % Get a list of the live nodes
-get_live_nodes() -> 
-	pm_cluster:get_live_nodes().
+get_live_nodes() -> pm_master:get_current_nodes().
 % Terminate the cloud messenger
 % This sends a shutdown to the whole cloud
 shutdown() -> 

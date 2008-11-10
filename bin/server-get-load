@@ -20,7 +20,7 @@ include Remote
   
   with_cloud(cl, {:testing => o.testing, :monitorname => @monitor }) do
     if PoolParty::Monitors.available_monitors.include?(monitorname.downcase.to_sym)
-      print "PoolParty::Monitors::#{monitorname.capitalize}Monitor".constantize.run
+      print "PoolParty::Monitors::#{monitorname.capitalize}Monitor".constantize.run.to_f
     else
       puts "Unknown monitor"
     end
