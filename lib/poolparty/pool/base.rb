@@ -22,6 +22,7 @@ module PoolParty
       :template_path => "/var/lib/puppet/templates",
       :module_path => "/etc/puppet/modules/poolparty",
       :default_specfile_name => "pool.spec",
+      :default_project_specfile_name => "spec/pool.spec",
       :port => "80",
       :forwarding_port => "8080",
       :proxy_mode => "http",      
