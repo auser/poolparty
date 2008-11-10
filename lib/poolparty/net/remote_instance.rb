@@ -61,7 +61,7 @@ module PoolParty
       # Printing. This is how we extract the instances into the listing on the 
       # local side into the local listing file
       def to_s
-        "#{name}\t#{ip}"
+        "#{name}\t#{ip}\t#{instance_id}"
       end
       
       def puppet_runner_command
