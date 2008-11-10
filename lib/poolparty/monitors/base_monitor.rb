@@ -23,7 +23,7 @@ module PoolParty
       args.each do |arg|
         (available_monitors << "#{arg}".downcase.to_sym)
         
-        InstanceMethods.module_eval "def #{arg}; @#{arg} ||= PoolParty::Messenger.messenger_send!(\"get_load #{arg}\").to_f rescue -1; end"
+        InstanceMethods.module_eval "def #{arg}; @#{arg} ||= PoolParty::Messenger.messenger_send!(\"get_load #{arg}\").to_f rescue -1.0; end"
       end
     end
 

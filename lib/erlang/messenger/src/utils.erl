@@ -27,7 +27,7 @@ tick_timer(Time, Fun) ->
 end. 
 
 average_of_list(L) ->
-	Sum = lists:foldr( fun(Int, Sum) -> Int + Sum end, 0, [F || F <- L] ),
+	Sum = lists:foldr( fun(Int, Sum) -> erlang:list_to_float(Int) + Sum end, 0, [F || F <- L] ),
 	average_for_list(Sum, L).
 
 % Get the average of the list

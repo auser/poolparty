@@ -32,7 +32,7 @@ module PoolParty
       end
       
       def nix_memory_usage
-        str = %x[free -m #{unix_hide_string} | grep -i mem]
+        str = %x[free -m | grep -i mem]
         begin
           total_memory = str.split[1].to_f
           used_memory = str.split[2].to_f

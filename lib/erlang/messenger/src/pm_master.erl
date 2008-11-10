@@ -59,8 +59,7 @@ shutdown_cloud() ->
 	pm_cluster:send_call(stop, []),
 	{ok}.
 
-get_current_nodes() ->
-	gen_server:call(?SERVER, {get_live_nodes}).
+get_current_nodes() -> gen_server:call(?SERVER, {get_live_nodes}).
 
 stop() -> gen_server:cast(?MODULE, stop).	
 %%--------------------------------------------------------------------
@@ -206,6 +205,6 @@ run_on_nodes(Fun, State) ->
 	lists:map(Fun, NodePids).
 	
 store_load_for(Name, Loads, State) ->
-	NewNodeEntry = [ {erlang:list_to_atom(Key), erlang:list_to_float(proplists:get_value(Key, Loads))} || Key <- proplists:get_keys(Loads) ],
+	NewNodeEntry = [ {erlang:list_to_atom(Key), proplists:get_value(Key, Loads)} || Key <- proplists:get_keys(Loads)],
 	NewState = ?DICT:store(Name, NewNodeEntry, State#state.nodes),
 	{NewNodeEntry, State#state{nodes = NewState}}.
