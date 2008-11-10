@@ -9,6 +9,9 @@ class TestMonitorClass
 end
 
 describe "Monitors" do
+  before(:each) do
+    @tmc = TestMonitorClass.new
+  end
   it "should have a list of available monitors" do
     PoolParty::Monitors.available_monitors.empty?.should == false
   end
@@ -22,12 +25,12 @@ describe "Monitors" do
     TestMonitorClass.new.respond_to?(:fake).should == true
   end
   it "should call the Messenger with messenger_send!('get_load fake')" do
-    PoolParty::Messenger.should_receive(:messenger_send!).with("get_load fake").and_return true
-    TestMonitorClass.new.fake
+    @tmc.should_receive(:messenger_send!).with("get_load fake").and_return true
+    @tmc.fake
   end
   it "should have the cpu method on the class" do
-    PoolParty::Messenger.should_receive(:messenger_send!).with("get_load cpu").and_return true
-    TestMonitorClass.new.cpu
+    @tmc.should_receive(:messenger_send!).with("get_load cpu").and_return true
+    @tmc.cpu
   end
   describe "expansions" do
     before(:each) do

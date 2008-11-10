@@ -1,52 +1,48 @@
 -module (pm_client).
--include_lib("../include/defines.hrl").
+-behavior(gen_server).
 
--export ([reconfigure_cloud/0, get_load/1, get_live_nodes/0, start/0]).
--export ([run_cmd/1, fire_cmd/1]).
--export ([provision_orphan_running_servers/0]).
--export ([shutdown/0]).
-% Run commands on the running master process
-% erl -pa ./ebin/ -run pm_client get_load cpu -run init stop -noshell
+-export([init/1, code_change/3, handle_call/3, handle_cast/2, handle_info/2, terminate/2]).
+-export([accept_loop/1]).
+-export([start/3]).
 
-% Connect to the master
-start() -> 
-	pong = net_adm:ping(?MASTER_LOCATION),
-	global:sync().
-% Send the command Cmd to the pm_master process
-run_cmd(Cmd) ->	
-	Out = pm_master:run_cmd(Cmd),
-	io:format("~p", [Out]),
-	Out.
-fire_cmd(Cmd) ->	
-	Out = pm_master:fire_cmd(Cmd),
-	io:format("~p", [Out]),
-	Out.
-% Reconfigure the cloud
-reconfigure_cloud() -> pm_master:reconfigure_cloud().
-% Get the load on the cloud of type Type
-get_load(Type) -> 
-	start(),
-	Load = pm_master:get_load(Type),
-	io:format("~p", [Load]),
-	Load.
-	
-% Check to see if there are servers that are unprovisioned
-% And if there are, log in to them and start their messenger
-% sending the live code on the master to them
-provision_orphan_running_servers() ->
-	Instances = pm_cluster:any_new_servers(),
-	case lists:flatlength(Instances) of
-		0 ->
-			ok;
-		_ ->
-			utils:distribute_modules_to([pm_node, pm_node_supervisor, pm_event_manager, node_app], Instances),
-			pm_cluster:slaves(Instances),
-			Instances
-	end.
+-define(TCP_OPTIONS, [binary, {packet, 0}, {active, false}, {reuseaddr, true}]).
 
-% Get a list of the live nodes
-get_live_nodes() -> pm_master:get_current_nodes().
-% Terminate the cloud messenger
-% This sends a shutdown to the whole cloud
-shutdown() -> 
-	pm_master:shutdown_cloud().
+-record(server_state, {
+        port,
+        loop,
+        ip=any,
+        lsocket=null}).
+
+start(Name, Port, Loop) ->
+    State = #server_state{port = Port, loop = Loop},
+    gen_server:start_link({global, Name}, ?MODULE, State, []).
+
+init(State = #server_state{port=Port}) ->
+    case gen_tcp:listen(Port, ?TCP_OPTIONS) of
+        {ok, LSocket} ->
+            NewState = State#server_state{lsocket = LSocket},
+            {ok, accept(NewState)};
+        {error, Reason} ->
+            {stop, Reason}
+    end.
+
+handle_cast({accepted, _Pid}, State=#server_state{}) ->
+    {noreply, accept(State)}.
+
+accept_loop({Server, LSocket, {M, F}}) ->
+    {ok, Socket} = gen_tcp:accept(LSocket),
+    % Let the server spawn a new process and replace this loop
+    % with the echo loop, to avoid blocking 
+    gen_server:cast(Server, {accepted, self()}),
+    M:F(Socket).
+    
+% To be more robust we should be using spawn_link and trapping exits
+accept(State = #server_state{lsocket=LSocket, loop = Loop}) ->
+    proc_lib:spawn(?MODULE, accept_loop, [{self(), LSocket, Loop}]),
+    State.
+
+% These are just here to suppress warnings.
+handle_call(_Msg, _Caller, State) -> {noreply, State}.
+handle_info(_Msg, Library) -> {noreply, Library}.
+terminate(_Reason, _Library) -> ok.
+code_change(_OldVersion, Library, _Extra) -> {ok, Library}.

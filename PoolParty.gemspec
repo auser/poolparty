@@ -71,6 +71,7 @@ executables:
 - cloud-run
 - cloud-ssh
 - cloud-start
+- cloud-stats
 - cloud-terminate
 - messenger-get-load
 - pool
@@ -121,6 +122,7 @@ files:
 - bin/cloud-run
 - bin/cloud-ssh
 - bin/cloud-start
+- bin/cloud-stats
 - bin/cloud-terminate
 - bin/messenger-get-load
 - bin/pool
@@ -152,6 +154,9 @@ files:
 - lib/erlang/messenger/README
 - lib/erlang/messenger/Rakefile
 - lib/erlang/messenger/control
+- lib/erlang/messenger/ebin/client.app
+- lib/erlang/messenger/ebin/client_app.beam
+- lib/erlang/messenger/ebin/client_server.beam
 - lib/erlang/messenger/ebin/erl_crash.dump
 - lib/erlang/messenger/ebin/master.app
 - lib/erlang/messenger/ebin/master_app.beam
@@ -159,6 +164,9 @@ files:
 - lib/erlang/messenger/ebin/node_app.beam
 - lib/erlang/messenger/ebin/packager.app
 - lib/erlang/messenger/ebin/pm_client.beam
+- lib/erlang/messenger/ebin/pm_client_old.beam
+- lib/erlang/messenger/ebin/pm_client_rel-0.1.rel
+- lib/erlang/messenger/ebin/pm_client_supervisor.beam
 - lib/erlang/messenger/ebin/pm_cluster.beam
 - lib/erlang/messenger/ebin/pm_event_manager.beam
 - lib/erlang/messenger/ebin/pm_master.beam
@@ -227,13 +235,19 @@ files:
 - lib/erlang/messenger/lib/eunit/src/file_monitor.erl
 - lib/erlang/messenger/lib/eunit/sys.config
 - lib/erlang/messenger/lib/eunit/vsn.mk
+- lib/erlang/messenger/pm_client_rel-0.1.boot
+- lib/erlang/messenger/pm_client_rel-0.1.script
 - lib/erlang/messenger/pm_master_rel-0.1.boot
 - lib/erlang/messenger/pm_master_rel-0.1.script
 - lib/erlang/messenger/pm_node_rel-0.1.boot
 - lib/erlang/messenger/pm_node_rel-0.1.script
+- lib/erlang/messenger/src/client_app.erl
+- lib/erlang/messenger/src/client_server.erl
 - lib/erlang/messenger/src/master_app.erl
 - lib/erlang/messenger/src/node_app.erl
 - lib/erlang/messenger/src/pm_client.erl
+- lib/erlang/messenger/src/pm_client_old.erl
+- lib/erlang/messenger/src/pm_client_supervisor.erl
 - lib/erlang/messenger/src/pm_cluster.erl
 - lib/erlang/messenger/src/pm_event_manager.erl
 - lib/erlang/messenger/src/pm_master.erl
