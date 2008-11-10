@@ -56,6 +56,24 @@ describe "Console" do
       reload!
     end
   end
+  describe "pools" do
+    before(:each) do
+      @filename = "myspec.spec"
+      ::File.stub!(:readable?).with(@filename).and_return true
+      @filename.stub!(:read).and_return "spec contents"
+      self.stub!(:open).with(@filename).and_return @filename
+    end
+    it "should call readable on the string sent in to load_pool" do      
+      lambda {
+        ::File.should_receive(:readable?).with(@filename).and_return false
+        load_pool(@filename)
+      }
+    end
+    it "should call inflate from Script with the poolspec" do
+      PoolParty::Script.should_receive(:inflate).with("spec contents", "myspec.spec")
+      load_pool(@filename)
+    end
+  end
   describe "print" do
     before(:each) do
       reset!
