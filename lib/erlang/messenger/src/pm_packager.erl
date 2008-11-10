@@ -52,11 +52,14 @@ gen_rel(Name, Vers) ->
 recompile_scripts(Vers) ->
 	gen_rel("master", Vers),
 	gen_rel("node", Vers),
+	gen_rel("client", Vers),
 	systools:make_script("pm_node_rel-"++Vers, [local,{path,["ebin"]}]),
-	systools:make_script("pm_master_rel-"++Vers, [local,{path,["ebin"]}]).
+	systools:make_script("pm_master_rel-"++Vers, [local,{path,["ebin"]}]),
+	systools:make_script("pm_client_rel-"++Vers, [local,{path,["ebin"]}]).
 
 package_scripts(Vers) ->
 	systools:make_tar("ebin/pm_node_rel-"++Vers),
+	systools:make_tar("ebin/pm_client_rel-"++Vers),
 	systools:make_tar("ebin/pm_master_rel-"++Vers).
 
 get_vsn(Module) ->

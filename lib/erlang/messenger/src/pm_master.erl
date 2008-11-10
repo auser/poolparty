@@ -100,11 +100,13 @@ init([]) ->
 handle_call({get_load, Args}, _From, State) ->
 		Nodes = pm_cluster:get_live_nodes(),
 		List = rpc:multicall(Nodes, pm_node, get_load_for_type, [Args]),
-		{reply, List, State};		
-handle_call({get_current_load, Type}, _From, State) ->
+		Loads = utils:convert_responses_to_int_list(List),
+		{reply, Loads, State};		
+handle_call({get_current_load, [Type]}, _From, State) ->
 	LoadForType = get_load_for_type(Type, State),
 	?TRACE("LoadForType: ",[LoadForType]),
-	{reply, LoadForType, State};
+	Loads = utils:average_of_list(LoadForType),
+	{reply, Loads, State};
 handle_call({get_live_nodes}, _From, State) ->
 	{reply, get_live_nodes(State), State}.
 	
