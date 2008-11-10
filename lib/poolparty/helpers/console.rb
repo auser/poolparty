@@ -7,12 +7,13 @@ module PoolParty
     
     # Load a file that contains a pool into memory
     def load_pool(filename)
-      filename = filename.chomp
+
       unless filename && ::File.readable?(filename)
-        puts "Could not load pool: #{filename}"
-        exit
+        puts "Please specify your cloud with -s, move it to ./pool.spec or in your POOL_SPEC environment variable"
+        exit(1)
       else
-        PoolParty::Script.inflate(open(filename).read, File.dirname(filename))
+        filename.chomp!
+        PoolParty::Script.inflate(open(filename).read, filename)
       end
     end
     
