@@ -126,9 +126,9 @@ wget http://rubyforge.org/frs/download.php/43666/amazon-ec2-0.3.1.gem -O amazon-
         <<-EOS
 . /etc/profile
 # /etc/init.d/puppetmaster stop #{unix_hide_string}
-# ps aux | grep puppetmaster | awk '{print $2}' | xargs kill #{unix_hide_string} # just in case
-# rm -rf /etc/puppet/ssl
-# # Start it back up
+ps aux | grep puppetmaster | awk '{print $2}' | xargs kill #{unix_hide_string} # just in case
+rm -rf /etc/puppet/ssl
+# Start it back up
 /etc/init.d/puppetmaster start #{unix_hide_string}
         EOS
       end
