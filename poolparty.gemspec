@@ -237,6 +237,7 @@ files:
 - lib/erlang/messenger/lib/eunit/src/file_monitor.erl
 - lib/erlang/messenger/lib/eunit/sys.config
 - lib/erlang/messenger/lib/eunit/vsn.mk
+- lib/erlang/messenger/log/pool.logs
 - lib/erlang/messenger/pm_client_rel-0.1.boot
 - lib/erlang/messenger/pm_client_rel-0.1.script
 - lib/erlang/messenger/pm_master_rel-0.1.boot
