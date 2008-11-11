@@ -26,7 +26,7 @@ module PoolParty
           # Service is required
           has_service(:name => "haproxy", :ensures => "running")
           
-          has_exec(:name => "reloadhaproxy", :command => "/etc/init.d/haproxy reload", :requires => get_package("haproxy"))
+          # has_exec(:name => "reloadhaproxy", :command => "/etc/init.d/haproxy reload", :requires => get_package("haproxy"))
 
           # These can also be passed in via hash
           has_remotefile(:name => "/etc/haproxy.cfg") do

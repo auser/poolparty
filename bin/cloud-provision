@@ -5,7 +5,7 @@ require "poolpartycl"
 
 o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
   opts.on('-p', '--slave', 'Provision slave (default: false)')    { optioner.provision_slave true }
-  opts.on('-i num', '--id num', 'Instance num to provision')    { |i| optioner.instance_num i }
+  opts.on('-i num', '--id num', 'Instance num to provision')    { |i| optioner.instance_number i }
 end
 
 o.loaded_clouds.each do |cloud|
