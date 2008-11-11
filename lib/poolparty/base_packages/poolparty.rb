@@ -79,7 +79,7 @@ module PoolParty
           
           has_exec(:name => "start client server", :command => ". /etc/profile && server-start-master", :requires => [get_gempackage("poolparty-latest"), get_exec("build_messenger"), get_exec("start master messenger")], :onlyif => "ps aux | grep beam | grep client")
           
-          has_cron({:name => "maintain script", :command => ". /etc/profile && which cloud-maintain | /bin/sh", :minute => "*/3", :requires => [get_gempackage("poolparty-latest"), get_cron("puppetd runner"), get_cron("Load handler"), get_exec("start master messenger"), get_service("haproxy")]})
+          has_cron({:name => "maintain script", :command => ". /etc/profile && which cloud-maintain | /bin/sh", :minute => "*/3", :requires => [get_gempackage("poolparty-latest"), get_cron("puppetd runner"), get_cron("Load handler"), get_exec("start master messenger"), get_service("haproxy"), get_exec("start client server")]})
           
           has_remotefile(:name => "/usr/bin/puppetcleaner") do
             mode 744
