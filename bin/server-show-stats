@@ -8,7 +8,7 @@ end
 
 o.loaded_clouds.each do |cloud|
   
-  with_cloud(cloud, {:testing => o.testing }) do    
+  with_cloud(cloud) do    
     puts header("Stats")
     puts rules_values
   end  
