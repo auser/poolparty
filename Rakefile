@@ -42,6 +42,6 @@ end
 
 desc "Generate github gemspec and latest gem"
 task :ghgem => [:local_deploy] do
-  `mv #{::File.expand_path(::File.dirname(__FILE__))}/pkg/*.gem #{::File.expand_path(::File.dirname(__FILE__))}/pkg/poolparty-latest.gem`
-  `git add pkg/poolparty-latest.gem -f`
+  `mv #{::File.expand_path(::File.dirname(__FILE__))}/pkg/*.gem #{::File.expand_path(::File.dirname(__FILE__))}/pkg/poolparty.gem`
+  `git add pkg/poolparty.gem -f`
 end
