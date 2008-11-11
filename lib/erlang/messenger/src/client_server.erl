@@ -23,7 +23,6 @@ loop(Socket) ->
 						Output = gen_server:call(master_server(), {erlang:list_to_atom(Meth), Args}),
 						?TRACE("received from gen_server", [Output]),
 						send_back_appropriate_response(Socket, Output),
-						io:format("~p~n", [Output]),
 						?TRACE("posted", [Output]),
             loop(Socket);
         {error, closed} ->
@@ -31,7 +30,14 @@ loop(Socket) ->
     end.
 
 % send_back_appropriate_response(Socket, Output) when is_float(Output) -> gen_tcp:send(Socket, erlang:float_to_list(Output));
-send_back_appropriate_response(Socket, Output) -> gen_tcp:send(Socket, erlang:float_to_list(Output)).
+% Figure out how to do this the best... damnit
+send_back_appropriate_response(Socket, Output) -> 
+	?TRACE("Output", [Output]),
+	ListOfFloats = string:join([erlang:float_to_list(V) || V <- Output], ", "),
+	NewOut = ListOfFloats,
+	?TRACE("NewOut", [NewOut]),
+	gen_tcp:send(Socket, NewOut).
+	
 
 connect_to_master() ->
 	case net_adm:ping(?MASTER_LOCATION) of
