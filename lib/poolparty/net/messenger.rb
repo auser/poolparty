@@ -24,12 +24,13 @@ module PoolParty
       ::File.expand_path(::File.join( ::File.dirname(__FILE__), "..", "..", "erlang/messenger" ))
     end
     
-    def messenger_send!(msg="get_current_load cpu")
-      vputs "Calling #{msg} on the client server"
-      with_socket do |sock|
+    def messenger_send!(msg="get_current_load cpu", testing=false)
+      with_socket(testing) do |sock|
         sock.send(msg, 0)
-        @str = sock.recv(100)
+        @str = sock.recv(2000)
       end
+      vputs "Received #{@str} from #{msg}"
+      @str
     end
     
     def self.messenger_send!(cmd="", testing=false)      
