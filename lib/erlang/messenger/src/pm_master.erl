@@ -44,8 +44,7 @@
 get_load(Type) ->
 	% {Loads, _} = pm_cluster:send_call(get_load_for_type, [Type]),
 	% {Loads, _} = gen_server:call(?SERVER, {get_load, [Type]}),
-	Loads = gen_server:call(?SERVER, {get_current_load, Type}),
-	utils:average_of_list(Loads).
+	gen_server:call(?SERVER, {get_current_load, Type}).
 
 % Send reconfigure tasks to every node
 reconfigure_cloud() -> gen_server:cast(?SERVER, {force_reconfig}).
@@ -59,7 +58,7 @@ shutdown_cloud() ->
 	pm_cluster:send_call(stop, []),
 	{ok}.
 
-get_current_nodes() -> gen_server:call(?SERVER, {get_live_nodes}).
+get_current_nodes() -> gen_server:call(?SERVER, {get_current_nodes}).
 
 stop() -> gen_server:cast(?MODULE, stop).	
 %%--------------------------------------------------------------------
@@ -101,13 +100,12 @@ handle_call({get_load, Args}, _From, State) ->
 		Nodes = pm_cluster:get_live_nodes(),
 		List = rpc:multicall(Nodes, pm_node, get_load_for_type, [Args]),
 		Loads = utils:convert_responses_to_int_list(List),
-		{reply, Loads, State};		
-handle_call({get_current_load, [Type]}, _From, State) ->
-	LoadForType = get_load_for_type(Type, State),
+		{reply, Loads, State};
+handle_call({get_current_load, Types}, _From, State) ->	
+	LoadForType = [utils:average_of_list(get_load_for_type(Type, State)) || Type <- Types],
 	?TRACE("LoadForType: ",[LoadForType]),
-	Loads = utils:average_of_list(LoadForType),
-	{reply, Loads, State};
-handle_call({get_live_nodes}, _From, State) ->
+	{reply, LoadForType, State};
+handle_call({get_current_nodes, _Args}, _From, State) ->
 	{reply, get_live_nodes(State), State}.
 	
 % handle_call(_Request, _From, State) ->
