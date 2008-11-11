@@ -14,16 +14,16 @@ module PoolParty
         has_package(:name => "erlang-src")
         # has_package(:name => "yaws")
         
-        has_package(:name => "rubygems") do |g|
+        has_package(:name => "rubygems") do
           # These should be installed automagically by poolparty, but just in case
           # TODO: Fix the requires method with a helper
-          g.has_gempackage(:name => "flexmock", :download_url => "http://rubyforge.org/frs/download.php/42580/flexmock-0.8.3.gem")
-          g.has_gempackage(:name => "lockfile", :download_url => "http://rubyforge.org/frs/download.php/18698/lockfile-1.4.3.gem")
-          g.has_gempackage(:name => "logging", :download_url => "http://rubyforge.org/frs/download.php/44731/logging-0.9.4.gem", :requires => [get_gempackage("flexmock"), get_gempackage("lockfile")])          
+          has_gempackage(:name => "flexmock", :download_url => "http://rubyforge.org/frs/download.php/42580/flexmock-0.8.3.gem")
+          has_gempackage(:name => "lockfile", :download_url => "http://rubyforge.org/frs/download.php/18698/lockfile-1.4.3.gem")
+          has_gempackage(:name => "logging", :download_url => "http://rubyforge.org/frs/download.php/44731/logging-0.9.4.gem", :requires => [get_gempackage("flexmock"), get_gempackage("lockfile")])          
           
-          g.has_gempackage(:name => "rubyforge", :download_url => "http://rubyforge.org/frs/download.php/45546/rubyforge-1.0.1.gem")
-          g.has_gempackage(:name => "hoe", :download_url => "http://rubyforge.org/frs/download.php/45685/hoe-1.8.2.gem", :version => "1.8", :requires => get_gempackage("rubyforge"))
-          g.has_gempackage(:name => "ZenTest", :download_url => "http://rubyforge.org/frs/download.php/45581/ZenTest-3.11.0.gem", :requires => [get_gempackage("hoe"), get_gempackage("rubyforge")])
+          has_gempackage(:name => "rubyforge", :download_url => "http://rubyforge.org/frs/download.php/45546/rubyforge-1.0.1.gem")
+          has_gempackage(:name => "hoe", :download_url => "http://rubyforge.org/frs/download.php/45685/hoe-1.8.2.gem", :version => "1.8", :requires => get_gempackage("rubyforge"))
+          has_gempackage(:name => "ZenTest", :download_url => "http://rubyforge.org/frs/download.php/45581/ZenTest-3.11.0.gem", :requires => [get_gempackage("hoe"), get_gempackage("rubyforge")])
           
           has_gempackage(:name => "rake", :download_url => "http://rubyforge.org/frs/download.php/43954/rake-0.8.3.gem")
           has_gempackage(:name => "xml-simple", :download_url => "http://rubyforge.org/frs/download.php/18366/xml-simple-1.0.11.gem")
@@ -45,6 +45,13 @@ module PoolParty
           
         end
         
+        # execute_on_node do
+          has_cron(:name => "puppetd runner", :user => Base.user, :minute => "*/5") do
+            requires get_gempackage("poolparty-latest")
+            command(PoolParty::Remote::RemoteInstance.puppet_rerun_commad)
+          end
+        # end
+        
         # Cloud panel setup
         
         # has_directory(:name => "/var/www/cloudpanel")
@@ -64,16 +71,7 @@ module PoolParty
             requires get_gempackage("poolparty-latest")
             command(". /etc/profile && cloud-handle-load")
           end
-        end
-        # execute_on_node do
-          has_cron(:name => "puppetd runner", :user => Base.user, :minute => "*/5") do
-            requires get_gempackage("poolparty-latest")
-            command(PoolParty::Remote::RemoteInstance.puppet_rerun_commad)
-          end
-        # end
-        
-        # These are all requirements on the master
-        execute_on_master do
+          
           # TODO: Update this so it only runs when needed
           has_exec(:name => "start master messenger", :command => ". /etc/profile && server-start-master", :requires => [get_gempackage("poolparty-latest"), get_exec("build_messenger")], :ifnot => "ps aux | grep beam | grep master")
           
