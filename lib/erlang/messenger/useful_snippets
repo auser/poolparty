@@ -6,7 +6,7 @@
 % erl -pa ./ebin -kernel inet_dist_listen_min 7000 inet_dist_listen_max 7050 -setcookie poolparty -boot pm_node_rel-0.1 -sname node1
 
 % Starting the client on the master
-% erl -pa /var/lib/gems/1.8/gems/poolparty-0.2.47/lib/erlang/messenger/ebin -kernel inet_dist_listen_min 7000 inet_dist_listen_max 7050 -sname client -setcookie poolparty -run pm_client start
+% erl -pa /var/lib/gems/1.8/gems/poolparty-0.2.54/lib/erlang/messenger/ebin -kernel inet_dist_listen_min 7000 inet_dist_listen_max 7050 -sname client -setcookie poolparty -run pm_client start
 
 % Get the load
 % erl -pa /var/lib/gems/1.8/gems/poolparty-0.2.46/lib/erlang/messenger/ebin -kernel inet_dist_listen_min 7000 inet_dist_listen_max 7050 -sname client -setcookie poolparty -run pm_client start

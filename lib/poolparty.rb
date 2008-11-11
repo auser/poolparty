@@ -1,13 +1,21 @@
 require 'rubygems'
 
 # Load required gems
+@required_software = Array.new
 %w(activesupport ftools logging ruby2ruby).each do |lib|
   begin
     require lib
   rescue Exception => e
+    @required_software << lib
     puts "Could not find library #{lib}: #{e}"
-  end
-  
+  end  
+end
+
+unless @required_software.empty?
+  puts "*****************************************"
+  puts "*           Error                       *"
+  puts "* Missing required software             *"
+  puts ""
 end
 
 # Use active supports auto load mechanism
