@@ -3,20 +3,13 @@ $:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
 require "poolparty"
 require "poolpartycl"
 
-available_monitors = PoolParty::Monitors.available_monitors
 o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
   opts.on('-n name', '--name name', 'Host name')    { |h| optioner.hostname h }
 end
 
-load_pool(o.spec || Binary.get_existing_spec_location)
-
-include Remote
-
-@clouds = extract_cloud_from_options o
-
-@clouds.each do |cloud|
+o.loaded_clouds.each do |cloud|
   
-  with_cloud(cloud, {:testing => o.testing, :verbose => o.verbose }) do
+  with_cloud(cloud) do
     
     boot_file = "#{Messenger.append_dir}/pm_master_rel-0.1"
     command = Messenger.erl_command("master", "-boot #{boot_file} #{noshell ? "" : "-detached -heart"}")
