@@ -35,7 +35,7 @@ module PoolParty
         <<-EOS
 . /etc/profile && /usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master #{unix_hide_string}
 rm -rf /etc/puppet/ssl
-        EOS        
+        EOS
       end
 
       # /etc/init.d/puppetmasterd stop
