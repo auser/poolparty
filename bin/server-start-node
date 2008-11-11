@@ -15,7 +15,7 @@ available_monitors = PoolParty::Monitors.available_monitors
 
 o.loaded_clouds.each do |cloud|
   
-  with_cloud(cloud, {:testing => o.testing, :hostname => @hostname, :noshell => o.noshell }) do
+  with_cloud(cloud) do
     # TODO: Change this to be app specfic
     # SECURITY RISK
     
@@ -24,7 +24,7 @@ o.loaded_clouds.each do |cloud|
     
     vputs "Running #{command}"
     
-    Kernel.system "exec #{command}" unless testing
+    Kernel.system "#{command}" unless testing
   end  
   
 end

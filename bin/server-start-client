@@ -16,7 +16,7 @@ o.loaded_clouds.each do |cloud|
     
     vputs "Running #{command}"
     
-    Kernel.system "exec #{command}" unless testing
+    Kernel.system "#{command}" unless testing
   end  
   
 end
