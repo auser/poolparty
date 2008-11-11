@@ -4,18 +4,30 @@ http://poolpartyrb.com
 
 == DESCRIPTION:
 
-COMING SOON
+PoolParty makes it easy and simple to configure any cloud of computers. In clear language, describe your cloud
+with language such as:
+
+pool :cloud do
+ cloud :app do
+  apache do
+   has_virtualhost(:name => "/var/www/sites/poolpartyrb.com")
+  end
+ end
+end
 
 == FEATURES/PROBLEMS:
 
-COMING SOON
+* Written in Ruby and Erlang
+* Written from the ground up to be extensible with plugins
+* Easy git-style commands to communicate with your clouds
+* Much much more
 
 == SYNOPSIS:
 
-poolparty is written with the intention of being as application-agnostic as possible. It installs only the basic 
+PoolParty is written with the intention of being as application-agnostic as possible. It installs only the basic 
 required software to glue the cloud together on the instances as listed below.
 
-poolparty is easily configuration. In fact, it makes little assumptions about your development environment and allows 
+PoolParty is easily configuration. In fact, it makes little assumptions about your development environment and allows 
 several options on how to begin configuring the cloud.
 
 == REQUIREMENTS:
