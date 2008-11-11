@@ -230,7 +230,7 @@ describe "Remote" do
         end
         it "should call request_launch_new_instances if we should_expand_cloud?" do
           @tc.should_receive(:should_expand_cloud?).once.and_return true
-          @tc.should_receive(:request_launch_new_instances).once.and_return [{:ip => "127.0.0.5", :name => "node2"}]
+          @tc.should_receive(:request_launch_one_instance_at_a_time).once.and_return [{:ip => "127.0.0.5", :name => "node2"}]
         end
         it "should call a new slave provisioner" do
           @tc.stub!(:should_expand_cloud?).once.and_return true
