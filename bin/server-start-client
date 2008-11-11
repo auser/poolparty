@@ -16,10 +16,10 @@ include Remote
 
 @clouds.each do |cloud|
   
-  with_cloud(cloud, {:testing => o.testing, :verbose => o.verbose }) do
+  with_cloud(cloud) do
     
     boot_file = "#{Messenger.append_dir}/pm_client_rel-0.1"
-    command = Messenger.erl_command("client", "-boot #{boot_file} #{noshell ? "" : "-detached -heart"}")
+    command = Messenger.erl_command("client", "-boot #{boot_file} #{noshell ? "" : "-detached -heart"}", 7049, 7049)
     
     vputs "Running #{command}"
     

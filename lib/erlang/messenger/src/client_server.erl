@@ -1,14 +1,18 @@
 -module (client_server).
 -include_lib("../include/defines.hrl").
--export([start/0, loop/1]).
+-export([loop/1, connect_to_master/0]).
+-export ([start/0]).
 
-% echo_server specific code
+-define (RECONNECT_TIMEOUT, 10000).
+
 start() -> 
 	?TRACE("MASTER_LOCATION", [?MASTER_LOCATION]),
-	pong = net_adm:ping(?MASTER_LOCATION),
-	% global:sync(),
-	pm_client:start(?MODULE, 7049, {?MODULE, loop}).
+	connect_to_master(),
+	global:sync(),
+	pm_client:start(?MODULE, 7050, {?MODULE, loop}).
+	
 master_server() -> global:whereis_name(pm_master).
+
 loop(Socket) ->
     case gen_tcp:recv(Socket, 0) of
         {ok, Data} ->
@@ -25,3 +29,15 @@ loop(Socket) ->
         {error, closed} ->
             ok
     end.
+
+connect_to_master() ->
+	case net_adm:ping(?MASTER_LOCATION) of
+		pong ->
+			ok;
+		_ ->
+			receive 
+				stop -> void 
+			after ?RECONNECT_TIMEOUT -> 
+				connect_to_master()
+			end
+	end.

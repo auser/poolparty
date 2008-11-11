@@ -18,6 +18,7 @@ start(Name, Port, Loop) ->
     gen_server:start_link({global, Name}, ?MODULE, State, []).
 
 init(State = #server_state{port=Port}) ->
+		process_flag(trap_exit, true),
     case gen_tcp:listen(Port, ?TCP_OPTIONS) of
         {ok, LSocket} ->
             NewState = State#server_state{lsocket = LSocket},
