@@ -15,7 +15,7 @@ available_monitors = PoolParty::Monitors.available_monitors
 
 o.loaded_clouds.each do |cloud|
   
-  with_cloud(cloud) do
+  with_cloud(cloud, {:hostname => @hostname}) do
     # TODO: Change this to be app specfic
     # SECURITY RISK
     
