@@ -58,7 +58,7 @@ shutdown_cloud() ->
 	pm_cluster:send_call(stop, []),
 	{ok}.
 
-get_current_nodes() -> gen_server:call(?SERVER, {get_current_nodes}).
+get_current_nodes() -> gen_server:call(?SERVER, {get_current_nodes, []}).
 
 stop() -> gen_server:cast(?MODULE, stop).	
 %%--------------------------------------------------------------------

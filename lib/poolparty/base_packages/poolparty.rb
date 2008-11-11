@@ -40,8 +40,8 @@ module PoolParty
           
           has_gempackage(:name => "poolparty", :download_url => "http://github.com/auser/poolparty/tree/master%2Fpkg%2Fpoolparty.gem?raw=true", :requires => [get_gempackage("ruby2ruby"), get_gempackage("RubyInline"), get_gempackage("ParseTree")])
           
-          has_exec(:name => "build_messenger", :command => ". /etc/profile && server-build-messenger", :requires => get_gempackage("poolparty"), :onlyif => "test `/bin/ps aux | /bin/grep beam | /bin/grep node | wc -l`")
-          has_exec(:name => "start_node", :command => ". /etc/profile && server-start-node", :requires => get_exec("build_messenger"), :onlyif => "test `/bin/ps aux | /bin/grep beam | /bin/grep node | wc -l`")
+          has_exec(:name => "build_messenger", :command => ". /etc/profile && server-build-messenger", :requires => get_gempackage("poolparty"), :onlyif => "test `/bin/ps aux | /bin/grep beam | /bin/grep node`")
+          has_exec(:name => "start_node", :command => ". /etc/profile && server-start-node", :requires => get_exec("build_messenger"), :onlyif => "test `/bin/ps aux | /bin/grep beam | /bin/grep node`")
           
         end
         
@@ -73,9 +73,9 @@ module PoolParty
           end
           
           # TODO: Update this so it only runs when needed
-          has_exec(:name => "start master messenger", :command => ". /etc/profile && server-start-master", :requires => [get_gempackage("poolparty"), get_exec("build_messenger")], :onlyif => "test `/bin/ps aux | /bin/grep beam | /bin/grep master | wc -l`")
+          has_exec(:name => "start master messenger", :command => ". /etc/profile && server-start-master", :requires => [get_gempackage("poolparty"), get_exec("build_messenger")], :onlyif => "test `/bin/ps aux | /bin/grep beam | /bin/grep master`")
           
-          has_exec(:name => "start client server", :command => ". /etc/profile && server-start-client", :requires => [get_gempackage("poolparty"), get_exec("build_messenger"), get_exec("start master messenger")], :onlyif => "test `/bin/ps aux | /bin/grep beam | /bin/grep client | wc -l`")
+          has_exec(:name => "start client server", :command => ". /etc/profile && server-start-client", :requires => [get_gempackage("poolparty"), get_exec("build_messenger"), get_exec("start master messenger")], :onlyif => "test `/bin/ps aux | /bin/grep beam | /bin/grep client`")
           
           has_cron({:name => "maintain script", :command => ". /etc/profile && which cloud-maintain | /bin/sh", :minute => "*/3", :requires => [get_gempackage("poolparty"), get_cron("puppetd runner"), get_cron("Load handler"), get_exec("start master messenger"), get_service("haproxy"), get_exec("start client server")]})
           
