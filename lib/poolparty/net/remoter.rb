@@ -185,7 +185,7 @@ module PoolParty
           last_instances.each do |inst|
             vputs "Provision slave: #{inst}"
             PoolParty::Provisioner.provision_slave(inst, self, false) unless inst.master? rescue vputs "Error"
-            cmd = ". /etc/profile && cloud-provision -i #{inst.name.gsub(/node/, '')} #{unix_hide_string} &"
+            cmd = ". /etc/profile; cloud-provision -i #{inst.name.gsub(/node/, '')} #{unix_hide_string} 2>&1 > /dev/null &"
             vputs "Provision slave with command #{cmd}"
             Kernel.system cmd
           end
