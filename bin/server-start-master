@@ -12,7 +12,7 @@ o.loaded_clouds.each do |cloud|
   with_cloud(cloud) do
     
     boot_file = "#{Messenger.append_dir}/pm_master_rel-0.1"
-    command = Messenger.erl_command("master", "-boot #{boot_file} #{noshell ? "" : "-detached -heart"}")
+    command = Messenger.erl_command("master", "-boot #{boot_file} #{noshell ? "" : "-noshell -detached -heart"}")
     
     vputs "Running #{command}"
     
