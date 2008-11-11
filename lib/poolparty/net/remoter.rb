@@ -235,10 +235,11 @@ module PoolParty
         if can_start_a_new_instance? && should_expand_cloud?(force)
           vputs "Expanding the cloud based on load"
           @num = 1
-          request_launch_new_instances(@num)
-          
+          list_of_pending_instances.size == 0 ? request_launch_one_instance_at_a_time : wait("5.seconds")          
+          reset!
           vputs "request_launch_new_instances: #{@num}"
           provision_slaves_from_n(@num)
+          after_launched
         end
       end
       # Contract the cloud
