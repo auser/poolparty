@@ -4,9 +4,12 @@ module PoolParty
     class Package < Resource
       
       default_options({
-        :ensure => "installed",
-        :name => nil
+        :ensure => "installed"
       })
+      
+      def disallowed_options
+        [:name]
+      end
       
       def present
         "installed"
