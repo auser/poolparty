@@ -1,7 +1,7 @@
 --- !ruby/object:Gem::Specification 
 name: poolparty
 version: !ruby/object:Gem::Version 
-  version: 0.2.48
+  version: 0.2.49
 platform: ruby
 authors: 
 - Ari Lerner
@@ -87,6 +87,7 @@ executables:
 - server-list-responding
 - server-rerun
 - server-show-stats
+- server-start-client
 - server-start-master
 - server-start-node
 extensions: []
@@ -138,6 +139,7 @@ files:
 - bin/server-list-responding
 - bin/server-rerun
 - bin/server-show-stats
+- bin/server-start-client
 - bin/server-start-master
 - bin/server-start-node
 - config/hoe.rb
