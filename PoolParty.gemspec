@@ -73,7 +73,6 @@ executables:
 - cloud-start
 - cloud-stats
 - cloud-terminate
-- messenger-get-load
 - pool
 - pool-console
 - pool-describe
@@ -125,7 +124,6 @@ files:
 - bin/cloud-start
 - bin/cloud-stats
 - bin/cloud-terminate
-- bin/messenger-get-load
 - bin/pool
 - bin/pool-console
 - bin/pool-describe
