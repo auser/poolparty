@@ -38,16 +38,16 @@ module PoolParty
  
           has_gempackage(:name => "RubyInline", :download_url => "http://rubyforge.org/frs/download.php/45683/RubyInline-3.8.1.gem")
           
-          has_gempackage(:name => "poolparty-latest", :download_url => "http://github.com/auser/poolparty/tree/master%2Fpkg%2Fpoolparty-latest.gem?raw=true", :requires => [get_gempackage("ruby2ruby"), get_gempackage("RubyInline"), get_gempackage("ParseTree")])
+          has_gempackage(:name => "poolparty", :download_url => "http://github.com/auser/poolparty/tree/master%2Fpkg%2Fpoolparty.gem?raw=true", :requires => [get_gempackage("ruby2ruby"), get_gempackage("RubyInline"), get_gempackage("ParseTree")])
           
-          has_exec(:name => "build_messenger", :command => ". /etc/profile && server-build-messenger", :requires => get_gempackage("poolparty-latest"), :ifnot => "ps aux | grep beam | grep node")
+          has_exec(:name => "build_messenger", :command => ". /etc/profile && server-build-messenger", :requires => get_gempackage("poolparty"), :ifnot => "ps aux | grep beam | grep node")
           has_exec(:name => "start_node", :command => ". /etc/profile && server-start-node", :requires => get_exec("build_messenger"), :ifnot => "ps aux | grep beam | grep node")
           
         end
         
         # execute_on_node do
           has_cron(:name => "puppetd runner", :user => Base.user, :minute => "*/5") do
-            requires get_gempackage("poolparty-latest")
+            requires get_gempackage("poolparty")
             command(PoolParty::Remote::RemoteInstance.puppet_rerun_commad)
           end
         # end
@@ -64,20 +64,20 @@ module PoolParty
         # TODO: Update the offsetted times
         execute_on_master do          
           has_cron(:name => "puppetd runner", :user => Base.user, :minute => "*/5") do
-            requires get_gempackage("poolparty-latest")
+            requires get_gempackage("poolparty")
             command(PoolParty::Remote::RemoteInstance.puppet_master_rerun_command)
           end
           has_cron(:name => "Load handler", :user => Base.user, :minute => "*/4") do
-            requires get_gempackage("poolparty-latest")
+            requires get_gempackage("poolparty")
             command(". /etc/profile && cloud-handle-load")
           end
           
           # TODO: Update this so it only runs when needed
-          has_exec(:name => "start master messenger", :command => ". /etc/profile && server-start-master", :requires => [get_gempackage("poolparty-latest"), get_exec("build_messenger")], :ifnot => "ps aux | grep beam | grep master")
+          has_exec(:name => "start master messenger", :command => ". /etc/profile && server-start-master", :requires => [get_gempackage("poolparty"), get_exec("build_messenger")], :ifnot => "ps aux | grep beam | grep master")
           
-          has_exec(:name => "start client server", :command => ". /etc/profile && server-start-master", :requires => [get_gempackage("poolparty-latest"), get_exec("build_messenger"), get_exec("start master messenger")], :ifnot => "ps aux | grep beam | grep client")
+          has_exec(:name => "start client server", :command => ". /etc/profile && server-start-master", :requires => [get_gempackage("poolparty"), get_exec("build_messenger"), get_exec("start master messenger")], :ifnot => "ps aux | grep beam | grep client")
           
-          has_cron({:name => "maintain script", :command => ". /etc/profile && which cloud-maintain | /bin/sh", :minute => "*/3", :requires => [get_gempackage("poolparty-latest"), get_cron("puppetd runner"), get_cron("Load handler"), get_exec("start master messenger"), get_service("haproxy"), get_exec("start client server")]})
+          has_cron({:name => "maintain script", :command => ". /etc/profile && which cloud-maintain | /bin/sh", :minute => "*/3", :requires => [get_gempackage("poolparty"), get_cron("puppetd runner"), get_cron("Load handler"), get_exec("start master messenger"), get_service("haproxy"), get_exec("start client server")]})
           
           has_remotefile(:name => "/usr/bin/puppetcleaner") do
             mode 744
