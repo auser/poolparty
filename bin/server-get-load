@@ -9,14 +9,9 @@ o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
   opts.on('-m name', '--monitor monitor_name', "Monitor name (default: cpu) (Available monitors: #{available_monitors.join(", ")})") {|c| optioner.monitorname c}
 end
 
-load_pool(o.spec || Binary.get_existing_spec_location)
-
-include Remote
-
-@clouds = extract_cloud_from_options o
 @monitor = o.monitorname ? o.monitorname : "cpu"
 
-@clouds.each do |cl|
+o.loaded_clouds.each do |cl|
   
   with_cloud(cl, {:testing => o.testing, :monitorname => @monitor }) do
     if PoolParty::Monitors.available_monitors.include?(monitorname.downcase.to_sym)
