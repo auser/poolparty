@@ -21,7 +21,7 @@
 					monitors = {}  % Tuple of monitors
 				}).
 -define(SERVER, ?MODULE).
--define (UPDATE_TIME, 2000).
+-define (UPDATE_TIME, 10000).
 
 % Client function definitions
 -export ([stop/0]).
