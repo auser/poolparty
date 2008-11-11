@@ -21,7 +21,7 @@ module PoolParty
     
     def self.register_monitor(*args)
       args.each do |arg|
-        (available_monitors << "#{arg}".downcase.to_sym)
+        (available_monitors << "#{arg}".downcase.to_sym unless available_monitors.include?("#{arg}".downcase.to_sym))
         
         InstanceMethods.module_eval "def #{arg}; @#{arg} ||= messenger_send!(\"get_current_load #{arg}\").to_f rescue -1.0; end"
       end
