@@ -1,4 +1,4 @@
--module (node_app).
+-module (client_app).
 -behaviour(application).
 
 %% Application callbacks

@@ -31,7 +31,7 @@ init([]) ->
 	SupFlags = {RestartStrategy, MaxRestarts, MaxTimeBetRestarts},
 	
 	% Servers
-	ClientServer = {pm_client1,  {pm_client, start}, permanent, TimeoutTime, worker, [pm_client]},
+	ClientServer = {client_server1,  {client_server, start, []}, permanent, TimeoutTime, worker, [client_server]},
 	
 	LoadServers = [ClientServer],
 

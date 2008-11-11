@@ -39,7 +39,8 @@ module PoolParty
       end
       
       def plugin_directory(*args)
-        args.each {|arg| Dir["#{arg}/*/*.rb"].each {|f| require f }}
+        args = ["/plugins"] if args.empty?
+        args.each {|arg| Dir["#{arg}/*/*.rb"].each {|f| require f rescue "" }}
       end
             
       # This is where the entire process starts
