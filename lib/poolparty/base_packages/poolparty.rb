@@ -65,12 +65,12 @@ module PoolParty
             command(". /etc/profile && cloud-handle-load")
           end
         end
-        execute_on_node do
+        # execute_on_node do
           has_cron(:name => "puppetd runner", :user => Base.user, :minute => "*/5") do
             requires get_gempackage("poolparty-latest")
             command(PoolParty::Remote::RemoteInstance.puppet_rerun_commad)
           end
-        end
+        # end
         
         # These are all requirements on the master
         execute_on_master do
