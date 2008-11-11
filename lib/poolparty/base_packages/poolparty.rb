@@ -40,7 +40,7 @@ module PoolParty
           
           has_gempackage(:name => "poolparty", :download_url => "http://github.com/auser/poolparty/tree/master%2Fpkg%2Fpoolparty.gem?raw=true", :requires => [get_gempackage("ruby2ruby"), get_gempackage("RubyInline"), get_gempackage("ParseTree")])
           
-          has_exec(:name => "build_messenger", :command => ". /etc/profile && server-build-messenger", :requires => get_gempackage("poolparty"), :onlyif => "/bin/ps | grep beam| grep node")
+          has_exec(:name => "build_messenger", :command => ". /etc/profile && server-build-messenger", :requires => get_gempackage("poolparty"), :ifnot => "/bin/ps | grep beam| grep node")
           has_exec(:name => "start_node", :command => ". /etc/profile && server-start-node", :requires => get_exec("build_messenger"), :ifnot => "/bin/ps | grep beam| grep node")
           
         end
