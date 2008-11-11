@@ -25,11 +25,11 @@ describe "Monitors" do
     TestMonitorClass.new.respond_to?(:fake).should == true
   end
   it "should call the Messenger with messenger_send!('get_load fake')" do
-    @tmc.should_receive(:messenger_send!).with("get_load fake").and_return true
+    @tmc.should_receive(:messenger_send!).with("get_current_load fake").and_return true
     @tmc.fake
   end
   it "should have the cpu method on the class" do
-    @tmc.should_receive(:messenger_send!).with("get_load cpu").and_return true
+    @tmc.should_receive(:messenger_send!).with("get_current_load cpu").and_return true
     @tmc.cpu
   end
   describe "expansions" do

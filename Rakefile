@@ -21,7 +21,7 @@ desc "Generate a new manifest and a new gem"
 task :build_local_gem => [:clean_tmp, :spec, :clean_pkg, :"manifest:refresh", :package]
 
 desc "Generate gemspec"
-task :gemspec  => [:spec, :clean_tmp, :"manifest:refresh", :local_deploy] do |t|
+task :gemspec  => [:spec, :clean_tmp, :"manifest:refresh", :build_local_gem] do |t|
   res = %x[rake debug_gem]
   res = res.split("\n")[1..-1].join("\n")
   ::File.open("#{GEM_NAME.downcase}.gemspec", "w+") do |f|
