@@ -15,10 +15,8 @@ o.loaded_clouds.each do |cloud|
   
   with_cloud(cloud, {:hostname => @hostname}) do
     
-    boot_file = "#{Messenger.append_dir}/pm_node_rel-0.1"
-    command = Messenger.erl_command(hostname, "-boot #{boot_file} #{noshell ? "" : "-detached -heart"}")
+    list_of_running_instances
     
-    Kernel.system command
   end  
   
 end
