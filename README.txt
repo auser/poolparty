@@ -40,6 +40,7 @@ sudo gem install auser-poolparty
 
 == TODO:
 * Replace services with Runit
+* Refactor provisioning to use erlang
 
 == LICENSE:
 
