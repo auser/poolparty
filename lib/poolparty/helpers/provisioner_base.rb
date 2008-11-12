@@ -139,6 +139,10 @@ module PoolParty
         end
       end
       def process_clean_reconfigure_for!(instance, testing=false)
+        if instance.is_a?(String)
+          name = instance
+          instance = MyOpenStruct.new(:name => name)
+        end
         vputs "Cleaning certs from master: #{instance.name}"
         # puppetca --clean #{instance.name}.compute-1.internal; puppetca --clean #{instance.name}.ec2.internal
         # find /etc/puppet/ssl -type f -exec rm {} \;

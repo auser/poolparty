@@ -239,7 +239,7 @@ module PoolParty
             list_of_pending_instances.size == 0 ? request_launch_one_instance_at_a_time : wait("5.seconds")          
             reset!
             vputs "request_launch_new_instances: #{@num}"
-            provision_slaves_from_n(i)
+            provision_slaves_from_n(@num)
             after_launched
           end
         end
