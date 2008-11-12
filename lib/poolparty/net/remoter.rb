@@ -183,12 +183,11 @@ module PoolParty
           vputs "(@num_instances - (num))..(@num_instances): #{(@num_instances - (num))..(@num_instances)}"
           last_instances = nonmaster_nonterminated_instances[(@num_instances - (num))..(@num_instances)]
           last_instances.each do |inst|
-            PoolParty::Provisioner.process_clean_reconfigure_for!(inst, self)
+            hide_output {PoolParty::Provisioner.process_clean_reconfigure_for!(inst, self)}
             vputs "Provision slave: #{inst}"
             PoolParty::Provisioner.provision_slave(inst, self, false) unless inst.master? rescue vputs "Error"
-            cmd = ". /etc/profile && cloud-provision -i #{inst.name.gsub(/node/, '')} &"
-            vputs "Provision slave with command #{cmd}"
-            `cmd`
+            # cmd = ". /etc/profile && cloud-provision -i #{inst.name.gsub(/node/, '')} &"
+            # vputs "Provision slave with command #{cmd}"
           end
           PoolParty::Provisioner.reconfigure_master(self)
         end
