@@ -183,6 +183,7 @@ files:
 - lib/erlang/messenger/ebin/pm_node_rel-0.1.rel
 - lib/erlang/messenger/ebin/pm_node_supervisor.beam
 - lib/erlang/messenger/ebin/pm_packager.beam
+- lib/erlang/messenger/ebin/pm_strings.beam
 - lib/erlang/messenger/ebin/utils.beam
 - lib/erlang/messenger/include/defines.hrl
 - lib/erlang/messenger/lib/eunit/AUTHORS
@@ -262,6 +263,7 @@ files:
 - lib/erlang/messenger/src/pm_node.erl
 - lib/erlang/messenger/src/pm_node_supervisor.erl
 - lib/erlang/messenger/src/pm_packager.erl
+- lib/erlang/messenger/src/pm_strings.erl
 - lib/erlang/messenger/src/utils.erl
 - lib/erlang/messenger/useful_snippets
 - lib/poolparty.rb
