@@ -11,6 +11,7 @@ o.loaded_clouds.each do |cloud|
 
   with_cloud(cloud) do
     vputs header("Load handling cloud #{name}")
+    vputs "should_expand_cloud: #{should_expand_cloud?}"
     if should_expand_cloud?
       vputs "Expanding cloud based on load"
       logger.debug "Expanding cloud based on load"
