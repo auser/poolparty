@@ -60,8 +60,8 @@ module PoolParty
         nodes.split(" ").map {|a| a.split(/@/)[-1] }
       end
       
-      def reconfigure_cloud!
-        messenger_cast!("force_reconfig")
+      def reconfigure_cloud!(msg="force_reconfig")
+        messenger_cast!(msg)
       end
     end
   end
