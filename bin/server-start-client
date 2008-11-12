@@ -10,16 +10,17 @@ end
 o.loaded_clouds.each do |cloud|
   
   with_cloud(cloud) do
-    
-    boot_file = "#{Messenger.append_dir}/pm_client_rel-0.1"
-    
-    Kernel.system "cd #{Messenger.append_dir} && rake build_boot_scripts"  unless ::File.file?("#{boot_file}.boot") || testing    
-    command = Messenger.erl_command("client", "-boot #{boot_file} #{noshell ? "" : "-detached -heart -noshell"}", 7049, 7050)
-    vputs "Running #{command}"
-    
+        
     # ruby /var/lib/gems/1.8/bin/server-start-client    
     already_running = %x[ps aux | grep beam | grep -v grep | grep client]
     if already_running.chomp.empty?
+      
+      boot_file = "#{Messenger.append_dir}/pm_client_rel-0.1"
+
+      Kernel.system "cd #{Messenger.append_dir} && rake build_boot_scripts"  unless ::File.file?("#{boot_file}.boot") || testing    
+      command = Messenger.erl_command("client", "-boot #{boot_file} #{noshell ? "" : "-detached -heart -noshell"}", 7049, 7050)
+      vputs "Running #{command}"
+      
       Kernel.system "export HOME=/root && #{command}" unless testing
     end
   end  
