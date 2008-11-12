@@ -7,8 +7,7 @@ module PoolParty
 runit_service {
 "#{name}":
   directory => "/etc/sv",
-  downif => "/bin/ps aux | grep -v grep | grep -q #{downif}",
-  notify => Exec["/sbin/start runsvdir"],
+  downif => "/bin/ps aux | grep -v grep | grep -q #{downif}",  
   templatedir => "#{path}";  
 }        
         EOC
