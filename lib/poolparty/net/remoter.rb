@@ -178,16 +178,17 @@ module PoolParty
         reset!
         when_no_pending_instances do
           vputs "Waiting for 10 seconds"
-          wait "10.seconds" # Give some time for ssh to startup
+          wait "10.seconds" # Give some time for ssh to startup          
           @num_instances = list_of_running_instances.size
           vputs "(@num_instances - (num))..(@num_instances): #{(@num_instances - (num))..(@num_instances)}"
           last_instances = nonmaster_nonterminated_instances[(@num_instances - (num))..(@num_instances)]
           last_instances.each do |inst|
+            PoolParty::Provisioner.process_clean_reconfigure_for!(inst, self)
             vputs "Provision slave: #{inst}"
             PoolParty::Provisioner.provision_slave(inst, self, false) unless inst.master? rescue vputs "Error"
-            cmd = ". /etc/profile; cloud-provision -i #{inst.name.gsub(/node/, '')} #{unix_hide_string} 2>&1 > /dev/null &"
+            cmd = ". /etc/profile && cloud-provision -i #{inst.name.gsub(/node/, '')} &"
             vputs "Provision slave with command #{cmd}"
-            Kernel.system cmd
+            `cmd`
           end
           PoolParty::Provisioner.reconfigure_master(self)
         end
