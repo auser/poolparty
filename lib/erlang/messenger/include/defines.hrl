@@ -1,6 +1,6 @@
 % Includes file for the PoolParty Messenger
 
--define(debug, true).
+% -define(debug, true).
 
 -ifdef(debug).
 
