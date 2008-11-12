@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 
 . /etc/profile
-rm -rf /etc/puppet/ssl
+# rm -rf /etc/puppet/ssl
 /usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master  2>&1 > /dev/null
