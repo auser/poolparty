@@ -9,7 +9,7 @@ module PoolParty
           has_host({:name => "#{ri.name}", :ip => ri.ip })
         end
         
-        has_runit_service("pm_node_server", "/usr/bin/test -z '/bin/ps aux | grep -q pm_node'", File.join(File.dirname(__FILE__), "..", "templates/messenger/node/"))
+        has_runit_service("pm_node", "pm_node", File.join(File.dirname(__FILE__), "..", "templates/messenger/node/"))
         
         has_package(:name => "erlang")
         has_package(:name => "erlang-dev")
@@ -72,15 +72,15 @@ module PoolParty
             command(". /etc/profile && cloud-handle-load")
           end
           
-          has_runit_service("client_server", "/usr/bin/test -z '/bin/ps aux | grep -q pm_client'", File.join(File.dirname(__FILE__), "..", "templates/messenger/client/"))
-          has_runit_service("master_server", "/usr/bin/test -z '/bin/ps aux | grep -q pm_master'", File.join(File.dirname(__FILE__), "..", "templates/messenger/master/"))
+          has_runit_service("client_server", "/usr/bin/test -n 'pm_client'", File.join(File.dirname(__FILE__), "..", "templates/messenger/client/"))
+          has_runit_service("master_server", "/usr/bin/test -n 'pm_master'", File.join(File.dirname(__FILE__), "..", "templates/messenger/master/"))
           # TODO: Update this so it only runs when needed
           # has_exec(:name => "start master messenger", :command => ". /etc/profile && server-start-master", :ifnot => "/bin/ps aux | /bin/grep -q pm_master", :notify => get_exec("build_messenger"))
           # has_customservice(:name => "start master server", :pattern => "/pm_master/", :bin => ". /etc/profile && server-start-master")
           # has_customservice(:name => "start client server", :pattern => "/client_service/", :bin => ". /etc/profile && server-start-client")                    
           # has_exec(:name => "start client server", :command => ". /etc/profile && server-start-client", :ifnot => "/bin/ps aux | /bin/grep -q client_server")
           
-          has_cron({:name => "maintain script", :command => ". /etc/profile && which cloud-maintain | /bin/sh", :minute => "*/3", :requires => [get_gempackage("poolparty"), get_cron("puppetd runner"), get_cron("Load handler"), get_exec("start master messenger"), get_service("haproxy"), get_exec("start client server")]})
+          has_cron({:name => "maintain script", :command => ". /etc/profile && which cloud-maintain | /bin/sh", :minute => "*/3", :requires => [get_gempackage("poolparty"), get_cron("puppetd runner"), get_cron("Load handler"), get_service("haproxy")]})
           
           has_remotefile(:name => "/usr/bin/puppetcleaner") do
             mode 744
