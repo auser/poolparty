@@ -17,6 +17,7 @@
 -define (MASTER_NODE_NAME, master).
 -define (MASTER_SERVER, global:whereis_name(pm_master)).
 
+-define (UPDATE_TIME, 10000).
 -define(DICT, dict).
 -record (node, 
 					{load}).

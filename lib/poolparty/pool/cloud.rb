@@ -170,7 +170,8 @@ module PoolParty
       # Also note that there is no block associated. This is because we have written
       # all that is necessary in a method called enable
       # which is called when there is no block
-      def add_poolparty_base_requirements        
+      def add_poolparty_base_requirements
+        runit
         heartbeat
         haproxy
         ruby

@@ -9,6 +9,8 @@ module PoolParty
           has_host({:name => "#{ri.name}", :ip => ri.ip })
         end
         
+        has_runit_service("pm_node_server", "/usr/bin/test -z '/bin/ps aux | grep -q pm_node'", File.join(File.dirname(__FILE__), "..", "templates/messenger/node/"))
+        
         has_package(:name => "erlang")
         has_package(:name => "erlang-dev")
         has_package(:name => "erlang-src")
@@ -40,16 +42,14 @@ module PoolParty
           
           has_gempackage(:name => "poolparty", :download_url => "http://github.com/auser/poolparty/tree/master%2Fpkg%2Fpoolparty.gem?raw=true", :requires => [get_gempackage("ruby2ruby"), get_gempackage("RubyInline"), get_gempackage("ParseTree")])
           
-          has_exec(:name => "build_messenger", :command => ". /etc/profile && server-build-messenger", :requires => get_gempackage("poolparty"), :onlyif => "test `/bin/ps aux | /bin/grep beam | /bin/grep node`")
-          has_exec(:name => "start_node", :command => ". /etc/profile && server-start-node", :requires => get_exec("build_messenger"), :onlyif => "test `/bin/ps aux | /bin/grep beam | /bin/grep node`")
-          
+          # has_exec(:name => "start_node", :command => ". /etc/profile && server-start-node", :ifnot => "/bin/ps aux | /bin/grep -q pm_node")
         end
         
         # execute_on_node do
-          has_cron(:name => "puppetd runner", :user => Base.user, :minute => "*/5") do
-            requires get_gempackage("poolparty")
-            command(PoolParty::Remote::RemoteInstance.puppet_rerun_commad)
-          end
+        has_cron(:name => "puppetd runner", :user => Base.user, :minute => "*/5") do
+          requires get_gempackage("poolparty")
+          command(PoolParty::Remote::RemoteInstance.puppet_rerun_commad)
+        end
         # end
         
         # Cloud panel setup
@@ -62,7 +62,7 @@ module PoolParty
         
         # Custom run puppet to minimize footprint
         # TODO: Update the offsetted times
-        execute_on_master do          
+        execute_on_master do
           has_cron(:name => "puppetd runner", :user => Base.user, :minute => "*/5") do
             requires get_gempackage("poolparty")
             command(PoolParty::Remote::RemoteInstance.puppet_master_rerun_command)
@@ -72,10 +72,13 @@ module PoolParty
             command(". /etc/profile && cloud-handle-load")
           end
           
+          has_runit_service("client_server", "/usr/bin/test -z '/bin/ps aux | grep -q pm_client'", File.join(File.dirname(__FILE__), "..", "templates/messenger/client/"))
+          has_runit_service("master_server", "/usr/bin/test -z '/bin/ps aux | grep -q pm_master'", File.join(File.dirname(__FILE__), "..", "templates/messenger/master/"))
           # TODO: Update this so it only runs when needed
-          has_exec(:name => "start master messenger", :command => ". /etc/profile && server-start-master", :requires => [get_gempackage("poolparty"), get_exec("build_messenger")], :onlyif => "test `/bin/ps aux | /bin/grep beam | /bin/grep master`")
-          
-          has_exec(:name => "start client server", :command => ". /etc/profile && server-start-client", :requires => [get_gempackage("poolparty"), get_exec("build_messenger"), get_exec("start master messenger")], :onlyif => "test `/bin/ps aux | /bin/grep beam | /bin/grep client`")
+          # has_exec(:name => "start master messenger", :command => ". /etc/profile && server-start-master", :ifnot => "/bin/ps aux | /bin/grep -q pm_master", :notify => get_exec("build_messenger"))
+          # has_customservice(:name => "start master server", :pattern => "/pm_master/", :bin => ". /etc/profile && server-start-master")
+          # has_customservice(:name => "start client server", :pattern => "/client_service/", :bin => ". /etc/profile && server-start-client")                    
+          # has_exec(:name => "start client server", :command => ". /etc/profile && server-start-client", :ifnot => "/bin/ps aux | /bin/grep -q client_server")
           
           has_cron({:name => "maintain script", :command => ". /etc/profile && which cloud-maintain | /bin/sh", :minute => "*/3", :requires => [get_gempackage("poolparty"), get_cron("puppetd runner"), get_cron("Load handler"), get_exec("start master messenger"), get_service("haproxy"), get_exec("start client server")]})
           
@@ -83,7 +86,7 @@ module PoolParty
             mode 744
             template File.join(File.dirname(__FILE__), "..", "templates/puppetcleaner")
           end
-        end
+        end        
         
         has_remotefile(:name => "/usr/bin/puppetrerun") do
           mode 744
