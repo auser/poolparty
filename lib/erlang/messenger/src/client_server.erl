@@ -34,9 +34,9 @@ send_back_appropriate_response(Socket, Output) ->
 	case erlang:is_atom(H) of
 		true ->
 			?TRACE("NewOut", [Output]),
-			NewOut = string:join( [erlang:atom_to_list(K) || K <- Output], ", ");
+			NewOut = pm_strings:string_join( [erlang:atom_to_list(K) || K <- Output], " ");
 		_ ->
-			ListOfFloats = string:join([erlang:float_to_list(V) || V <- Output], ", "),
+			ListOfFloats = pm_strings:string_join( [erlang:float_to_list(V) || V <- Output], " "),
 			NewOut = [ListOfFloats]
 	end,
 	?TRACE("NewOut", [NewOut]),

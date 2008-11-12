@@ -16,9 +16,10 @@ o.loaded_clouds.each do |cloud|
     Kernel.system "cd #{Messenger.append_dir} && rake build_boot_scripts"  unless ::File.file?("#{boot_file}.boot") || testing    
     command = Messenger.erl_command("client", "-boot #{boot_file} #{noshell ? "" : "-detached -heart -noshell"}", 7049, 7050)
     vputs "Running #{command}"
-        
+    
+    # ruby /var/lib/gems/1.8/bin/server-start-client    
     already_running = %x[ps aux | grep beam | grep -v grep | grep client]
-    if already_running.chomp.empty?    
+    if already_running.chomp.empty?
       Kernel.system "export HOME=/root && #{command}" unless testing
     end
   end  
