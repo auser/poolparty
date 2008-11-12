@@ -34,8 +34,7 @@ module PoolParty
           create_local_node,
           move_templates,
           create_poolparty_manifest,
-          restart_puppetd,
-          start_puppetmaster
+          restart_puppetd
         ]
       end
       
@@ -121,7 +120,7 @@ wget http://rubyforge.org/frs/download.php/43666/amazon-ec2-0.3.1.gem -O amazon-
       end
       
       # ps aux | grep puppetmasterd | awk '{print $2}' | xargs kill
-      # rm -rf /etc/puppet/ssl
+      # /etc/init.d/puppetmaster stop; rm -rf /etc/puppet/ssl; /etc/init.d/puppetmaster start
       def start_puppetmaster
         <<-EOS
 . /etc/profile
@@ -129,7 +128,8 @@ wget http://rubyforge.org/frs/download.php/43666/amazon-ec2-0.3.1.gem -O amazon-
 ps aux | grep puppetmaster | awk '{print $2}' | xargs kill #{unix_hide_string} # just in case
 rm -rf /etc/puppet/ssl
 # Start it back up
-/etc/init.d/puppetmaster start #{unix_hide_string}
+puppetmasterd --verbose
+# /etc/init.d/puppetmaster start #{unix_hide_string}
         EOS
       end
 
@@ -152,7 +152,7 @@ node "#{ri.name}" inherits default {}
       def move_templates
         <<-EOS
 mkdir -p #{Base.template_path}
-cp #{Base.remote_storage_path}/#{Base.template_directory}/* #{Base.template_path}
+cp -R #{Base.remote_storage_path}/#{Base.template_directory}/* #{Base.template_path}
         EOS
       end
       
@@ -161,6 +161,13 @@ cp #{Base.remote_storage_path}/#{Base.template_directory}/* #{Base.template_path
 cp #{Base.remote_storage_path}/poolparty.pp /etc/puppet/manifests/classes/poolparty.pp
 #{copy_ssh_app}
         EOS
+      end
+      
+      def clean_master_certs
+        returning String.new do |s|
+          s << "puppetca --clean master.compute-1.internal 2>&1 > /dev/null;"
+          s << "puppetca --clean master.ec2.internal 2>&1 > /dev/null"
+        end
       end
       
       def restart_puppetd
