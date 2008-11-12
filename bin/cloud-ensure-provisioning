@@ -8,15 +8,15 @@ o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
   opts.on('-n name', '--name name', 'Host name')    { |h| optioner.hostname h }
   opts.on('-l', '--no-shell', 'No shell') {optioner.noshell true}
 end
-@hostname = o.hostname ? o.hostname : `hostname`.chomp
-@hostname = "node0" if @hostname == "master" # Quick fix to make sure we have a node running on the master as well
 
 o.loaded_clouds.each do |cloud|
   
-  with_cloud(cloud, {:hostname => @hostname}) do
+  with_cloud(cloud) do
     
-    list_of_running_instances
-    
+    @nonprovisioned_nodes = list_of_running_instances.map {|a| a.name } - cloud.get_current_nodes
+    @nonprovisioned_nodes.each do |node|
+      `cloud-provision -i #{node.gsub(/node/, '')}`
+    end
   end  
   
 end

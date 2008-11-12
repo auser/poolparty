@@ -2,9 +2,6 @@
   The connection to the messenger from poolparty, the client
 =end
 module PoolParty
-  def reconfigure_cloud!
-    Messenger.messenger_send!("reconfigure_cloud")
-  end
   module Messenger
     def with_socket(testing=false, &block)
       host = testing ? "localhost" : (master.ip)
@@ -51,6 +48,15 @@ module PoolParty
   module Cloud
     class Cloud
       include PoolParty::Messenger
+      
+      def get_current_nodes
+        nodes = messenger_send!("get_current_nodes")
+        nodes.split(" ").map {|a| a.split(/@/)[-1] }
+      end
+      
+      def reconfigure_cloud!
+        messenger_send!("reconfigure_cloud")
+      end
     end
   end
 end

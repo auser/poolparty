@@ -71,8 +71,11 @@ module PoolParty
           has_cron(:name => "Load handler", :user => Base.user, :minute => "*/4") do
             requires get_gempackage("poolparty")
             command(". /etc/profile && cloud-handle-load")
+          end          
+          has_cron(:name => "provisioning ensurer", :user => Base.user, :minute => "*/6") do
+            requires get_gempackage("poolparty")
+            command ". /etc/profile && cloud-ensure-provisioning"
           end
-          
           # has_runit_service("client_server", "pm_client", File.join(File.dirname(__FILE__), "..", "templates/messenger/client/"))
           # has_runit_service("master_server", "pm_master", File.join(File.dirname(__FILE__), "..", "templates/messenger/master/"))
           # TODO: Update this so it only runs when needed          
