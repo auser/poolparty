@@ -159,7 +159,6 @@ files:
 - lib/erlang/messenger/Makefile
 - lib/erlang/messenger/README
 - lib/erlang/messenger/Rakefile
-- lib/erlang/messenger/client_server.beam
 - lib/erlang/messenger/control
 - lib/erlang/messenger/ebin/client.app
 - lib/erlang/messenger/ebin/client_app.beam
@@ -185,7 +184,6 @@ files:
 - lib/erlang/messenger/ebin/pm_node_supervisor.beam
 - lib/erlang/messenger/ebin/pm_packager.beam
 - lib/erlang/messenger/ebin/utils.beam
-- lib/erlang/messenger/erl_crash.dump
 - lib/erlang/messenger/include/defines.hrl
 - lib/erlang/messenger/lib/eunit/AUTHORS
 - lib/erlang/messenger/lib/eunit/CHANGELOG
@@ -243,6 +241,12 @@ files:
 - lib/erlang/messenger/lib/eunit/sys.config
 - lib/erlang/messenger/lib/eunit/vsn.mk
 - lib/erlang/messenger/log/pool.logs
+- lib/erlang/messenger/pm_client_rel-0.1.boot
+- lib/erlang/messenger/pm_client_rel-0.1.script
+- lib/erlang/messenger/pm_master_rel-0.1.boot
+- lib/erlang/messenger/pm_master_rel-0.1.script
+- lib/erlang/messenger/pm_node_rel-0.1.boot
+- lib/erlang/messenger/pm_node_rel-0.1.script
 - lib/erlang/messenger/src/client_app.erl
 - lib/erlang/messenger/src/client_server.erl
 - lib/erlang/messenger/src/master_app.erl
@@ -260,7 +264,6 @@ files:
 - lib/erlang/messenger/src/pm_packager.erl
 - lib/erlang/messenger/src/utils.erl
 - lib/erlang/messenger/useful_snippets
-- lib/erlang/messenger/utils.beam
 - lib/poolparty.rb
 - lib/poolparty/aska/aska.rb
 - lib/poolparty/base_packages/haproxy.rb
