@@ -8,7 +8,8 @@ runit_service {
 "#{name}":
   directory => "/etc/sv",
   downif => "/bin/ps aux | grep -v grep | grep -q #{downif}",
-  templatedir => "#{path}";
+  notify => Exec["/sbin/start runsvdir"],
+  templatedir => "#{path}";  
 }        
         EOC
       end
