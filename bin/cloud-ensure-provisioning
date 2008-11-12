@@ -23,7 +23,9 @@ o.loaded_clouds.each do |cloud|
         s << "/usr/sbin/puppetca --clean #{node}.compute-1.internal"
         s << "/usr/sbin/puppetca --clean #{node}.ec2.internal"
       end.join(";")
-      `. /etc/profile && #{str};cloud-provision -i #{node.gsub(/node/, '')};#{str}`
+      cmd = ". /etc/profile && #{str};cloud-provision -i #{node.gsub(/node/, '')};#{str}"
+      vputs "Executing #{cmd}"
+      `#{cmd}`
     end
     # @tp.join
   end  
