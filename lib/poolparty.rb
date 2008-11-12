@@ -7,15 +7,35 @@ require 'rubygems'
     require lib
   rescue Exception => e
     @required_software << lib
-    puts "Could not find library #{lib}: #{e}"
   end  
 end
 
 unless @required_software.empty?
-  puts "*****************************************"
-  puts "*           Error                       *"
-  puts "* Missing required software             *"
-  puts ""
+  @num_lines = 45
+  @centered_lines = @num_lines - 4
+  def wrap_cline(line)
+    "* #{line.center(@centered_lines)} *"
+  end
+  def wrap_lline(line)
+    "* #{line.ljust(@centered_lines)} *"
+  end
+  def header
+    "*"*@num_lines
+  end
+  empty_line = "* #{" ".ljust(@centered_lines)} *"
+  # error_initializing_message.txt
+  puts header
+  puts wrap_cline("Error")
+  puts wrap_lline("Missing required software")
+  puts @required_software.map {|a| wrap_lline("  #{a}") }  
+  puts wrap_lline("Please install the required software")
+  puts wrap_lline("and try again")
+  puts empty_line
+  puts wrap_lline("Try installing #{@required_software.size == 1 ? "it" : "them"} with")
+  puts @required_software.map {|a| wrap_lline("  gem install #{a}") }  
+  puts empty_line
+  puts "*"*@num_lines
+  exit(0)
 end
 
 # Use active supports auto load mechanism
