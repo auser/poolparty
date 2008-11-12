@@ -17,7 +17,10 @@ o.loaded_clouds.each do |cloud|
     command = Messenger.erl_command("master", "-boot #{boot_file} #{noshell ? "" : "-noshell -detached -heart"}")    
     vputs "Running #{command}"
     
-    Kernel.system "export HOME=/root && #{command}" unless testing
+    already_running = %x[ps aux | grep beam | grep -v grep | grep master]
+    if already_running.chomp.empty?    
+      Kernel.system "export HOME=/root && #{command}" unless testing
+    end
   end  
   
 end
