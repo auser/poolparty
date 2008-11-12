@@ -15,7 +15,6 @@ module PoolParty
       end
       def get_existing_spec_location
         [                            
-            "#{Base.base_config_directory}/#{Base.default_specfile_name}",
             "#{Base.remote_storage_path}/#{Base.default_specfile_name}", 
             ENV["POOL_SPEC"],
             "#{Base.default_specfile_name}",
