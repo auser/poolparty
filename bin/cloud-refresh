@@ -10,10 +10,7 @@ end
 o.loaded_clouds.each do |cloud|
   
   with_cloud(cloud) do
-    cmd = <<-EOE
-puppetrun --host #{list_of_node_names.join(", --host ")}
-    EOE
-    run_command_on(cmd.runnable, master)
+    reconfigure_cloud!("force_reconfig")
   end
   
 end
