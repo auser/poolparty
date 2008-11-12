@@ -13,7 +13,7 @@ o.loaded_clouds.each do |cloud|
     
     boot_file = "#{Messenger.append_dir}/pm_client_rel-0.1"
     
-    Kernel.system ". /etc/profile && server-build-messenger"  unless ::File.file?(boot_file) || testing
+    Kernel.system ". /etc/profile && server-build-messenger"  unless ::File.file?("#{boot_file}.boot") || testing
     
     command = Messenger.erl_command("client", "-boot #{boot_file} #{noshell ? "" : "-detached -heart -noshell"}", 7049, 7050)
     
