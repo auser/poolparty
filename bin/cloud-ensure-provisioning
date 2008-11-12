@@ -19,10 +19,11 @@ o.loaded_clouds.each do |cloud|
       vputs "Provisioning #{node}"
       next if node == "master"
       # @tp.process do
-        PoolParty::Provisioner.process_clean_reconfigure_for!(node, cloud)
-        `cloud-provision -i #{node.gsub(/node/, '')}`
-        PoolParty::Provisioner.process_clean_reconfigure_for!(node, cloud)
-      # end
+      str = returning Array.new do |s|
+        s << "/usr/sbin/puppetca --clean #{node}.compute-1.internal"
+        s << "/usr/sbin/puppetca --clean #{node}.ec2.internal"
+      end.join(";")
+      `. /etc/profile && #{str};cloud-provision -i #{node.gsub(/node/, '')};#{str}`
     end
     # @tp.join
   end  
