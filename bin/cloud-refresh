@@ -10,6 +10,7 @@ end
 o.loaded_clouds.each do |cloud|
   
   with_cloud(cloud) do
+    vputs "Calling reconfigure_cloud!('force_reconfig') on #{master.ip}"
     reconfigure_cloud!("force_reconfig")
   end
   
