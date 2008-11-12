@@ -14,15 +14,16 @@ o.loaded_clouds.each do |cloud|
   with_cloud(cloud) do
     
     @nonprovisioned_nodes = list_of_running_instances.map {|a| a.name } - cloud.get_current_nodes
-    @tp = ThreadPool.new(10)
+    # @tp = ThreadPool.new(10)
     @nonprovisioned_nodes.each do |node|
-      @tp.process do
+      next if node == "master"
+      # @tp.process do
         PoolParty::Provisioner.process_clean_reconfigure_for!(node, cloud)
         `cloud-provision -i #{node.gsub(/node/, '')}`
         PoolParty::Provisioner.process_clean_reconfigure_for!(node, cloud)
-      end
+      # end
     end
-    @tp.join
+    # @tp.join
   end  
   
 end
