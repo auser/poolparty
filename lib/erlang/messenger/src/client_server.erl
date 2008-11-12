@@ -5,17 +5,15 @@
 
 -define (RECONNECT_TIMEOUT, 10000).
 
-start() -> 
-	?TRACE("MASTER_LOCATION", [?MASTER_LOCATION]),
-	connect_to_master(),
-	global:sync(),
+start() -> 	
+	utils:start_timer(client_timer, ?UPDATE_TIME, fun() -> client_server:connect_to_master() end),
 	pm_client:start(?MODULE, 7050, {?MODULE, loop}).
 	
 master_server() -> global:whereis_name(pm_master).
 
 loop(Socket) ->
     case gen_tcp:recv(Socket, 0) of
-        {ok, Data} ->
+        {ok, Data} ->						
 						?TRACE("received", [master_server(), erlang:binary_to_list(Data)]),
 						% Args = [Item || K <- string:tokens(erlang:binary_to_list(Data), " "), Item <- erlang:list_to_atom(K)],
 						[Meth|Args] = string:tokens(erlang:binary_to_list(Data), " "),
@@ -32,16 +30,23 @@ loop(Socket) ->
 % send_back_appropriate_response(Socket, Output) when is_float(Output) -> gen_tcp:send(Socket, erlang:float_to_list(Output));
 % Figure out how to do this the best... damnit
 send_back_appropriate_response(Socket, Output) -> 
-	?TRACE("Output", [Output]),
-	ListOfFloats = string:join([erlang:float_to_list(V) || V <- Output], ", "),
-	NewOut = ListOfFloats,
+	[H|_T] = Output,
+	case erlang:is_atom(H) of
+		true ->
+			?TRACE("NewOut", [Output]),
+			NewOut = string:join( [erlang:atom_to_list(K) || K <- Output], ", ");
+		_ ->
+			ListOfFloats = string:join([erlang:float_to_list(V) || V <- Output], ", "),
+			NewOut = [ListOfFloats]
+	end,
 	?TRACE("NewOut", [NewOut]),
 	gen_tcp:send(Socket, NewOut).
 	
 
 connect_to_master() ->
 	case net_adm:ping(?MASTER_LOCATION) of
-		pong ->
+		pong ->			
+			global:sync(),
 			ok;
 		_ ->
 			receive 

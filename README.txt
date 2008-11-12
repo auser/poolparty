@@ -38,6 +38,9 @@ COMING SOON
 
 sudo gem install auser-poolparty
 
+== TODO:
+* Replace services with Runit
+
 == LICENSE:
 
 (The MIT License)

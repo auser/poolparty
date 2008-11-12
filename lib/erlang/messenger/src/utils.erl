@@ -1,4 +1,5 @@
 -module (utils).
+-include_lib("../include/defines.hrl").
 -compile(export_all).
 
 -ifdef(EUNIT).
@@ -12,18 +13,25 @@ convert_responses_to_int_list(L) ->
 	average_for_list(Sum, L).
 
 % Start a timer to fire off Fun after Time number of milliseconds
+start_timer(Name, Time, Fun) ->
+	case whereis(Name) of
+		undefined -> register(Name, spawn(fun() -> tick_timer(Time, Fun) end));
+		_ -> ok
+	end.
 start_timer(Time, Fun) -> 
-	register(?MODULE, spawn(fun() -> tick_timer(Time, Fun) end)). 
+	start_timer(?MODULE, Time, Fun).
+	% register(?MODULE, spawn(fun() -> tick_timer(Time, Fun) end)). 
 
+stop_timer(Name) -> erlang:whereis(Name) ! stop.
 stop_timer() -> ?MODULE ! stop. 
+
 
 tick_timer(Time, Fun) -> 
 	receive 
-		stop -> 
-			void 
+		stop -> void 
 	after Time -> 
 		Fun(), 
-		tick_timer(Time, Fun) 
+		tick_timer(Time, Fun)
 	end. 
 
 average_of_list(L) ->

@@ -89,6 +89,9 @@ executables:
 - server-start-client
 - server-start-master
 - server-start-node
+- server-stop-client
+- server-stop-master
+- server-stop-node
 extensions: []
 
 extra_rdoc_files: 
@@ -140,6 +143,9 @@ files:
 - bin/server-start-client
 - bin/server-start-master
 - bin/server-start-node
+- bin/server-stop-client
+- bin/server-stop-master
+- bin/server-stop-node
 - config/hoe.rb
 - config/requirements.rb
 - examples/basic.rb
@@ -153,6 +159,7 @@ files:
 - lib/erlang/messenger/Makefile
 - lib/erlang/messenger/README
 - lib/erlang/messenger/Rakefile
+- lib/erlang/messenger/client_server.beam
 - lib/erlang/messenger/control
 - lib/erlang/messenger/ebin/client.app
 - lib/erlang/messenger/ebin/client_app.beam
@@ -259,12 +266,14 @@ files:
 - lib/erlang/messenger/src/pm_packager.erl
 - lib/erlang/messenger/src/utils.erl
 - lib/erlang/messenger/useful_snippets
+- lib/erlang/messenger/utils.beam
 - lib/poolparty.rb
 - lib/poolparty/aska/aska.rb
 - lib/poolparty/base_packages/haproxy.rb
 - lib/poolparty/base_packages/heartbeat.rb
 - lib/poolparty/base_packages/poolparty.rb
 - lib/poolparty/base_packages/ruby.rb
+- lib/poolparty/base_packages/runit.rb
 - lib/poolparty/config/allowed_commands.yml
 - lib/poolparty/config/postlaunchmessage.txt
 - lib/poolparty/core/array.rb
@@ -323,6 +332,7 @@ files:
 - lib/poolparty/net/remoter_base.rb
 - lib/poolparty/plugins/git.rb
 - lib/poolparty/plugins/line.rb
+- lib/poolparty/plugins/runit.rb
 - lib/poolparty/plugins/svn.rb
 - lib/poolparty/pool/base.rb
 - lib/poolparty/pool/cloud.rb
@@ -335,6 +345,7 @@ files:
 - lib/poolparty/pool/resources/class_package.rb
 - lib/poolparty/pool/resources/conditional.rb
 - lib/poolparty/pool/resources/cron.rb
+- lib/poolparty/pool/resources/custom_service.rb
 - lib/poolparty/pool/resources/directory.rb
 - lib/poolparty/pool/resources/exec.rb
 - lib/poolparty/pool/resources/file.rb
@@ -354,6 +365,12 @@ files:
 - lib/poolparty/templates/ha.cf
 - lib/poolparty/templates/haproxy.conf
 - lib/poolparty/templates/haresources
+- lib/poolparty/templates/messenger/client/log-run.erb
+- lib/poolparty/templates/messenger/client/run.erb
+- lib/poolparty/templates/messenger/master/log-run.erb
+- lib/poolparty/templates/messenger/master/run.erb
+- lib/poolparty/templates/messenger/node/log-run.erb
+- lib/poolparty/templates/messenger/node/run.erb
 - lib/poolparty/templates/namespaceauth.conf
 - lib/poolparty/templates/poolparty.monitor
 - lib/poolparty/templates/puppet.conf
