@@ -7,9 +7,7 @@ module PoolParty
         # TODO: COME BACK AND CLEAN THIS UP
         (self.respond_to?(:list_of_running_instances) ? self : parent).list_of_running_instances.each do |ri|
           has_host({:name => "#{ri.name}", :ip => ri.ip })
-        end
-        
-        has_runit_service("pm_node", "pm_node", File.join(File.dirname(__FILE__), "..", "templates/messenger/node/"))
+        end        
         
         has_package(:name => "erlang")
         has_package(:name => "erlang-dev")
@@ -43,6 +41,7 @@ module PoolParty
           has_gempackage(:name => "poolparty", :download_url => "http://github.com/auser/poolparty/tree/master%2Fpkg%2Fpoolparty.gem?raw=true", :requires => [get_gempackage("ruby2ruby"), get_gempackage("RubyInline"), get_gempackage("ParseTree")])
           
           # has_exec(:name => "start_node", :command => ". /etc/profile && server-start-node", :ifnot => "/bin/ps aux | /bin/grep -q pm_node")
+          has_runit_service("pm_node", "pm_node", File.join(File.dirname(__FILE__), "..", "templates/messenger/node/"))
         end
         
         # execute_on_node do
@@ -72,8 +71,8 @@ module PoolParty
             command(". /etc/profile && cloud-handle-load")
           end
           
-          has_runit_service("client_server", "/usr/bin/test -n 'pm_client'", File.join(File.dirname(__FILE__), "..", "templates/messenger/client/"))
-          has_runit_service("master_server", "/usr/bin/test -n 'pm_master'", File.join(File.dirname(__FILE__), "..", "templates/messenger/master/"))
+          has_runit_service("client_server", "pm_client", File.join(File.dirname(__FILE__), "..", "templates/messenger/client/"))
+          has_runit_service("master_server", "pm_master", File.join(File.dirname(__FILE__), "..", "templates/messenger/master/"))
           # TODO: Update this so it only runs when needed
           # has_exec(:name => "start master messenger", :command => ". /etc/profile && server-start-master", :ifnot => "/bin/ps aux | /bin/grep -q pm_master", :notify => get_exec("build_messenger"))
           # has_customservice(:name => "start master server", :pattern => "/pm_master/", :bin => ". /etc/profile && server-start-master")
