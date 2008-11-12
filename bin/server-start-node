@@ -16,17 +16,15 @@ available_monitors = PoolParty::Monitors.available_monitors
 o.loaded_clouds.each do |cloud|
   
   with_cloud(cloud, {:hostname => @hostname}) do
-    # TODO: Change this to be app specfic
-    # SECURITY RISK
-    
-    boot_file = "#{Messenger.append_dir}/pm_node_rel-0.1"
-    
-    Kernel.system ". /etc/profile && server-build-messenger"  unless ::File.file?("#{boot_file}.boot") || testing
-    command = Messenger.erl_command(hostname, "-boot #{boot_file} #{noshell ? "" : "-noshell -detached -heart"} -- #{available_monitors.join(" ")}")    
-    vputs "Running #{command}"
-    
+    # TODO: Change this to be app specfic    
     already_running = %x[ps aux | grep beam | grep -v grep | grep node]
     if already_running.chomp.empty?    
+      boot_file = "#{Messenger.append_dir}/pm_node_rel-0.1"
+
+      Kernel.system ". /etc/profile && server-build-messenger"  unless ::File.file?("#{boot_file}.boot") || testing
+      command = Messenger.erl_command(hostname, "-boot #{boot_file} #{noshell ? "" : "-noshell -detached -heart"} -- #{available_monitors.join(" ")}")    
+      vputs "Running #{command}"
+      
       Kernel.system "export HOME=/root && #{command}" unless testing
     end
   end  
