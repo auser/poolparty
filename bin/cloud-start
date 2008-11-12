@@ -22,7 +22,7 @@ o.loaded_clouds.each do |cloud|
         provisioning_complete
       end
     end
-    vputs open(::File.join(File.dirname(__FILE__), "..", "lib", "poolparty", "config", "postlaunchmessage.txt")).read ^ {:master_ip => master.ip.chomp}
+    puts open(::File.join(File.dirname(__FILE__), "..", "lib", "poolparty", "config", "postlaunchmessage.txt")).read ^ {:master_ip => master.ip.chomp}
     clear_base_directory unless testing
   end
   
