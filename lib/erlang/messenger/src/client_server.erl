@@ -4,6 +4,7 @@
 -export ([start/0]).
 
 -define (RECONNECT_TIMEOUT, 10000).
+-define (CAST_MESSAGES, [force_reconfig]).
 
 start() -> 	
 	utils:start_timer(client_timer, ?UPDATE_TIME, fun() -> client_server:connect_to_master() end),
@@ -14,14 +15,16 @@ master_server() -> global:whereis_name(pm_master).
 loop(Socket) ->
     case gen_tcp:recv(Socket, 0) of
         {ok, Data} ->						
-						?TRACE("received", [master_server(), erlang:binary_to_list(Data)]),
 						% Args = [Item || K <- string:tokens(erlang:binary_to_list(Data), " "), Item <- erlang:list_to_atom(K)],
 						[Meth|Args] = string:tokens(erlang:binary_to_list(Data), " "),
-						?TRACE("received", [Meth, Args]),
-						Output = gen_server:call(master_server(), {erlang:list_to_atom(Meth), Args}),
-						?TRACE("received from gen_server", [Output]),
-						send_back_appropriate_response(Socket, Output),
-						?TRACE("posted", [Output]),
+						case lists:member(erlang:list_to_atom(Meth), ?CAST_MESSAGES) of
+							true ->
+								?TRACE("Received cast message", [Meth]);
+							_ ->
+								Output = gen_server:call(master_server(), {erlang:list_to_atom(Meth), Args}),
+								send_back_appropriate_response(Socket, Output),
+								?TRACE("posted", [Output])
+						end,
             loop(Socket);
         {error, closed} ->
             ok

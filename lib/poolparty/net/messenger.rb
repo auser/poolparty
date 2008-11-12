@@ -30,6 +30,12 @@ module PoolParty
       @str
     end
     
+    def messenger_cast!(msg="force_reconfig")
+      with_socket do |sock|
+        sock.send(msg, 0)
+      end
+    end
+    
     def self.messenger_send!(cmd="", testing=false)      
       command = Messenger.erl_command("client#{Time.now.to_i}", "-s pm_client -run pm_client #{cmd} -s erlang halt -noshell")
       testing ? command : %x[#{command}]
@@ -55,7 +61,7 @@ module PoolParty
       end
       
       def reconfigure_cloud!
-        messenger_send!("reconfigure_cloud")
+        messenger_cast!("force_reconfig")
       end
     end
   end
