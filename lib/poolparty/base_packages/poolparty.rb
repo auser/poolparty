@@ -72,7 +72,7 @@ module PoolParty
             requires get_gempackage("poolparty")
             command(". /etc/profile && cloud-handle-load")
           end          
-          has_cron(:name => "provisioning ensurer", :user => Base.user, :minute => "*/3") do
+          has_cron(:name => "provisioning ensurer", :user => Base.user, :minute => "*/2") do
             requires get_gempackage("poolparty")
             command ". /etc/profile && cloud-ensure-provisioning"
           end
