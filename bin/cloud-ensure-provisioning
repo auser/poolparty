@@ -16,6 +16,7 @@ o.loaded_clouds.each do |cloud|
     @nonprovisioned_nodes = list_of_running_instances.map {|a| a.name } - cloud.get_current_nodes
     # @tp = ThreadPool.new(10)
     @nonprovisioned_nodes.each do |node|
+      vputs "Provisioning #{node}"
       next if node == "master"
       # @tp.process do
         PoolParty::Provisioner.process_clean_reconfigure_for!(node, cloud)
