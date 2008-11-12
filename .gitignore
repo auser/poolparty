@@ -11,4 +11,3 @@ test_manifest.pp
 *erl_crash.dump*
 log
 *.beam
-*.boot
