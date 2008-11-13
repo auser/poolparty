@@ -33,8 +33,8 @@ module PoolParty
       default_options({
         :minimum_instances => 2,
         :maximum_instances => 5,
-        :contract_when => "cpu < 0.15",
-        :expand_when => "cpu > 0.9",
+        :contract_when => "cpu < 0.65",
+        :expand_when => "cpu > 1.9",
         :access_key => Base.access_key,
         :secret_access_key => Base.secret_access_key,
         :ec2_dir => ENV["EC2_HOME"],
