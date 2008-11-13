@@ -129,7 +129,7 @@ ps aux | grep puppetmaster | awk '{print $2}' | xargs kill #{unix_hide_string} #
 rm -rf /etc/puppet/ssl
 # Start it back up
 puppetmasterd --verbose
-rm -rf /etc/puppet/ssl
+/usr/bin/puppetcleaner
 # /etc/init.d/puppetmaster start #{unix_hide_string}
         EOS
       end
