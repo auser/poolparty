@@ -5,6 +5,9 @@ begin
     def convert_from_ec2_to_ip
       self.gsub(/.compute-1.amazonaws.com*/, '').gsub(/ec2-/, '').gsub(/-/, '.')
     end
+    def parse_datetime
+      DateTime.parse( self.chomp ) rescue self
+    end
   end
   module PoolParty
     module Ec2
@@ -46,7 +49,7 @@ begin
             :name => @name,
             :hostname => h[:ip],
             :ip => h[:ip].convert_from_ec2_to_ip,
-            :launching_time => DateTime.parse(h[:launching_time])
+            :launching_time => (h[:launching_time].parse_datetime)
           })
         end
       end
@@ -155,7 +158,7 @@ begin
           :name => resp.instanceId, 
           :ip => resp.dnsName || "not-assigned",
           :status => resp.instanceState.name,
-          :launching_time => DateTime.strptime(resp.launchTime),
+          :launching_time => resp.launchTime,
           :keypair => resp.keyName
         }        
       rescue Exception => e

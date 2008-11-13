@@ -34,6 +34,20 @@ describe "ec2 remote base" do
       end
     EOE
   end
+  describe "helpers" do
+    it "should be able to convert an ec2 ip to a real ip" do
+      "ec2-72-44-36-12.compute-1.amazonaws.com".convert_from_ec2_to_ip.should == "72.44.36.12"
+    end
+    it "should not throw an error if another string is returned" do
+      "72.44.36.12".convert_from_ec2_to_ip.should == "72.44.36.12"
+    end
+    it "should be able to parse the date from the timestamp" do
+      "2008-11-13T09:33:09+0000".parse_datetime.should == DateTime.parse("2008-11-13T09:33:09+0000")
+    end
+    it "should rescue itself and just return the string if it fails" do
+      "thisisthedate".parse_datetime.should == "thisisthedate"
+    end
+  end
   describe "launching" do
     before(:each) do
       @tr.ec2.stub!(:run_instances).and_return true
