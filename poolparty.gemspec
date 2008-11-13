@@ -77,6 +77,7 @@ executables:
 - pool
 - pool-console
 - pool-describe
+- pool-init
 - pool-list
 - pool-spec
 - pool-start
@@ -132,6 +133,7 @@ files:
 - bin/pool
 - bin/pool-console
 - bin/pool-describe
+- bin/pool-init
 - bin/pool-list
 - bin/pool-spec
 - bin/pool-start
