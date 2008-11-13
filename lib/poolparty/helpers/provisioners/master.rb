@@ -25,7 +25,9 @@ module PoolParty
           setup_autosigning,
           install_poolparty,
           setup_poolparty,
-          start_puppetmaster
+          start_puppetmaster,
+          restart_puppetd,
+          clean_master_certs
         ] << configure_tasks
       end
 
@@ -129,7 +131,6 @@ ps aux | grep puppetmaster | awk '{print $2}' | xargs kill #{unix_hide_string} #
 rm -rf /etc/puppet/ssl
 # Start it back up
 puppetmasterd --verbose
-/usr/bin/puppetcleaner
 # /etc/init.d/puppetmaster start #{unix_hide_string}
         EOS
       end
@@ -168,6 +169,7 @@ cp #{Base.remote_storage_path}/poolparty.pp /etc/puppet/manifests/classes/poolpa
         returning String.new do |s|
           s << "puppetca --clean master.compute-1.internal 2>&1 > /dev/null;"
           s << "puppetca --clean master.ec2.internal 2>&1 > /dev/null"
+          s << "/usr/bin/puppetcleaner"
         end
       end
       
