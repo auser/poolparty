@@ -11,18 +11,18 @@ module PoolParty
       def package_directory
         path = ::File.join( Base.tmp_path, "#{::File.basename(from_dir)}.tar.gz" )
         # cd /Users/auser/Sites/work/citrusbyte/internal/gems/pool-party/poolparty/spec/poolparty/plugins/ && tar -czf plugins.tar.gz . && mv plugins.tar.gz /tmp/poolparty && cd /tmp/poolparty
-        cmd = "cd #{::File.expand_path(from_dir)} && tar -czf #{::File.basename(from_dir)}.tar.gz . && mv #{::File.basename(from_dir)}.tar.gz #{Base.tmp_path}"
+        cmd = "cd #{::File.expand_path(from_dir)} && tar -czf #{name.dir_safe}.tar.gz . && mv #{name.dir_safe}.tar.gz #{Base.tmp_path}"
         `#{cmd}` unless testing
       end
       
       def unpack_directory         
         has_exec({:name => "deploy-directory-#{name}", :requires => get_directory("#{cwd}"), :cwd => cwd}) do
-          command "cd #{parent.cwd}; tar -zxf #{Base.tmp_path}/#{parent.name}.tar.gz"
+          command "cd #{parent.cwd}; tar -zxf #{Base.tmp_path}/#{parent.name.dir_safe}.tar.gz && rm #{Base.tmp_path}/#{parent.name.dir_safe}.tar.gz"
         end
       end
       
       def from(dir)
-        from_dir dir
+        from_dir (dir.include?(" ") ? dir.gsub(/[ ]/, '') : dir)
       end
       
       def to(dir)
