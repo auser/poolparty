@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # Based on puppet High Availability recipe
 # 
 # http://reductivelabs.com/trac/puppet/wiki/Recipes/HighAvailability
