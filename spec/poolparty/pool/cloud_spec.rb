@@ -284,7 +284,7 @@ describe "Cloud" do
               File.open("test_manifest.pp", "w+") {|f| f << @manifest}
             end
             it "should include the hosts for all the listed local instances" do
-              @manifest.should =~ /host \{\n\t\t"gen_master":/
+              @manifest.should =~ /master :/
             end
           end
           describe "building with an existing manifest" do
