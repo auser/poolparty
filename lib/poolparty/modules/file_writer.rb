@@ -41,7 +41,8 @@ module PoolParty
     end
     def make_base_path(path)
       unless FileTest.directory?(path)
-        begin          
+        begin
+          ::FileUtils.rm path if ::File.file?(path)
           ::FileUtils.mkdir_p path
         rescue Errno::ENOTDIR
         rescue Errno::EEXIST
@@ -50,11 +51,21 @@ module PoolParty
       end
     end
     def make_base_directory
-      FileUtils.mkdir_p Base.storage_directory unless ::File.directory?(Base.storage_directory)
+      begin
+        FileUtils.mkdir_p Base.storage_directory unless ::File.directory?(Base.storage_directory)
+      rescue Errno::EEXIST
+        FileUtils.rm Base.storage_directory
+        make_base_directory
+      end            
     end
     def make_template_directory(dir=nil)
       path = dir ? ::File.join(Base.tmp_path, Base.template_directory, ::File.basename(dir)) : ::File.join(Base.tmp_path, Base.template_directory)
-      FileUtils.mkdir_p path unless ::File.directory?(path)
+      begin
+        FileUtils.mkdir_p path unless ::File.directory?(path)
+      rescue Errno::EEXIST
+        FileUtils.rm path
+        make_template_directory(dir)
+      end      
       path
     end
     def clear_base_directory
