@@ -13,11 +13,13 @@ module PoolParty
       def binary_directory
         "#{::File.dirname(__FILE__)}/../../../bin"
       end
+      # These are the locations the spec file can be before the cloud
+      # aborts because it cannot load the cloud
       def get_existing_spec_location
         [                            
             "#{Base.remote_storage_path}/#{Base.default_specfile_name}", 
-            ENV["POOL_SPEC"],
             "#{Base.default_specfile_name}",
+            ENV["POOL_SPEC"],            
             "#{Base.storage_directory}/#{Base.default_specfile_name}",
             "#{Base.default_project_specfile_name}"
         ].reject {|a| a.nil?}.reject do |f|
