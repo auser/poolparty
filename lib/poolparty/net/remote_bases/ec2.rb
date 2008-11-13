@@ -1,5 +1,6 @@
 begin
   require 'EC2'
+  require "date"
   class String
     def convert_from_ec2_to_ip
       self.gsub(/.compute-1.amazonaws.com*/, '').gsub(/ec2-/, '').gsub(/-/, '.')
@@ -44,13 +45,14 @@ begin
           h.merge!({
             :name => @name,
             :hostname => h[:ip],
-            :ip => h[:ip].convert_from_ec2_to_ip
+            :ip => h[:ip].convert_from_ec2_to_ip,
+            :launching_time => DateTime.parse(h[:launching_time])
           })
         end
       end
       # Get the s3 description for the response in a hash format
       def get_instances_description
-        EC2ResponseObject.get_descriptions(ec2.describe_instances).sort_by {|a| a[:launching_time]}
+        EC2ResponseObject.get_descriptions(ec2.describe_instances).sort_by {|a| a[:launching_time] }
       end
 
       def after_launch_master(instance=nil)
@@ -146,14 +148,14 @@ begin
       end
       rs
     end
-    def self.get_hash_from_response(resp)
+    def self.get_hash_from_response(resp)      
       begin
         {
           :instance_id => resp.instanceId,
           :name => resp.instanceId, 
           :ip => resp.dnsName || "not-assigned",
           :status => resp.instanceState.name,
-          :launching_time => resp.launchTime,
+          :launching_time => DateTime.strptime(resp.launchTime),
           :keypair => resp.keyName
         }        
       rescue Exception => e
