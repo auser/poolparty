@@ -12,7 +12,7 @@ module PoolParty
     default_options({
       :environment => "production",
       :user => "root", # This should change here
-      :base_keypair_path => "~/.ec2",
+      :base_keypair_path => "#{ENV["HOME"]}/.ec2",
       :tmp_path => "/tmp/poolparty",
       :remote_storage_path => "/var/poolparty",
       :remote_gem_path => "/var/poolparty/gems",
