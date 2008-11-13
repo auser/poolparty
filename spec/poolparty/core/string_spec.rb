@@ -147,6 +147,9 @@ listen web_proxy 127.0.0.1:3000
     it "should remove the periods from the string" do
       "xnot.org".sanitize.should == "xnotorg"
     end
+    it "should be able to turn a string into a dir safe name" do
+      "Rails app/".dir_safe.should == "rails_app/"
+    end
   end
   describe "nice_runnable" do
     before(:each) do

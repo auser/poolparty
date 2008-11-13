@@ -27,6 +27,9 @@ class String
   def sanitize
     self.gsub(/[ \.\/\-]*/, '')
   end
+  def dir_safe
+    self.downcase.gsub(/[ ]/, '_')
+  end
   def nice_runnable(quite=true)
     self.split(/ && /).join("\n")
   end
