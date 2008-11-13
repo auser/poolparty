@@ -333,6 +333,7 @@ files:
 - lib/poolparty/net/remote_instance.rb
 - lib/poolparty/net/remoter.rb
 - lib/poolparty/net/remoter_base.rb
+- lib/poolparty/plugins/deploydirectory.rb
 - lib/poolparty/plugins/git.rb
 - lib/poolparty/plugins/line.rb
 - lib/poolparty/plugins/runit.rb
@@ -421,6 +422,7 @@ files:
 - spec/poolparty/net/remote_spec.rb
 - spec/poolparty/net/remoter_base_spec.rb
 - spec/poolparty/net/remoter_spec.rb
+- spec/poolparty/plugins/deploydirectory_spec.rb
 - spec/poolparty/plugins/git_spec.rb
 - spec/poolparty/plugins/line_spec.rb
 - spec/poolparty/plugins/svn_spec.rb
