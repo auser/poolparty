@@ -6,8 +6,9 @@ module PoolParty
         # Build hostsfile
         # TODO: COME BACK AND CLEAN THIS UP
         (self.respond_to?(:list_of_running_instances) ? self : parent).list_of_running_instances.each do |ri|
-          has_host({:name => "#{ri.name}", :ip => ri.ip })
-        end        
+          has_host({:name => "gen_#{ri.name}", :ip => ri.ip, :alias => "#{ri.name}" })
+        end
+        has_host({:alias => "$hostname", :name => "$hostname", :ip => "localhost"})
         
         has_package(:name => "erlang")
         has_package(:name => "erlang-dev")

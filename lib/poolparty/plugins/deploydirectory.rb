@@ -5,7 +5,10 @@ module PoolParty
       
       def loaded(opts={}, parent=self)
         package_directory
-        unpack_directory
+        execute_on_master do
+          unpack_directory
+        end
+        has_rsync_mirror(:dir => cwd)
       end
             
       def package_directory
