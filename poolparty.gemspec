@@ -336,6 +336,7 @@ files:
 - lib/poolparty/plugins/deploydirectory.rb
 - lib/poolparty/plugins/git.rb
 - lib/poolparty/plugins/line.rb
+- lib/poolparty/plugins/rsyncmirror.rb
 - lib/poolparty/plugins/runit.rb
 - lib/poolparty/plugins/svn.rb
 - lib/poolparty/pool/base.rb
