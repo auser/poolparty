@@ -61,9 +61,10 @@ module PoolParty
     def make_template_directory(dir=nil)
       path = dir ? ::File.join(Base.tmp_path, Base.template_directory, ::File.basename(dir)) : ::File.join(Base.tmp_path, Base.template_directory)
       begin
-        FileUtils.mkdir_p path unless ::File.directory?(path)
+        make_base_directory
+        FileUtils.mkdir path unless ::File.directory?(path)
       rescue Errno::EEXIST
-        FileUtils.rm path
+        FileUtils.rm path if ::File.exists?(path)
         make_template_directory(dir)
       end      
       path

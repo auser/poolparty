@@ -43,7 +43,7 @@ module PoolParty
       # If the master is not in the hosts file, then add it to the hosts file
       def create_local_hosts_entry
         <<-EOS
-if [ -z \"$(grep -v '#' /etc/hosts | grep 'puppet')" ]; then echo '#{@master_ip}           puppet master' >> /etc/hosts; fi
+if [ -z \"$(grep -v '#' /etc/hosts | grep 'puppet')" ]; then echo '#{@master_ip}           puppet master localhost' >> /etc/hosts; fi
         EOS
       end
 
