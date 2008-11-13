@@ -121,7 +121,7 @@ def remove_stub_instance_from(o, num)
   # o.stub!(:remote_instances_list).once.and_return ris
 end
 def stub_instance(num=1, status="running", keypair="fake_keypair")
-  {:name => "node#{num}", :ip => "192.168.0.#{num}", :status => "#{status}", :launching_time => num.minutes.ago, :keypair => "#{keypair}"}
+  {:name => "node#{num}", :ip => "192.168.0.#{num}", :status => "#{status}", :launching_time => num.minutes.ago.to_s, :keypair => "#{keypair}"}
 end
 def drop_pending_instances_for(o)
   puts "hi"
