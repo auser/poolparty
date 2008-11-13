@@ -73,7 +73,7 @@ describe "CloudResourcer" do
         @tc.respond_to?(:keypair_path).should == true
       end
       it "should set the keypair to the Base.keypair_path" do      
-        @tc.keypair_path.should =~ /#{File.expand_path(Base.base_keypair_path)}/
+        @tc.keypair_path.should =~ /\.ec2\/rangerbob/
       end
       it "should set the keypair to have the keypair set" do
         @tc.keypair.should =~ /rangerbob/

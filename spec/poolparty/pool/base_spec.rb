@@ -11,8 +11,8 @@ describe "Base" do
   it "should set the user to root" do
     Base.user.should == "root"
   end
-  it "should set the base keypair path to ~/.ec2" do
-    Base.base_keypair_path.should == "~/.ec2"
+  it "should set the base keypair path to $HOME/.ec2" do
+    Base.base_keypair_path.should =~ /\.ec2/
   end
   it "should set the storage_directory to the tmp directory of the current working directory" do
     Base.storage_directory.should =~ /tmp/
