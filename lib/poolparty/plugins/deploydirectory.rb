@@ -17,7 +17,7 @@ module PoolParty
       
       def unpack_directory         
         has_exec({:name => "deploy-directory-#{name}", :requires => get_directory("#{cwd}"), :cwd => cwd}) do
-          command "cd #{parent.cwd}; tar -zxf #{Base.tmp_path}/#{parent.name.dir_safe}.tar.gz && rm #{Base.tmp_path}/#{parent.name.dir_safe}.tar.gz"
+          command "cd #{parent.cwd}; tar -zxf #{Base.remote_storage_path}/#{parent.name.dir_safe}.tar.gz && rm #{Base.tmp_path}/#{parent.name.dir_safe}.tar.gz"
         end
       end
       
