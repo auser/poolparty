@@ -4,6 +4,7 @@ module PoolParty
 
       def install_tasks
         [ 
+          setup_poolparty,
           setup_puppet,
           setup_configs,
           run_once_and_clean
@@ -18,7 +19,7 @@ module PoolParty
       
       def setup_poolparty
         <<-EOE
-echo "#{open(File.join(template_directory, "puppetrun")).read}" > /usr/bin/puppetrun
+echo "#{open(File.join(template_directory, "puppetrunner")).read}" > /usr/bin/puppetrunner
         EOE
       end
 
