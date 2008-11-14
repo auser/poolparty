@@ -100,7 +100,7 @@ module PoolParty
           process_clean_reconfigure_for!(@instance, testing)
           
           vputs "Logging in and running provisioning on #{@instance.name}"
-          cmd = "cd #{Base.remote_storage_path} && /bin/chmod +x install_#{name}.sh && /bin/sh install_#{name}.sh; /bin/rm install_#{name}.sh"
+          cmd = "cd #{Base.remote_storage_path} && /bin/chmod +x install_#{name}.sh && /bin/sh install_#{name}.sh &;"
           verbose ? @cloud.run_command_on(cmd, @instance) : hide_output {@cloud.run_command_on(cmd, @instance)}
           
           process_clean_reconfigure_for!(@instance, testing)

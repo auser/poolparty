@@ -51,7 +51,7 @@ module PoolParty
         # execute_on_node do
         has_cron(:name => "puppetd runner", :user => Base.user, :minute => "*/5") do
           requires get_gempackage("poolparty")
-          command(PoolParty::Remote::RemoteInstance.puppet_rerun_commad)
+          command "/usr/bin/puppetrun"
         end
         # end
         
