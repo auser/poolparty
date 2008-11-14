@@ -48,8 +48,14 @@ module PoolParty
         # store_block(&block)
         set_parent(parent) if parent
         self.instance_eval &block if block
+        
+        setup_defaults
+      end
+      
+      def setup_defaults
         # this can be overridden in the spec, but ec2 is the default
         self.using :ec2
+        plugin_directory
       end
                               
       # Keypairs
