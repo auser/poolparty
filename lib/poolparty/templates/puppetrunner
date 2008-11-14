@@ -2,11 +2,11 @@
 
 . /etc/profile
 # rm -rf /etc/puppet/ssl
-if [ `hostname` -eq "master"];
+if [ $(hostname) -eq "master"];
   then
   /bin/sh puppetrerun
   else
-  if [ `/usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master` ];
+  if [ $(/usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master) ];
     then
     echo '';
     else

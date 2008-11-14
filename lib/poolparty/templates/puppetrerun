@@ -1,18 +1,16 @@
 #!/usr/bin/env bash
 
 . /etc/profile
-# rm -rf /etc/puppet/ssl
-if [ `/usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master` ];
+if [ $(/usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master) ];
   then
   echo '';
   else
-  ps aux | grep puppetmaster | awk '{print $2}' | xargs kill;
-  /etc/init.d/puppetmaster stop; rm -rf /etc/puppet/ssl; /etc/init.d/puppetmaster start
-  if [ `/usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master` ];
+  ps aux | grep puppetmaster | awk '{print $2}' | xargs kill; /etc/init.d/puppetmaster stop; rm -rf /etc/puppet/ssl; /etc/init.d/puppetmaster start
+  if [ $(/usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master) ];
     then
     echo '';
     else
     # Try again
-    /usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master
+    /usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master 2>&1 
   fi
 fi
