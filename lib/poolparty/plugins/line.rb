@@ -26,11 +26,12 @@ module PoolParty
         EOE
       end
       
-      def delete_lines_from(file="", pattern=//)
+      def delete_lines_from(file="", pattern=//, opts={})
         call_function <<-EOE
         delete_lines {
           '#{file}' :
             file => '#{file}',
+            #{opts.flush_out("\t", ",")}
             pattern => '#{pattern}'
         }
         EOE

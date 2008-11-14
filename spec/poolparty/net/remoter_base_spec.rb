@@ -54,7 +54,7 @@ describe "RemoterBase" do
           @tr.list_of_instances("fake_keypair").map {|a| a[:name] }.should == ["master", "node1", "node2", "node3"]
         end
         it "should be able to grab all the blist keypairs" do
-          @tr.list_of_instances("blist").map {|a| a[:name] }.should == ["master"]
+          @tr.list_of_instances("blist").map {|a| a[:name] }.should == ["node4"]
         end
       end
       describe "get by name" do
