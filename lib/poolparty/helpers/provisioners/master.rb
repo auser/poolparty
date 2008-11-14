@@ -33,6 +33,7 @@ module PoolParty
 
       def configure_tasks
         [
+          create_local_node,
           move_templates,
           create_poolparty_manifest,
           restart_puppetd
@@ -126,7 +127,7 @@ wget http://rubyforge.org/frs/download.php/43666/amazon-ec2-0.3.1.gem -O amazon-
         <<-EOS
 . /etc/profile
 /etc/init.d/puppetmaster stop #{unix_hide_string}
-# ps aux | grep puppetmaster | awk '{print $2}' | xargs kill #{unix_hide_string} # just in case
+ps aux | grep puppetmaster | awk '{print $2}' | xargs kill #{unix_hide_string} # just in case
 rm -rf /etc/puppet/ssl
 # Start it back up
 puppetmasterd --verbose
@@ -173,8 +174,9 @@ cp #{Base.remote_storage_path}/poolparty.pp /etc/puppet/manifests/classes/poolpa
       end
       
       def restart_puppetd
+        terminate_string = "ps aux | grep puppetmaster | awk '{print $2}' | xargs kill #{unix_hide_string}; puppetmasterd --verbose"
         <<-EOS
-if [ -z '`ps aux | grep puppetmaster`' ]; then echo puppetmasterd --verbose;  fi
+if [ -z '`ps aux | grep puppetmaster`' ]; then #{terminate_string};  fi
 . /etc/profile && /usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master #{unix_hide_string}
         EOS
       end
