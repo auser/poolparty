@@ -145,9 +145,9 @@ puppetmasterd --verbose
       
       def run_first_time
 <<-EOE
-echo "#{open(File.join(template_directory, "puppetrerun")).read}" > /usr/bin/puppetrun
-chmod +x /usr/bin/puppetrun
-/bin/sh /usr/bin/puppetrun
+echo "#{open(File.join(template_directory, "puppetrerun")).read}" > /usr/bin/puppetrerun
+chmod +x /usr/bin/puppetrerun
+/bin/sh /usr/bin/puppetrerun
 EOE
       end
 
