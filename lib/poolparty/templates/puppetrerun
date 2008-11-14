@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 
 . /etc/profile
-if [ $(/usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master) ];
+if [ -z "$(/usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master)" ];
   then
   echo '';
   else
   ps aux | grep puppetmaster | awk '{print $2}' | xargs kill
-  /etc/init.d/puppetmaster stop; rm -rf /etc/puppet/ssl; /etc/init.d/puppetmaster start
-  if [ $(/usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master) ];
+  /etc/init.d/puppetmaster stop; rm -rf /etc/puppet/ssl; /etc/init.d/puppetmaster start; echo "Master launched"
+  if [ -z "$(/usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master)" ];
     then
     echo '';
     else
