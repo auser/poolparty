@@ -69,7 +69,7 @@ module PoolParty
       end
       # Commands for the servers
       def self.puppet_runner_command
-        ". /etc/profile && puppetrun"
+        ". /etc/profile && puppetrunner"
       end
       def self.puppet_master_rerun_command
         ". /etc/profile && puppetrerun"
