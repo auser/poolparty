@@ -30,6 +30,9 @@ class String
   def dir_safe
     self.downcase.gsub(/[ ]/, '_')
   end
+  def safe_quote
+    self.gsub(/[']/, '\\\\\'')
+  end
   def nice_runnable(quite=true)
     self.split(/ && /).join("\n")
   end

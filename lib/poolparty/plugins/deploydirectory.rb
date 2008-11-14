@@ -4,25 +4,32 @@ module PoolParty
     virtual_resource(:deploydirectory) do
       
       def loaded(opts={}, parent=self)
-        package_directory
-        execute_on_master do
-          unpack_directory
-        end
-        has_rsync_mirror(:dir => cwd)
+        package_directory        
+        unpack_directory
+        sync_directories
       end
             
       def package_directory
         path = ::File.join( Base.tmp_path, "#{::File.basename(from_dir)}.tar.gz" )
         # cd /Users/auser/Sites/work/citrusbyte/internal/gems/pool-party/poolparty/spec/poolparty/plugins/ && tar -czf plugins.tar.gz . && mv plugins.tar.gz /tmp/poolparty && cd /tmp/poolparty
-        cmd = "cd #{::File.expand_path(from_dir)} && tar -czf #{name.dir_safe}.tar.gz . && mv #{name.dir_safe}.tar.gz #{Base.tmp_path}"
+        archive_name = "#{name.dir_safe}.tar.gz"
+        cmd = "cd #{::File.expand_path(from_dir)} && tar -czf #{archive_name} . && mv #{archive_name} #{Base.tmp_path}"
         `#{cmd}` unless testing
       end
       
-      def unpack_directory         
-        has_exec({:name => "deploy-directory-#{name}", :requires => get_directory("#{cwd}"), :cwd => cwd}) do
-          #  && rm #{Base.tmp_path}/#{parent.name.dir_safe}.tar.gz
-          command "cd #{parent.cwd}; tar -zxf #{Base.remote_storage_path}/#{parent.name.dir_safe}.tar.gz"
+      def unpack_directory
+        execute_on_master do
+          has_exec({:name => "deploy-directory-#{name}", :requires => get_directory("#{cwd}"), :cwd => cwd}) do
+            #  && rm #{Base.tmp_path}/#{parent.name.dir_safe}.tar.gz
+            command "cd #{parent.cwd}; tar -zxf #{Base.remote_storage_path}/#{parent.name.dir_safe}.tar.gz"
+          end
         end
+      end
+      
+      def sync_directories
+        # execute_on_master do
+          has_rsyncmirror(:dir => cwd, :name => "deploydirectory-#{name}")
+        # end
       end
       
       def from(dir)

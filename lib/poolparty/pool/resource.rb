@@ -150,6 +150,14 @@ module PoolParty
         self.class.custom_functions << str
       end
       
+      def cloud
+        @p = parent
+        while !@p.is_a?(PoolParty::Cloud)
+          @p = @p.parent
+        end
+        @p
+      end
+      
       def self.custom_functions_to_string(pre="")
         returning Array.new do |output|
           PoolParty::Resources.available_custom_resources.each do |resource|

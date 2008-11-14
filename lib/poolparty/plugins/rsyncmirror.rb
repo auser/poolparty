@@ -1,14 +1,11 @@
 module PoolParty    
-  class Git
+  class Rsyncmirror
         
     virtual_resource(:rsyncmirror) do
       
       def loaded(opts={}, parent=self)
-        has_rsync_mirror(opts, parent)
-      end
-            
-      def has_rsync_mirror(opts={}, parent=self)
-        has_exec(:command => "rsync -aRqv --no-implied-dirs --delete --delete-excluded '#{Base.user}@master:#{opts[:dir]}' '#{opts[:dir]}'", :name => "rsync-#{name}")
+        @parent = parent
+        has_exec(opts.merge({:command => "#{cloud.remote_rsync_command} --no-implied-dirs --delete-excluded #{Base.user}@master:#{dir}/ #{dir}/".safe_quote, :name => "rsync-#{name}"}))
       end
             
       # Since git is not a native type, we have to say which core resource

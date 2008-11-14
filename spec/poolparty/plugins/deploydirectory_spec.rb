@@ -11,7 +11,11 @@ describe "Remote Instance" do
   end
   describe "wrapped" do
     before(:each) do
-      @tc = TestClass.new
+      @tc = TestClass.new      
+      @cloud = MyOpenStruct.new(:keypair => "keys", :remote_keypair_path => "/keypair_path", :name => "cloudcloud")
+      @cloud.stub!(:is_a?).with(PoolParty::Cloud::Cloud).and_return true
+      @tc.stub!(:parent).and_return @cloud
+      
       @options = {:name => "deploydirectory", :from => ::File.dirname(__FILE__), :to => "/var/www/deploydirectory", :testing => false}
     end
     it "should be a string" do
