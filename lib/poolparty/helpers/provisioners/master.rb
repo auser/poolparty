@@ -194,8 +194,7 @@ cp #{Base.remote_storage_path}/poolparty.pp /etc/puppet/manifests/classes/poolpa
         terminate_string = "ps aux | grep puppetmaster | awk '{print $2}' | xargs kill #{unix_hide_string}; puppetmasterd --verbose"
         <<-EOS
 echo "Running puppet manifest"
-if [ -z '`ps aux | grep puppetmaster`' ]; then #{terminate_string};  fi
-. /etc/profile && /usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master #{unix_hide_string}
+/bin/sh /usr/bin/puppetrerun
         EOS
       end
     end
