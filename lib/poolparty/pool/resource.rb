@@ -18,7 +18,7 @@ module PoolParty
     end
     
     def add_resource(type, opts={}, parent=self, &block)      
-      if in_resources?(type, opts[:name])
+      if in_resources?(type, opts[:name])        
         get_resource(type, opts[:name], parent)
       else
         returning "PoolParty::Resources::#{type.to_s.camelize}".classify.constantize.new(opts, parent, &block) do |o|                    
