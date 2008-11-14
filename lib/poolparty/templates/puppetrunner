@@ -2,7 +2,7 @@
 
 . /etc/profile
 # rm -rf /etc/puppet/ssl
-if [ $(hostname) -eq "master"];
+if [[ $(hostname) -eq "master" ]];
   then
   /bin/sh puppetrerun
   else
