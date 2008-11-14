@@ -26,7 +26,7 @@ module PoolParty
           install_poolparty,
           setup_poolparty,
           create_local_node,        
-          restart_puppetd,
+          run_first_time,
           restart_puppetmaster
         ] << configure_tasks
       end
@@ -43,12 +43,14 @@ module PoolParty
       # If the master is not in the hosts file, then add it to the hosts file
       def create_local_hosts_entry
         <<-EOS
+echo "Creating local host entry"
 if [ -z \"$(grep -v '#' /etc/hosts | grep 'puppet')" ]; then echo '#{@master_ip}           puppet master localhost' >> /etc/hosts; fi
         EOS
       end
 
       def setup_basic_structure
         <<-EOS
+echo "Creating basic structure for poolparty"        
 mkdir -p /etc/puppet/manifests/nodes 
 mkdir -p /etc/puppet/manifests/classes
 echo "import 'nodes/*.pp'" > /etc/puppet/manifests/site.pp
@@ -59,12 +61,14 @@ cp #{Base.remote_storage_path}/namespaceauth.conf /etc/puppet/namespaceauth.conf
 
       def setup_configs
         <<-EOS
+echo "Setting up configuration"        
 echo "#{open(File.join(template_directory, "puppet.conf")).read}" > /etc/puppet/puppet.conf
         EOS
       end
 
       def setup_fileserver
         <<-EOS
+echo "Setting up the master fileserver"
 echo "
 [files]
   path #{Base.remote_storage_path}
@@ -77,12 +81,14 @@ mkdir -p /etc/poolparty
       # Change this eventually for better security supportsetup_fileserver
       def setup_autosigning
         <<-EOS
+echo "Creating accessibility for the nodes"        
 echo "*" > /etc/puppet/autosign.conf
         EOS
       end
       
       def setup_poolparty
         <<-EOS
+echo "Setting the poolparty configuration"        
 cp #{Base.remote_storage_path}/#{Base.key_file_locations.first} "#{Base.base_config_directory}/.ppkeys"
 cp #{Base.remote_storage_path}/#{Base.default_specfile_name} #{Base.base_config_directory}/#{Base.default_specfile_name}
         EOS
@@ -94,6 +100,7 @@ cp #{Base.remote_storage_path}/#{Base.default_specfile_name} #{Base.base_config_
       
       def install_poolparty
         <<-EOE
+echo "Installing poolparty"
 #{installer_for("ruby rubygems")}
 cd /var/poolparty
 wget http://rubyforge.org/frs/download.php/44731/logging-0.9.4.gem -O logging.gem 2>&1
@@ -125,6 +132,7 @@ wget http://rubyforge.org/frs/download.php/43666/amazon-ec2-0.3.1.gem -O amazon-
       # /etc/init.d/puppetmaster stop; rm -rf /etc/puppet/ssl; /etc/init.d/puppetmaster start
       def restart_puppetmaster
         <<-EOS
+echo "(Re)starting poolparty"
 . /etc/profile
 /etc/init.d/puppetmaster stop #{unix_hide_string}
 ps aux | grep puppetmaster | awk '{print $2}' | xargs kill #{unix_hide_string} # just in case
@@ -133,6 +141,14 @@ rm -rf /etc/puppet/ssl
 puppetmasterd --verbose
 # /etc/init.d/puppetmaster start #{unix_hide_string}
         EOS
+      end
+      
+      def run_first_time
+<<-EOE
+echo "#{open(File.join(template_directory, "puppetrerun")).read}" > /usr/bin/puppetrun
+chmod +x /usr/bin/puppetrun
+/bin/sh /usr/bin/puppetrun
+EOE
       end
 
       # TODO:
@@ -153,6 +169,7 @@ node "#{ri.name}" inherits default {}
 
       def move_templates
         <<-EOS
+echo "Moving templates into place"
 mkdir -p #{Base.template_path}
 cp -R #{Base.remote_storage_path}/#{Base.template_directory}/* #{Base.template_path}
         EOS
@@ -160,6 +177,7 @@ cp -R #{Base.remote_storage_path}/#{Base.template_directory}/* #{Base.template_p
       
       def create_poolparty_manifest
         <<-EOS
+echo "Creating the manifest"
 cp #{Base.remote_storage_path}/poolparty.pp /etc/puppet/manifests/classes/poolparty.pp
 #{copy_ssh_app}
         EOS
@@ -176,6 +194,7 @@ cp #{Base.remote_storage_path}/poolparty.pp /etc/puppet/manifests/classes/poolpa
       def restart_puppetd
         terminate_string = "ps aux | grep puppetmaster | awk '{print $2}' | xargs kill #{unix_hide_string}; puppetmasterd --verbose"
         <<-EOS
+echo "Running puppet manifest"
 if [ -z '`ps aux | grep puppetmaster`' ]; then #{terminate_string};  fi
 . /etc/profile && /usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master #{unix_hide_string}
         EOS
