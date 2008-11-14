@@ -49,13 +49,14 @@ begin
             :name => @name,
             :hostname => h[:ip],
             :ip => h[:ip].convert_from_ec2_to_ip,
-            :launching_time => (h[:launching_time].parse_datetime)
+            :index => i,
+            :launching_time => (h[:launching_time])
           })
-        end
+        end.sort_by {|a| a[:index] }
       end
       # Get the s3 description for the response in a hash format
       def get_instances_description
-        EC2ResponseObject.get_descriptions(ec2.describe_instances).sort_by {|a| a[:launching_time] }
+        EC2ResponseObject.get_descriptions(ec2.describe_instances)
       end
 
       def after_launch_master(instance=nil)
@@ -158,7 +159,7 @@ begin
           :name => resp.instanceId, 
           :ip => resp.dnsName || "not-assigned",
           :status => resp.instanceState.name,
-          :launching_time => resp.launchTime,
+          :launching_time => resp.launchTime.parse_datetime,
           :keypair => resp.keyName
         }        
       rescue Exception => e
