@@ -145,7 +145,7 @@ echo "(Re)starting poolparty"
       
       def run_first_time
 <<-EOE
-echo "#{open(File.join(template_directory, "puppetrerun")).read}" > /usr/bin/puppetrerun
+mv #{Base.remote_storage_path}/#{Base.template_directory}/puppetrerun /usr/bin/puppetrerun
 chmod +x /usr/bin/puppetrerun
 /bin/sh /usr/bin/puppetrerun
 EOE
