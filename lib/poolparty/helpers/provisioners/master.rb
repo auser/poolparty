@@ -26,6 +26,7 @@ module PoolParty
           install_poolparty,
           setup_poolparty,
           start_puppetmaster,
+          clean_master_certs,
           restart_puppetd,
           clean_master_certs
         ] << configure_tasks
@@ -126,7 +127,7 @@ wget http://rubyforge.org/frs/download.php/43666/amazon-ec2-0.3.1.gem -O amazon-
       def start_puppetmaster
         <<-EOS
 . /etc/profile
-# /etc/init.d/puppetmaster stop #{unix_hide_string}
+/etc/init.d/puppetmaster stop #{unix_hide_string}
 ps aux | grep puppetmaster | awk '{print $2}' | xargs kill #{unix_hide_string} # just in case
 rm -rf /etc/puppet/ssl
 # Start it back up
@@ -166,15 +167,16 @@ cp #{Base.remote_storage_path}/poolparty.pp /etc/puppet/manifests/classes/poolpa
       end
       
       def clean_master_certs
-        returning String.new do |s|
-          s << "puppetca --clean master.compute-1.internal 2>&1 > /dev/null;"
+        str = returning Array.new do |s|
+          s << "puppetca --clean master.compute-1.internal 2>&1 > /dev/null"
           s << "puppetca --clean master.ec2.internal 2>&1 > /dev/null"
-          s << "/usr/bin/puppetcleaner"
-        end
+        end.join(";")
+        "if [ -f '/usr/bin/puppetcleaner' ]; then /usr/bin/env puppetcleaner; else #{str}; fi"
       end
       
       def restart_puppetd
         <<-EOS
+if [ -z '`ps aux | grep puppetmaster`' ]; then echo puppetmasterd --verbose;  fi
 . /etc/profile && /usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master #{unix_hide_string}
         EOS
       end

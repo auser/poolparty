@@ -306,7 +306,6 @@ aptitude update -y #{unix_hide_string} <<heredoc
 Y
 
 heredoc
-aptitude autoclean #{unix_hide_string} 
 fi
           "
         else

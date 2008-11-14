@@ -79,19 +79,29 @@ module PoolParty
         key = keyp ? keyp : keypair
         unless @describe_instances
           tmpInstanceList = describe_instances.select {|a| key ? a[:keypair] == key : true }
-          has_master = tmpInstanceList.collect {|a| a[:name] }.include?("master")
+          has_master = !tmpInstanceList.select {|a| a[:name] == "master" }.empty?
           if has_master
             @describe_instances = tmpInstanceList
-          else            
+          else
             @id = 0
-            @describe_instances = tmpInstanceList.sort_by {|a| a[:status] }.map do |inst|
+            running = select_from_instances_on_status(/running/, tmpInstanceList)
+            pending = select_from_instances_on_status(/pending/, tmpInstanceList)
+            terminated = select_from_instances_on_status(/shutting/, tmpInstanceList)
+            
+            running = running.map do |inst|
               inst[:name] = (@id == 0 ? "master" : "node#{@id}")
               @id += 1
               inst
-            end
+            end.sort_by {|a| a[:index] }
+            
+            @describe_instances = [running, pending, terminated].flatten
           end
         end
         @describe_instances
+      end
+      # Select the instances based on their status
+      def select_from_instances_on_status(status=/running/, list=[])
+        list.select {|a| a[:status] =~ status}
       end
       # Instances
       # Get the master from the cloud
