@@ -21,7 +21,8 @@ module PoolParty
         execute_on_master do
           has_exec({:name => "deploy-directory-#{name}", :requires => get_directory("#{cwd}"), :cwd => cwd}) do
             #  && rm #{Base.tmp_path}/#{parent.name.dir_safe}.tar.gz
-            command "cd #{parent.cwd}; tar -zxf #{Base.remote_storage_path}/#{parent.name.dir_safe}.tar.gz"
+            command "cd #{parent.cwd}; tar -zxf #{Base.remote_storage_path}/#{parent.name.dir_safe}.tar.gz; rm #{Base.remote_storage_path}/#{parent.name.dir_safe}.tar.gz"
+            onlyif "test -f #{Base.remote_storage_path}/#{parent.name.dir_safe}.tar.gz"
           end
         end
       end

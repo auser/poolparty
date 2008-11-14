@@ -43,6 +43,9 @@ describe "Remote Instance" do
       it "should not have the to in the to_string" do
         @tc.resource(:deploydirectory).first.to_string.should_not =~ /to /
       end
+      it "should have onlyif in the to_string" do
+        @tc.resource(:deploydirectory).first.to_string.should =~ /onlyif/
+      end
     end
   end
 end

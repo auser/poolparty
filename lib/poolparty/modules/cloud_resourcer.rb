@@ -3,6 +3,11 @@ require "ftools"
 module PoolParty
   module CloudResourcer
     
+    def plugin_directory(*args)
+      args = ["/plugins"] if args.empty?
+      args.each {|arg| Dir["#{arg}/*/*.rb"].each {|f| require f rescue "" }}
+    end
+    
     # Store block
     def store_block(&block)
       @store_block ||= block
