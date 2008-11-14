@@ -191,7 +191,6 @@ cp #{Base.remote_storage_path}/poolparty.pp /etc/puppet/manifests/classes/poolpa
       end
       
       def restart_puppetd
-        terminate_string = "ps aux | grep puppetmaster | awk '{print $2}' | xargs kill #{unix_hide_string}; puppetmasterd --verbose"
         <<-EOS
 echo "Running puppet manifest"
 /bin/sh /usr/bin/puppetrerun
