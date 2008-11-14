@@ -137,8 +137,8 @@ echo "(Re)starting poolparty"
 ps aux | grep puppetmaster | awk '{print $2}' | xargs kill #{unix_hide_string} # just in case
 rm -rf /etc/puppet/ssl
 # Start it back up
-puppetmasterd --verbose
-# /etc/init.d/puppetmaster start #{unix_hide_string}
+# puppetmasterd --verbose
+/etc/init.d/puppetmaster start
         EOS
       end
       
