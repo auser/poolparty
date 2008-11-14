@@ -37,7 +37,7 @@ module PoolParty
         setup_defaults
         
         @name = name
-        instance_eval &block if block        
+        instance_eval &block if block
       end
       
       def setup_defaults
