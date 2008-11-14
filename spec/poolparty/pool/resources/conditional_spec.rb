@@ -9,7 +9,7 @@ describe "Conditional" do
   describe "wrapped" do
     before(:each) do
       @cloud = cloud :conditional_cloud_spec do
-          execute_if("$hostname", "==", "'master'", self) do
+          execute_if("$hostname", "==", "'master'", {}, self) do
             has_file({:name => "/etc/apache2/puppetmaster2.conf"})
           end
       end
@@ -29,6 +29,18 @@ describe "Conditional" do
     end
     it "should have the parent as the cloud" do
       @cond.parent.should == @cloud
+    end
+    describe "helpers" do
+      it "should have execute_on_master with the string $hostname == 'master'" do
+        str = execute_on_master do
+          has_file(:name => "/etc/vars")
+        end.to_string.should =~ /\$hostname==master/
+      end
+      it "should have execute_on_node with the string $hostname != 'master'" do
+        str = execute_on_node do
+          has_file(:name => "/etc/vars")
+        end.to_string.should =~ /\$hostname!=master/
+      end
     end
     describe "to_string" do
       before(:each) do
