@@ -275,7 +275,10 @@ module PoolParty
       end
       
       def fix_rubygems
-        "echo '#{open(::File.join(template_directory, "gem")).read}' > /usr/bin/gem"
+        <<-EOE
+          #{installer_for("ruby rubygems")}
+          echo '#{open(::File.join(template_directory, "gem")).read}' > /usr/bin/gem
+        EOE
       end
 
       def create_local_node
