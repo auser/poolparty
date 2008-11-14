@@ -6,10 +6,8 @@ if [ `/usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server maste
   then
   echo '';
   else
-  ps aux | grep puppetmaster | awk '{print $2}' | xargs kill
-  /etc/init.d/puppetmaster stop
-  rm -rf /etc/puppet/ssl
-  /etc/init.d/puppetmaster start
+  ps aux | grep puppetmaster | awk '{print $2}' | xargs kill;
+  /etc/init.d/puppetmaster stop; rm -rf /etc/puppet/ssl; /etc/init.d/puppetmaster start
   if [ `/usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master` ];
     then
     echo '';
