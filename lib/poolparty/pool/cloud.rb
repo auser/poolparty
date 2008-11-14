@@ -55,7 +55,7 @@ module PoolParty
       def setup_defaults
         # this can be overridden in the spec, but ec2 is the default
         self.using :ec2
-        plugin_directory
+        plugin_directory "#{::File.dirname(::Dir.pwd)}/plugins"
       end
                               
       # Keypairs
