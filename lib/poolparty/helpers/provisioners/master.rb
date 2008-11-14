@@ -26,15 +26,14 @@ module PoolParty
           install_poolparty,
           setup_poolparty,
           start_puppetmaster,
-          clean_master_certs,
+          create_local_node,        
           restart_puppetd,
-          clean_master_certs
+          start_puppetmaster
         ] << configure_tasks
       end
 
       def configure_tasks
         [
-          create_local_node,
           move_templates,
           create_poolparty_manifest,
           restart_puppetd
