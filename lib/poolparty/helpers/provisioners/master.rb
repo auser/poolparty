@@ -25,10 +25,9 @@ module PoolParty
           setup_autosigning,
           install_poolparty,
           setup_poolparty,
-          start_puppetmaster,
           create_local_node,        
           restart_puppetd,
-          start_puppetmaster
+          restart_puppetmaster
         ] << configure_tasks
       end
 
@@ -123,7 +122,7 @@ wget http://rubyforge.org/frs/download.php/43666/amazon-ec2-0.3.1.gem -O amazon-
       
       # ps aux | grep puppetmasterd | awk '{print $2}' | xargs kill
       # /etc/init.d/puppetmaster stop; rm -rf /etc/puppet/ssl; /etc/init.d/puppetmaster start
-      def start_puppetmaster
+      def restart_puppetmaster
         <<-EOS
 . /etc/profile
 /etc/init.d/puppetmaster stop #{unix_hide_string}
