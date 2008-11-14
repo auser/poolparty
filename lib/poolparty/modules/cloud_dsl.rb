@@ -1,6 +1,11 @@
 module PoolParty
   module CloudDsl
     
+    def plugin_directory(*args)
+      args = ["/plugins"] if args.empty?
+      args.each {|arg| Dir["#{arg}/*/*.rb"].each {|f| require f rescue "" }}
+    end
+    
     def mount_ebs_volume_at(id="", loc="/data")
       ebs_volume_id id
       ebs_volume_mount_point loc

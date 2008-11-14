@@ -34,13 +34,14 @@ module PoolParty
       })
       
       def initialize(name,&block)
+        setup_defaults
+        
         @name = name
-        instance_eval &block if block
+        instance_eval &block if block        
       end
       
-      def plugin_directory(*args)
-        args = ["/plugins"] if args.empty?
-        args.each {|arg| Dir["#{arg}/*/*.rb"].each {|f| require f rescue "" }}
+      def setup_defaults
+        plugin_directory "#{::Dir.pwd}/plugins" 
       end
             
       # This is where the entire process starts
