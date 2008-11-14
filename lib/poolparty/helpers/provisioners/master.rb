@@ -25,9 +25,9 @@ module PoolParty
           setup_autosigning,
           install_poolparty,
           setup_poolparty,
-          create_local_node,        
-          run_first_time,
-          restart_puppetmaster
+          create_local_node,
+          restart_puppetmaster,
+          run_first_time          
         ] << configure_tasks
       end
 
