@@ -98,6 +98,10 @@ module PoolParty
           mode 744
           template File.join(File.dirname(__FILE__), "..", "templates/puppetrerun")
         end
+        has_remotefile(:name => "/usr/bin/puppetrun") do
+          mode 744
+          template File.join(File.dirname(__FILE__), "..", "templates/puppetrun")
+        end
         
         # has_host(:name => "puppet", :ip => (self.respond_to?(:master) ? self : parent).master.ip)
       end
