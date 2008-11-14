@@ -45,7 +45,9 @@ module PoolParty
       
       def initialize(name, parent, &block)
         @name = name
-        # store_block(&block)
+        
+        plugin_directory "#{::Dir.pwd}/plugins"
+        
         set_parent(parent) if parent
         self.instance_eval &block if block
         
@@ -54,8 +56,7 @@ module PoolParty
       
       def setup_defaults
         # this can be overridden in the spec, but ec2 is the default
-        self.using :ec2
-        plugin_directory "#{::File.dirname(::Dir.pwd)}/plugins"
+        self.using :ec2        
       end
                               
       # Keypairs
