@@ -4,13 +4,12 @@
 # rm -rf /etc/puppet/ssl
 if [ `/usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master` ];
   then
-  echo "Run the puppet script";
+  echo '';
   else
-  echo "Did not run the puppet manifest";
   ps aux | grep puppetmaster | awk '{print $2}' | xargs kill
   /etc/init.d/puppetmaster stop
   rm -rf /etc/puppet/ssl
   /etc/init.d/puppetmaster start
-  /bin/sh /usr/bin/puppetrerun
+  /usr/sbin/puppetmasterd --verbose
   /usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master
 fi
