@@ -381,6 +381,7 @@ files:
 - lib/poolparty/templates/puppet.conf
 - lib/poolparty/templates/puppetcleaner
 - lib/poolparty/templates/puppetrerun
+- lib/poolparty/templates/puppetrun
 - lib/poolparty/templates/yaws.conf
 - lib/poolparty/version.rb
 - lib/poolpartycl.rb

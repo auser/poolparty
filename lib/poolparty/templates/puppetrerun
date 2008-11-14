@@ -10,6 +10,11 @@ if [ `/usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server maste
   /etc/init.d/puppetmaster stop
   rm -rf /etc/puppet/ssl
   /etc/init.d/puppetmaster start
-  /usr/sbin/puppetmasterd --verbose
-  /usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master
+  if [ `/usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master` ];
+    then
+    echo '';
+    else
+    # Try again
+    /usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master
+  fi
 fi
