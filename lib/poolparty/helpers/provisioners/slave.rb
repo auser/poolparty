@@ -15,6 +15,12 @@ module PoolParty
           start_puppet
         ]
       end
+      
+      def setup_poolparty
+        <<-EOE
+echo "#{open(File.join(template_directory, "puppetrun")).read}" > /usr/bin/puppetrun
+        EOE
+      end
 
       def setup_puppet
         <<-EOE
@@ -34,7 +40,7 @@ module PoolParty
       def run_once_and_clean
         <<-EOS
 rm -rf /etc/puppet/ssl        
-. /etc/profile && /usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master #{unix_hide_string} &
+/bin/sh /usr/bin/puppetrerun
 rm -rf /etc/puppet/ssl
         EOS
       end
@@ -43,7 +49,7 @@ rm -rf /etc/puppet/ssl
       # puppetd --listen --fqdn #{@instance.name}
       def start_puppet
         <<-EOS
-. /etc/profile && /usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master #{unix_hide_string} &
+/bin/sh /usr/bin/puppetrerun
         EOS
       end
       

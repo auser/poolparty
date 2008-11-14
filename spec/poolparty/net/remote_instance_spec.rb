@@ -70,7 +70,7 @@ describe "Remote Instance" do
       @ri.respond_to?(:puppet_runner_command).should == true
     end
     it "should return the puppet_runner_command with puppetd" do
-      @ri.puppet_runner_command.should =~ /\.\ \/etc\/profile && puppetrerun/
+      @ri.puppet_runner_command.should =~ /puppetrun/
     end
   end
 end
