@@ -51,8 +51,13 @@ module PoolParty
         # execute_on_node do
         has_cron(:name => "puppetd runner", :user => Base.user, :minute => "*/5") do
           requires get_gempackage("poolparty")
-          command "/usr/bin/puppetrun"
+          command "/usr/bin/puppetrunner"
         end
+        has_remotefile(:name => "/usr/bin/puppetrunner") do
+          mode 744
+          template File.join(File.dirname(__FILE__), "..", "templates/puppetrunner")
+        end
+        
         # end
         
         # Cloud panel setup
@@ -92,17 +97,12 @@ module PoolParty
             mode 744
             template File.join(File.dirname(__FILE__), "..", "templates/puppetcleaner")
           end
+          
+          has_remotefile(:name => "/usr/bin/puppetrerun") do
+            mode 744
+            template File.join(File.dirname(__FILE__), "..", "templates/puppetrerun")
+          end
         end        
-        
-        has_remotefile(:name => "/usr/bin/puppetrerun") do
-          mode 744
-          template File.join(File.dirname(__FILE__), "..", "templates/puppetrerun")
-        end
-        has_remotefile(:name => "/usr/bin/puppetrunner") do
-          mode 744
-          template File.join(File.dirname(__FILE__), "..", "templates/puppetrunner")
-        end
-        
         # has_host(:name => "puppet", :ip => (self.respond_to?(:master) ? self : parent).master.ip)
       end
       

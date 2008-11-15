@@ -210,15 +210,14 @@ module PoolParty
         logger.debug "Launching master"
         request_launch_master_instance if list_of_pending_instances.size.zero? && can_start_a_new_instance? && !is_master_running?
         reset!
-        
+        vputs ""
         vputs "Waiting for there to be no pending instances..."
         when_no_pending_instances do
           wait "20.seconds"
           vputs ""
           vputs "Provisioning master..."
-          hide_output { Provisioner.provision_master(self, testing) }
-          hide_output { PoolParty::Provisioner.clear_master_ssl_certs(self) }
-          # PoolParty::Provisioner.provision_master(self, testing)
+          
+          verbose ? Provisioner.provision_master(self, testing) : hide_output { Provisioner.provision_master(self, testing) }
           
           after_launched
         end        
