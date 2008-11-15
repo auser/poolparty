@@ -146,12 +146,13 @@ echo "(Re)starting poolparty"
       
       def run_first_time
 <<-EOE
+echo "Running first time run"
 mv #{Base.remote_storage_path}/#{Base.template_directory}/puppetrerun /usr/bin/puppetrerun
 mv #{Base.remote_storage_path}/#{Base.template_directory}/puppetrunner /usr/bin/puppetrunner
 chmod +x /usr/bin/puppetrerun
-/usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master
-/etc/init.d/puppetmaster stop; rm -rf /etc/puppet/ssl; /etc/init.d/puppetmaster start;echo "Master launched"
 /bin/sh /usr/bin/puppetrerun
+/etc/init.d/puppetmaster stop; rm -rf /etc/puppet/ssl; /etc/init.d/puppetmaster start;
+echo "Master launched and cleaned"
 EOE
       end
 
