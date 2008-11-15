@@ -218,6 +218,7 @@ module PoolParty
           vputs "Provisioning master..."
           
           verbose ? Provisioner.provision_master(self, testing) : hide_output { Provisioner.provision_master(self, testing) }
+          verbose ? Provisioner.clear_master_ssl_certs(self, testing) : hide_output { Provisioner.clear_master_ssl_certs(self, testing) }
           
           after_launched
         end        

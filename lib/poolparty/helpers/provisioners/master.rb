@@ -26,9 +26,6 @@ module PoolParty
           install_poolparty,
           setup_poolparty,
           create_local_node,
-          restart_puppetmaster,
-          run_first_time,
-          clean_master_certs
         ] << configure_tasks
       end
 
