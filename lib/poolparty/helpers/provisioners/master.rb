@@ -117,11 +117,11 @@ wget http://rubyforge.org/frs/download.php/45546/rubyforge-1.0.1.gem -O rubyforg
 wget http://rubyforge.org/frs/download.php/43954/rake-0.8.3.gem -O rake.gem 2>&1
 wget http://rubyforge.org/frs/download.php/45589/sexp_processor-3.0.0.gem -O sexp_processor.gem 2>&1
 wget http://github.com/auser/poolparty/tree/master%2Fpkg%2Fpoolparty.gem?raw=true -O poolparty.gem 2>&1
-wget http://rubyforge.org/frs/download.php/43666/amazon-ec2-0.3.1.gem -O amazon-ec2.gem 2>&1
+# wget http://rubyforge.org/frs/download.php/43666/amazon-ec2-0.3.1.gem -O amazon-ec2.gem 2>&1
 
 #{
   %w(rake lockfile rubyforge hoe ZenTest sexp_processor flexmock logging activesupport 
-      RubyInline ParseTree ruby2ruby xml-simple poolparty amazon-ec2).map do |dep|
+      RubyInline ParseTree ruby2ruby xml-simple poolparty).map do |dep|
     "gem install --ignore-dependencies -y --no-ri --no-rdoc #{dep}.gem #{unix_hide_string}"
   end.join("\n")
 }
@@ -150,7 +150,7 @@ cp #{Base.remote_storage_path}/#{Base.template_directory}/puppetrerun /usr/bin/p
 cp #{Base.remote_storage_path}/#{Base.template_directory}/puppetrunner /usr/bin/puppetrunner
 chmod +x /usr/bin/puppetrerun
 chmod +x /usr/bin/puppetrunner
-/bin/sh /usr/bin/puppetrerun
+# /bin/sh /usr/bin/puppetrerun
 # /etc/init.d/puppetmaster stop; rm -rf /etc/puppet/ssl; /etc/init.d/puppetmaster start;
 echo "Master launched and cleaned"
 EOE
