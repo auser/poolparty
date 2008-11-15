@@ -1,17 +1,21 @@
 #!/usr/bin/env bash
 
 . /etc/profile
-if [ -z "$(/usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master)" ];
-  then
-  echo '';
-  else
-  ps aux | grep puppetmaster | awk '{print $2}' | xargs kill
-  /etc/init.d/puppetmaster stop; rm -rf /etc/puppet/ssl; /etc/init.d/puppetmaster start; echo "Master launched"
-  if [ -z "$(/usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master)" ];
-    then
-    echo '';
-    else
-    # Try again
-    /usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master 2>&1 
-  fi
-fi
+ps aux | grep puppetmaster | awk '{print $2}' | xargs kill
+/etc/init.d/puppetmaster stop; rm -rf /etc/puppet/ssl; /etc/init.d/puppetmaster start; /usr/sbin/puppetmasterd --verbose;echo "Master launched"
+/usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master
+
+# if [ -z "$(/usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master)" ];
+#   then
+#   echo 'Successful puppet run on master';
+#   else
+#   ps aux | grep puppetmaster | awk '{print $2}' | xargs kill
+#   /etc/init.d/puppetmaster stop; rm -rf /etc/puppet/ssl; /etc/init.d/puppetmaster start; echo "Master launched"
+#   if [ -z "$(/usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master)" ];
+#     then
+#     echo 'Successful runner run';
+#     else
+#     # Try again
+#     /usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master 2>&1 
+#   fi
+# fi
