@@ -150,6 +150,7 @@ mv #{Base.remote_storage_path}/#{Base.template_directory}/puppetrerun /usr/bin/p
 mv #{Base.remote_storage_path}/#{Base.template_directory}/puppetrunner /usr/bin/puppetrunner
 chmod +x /usr/bin/puppetrerun
 /usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master
+/etc/init.d/puppetmaster stop; rm -rf /etc/puppet/ssl; /etc/init.d/puppetmaster start;echo "Master launched"
 /bin/sh /usr/bin/puppetrerun
 EOE
       end
