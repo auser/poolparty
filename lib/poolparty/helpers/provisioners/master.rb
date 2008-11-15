@@ -147,7 +147,9 @@ echo "(Re)starting poolparty"
       def run_first_time
 <<-EOE
 mv #{Base.remote_storage_path}/#{Base.template_directory}/puppetrerun /usr/bin/puppetrerun
+mv #{Base.remote_storage_path}/#{Base.template_directory}/puppetrunner /usr/bin/puppetrunner
 chmod +x /usr/bin/puppetrerun
+/usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master
 /bin/sh /usr/bin/puppetrerun
 EOE
       end
@@ -195,7 +197,7 @@ cp #{Base.remote_storage_path}/poolparty.pp /etc/puppet/manifests/classes/poolpa
       def restart_puppetd
         <<-EOS
 echo "Running puppet manifest"
-/bin/sh /usr/bin/puppetrerun
+/bin/sh /usr/bin/puppetrunner
         EOS
       end
     end

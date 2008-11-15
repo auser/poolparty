@@ -2,14 +2,16 @@
 
 . /etc/profile
 # rm -rf /etc/puppet/ssl
-if [[ -z "$(hostname) == 'master'" ]];
-  then
-  /bin/sh puppetrerun
-  else
-  if [ -z "$(/usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master)" ];
-    then
-    echo '';
-    else
-    /usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master
-  fi
-fi
+/usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master
+# if [ -z "$(hostname) == 'master'" ];
+#   then
+#   /bin/sh puppetrerun
+#   else
+#   if [ -z "$(/usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master)" ];
+#     then
+#     echo 'Successful runner run';
+#     else
+#     rm -rf /etc/puppet/ssl
+#     /usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master
+#   fi
+# fi
