@@ -25,6 +25,7 @@ module PoolParty
           setup_autosigning,
           install_poolparty,
           setup_poolparty,
+          restart_puppetmaster,
           run_first_time,
           create_local_node,
         ] << configure_tasks
@@ -145,8 +146,8 @@ echo "(Re)starting poolparty"
       def run_first_time
 <<-EOE
 echo "Running first time run"
-mv #{Base.remote_storage_path}/#{Base.template_directory}/puppetrerun /usr/bin/puppetrerun
-mv #{Base.remote_storage_path}/#{Base.template_directory}/puppetrunner /usr/bin/puppetrunner
+cp #{Base.remote_storage_path}/#{Base.template_directory}/puppetrerun /usr/bin/puppetrerun
+cp #{Base.remote_storage_path}/#{Base.template_directory}/puppetrunner /usr/bin/puppetrunner
 chmod +x /usr/bin/puppetrerun
 chmod +x /usr/bin/puppetrunner
 /bin/sh /usr/bin/puppetrerun
