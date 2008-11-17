@@ -166,7 +166,7 @@ node default {
 node "#{ri.name}" inherits default {}
            EOS
          end
-"echo '#{str}' > #{Base.manifest_path}/../nodes/nodes.pp"
+"echo '#{str}' > #{Base.manifest_path}/nodes/nodes.pp"
       end
 
       def move_templates
