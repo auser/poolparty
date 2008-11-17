@@ -7,9 +7,8 @@ module PoolParty
       include Remote
       include Configurable
       include CloudResourcer
-      attr_reader :parent_cloud
       
-      def initialize(opts, parent=nil)
+      def initialize(opts, parent=nil)        
         run_setup(parent)
                 
         set_vars_from_options(parent.options) if parent && parent.respond_to?(:options)
@@ -80,16 +79,9 @@ module PoolParty
       def self.puppet_rerun_commad
         puppet_runner_command
       end
-      # def cloud
-      #   @p = @parent
-      #   while !@p.is_a?(PoolParty::Cloud::Cloud)
-      #     @p = @p.parent
-      #   end
-      #   @p
-      # end
-      def hosts_file_listing(list=false)
-        string = list ? "#{name}.#{cloud.name} #{name}" : "#{name}.#{cloud.name}"
-        "#{internal_ip} #{string}"
+      def hosts_file_listing_for(cl)
+        string = (cl.name == parent.name) ? "#{name}.#{parent.name}\t#{name}" : "#{name}.#{parent.name}"
+        "#{internal_ip}\t#{string}"
       end
     end
     

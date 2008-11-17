@@ -71,6 +71,9 @@ module PoolParty
 
         reject_junk_options!
         raise CloudNotFoundException.new("Please specify your cloud with -s, move it to ./pool.spec or in your POOL_SPEC environment variable") unless loaded_clouds && !loaded_clouds.empty?
+        loaded_pools.each do |pl|
+          pl.configure(self.options)
+        end
         loaded_clouds.each do |cl|
           cl.configure(self.options)
         end

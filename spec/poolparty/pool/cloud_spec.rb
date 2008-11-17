@@ -265,6 +265,8 @@ describe "Cloud" do
               @sample_instances_list = [{:ip => "192.168.0.1", :name => "master"}, {:ip => "192.168.0.2", :name => "node1"}]
               @ris = @sample_instances_list.map {|h| PoolParty::Remote::RemoteInstance.new(h, @cloud) }
               
+              stub_remoter_for(@cloud)
+              
               @manifest = @cloud.build_manifest
             end
             it "should return a string when calling build_manifest" do

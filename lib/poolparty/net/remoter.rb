@@ -229,7 +229,7 @@ module PoolParty
       def contract_cloud_if_necessary(force=false)
         if can_shutdown_an_instance?          
           if should_contract_cloud?(force)
-            logger.debug "Shrinking the cloud by 1"
+            vputs "Shrinking the cloud by 1"
             before_shutdown
             request_termination_of_non_master_instance
           end
@@ -250,9 +250,7 @@ module PoolParty
       
       # Rsync command to the instance
       def rsync_storage_files_to(instance=nil)
-        hide_output do
-          Kernel.system "#{rsync_storage_files_to_command(instance)}" if instance
-        end
+        hide_output {Kernel.system "#{rsync_storage_files_to_command(instance)}" if instance}
       end
       # Take the rsync command and execute it on the system
       # if there is an instance given

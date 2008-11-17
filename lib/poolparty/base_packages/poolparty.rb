@@ -4,19 +4,6 @@ module PoolParty
       
       def enable                
         # Build hostsfile
-        # TODO: COME BACK AND CLEAN THIS UP
-        puts "cloud: #{self} - #{parent}"
-        parent.list_of_running_instances.each do |ri|
-          has_host({:name => "#{ri.name}", :ip => ri.ip})
-        end
-        
-        # other_clouds.each do |cl|
-        #   cl.list_of_running_instances do |ri|
-        #     has_host({:name => "#{cl.name}.#{ri.name}", :ip => ri.ip})
-        #   end
-        # end
-
-        # has_host({:name => "$hostname", :ip => "127.0.0.1", :alias => "localhost"})
         
         has_package(:name => "erlang")
         has_package(:name => "erlang-dev")
@@ -50,8 +37,9 @@ module PoolParty
           has_gempackage(:name => "poolparty", :download_url => "http://github.com/auser/poolparty/tree/master%2Fpkg%2Fpoolparty.gem?raw=true", :requires => [get_gempackage("ruby2ruby"), get_gempackage("RubyInline"), get_gempackage("ParseTree")])
           
           # , :ifnot => "/bin/ps aux | /bin/grep -q pm_node"
-          has_exec(:name => "build_messenger", :command => ". /etc/profile && server-build-messenger -v")
+          has_exec(:name => "build_messenger", :command => ". /etc/profile && server-build-messenger")
           has_exec(:name => "start_node", :command => ". /etc/profile && server-start-node")
+          has_exec(:name => "update_hosts", :command => ". /etc/profile && server-update-hosts")
           # has_runit_service("pm_node", "pm_node", File.join(File.dirname(__FILE__), "..", "templates/messenger/node/"))
         end
         

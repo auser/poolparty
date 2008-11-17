@@ -10,7 +10,6 @@ module PoolParty
     extend MethodMissingSugar
     
     default_options({
-      :environment => "production",
       :user => "root", # This should change here
       :base_keypair_path => "#{ENV["HOME"]}/.ec2",
       :tmp_path => "/tmp/poolparty",
@@ -25,9 +24,11 @@ module PoolParty
       :default_project_specfile_name => "spec/pool.spec",
       :port => "80",
       :forwarding_port => "8080",
-      :proxy_mode => "http",      
+      :proxy_mode => "http",
       # EC2 Options
-      :ami => "ami-1cd73375" 
+      :ami => "ami-1cd73375",
+      # Options that should not be touched pretty much ever
+      :manifest_path => "/etc/puppet/manifests"
     })
         
     # Class methods

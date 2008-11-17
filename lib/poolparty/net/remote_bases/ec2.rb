@@ -42,13 +42,13 @@ begin
         @id = 0
         get_instances_description.each_with_index do |h,i|
           if h[:status] == "running"
-            @name = @id == 0 ? "master" : "node#{@id}"
+            inst_name = @id == 0 ? "master" : "node#{@id}"
             @id += 1
           else
-            @name = "#{h[:status]}_node#{i}"
+            inst_name = "#{h[:status]}_node#{i}"
           end
           h.merge!({
-            :name => @name,
+            :name => inst_name,
             :hostname => h[:ip],
             :ip => h[:ip].convert_from_ec2_to_ip,
             :index => i,
