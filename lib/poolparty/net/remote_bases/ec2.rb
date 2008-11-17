@@ -160,6 +160,7 @@ begin
           :ip => resp.dnsName || "not-assigned",
           :status => resp.instanceState.name,
           :launching_time => resp.launchTime.parse_datetime,
+          :internal_ip => resp.privateDnsName,
           :keypair => resp.keyName
         }        
       rescue Exception => e

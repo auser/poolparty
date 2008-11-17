@@ -184,16 +184,8 @@ module PoolParty
         poolparty
       end
       
-      def provisioning?
-        @provisioning_in_progress == true
-      end
-      
-      def provisioning_in_progress
-        @provisioning_in_progress = true
-      end
-      
-      def provisioning_complete
-        @provisioning_in_progress = false
+      def other_clouds
+        clouds.select {|name, cl| cl if name != self.name }
       end
       
       def reset!
