@@ -28,8 +28,8 @@ describe "Plugin" do
       @c.parent.should == @p
     end
     describe "instance" do
-      before(:each) do
-        @plugin = "apache".class_constant.new(@c)
+      before(:each) do        
+        @plugin = @c.apache
       end
       it "should not be empty" do
         @plugin.class.should == PoolPartyApacheClass
