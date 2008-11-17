@@ -35,6 +35,7 @@ bin/server-get-load
 bin/server-list-active
 bin/server-list-responding
 bin/server-rerun
+bin/server-send-command
 bin/server-show-stats
 bin/server-start-client
 bin/server-start-master
