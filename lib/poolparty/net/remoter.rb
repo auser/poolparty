@@ -183,7 +183,7 @@ module PoolParty
         vputs ""
         vputs "Waiting for there to be no pending instances..."
         when_no_pending_instances do
-          wait "20.seconds"
+          when_all_assigned_ips {wait "2.seconds"}
           vputs ""
           vputs "Provisioning master..."
           

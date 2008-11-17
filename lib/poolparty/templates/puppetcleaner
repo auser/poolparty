@@ -3,7 +3,4 @@
 # /var/lib/puppet/state/puppetdlock
 . /etc/profile
 ps aux | grep puppetmaster | awk '{print $2}' | xargs kill
-/etc/init.d/puppetmaster stop
-rm -rf /etc/puppet/ssl
-/etc/init.d/puppetmaster start
-puppetmasterd --verbose
+/etc/init.d/puppetmaster stop;rm -rf /etc/puppet/ssl;/etc/init.d/puppetmaster start;puppetmasterd --verbose
