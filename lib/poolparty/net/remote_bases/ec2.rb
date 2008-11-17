@@ -83,6 +83,13 @@ begin
           Kernel.system "ec2-add-keypair #{keypair} > #{new_keypair_path} && chmod 600 #{new_keypair_path}"
         end
       end
+      
+      # wrapper for remote base to perform a snapshot backup for the ebs volume
+      def create_snapshot
+        return nil if ebs_volume_id.nil?
+        ec2.create_snapshot(:volume_id => ebs_volume_id)
+      end
+      
       # EC2 connections
       def ec2
         @ec2 ||= EC2::Base.new( :access_key_id => (access_key || Base.access_key), 
