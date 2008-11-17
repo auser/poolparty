@@ -276,7 +276,6 @@ lib/poolparty/templates/puppet.conf
 lib/poolparty/templates/puppetcleaner
 lib/poolparty/templates/puppetrerun
 lib/poolparty/templates/puppetrunner
-lib/poolparty/templates/sethosts.rb
 lib/poolparty/templates/yaws.conf
 lib/poolparty/version.rb
 lib/poolpartycl.rb
