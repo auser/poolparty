@@ -9,7 +9,7 @@ autorequire:
 bindir: bin
 cert_chain: []
 
-date: 2008-11-14 00:00:00 -08:00
+date: 2008-11-16 00:00:00 -08:00
 default_executable: 
 dependencies: 
 - !ruby/object:Gem::Dependency 
@@ -87,6 +87,7 @@ executables:
 - server-list-active
 - server-list-responding
 - server-rerun
+- server-send-command
 - server-show-stats
 - server-start-client
 - server-start-master
@@ -143,6 +144,7 @@ files:
 - bin/server-list-active
 - bin/server-list-responding
 - bin/server-rerun
+- bin/server-send-command
 - bin/server-show-stats
 - bin/server-start-client
 - bin/server-start-master
