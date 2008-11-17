@@ -71,7 +71,8 @@ module PoolParty
         list.select {|i| i.name == name }.first
       end
       def remote_instances_list
-        list_of_instances.map {|i| PoolParty::Remote::RemoteInstance.new(i, self) }
+        # puts "> #{@containing_cloud.name} - #{@containing_cloud.class}"
+        list_of_instances(keypair).map {|h| PoolParty::Remote::RemoteInstance.new(h, self) }
       end
       # List the instances for the current key pair, regardless of their states
       # If no keypair is passed, select them all
@@ -102,13 +103,6 @@ module PoolParty
       # Select the instances based on their status
       def select_from_instances_on_status(status=/running/, list=[])
         list.select {|a| a[:status] =~ status}
-      end
-      # Instances
-      # Get the master from the cloud
-      def master
-        # remote_instances_list.select {|a| a.master }.first
-        @list = list_from_remote
-        @list.reject {|a| a unless a.name =~ /master/ }.first if @list.class != String
       end
       # Helpers
       def create_keypair

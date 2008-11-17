@@ -4,7 +4,7 @@ module PoolParty
     # Wrap all the resources into a class package from 
     def classpackage_with_self(parent=self, &block)
       @cp = PoolParty::Resources::Classpackage.new(parent.options, parent, &block)
-      @cp.instance_eval {@resources = parent.resources}
+      @cp.run_in_context {@resources = parent.resources}
       # parent.instance_eval {@resources = nil}
       @cp
     end
@@ -19,7 +19,8 @@ module PoolParty
         # Take the options of the parents
         set_parent(parent, false) if parent
         set_vars_from_options(opts) unless opts.empty?
-        self.instance_eval &block if block
+        # self.instance_eval &block if block
+        self.run_in_context &block if block
         # store_block(&block)        
         loaded
       end

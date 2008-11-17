@@ -13,6 +13,8 @@ module PoolParty
       @stored_block ||= block
     end
     
+    # This will run the blocks after they are stored if there is a block
+    # associated
     def run_stored_block      
       self.run_in_context @stored_block if @stored_block
     end
@@ -75,9 +77,19 @@ module PoolParty
       ]
     end
     
+    @@stack = []
+    def run_setup(parent, &block)
+      set_parent(parent) if parent && !@parent
+      if block
+        @@stack << self
+        run_in_context parent, &block
+        @@stack.pop
+      end
+    end
+    
     # Set the parent on the resource
     def set_parent(pare, sink_options=true)
-      unless pare == self
+      unless pare == self || !@parent.nil?
         @parent = pare
         # Add self as a service on the parent
         pare.add_service(self) if pare.respond_to?(:add_service)

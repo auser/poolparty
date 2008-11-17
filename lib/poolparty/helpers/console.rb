@@ -20,6 +20,10 @@ module PoolParty
       o.cloudname ? [cloud(o.cloudname.downcase.to_sym)] : [clouds[clouds.keys.first]]
     end
     
+    def extract_pool_from_options(o)
+      o.poolname ? [pool(o.poolname.downcase.to_sym)] : [pools[pools.keys.first]]
+    end
+    
     # Clear all the pools and reload the console
     # Call within console to reset and reload the entire poolparty base
     # as well

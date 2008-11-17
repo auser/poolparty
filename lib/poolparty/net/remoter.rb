@@ -40,30 +40,6 @@ module PoolParty
       def remote_rsync_command
         "rsync -azP --exclude cache -e '#{remote_ssh_string}'"
       end
-      # Open the cached local copy of the instances list and 
-      # create a new RemoteInstance from each line
-      def list_from_local
-        list_file = get_working_listing_file
-        if list_file
-          out = returning Array.new do |instances|
-            open(list_file).read.split("\n").each do |line|
-              instances << RemoteInstance.new(line)
-            end
-          end
-        else
-          out = list_from_remote(:cache => true)
-        end
-        return out
-      end      
-      # List the instances that are known from the remoter_base
-      # Create a RemoteInstance for each of the instances from the hash
-      # returned by the list of instances, write them to the cached file
-      # and then return the array of instances
-      def list_from_remote(options={})
-        out_array = get_remote_nodes
-        write_to_file( local_instances_list_file_locations.first, out_array.map{|a| a.to_s }.join("\n")) if options[:cache]
-        out_array
-      end
       # Get the names of the nodes. Mainly used for puppet templating
       def list_of_node_names(options={})
         list_of_running_instances.collect {|ri| ri.name }
@@ -72,13 +48,7 @@ module PoolParty
       def list_of_node_ips(options={})
         list_of_running_instances.collect {|ri| ri.ip }
       end
-      def get_remote_nodes
-        returning Array.new do |instances|
-          list_of_instances(respond_to?(:keypair) ? keypair : nil).each do |h|
-            instances << PoolParty::Remote::RemoteInstance.new(h)
-          end
-        end
-      end
+
       # Get the instance first instance file that exists on the system from the expected places
       # denoted in the local_instances_list_file_locations
       def get_working_listing_file

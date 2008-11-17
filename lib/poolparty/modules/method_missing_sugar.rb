@@ -16,7 +16,7 @@ module PoolParty
     # See get_from_options for more information
     def method_missing(m, *args, &block)
       if block_given?
-        (args[0].class == self.class) ? args[0].instance_eval(&block) : super
+        (args[0].class == self.class) ? args[0].run_in_context(&block) : super
       else        
         get_from_options(m, *args, &block)
       end
