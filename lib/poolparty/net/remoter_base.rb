@@ -73,7 +73,7 @@ module PoolParty
       def remote_instances_list
         # puts "> #{@containing_cloud.name} - #{@containing_cloud.class}"
         @containing_cloud = self
-        @remote_instances_list ||= list_of_instances(keypair).collect {|h| PoolParty::Remote::RemoteInstance.new(h, @containing_cloud) }
+        list_of_instances(keypair).collect {|h| PoolParty::Remote::RemoteInstance.new(h, @containing_cloud) }
       end
       # List the instances for the current key pair, regardless of their states
       # If no keypair is passed, select them all
