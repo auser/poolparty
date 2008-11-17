@@ -15,8 +15,16 @@ o.loaded_pools.each do |pool|
     puts header("Listing pool #{name}")
     clouds.each do |name, cloud|
       puts subheader("Cloud: #{name}")
-      out = location == "remote" ? cloud.list_from_remote({:cache => true}).map{|a| a.to_s} : cloud.list_from_local.map{|a| a.to_s}
-      puts out
+      with_cloud(cloud) do
+        puts header("Listing cloud #{name}")
+        puts subheader("Active instances")
+        puts list_of_running_instances.map{|a| a.to_s}.join("\n")
+        puts ""
+        if list_of_pending_instances.size > 0
+          puts subheader("Pending instances")
+          puts list_of_pending_instances.map{|a| a.to_s}.join("\n")
+        end
+      end
     end
   end
 end

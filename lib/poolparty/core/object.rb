@@ -55,7 +55,7 @@ class Object
     end
   end
   def block_instance_eval(*args, &block)
-    return instance_eval(*args,&block) unless block_given? && !block.arity.zero?
+    return instance_eval(*args,&block) unless block && !block.arity.zero?
     old_method = (self.class.instance_method(:__) rescue nil)
     self.class.send(:define_method, :__, &block)
     block_method = self.class.instance_method(:__)
@@ -72,10 +72,10 @@ class Object
   def meta_undef name
     meta_eval { remove_method name }
   end
-  def run_in_context(&block)
+  def run_in_context(context=self, &block)
     name="temp_#{self.class}_#{respond_to?(:parent) ? parent.to_s : Time.now.to_i}".to_sym
     meta_def name, &block
-    self.send name, self
+    self.send name, context
     # self.instance_eval &block if block
     meta_undef name
   end

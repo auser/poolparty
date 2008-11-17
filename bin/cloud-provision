@@ -4,6 +4,7 @@ require "poolparty"
 require "poolpartycl"
 
 o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
+  opts.on('-n cloudname', '--name name', 'Start cloud by this name')    { |c| optioner.cloudname c }
   opts.on('-p', '--slave', 'Provision slave (default: false)')    { optioner.provision_slave true }
   opts.on('-i num', '--id num', 'Instance num to provision')    { |i| optioner.instance_number i }
 end

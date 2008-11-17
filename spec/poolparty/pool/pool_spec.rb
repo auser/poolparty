@@ -91,7 +91,7 @@ describe "Pool" do
         @pool.clouds.size.should == 2
       end
       it "should be able to tel the other clouds from within one cloud" do
-        cloud(:app).other_clouds.keys.should == [:db]
+        cloud(:app).other_clouds.should == [cloud(:db)]
       end
     end  
   end

@@ -1,0 +1,20 @@
+#!/usr/bin/env ruby
+$:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
+require "poolparty"
+require "poolpartycl"
+
+o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
+  opts.on('-n name', '--name name', 'Update hosts for local pool named [name]')    { |p| optioner.poolname p }
+end
+
+o.loaded_pools.each do |pool|
+  with_pool(pool) do
+    pool_clouds.each do |cl|
+      puts "> server-update-hosts #{__LINE__} cloud: #{cl.name} #{cl.list_of_instances.size}"
+      cl.list_of_running_instances.each do |ri|
+        puts ri.hosts_file_listing
+      end
+    end
+    
+  end
+end
