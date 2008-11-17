@@ -78,6 +78,21 @@ describe "Pool" do
           @pool.maximum_instances.should == 5
         end
       end
-    end    
+    end  
+    describe "with clouds" do
+      before(:each) do
+        reset!
+        @pool = Pool.new :test do
+          cloud :app
+          cloud :db
+        end
+      end
+      it "should have 2 clouds in the pool when there are 2 described" do
+        @pool.clouds.size.should == 2
+      end
+      it "should be able to tel the other clouds from within one cloud" do
+        cloud(:app).other_clouds.keys.should == [:db]
+      end
+    end  
   end
 end
