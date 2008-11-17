@@ -112,6 +112,7 @@ module PoolParty
         loaded(opts, @parent)
       end
       
+      # Helper to set the containing parent on the resource
       def set_resource_parent(parent=nil)
         if parent && parent != self
           @parent = parent
