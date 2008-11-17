@@ -5,9 +5,6 @@ describe "Base" do
     ENV.stub!(:[]).with("AWS_ACCESS_KEY_ID").and_return "KEY"
     ENV.stub!(:[]).with("AWS_SECRET_ACCESS_KEY").and_return "SECRET"
   end
-  it "should set the environment, if not set to production" do
-    Base.environment.should == "production"
-  end
   it "should set the user to root" do
     Base.user.should == "root"
   end

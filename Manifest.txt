@@ -43,6 +43,7 @@ bin/server-start-node
 bin/server-stop-client
 bin/server-stop-master
 bin/server-stop-node
+bin/server-update-hosts
 config/hoe.rb
 config/requirements.rb
 examples/basic.rb
@@ -275,6 +276,7 @@ lib/poolparty/templates/puppet.conf
 lib/poolparty/templates/puppetcleaner
 lib/poolparty/templates/puppetrerun
 lib/poolparty/templates/puppetrunner
+lib/poolparty/templates/sethosts.rb
 lib/poolparty/templates/yaws.conf
 lib/poolparty/version.rb
 lib/poolpartycl.rb
