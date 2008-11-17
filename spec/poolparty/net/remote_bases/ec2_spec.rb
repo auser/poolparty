@@ -14,7 +14,6 @@ class TestClass
   
   def ami;"ami-abc123";end
   def size; "small";end
-  def security_group; "web";end
   def verbose
     false
   end
@@ -57,6 +56,15 @@ describe "ec2 remote base" do
     it "should call run_instances on the ec2 Base class when asking to launch_new_instance!" do
       @tr.ec2.should_receive(:run_instances).and_return true
       @tr.launch_new_instance!
+    end
+    it "should use a specific security group if one is specified" do
+      @tr.stub!(:security_group).and_return "web"
+      @tr.ec2.should_receive(:run_instances).with(hash_including(:group_id => ['web'])).and_return true
+      @tr.launch_new_instance!      
+    end
+    it "should use the default security group if none is specified" do
+      @tr.ec2.should_receive(:run_instances).with(hash_including(:group_id => ['default'])).and_return true
+      @tr.launch_new_instance!      
     end
     it "should get the hash response from EC2ResponseObject" do
       EC2ResponseObject.should_receive(:get_hash_from_response).and_return true
