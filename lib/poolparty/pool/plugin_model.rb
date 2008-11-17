@@ -14,28 +14,26 @@ module PoolParty
     
     class PluginModel      
       attr_accessor :name, :klass
-      attr_reader :parent
       include MethodMissingSugar
       include Configurable
       include PrettyPrinter      
       
       def initialize(name,cld,&block)
         @name = name
-        @parent = cld
+        # @parent = cld
         class_string_name = "#{name}"
         
         # Create the class to evaluate the plugin on the implemented call
         klass = class_string_name.class_constant(PoolParty::Plugin::Plugin)
-        klass.extend PoolParty::Resources
-        klass.send :include, PoolParty::Resources
-
-        # Create the block inside the instantiated plugin
-        klass.module_eval &block if block
+        mod = class_string_name.module_constant(&block)
+        
+        # klass.extend PoolParty::Resources
+        klass.send :include, mod
         
         # Store the name of the class for pretty printing later
         klass.name = name
         # Add the plugin definition to the cloud as an instance method
-        Cloud::Cloud.module_eval <<-EOE
+        Cloud::Cloud.class_eval <<-EOE
           def #{name}(parent=self, &block)
             @#{class_string_name.downcase} ||= #{class_string_name.class_constant}.new(parent, &block)
           end

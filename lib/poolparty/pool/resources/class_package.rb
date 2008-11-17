@@ -17,10 +17,11 @@ module PoolParty
       
       def initialize(opts={}, parent=self, &block)
         # Take the options of the parents
-        set_parent(parent, false) if parent
+        # set_parent(parent, false) if parent
         set_vars_from_options(opts) unless opts.empty?
         # self.instance_eval &block if block
-        self.run_in_context &block if block
+        run_setup(parent, &block) if block
+        # self.run_in_context &block if block
         # store_block(&block)        
         loaded
       end
@@ -39,7 +40,7 @@ module PoolParty
       end
       
       def name(*args)
-        args.empty? ? (@name || parent.name || "custom_#{Time.now.to_i}") : @name ||= args.first
+        args.empty? ? (@name || (!parent.nil? && parent.name) || "custom_#{Time.now.to_i}") : @name ||= args.first
       end
       def printable?
         false

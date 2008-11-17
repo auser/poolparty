@@ -1,19 +1,20 @@
 module PoolParty
   class Base
-    plugin :poolparty do
+    plugin :poolparty_base_packages do
       
       def enable                
         # Build hostsfile
         # TODO: COME BACK AND CLEAN THIS UP
-        (self.respond_to?(:list_of_running_instances) ? self : parent).list_of_running_instances.each do |ri|
+        puts "cloud: #{self} - #{parent}"
+        parent.list_of_running_instances.each do |ri|
           has_host({:name => "#{ri.name}", :ip => ri.ip})
         end
         
-        other_clouds.each do |cl|
-          cl.list_of_running_instances do |ri|
-            has_host({:name => "#{cl.name}.#{ri.name}", :ip => ri.ip})
-          end
-        end
+        # other_clouds.each do |cl|
+        #   cl.list_of_running_instances do |ri|
+        #     has_host({:name => "#{cl.name}.#{ri.name}", :ip => ri.ip})
+        #   end
+        # end
 
         # has_host({:name => "$hostname", :ip => "127.0.0.1", :alias => "localhost"})
         

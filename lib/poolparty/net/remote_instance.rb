@@ -10,10 +10,11 @@ module PoolParty
       attr_reader :parent_cloud
       
       def initialize(opts, parent=nil)
-        @parent = parent
+        run_setup(parent)
                 
         set_vars_from_options(parent.options) if parent && parent.respond_to?(:options)
         set_vars_from_options(opts) unless opts.nil? || opts.empty?
+        
         on_init
       end
       
@@ -79,14 +80,13 @@ module PoolParty
       def self.puppet_rerun_commad
         puppet_runner_command
       end
-      def cloud
-        @p = @parent
-        while !@p.is_a?(PoolParty::Cloud::Cloud)
-          @p = @p.parent
-        end
-        puts "@p: #{@p.name}"
-        @p
-      end
+      # def cloud
+      #   @p = @parent
+      #   while !@p.is_a?(PoolParty::Cloud::Cloud)
+      #     @p = @p.parent
+      #   end
+      #   @p
+      # end
       def hosts_file_listing(list=false)
         string = list ? "#{name}.#{cloud.name} #{name}" : "#{name}.#{cloud.name}"
         "#{internal_ip} #{string}"

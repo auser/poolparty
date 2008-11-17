@@ -77,27 +77,29 @@ module PoolParty
       ]
     end
     
-    @@stack = []
-    def run_setup(parent, &block)
-      set_parent(parent) if parent && !@parent
-      if block
-        @@stack << self
-        run_in_context parent, &block
-        @@stack.pop
-      end
+    def context_stack
+      @@context_stack ||= []
+    end
+    def run_setup(parent, should_set_parent=true, &block)
+      context_stack.push parent
+      
+      set_parent if should_set_parent
+      run_in_context self, &block if block
+      
+      context_stack.pop
     end
     
     # Set the parent on the resource
-    def set_parent(pare, sink_options=true)
-      unless pare == self || !@parent.nil?
-        @parent = pare
+    def set_parent(sink_options=true)
+      # unless context_stack.last == self
+        @parent = context_stack.last
         # Add self as a service on the parent
-        pare.add_service(self) if pare.respond_to?(:add_service)
+        parent.add_service(self) if parent.respond_to?(:add_service)
         # Take the options of the parents
-        configure(pare.options) if pare.respond_to?(:options) && sink_options
-      end
+        configure(parent.options) if parent && parent.respond_to?(:options) && sink_options
+      # end
     end
-    
+        
     def number_of_resources
       arr = resources.map do |n, r|
         r.size

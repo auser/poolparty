@@ -3,8 +3,8 @@ require File.dirname(__FILE__) + "/resource"
 
 module PoolParty    
   module Cloud
-    def cloud(name=:app, &block)
-      clouds.has_key?(name) ? clouds[name] : (clouds[name] = Cloud.new(name, self, &block))
+    def cloud(name=:app, parent=self, &block)
+      clouds.has_key?(name) ? clouds[name] : (clouds[name] = Cloud.new(name, parent, &block))
     end
 
     def clouds
@@ -45,13 +45,14 @@ module PoolParty
       def initialize(name, parent=self, &block)
         @name = name
         
+        setup_defaults
         plugin_directory "#{::Dir.pwd}/plugins"
         
-        # run_setup(parent, &block)
-        set_parent(parent) if parent && !@parent
-        self.run_in_context parent, &block if block
+        p = parent if parent.is_a?(PoolParty::Pool::Pool)        
+        run_setup(p, &block)
         
-        setup_defaults
+        # set_parent(parent) if parent && !@parent
+        # self.run_in_context parent, &block if block        
       end
       
       def setup_defaults
@@ -127,6 +128,7 @@ module PoolParty
         unless @build_manifest
           
           # reset_resources!
+          puts "parent from build_manifest in cloud (#{__LINE__}): #{self} #{parent}"
           add_poolparty_base_requirements
           
           @build_manifest = "class poolparty {\n #{build_short_manifest}\n}"
@@ -177,11 +179,11 @@ module PoolParty
       # Also note that there is no block associated. This is because we have written
       # all that is necessary in a method called enable
       # which is called when there is no block
-      def add_poolparty_base_requirements
+      def add_poolparty_base_requirements        
         heartbeat
         haproxy
         ruby
-        poolparty
+        poolparty_base_packages
       end
       
       def other_clouds

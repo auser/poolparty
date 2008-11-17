@@ -98,12 +98,12 @@ describe "CloudResourcer" do
         @tc.should_receive(:configure).with(@testparent.options)      
       end
       after do
-        @tc.set_parent(@testparent)
+        @tc.run_setup(@testparent)
       end      
     end
     describe "parent's services" do
       before(:each) do        
-        @tc.set_parent(@testparent)        
+        @tc.run_setup(@testparent)        
       end
       it "should set the parent" do
         @tc.parent.should == @testparent
