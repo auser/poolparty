@@ -150,9 +150,6 @@ cp #{Base.remote_storage_path}/#{Base.template_directory}/puppetrerun /usr/bin/p
 cp #{Base.remote_storage_path}/#{Base.template_directory}/puppetrunner /usr/bin/puppetrunner
 chmod +x /usr/bin/puppetrerun
 chmod +x /usr/bin/puppetrunner
-# /bin/sh /usr/bin/puppetrerun
-# /etc/init.d/puppetmaster stop; rm -rf /etc/puppet/ssl; /etc/init.d/puppetmaster start;
-echo "Master launched and cleaned"
 EOE
       end
 
