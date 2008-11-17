@@ -41,6 +41,8 @@ sudo gem install auser-poolparty
 == TODO:
 * Replace services with Runit
 * Refactor provisioning to use erlang
+* Move the building of the resource tree on read to on resolve
+* Add queuing of tasks on the messenger
 
 == LICENSE:
 

@@ -10,8 +10,13 @@ module PoolParty
     
     # Store block
     def store_block(&block)
-      @store_block ||= block
+      @stored_block ||= block
     end
+    
+    def run_stored_block      
+      self.run_in_context @stored_block if @stored_block
+    end
+    
     # Set instances with a range
     def instances(arg)
       if arg.is_a?(Range)
