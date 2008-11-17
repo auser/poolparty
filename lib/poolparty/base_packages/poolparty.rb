@@ -39,7 +39,7 @@ module PoolParty
           # , :ifnot => "/bin/ps aux | /bin/grep -q pm_node"
           has_exec(:name => "build_messenger", :command => ". /etc/profile && server-build-messenger")
           has_exec(:name => "start_node", :command => ". /etc/profile && server-start-node")
-          has_exec(:name => "update_hosts", :command => ". /etc/profile && server-update-hosts")
+          # has_exec(:name => "update_hosts", :command => ". /etc/profile && server-update-hosts")
           # has_runit_service("pm_node", "pm_node", File.join(File.dirname(__FILE__), "..", "templates/messenger/node/"))
         end
         
@@ -47,6 +47,9 @@ module PoolParty
         has_cron(:name => "puppetd runner", :user => Base.user, :minute => "*/5") do
           requires get_gempackage("poolparty")
           command "/usr/bin/puppetrunner"
+        end
+        has_cron(:name => "update_hosts", :user => Base.user, :minute => "0") do
+          command ". /etc/profile && server-update-hosts"
         end
         has_remotefile(:name => "/usr/bin/puppetrunner") do
           mode 744
@@ -73,7 +76,7 @@ module PoolParty
           has_cron(:name => "Load handler", :user => Base.user, :minute => "*/4") do
             requires get_gempackage("poolparty")
             command(". /etc/profile && cloud-handle-load")
-          end          
+          end
           has_cron(:name => "provisioning ensurer", :user => Base.user, :minute => "*/2") do
             requires get_gempackage("poolparty")
             command ". /etc/profile && cloud-ensure-provisioning"
