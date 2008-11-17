@@ -13,14 +13,6 @@ describe "Rules" do
     @car = Car.new
   end
   describe "malformed rules" do
-    it "should not put a malformed rule in the rules" do
-      lambda {
-        @plaster = Class.new do
-          include Aska
-          rules :names, "x runs b"
-        end
-      }.should raise_error()
-    end
     [
       "k > 10",
       "x == 2",

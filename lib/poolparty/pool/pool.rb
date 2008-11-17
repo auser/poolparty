@@ -38,7 +38,8 @@ module PoolParty
         setup_defaults
         
         @name = name
-        run_in_context &block if block
+        # run_in_context &block if block
+        run_setup(self, &block)
       end
       
       def setup_defaults

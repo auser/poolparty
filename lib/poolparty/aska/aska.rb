@@ -9,7 +9,7 @@ module Aska
         arr.each do |line|
           next unless line
           rule = Rule.new(line)
-          raise LoadRulesException.new(line) unless rule.valid?
+          next unless rule.valid?
           k = rule.key
           v = rule.var
           m = rule.comparison

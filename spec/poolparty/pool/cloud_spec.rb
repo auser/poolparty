@@ -185,6 +185,10 @@ describe "Cloud" do
           it "should it should have the method build_manifest" do
             @cloud.respond_to?(:build_manifest).should == true
           end
+          it "should make a new 'haproxy' class" do
+            PoolPartyHaproxyClass.should_receive(:new).once
+            @cloud.add_poolparty_base_requirements
+          end
           it "should have 3 resources" do
             @cloud.add_poolparty_base_requirements
             @cloud.number_of_resources.should > 2
@@ -223,7 +227,7 @@ describe "Cloud" do
             describe "after adding" do
               before(:each) do
                 stub_list_from_remote_for(@cloud)
-                @cloud.add_poolparty_base_requirements              
+                @cloud.add_poolparty_base_requirements
               end
               it "should add resources onto the heartbeat class inside the cloud" do
                 @cloud.services.size.should > 0
@@ -260,7 +264,7 @@ describe "Cloud" do
               node1 192.168.0.2"
               @sample_instances_list = [{:ip => "192.168.0.1", :name => "master"}, {:ip => "192.168.0.2", :name => "node1"}]
               @ris = @sample_instances_list.map {|h| PoolParty::Remote::RemoteInstance.new(h, @cloud) }
-
+              
               @manifest = @cloud.build_manifest
             end
             it "should return a string when calling build_manifest" do
@@ -272,8 +276,8 @@ describe "Cloud" do
             it "should have the comment of a package in the manifest" do
               @manifest.should =~ /package \{/
             end
-            it "should have the comment for heartbeat in the manifest" do
-              @manifest.should =~ /class heartbeat/            
+            it "should have the comment for haproxy in the manifest" do
+              @manifest.should =~ /haproxy/            
             end
             it "should include the poolparty gem" do
               @manifest.should =~ /package \{/

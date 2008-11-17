@@ -77,7 +77,7 @@ class Object
     meta_def name, &block
     self.send name, context
     # self.instance_eval &block if block
-    meta_undef name
+    meta_undef name rescue ""
   end
   def vputs(m="", o=self)
     puts m if o.verbose

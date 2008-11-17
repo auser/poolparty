@@ -108,7 +108,9 @@ module PoolParty
         # Take the options of the parents
         set_vars_from_options(opts) unless opts.empty?
         set_resource_parent(parent)
-        self.run_in_context &block if block
+        
+        run_setup(parent, false, &block) if block
+        # self.run_in_context &block if block
         loaded(opts, @parent)
       end
       
@@ -150,15 +152,7 @@ module PoolParty
       def custom_function(str)
         self.class.custom_functions << str
       end
-      
-      def cloud
-        @p = parent
-        while !@p.is_a?(PoolParty::Cloud)
-          @p = @p.parent
-        end
-        @p
-      end
-      
+            
       def self.custom_functions_to_string(pre="")
         returning Array.new do |output|
           PoolParty::Resources.available_custom_resources.each do |resource|

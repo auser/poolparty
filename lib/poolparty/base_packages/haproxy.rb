@@ -2,14 +2,14 @@ module PoolParty
   class Base
     plugin :haproxy do
       
-      def enable
+      def enable        
         execute_on_master do
           has_package({:name => "haproxy"})
 
           # Restart sysklogd after we update the haproxy.log
           has_service(:name => "sysklogd")
           
-          # Template variables
+          # Template variables          
           has_variable(:name => "name_haproxy", :value => "#{cloud.name}")
           has_variable(:name => "nodenames_haproxy", :value => "generate('/usr/bin/env', '/usr/bin/server-list-active', '-c', 'name')")
           has_variable(:name => "node_ips_haproxy",  :value => "generate('/usr/bin/env', '/usr/bin/server-list-active', '-c', 'ip')")
