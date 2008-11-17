@@ -72,7 +72,8 @@ module PoolParty
       end
       def remote_instances_list
         # puts "> #{@containing_cloud.name} - #{@containing_cloud.class}"
-        list_of_instances(keypair).map {|h| PoolParty::Remote::RemoteInstance.new(h, self) }
+        @containing_cloud = self
+        @remote_instances_list ||= list_of_instances(keypair).collect {|h| PoolParty::Remote::RemoteInstance.new(h, @containing_cloud) }
       end
       # List the instances for the current key pair, regardless of their states
       # If no keypair is passed, select them all
@@ -80,7 +81,7 @@ module PoolParty
         key = keyp ? keyp : keypair
         unless @describe_instances
           tmpInstanceList = describe_instances.select {|a| key ? a[:keypair] == key : true }
-          has_master = !tmpInstanceList.select {|a| a[:name] == "master" }.empty?
+          has_master = !tmpInstanceList.select {|a| a[:name] == "master" }.empty?          
           if has_master
             @describe_instances = tmpInstanceList
           else

@@ -99,7 +99,7 @@ module PoolParty
         configure(parent.options) if parent && parent.respond_to?(:options) && sink_options
       # end
     end
-        
+            
     def number_of_resources
       arr = resources.map do |n, r|
         r.size

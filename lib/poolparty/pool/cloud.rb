@@ -43,7 +43,7 @@ module PoolParty
       })
       
       def initialize(name, parent=self, &block)
-        @name = name
+        @cloud_name = @name = name
         
         setup_defaults
         plugin_directory "#{::Dir.pwd}/plugins"
@@ -127,8 +127,6 @@ module PoolParty
         @build_manifest ||= build_from_existing_file
         unless @build_manifest
           
-          # reset_resources!
-          puts "parent from build_manifest in cloud (#{__LINE__}): #{self} #{parent}"
           add_poolparty_base_requirements
           
           @build_manifest = "class poolparty {\n #{build_short_manifest}\n}"

@@ -150,6 +150,7 @@ cp #{Base.remote_storage_path}/#{Base.template_directory}/puppetrerun /usr/bin/p
 cp #{Base.remote_storage_path}/#{Base.template_directory}/puppetrunner /usr/bin/puppetrunner
 chmod +x /usr/bin/puppetrerun
 chmod +x /usr/bin/puppetrunner
+/bin/sh /usr/bin/server-update-hosts
 EOE
       end
 
@@ -166,7 +167,7 @@ node default {
 node "#{ri.name}" inherits default {}
            EOS
          end
-"echo '#{str}' > /etc/puppet/manifests/nodes/nodes.pp"
+"echo '#{str}' > #{Base.manifest_path}/../nodes/nodes.pp"
       end
 
       def move_templates

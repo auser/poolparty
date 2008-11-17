@@ -10,10 +10,37 @@ end
 o.loaded_pools.each do |pool|
   with_pool(pool) do
     pool_clouds.each do |cl|
-      puts "> server-update-hosts #{__LINE__} cloud: #{cl.name} #{cl.list_of_instances.size}"
-      cl.list_of_running_instances.each do |ri|
-        puts ri.hosts_file_listing
+      
+      new_hosts_listing = returning Array.new do |arr|
+        cl.list_of_running_instances.each do |ri|
+          vputs ri.hosts_file_listing_for(cl)
+          arr << ri.hosts_file_listing_for(cl)
+        end
+        cl.other_clouds.each do |other|
+          other.list_of_running_instances.each do |ri|
+            vputs ri.hosts_file_listing_for(cl)
+            arr << ri.hosts_file_listing_for(cl)
+          end
+        end
+      end.join("\n")
+      
+      if testing
+        puts new_hosts_listing
+      else
+        new_hosts_file = "#{Base.manifest_path}/classes/hosts.pp"
+        
+        arr = returning Array.new do |arr|
+          new_hosts_listing.split(/\n/).each do |line|
+            parts = line.split(/\t/).map {|a| a.chomp }
+            ip,hostname,aliases = parts[0], parts[1], parts[2..-1]
+            
+            arr << PoolParty::Resources::Host.new(:ip => ip, :name => Resolv::DNS.new.getaddress(hostname), :alias => aliases).to_string
+          end
+        end
+        
+        ::File.open(new_hosts_file, "w+") {|f| f << arr.join("\n") }
       end
+      
     end
     
   end

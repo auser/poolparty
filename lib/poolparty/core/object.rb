@@ -82,6 +82,9 @@ class Object
   def vputs(m="", o=self)
     puts m if o.verbose
   end
+  def dputs(m="", o=self)
+    vputs(">#{::File.basename(__FILE__)} (#{__LINE__}) #{m}", o)
+  end
   def vprint(m="", o=self)
     print m if o.verbose
   end
