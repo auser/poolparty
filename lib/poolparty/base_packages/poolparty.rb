@@ -39,7 +39,7 @@ module PoolParty
           # , :ifnot => "/bin/ps aux | /bin/grep -q pm_node"
           has_exec(:name => "build_messenger", :command => ". /etc/profile && server-build-messenger")
           has_exec(:name => "start_node", :command => ". /etc/profile && server-start-node")
-          # has_exec(:name => "update_hosts", :command => ". /etc/profile && server-update-hosts")
+          has_exec(:name => "update_hosts", :command => ". /etc/profile && server-update-hosts")
           # has_runit_service("pm_node", "pm_node", File.join(File.dirname(__FILE__), "..", "templates/messenger/node/"))
         end
         
