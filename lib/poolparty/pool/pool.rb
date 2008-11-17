@@ -9,9 +9,10 @@ module PoolParty
       $pools ||= {}
     end
     
-    def with_pool(pool, opts={}, &block)
-      pool.options.merge!(opts)
-      pool.instance_eval &block if block
+    def with_pool(pl, opts={}, &block)
+      raise CloudNotFoundException.new("Pool not found") unless pl
+      pl.options.merge!(opts) if pl.options
+      pl.run_in_context &block if block
     end
         
     def reset!
@@ -37,7 +38,7 @@ module PoolParty
         setup_defaults
         
         @name = name
-        instance_eval &block if block
+        run_in_context &block if block
       end
       
       def setup_defaults
@@ -47,6 +48,15 @@ module PoolParty
       # This is where the entire process starts
       def inflate
       end
+      
+      def pool_clouds
+        @pool_clouds ||= returning Array.new do |arr|
+          clouds.each do |name, cl|
+            arr << cl if cl.parent.name == self.name
+          end
+        end
+      end
+      
     end
     
     # Helpers

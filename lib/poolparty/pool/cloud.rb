@@ -14,7 +14,7 @@ module PoolParty
     def with_cloud(cl, opts={}, &block)
       raise CloudNotFoundException.new("Cloud not found") unless cl
       cl.options.merge!(opts) if opts
-      cl.instance_eval &block if block
+      cl.run_in_context &block if block
     end
     
     class Cloud
@@ -25,8 +25,7 @@ module PoolParty
       include Configurable
       include CloudResourcer
       # extend CloudResourcer
-      # Net methods
-      include PoolParty::Remote::RemoterBase
+      # Net methods      
       include Remote
       include PoolParty::CloudDsl
       
@@ -43,13 +42,14 @@ module PoolParty
         :polling_time => "30.seconds"
       })
       
-      def initialize(name, parent, &block)
+      def initialize(name, parent=self, &block)
         @name = name
         
         plugin_directory "#{::Dir.pwd}/plugins"
         
-        set_parent(parent) if parent
-        self.instance_eval &block if block
+        # run_setup(parent, &block)
+        set_parent(parent) if parent && !@parent
+        self.run_in_context parent, &block if block
         
         setup_defaults
       end
@@ -185,7 +185,11 @@ module PoolParty
       end
       
       def other_clouds
-        clouds.select {|name, cl| cl if name != self.name }
+        returning Array.new do |arr|
+          clouds.each do |name, cl|
+            arr << cl if name != self.name
+          end
+        end
       end
       
       def reset!
