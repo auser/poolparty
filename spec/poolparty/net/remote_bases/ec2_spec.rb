@@ -14,6 +14,7 @@ class TestClass
   
   def ami;"ami-abc123";end
   def size; "small";end
+  def security_group; "web";end
   def verbose
     false
   end

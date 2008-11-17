@@ -27,7 +27,8 @@ module PoolParty
       :forwarding_port => "8080",
       :proxy_mode => "http",      
       # EC2 Options
-      :ami => "ami-1cd73375" 
+      :ami => "ami-1cd73375",
+      :security_group => ["default"] 
     })
         
     # Class methods

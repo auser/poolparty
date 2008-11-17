@@ -19,7 +19,8 @@ begin
           :maxCount => num,
           :key_name => (keypair || Base.keypair),
           :availability_zone => nil,
-          :size => "#{size || Base.size}")
+          :size => "#{size || Base.size}",
+          :group_id => ["#{security_group || 'default'}"])
         begin
           h = EC2ResponseObject.get_hash_from_response(instance)
           h = instance.instancesSet.item.first
@@ -167,7 +168,8 @@ begin
           :ip => resp.dnsName || "not-assigned",
           :status => resp.instanceState.name,
           :launching_time => resp.launchTime.parse_datetime,
-          :keypair => resp.keyName
+          :keypair => resp.keyName, 
+          :security_group => resp.groupSet.item[0].groupId
         }        
       rescue Exception => e
         nil
