@@ -317,21 +317,6 @@ describe "Cloud" do
           @cloud3.master.should_not be_nil
         end
       end
-
-      describe "provisioning" do
-        it "should be able to tell that it is provisioning when setting the provisioning flag" do
-          @cloud.provisioning?.should == false
-        end
-        it "should be able to set it as provisioning" do
-          @cloud.provisioning_in_progress
-          @cloud.provisioning?.should == true
-        end
-        it "should be able to unset itself as provisioning" do
-          @cloud.provisioning_in_progress
-          @cloud.provisioning_complete
-          @cloud.provisioning?.should == false
-        end
-      end
     end
   end
 end

@@ -225,7 +225,7 @@ describe "Resource" do
       end
       describe "parent" do
         before(:each) do
-          @cloud = cloud :app do
+          @cloud = cloud :orange do
             tangerine "orange"
             file(:name => "file.txt")
           end

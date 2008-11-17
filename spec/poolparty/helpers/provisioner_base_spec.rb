@@ -100,6 +100,7 @@ describe "ProvisionerBase" do
         stub_list_from_remote_for(@cloud)
         @cloud.stub!(:keypair).and_return "fake_keypair"
         @cloud.stub!(:keypair_path).and_return "~/.ec2/fake_keypair"
+        @cloud.stub!(:other_clouds).and_return []
         Provisioner::Master.stub!(:new).and_return @provisioner
         @cloud.stub!(:copy_file_to_storage_directory).and_return true
         @cloud.stub!(:rsync_storage_files_to).and_return true
