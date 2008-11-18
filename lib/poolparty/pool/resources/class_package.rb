@@ -56,7 +56,7 @@ module PoolParty
         # self.instance_eval &block if block
         run_setup(parent, &block) if block
         # self.run_in_context &block if block
-        # store_block(&block)        
+        # store_block(&block)
         loaded
       end
                         
@@ -81,23 +81,6 @@ module PoolParty
         "custom_#{parent ? parent.object_id.to_s : "parent"}"
       end
 
-    end
-    
-    def resources_string_from_resources(resources, pre="\t")
-      @variables = resources.extract! {|name,resource| name == :variable}
-      returning Array.new do |str|
-        unless @variables.empty?
-          str << "\n# Variables \n"
-          @variables.each do |name, variable|
-            str << variable.to_string("#{pre}")
-          end          
-        end
-        
-        resources.each do |type, resource|
-          str << "\n#{pre*2}# #{type}\n"
-          str << resource.to_string("#{pre*2}")
-        end        
-      end.join("\n")
     end
     
   end
