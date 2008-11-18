@@ -97,8 +97,24 @@ describe "File" do
         @cloud.resource(:classpackage).first.should == @class2
       end
       describe "to_string" do
+        before(:each) do
+          @output = @class2.to_string
+        end
         it "should have the file in the string" do
-          @class2.to_string.should =~ /franksfile/
+          @output.should =~ /franksfile/
+        end
+        it "should contain just the two resources in the string" do
+          @output.match(/(\w+) \{/).size.should == 2
+        end
+        describe "from within the cloud" do
+          before(:each) do
+            reset_resources!
+            @output = @cloud.build_short_manifest
+            puts @output
+          end
+          it "should have one class" do
+            @output.match(/class (\w+) \{/).size.should == 1
+          end
         end
       end
   end
