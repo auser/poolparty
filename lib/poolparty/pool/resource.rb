@@ -19,7 +19,7 @@ module PoolParty
     
     def add_resource(type, opts={}, parent=self, &block)      
       if in_resources?(type, opts[:name])        
-        get_resource(type, opts[:name], parent)
+        return get_resource(type, opts[:name], parent)
       else
         returning "PoolParty::Resources::#{type.to_s.camelize}".classify.constantize.new(opts, parent, &block) do |o|                    
           store_into_global_resource_store(o)
