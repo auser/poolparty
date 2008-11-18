@@ -36,7 +36,9 @@ class EC2ResponseObject
   end
   def self.get_group_from_response(resp)
     begin
+      resp = resp.reservationSet.item.first if resp.reservationSet.item.is_a?(Array)
       group = resp.reservationSet.item.groupSet.item.groupId unless resp.reservationSet.nil?
+      group ||= resp.groupSet.item[0].groupId rescue nil
       group ||= resp.DescribeInstancesResponse.reservationSet.item.groupSet.item.groupId
       #rs ||= rs.respond_to?(:instancesSet) ? rs.instancesSet : rs
       #rs.reject! {|a| a.nil? || a.empty? }
@@ -45,7 +47,7 @@ class EC2ResponseObject
     end
     group
   end
-  def self.get_hash_from_response(instance_set, group = 'default')      
+  def self.get_hash_from_response(resp, group = 'default')
     begin
       {
         :instance_id => resp.instanceId,
