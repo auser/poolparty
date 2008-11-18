@@ -21,7 +21,8 @@ begin
           :maxCount => num,
           :key_name => (keypair || Base.keypair),
           :availability_zone => nil,
-          :size => "#{size || Base.size}")
+          :size => "#{size || Base.size}",
+          :group_id => ["#{security_group || 'default'}"])
         begin
           h = EC2ResponseObject.get_hash_from_response(instance)
           h = instance.instancesSet.item.first
@@ -85,6 +86,13 @@ begin
           Kernel.system "ec2-add-keypair #{keypair} > #{new_keypair_path} && chmod 600 #{new_keypair_path}"
         end
       end
+      
+      # wrapper for remote base to perform a snapshot backup for the ebs volume
+      def create_snapshot
+        return nil if ebs_volume_id.nil?
+        ec2.create_snapshot(:volume_id => ebs_volume_id)
+      end
+      
       # EC2 connections
       def ec2
         @ec2 ||= EC2::Base.new( :access_key_id => (access_key || Base.access_key), 
@@ -163,7 +171,8 @@ begin
           :status => resp.instanceState.name,
           :launching_time => resp.launchTime.parse_datetime,
           :internal_ip => resp.privateDnsName,
-          :keypair => resp.keyName
+          :keypair => resp.keyName, 
+          :security_group => resp.groupSet.item[0].groupId
         }        
       rescue Exception => e
         nil

@@ -172,7 +172,7 @@ module PoolParty
       # to be saved on the remote "master" machine
       def minimum_runnable_options
         [
-          :keypair, :minimum_instances, :maximum_instances, :ami, 
+          :keypair, :minimum_instances, :maximum_instances, :ami, :security_group,
           :expand_when, :contract_when, :set_master_ip_to
         ]
       end
