@@ -28,7 +28,7 @@ begin
           :group_id => ["#{security_group || 'default'}"])
         begin
           h = EC2ResponseObject.get_hash_from_response(instance)
-          h = instance.instancesSet.item.first
+          #h = instance.instancesSet.item.first
         rescue Exception => e
           h = instance
         end
