@@ -1,13 +1,46 @@
 module PoolParty    
   module Resources
-        
+    
+    def global_classpackages
+      $global_classpackage_store ||= []
+    end
+    
+    def in_global_classpackages?(name)
+      !get_from_global_classpackage_store(name).nil?
+    end
+    
+    def get_from_global_classpackage_store(key)
+      global_classpackages.select {|a| a if key == a.name }.first
+    end
+    
+    def store_into_global_classpackage_store(r)
+      global_classpackages << r unless in_global_classpackages?(r.name)
+    end
+    
     # Wrap all the resources into a class package from 
     def classpackage_with_self(parent=self, &block)
-      # add_resource(:#{lowercase_class_name}, opts, parent, &blk)
-      @cp = add_resource(:classpackage, parent.options, parent, &block)
-      @cp.run_in_context {@resources = parent.resources}
-      parent.instance_eval {@resources = @cp}
-      @cp
+      name = (parent.options.name || Classpackage.name(parent).to_s).sanitize
+      if in_global_classpackages?(name) 
+        @@cp = get_from_global_classpackage_store(name)
+        @@cp.run_in_context(parent, &block) if block
+      else
+        @@parent_resources = parent.resources
+        @@cp = parent.add_resource(:classpackage, parent.options.merge(:name => name), parent)
+
+        @@cp.run_in_context(parent) do
+          @@parent_resources.each do |ty, res|
+            resources[ty] = res unless ty == :classpackage
+          end
+        end
+        parent.instance_eval do
+          @resources = {:classpackage => [@@cp]}
+        end
+        @@cp.instance_eval &block if block
+        
+        store_into_global_classpackage_store(@@cp)
+      end
+      @@parent_resources = nil
+      @@cp
     end
                 
     class Classpackage < Resource
@@ -27,7 +60,7 @@ module PoolParty
         loaded
       end
                         
-      def to_string(tab="\n")
+      def to_string
         returning String.new do |output|
           output << "# #{name.sanitize}"
           output << "\nclass #{name.sanitize.downcase} {\n"
@@ -40,11 +73,12 @@ module PoolParty
         "include #{name.sanitize.downcase}"
       end
       
-      def name(*args)
-        args.empty? ? (@name || (!parent.nil? && parent.name) || "custom_#{Time.now.to_i}") : @name ||= args.first
-      end
       def printable?
         false
+      end
+      
+      def self.name(parent=nil)
+        "custom_#{parent ? parent.object_id.to_s : "parent"}"
       end
 
     end

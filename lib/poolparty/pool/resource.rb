@@ -19,13 +19,14 @@ module PoolParty
     
     def add_resource(type, opts={}, parent=self, &block)      
       if in_resources?(type, opts[:name])        
-        return get_resource(type, opts[:name], parent)
+        @res = get_resource(type, opts[:name], parent)
       else
-        returning "PoolParty::Resources::#{type.to_s.camelize}".classify.constantize.new(opts, parent, &block) do |o|                    
+        @res = returning "PoolParty::Resources::#{type.to_s.camelize}".classify.constantize.new(opts, parent, &block) do |o|                    
           store_into_global_resource_store(o)
           resource(type) << o          
         end
       end
+      @res
     end    
     def get_resource(ty, key, parent=self)
       resource(ty).select {|r| r.key == key }.first || get_from_global_resource_store(ty, key)
@@ -47,7 +48,7 @@ module PoolParty
     end
     #:nodoc:
     def reset_resources!
-      $global_resources = @resources = nil
+      $global_resources = $global_classpackage_store = @resources = nil
     end
         
     # def resources_string(pre="")
