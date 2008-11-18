@@ -6,6 +6,7 @@ class TestClass
   include PoolParty::Remote::RemoterBase
   include Ec2
   include CloudResourcer
+  include CloudDsl
   
   def keypair
     "fake_keypair"
@@ -27,7 +28,7 @@ describe "ec2 remote base" do
     stub_remoter_for(@tr)
     @tr.stub!(:get_instances_description).and_return response_list_of_instances
   end
-  %w(launch_new_instance! terminate_instance! describe_instance describe_instances).each do |method|
+  %w(launch_new_instance! terminate_instance! describe_instance describe_instances create_snapshot).each do |method|
     eval <<-EOE
       it "should have the method #{method}" do
         @tr.respond_to?(:#{method}).should == true
@@ -55,6 +56,15 @@ describe "ec2 remote base" do
     it "should call run_instances on the ec2 Base class when asking to launch_new_instance!" do
       @tr.ec2.should_receive(:run_instances).and_return true
       @tr.launch_new_instance!
+    end
+    it "should use a specific security group if one is specified" do
+      @tr.stub!(:security_group).and_return "web"
+      @tr.ec2.should_receive(:run_instances).with(hash_including(:group_id => ['web'])).and_return true
+      @tr.launch_new_instance!      
+    end
+    it "should use the default security group if none is specified" do
+      @tr.ec2.should_receive(:run_instances).with(hash_including(:group_id => ['default'])).and_return true
+      @tr.launch_new_instance!      
     end
     it "should get the hash response from EC2ResponseObject" do
       EC2ResponseObject.should_receive(:get_hash_from_response).and_return true
@@ -104,6 +114,20 @@ describe "ec2 remote base" do
       Kernel.should_not_receive(:system)
       @tr.stub!(:keypair).and_return nil
       @tr.create_keypair
+    end
+  end
+  describe "create_snapshot" do
+    # We can assume that create_snapshot on the ec2 gem works
+    before(:each) do
+      @tr.ec2.stub!(:create_snapshot).and_return nil
+    end
+    it "should create a snapshot of the current EBS volume" do
+      @tr.ec2.stub!(:create_snapshot).and_return {{"snapshotId" => "snap-123"}}
+      @tr.stub!(:ebs_volume_id).and_return "vol-123"
+      @tr.create_snapshot.should == {"snapshotId" => "snap-123"}
+    end
+    it "should not create a snapshot if there is no EBS volume" do
+      @tr.create_snapshot.should == nil
     end
   end
 end
