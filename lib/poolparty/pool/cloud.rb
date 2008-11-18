@@ -158,7 +158,7 @@ module PoolParty
       end
       
       def build_from_existing_file
-        ::FileTest.file?("/etc/puppet/manifests/classes/poolparty.pp") ? open("/etc/puppet/manifests/classes/poolparty.pp").read : nil
+        ::FileTest.file?("#{Base.manifest_path}/classes/poolparty.pp") ? open("#{Base.manifest_path}/classes/poolparty.pp").read : nil
       end
       
       # To allow the remote instances to do their job,

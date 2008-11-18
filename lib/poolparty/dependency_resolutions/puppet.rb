@@ -21,11 +21,11 @@ module PoolParty
         returning Array.new do |output|
           unless cancelled?
             output << @prestring || ""
-          
+
             if resources && !resources.empty?
               @cp = classpackage_with_self(self)
               output << @cp.to_string
-              output << "include #{@cp.name.downcase.sanitize}"
+              output << "include #{@cp.name.downcase.sanitize}"              
             end
             
             unless virtual_resource?
@@ -37,6 +37,22 @@ module PoolParty
           
             output << @poststring || ""
           end
+        end.join("\n")
+      end
+      
+      def resources_string_from_resources(res, pre="\t")
+        @variables = res.extract! {|name,resource| name == :variable}
+        returning Array.new do |str|
+          unless @variables.empty?
+            str << "\n# Variables"
+            @variables.each do |name, variable|
+              str << variable.to_string("#{pre}")
+            end          
+          end
+
+          res.each do |type, resource|
+            str << resource.to_string("#{pre*2}") unless type == :classpackage
+          end        
         end.join("\n")
       end
       
