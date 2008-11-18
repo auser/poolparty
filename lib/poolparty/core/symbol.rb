@@ -11,4 +11,7 @@ class Symbol
   def sanitize
     self.to_s.sanitize
   end
+  def <=>(b)
+    "#{self}" <=> "#{b}"
+  end
 end

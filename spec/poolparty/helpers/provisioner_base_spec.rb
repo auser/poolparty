@@ -102,9 +102,10 @@ describe "ProvisionerBase" do
         @cloud.stub!(:keypair_path).and_return "~/.ec2/fake_keypair"
         @cloud.stub!(:other_clouds).and_return []
         @cloud.stub!(:expand_when).and_return "cpu > 10"
-        Provisioner::Master.stub!(:new).and_return @provisioner
         @cloud.stub!(:copy_file_to_storage_directory).and_return true
         @cloud.stub!(:rsync_storage_files_to).and_return true
+        @cloud.stub!(:minimum_runnable_options).and_return []
+        Provisioner::Master.stub!(:new).and_return @provisioner
         @provisioner.stub!(:build_and_store_new_config_file).and_return true
         @provisioner.stub!(:process_clean_reconfigure_for!).and_return true
       end
