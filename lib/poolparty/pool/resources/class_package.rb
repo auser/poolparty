@@ -1,11 +1,12 @@
 module PoolParty    
   module Resources
-    
+        
     # Wrap all the resources into a class package from 
     def classpackage_with_self(parent=self, &block)
-      @cp = PoolParty::Resources::Classpackage.new(parent.options, parent, &block)
+      # add_resource(:#{lowercase_class_name}, opts, parent, &blk)
+      @cp = add_resource(:classpackage, parent.options, parent, &block)
       @cp.run_in_context {@resources = parent.resources}
-      # parent.instance_eval {@resources = nil}
+      parent.instance_eval {@resources = @cp}
       @cp
     end
                 
@@ -26,7 +27,7 @@ module PoolParty
         loaded
       end
                         
-      def to_string
+      def to_string(tab="\n")
         returning String.new do |output|
           output << "# #{name.sanitize}"
           output << "\nclass #{name.sanitize.downcase} {\n"
