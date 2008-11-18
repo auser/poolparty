@@ -8,17 +8,18 @@ module PoolParty
       end
             
       def has_git_repos
-        has_package(:name => "git-core")
-        
-        has_exec({:name => "git-#{name}", :requires => get_package("git-core"), :requires => [get_directory("#{cwd}"), get_package("git-core")]}) do          
-          command parent.user ? "git clone #{parent.user}@#{parent.source} #{parent.path}" : "git clone #{parent.source} #{parent.to ? parent.to : ""}"
-          cwd "#{parent.cwd if parent.cwd}"
-          creates "#{::File.join( (parent.cwd ? parent.cwd : cwd), ::File.basename(parent.source, ::File.extname(parent.source)) )}/.git"
-        end
-        has_exec(:name => "update-#{name}", :requires => get_exec("git-#{name}")) do
-          cwd ::File.dirname(get_exec("git-#{parent.name}").creates)
-          command "git pull"
-        end
+        has_package(:name => "git-core") do
+          has_exec({:requires => get_package("git-core"), :requires => [get_directory("#{cwd}")]}) do
+            name key
+            command user ? "git clone #{user}@#{source} #{path}" : "git clone #{source} #{to ? to : ""}"
+            cwd "#{cwd if cwd}"
+            creates "#{::File.join( (cwd), ::File.basename(source, ::File.extname(source)) )}/.git"
+          end
+          has_exec(:name => "update-#{name}") do
+            cwd ::File.dirname( get_exec(key).creates )
+            command "git pull"
+          end          
+        end                
       end
       
       def at(dir)

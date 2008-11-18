@@ -25,7 +25,7 @@ describe "Remote Instance" do
     describe "in resource" do
       before(:each) do
         @tc.instance_eval do
-          git(:name => "gittr") do
+          has_git(:name => "gittr") do
             source "git://source.git"
             path "/var/www/xnot.org"
             symlink "/var/www/xnot.org/public"
@@ -33,7 +33,7 @@ describe "Remote Instance" do
         end
       end
       it "should have the path set within the resource" do
-        @tc.resource(:git).first.to_string.should =~ /exec \{/
+        @tc.resource(:git).first.to_string.should =~ /exec \{ "gittr"/
       end
     end
   end
