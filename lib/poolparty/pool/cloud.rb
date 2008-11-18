@@ -89,7 +89,7 @@ module PoolParty
         make_base_directory
         copy_misc_templates
         Base.store_keys_in_file
-        Script.save!
+        Script.save!(self)
         copy_ssh_key # not my favorite...
       end
       

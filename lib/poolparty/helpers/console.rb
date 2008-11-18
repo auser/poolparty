@@ -17,11 +17,11 @@ module PoolParty
     end
     
     def extract_cloud_from_options(o)
-      o.cloudname ? [cloud(o.cloudname.downcase.to_sym)] : [clouds[clouds.keys.first]]
+      o.cloudname ? [cloud(o.cloudname.downcase.to_sym)] : [clouds[clouds.keys.sort.first]]
     end
     
     def extract_pool_from_options(o)
-      o.poolname ? [pool(o.poolname.downcase.to_sym)] : [pools[pools.keys.first]]
+      o.poolname ? [pool(o.poolname.downcase.to_sym)] : [pools[pools.keys.sort.first]]
     end
     
     # Clear all the pools and reload the console

@@ -14,7 +14,8 @@ module PoolParty
       opts = {:attribute => attr_s, :equal => str, :comparison => comparison}.merge(cust_opts)
       options = (parent.respond_to?(:options) && parent) ? parent.options.merge!(opts) : opts
       # @c = PoolParty::Resources::Conditional.new(options, parent, &block)
-      conditional(options, parent, &block)
+      # conditional(options, parent, &block)
+      parent.add_resource(:conditional, options, parent, &block)
     end
     
     class Conditional < Resource
