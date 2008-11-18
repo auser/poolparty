@@ -171,8 +171,8 @@ begin
           :status => resp.instanceState.name,
           :launching_time => resp.launchTime.parse_datetime,
           :internal_ip => resp.privateDnsName,
-          :keypair => resp.keyName, 
-          :security_group => resp.groupSet.item[0].groupId
+          :keypair => resp.keyName 
+          # :security_group => resp.groupSet.item[0].groupId
         }        
       rescue Exception => e
         nil

@@ -24,9 +24,7 @@ o.loaded_clouds.each do |cloud|
         Provisioner.provision_slaves(self, testing)
       else
         vputs "Provisioning master"
-        provisioning_in_progress
-        verbose ? Provisioner.provision_master(self, testing) : hide_output { Provisioner.provision_master(self, testing) }
-        provisioning_complete
+        (verbose || testing) ? Provisioner.provision_master(self, testing) : hide_output { Provisioner.provision_master(self, testing) }
       end
     end
     
