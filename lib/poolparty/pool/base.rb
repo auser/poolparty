@@ -28,7 +28,8 @@ module PoolParty
       # EC2 Options
       :ami => "ami-1cd73375",
       # Options that should not be touched pretty much ever
-      :manifest_path => "/etc/puppet/manifests"
+      :manifest_path => "/etc/puppet/manifests",
+      :security_group => ["default"] 
     })
         
     # Class methods
