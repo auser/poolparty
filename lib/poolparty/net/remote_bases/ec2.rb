@@ -1,7 +1,8 @@
+require "date"
+require "#{::File.dirname(__FILE__)}/ec2/ec2_response_object"
+
 begin
   require 'EC2'
-  require "date"
-  require "#{::File.dirname(__FILE__)}/ec2/ec2_response_object"
   
   class String
     def convert_from_ec2_to_ip
