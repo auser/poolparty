@@ -149,14 +149,17 @@ module PoolParty
             classpackage_with_self(service)
           end
           
+          options.merge!(:name => "user")
+          classpackage_with_self
+          # resources.each do |type, res|
+          #   str << "# #{type.to_s.pluralize}"
+          #   str << res.to_string
+          # end
+          
           global_classpackages.each do |cls|
             str << cls.to_string
+            str << cls.include_string
           end
-          
-          resources.each do |type, res|
-            str << "# #{type.to_s.pluralize}"
-            str << res.to_string
-          end          
 
           str << "# Custom functions"
           str << Resources::CustomResource.custom_functions_to_string
