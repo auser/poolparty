@@ -40,9 +40,9 @@ module PoolParty
           # has_runit_service("pm_node", "pm_node", File.join(File.dirname(__FILE__), "..", "templates/messenger/node/"))
         end
         
-        has_exec(:name => "build_messenger", :command => ". /etc/profile && server-build-messenger")
+        has_exec(:name => "build_messenger", :command => ". /etc/profile && server-build-messenger -n #{cloud.name}")
         has_exec(:name => "start_node", :command => ". /etc/profile && server-start-node")
-        has_exec(:name => "update_hosts", :command => ". /etc/profile && server-update-hosts")
+        has_exec(:name => "update_hosts", :command => ". /etc/profile && server-update-hosts -n #{cloud.name}")
         
         # execute_on_node do
         has_cron(:name => "puppetd runner", :user => Base.user, :minute => "*/5") do
@@ -76,11 +76,11 @@ module PoolParty
           end
           has_cron(:name => "Load handler", :user => Base.user, :minute => "*/4") do
             requires get_gempackage("poolparty")
-            command(". /etc/profile && cloud-handle-load")
+            command(". /etc/profile && cloud-handle-load -n #{cloud.name}")
           end
           has_cron(:name => "provisioning ensurer", :user => Base.user, :minute => "*/2") do
             requires get_gempackage("poolparty")
-            command ". /etc/profile && cloud-ensure-provisioning"
+            command ". /etc/profile && cloud-ensure-provisioning -n #{cloud.name}"
           end
           # has_runit_service("client_server", "pm_client", File.join(File.dirname(__FILE__), "..", "templates/messenger/client/"))
           # has_runit_service("master_server", "pm_master", File.join(File.dirname(__FILE__), "..", "templates/messenger/master/"))
