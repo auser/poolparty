@@ -133,12 +133,10 @@ wget http://github.com/auser/poolparty/tree/master%2Fpkg%2Fpoolparty.gem?raw=tru
       def restart_puppetmaster
         <<-EOS
 echo "(Re)starting poolparty"
-# . /etc/profile
+. /etc/profile
 # /etc/init.d/puppetmaster stop #{unix_hide_string}
-# ps aux | grep puppetmaster | awk '{print $2}' | xargs kill #{unix_hide_string} # just in case
-# rm -rf /etc/puppet/ssl
+ps aux | grep puppetmaster | awk '{print $2}' | xargs kill;rm -rf /etc/puppet/ssl;puppetmasterd --verbose
 # # Start it back up
-# # puppetmasterd --verbose
 /etc/init.d/puppetmaster start
         EOS
       end
