@@ -1,17 +1,18 @@
 class EC2ResponseObject
   def self.get_descriptions(resp)      
-    rs = get_response_from(resp)
-
+    rs = get_instance_from_response(resp)
+    group = get_group_from_response(resp)
+    
     # puts rs.methods.sort - rs.ancestors.methods
     out = begin
       if rs.respond_to?(:instancesSet)
-        [EC2ResponseObject.get_hash_from_response(rs.instancesSet.item)]
+        [EC2ResponseObject.get_hash_from_response(rs.instancesSet.item, group)]
       else
         rs.collect {|r| 
           if r.instancesSet.item.class == Array
-            r.instancesSet.item.map {|t| EC2ResponseObject.get_hash_from_response(t)}
+            r.instancesSet.item.map {|t| EC2ResponseObject.get_hash_from_response(t, group)}
           else
-            [EC2ResponseObject.get_hash_from_response(r.instancesSet.item)]
+            [EC2ResponseObject.get_hash_from_response(r.instancesSet.item, group)]
           end            
         }.flatten.reject {|a| a.nil? }
       end
@@ -22,7 +23,7 @@ class EC2ResponseObject
 
     out
   end
-  def self.get_response_from(resp)
+  def self.get_instance_from_response(resp)
     begin
       rs = resp.reservationSet.item unless resp.reservationSet.nil?
       rs ||= resp.DescribeInstancesResponse.reservationSet.item
@@ -33,7 +34,18 @@ class EC2ResponseObject
     end
     rs
   end
-  def self.get_hash_from_response(resp)      
+  def self.get_group_from_response(resp)
+    begin
+      group = resp.reservationSet.item.groupSet.item.groupId unless resp.reservationSet.nil?
+      group ||= resp.DescribeInstancesResponse.reservationSet.item.groupSet.item.groupId
+      #rs ||= rs.respond_to?(:instancesSet) ? rs.instancesSet : rs
+      #rs.reject! {|a| a.nil? || a.empty? }
+    rescue Exception => e
+      resp
+    end
+    group
+  end
+  def self.get_hash_from_response(instance_set, group = 'default')      
     begin
       {
         :instance_id => resp.instanceId,
@@ -42,8 +54,8 @@ class EC2ResponseObject
         :status => resp.instanceState.name,
         :launching_time => resp.launchTime.parse_datetime,
         :internal_ip => resp.privateDnsName,
-        :keypair => resp.keyName
-        # :security_group => resp.groupSet.item[0].groupId
+        :keypair => resp.keyName,
+        :security_group => group
       }        
     rescue Exception => e
       nil
