@@ -25,7 +25,7 @@ module PoolParty
             if resources && !resources.empty?
               @cp = classpackage_with_self(self)
               output << @cp.to_string
-              output << "include #{@cp.name.sanitize}"
+              output << "include #{@cp.name.downcase.sanitize}"
             end
             
             unless virtual_resource?
