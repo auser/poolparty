@@ -2,10 +2,10 @@ module PoolParty
   module Provisioner
     class Master < ProvisionerBase
       
-      def initialize(cloud=self, os=:ubuntu)
-        raise MasterException.new(:no_ip) unless cloud.master && cloud.master.ip
-        super(cloud.master, cloud, os)
-        @master_ip = cloud.master.ip
+      def initialize(cl=self, os=:ubuntu)
+        raise MasterException.new(:no_ip) unless cl.master && cl.master.ip
+        super(cl.master, cl, os)
+        @master_ip = cl.master.ip
       end
 
       def valid?
