@@ -19,17 +19,18 @@ describe "Cron" do
     end
     describe "as included" do            
       before(:each) do
+        reset_resources!
         @cron = cron({:rent => "low"}) do
           name "/www/conf/httpd.conf"
           hour 23
           minute 5
-          weekday 1
+          weekday 1          
         end
       end
       it "should use default values" do
         @cron.name.should == "/www/conf/httpd.conf"
       end
-      it "should keep the default values for the file" do
+      it "should keep the default values for the cron" do
         @cron.user.should == "root"
       end
       it "should also set options through a hash" do

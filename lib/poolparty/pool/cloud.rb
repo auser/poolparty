@@ -145,12 +145,18 @@ module PoolParty
           # Refactor this into the resources method
           # TODO
           services.each do |service|
-            @cp = classpackage_with_self(service)
-            str << @cp.to_string
-            str << @cp.include_string
+            service.options.merge!(:name => service.name)
+            classpackage_with_self(service)
           end
           
-          str << resources_string_from_resources(resources)
+          global_classpackages.each do |cls|
+            str << cls.to_string
+          end
+          
+          resources.each do |type, res|
+            str << "# #{type.to_s.pluralize}"
+            str << res.to_string
+          end          
 
           str << "# Custom functions"
           str << Resources::CustomResource.custom_functions_to_string

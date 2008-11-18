@@ -110,10 +110,9 @@ describe "File" do
           before(:each) do
             reset_resources!
             @output = @cloud.build_short_manifest
-            puts @output
           end
           it "should have one class" do
-            @output.match(/class (\w+) \{/).size.should == 1
+            @output.match(/class (\w+) \{/).size.should == 2
           end
         end
       end

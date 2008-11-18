@@ -19,7 +19,7 @@ describe "Gem" do
     @gem.name.should == "activesupport"
   end
   it "should have the 'rails' gem in the packages" do
-    @cloud.get_resource(:gempackage, "activesupport").to_string.should =~ /activesupport/
+    @gem.to_string.should =~ /activesupport/
   end
   describe "with parent options" do
     before(:each) do

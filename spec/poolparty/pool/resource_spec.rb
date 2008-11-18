@@ -31,28 +31,7 @@ describe "Resource" do
     end
     describe "to_s" do
       it "should be able to coalesce the instances" do
-        @resource.to_string.should =~ /resource \{\n/
-      end
-      describe "with resources" do
-        before(:each) do
-          self.stub!(:options).and_return(:name => "cook")
-
-          @obj = PoolParty::Resources::Resource.new
-          @obj.stub!(:name).and_return "cook"
-
-          @resource2 = MyResource.new do
-            file(:name => "shulie")
-          end
-        end
-        it "should call classpackage_with_self when it has resources" do
-          @resource2.should_receive(:classpackage_with_self).and_return @obj
-          @resource2.to_string
-        end
-        it "should call to_string on the class package" do
-          @obj.should_receive(:to_string).and_return "wee"
-          @resource2.should_receive(:classpackage_with_self).and_return @obj
-          @resource2.to_string
-        end
+        @resource.to_string.should =~ /resource \{/
       end
     end
     describe "class methods" do
@@ -139,10 +118,19 @@ describe "Resource" do
       before(:each) do
         @cloud = cloud :command_cloud do; end
       end
-      it "should call add_resource when creating using the command: file" do
-        @cloud.should_receive(:add_resource).with(:file, {:name => "frank"}, @cloud)
-        @cloud.instance_eval do
+      describe "add_resource" do
+        it "should call add_resource when creating using the command: file" do
+          @cloud.should_receive(:add_resource).with(:file, {:name => "frank"}, @cloud)
+          @cloud.instance_eval do
+            file(:name => "frank")
+          end
+        end
+        it "should return a resource when the resource does not exist" do
+          file(:name => "/etc/frank.txt").class.should == PoolParty::Resources::File
+        end
+        it "should return a resource when the resource does exist" do
           file(:name => "frank")
+          file(:name => "frank").class.should == PoolParty::Resources::File
         end
       end
       it "should create the new 'resource' as a resource" do

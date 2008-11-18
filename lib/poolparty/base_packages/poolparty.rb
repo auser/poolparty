@@ -37,11 +37,12 @@ module PoolParty
           has_gempackage(:name => "poolparty", :download_url => "http://github.com/auser/poolparty/tree/master%2Fpkg%2Fpoolparty.gem?raw=true", :requires => [get_gempackage("ruby2ruby"), get_gempackage("RubyInline"), get_gempackage("ParseTree")])
           
           # , :ifnot => "/bin/ps aux | /bin/grep -q pm_node"
-          has_exec(:name => "build_messenger", :command => ". /etc/profile && server-build-messenger")
-          has_exec(:name => "start_node", :command => ". /etc/profile && server-start-node")
-          has_exec(:name => "update_hosts", :command => ". /etc/profile && server-update-hosts")
           # has_runit_service("pm_node", "pm_node", File.join(File.dirname(__FILE__), "..", "templates/messenger/node/"))
         end
+        
+        has_exec(:name => "build_messenger", :command => ". /etc/profile && server-build-messenger")
+        has_exec(:name => "start_node", :command => ". /etc/profile && server-start-node")
+        has_exec(:name => "update_hosts", :command => ". /etc/profile && server-update-hosts")
         
         # execute_on_node do
         has_cron(:name => "puppetd runner", :user => Base.user, :minute => "*/5") do

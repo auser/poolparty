@@ -8,7 +8,7 @@ describe "Exec" do
   end
   describe "instances" do
     it "should turn the one hash instance into a string" do
-      @exec.to_string.should =~ /exec \{\n"\/usr\/bin\/ifconfig"/
+      @exec.to_string.should =~ /exec \{ "\/usr\/bin\/ifconfig"/
     end
     it "should turn the two hash instance into a string" do
       @exec = exec({:name => "/usr/bin/ping 127.0.0.1"})

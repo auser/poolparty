@@ -105,24 +105,30 @@ module PoolParty
       # Then it takes the value of the block and sets whatever is sent there as 
       # the options
       # Finally, it uses the parent's options as the lowest priority
-      def initialize(opts={}, parent=self, &block)
+      def initialize(opts={}, parent=self, &block)                        
+        run_setup(parent, &block)
         # Take the options of the parents
         set_vars_from_options(opts) unless opts.empty?
-        set_resource_parent(parent)
         
-        run_setup(parent, false, &block) if block
-        # self.run_in_context &block if block
+        set_resource_parent
+        
         loaded(opts, @parent)
       end
       
       # Helper to set the containing parent on the resource
-      def set_resource_parent(parent=nil)
-        if parent && parent != self
-          @parent = parent
-          if @parent.is_a?(PoolParty::Resources::Resource) && @parent.printable? && @parent.name != name
+      def set_resource_parent
+        if @parent && @parent != self
+          if can_set_requires_for_parent
             # requires @parent.to_s
           end
         end
+      end
+      
+      def can_set_requires_for_parent
+        @parent.is_a?(PoolParty::Resources::Resource) && 
+          @parent.printable? && 
+          @parent.name != name &&
+          !@parent.is_a?(PoolParty::Resources::Classpackage)
       end
             
       # Stub, so you can create virtual resources
