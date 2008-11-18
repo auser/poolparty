@@ -24,7 +24,6 @@ module PoolParty
     def classpackage_with_self(parent=self, &block)
       name = (parent.options.name || Classpackage.name(parent).to_s).sanitize
       if in_global_classpackages?(name)
-        puts "#{name} already a class in the global storage"
         returning get_from_global_classpackage_store(name) do |cls|
           cls.run_in_context(parent, &block) if block
         end
