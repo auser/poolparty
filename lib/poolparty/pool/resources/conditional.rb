@@ -12,7 +12,7 @@ module PoolParty
     def execute_if(attr_s="$hostname", comparison="==", str="", cust_opts={}, parent=self, &block)
       # parent = parent.is_a?(PoolParty::Cloud::Cloud) ? parent : parent.parent
       opts = {:attribute => attr_s, :equal => str, :comparison => comparison}.merge(cust_opts)
-      options = (parent.respond_to?(:options) && parent) ? parent.options.merge!(opts) : opts
+      options = (parent.respond_to?(:options) && parent && parent != self) ? parent.options.merge!(opts) : opts
       # @c = PoolParty::Resources::Conditional.new(options, parent, &block)
       # conditional(options, parent, &block)
       add_resource(:conditional, options, parent, &block)

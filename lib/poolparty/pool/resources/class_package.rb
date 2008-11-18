@@ -14,19 +14,25 @@ module PoolParty
     end
     
     def store_into_global_classpackage_store(r)
-      global_classpackages << r unless in_global_classpackages?(r.name)
+      arr = r.is_a?(Array) ? r : [r]
+      arr.each do |a|
+        global_classpackages << a unless in_global_classpackages?(a.name)
+      end
     end
     
     # Wrap all the resources into a class package from 
     def classpackage_with_self(parent=self, &block)
       name = (parent.options.name || Classpackage.name(parent).to_s).sanitize
-      if in_global_classpackages?(name) 
-        @@cp = get_from_global_classpackage_store(name)
-        @@cp.run_in_context(parent, &block) if block
+      if in_global_classpackages?(name)
+        puts "#{name} already a class in the global storage"
+        returning get_from_global_classpackage_store(name) do |cls|
+          cls.run_in_context(parent, &block) if block
+        end
       else
         @@parent_resources = parent.resources
-        @@cp = parent.add_resource(:classpackage, parent.options.merge(:name => name), parent)
-
+        @@cp = parent.add_resource(:classpackage, parent.options.merge(:name => name), parent, &block)
+        @@cp = @@cp.is_a?(Array) ? @@cp[-1] : @@cp
+        
         @@cp.run_in_context(parent) do
           @@parent_resources.each do |ty, res|
             resources[ty] = res unless ty == :classpackage
@@ -38,9 +44,8 @@ module PoolParty
         @@cp.instance_eval &block if block
         
         store_into_global_classpackage_store(@@cp)
-      end
-      @@parent_resources = nil
-      @@cp
+      end      
+      return @@cp
     end
                 
     class Classpackage < Resource
@@ -60,17 +65,21 @@ module PoolParty
         loaded
       end
                         
-      def to_string
-        returning String.new do |output|
-          output << "# #{name.sanitize}"
-          output << "\nclass #{name.sanitize.downcase} {\n"
-          output << resources_string_from_resources(resources)
-          output << "\n}\n"
-        end
+      def to_string(pre="")
+        "" unless resources.size > 0
+        returning Array.new do |output|
+          output << "#{pre}class #{name.sanitize.downcase} {"
+          output << "#{pre}#{resources_string_from_resources(resources)}"
+          output << "#{pre}}"
+        end.join("\n")
       end
       
       def include_string
         "include #{name.sanitize.downcase}"
+      end
+      
+      def virtual_resource?
+        true
       end
       
       def printable?

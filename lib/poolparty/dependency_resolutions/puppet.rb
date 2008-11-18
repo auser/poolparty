@@ -23,16 +23,16 @@ module PoolParty
             output << @prestring || ""
 
             if resources && !resources.empty?
-              @cp = classpackage_with_self(self)
-              output << @cp.to_string
-              output << "include #{@cp.name.downcase.sanitize}"              
+              # @cp = classpackage_with_self(self)
+              # output << @cp.to_string
+              # output << "include #{@cp.name.downcase.sanitize}"
+              output << resources_string_from_resources(resources, pre)
             end
             
             unless virtual_resource?
-              output << "#{pre}#{class_type_name.downcase} {"
-              output << "#{pre}\"#{self.key}\":"
+              output << "#{pre}#{class_type_name.downcase} { #{pre}\"#{self.key}\":"
               output << opts.flush_out("#{pre*2}").join(",\n")
-              output << "#{pre}}"            
+              output << "#{pre}}"
             end
           
             output << @poststring || ""
@@ -51,8 +51,8 @@ module PoolParty
           end
 
           res.each do |type, resource|
-            str << resource.to_string("#{pre*2}") unless type == :classpackage
-          end        
+            str << resource.to_string("#{pre*2}")
+          end
         end.join("\n")
       end
       
