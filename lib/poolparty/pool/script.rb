@@ -22,12 +22,17 @@ module PoolParty
     
     def self.for_save_string(in_cloud=nil)
       returning Array.new do |out|
-        (in_cloud ? [in_cloud] : clouds.collect {|n,cl| cl }).each do |cl|
-          out << <<-EOE
-cloud :#{cl.name} do
-#{cl.minimum_runnable_options.map {|o| "\t#{o} #{cl.send(o).respec_string}"}.join("\n")}
+        pools.collect {|n,pl| pl}.each do |pl|
+          
+          (in_cloud ? [in_cloud] : clouds.collect {|n,cl| cl }).each do |cl|
+            out << <<-EOE
+pool :mypool do
+  cloud :#{cl.name} do
+    #{cl.minimum_runnable_options.map {|o| "#{o} #{cl.send(o).respec_string}"}.join("\n")}
+  end
 end
-          EOE
+            EOE
+          end          
         end
       end.join("\n")
     end
