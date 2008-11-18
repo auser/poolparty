@@ -69,21 +69,37 @@ describe "File" do
       end
     end
     describe "from a collection of resources to another" do
-      before(:each) do
-        self.stub!(:options).and_return({:name => "cook"})
-        file(:name => "franksfile")
-        exec(:name => "get file", :command => "kill frank for file")
+      before(:each) do 
+        reset_resources!       
+        cloud :bunkers do
+          file(:name => "franksfile")
+          exec(:name => "get file", :command => "kill frank for file")
+        end
+        @cloud = cloud(:bunkers)
+        @class2 = classpackage_with_self(@cloud)
       end
       it "should have the method classpackage_with_self" do
         self.respond_to?(:classpackage_with_self).should == true
       end
       it "should transfer the resources to the class" do
-        @class2 = classpackage_with_self(self)
-        @class2.resources.should_not be_empty
+        @class2.resources.size.should == 2
       end
-      # it "should leave zero resources on the parent" do
-      #   @class2 = classpackage_with_self(self)
-      #   resources.should be_empty
-      # end
+      it "should have the file resource in the classpackage" do
+        @class2.resource(:file).first.name.should == "franksfile"
+      end
+      it "should have the exec resource in the classpackage" do
+        @class2.resource(:exec).first.name.should == "get file"
+      end
+      it "should have the resources on the new classpackage" do
+        @cloud.resources.size.should == 1
+      end
+      it "should have the conditional classpackage on the resources" do
+        @cloud.resource(:classpackage).first.should == @class2
+      end
+      describe "to_string" do
+        it "should have the file in the string" do
+          @class2.to_string.should =~ /franksfile/
+        end
+      end
   end
 end
