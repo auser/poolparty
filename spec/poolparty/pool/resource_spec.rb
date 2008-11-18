@@ -1,7 +1,8 @@
 require File.dirname(__FILE__) + '/../spec_helper'
-require File.dirname(__FILE__) + '/test_plugins/webserver'
 
 include PoolParty::Resources
+
+require File.dirname(__FILE__) + '/test_plugins/webserver'
 
 class MyResource < PoolParty::Resources::Resource
   # Just to give some options for the test class
@@ -345,6 +346,21 @@ describe "Resource" do
           end
           it "should be able to get the resource from the global_resources_store by the name and type" do
             @cloud2.get_from_global_resource_store(:directory, "/var/www").key.should == "/var/www"
+          end
+          describe "adding to global resource store" do
+            before(:each) do
+              @cloud3 = cloud :pumpkinpie do          
+                file(:name => "/var/www/pumpkinfile.html")
+                file(:name => "/var/www/pumpkinfile.html")
+                apache do
+                  file(:name => "/var/www/pumpkinfile.html")
+                end
+              end
+              @cloud3 = cloud(:pumpkinpie)
+            end
+            it "should not have 2 of the same resources" do
+              @cloud3.resource(:file).size.should == 1
+            end
           end
           describe "grabbing after already instantiated" do
             before(:each) do

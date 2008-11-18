@@ -15,7 +15,7 @@ module PoolParty
       options = (parent.respond_to?(:options) && parent) ? parent.options.merge!(opts) : opts
       # @c = PoolParty::Resources::Conditional.new(options, parent, &block)
       # conditional(options, parent, &block)
-      parent.add_resource(:conditional, options, parent, &block)
+      add_resource(:conditional, options, parent, &block)
     end
     
     class Conditional < Resource

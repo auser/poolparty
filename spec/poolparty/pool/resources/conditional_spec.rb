@@ -49,6 +49,22 @@ describe "Conditional" do
       it "should have a case statement for the hostname" do
         @string.should =~ /case \$hostname/
       end
+      describe "multiple" do
+        before(:each) do
+          reset!
+          @cloud = cloud :multiple_conditionals do
+            execute_on_master do
+              has_file(:name => "/etc/frank.txt")
+            end
+            execute_on_master do
+              has_exec(:name => "feed frank")
+            end
+          end
+        end
+        it "should have two conditional resources" do
+          @cloud.resource(:conditional).size.should == 2
+        end
+      end
     end
   end
 end
