@@ -20,6 +20,9 @@ end
 desc "Generate a new manifest and a new gem"
 task :build_local_gem => [:clean_tmp, :spec, :clean_pkg, :"manifest:refresh", :package]
 
+desc "Release to github"
+task :release => [:ghgem]
+
 desc "Generate gemspec"
 task :gemspec  => [:spec, :clean_tmp, :"manifest:refresh", :build_local_gem] do |t|
   res = %x[rake debug_gem]
