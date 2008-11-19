@@ -179,7 +179,7 @@ module PoolParty
       end
       # Gather all the tasks into one string
       def install_string
-        (default_install_tasks).each do |task|
+        [default_install_tasks, last_install_tasks].flatten.each do |task|
           case task.class
           when String
             task
@@ -188,8 +188,11 @@ module PoolParty
           end
         end.nice_runnable
       end
+      def last_install_tasks
+        []
+      end
       def configure_string
-        (default_configure_tasks).each do |task|
+        [default_configure_tasks, last_configure_tasks].flatten.each do |task|
           case task.class
           when String
             task
@@ -197,6 +200,9 @@ module PoolParty
             self.send(task.to_sym)
           end
         end.nice_runnable
+      end
+      def last_configure_tasks
+        []
       end
       # Tasks with default tasks 
       # These are run on all the provisioners, master or slave
