@@ -2,16 +2,16 @@ module PoolParty
   module Resources
     
     def execute_on_master(parent=self, &block)
-      execute_if("$hostname", "==", "master", {}, parent, &block)
+      execute_if("$hostname", "master", {}, parent, &block)
     end
     
     def execute_on_node(parent=self, &block)
-      execute_if("$hostname", "!=", "master", {:notequal => true}, parent, &block)
+      execute_if("$hostname", "master", {:notequal => true}, parent, &block)
     end
     
-    def execute_if(attr_s="$hostname", comparison="==", str="", cust_opts={}, parent=self, &block)
+    def execute_if(attr_s="$hostname", str="", cust_opts={}, parent=self, &block)
       # parent = parent.is_a?(PoolParty::Cloud::Cloud) ? parent : parent.parent
-      opts = {:attribute => attr_s, :equal => str, :comparison => comparison}.merge(cust_opts)
+      opts = {:attribute => attr_s, :equal => str}.merge(cust_opts)
       options = (parent.respond_to?(:options) && parent && parent != self) ? parent.options.merge!(opts) : opts
       # @c = PoolParty::Resources::Conditional.new(options, parent, &block)
       # conditional(options, parent, &block)
@@ -21,7 +21,7 @@ module PoolParty
     class Conditional < Resource
       
       def initialize(opts={}, parent=self, &block)
-        name "#{opts[:name] ? opts[:name] : opts[:attribute]} #{opts[:comparison]} #{opts[:equal]}"
+        name "#{opts[:name] ? opts[:name] : opts[:attribute]} #{opts[:equal]}"
         attribute opts[:attribute]
         equal opts[:equal]
         notequal opts.has_key?(:notequal) ? opts[:notequal] : false

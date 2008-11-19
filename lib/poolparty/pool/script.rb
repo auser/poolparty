@@ -26,7 +26,7 @@ module PoolParty
           
           (in_cloud ? [in_cloud] : clouds.collect {|n,cl| cl }).each do |cl|
             out << <<-EOE
-pool :mypool do
+pool :#{pl.name} do
   cloud :#{cl.name} do
     #{cl.minimum_runnable_options.map {|o| "#{o} #{cl.send(o).respec_string}"}.join("\n")}
   end
