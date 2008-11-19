@@ -23,20 +23,13 @@ module PoolParty
             output << @prestring || ""
 
             if resources && !resources.empty?
-              # @cp = classpackage_with_self(self)
-              # output << @cp.to_string
-              # output << "include #{@cp.name.downcase.sanitize}"
               output << resources_string_from_resources(resources, pre)
             end
             
             unless virtual_resource?
-              # if self.key.nil? || self.key.empty?
-                # output << "# #{class_type_name.downcase.pluralize}"
-              # else
                 output << "#{pre}#{class_type_name.downcase} { #{pre}\"#{self.key}\":"
                 output << opts.flush_out("#{pre*2}").join(",\n")
-                output << "#{pre}}"
-              # end
+                output << "#{pre}}"d
             end
           
             output << @poststring || ""
