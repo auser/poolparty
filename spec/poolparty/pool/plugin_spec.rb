@@ -93,6 +93,19 @@ describe "Plugin" do
       it "should get a hold of the containing cloud" do
         @plugin.cloud.should == @c
       end
+      describe "enable" do
+        before(:each) do
+          reset!
+          @plugin = PoolParty::Plugin::Plugin.new
+          Kernel::PoolPartyApacheClass.stub!(:new).and_return @plugin          
+        end
+        it "should call enable on calling realize! when there is no block included" do
+          @plugin.should_receive(:enable).and_return true
+          @cloud = cloud :app do
+            apache
+          end
+        end
+      end
     end
   end
 end

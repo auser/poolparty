@@ -80,6 +80,13 @@ describe "Cloud" do
       it "should be able to pull the pool from the cloud" do
         @cloud.parent == @pool
       end
+      it "should have the outer pool listed as the parent of the inner cloud" do
+        @pool = pool :knick_knack do
+          cloud :paddy_wack do            
+          end
+        end
+        cloud(:paddy_wack).parent.should == pool(:knick_knack)
+      end
       it "should have services in an array" do
         @cloud.services.class.should == Array
       end
@@ -288,9 +295,6 @@ describe "Cloud" do
               @manifest.should =~ /define line\(\$file/
 
               File.open("test_manifest.pp", "w+") {|f| f << @manifest}
-            end
-            it "should include the hosts for all the listed local instances" do
-              @manifest.should =~ /master \{/
             end
           end
           describe "building with an existing manifest" do

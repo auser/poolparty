@@ -27,7 +27,6 @@ module PoolParty
         klass = class_string_name.class_constant(PoolParty::Plugin::Plugin)
         mod = class_string_name.module_constant(&block)
         
-        # klass.extend PoolParty::Resources
         klass.send :include, mod
         
         # Store the name of the class for pretty printing later

@@ -363,6 +363,21 @@ describe "Resource" do
                 end
               end
             end
+            describe "same_resources_of" do
+              it "should say that two resources are the same" do
+                has_file(:name => "tanks")
+                has_file(:name => "tanks").same_resources_of(:file, "tanks").should == true
+              end
+              it "should say that two resources are the same regardless of their context" do
+                @cloud2.instance_eval do
+                  has_file(:name => "mighty_mighty_bosstones")
+                end
+                @cloud2.resource(:file).first.same_resources_of(:file, "mighty_mighty_bosstones").should == true
+              end
+              it "should say that two resources are not the same if they are not the same" do
+                has_file(:name => "trees").same_resources_of(:file, "timber").should == false
+              end
+            end
             it "should grab the resource when called in in a block"# do
             #   @cloud2.resources_string_from_resources(@cloud2.resources).should =~ /\[ Package\['apache2'\], Package\['boxers'\] \]/
             # end

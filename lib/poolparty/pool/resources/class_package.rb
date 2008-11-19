@@ -65,12 +65,21 @@ module PoolParty
       end
                         
       def to_string(pre="")
-        "" unless resources.size > 0
-        returning Array.new do |output|
-          output << "#{pre}class #{name.sanitize.downcase} {"
-          output << "#{pre}#{resources_string_from_resources(resources)}"
-          output << "#{pre}}"
-        end.join("\n")
+        if resources.size > 0 && not_printed?
+          returning Array.new do |output|
+            output << "#{pre}class #{name.sanitize.downcase} {"
+            output << "#{pre}#{resources_string_from_resources(resources)}"
+            output << "#{pre}}"
+            output << include_string
+            @not_printed = false
+          end.join("\n")
+        else
+          ""
+        end
+      end
+      
+      def not_printed?
+        @not_printed ||= true
       end
       
       def include_string
