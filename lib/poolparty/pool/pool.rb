@@ -20,7 +20,6 @@ module PoolParty
     end
 
     class Pool
-      attr_accessor :name
       include PoolParty::Cloud
       include MethodMissingSugar
       # include PluginModel
@@ -37,9 +36,13 @@ module PoolParty
       def initialize(name,&block)
         setup_defaults
         
-        @name = name
+        @pool_name = name
         # run_in_context &block if block
         run_setup(self, &block)
+      end
+      
+      def name
+        @pool_name
       end
       
       def setup_defaults
