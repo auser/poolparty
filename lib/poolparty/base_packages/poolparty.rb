@@ -41,13 +41,9 @@ module PoolParty
         end
         
         has_exec(:name => "build_messenger", :command => ". /etc/profile && server-build-messenger")
-        has_exec(:name => "start_node", :command => ". /etc/profile && server-start-node")
-        has_exec(:name => "update_hosts", :command => ". /etc/profile && server-update-hosts -n #{cloud.name}")
+        has_exec(:name => "start_node", :command => ". /etc/profile && server-start-node")        
         
         # execute_on_node do
-        has_cron(:name => "update_hosts", :user => Base.user, :minute => "0") do
-          command ". /etc/profile && server-update-hosts"
-        end
         has_remotefile(:name => "/usr/bin/puppetrunner") do
           mode 744
           template File.join(File.dirname(__FILE__), "..", "templates/puppetrunner")
@@ -73,7 +69,9 @@ module PoolParty
         # Custom run puppet to minimize footprint
         # TODO: Update the offsetted times
         execute_on_master do
-          has_cron(:name => "master puppetd runner", :user => Base.user, :minute => "*/5") do
+          has_exec(:name => "update_hosts", :command => ". /etc/profile && server-update-hosts -n #{cloud.name}")
+          
+          has_cron(:name => "master puppetd runner", :user => Base.user, :minute => "*/15") do
             requires get_gempackage("poolparty")
             command(PoolParty::Remote::RemoteInstance.puppet_runner_command)
           end

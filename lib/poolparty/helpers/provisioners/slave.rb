@@ -35,6 +35,7 @@ chmod +x /usr/bin/puppetrunner
         <<-EOS          
           echo "#{open(File.join(template_directory, "puppet.conf")).read}" > /etc/puppet/puppet.conf
           /etc/init.d/puppetmaster stop #{unix_hide_string}
+          rm -rf /etc/puppet/ssl
           # /usr/bin/puppetrerun
         EOS
       end
@@ -45,6 +46,12 @@ chmod +x /usr/bin/puppetrunner
         <<-EOS
 /bin/sh /usr/bin/puppetrunner
         EOS
+      end
+      
+      def last_install_tasks
+        [
+          "rm -rf /etc/puppet/ssl"
+        ]
       end
       
       def master_ip

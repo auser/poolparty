@@ -55,7 +55,7 @@ module PoolParty
       end
       
       def pool_clouds
-        @pool_clouds ||= returning Array.new do |arr|
+        returning Array.new do |arr|
           clouds.each do |name, cl|
             arr << cl if cl.parent.name == self.name
           end

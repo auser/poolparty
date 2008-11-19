@@ -5,20 +5,14 @@ require "poolpartycl"
 
 available_monitors = PoolParty::Monitors.available_monitors
 o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
-  opts.on('-n name', '--name name', 'Listing for cloud name')    { |c| optioner.cloudname c }
+  # opts.on('-n name', '--name name', 'Listing for cloud name')    { |c| optioner.cloudname c }
   opts.on('-m name', '--monitor monitor_name', "Monitor name (default: cpu) (Available monitors: #{available_monitors.join(", ")})") {|c| optioner.monitorname c}
 end
 
 @monitor = o.monitorname ? o.monitorname : "cpu"
-
-o.loaded_clouds.each do |cl|
   
-  with_cloud(cl, {:testing => o.testing, :monitorname => @monitor }) do
-    if PoolParty::Monitors.available_monitors.include?(monitorname.downcase.to_sym)
-      print "PoolParty::Monitors::#{monitorname.capitalize}Monitor".constantize.run.to_f
-    else
-      puts "Unknown monitor"
-    end
-  end
-  
+if PoolParty::Monitors.available_monitors.include?(@monitor.downcase.to_sym)
+  print "PoolParty::Monitors::#{@monitor.capitalize}Monitor".constantize.run.to_f
+else
+  puts "Unknown monitor"
 end
