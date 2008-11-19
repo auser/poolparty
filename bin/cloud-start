@@ -16,10 +16,8 @@ o.loaded_clouds.each do |cloud|
       if testing
         puts("\tNot launching while in testing mode")
       else
-        provisioning_in_progress
         vputs "Launching and configuring the master"
         launch_and_configure_master!
-        provisioning_complete
       end
     end
     puts open(::File.join(File.dirname(__FILE__), "..", "lib", "poolparty", "config", "postlaunchmessage.txt")).read ^ {:master_ip => master.ip.chomp}

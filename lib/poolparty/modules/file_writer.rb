@@ -5,6 +5,11 @@ module PoolParty
       path = ::File.join( Base.storage_directory, preceded, ::File.basename(file) )      
       FileUtils.cp file, path unless file == path || ::File.exists?(path)
     end
+    def cleanup_storage_directory
+      Dir["#{Base.storage_directory}/**"].each do |f|
+        ::FileUtils.rm f if ::File.file?(f)
+      end
+    end
     def copy_template_to_storage_directory(file)
       make_template_directory
       path = ::File.join( Base.tmp_path, Base.template_directory, ::File.basename(file) )
