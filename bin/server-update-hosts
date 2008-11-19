@@ -7,46 +7,41 @@ o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
   opts.on('-n name', '--name name', 'Update hosts for local pool named [name]')    { |p| optioner.poolname p }
 end
 
-o.loaded_pools.each do |pool|  
-  with_pool(pool) do
-    puts "Pool: #{name}"
-    pool_clouds.each do |cl|
+o.loaded_clouds.each do |cloud|
+  with_cloud(cloud) do
+    puts "Cloud: #{name}"
+    
+    new_hosts_listing = returning Array.new do |arr|
       
-      vputs "Cloud: #{cl.name}"
+      puts list_of_running_instances
       
-      new_hosts_listing = returning Array.new do |arr|
-        
-        puts cl.list_of_running_instances
-        
-        cl.list_of_running_instances.each do |ri|
-          vputs ri.hosts_file_listing_for(cl)
-          arr << ri.hosts_file_listing_for(cl)
+      list_of_running_instances.each do |ri|
+        vputs ri.hosts_file_listing_for(self)
+        arr << ri.hosts_file_listing_for(self)
+      end
+      other_clouds.each do |other|
+        other.list_of_running_instances.each do |ri|
+          vputs ri.hosts_file_listing_for(self)
+          arr << ri.hosts_file_listing_for(self)
         end
-        cl.other_clouds.each do |other|
-          other.list_of_running_instances.each do |ri|
-            vputs ri.hosts_file_listing_for(cl)
-            arr << ri.hosts_file_listing_for(cl)
-          end
-        end
-      end.join("\n")
+      end
+    end.join("\n")
+    
+    if testing
+      puts new_hosts_listing
+    else
+      new_hosts_file = "#{Base.manifest_path}/classes/hosts.pp"
       
-      if testing
-        puts new_hosts_listing
-      else
-        new_hosts_file = "#{Base.manifest_path}/classes/hosts.pp"
-        
-        arr = returning Array.new do |arr|
-          new_hosts_listing.split(/\n/).each do |line|
-            parts = line.split(/\t/).map {|a| a.chomp }
-            ip,hostname,aliases = parts[0], parts[1], parts[2..-1]
-            puts "ip: #{ip} for #{hostname}"
-            arr << PoolParty::Resources::Host.new(:name => hostname, :ip => Resolv::DNS.new.getaddress(ip).to_s, :alias => aliases).to_string
-          end
+      arr = returning Array.new do |arr|
+        new_hosts_listing.split(/\n/).each do |line|
+          parts = line.split(/\t/).map {|a| a.chomp }
+          ip,hostname,aliases = parts[0], parts[1], parts[2..-1]
+          puts "ip: #{ip} for #{hostname}"
+          arr << PoolParty::Resources::Host.new(:name => hostname, :ip => Resolv::DNS.new.getaddress(ip).to_s, :alias => aliases).to_string
         end
-        
-        ::File.open(new_hosts_file, "w+") {|f| f << arr.join("\n") }
       end
       
+      ::File.open(new_hosts_file, "w+") {|f| f << arr.join("\n") }
     end
     
   end
