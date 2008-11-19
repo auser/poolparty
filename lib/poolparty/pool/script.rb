@@ -23,16 +23,15 @@ module PoolParty
     def self.for_save_string
       returning Array.new do |out|
         pools.collect {|n,pl| pl}.each do |pl|
-          
-          clouds.collect {|n,cl| cl }.each do |cl|
+          out << "pool :#{pl.name} do"
+          clouds.each do |n,cl|
             out << <<-EOE
-pool :#{pl.name} do
   cloud :#{cl.name} do
     #{cl.minimum_runnable_options.map {|o| "#{o} #{cl.send(o).respec_string}"}.join("\n")}
   end
-end
             EOE
-          end          
+          end
+          out << "end"
         end
       end.join("\n")
     end
