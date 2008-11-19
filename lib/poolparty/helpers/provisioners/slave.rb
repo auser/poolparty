@@ -7,7 +7,6 @@ module PoolParty
           setup_poolparty,
           setup_puppet,
           setup_configs,
-          run_once_and_clean
         ] << configure_tasks
       end
 
@@ -19,7 +18,9 @@ module PoolParty
       
       def setup_poolparty
         <<-EOE
-echo "#{open(File.join(template_directory, "puppetrunner")).read}" > /usr/bin/puppetrunner
+echo "Running first time run"
+cp #{Base.remote_storage_path}/#{Base.template_directory}/puppetrunner /usr/bin/puppetrunner
+chmod +x /usr/bin/puppetrunner
         EOE
       end
 
@@ -38,19 +39,11 @@ echo "#{open(File.join(template_directory, "puppetrunner")).read}" > /usr/bin/pu
         EOS
       end
       
-      def run_once_and_clean
-        <<-EOS
-rm -rf /etc/puppet/ssl        
-/bin/sh /usr/bin/puppetrerun
-rm -rf /etc/puppet/ssl
-        EOS
-      end
-
       # /etc/init.d/puppetmasterd stop
       # puppetd --listen --fqdn #{@instance.name}
       def start_puppet
         <<-EOS
-/bin/sh /usr/bin/puppetrerun
+/bin/sh /usr/bin/puppetrunner
         EOS
       end
       
