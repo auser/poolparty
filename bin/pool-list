@@ -14,7 +14,7 @@ o.loaded_pools.each do |pool|
   with_pool(pool) do
     puts header("Listing pool #{name}")
     clouds.each do |name, cloud|
-      puts subheader("Cloud: #{name}")
+      puts subheader("Cloud: #{name} (#{cloud.keypair})")
       with_cloud(cloud) do
         puts header("Listing cloud #{name}")
         puts subheader("Active instances")

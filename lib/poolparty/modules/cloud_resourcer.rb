@@ -13,9 +13,13 @@ module PoolParty
       @stored_block ||= block
     end
     
+    def stored_block
+      @stored_block
+    end
+    
     # This will run the blocks after they are stored if there is a block
     # associated
-    def run_stored_block      
+    def run_stored_block
       self.run_in_context @stored_block if @stored_block
     end
     
@@ -109,6 +113,18 @@ module PoolParty
     
     def parent
       @parent ||= nil
+    end
+    
+    def plugin_store
+      @plugin_store ||= []
+    end
+    
+    def realize_plugins!
+      plugin_store.each {|plugin| plugin.realize! }
+    end
+    
+    def plugin_store
+      @plugins ||= []
     end
     
   end
