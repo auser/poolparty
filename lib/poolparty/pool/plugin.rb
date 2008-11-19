@@ -11,9 +11,16 @@ module PoolParty
       
       default_options({})
       
-      def initialize(p=self, opts={}, &block)        
-        run_setup(p, &block)
-        enable unless block
+      def initialize(p=self, opts={}, &block)
+        store_block &block
+        run_setup(p)
+        # run_setup(p, &block)
+        # enable unless block
+      end
+      
+      def realize!
+        run_setup(p, false, &stored_block)
+        enable unless stored_block
       end
       
       # Overwrite this method
