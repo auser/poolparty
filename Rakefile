@@ -21,7 +21,14 @@ desc "Generate a new manifest and a new gem"
 task :build_local_gem => [:clean_tmp, :spec, :clean_pkg, :"manifest:refresh", :package]
 
 desc "Release to github"
-task :release => [:ghgem]
+task :github_release => [:clean_tmp, :spec, :clean_pkg, :"manifest:refresh", :package] do
+  res = %x[rake debug_gem]
+  res = res.split("\n")[1..-1].join("\n")
+  ::File.open("#{GEM_NAME.downcase}.gemspec", "w+") do |f|
+    f << res
+  end
+  `mv #{::File.expand_path(::File.dirname(__FILE__))}/pkg/*.gem #{::File.expand_path(::File.dirname(__FILE__))}/pkg/poolparty.gem`
+end
 
 desc "Generate gemspec"
 task :gemspec  => [:spec, :clean_tmp, :"manifest:refresh", :build_local_gem] do |t|
@@ -46,5 +53,4 @@ end
 desc "Generate github gemspec and latest gem"
 task :ghgem => [:local_deploy] do
   `mv #{::File.expand_path(::File.dirname(__FILE__))}/pkg/*.gem #{::File.expand_path(::File.dirname(__FILE__))}/pkg/poolparty.gem`
-  `git add pkg/poolparty.gem -f`
 end
