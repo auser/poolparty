@@ -35,8 +35,9 @@ module PoolParty
         # Add the plugin definition to the cloud as an instance method
         Cloud::Cloud.class_eval <<-EOE
           def #{name}(parent=self, &block)
+            @pa = parent
             @#{class_string_name.downcase} ||= returning #{class_string_name.class_constant}.new(parent, &block) do |pl|
-              plugin_store << pl
+              @pa.plugin_store << pl
             end
           end
         EOE

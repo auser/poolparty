@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
-require File.dirname(__FILE__) + '/test_plugins/webserver'
 
 include PoolParty::Resources
+require File.dirname(__FILE__) + '/test_plugins/webserver'
 
 describe "Plugin" do
   before(:each) do

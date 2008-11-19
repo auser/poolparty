@@ -1,6 +1,5 @@
-require File.dirname(__FILE__) + "/pool/test_plugins/webserver"
-
 pool :app do
+  require File.dirname(__FILE__) + "/pool/test_plugins/webserver"
   
   instances 2..10
   

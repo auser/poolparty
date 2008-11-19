@@ -1,5 +1,6 @@
 class WebServers
   plugin :apache do
+    include PoolParty::Resources
     
     attr_accessor :php
     
