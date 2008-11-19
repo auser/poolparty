@@ -11,7 +11,8 @@ end
 @ctype = (o.classname || "name").downcase.to_sym
 
 o.loaded_clouds.each do |cloud|
-  puts cloud.list_of_running_instances.size
-  print "#{cloud.list_of_running_instances.collect{|a| "#{a.send ctype}" }.join("\t")}"
+  with_cloud(cloud, {:ctype => @ctype}) do
+    print "#{list_of_running_instances.collect{|a| "#{a.send ctype}" }.join("\t")}"
+  end  
   
 end
