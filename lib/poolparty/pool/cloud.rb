@@ -48,11 +48,12 @@ module PoolParty
         setup_defaults
         plugin_directory "#{::Dir.pwd}/plugins"
         
-        p = parent if parent.is_a?(PoolParty::Pool::Pool)        
+        p = parent.is_a?(PoolParty::Pool::Pool) ? parent : self
         run_setup(p, &block)
         
         # set_parent(parent) if parent && !@parent
-        # self.run_in_context parent, &block if block        
+        # self.run_in_context parent, &block if block
+        realize_plugins!
       end
       
       def setup_defaults
