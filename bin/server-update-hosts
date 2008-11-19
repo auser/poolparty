@@ -30,8 +30,6 @@ o.loaded_pools.each do |pool|
         end
       end.join("\n")
       
-      puts new_hosts_listing
-      
       if testing
         puts new_hosts_listing
       else
@@ -42,7 +40,7 @@ o.loaded_pools.each do |pool|
             parts = line.split(/\t/).map {|a| a.chomp }
             ip,hostname,aliases = parts[0], parts[1], parts[2..-1]
             puts "ip: #{ip} for #{hostname}"
-            arr << PoolParty::Resources::Host.new(:ip => ip, :name => Resolv::DNS.new.getaddress(hostname), :alias => aliases).to_string
+            arr << PoolParty::Resources::Host.new(:name => hostname, :ip => Resolv::DNS.new.getaddress(ip).to_s, :alias => aliases).to_string
           end
         end
         
