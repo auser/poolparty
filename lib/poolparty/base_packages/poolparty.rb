@@ -75,7 +75,7 @@ module PoolParty
         execute_on_master do
           has_cron(:name => "master puppetd runner", :user => Base.user, :minute => "*/5") do
             requires get_gempackage("poolparty")
-            command(PoolParty::Remote::RemoteInstance.puppet_master_rerun_command)
+            command(PoolParty::Remote::RemoteInstance.puppet_runner_command)
           end
           has_cron(:name => "Load handler", :user => Base.user, :minute => "*/4") do
             requires get_gempackage("poolparty")
