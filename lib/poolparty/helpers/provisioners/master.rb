@@ -192,8 +192,13 @@ cp #{Base.remote_storage_path}/poolparty.pp /etc/puppet/manifests/classes/poolpa
       def restart_puppetd
         <<-EOS
 echo "Running puppet manifest"
-/bin/sh /usr/bin/puppetrerun
+/bin/sh /usr/bin/puppetrunner
         EOS
+      end
+      def last_install_tasks
+        [
+          "/usr/bin/puppetrerun"
+        ]
       end
     end
   end
