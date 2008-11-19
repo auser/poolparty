@@ -27,9 +27,9 @@ module PoolParty
             end
             
             unless virtual_resource?
-                output << "#{pre}#{class_type_name.downcase} { #{pre}\"#{self.key}\":"
-                output << opts.flush_out("#{pre*2}").join(",\n")
-                output << "#{pre}}"d
+              output << "#{pre}#{class_type_name.downcase} { #{pre}\"#{self.key}\":"
+              output << opts.flush_out("#{pre*2}").join(",\n")
+              output << "#{pre}}"
             end
           
             output << @poststring || ""

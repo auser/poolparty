@@ -10,7 +10,7 @@ module PoolParty
     
     # Store block
     def store_block(&block)
-      @stored_block ||= block
+      @stored_block ||= block ? block : nil
     end
     
     def stored_block
@@ -84,6 +84,7 @@ module PoolParty
     def context_stack
       @@context_stack ||= []
     end
+    
     def run_setup(parent, should_set_parent=true, &block)
       context_stack.push parent
       
@@ -95,13 +96,13 @@ module PoolParty
     
     # Set the parent on the resource
     def set_parent(sink_options=true)
-      # unless context_stack.last == self
+      unless context_stack.last.nil?
         @parent = context_stack.last
         # Add self as a service on the parent
         parent.add_service(self) if parent.respond_to?(:add_service)
         # Take the options of the parents
         configure(parent.options) if parent && parent.respond_to?(:options) && sink_options
-      # end
+      end
     end
             
     def number_of_resources

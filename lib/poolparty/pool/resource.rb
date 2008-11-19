@@ -60,7 +60,7 @@ module PoolParty
     def custom_file(path, str)
       write_to_file_in_storage_directory(path, str)
     end
-    
+        
     class Resource
       attr_accessor :prestring, :poststring
       
@@ -136,6 +136,14 @@ module PoolParty
       # with the options given to it in the init-block
       def loaded(opts={}, parent=self)
       end
+      
+      def cloud
+        @pa = parent
+        while !(@pa.is_a?(PoolParty::Cloud::Cloud) || @pa.nil? || @pa == self)
+          @pa = @pa.parent
+        end
+        @pa
+      end      
       
       # DSL Overriders
       include PoolParty::ResourcingDsl

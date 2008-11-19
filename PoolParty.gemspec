@@ -9,7 +9,7 @@ autorequire:
 bindir: bin
 cert_chain: []
 
-date: 2008-11-18 00:00:00 -08:00
+date: 2008-11-19 00:00:00 -08:00
 default_executable: 
 dependencies: 
 - !ruby/object:Gem::Dependency 
@@ -159,7 +159,6 @@ files:
 - examples/basic.rb
 - examples/plugin_without_plugin_directory.rb
 - examples/poolparty.rb
-- examples/with_apache_plugin.rb
 - generators/poolspec/USAGE
 - generators/poolspec/poolspec_generator.rb
 - generators/poolspec/templates/pool_spec_template.erb

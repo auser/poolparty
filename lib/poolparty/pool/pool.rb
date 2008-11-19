@@ -37,6 +37,7 @@ module PoolParty
         setup_defaults
         
         @pool_name = name
+        @pool_name.freeze
         # run_in_context &block if block
         run_setup(self, &block)
       end
