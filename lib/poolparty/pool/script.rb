@@ -20,11 +20,11 @@ module PoolParty
       blk.to_ruby(opts)
     end
     
-    def self.for_save_string(in_cloud=nil)
+    def self.for_save_string
       returning Array.new do |out|
         pools.collect {|n,pl| pl}.each do |pl|
           
-          (in_cloud ? [in_cloud] : clouds.collect {|n,cl| cl }).each do |cl|
+          clouds.collect {|n,cl| cl }.each do |cl|
             out << <<-EOE
 pool :#{pl.name} do
   cloud :#{cl.name} do
@@ -37,8 +37,8 @@ end
       end.join("\n")
     end
     
-    def self.save!(cl=nil,to_file=true)
-      write_to_file_in_storage_directory(Base.default_specfile_name, for_save_string(cl)) if to_file
+    def self.save!(to_file=true)
+      write_to_file_in_storage_directory(Base.default_specfile_name, for_save_string) if to_file
       for_save_string
     end
     
