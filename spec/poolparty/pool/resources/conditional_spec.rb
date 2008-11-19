@@ -9,17 +9,17 @@ describe "Conditional" do
   describe "wrapped" do
     before(:each) do
       @cloud = cloud :conditional_cloud_spec do
-          execute_if("$hostname", "==", "'master'", {}, self) do
+          execute_if("$hostname","'master'", {}, self) do
             has_file({:name => "/etc/apache2/puppetmaster2.conf"})
           end
       end
-      @cond = @cloud.get_resource(:conditional, "$hostname == 'master'")
+      @cond = @cloud.get_resource(:conditional, "$hostname 'master'")
     end
     it "should add the block of resources on the parent" do
       @cloud.resources.size.should == 1
     end
     it "should have a conditional in the resources" do
-      @cond.name.should == "$hostname == 'master'"
+      @cond.name.should == "$hostname 'master'"
     end
     it "should push the resources onto the conditional resource" do
       @cond.resources.size.should == 1
@@ -34,12 +34,12 @@ describe "Conditional" do
       it "should have execute_on_master with the string $hostname == 'master'" do
         str = execute_on_master do
           has_file(:name => "/etc/vars")
-        end.to_string.should =~ /\$hostname==master/
+        end.to_string.should =~ /\$hostnamemaster/
       end
       it "should have execute_on_node with the string $hostname != 'master'" do
         str = execute_on_node do
           has_file(:name => "/etc/vars")
-        end.to_string.should =~ /\$hostname!=master/
+        end.to_string.should =~ /\$hostnamemaster/
       end
     end
     describe "to_string" do
@@ -63,6 +63,13 @@ describe "Conditional" do
         end
         it "should have two conditional resources" do
           @cloud.resource(:conditional).size.should == 2
+        end
+      end
+      describe "execute on node" do
+        it "should place the node in the default section" do
+          str = execute_on_node do
+            has_file(:name => "/etc/vars")
+          end.to_string.should =~ /default : \{/
         end
       end
     end

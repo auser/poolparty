@@ -18,7 +18,7 @@ module PoolParty
     end
     
     class Cloud
-      attr_reader :name, :templates
+      attr_reader :templates
       include PoolParty::PluginModel
       include PoolParty::Resources      
       include PrettyPrinter
@@ -43,7 +43,8 @@ module PoolParty
       })
       
       def initialize(name, parent=self, &block)
-        @cloud_name = @name = name
+        @cloud_name = name
+        @cloud_name.freeze
         
         setup_defaults
         plugin_directory "#{::Dir.pwd}/plugins"
@@ -52,14 +53,20 @@ module PoolParty
         run_setup(p, &block)
         
         # set_parent(parent) if parent && !@parent
-        # self.run_in_context parent, &block if block        
+        # self.run_in_context parent, &block if block
+        
+        plugin_store.each {|plugin| plugin.exec }
       end
       
       def setup_defaults
         # this can be overridden in the spec, but ec2 is the default
         self.using :ec2        
       end
-                              
+      
+      def name
+        @cloud_name
+      end
+                                    
       # Keypairs
       # If the parent (pool) doesn't have a keypair defined on it, then generate one based on the 
       # pool_name and the cloud_name
@@ -73,7 +80,7 @@ module PoolParty
       # Generate a keypair based on the parent's name (if there is a parent)
       # and the cloud's name
       def generate_keypair(*args)
-        options[:keypair] = args.length > 0 ? args[0] : "#{@parent && @parent.respond_to?(:name) ? @parent.name : ""}_#{@name}"
+        options[:keypair] = args.length > 0 ? args[0] : "#{parent && parent.respond_to?(:name) ? parent.name : "poolparty"}_#{name}"
       end
       
       # Prepare to send the new configuration to the instances
