@@ -5,6 +5,7 @@ module PoolParty
   module Messenger
     def with_socket(testing=false, &block)
       host = testing ? "localhost" : (master.ip)
+      vputs "Pinging #{host} with the messenger"
       socket = TCPSocket.open(host, 7050)
       out = yield(socket)
       socket.close
