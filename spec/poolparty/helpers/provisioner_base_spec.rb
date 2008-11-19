@@ -91,6 +91,13 @@ describe "ProvisionerBase" do
     it "should compound the string to be hello \n   \n cruel world" do
       @provisioner.install_string.should == "hello \n   \n cruel world"
     end
+    it "should call the last_install_tasks last" do
+      @provisioner.should_receive(:last_install_tasks).at_least(1).and_return ["pops"]
+    end
+    it "should append the last_install_tasks to the end" do
+      @provisioner.stub!(:last_install_tasks).and_return ["pops"]
+      @provisioner.install_string.should == "hello \n   \n cruel world \n pops"
+    end
     after do
       @provisioner.install_string
     end
