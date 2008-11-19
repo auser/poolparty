@@ -42,24 +42,26 @@ module PoolParty
         :polling_time => "30.seconds"
       })
       
-      def initialize(name, parent=self, &block)
+      def initialize(name, pare=self, &block)
         @cloud_name = name
         @cloud_name.freeze
-        
-        setup_defaults
+                
         plugin_directory "#{::Dir.pwd}/plugins"
-        
-        p = parent.is_a?(PoolParty::Pool::Pool) ? parent : self
+                
+        p = pare.is_a?(PoolParty::Pool::Pool) ? pare : nil
         run_setup(p, &block)
         
         # set_parent(parent) if parent && !@parent
         # self.run_in_context parent, &block if block
+        setup_defaults
+        reset_remoter_base!
         realize_plugins!
       end
       
       def setup_defaults
         # this can be overridden in the spec, but ec2 is the default
-        self.using :ec2        
+        self.using :ec2
+        generate_keypair unless has_keypair?
       end
       
       def name
@@ -67,19 +69,14 @@ module PoolParty
       end
                                     
       # Keypairs
-      # If the parent (pool) doesn't have a keypair defined on it, then generate one based on the 
-      # pool_name and the cloud_name
-      def keypair(*args)
-        has_keypair? ? options[:keypair] : generate_keypair(*args)
-      end
       # Let's just make sure that the keypair exists on the options
       def has_keypair?
-        options.has_key?(:keypair) && options[:keypair]
+        options.has_key?(:keypair) && options[:keypair] && !options[:keypair].empty?
       end
       # Generate a keypair based on the parent's name (if there is a parent)
       # and the cloud's name
       def generate_keypair(*args)
-        options[:keypair] = args.length > 0 ? args[0] : "#{parent && parent.respond_to?(:name) ? parent.name : "poolparty"}_#{name}"
+        options[:keypair] = "#{parent && parent.is_a?(PoolParty::Pool::Pool) ? parent.name : "poolparty"}_#{name}" unless has_keypair?
       end
       
       # Prepare to send the new configuration to the instances
@@ -164,7 +161,6 @@ module PoolParty
           
           global_classpackages.each do |cls|
             str << cls.to_string
-            str << cls.include_string
           end
 
           str << "# Custom functions"

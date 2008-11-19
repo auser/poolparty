@@ -70,9 +70,9 @@ module PoolParty
         name = (i.zero? ? "master" : "node#{i}")
         list.select {|i| i.name == name }.first
       end
-      def remote_instances_list
-        # puts "> #{@containing_cloud.name} - #{@containing_cloud.class}"
+      def remote_instances_list        
         @containing_cloud = self
+        # puts "> #{@containing_cloud} #{@describe_instances.nil?}"
         list_of_instances(keypair).collect {|h| PoolParty::Remote::RemoteInstance.new(h, @containing_cloud) }
       end
       # List the instances for the current key pair, regardless of their states
@@ -111,7 +111,6 @@ module PoolParty
       # Reset the cache of descriptions
       def reset_remoter_base!
         @describe_instances = nil
-        reset_base!
       end
       def self.included(other)
         PoolParty.register_remote_base(self.class.to_s.downcase.to_sym)

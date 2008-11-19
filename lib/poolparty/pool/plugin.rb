@@ -1,7 +1,7 @@
 module PoolParty
       
   module Plugin
-    
+        
     class Plugin
       include Configurable
       include CloudResourcer
@@ -14,12 +14,15 @@ module PoolParty
       def initialize(p=self, opts={}, &block)
         store_block &block
         run_setup(p)
-        # run_setup(p, &block)
-        # enable unless block
+        realize! unless block
+      end
+            
+      def realize!(force=false)
+        force ? force_realize! : (@realized ? nil : force_realize!)
       end
       
-      def realize!
-        run_setup(p, false, &stored_block)
+      def force_realize!
+        run_setup(parent, false, &stored_block)
         enable unless stored_block
       end
       

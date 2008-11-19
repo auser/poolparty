@@ -2,7 +2,7 @@ module PoolParty
   class Base
     plugin :haproxy do
       
-      def enable        
+      def enable
         execute_on_master do
           has_package({:name => "haproxy"})
 
