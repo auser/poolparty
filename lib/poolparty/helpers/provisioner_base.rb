@@ -52,6 +52,7 @@ module PoolParty
       
       include Configurable
       include CloudResourcer
+      include FileWriter
       
       def initialize(instance,cloud=self, os=:ubuntu)
         @instance = instance
@@ -62,6 +63,7 @@ module PoolParty
         options(instance.options) if instance.respond_to?(:options)
         
         @os = os.to_s.downcase.to_sym
+        cleanup_storage_directory
         loaded
       end
       # Callback after initialized
