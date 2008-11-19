@@ -28,9 +28,9 @@ module PoolParty
       end
       
       def sync_directories
-        # execute_on_master do
+        execute_on_node do
           has_rsyncmirror(:dir => cwd, :name => "deploydirectory-#{name}")
-        # end
+        end
       end
       
       def from(dir)
