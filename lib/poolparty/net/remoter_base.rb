@@ -78,9 +78,9 @@ module PoolParty
       # List the instances for the current key pair, regardless of their states
       # If no keypair is passed, select them all
       def list_of_instances(keyp=nil)
-        key = keyp ? keyp : keypair
+        tmp_key = (keyp ? keyp : keypair).to_s
         unless @describe_instances
-          tmpInstanceList = describe_instances.select {|a| key ? a[:keypair] == key : true }
+          tmpInstanceList = describe_instances.select {|a| a if tmp_key ? a[:keypair] == tmp_key : true }
           has_master = !tmpInstanceList.select {|a| a[:name] == "master" }.empty?          
           if has_master
             @describe_instances = tmpInstanceList

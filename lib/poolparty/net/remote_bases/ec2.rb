@@ -43,11 +43,11 @@ begin
         describe_instances.select {|a| a[:name] == id}[0] rescue nil
       end
       def describe_instances
-        @id = 0
+        id = 0
         get_instances_description.each_with_index do |h,i|
           if h[:status] == "running"
-            inst_name = @id == 0 ? "master" : "node#{@id}"
-            @id += 1
+            inst_name = id == 0 ? "master" : "node#{id}"
+            id += 1
           else
             inst_name = "#{h[:status]}_node#{i}"
           end
@@ -58,7 +58,7 @@ begin
             :index => i,
             :launching_time => (h[:launching_time])
           })
-        end.sort_by {|a| a[:index] }
+        end.sort {|a,b| a[:index] <=> b[:index] }
       end
       # Get the s3 description for the response in a hash format
       def get_instances_description
