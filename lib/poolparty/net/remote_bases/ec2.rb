@@ -24,8 +24,8 @@ begin
           :maxCount => num,
           :key_name => (keypair || Base.keypair),
           :availability_zone => nil,
-          :size => "#{size || Base.size}",
-          :group_id => ["#{security_group || 'default'}"])
+          :instance_type => "#{size || Base.size}",
+          :group_id => ["#{security_group || Base.security_group}"])
         begin
           h = EC2ResponseObject.get_hash_from_response(instance)
           #h = instance.instancesSet.item.first
