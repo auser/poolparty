@@ -27,9 +27,10 @@ module PoolParty
       :proxy_mode => "http",
       # EC2 Options
       :ami => "ami-1cd73375",
+      :size => 'm1.small', # must be 'm1.small', 'm1.large', 'm1.xlarge', 'c1.medium', or 'c1.xlarge'
+      :security_group => ["default"],
       # Options that should not be touched pretty much ever
-      :manifest_path => "/etc/puppet/manifests",
-      :security_group => ["default"] 
+      :manifest_path => "/etc/puppet/manifests"
     })
         
     # Class methods
