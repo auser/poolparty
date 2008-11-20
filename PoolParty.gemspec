@@ -30,8 +30,8 @@ For more information, check http://PoolPartyrb.com or visit us on IRC at:
   irc.freenode.net
   #poolpartyrb
 
-Thanks! (Updated at 03:27PM, 11/19/08)
-*** Ari Lerner @ <arilerner@mac.com> ***}
+*** Ari Lerner @ <arilerner@mac.com> ***
+Updated at Updated at 05:12PM, 11/19/08 }
   s.rdoc_options = ["--main", "README.txt"]
   s.require_paths = ["lib"]
   s.rubyforge_project = %q{poolparty}
