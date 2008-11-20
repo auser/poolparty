@@ -20,13 +20,11 @@ module PoolParty
     def add_resource(type, opts={}, parent=self, &block)
       if in_a_resource_store?(type, opts[:name])
         @res = get_resource(type, opts[:name], parent)
-        if parent != @res.parent && @res != parent && in_global_resource_store?(type, opts[:name]) && resource(type).select {|r| r.key == key }.empty?
+        if should_duplicate_resource?(type, @res, parent, opts)
           @res = @res.dup
           @pa = parent
-          @res.instance_eval do
-            @parent = @pa
-          end
-          parent.resource(type) << @res
+          @res.instance_eval {@parent = @pa}
+          # parent.resource(type) << @res
         end        
       else
         @res = returning "PoolParty::Resources::#{type.to_s.camelize}".classify.constantize.new(opts, parent, &block) do |o|                    
@@ -35,9 +33,18 @@ module PoolParty
         end
       end
       @res
-    end    
+    end
+    def should_duplicate_resource?(type, res, pare, opts)
+      pare != @res.parent && 
+        pare.cloud != @res.cloud && 
+        in_global_resource_store?(type, opts[:name]) && 
+        !in_resources?(type, res, pare)
+    end
     def get_resource(ty, key, parent=self)
-      resource(ty).select {|r| r.key == key }.first || get_from_global_resource_store(ty, key)
+      get_from_local_resource_store(ty, key, parent) || get_from_global_resource_store(ty, key)
+    end
+    def get_from_local_resource_store(type, key, parent)
+      resource(ty).select {|r| r.key == key }.first
     end
     def in_a_resource_store?(type, key, parent=self)
       !(get_resource(type, key) && in_global_resource_store?(type, key)).nil?
@@ -92,7 +99,7 @@ module PoolParty
               add_resource(:#{lowercase_class_name}, opts, parent, &blk)
             end
             def get_#{lowercase_class_name}(name)              
-              get_resource(:#{lowercase_class_name}, name) if in_resources?(:#{lowercase_class_name}, name)
+              get_resource(:#{lowercase_class_name}, name) if in_a_resource_store?(:#{lowercase_class_name}, name)
             end
           EOE
           PoolParty::Resources.module_eval method

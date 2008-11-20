@@ -13,16 +13,30 @@ module PoolParty
   module Resources
     
     def call_function(str, opts={}, &block)
-      returning PoolParty::Resources::CallFunction.new(str, opts, &block) do |o|
-        resource(:call_function) << o
+      
+      if !global_resources_store.select {|r| r.key == str.keyerize }.empty?
+        @res = get_resource(:call_function, str.keyerize, parent)
+      else
+        @res = returning PoolParty::Resources::CallFunction.new(str, opts.merge(:key => str.keyerize), &block) do |o|
+          store_into_global_resource_store(o)
+          resource(:call_function) << o
+        end
       end
+      @res
     end
                 
     # Resources for function call
     class CallFunction < Resource
       def initialize(str="", opts={}, parent=self, &block)
+        @key = opts[:key] || str.keyerize
         @str = str
         # super(opts, parent, &block)
+      end
+      def key
+        @key || @str.keyerize
+      end
+      def duplicatable?
+        false
       end
       def to_string(pre="")
         returning Array.new do |arr|
