@@ -26,7 +26,9 @@ task :update_timestamp do
   str = "Updated at #{Time.now.strftime("%I:%M%p, %D")}"
   
   if data.scan(/Updated at/).empty?
-    data = data.gsub(/Thanks!/, '\0'+" (#{str})")
+    data << "Updated at #{str}"    
+  else
+    data = data.gsub(/Updated at/, '\0'+" #{str}")
   end
   ::File.open("PostInstall.txt", "w+") {|f| f << data }
 end
