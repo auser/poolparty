@@ -75,6 +75,7 @@ describe "Cloud" do
           # Inside cloud block
           keypair "fake_keypair"
         end
+        @cloud.stub!(:plugin_store).and_return []
       end
 
       it "should be able to pull the pool from the cloud" do
@@ -193,6 +194,7 @@ describe "Cloud" do
             @cloud.respond_to?(:build_manifest).should == true
           end
           it "should make a new 'haproxy' class" do
+            @cloud.stub!(:realize_plugins!).and_return true
             PoolPartyHaproxyClass.should_receive(:new).once
             @cloud.add_poolparty_base_requirements
           end
@@ -211,8 +213,10 @@ describe "Cloud" do
                 @heartbeat = nil
               end
               @hb = "heartbeat".class_constant.new(@cloud)
+              @cloud.stub!(:realize_plugins!).and_return []
             end
             it "should call initialize on heartbeat (in add_poolparty_base_requirements)" do
+              @cloud.stub!(:realize_plugins!).and_return []
               @hb.class.should_receive(:new).and_return true
               @cloud.add_poolparty_base_requirements
             end
@@ -227,7 +231,7 @@ describe "Cloud" do
             it "should call enable on the plugin call" do
               @hb = "heartbeat".class_constant
               "heartbeat".class_constant.stub!(:new).and_return @hb
-
+              
               @cloud.add_poolparty_base_requirements
               @cloud.heartbeat.should == @hb
             end

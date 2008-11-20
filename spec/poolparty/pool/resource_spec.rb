@@ -13,6 +13,7 @@ end
 describe "Resource" do
   before(:each) do
     setup
+    self.stub!(:key).and_return true
   end
   describe "wrapped" do
     before(:each) do
@@ -263,7 +264,8 @@ describe "Resource" do
         end
         it "should be able to use the helper to grab the file" do
           PoolParty::Resources::File.should_not_receive(:new)
-          file(:name => "pancakes").should == @file
+          self.stub!(:key).and_return "false"
+          file(:name => "pancakes").name.should == @file.name
         end
         it "should turn the resource into a string" do
           @file.to_s.should == "File['pancakes']"
