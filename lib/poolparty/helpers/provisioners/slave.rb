@@ -50,7 +50,8 @@ chmod +x /usr/bin/puppetrunner
       
       def last_install_tasks
         [
-          "rm -rf /etc/puppet/ssl"
+          "rm -rf /etc/puppet/ssl",
+          "/usr/bin/puppetrerun"
         ]
       end
       
