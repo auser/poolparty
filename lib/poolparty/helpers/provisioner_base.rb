@@ -63,7 +63,6 @@ module PoolParty
         options(instance.options) if instance.respond_to?(:options)
         
         @os = os.to_s.downcase.to_sym
-        cleanup_storage_directory
         loaded
       end
       # Callback after initialized
