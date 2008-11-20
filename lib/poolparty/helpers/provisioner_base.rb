@@ -54,9 +54,9 @@ module PoolParty
       include CloudResourcer
       include FileWriter
       
-      def initialize(instance,cloud=self, os=:ubuntu)
+      def initialize(instance,cld=self, os=:ubuntu)
         @instance = instance
-        @cloud = cloud
+        @cloud = cld
         
         options(cloud.options) if cloud && cloud.respond_to?(:options)
         set_vars_from_options(instance.options) unless instance.nil? || !instance.options || !instance.options.empty?
@@ -90,7 +90,7 @@ module PoolParty
       def process_install!(testing=false)
         error unless valid?
         write_install_file
-        setup_runner(@cloud)
+        setup_runner
         
         unless testing
           vputs "Logging on to #{@instance.ip} (#{@instance.name})"
@@ -130,7 +130,7 @@ module PoolParty
       def process_configure!(testing=false)
         error unless valid?
         write_configure_file
-        setup_runner(@cloud)
+        setup_runner
         
         unless testing
           vputs "Logging on to #{@instance.ip}"
