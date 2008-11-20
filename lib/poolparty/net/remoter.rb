@@ -178,20 +178,22 @@ module PoolParty
       def launch_and_configure_master!(testing=false)
         vputs "Requesting to launch new instance"
         logger.debug "Launching master"
-        request_launch_master_instance if list_of_pending_instances.size.zero? && can_start_a_new_instance? && !is_master_running?
+        request_launch_master_instance if list_of_pending_instances.size.zero? && can_start_a_new_instance? && !is_master_running? && !testing
         reset!
-        vputs ""
-        vputs "Waiting for there to be no pending instances..."
-        when_no_pending_instances do
-          when_all_assigned_ips {wait "20.seconds"}
+        unless testing
           vputs ""
-          vputs "Provisioning master..."
+          vputs "Waiting for there to be no pending instances..."
+          when_no_pending_instances do
+            when_all_assigned_ips {wait "20.seconds"}
+            vputs ""
+            vputs "Provisioning master..."
+            cleanup_storage_directory
+            verbose ? Provisioner.provision_master(self, testing) : hide_output { Provisioner.provision_master(self, testing) }
+            verbose ? Provisioner.clear_master_ssl_certs(self, testing) : hide_output { Provisioner.clear_master_ssl_certs(self, testing) }
           
-          verbose ? Provisioner.provision_master(self, testing) : hide_output { Provisioner.provision_master(self, testing) }
-          verbose ? Provisioner.clear_master_ssl_certs(self, testing) : hide_output { Provisioner.clear_master_ssl_certs(self, testing) }
-          
-          after_launched
-        end        
+            after_launched
+          end
+        end
       end
       def is_master_running?
         !list_of_running_instances.select {|a| a.name == "master"}.first.nil?

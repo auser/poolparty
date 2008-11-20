@@ -11,15 +11,15 @@ o.loaded_clouds.each do |cloud|
   with_cloud(cloud) do
     vputs header("Starting cloud #{name}")
     vputs "#{list_of_running_instances.size} running instances (#{minimum_instances} - #{maximum_instances})"
-    if list_of_running_instances.size <= 1
+    # if list_of_running_instances.size <= 1
       puts "Starting the master instance"    
-      if testing
-        puts("\tNot launching while in testing mode")
-      else
+      # if testing
+      #   puts("\tNot launching while in testing mode")
+      # else
         vputs "Launching and configuring the master"
         launch_and_configure_master!
-      end
-    end
+      # end
+    # end
     puts open(::File.join(File.dirname(__FILE__), "..", "lib", "poolparty", "config", "postlaunchmessage.txt")).read ^ {:master_ip => master.ip.chomp}
     clear_base_directory unless testing
   end
