@@ -121,7 +121,7 @@ module PoolParty
     end
     
     def realize_plugins!
-      plugin_store.each {|plugin| plugin.realize! }
+      plugin_store.each {|plugin| plugin.realize! if plugin }
     end
     
     def plugin_store

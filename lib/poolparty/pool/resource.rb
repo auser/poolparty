@@ -17,9 +17,17 @@ module PoolParty
       resources[type] ||= []
     end
     
-    def add_resource(type, opts={}, parent=self, &block)      
-      if in_resources?(type, opts[:name])        
+    def add_resource(type, opts={}, parent=self, &block)
+      if in_a_resource_store?(type, opts[:name])
         @res = get_resource(type, opts[:name], parent)
+        if parent != @res.parent && @res != parent && in_global_resource_store?(type, opts[:name]) && resource(type).select {|r| r.key == key }.empty?
+          @res = @res.dup
+          @pa = parent
+          @res.instance_eval do
+            @parent = @pa
+          end
+          parent.resource(type) << @res
+        end        
       else
         @res = returning "PoolParty::Resources::#{type.to_s.camelize}".classify.constantize.new(opts, parent, &block) do |o|                    
           store_into_global_resource_store(o)
@@ -31,8 +39,11 @@ module PoolParty
     def get_resource(ty, key, parent=self)
       resource(ty).select {|r| r.key == key }.first || get_from_global_resource_store(ty, key)
     end
-    def in_resources?(type, key, parent=self)
+    def in_a_resource_store?(type, key, parent=self)
       !(get_resource(type, key) && in_global_resource_store?(type, key)).nil?
+    end
+    def in_resources?(type, key, parent=self)
+      !get_resource(type, key).nil?
     end
     def global_resources_store
       $global_resources ||= []

@@ -54,8 +54,7 @@ module PoolParty
         # set_parent(parent) if parent && !@parent
         # self.run_in_context parent, &block if block
         setup_defaults
-        reset_remoter_base!
-        realize_plugins!
+        reset_remoter_base!        
       end
       
       def setup_defaults
@@ -112,9 +111,7 @@ module PoolParty
         manifest = force ? rebuild_manifest : build_manifest
         config_file = ::File.join(Base.storage_directory, "poolparty.pp")
         ::File.open(config_file, "w") do |file|
-          # file << "class poolparty {"
           file << manifest
-          # file << "}"
         end
       end      
       
@@ -193,6 +190,7 @@ module PoolParty
         haproxy
         ruby
         poolparty_base_packages
+        realize_plugins!
       end
       
       def other_clouds
