@@ -44,7 +44,7 @@ module PoolParty
       get_from_local_resource_store(ty, key, parent) || get_from_global_resource_store(ty, key)
     end
     def get_from_local_resource_store(type, key, parent)
-      resource(ty).select {|r| r.key == key }.first
+      resource(type).select {|r| r.key == key }.first
     end
     def in_a_resource_store?(type, key, parent=self)
       !(get_resource(type, key) && in_global_resource_store?(type, key)).nil?
@@ -158,7 +158,7 @@ module PoolParty
       def cloud
         @pa = parent
         while !(@pa.is_a?(PoolParty::Cloud::Cloud) || @pa.nil? || @pa == self)
-          @pa = @pa.parent
+          @pa = @pa.respond_to?(:parent) ? @pa.parent : nil
         end
         @pa
       end      

@@ -13,7 +13,6 @@ end
 describe "Resource" do
   before(:each) do
     setup
-    self.stub!(:key).and_return true
   end
   describe "wrapped" do
     before(:each) do
@@ -260,7 +259,7 @@ describe "Resource" do
           file(:name => "pancakes")
         end
         it "should return the file preiously created" do
-          get_resource(:file, "pancakes").should == @file
+          get_resource(:file, "pancakes").options.keys.sort.should == @file.options.keys.sort
         end
         it "should be able to use the helper to grab the file" do
           PoolParty::Resources::File.should_not_receive(:new)
@@ -279,7 +278,7 @@ describe "Resource" do
             @file.cancelled?.should == true
           end
           it "should be able to get the file from the helper" do
-            get_file("pancakes").should == @file
+            get_file("pancakes").options.keys.sort.should == @file.options.keys.sort
           end
         end
         describe "virtual_resources" do
