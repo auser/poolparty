@@ -23,12 +23,12 @@ task :build_local_gem => [:clean_tmp, :spec, :clean_pkg, :"manifest:refresh", :p
 desc "Packge with timestamp"
 task :update_timestamp do
   data = open("PostInstall.txt").read
-  str = "Updated at #{Time.now.strftime("%I:%M%p, %D")}"
+  str = "Updated at #{Time.now.strftime("%D")}"
   
   if data.scan(/Updated at/).empty?
-    data << "Updated at #{str}"    
+    data = data.gsub(/just installed PoolParty\!/, '\0'+" (#{str})")
   else
-    data = data.gsub(/Updated at/, '\0'+" #{str}")
+    data = data ^ {:updated_at => str}
   end
   ::File.open("PostInstall.txt", "w+") {|f| f << data }
 end
