@@ -5,6 +5,7 @@ require "poolpartycl"
 
 o = PoolParty::Optioner.new(ARGV) do |opts, optioner|  
   opts.on('-n cloudname', '--name name', 'Start cloud by this name')    { |c| optioner.cloudname c }
+  opts.on('-d', '--daemonize', 'Daemonize starting the cloud')    { optioner.daemon true }
 end
 
 o.loaded_clouds.each do |cloud|
@@ -17,11 +18,13 @@ o.loaded_clouds.each do |cloud|
       #   puts("\tNot launching while in testing mode")
       # else
         vputs "Launching and configuring the master"
-        launch_and_configure_master!
+        daemon ? daemonize {launch_and_configure_master!} : launch_and_configure_master!
       # end
     # end
-    puts open(::File.join(File.dirname(__FILE__), "..", "lib", "poolparty", "config", "postlaunchmessage.txt")).read ^ {:master_ip => master.ip.chomp}
-    clear_base_directory unless testing
+    when_no_pending_instances do
+      puts open(::File.join(File.dirname(__FILE__), "..", "lib", "poolparty", "config", "postlaunchmessage.txt")).read ^ {:master_ip => master.ip.chomp}
+      clear_base_directory unless testing
+    end
   end
   
 end

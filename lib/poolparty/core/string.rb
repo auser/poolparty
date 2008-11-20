@@ -27,6 +27,15 @@ class String
   def sanitize
     self.gsub(/[ \.\/\-]*/, '')
   end
+  def keyerize
+    signed_short = 0x7FFFFFFF
+    len = self.sanitize.length
+    hash = 0 
+    len.times{ |i| 
+      hash = self[i] + ( hash << 6 ) + ( hash << 16 ) - hash 
+    } 
+    hash & signed_short
+  end
   def dir_safe
     self.downcase.gsub(/[ ]/, '_')
   end
