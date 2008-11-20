@@ -2,7 +2,7 @@ module PoolParty
   module Resources
     
     def global_classpackages
-      $global_classpackage_store ||= []
+      @global_classpackage_store ||= []
     end
     
     def in_global_classpackages?(name)
@@ -79,7 +79,7 @@ module PoolParty
       end
       
       def not_printed?
-        @not_printed ||= true
+        true
       end
       
       def include_string
