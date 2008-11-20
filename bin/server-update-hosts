@@ -4,7 +4,7 @@ require "poolparty"
 require "poolpartycl"
 
 o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
-  opts.on('-n name', '--name name', 'Update hosts for local pool named [name]')    { |p| optioner.poolname p }
+  opts.on('-n name', '--name name', 'Update hosts for local pool named [name]')    { |p| optioner.cloudname p }
 end
 
 o.loaded_clouds.each do |cloud|
