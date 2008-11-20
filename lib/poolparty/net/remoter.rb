@@ -187,7 +187,7 @@ module PoolParty
             when_all_assigned_ips {wait "20.seconds"}
             vputs ""
             vputs "Provisioning master..."
-            cleanup_storage_directory
+            # cleanup_storage_directory
             verbose ? Provisioner.provision_master(self, testing) : hide_output { Provisioner.provision_master(self, testing) }
             verbose ? Provisioner.clear_master_ssl_certs(self, testing) : hide_output { Provisioner.clear_master_ssl_certs(self, testing) }
           
