@@ -104,6 +104,7 @@ describe "Plugin" do
           @cloud = cloud :app do
             apache
           end
+          @cloud.realize_plugins!
         end
       end
     end

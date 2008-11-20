@@ -65,8 +65,8 @@ class String
     klass
   end
   
-  def module_constant(&block)
-    symc = "#{self}_Module".classify
+  def module_constant(append="", &block)
+    symc = "#{self}_Module#{append}".classify
     mod = Object.const_defined?(symc) ? Object.const_get(symc.to_sym) : Module.new(&block)
     Object.const_set(symc, mod) unless Object.const_defined?(symc)
     symc.to_s.constantize

@@ -20,7 +20,7 @@ module PoolParty
     end
 
     class Pool
-      include PoolParty::Cloud
+      # include PoolParty::Cloud
       include MethodMissingSugar
       # include PluginModel
       include Configurable
