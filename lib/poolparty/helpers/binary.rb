@@ -26,6 +26,22 @@ module PoolParty
           f unless ::File.readable?(f)
         end.first
       end
+      # Daemonize the process
+      def daemonize(&block)
+        vputs "Daemonizing..."
+
+        pid = fork do
+          Signal.trap('HUP', 'IGNORE') # Don't die upon logout
+          File.open("/dev/null", "r+") do |devnull|
+            $stdout.reopen(devnull)
+            $stderr.reopen(devnull)
+            $stdin.reopen(devnull) unless @use_stdin
+          end
+          block.call if block
+        end
+        Process.detach(pid)
+        pid
+      end
       
     end
     
