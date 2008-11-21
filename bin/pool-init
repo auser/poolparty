@@ -4,7 +4,7 @@ require 'rubygems'
 require 'rubigen'
 
 # First, let's generate the spec
-if %w(-v --version).include? ARGV.first
+if %w(-V --version).include? ARGV.first
   require 'poolspec/version'
   puts "#{File.basename($0)} #{Poolspec::VERSION::STRING}"
   exit(0)
@@ -12,8 +12,8 @@ end
 
 name = ARGV.first
 
-vputs "Creating pool named #{name}"
-`pool spec #{name}`
+puts "Creating pool named #{name}"
+`pool generate #{name}`
 
 # Now add the keypairs for the pool based on the default pool name and cloud name
 
