@@ -4,11 +4,6 @@ module PoolParty
   def available_custom_resources
     $available_custom_resources ||= []
   end
-  module DefinableFact
-    def define_fact(name, string="")
-      
-    end
-  end
 
   module Resources
     
