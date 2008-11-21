@@ -25,9 +25,9 @@ bin/messenger-get-current-nodes
 bin/pool
 bin/pool-console
 bin/pool-describe
+bin/pool-generate
 bin/pool-init
 bin/pool-list
-bin/pool-spec
 bin/pool-start
 bin/server-build-messenger
 bin/server-fire-cmd
