@@ -75,7 +75,9 @@ module PoolParty
       path
     end
     def clear_base_directory
-      FileUtils::rm_rf "#{Base.storage_directory}"
+      Dir["#{Base.storage_directory}/**"].each do |f|
+        ::FileUtils.rm f if ::File.file?(f)
+      end
     end
   end
 end

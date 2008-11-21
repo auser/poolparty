@@ -11,6 +11,10 @@ module PoolParty
       def to_string(pre="\t")
         "$#{name} = #{value_string}"
       end
+            
+      def duplicatable?
+        false
+      end
       
       def value_string
         value.to_option_string
