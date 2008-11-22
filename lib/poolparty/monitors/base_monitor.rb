@@ -3,6 +3,8 @@
   
   TODO: Fill this out
 =end
+require "#{::File.dirname(__FILE__)}/../pool/base"
+
 module PoolParty
   module Monitors    
     
@@ -48,6 +50,7 @@ module PoolParty
 end
 
 Dir["#{File.dirname(__FILE__)}/monitors/*.rb"].each {|f| require f}
+Dir["#{PoolParty::Base.custom_monitor_directories}/*.rb"].each {|f| require f}
 
 module PoolParty
   module Cloud

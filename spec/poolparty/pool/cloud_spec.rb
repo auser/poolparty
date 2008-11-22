@@ -299,6 +299,51 @@ describe "Cloud" do
               @manifest.should =~ /define line\(\$file/
             end
           end
+          describe "prepare_for_configuration" do
+            before(:each) do
+              @cloud.stub!(:copy_ssh_key).and_return true
+            end
+            it "should make_base_directory" do
+              @cloud.should_receive(:make_base_directory).at_least(1)
+            end
+            it "should copy_misc_templates" do
+              @cloud.should_receive(:copy_misc_templates).once
+            end
+            it "should copy_custom_monitors" do
+              @cloud.should_receive(:copy_custom_monitors).once
+            end
+            describe "copy_custom_monitors" do
+              before(:each) do                
+                Base.stub!(:custom_monitor_directories).and_return ["/tmp/monitors/custom_monitor.rb"]
+                Dir.stub!(:[]).with("#{Base.custom_monitor_directories}/*.rb").and_return ["/tmp/monitors/custom_monitor.rb"]
+                @cloud.stub!(:copy_misc_templates).and_return true
+                @cloud.stub!(:copy_file_to_storage_directory).and_return true
+              end
+              it "should call make_directory_in_storage_directory with monitors" do                
+                @cloud.should_receive(:make_directory_in_storage_directory).with("monitors").once
+                @cloud.stub!(:make_directory_in_storage_directory)
+              end
+              it "should copy the monitors into the monitor directory" do
+                @cloud.should_receive(:copy_file_to_storage_directory).with("/tmp/monitors/custom_monitor.rb", "monitors").at_least(1)
+                @cloud.stub!(:copy_file_to_storage_directory).and_return true
+              end
+              after(:each) do
+                @cloud.copy_custom_monitors
+              end
+            end
+            it "should store_keys_in_file" do
+              @cloud.should_receive(:store_keys_in_file).once
+            end
+            it "should call save! on Script" do
+              Script.should_receive(:save!).with(@cloud).once
+            end
+            it "should copy_ssh_key" do
+              @cloud.should_receive(:copy_ssh_key).once
+            end
+            after(:each) do
+              @cloud.prepare_for_configuration
+            end
+          end
           describe "building with an existing manifest" do
             before(:each) do
               @file = "/etc/puppet/manifests/nodes/nodes.pp"
