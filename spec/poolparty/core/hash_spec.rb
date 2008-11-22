@@ -52,7 +52,7 @@ describe "Hash" do
       @rejected_hash.keys.should == [:a]
     end
     it "should return the old array with the other keys" do
-      @a.keys.should == [:b, :c]
+      @a.keys.sort.should == [:b, :c]
     end
     it "should not throw a fit with an empty hash" do
       lambda {
