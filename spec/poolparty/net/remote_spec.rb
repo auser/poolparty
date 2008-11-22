@@ -217,7 +217,7 @@ describe "Remote" do
           @tc.stub!(:request_launch_new_instances).and_return PoolParty::Remote::RemoteInstance.new(:ip => "127.0.0.1", :num => 1)
           @tc.stub!(:can_start_a_new_instance).and_return true
           @tc.stub!(:list_of_pending_instances).and_return []
-          @tc.stub!(:prepare_to_configuration).and_return true
+          @tc.stub!(:prepare_for_configuration).and_return true
           @tc.stub!(:build_and_store_new_config_file).and_return true          
           PoolParty::Provisioner.stub!(:provision_slaves).and_return true
           Kernel.stub!(:system).and_return true

@@ -14,9 +14,6 @@ end
 include PoolParty
 extend PoolParty
 
-Base.environment = "test"
-Base.verbose = false
-
 def setup
   PoolParty::Messenger.stub!(:messenger_send!).and_return false
 end
