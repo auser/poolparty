@@ -40,10 +40,10 @@ module PoolParty
       end
       # Get the access_key
       def access_key
-        ENV["AWS_ACCESS_KEY_ID"] ? ENV["AWS_ACCESS_KEY_ID"] : load_keys_from_file[:access_key]
+        @access_key ||= ENV["AWS_ACCESS_KEY_ID"] ? ENV["AWS_ACCESS_KEY_ID"] : load_keys_from_file[:access_key]
       end
       def secret_access_key
-        ENV["AWS_SECRET_ACCESS_KEY"] ? ENV["AWS_SECRET_ACCESS_KEY"] : load_keys_from_file[:secret_access_key]
+        @secret_access_key ||= ENV["AWS_SECRET_ACCESS_KEY"] ? ENV["AWS_SECRET_ACCESS_KEY"] : load_keys_from_file[:secret_access_key]
       end
       def read_keyfile
         open(get_working_key_file_locations).read
@@ -57,6 +57,13 @@ module PoolParty
         unless access_key.nil? || secret_access_key.nil?
           write_to_file( key_file_locations.first, YAML::dump({:access_key => access_key, :secret_access_key => secret_access_key}))        
         end
+      end
+      def store_keys_in_file_for(obj=nil)
+        if obj
+          @access_key = obj.access_key
+          @secret_access_key = obj.secret_access_key
+        end
+        store_keys_in_file
       end
       def reset!
         @keys = nil
