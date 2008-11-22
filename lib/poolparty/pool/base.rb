@@ -83,32 +83,37 @@ module PoolParty
           "ppkeys"
         ]
       end
-            
       def storage_directory
         [
             "/var/poolparty"           
         ].select do |dir|
-          dir if ::File.directory?(dir) && ::File.readable?(dir)
+          dir if viable_directory?(dir)
         end.first || ::File.join( "/tmp/poolparty")
       end
-      
       def logger_location
         [
             "/var/log/poolparty"
         ].select do |dir|
-          dir if ::File.directory?(dir) && ::File.readable?(dir)
+          dir if viable_directory?(dir)
         end.first || ::File.join(Dir.pwd, "log")
       end
-      
+      # Assume the logs will be at the pool.log location within the 
+      # logger_location set above
       def pool_logger_location
-        ::File.join(logger_location, "pool.logs")
+        ::File.join(logger_location, "pool.log")
       end
-      
-      # Array of allowed_commands that you can run on the remote nodes
-      def allowed_commands
-        @allowed_commands ||= open(::File.join( ::File.dirname(__FILE__), "..", "config", "allowed_commands.yml")).read.split(/\n/).map {|a| a.chomp }
+      def custom_monitor_directories
+        [
+          "/var/poolparty/monitors",
+          "/etc/poolparty/monitors",
+          "#{Dir.pwd}/monitors"
+        ].select {|d| d if viable_directory?(d) }
       end
-      
+      # Only return true if the directory we are reading is both readable
+      # and exists
+      def viable_directory?(dir)
+        ::File.directory?(dir) && ::File.readable?(dir)
+      end
     end
   end    
 end

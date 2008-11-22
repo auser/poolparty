@@ -86,19 +86,25 @@ module PoolParty
       # Then, send the saved containing cloud instances to give the 
       # remote master access to the cloud options that are required
       # for the master to run checks
-      def prepare_to_configuration        
+      def prepare_for_configuration        
         # clear_base_directory
         make_base_directory
         copy_misc_templates
+        copy_custom_monitors
         store_keys_in_file
         Script.save!(self)
-        copy_ssh_key # not my favorite...
+        # not my favorite...
+        copy_ssh_key
       end
       
+      # Copy the ssh keys to the storage directory in preparation for
+      # configuration
       def copy_ssh_key
         copy_file_to_storage_directory(full_keypair_path)
       end
       
+      # Store our keys for cloud access in a file 
+      # that is specific to this cloud
       def store_keys_in_file
         Base.store_keys_in_file_for(self)
       end
@@ -120,9 +126,24 @@ module PoolParty
       end      
       
       def copy_misc_templates
-        ["namespaceauth.conf", "yaws.conf"].each do |f|
+        ["namespaceauth.conf"].each do |f|
           copy_file_to_storage_directory(::File.join(::File.dirname(__FILE__), "..", "templates", f))
         end
+      end
+      
+      # If there is a directory named monitors in the same directory
+      # as the pool specification file is in,
+      # then create a monitors directory in the storage directory
+      # and mirror the two. When PoolParty "boots" up, it scans
+      # the monitors directory for any custom monitors
+      # that are in known locations, these are included
+      def copy_custom_monitors
+        unless Base.custom_monitor_directories.empty?
+          make_directory_in_storage_directory("monitors")
+          Dir["#{Base.custom_monitor_directories}/*.rb"].each do |f|
+            copy_file_to_storage_directory(f, "monitors")
+          end
+        end        
       end
             
       # Configuration files

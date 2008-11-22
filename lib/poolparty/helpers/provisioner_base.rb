@@ -169,7 +169,7 @@ module PoolParty
       # Tasks that need to be performed everytime we do any
       # remote ssh'ing into any instance
       def setup_runner(force=false)
-        @cloud.prepare_to_configuration
+        @cloud.prepare_for_configuration
         @cloud.build_and_store_new_config_file(force)
       end
       def valid?
