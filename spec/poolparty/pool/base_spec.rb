@@ -2,6 +2,10 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe "Base" do
   before(:each) do
+    # To clear out the instance variables just in case
+    Base.instance_eval do
+      @access_key = @secret_access_key = nil
+    end
     ENV.stub!(:[]).with("AWS_ACCESS_KEY_ID").and_return "KEY"
     ENV.stub!(:[]).with("AWS_SECRET_ACCESS_KEY").and_return "SECRET"
   end
