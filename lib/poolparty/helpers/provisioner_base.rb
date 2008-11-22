@@ -284,6 +284,7 @@ module PoolParty
       def fix_rubygems
         <<-EOE
           #{installer_for("ruby rubygems")}
+          gem update --system # Force rubygems update
           echo '#{open(::File.join(template_directory, "gem")).read}' > /usr/bin/gem
         EOE
       end
