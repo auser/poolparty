@@ -297,8 +297,6 @@ describe "Cloud" do
             end
             it "should include custom functions" do
               @manifest.should =~ /define line\(\$file/
-
-              File.open("test_manifest.pp", "w+") {|f| f << @manifest}
             end
           end
           describe "building with an existing manifest" do
