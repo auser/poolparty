@@ -90,13 +90,17 @@ module PoolParty
         # clear_base_directory
         make_base_directory
         copy_misc_templates
-        Base.store_keys_in_file
+        store_keys_in_file
         Script.save!(self)
         copy_ssh_key # not my favorite...
       end
       
       def copy_ssh_key
         copy_file_to_storage_directory(full_keypair_path)
+      end
+      
+      def store_keys_in_file
+        Base.store_keys_in_file_for(self)
       end
       
       # Build the new poolparty manifest

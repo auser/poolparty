@@ -73,6 +73,9 @@ describe "Base" do
       describe "without keyfile" do
         before(:each) do
           Base.stub!(:get_working_key_file_locations).and_return nil
+          Base.instance_eval do
+            @access_key = @secret_access_key = nil
+          end
           ENV.stub!(:[]).with("AWS_ACCESS_KEY_ID").and_return nil
           ENV.stub!(:[]).with("AWS_SECRET_ACCESS_KEY").and_return nil
           Base.reset!
@@ -82,6 +85,22 @@ describe "Base" do
         end
         it "should render the secret_access_key as nil" do
           Base.secret_access_key.should == nil
+        end
+      end
+      describe "store_keys_in_file_for" do
+        before(:each) do
+          @obj = Class.new
+          @obj.stub!(:access_key).and_return "MYACCESSKEY"
+          @obj.stub!(:secret_access_key).and_return "MYSECRETACCESSKEY"
+          Base.stub!(:store_keys_in_file).and_return true
+          
+          Base.store_keys_in_file_for(@obj)
+        end
+        it "should take the access key from the object" do          
+          Base.access_key.should == "MYACCESSKEY"
+        end
+        it "should take the secret_access_key from the object" do
+          Base.secret_access_key.should == "MYSECRETACCESSKEY"
         end
       end
     end
