@@ -92,4 +92,12 @@ module PoolParty
     end
     
   end
+  
+  def extract_cloud_from_options(o)
+    o.cloudname ? [cloud(o.cloudname.downcase.to_sym)] : clouds.collect {|n,cl| cl}
+  end
+  
+  def extract_pool_from_options(o)
+    o.poolname ? [pool(o.poolname.downcase.to_sym)] : pools.collect {|n,pl| pl}
+  end
 end

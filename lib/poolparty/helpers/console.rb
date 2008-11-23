@@ -5,23 +5,26 @@ module PoolParty
     
     include Display
     
-    # Load a file that contains a pool into memory
-    def load_pool(filename)
-
-      unless filename && ::File.readable?(filename)
-        puts "Please specify your cloud with -s, move it to ./pool.spec or in your POOL_SPEC environment variable"
-        exit(1)
-      else
-        PoolParty::Script.inflate(open(filename).read, filename)
+    # Print help commands for the console
+    # level 0 - Basic help
+    # level 1 - Commands
+    def help(level=0)
+      @np = NicePrinter.new(60)
+      @np.header
+      @np.center "PoolParty console help"
+      if level.zero?
+        @np.center "Basics"
+        @np << "Load your pool with load_pool(filename)"
+        @np << "Reference clouds with"
+        @np << "c = cloud :cloudname"
+        @np.empty
       end
-    end
-    
-    def extract_cloud_from_options(o)
-      o.cloudname ? [cloud(o.cloudname.downcase.to_sym)] : clouds.collect {|n,cl| cl}
-    end
-    
-    def extract_pool_from_options(o)
-      o.poolname ? [pool(o.poolname.downcase.to_sym)] : pools.collect {|n,pl| pl}
+      @np.center "CloudSpeak"
+      @np << "You can check the number of instances with"
+      @np << "list_of_running_nodes"
+      @np.empty
+      @np.footer
+      @np.print
     end
     
     # Clear all the pools and reload the console
@@ -29,6 +32,8 @@ module PoolParty
     # as well
     def reload!      
       reset!
+      require File.dirname(__FILE__) + "/../../../poolparty"
+      require File.dirname(__FILE__) + "/../../../poolpartycl"
     end
     
   end

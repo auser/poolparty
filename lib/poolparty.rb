@@ -10,31 +10,25 @@ require 'rubygems'
   end  
 end
 
+require "#{File.dirname(__FILE__)}/poolparty/helpers/nice_printer"
+
 unless @required_software.empty?
-  @num_lines = 45
-  @centered_lines = @num_lines - 4
-  def wrap_cline(line)
-    "* #{line.center(@centered_lines)} *"
-  end
-  def wrap_lline(line)
-    "* #{line.ljust(@centered_lines)} *"
-  end
-  def header
-    "*"*@num_lines
-  end
-  empty_line = "* #{" ".ljust(@centered_lines)} *"
+  @np = NicePrinter.new(45)
+
   # error_initializing_message.txt
-  puts header
-  puts wrap_cline("Error")
-  puts wrap_lline("Missing required software")
-  puts @required_software.map {|a| wrap_lline("  #{a}") }  
-  puts wrap_lline("Please install the required software")
-  puts wrap_lline("and try again")
-  puts empty_line
-  puts wrap_lline("Try installing #{@required_software.size == 1 ? "it" : "them"} with")
-  puts @required_software.map {|a| wrap_lline("  gem install #{a}") }  
-  puts empty_line
-  puts "*"*@num_lines
+  @np.header
+  @np.center("Error")
+  @np.left("Missing required software")
+  @required_software.map {|a| @np << "  #{a}" }  
+  @np << "Please install the required software"
+  @np << "and try again"
+  @np.empty
+  @np << "Try installing #{@required_software.size == 1 ? "it" : "them"} with"
+  @required_software.map {|a| @np << "  gem install #{a}" }
+  @np.empty
+  @np.footer
+  
+  @np.print
   exit(0)
 end
 
