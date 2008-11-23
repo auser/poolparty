@@ -11,18 +11,22 @@ module PoolParty
     def help(level=0)
       @np = NicePrinter.new(60)
       @np.header
-      @np.center "PoolParty console help"
-      if level.zero?
-        @np.center "Basics"
-        @np << "Load your pool with load_pool(filename)"
-        @np << "Reference clouds with"
-        @np << "c = cloud :cloudname"
+      @np.center "PoolParty console help"      
+      @np.center "Basics"
+      @np << "Load your pool with load_pool(filename)"
+      @np << "Reference clouds with"
+      @np << "c = cloud :cloudname"
+      @np.empty
+      if level >= 1
+        @np.center "CloudSpeak"
+        @np << "All the commands set on your cloud can be called within the console"
+        @np << "list_of_running_instances - get list of running nodes"
+        @np << "list_of_pending_instances - get list of pending nodes"
+        @np << "available_monitors - get list of the available monitors on the cloud"
+        @np << "  note: all monitors can be called as a method on the cloud"
+        @np << "    i.e. CpuMonitor makes the method cpu available on the cloud"
         @np.empty
       end
-      @np.center "CloudSpeak"
-      @np << "You can check the number of instances with"
-      @np << "list_of_running_nodes"
-      @np.empty
       @np.footer
       @np.print
     end
