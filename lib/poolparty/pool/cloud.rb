@@ -38,8 +38,7 @@ module PoolParty
         :secret_access_key => Base.secret_access_key,
         :ec2_dir => ENV["EC2_HOME"],
         :keypair => (ENV["KEYPAIR_NAME"].nil? || ENV["KEYPAIR_NAME"].empty?) ? nil : ENV["KEYPAIR_NAME"],
-        :ami => 'ami-44bd592d',
-        :polling_time => "30.seconds"
+        :ami => 'ami-44bd592d'
       })
       
       def initialize(name, pare=self, &block)
