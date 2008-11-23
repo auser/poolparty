@@ -8,9 +8,9 @@ task :deploy => [:check_version, :website, :release] do
 end
 
 # desc 'Runs tasks website_generate and install_gem as a local deployment of the gem'
-# task :local_deploy => [:website_generate, :install_gem]
+# task :local_deploy => []
 desc "Deploy the gem locally"
-task :local_deploy => [:build_local_gem] do
+task :local_deploy => [:website_generate, :install_gem, :build_local_gem] do
   sh "#{'sudo ' unless Hoe::WINDOZE }gem install pkg/*.gem --no-rdoc --no-ri"
 end
 
@@ -30,9 +30,21 @@ task :install_gem_no_doc => [:clean, :package] do
   sh "#{'sudo ' unless Hoe::WINDOZE }gem install pkg/*.gem --no-rdoc --no-ri"
 end
 
+desc "Ensure .hoerc exists in the homedirectory. Create it if it doesn't"
+task :hoerc do
+str =<<-EOE
+---
+publish_on_announce: true
+exclude: !ruby/regexp
+  /tmp$|\.git|log$|local/.*\.rb$|Makefile|\.beam$/
+EOE
+  hoerc_path = ::File.join( ENV["HOME"], ".hoerc" )
+  ::File.open(hoerc_path, "w+") {|f| f << str } unless ::File.file?(hoerc_path)
+end
+
 namespace :manifest do
   desc 'Recreate Manifest.txt to include ALL files'
-  task :refresh do
+  task :refresh => [:hoerc] do
     `rake check_manifest | patch -p0 > Manifest.txt`
   end
 end

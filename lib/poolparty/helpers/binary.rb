@@ -1,5 +1,17 @@
 require "ftools"
 module PoolParty
+  
+  # Load a file that contains a pool into memory
+  def load_pool(filename)
+
+    unless filename && ::File.readable?(filename)
+      puts "Please specify your cloud with -s, move it to ./pool.spec or in your POOL_SPEC environment variable"
+      exit(1)
+    else
+      PoolParty::Script.inflate(open(filename).read, filename)
+    end
+  end
+  
   module Binary
     
     class << self
