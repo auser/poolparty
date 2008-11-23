@@ -244,6 +244,7 @@ lib/poolparty/exceptions/UnacceptableCommand.rb
 lib/poolparty/helpers/binary.rb
 lib/poolparty/helpers/console.rb
 lib/poolparty/helpers/display.rb
+lib/poolparty/helpers/nice_printer.rb
 lib/poolparty/helpers/optioner.rb
 lib/poolparty/helpers/provisioner_base.rb
 lib/poolparty/helpers/provisioners/master.rb
