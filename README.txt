@@ -39,6 +39,7 @@ COMING SOON
 sudo gem install auser-poolparty
 
 == TODO:
+* Rewrite the disallowed_options to whitelist allowed_options on resources
 * Replace services with Runit
 * Refactor provisioning to use erlang
 * Add queuing of tasks on the messenger
