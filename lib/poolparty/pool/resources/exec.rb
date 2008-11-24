@@ -13,7 +13,7 @@ module PoolParty
       # exclude it in the gempackage, but this is an example
       # of how to exclude it as well
       def disallowed_options
-        [:ensure, :name, :source, :version, :download_url]
+        [:ensure, :name, :source, :version, :download_url, :template]
       end
       
       def key
