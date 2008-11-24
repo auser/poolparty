@@ -1,3 +1,21 @@
+=begin rdoc
+  The base for Remote Bases
+  
+  By extending this class, you can easily add remoters to 
+  PoolParty. There are 4 methods that the remote base needs to implement
+  in order to be compatible.
+  
+  The four methods are:
+    launch_new_instance!
+    terminate_instance(id)
+    describe_instance(id)
+    describe_instances
+  
+  After your remote base is written, make sure to register the base outside the context
+  of the remote base, like so:
+    register_remote_base :remote_base_name
+  
+=end
 module PoolParty
 
   def register_remote_base(*args)

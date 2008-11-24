@@ -1,12 +1,15 @@
 =begin rdoc
-  The connection to the messenger from poolparty, the client
+  The connection to the messenger from poolparty, the client.
+  
+  This class will setup a socket connection to the master's client
+  at the messenger_client_port
 =end
 module PoolParty
   module Messenger
     def with_socket(testing=false, &block)
       host = testing ? "localhost" : (master.ip)
       vputs "Pinging #{host} with the messenger"
-      socket = TCPSocket.open(host, 7050)
+      socket = TCPSocket.open(host, Base.messenger_client_port)
       out = yield(socket)
       socket.close
       out
