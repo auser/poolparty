@@ -3,7 +3,7 @@ module PoolParty
     define_resource(:runitservice) do
       def has_runit_service(name="runitservice", downif="", templatedir="")
         path = copy_templates_from_templatedir(templatedir)
-        call_function <<-EOC
+        call_custom_function <<-EOC
 runit_service {
 "#{name}":
   directory => "/etc/sv",

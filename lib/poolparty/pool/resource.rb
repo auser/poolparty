@@ -20,17 +20,18 @@ module PoolParty
     def add_resource(type, opts={}, parent=self, &block)
       if in_a_resource_store?(type, opts[:name])
         @res = get_resource(type, opts[:name], parent)
-        if should_duplicate_resource?(type, @res, parent, opts)
-          @res = @res.dup
-          @pa = parent
-          @res.instance_eval {@parent = @pa}
+        # if should_duplicate_resource?(type, @res, parent, opts)
+        # unless @res.parent == parent
+        #   @pa = parent
+        #   @res.instance_eval {@parent = @pa}
+        # end
           # parent.resource(type) << @res
-        end        
+        # end
       else
-        @res = returning "PoolParty::Resources::#{type.to_s.camelize}".classify.constantize.new(opts, parent, &block) do |o|                    
+        @res = returning "PoolParty::Resources::#{type.to_s.camelize}".camelize.constantize.new(opts, parent, &block) do |o|                    
           store_into_global_resource_store(o)
           resource(type) << o          
-        end
+        end        
       end
       @res
     end
@@ -90,7 +91,7 @@ module PoolParty
       
       def self.inherited(subclass)
         subclass = subclass.to_s.split("::")[-1] if subclass.to_s.index("::")
-        lowercase_class_name = subclass.to_s.downcase
+        lowercase_class_name = subclass.to_s.underscore
         
         # Add add resource method to the Resources module
         unless PoolParty::Resources.respond_to?(lowercase_class_name.to_sym)          
@@ -161,20 +162,30 @@ module PoolParty
           @pa = @pa.respond_to?(:parent) ? @pa.parent : nil
         end
         @pa
-      end      
+      end
+      
+      def parent_tree
+        @pa = self
+        returning Array.new do |arr|
+          while !(@pa.is_a?(PoolParty::Cloud::Cloud) || @pa.nil? || @pa == self)
+            @pa = @pa.respond_to?(:parent) ? @pa.parent : nil
+            arr << @pa
+          end
+        end
+      end
       
       # DSL Overriders
       include PoolParty::ResourcingDsl
       
       def same_resources_of(t, k)
-        key == k && class_name_sym == t && !duplicatable?
+        key == k && class_name_sym == t
       end
       def duplicatable?
         false
       end
       # This way we can subclass resources without worry
       def class_type_name
-        self.class.to_s.top_level_class
+        self.class.to_s.top_level_class.underscore
       end
       def self.custom_function(str)
         custom_functions << str

@@ -4,7 +4,7 @@ module PoolParty
     define_resource(:line_in_file) do
       # Should refactor
       def has_line_in_file(line="line_in_file", file="file", opts={})
-        call_function <<-EOE
+        call_custom_function <<-EOE
         line {
           '#{file}_line' :
             file => '#{file}',
@@ -16,7 +16,7 @@ module PoolParty
       end
       
       def append_if_no_such_line(line="line", file="", refreshonly='false')
-        call_function <<-EOE
+        call_custom_function <<-EOE
         append_if_no_such_line {
           '#{file}' :
             file => '#{file}',
@@ -27,7 +27,7 @@ module PoolParty
       end
       
       def delete_lines_from(file="", pattern=//, opts={})
-        call_function <<-EOE
+        call_custom_function <<-EOE
         delete_lines {
           '#{file}' :
             file => '#{file}',

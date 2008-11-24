@@ -14,7 +14,7 @@ describe "Custom Resource" do
       lambda {
         define_resource(:rockstar) do
           def has_a_line_in_file(line="line_in_file", file="file")
-            call_function "line(#{file}, #{line})"
+            call_custom_function "line(#{file}, #{line})"
           end
           custom_function <<-EOF
           define line($file, $line, $ensure = 'present') {
@@ -28,7 +28,7 @@ describe "Custom Resource" do
       before(:each) do
         define_resource(:rockstar) do
           def has_a_line_in_file(line="line_in_file", file="file")
-            call_function "line(#{file}, #{line})"
+            call_custom_function "line(#{file}, #{line})"
           end
           custom_function <<-EOF
           define line($file, $line, $ensure = 'present') {
@@ -49,7 +49,7 @@ describe "Custom Resource" do
         reset_resources!
         define_resource(:rockstar) do
           def has_a_line_in_file(line="line_in_file", file="file")
-            call_function "line(#{file}, #{line})"
+            call_custom_function "line(#{file}, #{line})"
           end
           custom_function <<-EOF
           define line($file, $line, $ensure = 'present') {
@@ -69,7 +69,7 @@ describe "Custom Resource" do
         @resource.instance_eval do
           has_a_line_in_file("hi", "filename")
         end
-        @resource.resource(:call_function).to_string.should == "line(filename, hi)"
+        @resource.resource(:call_function).first.to_string.should == "line(filename, hi)"
       end
       it "should be stored in an array" do
         resource(:rockstar).class.should == Array

@@ -47,7 +47,7 @@ module PoolParty
             end          
           end
 
-          res.each do |type, resource|
+          res.reject do |type, resource|
             str << resource.to_string("#{pre*2}")
           end
         end.join("\n")
