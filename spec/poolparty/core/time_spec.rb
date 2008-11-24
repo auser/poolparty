@@ -17,9 +17,6 @@ describe "Time" do
     it "should be able to parse weeks" do
       2.weeks.should == 1209600
     end
-    it "should be able to parse months" do
-      1.month.should == 2592000
-    end
   end
   describe "from" do
     it "should be able to find minutes ago" do
