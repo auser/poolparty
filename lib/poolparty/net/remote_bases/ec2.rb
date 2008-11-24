@@ -1,3 +1,9 @@
+=begin rdoc
+  EC2 Remoter Base
+  
+  This serves as the basis for running PoolParty on Amazon's ec2 cloud
+  cluster. 
+=end
 require "date"
 require "#{::File.dirname(__FILE__)}/ec2/ec2_response_object"
 

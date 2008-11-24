@@ -25,6 +25,7 @@ module PoolParty
       :port => "80",
       :forwarding_port => "8080",
       :proxy_mode => "http",
+      :messenger_client_port => 7050,
       # EC2 Options
       :ami => "ami-1cd73375",
       :size => 'm1.small', # must be 'm1.small', 'm1.large', 'm1.xlarge', 'c1.medium', or 'c1.xlarge'
