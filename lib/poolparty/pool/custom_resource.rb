@@ -7,48 +7,23 @@ module PoolParty
 
   module Resources
     
-    def call_function(str, opts={}, &block)
-      
-      if !global_resources_store.select {|r| r.key == str.keyerize }.empty?
-        @res = get_resource(:call_function, str.keyerize, parent)
-      else
-        @res = returning PoolParty::Resources::CallFunction.new(str, opts.merge(:key => str.keyerize), &block) do |o|
-          store_into_global_resource_store(o)
-          resource(:call_function) << o
-        end
-      end
-      @res
+    def call_custom_function(str, opts={}, parent=self, &block)
+      add_resource(:call_function, opts.merge({:str => str, :name => str.keyerize}), parent, &block)
     end
                 
     # Resources for function call
     class CallFunction < Resource
-      def initialize(str="", opts={}, parent=self, &block)
-        @key = opts[:key] || str.keyerize
-        @str = str
-        # super(opts, parent, &block)
-      end
-      def key
-        @key || @str.keyerize
-      end
-      def duplicatable?
-        false
-      end
       def to_string(pre="")
         returning Array.new do |arr|
-          arr << "#{pre}#{@str}"
+          arr << "#{pre}#{str}"
         end.join("\n")
       end
     end
         
     class CustomResource < Resource
-      def initialize(name=:custom_method, opts={}, parent=self, &block)
-        @name = name
-        super(opts, parent, &block)
-      end
-      
       def self.inherited(subclass)
         PoolParty::Resources.available_custom_resources << subclass
-        super(subclass)
+        super
       end
       
       def to_string(pre="")

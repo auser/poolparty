@@ -16,7 +16,7 @@ module PoolParty
     # 
     # For example usage, see lib/poolparty/plugins/line.rb
     def define_resource(name, &block)
-      symc = "#{name}".classify
+      symc = "#{name}".camelcase
       klass = symc.class_constant(PoolParty::Resources::CustomResource, {:preserve => true}, &block)
       PoolParty::Resources.module_eval &block
       klass
@@ -44,7 +44,7 @@ module PoolParty
     # 
     # An example is included in the poolparty-apache-plugin
     def virtual_resource(name=:virtual_resource, opts={}, &block)
-      symc = "#{name}".classify
+      symc = "#{name}".camelcase
       eval <<-EOE
         class PoolParty::Resources::#{symc} < PoolParty::Resources::Resource
         end

@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
 
 . /etc/profile
-/usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master
+if [ $(/usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master)]; then
+  echo "Run successfully"
+  else
+  /usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master
+fi
