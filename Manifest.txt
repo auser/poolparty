@@ -324,6 +324,7 @@ lib/poolparty/templates/yaws.conf
 lib/poolparty/version.rb
 lib/poolpartycl.rb
 log/pool.logs
+poolparty.gemspec
 script/destroy
 script/generate
 script/txt2html

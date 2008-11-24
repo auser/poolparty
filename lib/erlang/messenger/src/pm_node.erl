@@ -18,13 +18,14 @@
          terminate/2, code_change/3]).
 
 -record(state, {
-					monitors = {}  % Tuple of monitors
+					monitors = {},  % Tuple of monitors
+					stored_loads = ?DICT:new() % Dictionary of latest loads
 				}).
 -define(SERVER, ?MODULE).
 
 % Client function definitions
 -export ([stop/0]).
--export ([get_load_for_type/1, run_cmd/1, fire_cmd/1]).
+-export ([get_current_load_for_type/1, run_cmd/1, fire_cmd/1]).
 -export ([run_reconfig/0, local_update/1, still_here/0, print_monitors/0]).
 -export ([server_location/0]).
 %%====================================================================
@@ -36,10 +37,40 @@
 
 
 % Get the load for the type sent...
-get_load_for_type(Type) ->
+get_current_load_for_type(Type) ->
 	String = string:concat(". /etc/profile && server-get-load -m ",Type),
-	{os:cmd(String)}.
+	LatestLoad = os:cmd(String), 
+	Load = gen_server:call(server_location(), {update_load, Type, LatestLoad}),
+	{Load}.
 
+get_load_listing(Type, State) ->
+	% Find or create the stored node
+	case ?DICT:is_key(Type, State#state.stored_loads) of
+		true -> 
+			LoadStore = ?DICT:fetch(Type, State#state.stored_loads), 
+			{LoadStore, State};
+		false -> 
+			LoadStore = [],
+			NewState = State#state{stored_loads = ?DICT:store(Type, LoadStore, State#state.stored_loads)}, 
+			{LoadStore, NewState}
+	end.
+
+get_average_load_listing(Type, State) ->
+	{LoadListing, _} = get_load_listing(Type, State),
+	utils:average_of_list(LoadListing).
+% Get the stored load for the type
+% Only store the latest NUM_LOADS_TO_STORE in the stored_loads array
+store_load_for_type(Type, Load, State) ->
+	{LoadStore, LoadListingState} = get_load_listing(Type, State),	
+	LoadList = lists:reverse(LoadStore),
+	case length(LoadList) >= ?NUM_LOADS_TO_STORE of
+		true -> [_|T] = LoadList; 
+		false -> T = LoadList
+	end,
+	NewStoredLoad = lists:append([Load], lists:reverse(T)),	
+	NewState = State#state{stored_loads = ?DICT:store(Type, NewStoredLoad, LoadListingState#state.stored_loads)},	
+	{Type, NewState}.
+	
 % Rerun the configuration
 run_reconfig() -> gen_server:cast(server_location(), {run_reconfig}).
 print_monitors() -> gen_server:call(server_location(), {print_monitors}).
@@ -56,9 +87,9 @@ stop() -> gen_server:cast(server_location(), stop).
 % Run every UPDATE_TIME seconds
 local_update(Types) ->
 	?TRACE("Updating", [?MASTER_LOCATION]),	
-	net_adm:ping(?MASTER_LOCATION),
-	Load = [{Ty, element(1, get_load_for_type(Ty))} || Ty <- Types],
-	gen_server:cast(?MASTER_SERVER, {update_node_load, node(), Load}).
+	net_adm:ping(?MASTER_LOCATION), % check in with the master
+	Load = [{Ty, element(1, get_current_load_for_type(Ty))} || Ty <- Types],
+	gen_server:cast(?MASTER_SERVER, {update_node_load, node(), Load}).	
 	
 %%--------------------------------------------------------------------
 %% Function: start_link() -> {ok,Pid} | ignore | {error,Error}
@@ -88,7 +119,8 @@ init(Args) ->
 	process_flag(trap_exit, true),
 	utils:start_timer(?UPDATE_TIME, fun() -> pm_node:local_update(Args) end),
   {ok, #state{
-					monitors=Args
+					monitors=Args,
+					stored_loads = ?DICT:new()
 				}}.
 
 %%--------------------------------------------------------------------
@@ -103,6 +135,11 @@ init(Args) ->
 handle_call({run_command, Cmd}, _From, State) ->
 	Reply = os:cmd(". /etc/profile && server-fire-cmd \""++Cmd++"\""),
 	{reply, Reply, State};
+handle_call({update_load, Type, Load}, _From, State) ->
+	{Type, NewState} = store_load_for_type(Type, Load, State),
+	Reply = get_average_load_listing(Type, NewState),
+	?TRACE("Updated load", [Reply]),
+	{reply, Reply, NewState};
 handle_call({still_there}, _From, State) ->
 	Reply = still_here,
 	{reply, Reply, State};

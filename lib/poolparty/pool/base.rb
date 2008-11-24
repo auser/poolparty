@@ -40,7 +40,7 @@ module PoolParty
       end
       # Get the access_key
       def access_key
-        @access_key ||= ENV["AWS_ACCESS_KEY_ID"] ? ENV["AWS_ACCESS_KEY_ID"] : load_keys_from_file[:access_key]
+        @access_key ||= ENV["AWS_ACCESS_KEY"] ? ENV["AWS_ACCESS_KEY"] : load_keys_from_file[:access_key]
       end
       def secret_access_key
         @secret_access_key ||= ENV["AWS_SECRET_ACCESS_KEY"] ? ENV["AWS_SECRET_ACCESS_KEY"] : load_keys_from_file[:secret_access_key]
