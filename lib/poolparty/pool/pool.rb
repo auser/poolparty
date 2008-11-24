@@ -47,7 +47,7 @@ module PoolParty
       end
       
       def setup_defaults
-        plugin_directory "#{::Dir.pwd}/plugins" 
+        plugin_directory "#{::File.dirname(pool_specfile)}/plugins" 
       end
             
       # This is where the entire process starts
