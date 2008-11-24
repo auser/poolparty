@@ -9,11 +9,12 @@ module PoolParty
       
       # Execs cannot have the following parameters
       # We use version in the gempackage resource
-      # So we have to exclude it here. Alternatively, we could
-      # exclude it in the gempackage, but this is an example
-      # of how to exclude it as well
-      def disallowed_options
-        [:ensure, :name, :source, :version, :download_url, :template]
+      # So we have to exclude it here.
+      def allowed_options
+        [
+          :command, :creates, :cwd, :env, :environment, :group, :logoutput, :user,
+          :onlyif, :path, :refresh, :refreshonly, :returns, :timeout, :unless
+        ]
       end
       
       def key
