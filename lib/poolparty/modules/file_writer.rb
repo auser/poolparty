@@ -6,7 +6,7 @@ module PoolParty
       FileUtils.cp file, path unless file == path || ::File.exists?(path)
     end
     def cleanup_storage_directory
-      Dir["#{Base.storage_directory}/**"].each do |f|
+      Dir["#{Base.storage_directory}/**/*"].each do |f|
         ::FileUtils.rm f if ::File.file?(f)
       end
     end
@@ -79,7 +79,7 @@ module PoolParty
       path
     end
     def clear_base_directory
-      Dir["#{Base.storage_directory}/**"].each do |f|
+      Dir["#{Base.storage_directory}/**/*"].each do |f|
         ::FileUtils.rm f if ::File.file?(f)
       end
     end
