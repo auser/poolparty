@@ -8,8 +8,13 @@ module PoolParty
       puts "Please specify your cloud with -s, move it to ./pool.spec or in your POOL_SPEC environment variable"
       exit(1)
     else
+      $pool_specfile = filename
       PoolParty::Script.inflate(open(filename).read, filename)
     end
+  end
+  
+  def pool_specfile
+    $pool_specfile
   end
   
   module Binary

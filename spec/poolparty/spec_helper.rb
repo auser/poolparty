@@ -11,6 +11,8 @@ end
 
 # Dir["#{File.dirname(__FILE__)}/helpers/**"].each {|a| require a}
 
+ENV["POOL_SPEC"] = nil
+
 include PoolParty
 extend PoolParty
 
