@@ -1,3 +1,10 @@
+=begin rdoc
+  DeployDirectory
+  
+  Deploy directory will tar.gz a local directory and sync it up to 
+  the master instance of the cloud. This enables you to send a directory
+  up to the cloud and let the master host it for the remote slaves
+=end
 module PoolParty    
   class Deploydirectory
         
@@ -11,7 +18,6 @@ module PoolParty
             
       def package_directory
         path = ::File.join( Base.tmp_path, "#{::File.basename(from_dir)}.tar.gz" )
-        # cd /Users/auser/Sites/work/citrusbyte/internal/gems/pool-party/poolparty/spec/poolparty/plugins/ && tar -czf plugins.tar.gz . && mv plugins.tar.gz /tmp/poolparty && cd /tmp/poolparty
         archive_name = "#{name.dir_safe}.tar.gz"
         cmd = "cd #{::File.expand_path(from_dir)} && tar -czf #{archive_name} . && mv #{archive_name} #{Base.tmp_path}"
         `#{cmd}` unless testing
