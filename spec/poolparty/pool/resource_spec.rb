@@ -383,6 +383,11 @@ describe "Resource" do
             #   @cloud2.resources_string_from_resources(@cloud2.resources).should =~ /\[ Package\['apache2'\], Package\['boxers'\] \]/
             # end
           end
+          describe "inherited" do
+            it "should turn passengersite_with_ssl into PassengerSiteWithSsl" do
+              "PassengersiteWithSsl".to_s.split("::")[-1].underscore.should == "passengersite_with_ssl"
+            end
+          end
         end
       end
     end    

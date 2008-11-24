@@ -4,7 +4,7 @@ module PoolParty
     define_resource(:svn) do
       
       def has_svnpath(opts={})
-        call_function <<-EOE
+        call_custom_function <<-EOE
         svnserve { #{opts[:name]}:
           source => "#{opts[:source]}",
           path => "#{opts[:path]}",
