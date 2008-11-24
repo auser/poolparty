@@ -53,7 +53,7 @@ task :gemspec  => [:spec, :clean_tmp, :"manifest:refresh", :build_local_gem] do 
 end
 
 desc "Generate gemspec for github"
-task :gh => [:gemspec, :ghgem] do
+task :gh => [:github_release] do
   filepath = ::File.join(::File.dirname(__FILE__), "poolparty.gemspec")
   data = open(filepath).read
   spec = eval("$SAFE = 3\n#{data}")
@@ -64,6 +64,6 @@ task :gh => [:gemspec, :ghgem] do
 end
 
 desc "Generate github gemspec and latest gem"
-task :ghgem => [:local_deploy] do
-  `mv #{::File.expand_path(::File.dirname(__FILE__))}/pkg/*.gem #{::File.expand_path(::File.dirname(__FILE__))}/pkg/poolparty.gem`
+task :ghgem => [:gh] do
+  %x[sudo gem install pkg/poolparty.gem]
 end

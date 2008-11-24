@@ -60,7 +60,7 @@ class String
   # Refactor this guy to get the class if the class is defined, and not always create a new one
   # although, it doesn't really matter as ruby will just reopen the class
   def class_constant(superclass=nil, opts={}, &block)
-    symc = ((opts && opts[:preserve]) ? ("#{self.classify}Classs") : "PoolParty#{self.classify}Classs").classify
+    symc = ((opts && opts[:preserve]) ? ("#{self.camelcase}Classs") : "PoolParty#{self.camelcase}Classs").classify
     
     kla=<<-EOE
       class #{symc} #{"< #{superclass}" if superclass}
@@ -75,13 +75,13 @@ class String
   end
   
   def module_constant(append="", &block)
-    symc = "#{self}_Module#{append}".classify
+    symc = "#{self}_Module#{append}".camelcase
     mod = Object.const_defined?(symc) ? Object.const_get(symc.to_sym) : Module.new(&block)
     Object.const_set(symc, mod) unless Object.const_defined?(symc)
     symc.to_s.constantize
   end
   def preserved_module_constant(ext="", from="PoolParty::", &block)
-    symc = "#{self}#{ext}".classify
+    symc = "#{self}#{ext}".camelcase
     mod = Kernel.const_defined?(symc) ? Kernel.const_get(symc.to_sym) : Module.new(&block)
     Kernel.const_set(symc, mod) unless Kernel.const_defined?(symc)
     symc.to_s.constantize

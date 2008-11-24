@@ -115,6 +115,9 @@ listen web_proxy 127.0.0.1:3000
     it "should be able to get the top level class" do
       "PoolParty::Resources::File".top_level_class.should == "file"
     end
+    it "should turn file into a class" do
+      "file".camelcase.should == "File"
+    end
   end
   describe "to_option_string" do
     it "should not touch a string, but return the string with single quotes" do

@@ -47,7 +47,7 @@ module PoolParty
       end
       
       def setup_defaults
-        plugin_directory "#{::File.dirname(pool_specfile)}/plugins"  if pool_specfile
+        plugin_directory "#{::File.dirname(pool_specfile ? pool_specfile : Dir.pwd)}/plugins"
       end
             
       # This is where the entire process starts
