@@ -35,11 +35,10 @@ module PoolParty
       
       def initialize(name,&block)
         setup_defaults
-        
         @pool_name = name
         @pool_name.freeze
         # run_in_context &block if block
-        run_setup(self, &block)
+        run_setup(self, &block)        
       end
       
       def name

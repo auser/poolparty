@@ -86,7 +86,7 @@ module PoolParty
         wait "5.seconds"
         when_no_pending_instances {after_launch_master(inst)}
       end
-      def after_launch_master(h={})
+      def after_launch_master(inst=nil)
         vputs "After launch master in remoter"
       end
       # Let's terminate an instance that is not the master instance
