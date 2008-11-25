@@ -45,7 +45,7 @@ module PoolParty
         @cloud_name = name
         @cloud_name.freeze
                 
-        plugin_directory "#{::Dir.pwd}/plugins"
+        plugin_directory
                 
         p = pare.is_a?(PoolParty::Pool::Pool) ? pare : nil
         run_setup(p, &block)

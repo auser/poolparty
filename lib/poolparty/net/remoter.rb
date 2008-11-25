@@ -82,9 +82,13 @@ module PoolParty
         out
       end
       def request_launch_master_instance
-        inst = launch_new_instance!
+        @inst = launch_new_instance!
         wait "5.seconds"
-        when_no_pending_instances {after_launch_master(inst)}
+        when_no_pending_instances do
+          vputs "Master has launched"
+          reset!
+          after_launch_master(@inst)
+        end
       end
       def after_launch_master(inst=nil)
         vputs "After launch master in remoter"

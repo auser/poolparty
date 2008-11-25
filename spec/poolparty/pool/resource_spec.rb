@@ -283,10 +283,10 @@ describe "Resource" do
         end
         describe "virtual_resources" do
           before(:each) do
-            @virtual_resource = git(:name => "tank", :source => "git://github.com/auser/testgit.git")
+            @virtual_resource = git(:at => "/var/paint/cans", :name => "tank", :source => "git://github.com/auser/testgit.git")
           end
           it "should fetch a virtual resource the same" do
-            git(:name => "tank", :source => "git://github.com/auser/testgit.git").to_s.should == @virtual_resource.to_s
+            git(:at => "/var/paint/cans", :name => "tank", :source => "git://github.com/auser/testgit.git").to_s.should == @virtual_resource.to_s
           end
         end
       end

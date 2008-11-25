@@ -76,7 +76,7 @@ def stub_list_from_remote_for(o, launch_stub=true)
   # o.stub!(:list_from_remote).and_return ris
   # o.stub!(:remote_instances_list).once.and_return ris
   # o.stub!(:master).and_return @ris[0]
-  o.stub!(:launch_new_instance!).and_return true if launch_stub
+  o.stub!(:launch_new_instance!).and_return @ris.first if launch_stub
   stub_list_of_instances_for(o)
 end
 

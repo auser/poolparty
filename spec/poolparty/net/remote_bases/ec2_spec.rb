@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/../../spec_helper'
 
 # include Remote
 
-class TestClass  
+class TestEC2Class  
   include PoolParty::Remote::RemoterBase
   include Ec2
   include CloudResourcer
@@ -14,6 +14,8 @@ class TestClass
   
   def ami;"ami-abc123";end
   def size; "small";end
+  def security_group; "default";end
+  def ebs_volume_id; "ebs_volume_id";end
   def verbose
     false
   end
@@ -24,7 +26,7 @@ end
 describe "ec2 remote base" do
   before(:each) do
     setup
-    @tr = TestClass.new
+    @tr = TestEC2Class.new
     stub_remoter_for(@tr)
     @tr.stub!(:get_instances_description).and_return response_list_of_instances
   end

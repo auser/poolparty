@@ -4,7 +4,7 @@ require File.dirname(__FILE__) + '/../../../lib/poolparty/helpers/optioner'
 describe "Option Parser" do
   describe "options" do
     before(:each) do
-      @op = PoolParty::Optioner.new({:abstract => true})
+      @op = PoolParty::Optioner.new([], {:abstract => true})
       @op.parse_options
     end
     it "should set the options as an Hash" do
@@ -28,10 +28,9 @@ describe "Option Parser" do
     end
   end
   it "should be able to take a block and set some options on the block" do
-    o = PoolParty::Optioner.new(["-w"]) do |opts, optioner|
+    PoolParty::Optioner.new(["-w"], {:abstract => false, :load_pools => false}) do |opts, optioner|
       opts.on('-w', '--wee')    { optioner.wee "wee" }
       opts.on('-t t', '--teatime tea')    { optioner.tea "time" }
-    end
-    o.wee.should == "wee"
+    end.wee.should == "wee"
   end
 end

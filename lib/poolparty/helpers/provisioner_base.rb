@@ -211,9 +211,10 @@ module PoolParty
         [
           "#!/usr/bin/env sh",
           upgrade_system,
-          fix_rubygems,
+          install_rubygems,
           make_logger_directory,
           install_puppet,
+          fix_rubygems,
           custom_install_tasks
         ] << install_tasks
       end
@@ -281,15 +282,19 @@ module PoolParty
         File.join(File.dirname(__FILE__), "..", "templates")
       end
       
-      def fix_rubygems
+      def install_rubygems
         <<-EOE
-          #{installer_for("ruby rubygems")}
-          if [gem update --system]; then # Force rubygems update
-            echo "Updated rubygems"
-          else
-            gem update --system # try again
-          fi
+        #{installer_for("ruby rubygems")}
+        EOE
+      end
+      
+      def fix_rubygems        
+        <<-EOE
           echo '#{open(::File.join(template_directory, "gem")).read}' > /usr/bin/gem
+          echo 'Updating rubygems'
+          PAT=`/usr/bin/gem env gemdir`
+          /usr/bin/gem update --system #{unix_hide_string}
+          /usr/bin/gem update --system #{unix_hide_string}
         EOE
       end
 
