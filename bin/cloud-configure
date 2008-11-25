@@ -4,7 +4,8 @@ require "poolparty"
 require "poolpartycl"
 
 o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
-  opts.on('-n cloudname', '--name name', 'Start cloud by this name')    { |c| optioner.cloudname c }
+  optioner.cloudnames
+  # optioner.daemonizeable
 end
 
 o.loaded_clouds.each do |cloud|
@@ -13,7 +14,8 @@ o.loaded_clouds.each do |cloud|
     
     # hide_output do
       # if provision_class == "master" || provision_class == "all"
-        Provisioner.configure_master(self, testing)
+      @cl = self
+      daemon ? daemonize {Provisioner.configure_master(@cl, testing)} : Provisioner.configure_master(self, testing)
       # end
       # if provision_class == "slave" || provision_class == "all"
       #   Provisioner.configure_slaves(self, testing)

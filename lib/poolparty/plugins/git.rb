@@ -1,5 +1,5 @@
 module PoolParty    
-  class Git
+  class GitResource
         
     virtual_resource(:git) do
       

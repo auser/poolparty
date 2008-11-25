@@ -41,6 +41,7 @@ sudo gem install auser-poolparty
 == TODO:
 * Rewrite the disallowed_options to whitelist allowed_options on resources
 * Add pingback for nodes to master when failure occurs
+* Add become master for the nodes
 * Add soft-stop to haproxy while reconfiguring
 * Replace services with Runit
 * Refactor provisioning to use erlang

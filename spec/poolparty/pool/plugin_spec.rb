@@ -100,7 +100,7 @@ describe "Plugin" do
           Kernel::PoolPartyApacheClass.stub!(:new).and_return @plugin          
         end
         it "should call enable on calling realize! when there is no block included" do
-          @plugin.should_receive(:enable).and_return true
+          @plugin.should_receive(:enable).at_least(1).and_return true
           @cloud = cloud :app do
             apache
           end

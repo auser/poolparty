@@ -11,15 +11,22 @@ module PoolParty
     include MethodMissingSugar
         
     def initialize(args=[], opts={}, &block)
-      @arguments = parse_args(args)
-      @parse_options = opts[:parse_options] ? opts[:parse_options] : true
+      @arguments = parse_args(args)      
       @extra_help = opts.has_key?(:extra_help) ? opts[:extra_help] : ""
       @abstract = opts[:abstract] ? opts[:abstract] : false
+      @parse_options = opts[:parse_options] ? opts[:parse_options] : !@abstract
       @command = opts[:command] ? opts[:command] : false
       
       parse_options(&block) if @parse_options
       set_default_options
       self
+    end
+    
+    def daemonizeable
+      @opts.on('-d', '--daemonize', 'Daemonize starting the cloud')    { self.daemon true }
+    end
+    def cloudnames
+      @opts.on('-n cloudname', '--name name', 'Start cloud by this name')    { |c| self.cloudname c }
     end
     
     def parse_args(argv, safe=[])
@@ -37,29 +44,29 @@ module PoolParty
     
     def parse_options(&blk)
       progname = $0.include?("-") ? "#{::File.basename($0[/(\w+)-/, 1])} #{::File.basename($0[/-(.*)/, 1])}" : ::File.basename($0)
-      opts = OptionParser.new 
-      opts.banner = "Usage: #{progname} #{@abstract ? "[command] " : ""}[options]"
+      @opts = OptionParser.new 
+      @opts.banner = "Usage: #{progname} #{@abstract ? "[command] " : ""}[options]"
 
-      opts.separator ""
+      @opts.separator ""
       
       unless @abstract
-        opts.separator "Options:"
+        @opts.separator "Options:"
         
-        opts.on('-v', '--verbose', 'Be verbose')    { self.verbose true }  
-        opts.on('-s [file]', '--spec-file [file]', 'Set the spec file')      { |file| self.spec file.chomp }
-        opts.on('-t', '--test', 'Testing mode')    { self.testing true }
+        @opts.on('-v', '--verbose', 'Be verbose')    { self.verbose true }  
+        @opts.on('-s [file]', '--spec-file [file]', 'Set the spec file')      { |file| self.spec file.chomp }
+        @opts.on('-t', '--test', 'Testing mode')    { self.testing true }
 
-        blk.call(opts, self) if blk
+        blk.call(@opts, self) if blk
       end
       
-      opts.on('-V', '--version', 'Display the version')    { puts @version ; exit 0 }
-      opts.on_tail("-h", "--help", "Show this message") do
-        puts opts
+      @opts.on('-V', '--version', 'Display the version')    { puts @version ; exit 0 }
+      @opts.on_tail("-h", "--help", "Show this message") do
+        puts @opts
         puts @extra_help
         exit
       end
       
-      opts.parse(@arguments.dup)
+      @opts.parse(@arguments.dup)
       
       process_options
       output_options if verbose
