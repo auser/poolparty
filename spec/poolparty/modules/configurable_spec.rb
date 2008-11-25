@@ -1,12 +1,12 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
-class TestClass
+class TestClass2
   include Configurable
 end
 
 describe "configurable" do
   before(:each) do
-    @tc = TestClass.new
+    @tc = TestClass2.new
   end
   it "should set the name as frank" do
     @tc.configure({:name => "frank"})

@@ -8,23 +8,25 @@ module PoolParty
       end
             
       def has_git_repos
-        has_package(:name => "git-core") do
-          has_exec({:requires => get_package("git-core"), :requires => [get_directory("#{cwd}")]}) do
-            name key
-            command user ? "git clone #{user}@#{source} #{path}" : "git clone #{source} #{to ? to : ""}"
-            cwd "#{cwd if cwd}"
-            creates "#{::File.join( (cwd), ::File.basename(source, ::File.extname(source)) )}/.git"
-          end
-          has_exec(:name => "update-#{name}") do
-            cwd ::File.dirname( get_exec(key).creates )
-            command "git pull"
-          end          
+        has_package(:name => "git-core")
+        has_exec({:name => key, :requires => [get_directory("#{working_dir}"), get_package("git-core")] }) do
+          command user ? "git clone #{user}@#{source} #{path}" : "git clone #{source} #{to ? to : ""}"
+          cwd "#{working_dir if working_dir}"
+          creates creates_dir
+        end
+        has_exec(:name => "update-#{name}") do
+          cwd ::File.dirname( creates_dir )
+          command "git pull"
         end                
       end
       
       def at(dir)
-        cwd dir
+        working_dir dir        
         has_directory(:name => "#{dir}", :requires => get_directory("#{::File.dirname(dir)}"))
+      end
+      
+      def creates_dir
+        "#{::File.join( working_dir, ::File.basename(source, ::File.extname(source)) )}/.git"
       end
       
       # Since git is not a native type, we have to say which core resource
