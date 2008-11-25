@@ -4,13 +4,17 @@ module PoolParty
     class Sshkey < Resource
       
       default_options({
-        :command => nil,
         # :key => "ALONGSTRINGOFDIGITS",
         :target => "~/.ssh/poolparty_id_rsa"
       })
       
       def keyfile=(file)
         keyfile open(file).read
+        options[:key] = keyfile
+      end
+      
+      def key
+        name
       end
       
     end
