@@ -122,7 +122,7 @@ wget http://github.com/auser/poolparty/tree/master%2Fpkg%2Fpoolparty.gem?raw=tru
 #{
   %w(rake lockfile rubyforge hoe ZenTest sexp_processor flexmock logging activesupport 
       RubyInline ParseTree ruby2ruby xml-simple poolparty).map do |dep|
-    "gem install --ignore-dependencies -y --no-ri --no-rdoc #{dep}.gem #{unix_hide_string}"
+    "/usr/bin/gem install --ignore-dependencies -y --no-ri --no-rdoc #{dep}.gem #{unix_hide_string}"
   end.join("\n")
 }
         EOE
@@ -186,7 +186,7 @@ cp #{Base.remote_storage_path}/poolparty.pp /etc/puppet/manifests/classes/poolpa
           s << "puppetca --clean master.compute-1.internal 2>&1 > /dev/null"
           s << "puppetca --clean master.ec2.internal 2>&1 > /dev/null"
         end.join(";")
-        "if [ -f '/usr/bin/puppetcleaner' ]; then /usr/bin/env puppetcleaner; else #{str}; fi"
+        "if [ -f '/usr/bin/puppetrerun' ]; then /usr/bin/puppetrerun; else #{str}; fi"
       end
       
       def restart_puppetd

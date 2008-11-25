@@ -13,9 +13,10 @@ module PoolParty
     def initialize(args=[], opts={}, &block)
       @arguments = parse_args(args)      
       @extra_help = opts.has_key?(:extra_help) ? opts[:extra_help] : ""
-      @abstract = opts[:abstract] ? opts[:abstract] : false
-      @parse_options = opts[:parse_options] ? opts[:parse_options] : !@abstract
-      @command = opts[:command] ? opts[:command] : false
+      @abstract = opts.has_key?(:abstract) ? opts[:abstract] : false
+      @load_pools = opts.has_key?(:load_pools) ? opts[:load_pools] : !@abstract
+      @parse_options = opts.has_key?(:parse_options) ? opts[:parse_options] : true
+      @command = opts.has_key?(:command) ? opts[:command] : false
       
       parse_options(&block) if @parse_options
       set_default_options
@@ -55,7 +56,7 @@ module PoolParty
         @opts.on('-v', '--verbose', 'Be verbose')    { self.verbose true }  
         @opts.on('-s [file]', '--spec-file [file]', 'Set the spec file')      { |file| self.spec file.chomp }
         @opts.on('-t', '--test', 'Testing mode')    { self.testing true }
-
+        
         blk.call(@opts, self) if blk
       end
       
@@ -70,7 +71,8 @@ module PoolParty
       
       process_options
       output_options if verbose
-      unless @abstract
+      
+      if @load_pools
         self.loaded_pool load_pool(self.spec || Binary.get_existing_spec_location)
 
         self.loaded_clouds extract_cloud_from_options(self)

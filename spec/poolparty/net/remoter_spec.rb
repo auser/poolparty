@@ -62,6 +62,7 @@ describe "Remoter" do
       stub_list_from_remote_for(@tc)
       @tc.stub!(:maximum_instances).and_return 5
       @tc.stub!(:list_of_pending_instances).and_return []
+      @tc.stub!(:list_of_nonterminated_instances).and_return []
       @tc.stub!(:list_of_running_instances).and_return []
       @tc.stub!(:master).and_return ris.first
       @tc.stub!(:after_launched).and_return true

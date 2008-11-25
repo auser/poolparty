@@ -8,7 +8,7 @@ module PoolParty
       })
       
       def disallowed_options
-        [:name]
+        [:name, :cwd]
       end
       
       def present

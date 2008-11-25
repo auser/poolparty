@@ -19,7 +19,8 @@ module PoolParty
     
     def add_resource(type, opts={}, parent=self, &block)
       if in_a_resource_store?(type, opts[:name])
-        @res = get_resource(type, opts[:name], parent)
+        @res = get_from_local_resource_store(type, opts[:name], parent)
+        @res ||= get_from_global_resource_store(type, opts[:name])
         # if should_duplicate_resource?(type, @res, parent, opts)
         # unless @res.parent == parent
         #   @pa = parent
@@ -246,7 +247,10 @@ module PoolParty
             opts = {}
           end
           @full_allowed_options ||= allowed_options.reject {|ele| disallowed_options.include?(ele) }
-          @modified_options = opts.reject {|k,v| !@full_allowed_options.include?(k) }
+          @modified_options = opts.reject do |k,v| 
+            !@full_allowed_options.include?(k) || 
+              @parent.respond_to?(:options) && @parent.options.has_key?(k) && @parent.options[k] == options[k]
+          end
         end
         @modified_options
       end

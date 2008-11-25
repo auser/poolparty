@@ -10,7 +10,7 @@ module PoolParty
       })
       
       def disallowed_options
-        [:name, :template]
+        [:name, :template, :cwd]
       end
       
       def source(arg=nil)
