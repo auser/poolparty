@@ -81,8 +81,10 @@ class Class
 end
 
 ## Load PoolParty Plugins and package
-%w(plugins base_packages).each do |dir|
-  Dir[File.dirname(__FILE__) + "/poolparty/#{dir}/**.rb"].each do |file|
-    require file
+module PoolParty
+  %w(plugins base_packages).each do |dir|
+    Dir[::File.dirname(__FILE__) + "/poolparty/#{dir}/*.rb"].each do |file|
+      require file
+    end
   end
 end

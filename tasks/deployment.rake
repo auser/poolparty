@@ -10,9 +10,7 @@ end
 # desc 'Runs tasks website_generate and install_gem as a local deployment of the gem'
 # task :local_deploy => []
 desc "Deploy the gem locally"
-task :local_deploy => [:website_generate, :install_gem, :build_local_gem] do
-  sh "#{'sudo ' unless Hoe::WINDOZE }gem install pkg/*.gem --no-rdoc --no-ri"
-end
+task :local_deploy => [:website_generate, :build_local_gem, :install_gem_no_doc]
 
 task :check_version do
   unless ENV['VERSION']
@@ -26,7 +24,7 @@ task :check_version do
 end
 
 desc 'Install the package as a gem, without generating documentation(ri/rdoc)'
-task :install_gem_no_doc => [:clean, :package] do
+task :install_gem_no_doc do
   sh "#{'sudo ' unless Hoe::WINDOZE }gem install pkg/*.gem --no-rdoc --no-ri"
 end
 
@@ -36,7 +34,7 @@ str =<<-EOE
 ---
 publish_on_announce: true
 exclude: !ruby/regexp
-  /tmp$|\.git|log$|local/.*\.rb$|Makefile|\.beam$/
+  /tmp$|\.git$|log$|local/.*\.rb$|Makefile|\.beam$/
 EOE
   hoerc_path = ::File.join( ENV["HOME"], ".hoerc" )
   ::File.open(hoerc_path, "w+") {|f| f << str } unless ::File.file?(hoerc_path)

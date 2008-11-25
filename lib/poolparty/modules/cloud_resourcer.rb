@@ -4,7 +4,7 @@ module PoolParty
   module CloudResourcer
     
     def plugin_directory(*args)
-      args = ["/plugins"] if args.empty?
+      args = ["#{::File.expand_path(Dir.pwd)}/plugins"] if args.empty?
       args.each {|arg| Dir["#{arg}/*/*.rb"].each {|f| require f rescue "" }}
     end
     

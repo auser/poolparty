@@ -91,7 +91,7 @@ module PoolParty
       
       def self.inherited(subclass)
         subclass = subclass.to_s.split("::")[-1] if subclass.to_s.index("::")
-        lowercase_class_name = subclass.to_s.underscore
+        lowercase_class_name = subclass.to_s.underscore.downcase
         
         # Add add resource method to the Resources module
         unless PoolParty::Resources.respond_to?(lowercase_class_name.to_sym)          
