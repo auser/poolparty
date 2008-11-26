@@ -8,7 +8,10 @@ module Spec
         end
         def matches?(target)
           @target = target
-          is_present?
+          required_values.reject {|v| @target.send v, @expected }.empty?
+        end
+        def required_values
+          [:matches]
         end
         def failure_message
           "expected #{@target.inspect} to have :type #{@expected}"
