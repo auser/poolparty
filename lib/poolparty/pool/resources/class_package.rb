@@ -45,7 +45,7 @@ module PoolParty
         store_into_global_classpackage_store(@@cp)
       end      
       return @@cp
-      @@parent_resources = nil
+      @@parent_resources = @@cp = nil
     end
                 
     class Classpackage < Resource
