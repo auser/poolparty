@@ -1,7 +1,7 @@
 module Spec
   module Matchers
     module SpecExtensions
-      class :classname < SpecExtensionsBase
+      class HaveHost < SpecExtensionsBase
         def initialize(expected,extra="")
           @expected = expected
           @extra = extra
@@ -11,18 +11,18 @@ module Spec
           is_present?
         end
         def failure_message
-          "expected #{@target.inspect} to have :type #{@expected}"
+          "expected #{@target.inspect} to have host #{@expected}"
         end
         def negative_failure_message
-          "expected #{@target.inspect} not to have :type #{@expected}"
+          "expected #{@target.inspect} not to have host #{@expected}"
         end
         def type
-          ":type"
+          "host"
         end
       end
     end
-    def have_:type(name, extra="")
-      :includer
+    def have_host(name, extra="")
+      SpecExtensions::HaveHost.new(name, extra)
     end
   end
 end

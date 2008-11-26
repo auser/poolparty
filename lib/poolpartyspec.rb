@@ -1,26 +1,12 @@
+$:.unshift(File.join(File.dirname(__FILE__), "poolparty", "spec"))
 require "rubygems"
 require "spec"
+require "ensure_matchers_exist"
 
-@basestr = open("#{::File.dirname(__FILE__)}/poolparty/spec/have_base.rb").read
-
-PoolParty::Resources::Resource.available_resources.each do |ty|
-  ty.downcase!
-  str = @basestr ^ {:classname => "Have#{ty.capitalize}", 
-                    :type => ty,
-                    :includer => "SpecExtensions::Have#{ty.capitalize}.new(name, extra)"}
-  eval str
-end
-
-module PoolPartySpecHelper    
-end
-
-class TestCloudClass < PoolParty::Cloud::Cloud
+class TestCloudClass < PoolParty::Cloud::Cloud  
   def initialize(name,opts={}, &block)
     reset_resources!
     super
-  end
-  def load_my_pool(poolfile=nil)
-    PoolParty::Script.inflate_file poolfile
   end
   def build_test_manifest
     realize_plugins!(true)
@@ -42,4 +28,11 @@ end
 
 def new_test_cloud(&block)  
   TestCloudClass.new(:test_cloud, &block)
+end
+
+def load_test_cloud(name, poolfile=nil)  
+  PoolParty::Script.inflate_file poolfile
+  blk = cloud(name).stored_block.dup
+  PoolParty::Pool.reset!
+  new_test_cloud &blk
 end
