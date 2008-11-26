@@ -19,6 +19,9 @@ class TestCloudClass < PoolParty::Cloud::Cloud
     reset_resources!
     super
   end
+  def load_my_pool(poolfile=nil)
+    PoolParty::Script.inflate_file poolfile
+  end
   def build_test_manifest
     realize_plugins!(true)
     
