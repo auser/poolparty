@@ -48,7 +48,8 @@ module PoolParty
         plugin_directory
                 
         p = pare.is_a?(PoolParty::Pool::Pool) ? pare : nil
-        run_setup(p, &block)
+        store_block(&block)
+        run_setup(p, &block)        
         
         # set_parent(parent) if parent && !@parent
         # self.run_in_context parent, &block if block
