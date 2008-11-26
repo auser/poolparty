@@ -303,10 +303,8 @@ lib/poolparty/pool/resources/sshkey.rb
 lib/poolparty/pool/resources/symlink.rb
 lib/poolparty/pool/resources/variable.rb
 lib/poolparty/pool/script.rb
-lib/poolparty/spec/core/spec_extensions_base.rb
 lib/poolparty/spec/core/string.rb
-lib/poolparty/spec/ensure_matchers_exist.rb
-lib/poolparty/spec/have_base.rb
+lib/poolparty/spec/matchers/a_spec_extensions_base.rb
 lib/poolparty/spec/matchers/have_conditional.rb
 lib/poolparty/spec/matchers/have_cron.rb
 lib/poolparty/spec/matchers/have_customresource.rb
@@ -326,6 +324,9 @@ lib/poolparty/spec/matchers/have_service.rb
 lib/poolparty/spec/matchers/have_sshkey.rb
 lib/poolparty/spec/matchers/have_symlink.rb
 lib/poolparty/spec/matchers/have_variable.rb
+lib/poolparty/spec/spec/dynamic_matchers.rb
+lib/poolparty/spec/spec/ensure_matchers_exist.rb
+lib/poolparty/spec/templates/have_base.rb
 lib/poolparty/templates/authkeys
 lib/poolparty/templates/cib.xml
 lib/poolparty/templates/gem
