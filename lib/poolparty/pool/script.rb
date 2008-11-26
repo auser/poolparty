@@ -3,7 +3,7 @@ module PoolParty
   class Script
     
     def self.inflate_file(file)
-      inflate open(file).read
+      inflate open(file).read if file
     end
         
     def self.inflate(script, file="__SCRIPT__")
