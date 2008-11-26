@@ -54,9 +54,16 @@ module PoolParty
       end
       
       def to_s
-        "#{class_type_name.capitalize}['#{key}']"
+        self.class.resource_string_name(class_type_name.capitalize, key)
       end
-      
+    end
+  end
+  
+  module Resources
+    class Resource
+      def self.resource_string_name(name, key)
+        "#{name}['#{key}']"
+      end
     end
   end
 end

@@ -1,14 +1,12 @@
-$:.unshift(File.join(File.dirname(__FILE__), "poolparty", "spec"))
 require "rubygems"
 require "spec"
-require "ensure_matchers_exist"
+["core", "spec"].each do |dir|
+  Dir[File.join(File.dirname(__FILE__), "poolparty", "spec", dir, "*.rb")].each {|f| require f}
+end
 
 class TestCloudClass < PoolParty::Cloud::Cloud  
-  def initialize(name,opts={}, &block)
-    reset_resources!
-    super
-  end
   def build_test_manifest
+    reset_resources!
     realize_plugins!(true)
     
     returning Array.new do |arr|

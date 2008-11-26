@@ -86,6 +86,9 @@ module PoolParty
       
       include CloudResourcer
       include Configurable
+      # For the time being, we'll make puppet the only available dependency resolution
+      # base, but in the future, we can rip this out and make it an option
+      include PoolParty::DependencyResolutions::Puppet
       
       extend PoolParty::Resources
       include PoolParty::Resources
@@ -101,7 +104,11 @@ module PoolParty
               add_resource(:#{lowercase_class_name}, opts, parent, &blk)
             end
             def get_#{lowercase_class_name}(name)              
-              get_resource(:#{lowercase_class_name}, name) if in_a_resource_store?(:#{lowercase_class_name}, name)
+              res = in_a_resource_store?(:#{lowercase_class_name}, name) ?
+                get_resource(:#{lowercase_class_name}, name) :
+                self.class.resource_string_name(ty, key)
+              res ||= self.class.resource_string_name(ty, key)
+              res
             end
           EOE
           PoolParty::Resources.module_eval method
@@ -254,10 +261,6 @@ module PoolParty
         end
         @modified_options
       end
-      
-      # For the time being, we'll make puppet the only available dependency resolution
-      # base, but in the future, we can rip this out and make it an option
-      include PoolParty::DependencyResolutions::Puppet
     end
     
     # Adds two methods to the module
