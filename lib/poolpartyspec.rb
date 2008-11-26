@@ -1,7 +1,7 @@
 require "rubygems"
 require "spec"
 
-@basestr = open("#{::File.dirname(__FILE__)}/spec/have_base.rb").read
+@basestr = open("#{::File.dirname(__FILE__)}/poolparty/spec/have_base.rb").read
 
 PoolParty::Resources::Resource.available_resources.each do |ty|
   ty.downcase!
