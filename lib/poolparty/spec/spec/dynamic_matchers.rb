@@ -12,16 +12,35 @@ class Object
       end
     end
   end
-  def create_dynamic_matcher_for(ty, &block)    
-    begin
-      eval make_dynamic_matcher_string_for(ty)
-      klass = "::Spec::Matchers::SpecExtensions::Have#{ty.to_s.capitalize}".constantize
-      # klass.module_eval &block if block
-      klass
-    rescue Exception => e
-      puts "e: #{e}"
+  # Create a dynamic matcher
+  # Create a matcher for spec based in the context called from
+  # Usage example:
+  #   dynamic_matcher_for(:virtualhost) do
+  #     set_description "should have virtualhost"
+  #     it "should have the directory /var/www" do        
+  #       have_directory("/var/www")
+  #     end
+  #   end
+  # This creates a method by the name of the dynamic matcher
+  # so in the above example for virtualhost, the 
+  # method have_virtualhost(name) &block is created in the spec 
+  # context and can be called from within the describe/context
+  # in a spec
+  def dynamic_matcher_for(ty, &block)
+    name = ty.to_s.camelcase
+    mod = name.module_constant do
+      self.class.send :define_method, :__run_dynamic_matcher, &block
     end
+    ::Spec::Example::ExampleGroupMethods.module_eval <<-EOM
+      def have_#{ty.to_s.underscore.downcase}(name,&block)
+        @name = name
+        self.extend(#{mod}).__run_dynamic_matcher
+      end
+    EOM
+    name
   end
+  # Load the have_base file and fill in the variables for the
+  # have_base base template
   def make_dynamic_matcher_string_for(ty, matcher="is_present?")
     @basestr ||= open("#{::File.dirname(__FILE__)}/../templates/have_base.rb").read
     typestring = ty.to_s

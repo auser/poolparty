@@ -9,7 +9,7 @@ autorequire:
 bindir: bin
 cert_chain: []
 
-date: 2008-11-25 00:00:00 -08:00
+date: 2008-11-26 00:00:00 -08:00
 default_executable: 
 dependencies: 
 - !ruby/object:Gem::Dependency 
@@ -413,7 +413,30 @@ files:
 - lib/poolparty/pool/resources/symlink.rb
 - lib/poolparty/pool/resources/variable.rb
 - lib/poolparty/pool/script.rb
-- lib/poolparty/spec/have_base.rb
+- lib/poolparty/spec/core/string.rb
+- lib/poolparty/spec/matchers/a_spec_extensions_base.rb
+- lib/poolparty/spec/matchers/have_conditional.rb
+- lib/poolparty/spec/matchers/have_cron.rb
+- lib/poolparty/spec/matchers/have_customresource.rb
+- lib/poolparty/spec/matchers/have_customservice.rb
+- lib/poolparty/spec/matchers/have_deploydirectory.rb
+- lib/poolparty/spec/matchers/have_directory.rb
+- lib/poolparty/spec/matchers/have_exec.rb
+- lib/poolparty/spec/matchers/have_file.rb
+- lib/poolparty/spec/matchers/have_gempackage.rb
+- lib/poolparty/spec/matchers/have_git.rb
+- lib/poolparty/spec/matchers/have_host.rb
+- lib/poolparty/spec/matchers/have_mount.rb
+- lib/poolparty/spec/matchers/have_package.rb
+- lib/poolparty/spec/matchers/have_remotefile.rb
+- lib/poolparty/spec/matchers/have_rsyncmirror.rb
+- lib/poolparty/spec/matchers/have_service.rb
+- lib/poolparty/spec/matchers/have_sshkey.rb
+- lib/poolparty/spec/matchers/have_symlink.rb
+- lib/poolparty/spec/matchers/have_variable.rb
+- lib/poolparty/spec/spec/dynamic_matchers.rb
+- lib/poolparty/spec/spec/ensure_matchers_exist.rb
+- lib/poolparty/spec/templates/have_base.rb
 - lib/poolparty/templates/authkeys
 - lib/poolparty/templates/cib.xml
 - lib/poolparty/templates/gem
@@ -532,7 +555,7 @@ files:
 has_rdoc: true
 homepage: http://poolparty.rubyforge.org
 post_install_message: |-
-  Get ready to jump in the pool, you just installed PoolParty! (Updated at 16:30 11/25/08)
+  Get ready to jump in the pool, you just installed PoolParty! (Updated at 10:31 11/26/08)
   
   To get started, run the generator:
   
