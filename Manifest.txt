@@ -305,10 +305,7 @@ lib/poolparty/pool/resources/variable.rb
 lib/poolparty/pool/script.rb
 lib/poolparty/spec/core/string.rb
 lib/poolparty/spec/matchers/a_spec_extensions_base.rb
-lib/poolparty/spec/matchers/have_conditional.rb
 lib/poolparty/spec/matchers/have_cron.rb
-lib/poolparty/spec/matchers/have_customresource.rb
-lib/poolparty/spec/matchers/have_customservice.rb
 lib/poolparty/spec/matchers/have_deploydirectory.rb
 lib/poolparty/spec/matchers/have_directory.rb
 lib/poolparty/spec/matchers/have_exec.rb

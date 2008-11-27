@@ -45,7 +45,11 @@ module PoolParty
       
       def to(dir)
         cwd dir
-        has_directory(:name => "#{dir}", :requires => get_directory("#{::File.dirname(dir)}"), :owner => owner)
+        name dir
+        has_directory(:name => "#{dir}", 
+                      :requires => get_directory("#{::File.dirname(dir)}"), 
+                      :owner => owner,
+                      :mode => mode)
       end
       
       # Since git is not a native type, we have to say which core resource
