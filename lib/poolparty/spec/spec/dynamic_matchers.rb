@@ -2,6 +2,9 @@ require "rubygems"
 require "spec"
 require "#{::File.dirname(__FILE__)}/../matchers/a_spec_extensions_base.rb"
 class Object
+  # For all of the available_resources, write the matcher template
+  # based on the have_base base and write the method have_
+  # for each of the resources available
   def write_dynamic_matchers
     PoolParty::Resources::Resource.available_resources.each do |ty|
       ty.downcase!
@@ -27,17 +30,22 @@ class Object
   # context and can be called from within the describe/context
   # in a spec
   def dynamic_matcher_for(ty, &block)
-    name = ty.to_s.camelcase
-    mod = name.module_constant do
-      self.class.send :define_method, :__run_dynamic_matcher, &block
+    name = "#{ty}".camelcase
+    
+    begin
+      const = Object.const_set(name, Spec::Example::SharedExampleGroup.register(name.to_sym, &block))
+    rescue NameError => e
+      raise NameError.new(e.message + "\nThe first argument to share_as must be a legal name for a constant\n")
     end
+    
+    described_type = "#{ty.to_s.underscore.downcase}"    
+    
     ::Spec::Example::ExampleGroupMethods.module_eval <<-EOM
-      def have_#{ty.to_s.underscore.downcase}(name,&block)
-        @name = name
-        self.extend(#{mod}).__run_dynamic_matcher
+      def have_#{ty.to_s.underscore.downcase}(*args)        
+        include #{const}
+        self.module_eval "@@described_type = args;def #{described_type}; @@described_type; end"
       end
     EOM
-    name
   end
   # Load the have_base file and fill in the variables for the
   # have_base base template

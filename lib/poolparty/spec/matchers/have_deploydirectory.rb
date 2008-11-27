@@ -1,28 +1,15 @@
-module Spec
-  module Matchers
-    module SpecExtensions
-      class HaveDeploydirectory < SpecExtensionsBase
-        def initialize(expected,extra="")
-          @expected = expected
-          @extra = extra
-        end
-        def matches?(target)
-          @target = target
-          is_present?
-        end
-        def failure_message
-          "expected #{@target.inspect} to have deploydirectory #{@expected}"
-        end
-        def negative_failure_message
-          "expected #{@target.inspect} not to have deploydirectory #{@expected}"
-        end
-        def type
-          "deploydirectory"
-        end
+module PoolParty
+  class SpecCore
+    dynamic_matcher_for(:deploydirectory) do
+      it "should have the directory" do
+        @manifest.should have_directory(@to)
       end
-    end
-    def have_deploydirectory(name, extra="")
-      SpecExtensions::HaveDeploydirectory.new(name, extra)
+      it "should have the rsyncmirror" do
+        @manifest.should have_rsyncmirror("deploydirectory-#{@to}")
+      end
+      it "should have the exec to unpack the archive" do
+        @manifest.should have_exec("deploy-directory-#{@to}")
+      end
     end
   end
 end

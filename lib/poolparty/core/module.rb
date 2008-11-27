@@ -34,7 +34,7 @@ class Module
     end
     nil
   end
-  def set(*args)
+  def instance_variables_from_hash(h={})
+    h.each {|k,v| instance_eval "@#{k} = #{v}"}
   end
-  alias_method :custom, :set
 end
