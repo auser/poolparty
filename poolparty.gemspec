@@ -415,10 +415,7 @@ files:
 - lib/poolparty/pool/script.rb
 - lib/poolparty/spec/core/string.rb
 - lib/poolparty/spec/matchers/a_spec_extensions_base.rb
-- lib/poolparty/spec/matchers/have_conditional.rb
 - lib/poolparty/spec/matchers/have_cron.rb
-- lib/poolparty/spec/matchers/have_customresource.rb
-- lib/poolparty/spec/matchers/have_customservice.rb
 - lib/poolparty/spec/matchers/have_deploydirectory.rb
 - lib/poolparty/spec/matchers/have_directory.rb
 - lib/poolparty/spec/matchers/have_exec.rb
@@ -555,7 +552,7 @@ files:
 has_rdoc: true
 homepage: http://poolparty.rubyforge.org
 post_install_message: |-
-  Get ready to jump in the pool, you just installed PoolParty! (Updated at 10:31 11/26/08)
+  Get ready to jump in the pool, you just installed PoolParty! (Updated at 11:47 11/26/08)
   
   To get started, run the generator:
   
