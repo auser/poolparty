@@ -1,5 +1,3 @@
-require "rubygems"
-require "spec"
 ["core", "spec"].each do |dir|
   Dir[File.join(File.dirname(__FILE__), "poolparty", "spec", dir, "*.rb")].each {|f| require f}
 end
@@ -7,7 +5,7 @@ end
 class TestCloudClass < PoolParty::Cloud::Cloud  
   def build_test_manifest
     reset_resources!
-    realize_plugins!(true)
+    realize_plugins!
     
     returning Array.new do |arr|
       

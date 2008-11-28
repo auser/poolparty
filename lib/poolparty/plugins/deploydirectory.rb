@@ -20,7 +20,7 @@ module PoolParty
         path = ::File.join( Base.tmp_path, "#{::File.basename(from_dir)}.tar.gz" )
         archive_name = "#{name.dir_safe}.tar.gz"
         cmd = "cd #{::File.expand_path(from_dir)} && tar -czf #{archive_name} . && mv #{archive_name} #{Base.tmp_path}"
-        `#{cmd}` unless testing
+        Kernel.system(cmd) unless testing
       end
       
       def unpack_directory
