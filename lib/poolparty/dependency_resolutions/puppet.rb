@@ -39,6 +39,7 @@ module PoolParty
       
       def resources_string_from_resources(res, pre="\t")
         @variables = res.extract! {|name,resource| name == :variable}
+        
         returning Array.new do |str|
           unless @variables.empty?
             str << "\n# Variables"
