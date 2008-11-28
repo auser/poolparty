@@ -104,9 +104,11 @@ module PoolParty
               add_resource(:#{lowercase_class_name}, opts, parent, &blk)
             end
             def get_#{lowercase_class_name}(name, opts={}, parent=self, &block)
-              in_a_resource_store?(:#{lowercase_class_name}, name) ?
+              res = in_a_resource_store?(:#{lowercase_class_name}, name) ?
                 get_resource(:#{lowercase_class_name}, name) :
-                self.class.resource_string_name(#{lowercase_class_name}, name)
+                self.class.resource_string_name(ty, key)
+              res ||= self.class.resource_string_name(ty, key)
+              res
             end
           EOE
           PoolParty::Resources.module_eval method
@@ -274,12 +276,21 @@ module PoolParty
     def self.add_has_and_does_not_have_methods_for(type=:file)
       module_eval <<-EOE
         def has_#{type}(opts={}, parent=self, &block)
-          #{type}(#{type == :exec ? "opts" : "{:is_present => ''}.merge(opts)"}, parent, &block)
+          #{type}(#{type == :exec ? "opts" : "{:is_present => ''}.merge(handle_option_values(opts))"}, parent, &block)
         end
         def does_not_have_#{type}(opts={}, parent=self, &block)
-          #{type}(#{type == :exec ? "opts" : "{:is_absent => ''}.merge(opts)"}, parent, &block)
+          #{type}(#{type == :exec ? "opts" : "{:is_absent => ''}.merge(handle_option_values(opts))"}, parent, &block)
         end
       EOE
+    end
+    
+    def handle_option_values(o)
+      case o.class.to_s
+      when "String"
+        {:name => o}
+      else
+        o
+      end
     end
     
   end
