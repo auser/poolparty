@@ -250,6 +250,14 @@ describe "Resource" do
           @file.parent.to_s.should == @dir.to_s
         end
       end
+      describe "handle_option_value" do
+        it "should turn a string into a hash with the string as the key name" do
+          handle_option_values("vat of cats").should == {:name => "vat of cats"}
+        end
+        it "should not change a hash into anything" do
+          handle_option_values({:name => "poe"}).should == {:name => "poe"}
+        end
+      end
       describe "fetching" do
         before(:each) do
           @file = file(:name => "pancakes")
