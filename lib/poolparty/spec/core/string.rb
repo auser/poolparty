@@ -7,4 +7,7 @@ class String
       ""
     end
   end
+  def grab_key_value_for(type, name, key)
+    grab_entry_for(type, name).scan(/#{key}[ =>]*(.*)/).flatten.first rescue ""
+  end
 end
