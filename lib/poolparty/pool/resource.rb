@@ -103,12 +103,10 @@ module PoolParty
             def #{lowercase_class_name}(opts={}, parent=self, &blk)
               add_resource(:#{lowercase_class_name}, opts, parent, &blk)
             end
-            def get_#{lowercase_class_name}(name)              
-              res = in_a_resource_store?(:#{lowercase_class_name}, name) ?
+            def get_#{lowercase_class_name}(name, opts={}, parent=self, &block)
+              in_a_resource_store?(:#{lowercase_class_name}, name) ?
                 get_resource(:#{lowercase_class_name}, name) :
-                self.class.resource_string_name(ty, key)
-              res ||= self.class.resource_string_name(ty, key)
-              res
+                self.class.resource_string_name(#{lowercase_class_name}, name)
             end
           EOE
           PoolParty::Resources.module_eval method
