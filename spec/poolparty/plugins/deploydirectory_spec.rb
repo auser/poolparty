@@ -8,6 +8,7 @@ end
 describe "Remote Instance" do
   before(:each) do
     reset_resources!
+    Kernel.stub!(:system).and_return true
   end
   describe "wrapped" do
     before(:each) do

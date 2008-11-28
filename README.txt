@@ -44,6 +44,7 @@ sudo gem install auser-poolparty
 * Add become master for the nodes
 * Add soft-stop to haproxy while reconfiguring
 * Replace services with Runit
+* Add more granular spec helpers
 * Refactor provisioning to use erlang
 * Add queuing of tasks on the messenger
 * Add list of latest loads to the messenger

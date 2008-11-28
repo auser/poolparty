@@ -17,7 +17,7 @@ module Spec
           "expected #{@target.inspect} not to have gempackage #{@expected}"
         end
         def type
-          "gempackage"
+          "exec"
         end
       end
     end
