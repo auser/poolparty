@@ -375,6 +375,7 @@ spec/poolparty/pool/test_plugins/sshkey_test
 spec/poolparty/pool/test_plugins/virtual_host_template.erb
 spec/poolparty/pool/test_plugins/webserver.rb
 spec/poolparty/poolparty_spec.rb
+spec/poolparty/spec/core/string_spec.rb
 spec/poolparty/spec_helper.rb
 tasks/cloud.rake
 tasks/deployment.rake

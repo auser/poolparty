@@ -485,6 +485,7 @@ files:
 - spec/poolparty/pool/test_plugins/virtual_host_template.erb
 - spec/poolparty/pool/test_plugins/webserver.rb
 - spec/poolparty/poolparty_spec.rb
+- spec/poolparty/spec/core/string_spec.rb
 - spec/poolparty/spec_helper.rb
 - tasks/cloud.rake
 - tasks/deployment.rake
@@ -508,7 +509,7 @@ files:
 has_rdoc: true
 homepage: http://poolparty.rubyforge.org
 post_install_message: |-
-  Get ready to jump in the pool, you just installed PoolParty! (Updated at 15:10 11/28/08)
+  Get ready to jump in the pool, you just installed PoolParty! (Updated at 16:49 11/28/08)
   
   To get started, run the generator:
   
