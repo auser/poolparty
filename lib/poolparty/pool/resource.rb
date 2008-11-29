@@ -276,10 +276,10 @@ module PoolParty
     def self.add_has_and_does_not_have_methods_for(type=:file)
       module_eval <<-EOE
         def has_#{type}(opts={}, parent=self, &block)
-          #{type}(#{type == :exec ? "opts" : "{:is_present => ''}.merge(handle_option_values(opts))"}, parent, &block)
+          #{type}(handle_option_values(opts).merge(:ensures => "present"), parent, &block)
         end
         def does_not_have_#{type}(opts={}, parent=self, &block)
-          #{type}(#{type == :exec ? "opts" : "{:is_absent => ''}.merge(handle_option_values(opts))"}, parent, &block)
+          #{type}(handle_option_values(opts).merge(:ensures => "absent"), parent, &block)
         end
       EOE
     end
