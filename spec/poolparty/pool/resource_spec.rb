@@ -240,6 +240,11 @@ describe "Resource" do
         it "should say there is 1 resource because the lower-level resources should be contained on the parenting resource" do
           @cloud1.resources.size.should == 1
         end
+        it "should set the exec to notify apache2" do
+          has_service("apache2")
+          has_exec(:name => "reload-page", :notify => get_service("apache2"))
+          resource(:exec).get_named("reload-page").first.options[:notify].to_s.should == "Service['apache2']"
+        end
         it "should say there is one resource on the outer resource" do
           @dir.resources.size.should == 1
         end
