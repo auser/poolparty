@@ -111,6 +111,22 @@ begin
                                 :secret_access_key => (secret_access_key || Base.secret_access_key)
                               )
       end
+      
+      def before_configuration_tasks
+        copy_file_to_storage_directory(pub_key)
+        copy_file_to_storage_directory(private_key)
+      end
+      # The keys are used only for puppet certificates
+      # and are only used for EC2. These should be abstracted
+      # eventually into the ec2 remoter_base
+      # Public key 
+      def pub_key
+        @pub_key ||= ENV["EC2_CERT_KEY"] ? ENV["EC2_CERT_KEY"] : nil
+      end
+      # Private key
+      def private_key
+        @private_key ||= ENV["EC2_PRIVATE_KEY"] ? ENV["EC2_PRIVATE_KEY"] : nil
+      end
 
       # Callback
       def custom_install_tasks_for(o)

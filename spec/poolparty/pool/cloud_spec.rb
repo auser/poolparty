@@ -312,6 +312,9 @@ describe "Cloud" do
             it "should copy_custom_monitors" do
               @cloud.should_receive(:copy_custom_monitors).once
             end
+            it "should call before_configuration_tasks callback" do
+              @cloud.should_receive(:before_configuration_tasks).once
+            end
             describe "copy_custom_monitors" do
               before(:each) do                
                 Base.stub!(:custom_monitor_directories).and_return ["/tmp/monitors/custom_monitor.rb"]

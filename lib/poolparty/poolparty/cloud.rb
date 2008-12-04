@@ -95,6 +95,7 @@ module PoolParty
         Script.save!(self)
         # not my favorite...
         copy_ssh_key
+        before_configuration_tasks
       end
       
       # Copy the ssh keys to the storage directory in preparation for
