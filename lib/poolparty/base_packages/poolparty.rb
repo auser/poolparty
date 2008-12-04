@@ -49,12 +49,12 @@ module PoolParty
           template File.join(File.dirname(__FILE__), "..", "templates/puppetrunner")
         end
         
-        execute_on_node do
+        # execute_on_node do
           has_cron(:name => "node puppetd runner", :user => Base.user, :minute => "*/5") do
             requires get_gempackage("poolparty")
             command "/usr/bin/puppetrunner"
           end
-        end
+        # end
         
         # end
         
