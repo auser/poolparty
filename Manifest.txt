@@ -302,7 +302,6 @@ lib/poolpartycl.rb
 lib/poolpartyspec.rb
 log/pool.log
 log/pool.logs
-poolparty.gemspec
 script/destroy
 script/generate
 script/txt2html
