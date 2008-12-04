@@ -29,7 +29,7 @@ begin
           :minCount => 1,
           :maxCount => num,
           :key_name => (keypair || Base.keypair),
-          :availability_zone => nil,
+          :availability_zone => (availabilty_zone || Base.availabilty_zone),
           :instance_type => "#{size || Base.size}",
           :group_id => ["#{security_group || Base.security_group}"])
         begin

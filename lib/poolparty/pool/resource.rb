@@ -95,7 +95,7 @@ module PoolParty
       
       def self.inherited(subclass)
         subclass = subclass.to_s.split("::")[-1] if subclass.to_s.index("::")
-        lowercase_class_name = subclass.to_s.underscore.downcase
+        lowercase_class_name = subclass.to_s.underscore.downcase || subclass.downcase
         
         # Add add resource method to the Resources module
         unless PoolParty::Resources.respond_to?(lowercase_class_name.to_sym)          
@@ -103,11 +103,13 @@ module PoolParty
             def #{lowercase_class_name}(opts={}, parent=self, &blk)
               add_resource(:#{lowercase_class_name}, opts, parent, &blk)
             end
-            def get_#{lowercase_class_name}(name, opts={}, parent=self, &block)
-              res = in_a_resource_store?(:#{lowercase_class_name}, name) ?
-                get_resource(:#{lowercase_class_name}, name) :
-                self.class.resource_string_name(ty, key)
-              res ||= self.class.resource_string_name(ty, key)
+            def get_#{lowercase_class_name}(n, opts={}, parent=self, &block)
+              res = in_a_resource_store?(:#{lowercase_class_name}, n) ?
+                get_resource(:#{lowercase_class_name}, n) :
+                nil
+                # PoolParty::Resources::Resource.resource_string_name(#{lowercase_class_name}, n)
+                # add_resource(:#{lowercase_class_name}, opts, parent, &blk)
+              # res ||= PoolParty::Resources::Resource.resource_string_name(#{lowercase_class_name}, n)
               res
             end
           EOE
@@ -193,7 +195,7 @@ module PoolParty
       end
       # This way we can subclass resources without worry
       def class_type_name
-        self.class.to_s.top_level_class.underscore
+        self.class.to_s.top_level_class.underscore.downcase
       end
       def self.custom_function(str)
         custom_functions << str
