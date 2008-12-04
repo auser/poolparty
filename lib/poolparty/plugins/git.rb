@@ -21,7 +21,7 @@ module PoolParty
       end
       
       def at(dir)
-        working_dir dir        
+        working_dir dir
         has_directory(:name => "#{dir}", :requires => get_directory("#{::File.dirname(dir)}"))
       end
       
