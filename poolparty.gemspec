@@ -82,6 +82,7 @@ executables:
 - pool-list
 - pool-start
 - server-build-messenger
+- server-clean-cert-for
 - server-fire-cmd
 - server-get-load
 - server-list-active
@@ -140,6 +141,7 @@ files:
 - bin/pool-list
 - bin/pool-start
 - bin/server-build-messenger
+- bin/server-clean-cert-for
 - bin/server-fire-cmd
 - bin/server-get-load
 - bin/server-list-active
@@ -313,6 +315,7 @@ files:
 - lib/poolparty/helpers/provisioner_base.rb
 - lib/poolparty/helpers/provisioners/master.rb
 - lib/poolparty/helpers/provisioners/slave.rb
+- lib/poolparty/helpers/ruberl.rb
 - lib/poolparty/modules/cloud_dsl.rb
 - lib/poolparty/modules/cloud_resourcer.rb
 - lib/poolparty/modules/configurable.rb
@@ -508,7 +511,7 @@ files:
 has_rdoc: true
 homepage: http://poolparty.rubyforge.org
 post_install_message: |-
-  Get ready to jump in the pool, you just installed PoolParty! (Updated at 06:30 12/05/08)
+  Get ready to jump in the pool, you just installed PoolParty! (Updated at 08:19 12/05/08)
   
   To get started, run the generator:
   
