@@ -216,6 +216,7 @@ module PoolParty
           make_logger_directory,
           install_puppet,
           fix_rubygems,
+          setup_system_for_poolparty,
           custom_install_tasks
         ] << install_tasks
       end
@@ -352,6 +353,9 @@ fi
           mkdir -p #{Base.base_config_directory}/ssl/private_keys
           mkdir -p #{Base.base_config_directory}/ssl/certs
           mkdir -p #{Base.base_config_directory}/ssl/public_keys
+          
+          cp #{Base.remote_storage_path}/#{Base.template_directory}/puppetrerun /usr/bin/puppetrerun
+          chmod +x /usr/bin/puppetrerun
         EOS
       end
     end
