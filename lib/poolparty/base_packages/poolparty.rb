@@ -68,6 +68,11 @@ module PoolParty
         
         # Custom run puppet to minimize footprint
         # TODO: Update the offsetted times
+        has_remotefile(:name => "/usr/bin/puppetrerun") do
+          mode 744
+          template File.join(File.dirname(__FILE__), "..", "templates/puppetrerun")
+        end
+        
         execute_on_master do
           has_exec(:name => "update_hosts", :command => ". /etc/profile && server-update-hosts -n #{cloud.name}")
           
@@ -96,11 +101,6 @@ module PoolParty
           has_remotefile(:name => "/usr/bin/puppetcleaner") do
             mode 744
             template File.join(File.dirname(__FILE__), "..", "templates/puppetcleaner")
-          end
-          
-          has_remotefile(:name => "/usr/bin/puppetrerun") do
-            mode 744
-            template File.join(File.dirname(__FILE__), "..", "templates/puppetrerun")
           end
         end        
         # has_host(:name => "puppet", :ip => (self.respond_to?(:master) ? self : parent).master.ip)
