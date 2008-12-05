@@ -135,7 +135,7 @@ wget http://github.com/auser/poolparty/tree/master%2Fpkg%2Fpoolparty.gem?raw=tru
 echo "(Re)starting poolparty"
 . /etc/profile
 # /etc/init.d/puppetmaster stop #{unix_hide_string}
-ps aux | grep puppetmaster | awk '{print $2}' | xargs kill;rm -rf /etc/puppet/ssl;puppetmasterd --verbose;/etc/init.d/puppetmaster start
+ps aux | grep puppetmaster | awk '{print $2}' | xargs kill;rm -rf /etc/poolparty/ssl;puppetmasterd --verbose;/etc/init.d/puppetmaster start
         EOS
       end
       
@@ -180,19 +180,11 @@ cp #{Base.remote_storage_path}/poolparty.pp /etc/puppet/manifests/classes/poolpa
 #{copy_ssh_app}
         EOS
       end
-      
-      def clean_master_certs
-        str = returning Array.new do |s|
-          s << "puppetca --clean master.compute-1.internal 2>&1 > /dev/null"
-          s << "puppetca --clean master.ec2.internal 2>&1 > /dev/null"
-        end.join(";")
-        "if [ -f '/usr/bin/puppetrerun' ]; then /usr/bin/puppetrerun; else #{str}; fi"
-      end
-      
+            
       def restart_puppetd
         <<-EOS
 echo "Running puppet manifest"
-/usr/bin/puppetrunner;/usr/bin/puppetrerun
+/usr/bin/puppetcleaner
         EOS
       end
     end

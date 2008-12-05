@@ -302,6 +302,7 @@ describe "Cloud" do
           describe "prepare_for_configuration" do
             before(:each) do
               @cloud.stub!(:copy_ssh_key).and_return true
+              @cloud.stub!(:before_configuration_tasks).and_return []
             end
             it "should make_base_directory" do
               @cloud.should_receive(:make_base_directory).at_least(1)
