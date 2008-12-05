@@ -30,6 +30,7 @@ bin/pool-init
 bin/pool-list
 bin/pool-start
 bin/server-build-messenger
+bin/server-clean-cert-for
 bin/server-fire-cmd
 bin/server-get-load
 bin/server-list-active
@@ -203,6 +204,7 @@ lib/poolparty/helpers/optioner.rb
 lib/poolparty/helpers/provisioner_base.rb
 lib/poolparty/helpers/provisioners/master.rb
 lib/poolparty/helpers/provisioners/slave.rb
+lib/poolparty/helpers/ruberl.rb
 lib/poolparty/modules/cloud_dsl.rb
 lib/poolparty/modules/cloud_resourcer.rb
 lib/poolparty/modules/configurable.rb
