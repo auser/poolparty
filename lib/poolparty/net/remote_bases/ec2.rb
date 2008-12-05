@@ -77,8 +77,11 @@ begin
         begin
           # when_no_pending_instances do
             if instance
-              ec2.associate_address(:instance_id => instance.instance_id, :public_ip => set_master_ip_to) if set_master_ip_to
               ec2.attach_volume(:volume_id => ebs_volume_id, :instance_id => instance.instance_id, :device => ebs_volume_device) if ebs_volume_id && ebs_volume_mount_point
+              # Let's associate the address LAST so that we can still connect to the instance
+              # for the other tasks here              
+              ec2.associate_address(:instance_id => instance.instance_id, :public_ip => set_master_ip_to) if set_master_ip_to              
+              reset_remoter_base!
             end
           # end
         rescue Exception => e        
@@ -113,15 +116,20 @@ begin
       end
       
       def before_configuration_tasks
-        copy_file_to_storage_directory(pub_key)
-        copy_file_to_storage_directory(private_key)
+        if has_cert_and_key?
+          copy_file_to_storage_directory(pub_key)
+          copy_file_to_storage_directory(private_key)
+        end
+      end
+      def has_cert_and_key?
+        pub_key && private_key
       end
       # The keys are used only for puppet certificates
       # and are only used for EC2. These should be abstracted
       # eventually into the ec2 remoter_base
       # Public key 
       def pub_key
-        @pub_key ||= ENV["EC2_CERT_KEY"] ? ENV["EC2_CERT_KEY"] : nil
+        @pub_key ||= ENV["EC2_CERT"] ? ENV["EC2_CERT"] : nil
       end
       # Private key
       def private_key
@@ -130,7 +138,18 @@ begin
 
       # Callback
       def custom_install_tasks_for(o)
-        [
+        arr = if has_cert_and_key?
+          [ 
+            "mkdir -p #{Base.base_config_directory}/ssl/private_keys",
+            "mkdir -p #{Base.base_config_directory}/ssl/certs",
+            "mkdir -p #{Base.base_config_directory}/ssl/public_keys",
+            "mv #{::File.basename(pub_key)} #{Base.base_config_directory}/ssl/public_keys/#{o.name}.pem", 
+            "mv #{::File.basename(private_key)} #{Base.base_config_directory}/ssl/private_keys/#{o.name}.pem"
+          ]
+          else 
+            []
+          end
+        arr << [
           "# ec2 installation tasks",
           "# Set hostname",
           # "if [ -z $(grep -v '#' /etc/hosts | grep '#{o.name}') ]; then echo \"$(curl http://169.254.169.254/latest/meta-data/public-ipv4) #{o.name}\" >> /etc/hosts; fi",
@@ -138,7 +157,7 @@ begin
           "hostname #{o.name}",
           "echo #{o.name} > /etc/hostname",
           "cd /var/poolparty && wget http://rubyforge.org/frs/download.php/43666/amazon-ec2-0.3.1.gem -O amazon-ec2.gem 2>&1",
-          "/usr/bin/gem install -y --no-ri --no-rdoc amazon-ec2.gem 2>&1"
+          "/usr/bin/gem install -y --no-ri --no-rdoc amazon-ec2.gem 2>&1",
         ]
       end
 

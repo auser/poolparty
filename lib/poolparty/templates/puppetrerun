@@ -4,6 +4,6 @@
 if [ $(/usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master)]; then
   echo "Run successfully"
   else
-  ps aux | grep puppetmaster | awk '{print $2}' | xargs kill;rm -rf /etc/puppet/ssl;puppetmasterd --verbose;/etc/init.d/puppetmaster start
+  ps aux | grep puppetmaster | awk '{print $2}' | xargs kill;rm -rf /etc/poolparty/ssl;puppetmasterd --verbose;/etc/init.d/puppetmaster start
   /usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master
 fi

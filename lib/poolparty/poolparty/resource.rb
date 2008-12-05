@@ -18,7 +18,7 @@ module PoolParty
     end
     
     def add_resource(type, opts={}, parent=self, &block)
-      if in_a_resource_store?(type, opts[:name])
+      if opts[:name] && in_a_resource_store?(type, opts[:name])
         @res = get_from_local_resource_store(type, opts[:name], parent)
         @res ||= get_from_global_resource_store(type, opts[:name])
         # if should_duplicate_resource?(type, @res, parent, opts)
@@ -249,16 +249,16 @@ module PoolParty
       def get_modified_options
         unless @modified_options
           if options
-            opts = options.inject({}) do |sum,h| 
+            opts = options.inject({}) do |sum,h|
               sum.merge!({h[0].to_sym => ((h[1].nil?) ? self.send(h[0].to_sym) : h[1]) })
             end
           else
             opts = {}
           end
           @full_allowed_options ||= allowed_options.reject {|ele| disallowed_options.include?(ele) }
-          @modified_options = opts.reject do |k,v| 
+          @modified_options = opts.reject do |k,v|
             !@full_allowed_options.include?(k) || 
-              @parent.respond_to?(:options) && @parent.options.has_key?(k) && @parent.options[k] == options[k]
+              @parent && @parent.respond_to?(:options) && @parent.options.has_key?(k) && @parent.options[k] == options[k]
           end
         end
         @modified_options
