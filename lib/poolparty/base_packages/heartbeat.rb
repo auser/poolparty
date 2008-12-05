@@ -36,8 +36,8 @@ module PoolParty
           # end
           
           # variables for the templates
-          has_variable(:name => "ha_nodenames", :value => "generate('/usr/bin/env', '/var/lib/gems/1.8/bin/server-list-active', '-c', 'name')")
-          has_variable(:name => "ha_node_ips",  :value => "generate('/usr/bin/env', '/var/lib/gems/1.8/bin/server-list-active', '-c', 'ip')")
+          has_variable(:name => "ha_nodenames", :value => "generate('/usr/bin/env', '/usr/bin/server-list-active', '-c', 'name', '-n', '#{cloud.name}')")
+          has_variable(:name => "ha_node_ips",  :value => "generate('/usr/bin/env', '/usr/bin/server-list-active', '-c', 'ip', '-n', '#{cloud.name}')")
           
           has_variable({:name => "ha_timeout",  :value => (self.respond_to?(:timeout) ? timeout : "5s")})
           has_variable({:name => "ha_port", :value => (self.respond_to?(:port) ? port : Base.port)})
