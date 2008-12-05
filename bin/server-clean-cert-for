@@ -11,5 +11,5 @@ end
 o.loaded_clouds.each do |cloud|
   # @nodes = cloud.messenger_send!("get_current_nodes")
   # @nodes = @nodes.split(" ").map {|a| a.split(/@/)[-1] }  
-  puts PoolParty::Ruberl::Base.new(cloud.master, Base.messenger_client_port).messenger_send!("clear_cert_for #{cloud.for}")
+  PoolParty::Ruberl::Base.new(cloud.master, Base.messenger_client_port).messenger_send!("clear_cert_for #{cloud.for}")
 end
