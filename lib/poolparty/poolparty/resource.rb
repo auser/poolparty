@@ -258,7 +258,7 @@ module PoolParty
           @full_allowed_options ||= allowed_options.reject {|ele| disallowed_options.include?(ele) }
           @modified_options = opts.reject do |k,v|
             !@full_allowed_options.include?(k) || 
-              @parent && @parent.respond_to?(:options) && @parent.options.has_key?(k) && @parent.options[k] == options[k]
+              @parent && @parent.respond_to?(:options) && @parent != self && @parent.options.has_key?(k) && @parent.options[k] == options[k]
           end
         end
         @modified_options
