@@ -142,9 +142,7 @@ ps aux | grep puppetmaster | awk '{print $2}' | xargs kill;rm -rf /etc/poolparty
       def run_first_time
 <<-EOE
 echo "Running first time run"
-cp #{Base.remote_storage_path}/#{Base.template_directory}/puppetrerun /usr/bin/puppetrerun
 cp #{Base.remote_storage_path}/#{Base.template_directory}/puppetrunner /usr/bin/puppetrunner
-chmod +x /usr/bin/puppetrerun
 chmod +x /usr/bin/puppetrunner
 EOE
       end
