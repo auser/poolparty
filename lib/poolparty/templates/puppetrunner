@@ -4,6 +4,5 @@
 if [ $(/usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master)]; then
   echo "Run successfully"
   else
-  /usr/bin/puppetrerun
-  /usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master
+  /usr/bin/puppetrerun;/usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master
 fi
