@@ -140,9 +140,6 @@ begin
       def custom_install_tasks_for(o)
         arr = if has_cert_and_key?
           [ 
-            "mkdir -p #{Base.base_config_directory}/ssl/private_keys",
-            "mkdir -p #{Base.base_config_directory}/ssl/certs",
-            "mkdir -p #{Base.base_config_directory}/ssl/public_keys",
             "mv #{::File.basename(pub_key)} #{Base.base_config_directory}/ssl/public_keys/#{o.name}.pem", 
             "mv #{::File.basename(private_key)} #{Base.base_config_directory}/ssl/private_keys/#{o.name}.pem"
           ]
