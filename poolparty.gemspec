@@ -1,7 +1,7 @@
 --- !ruby/object:Gem::Specification 
 name: poolparty
 version: !ruby/object:Gem::Version 
-  version: 0.2.74
+  version: 0.2.76
 platform: ruby
 authors: 
 - Ari Lerner
@@ -9,7 +9,7 @@ autorequire:
 bindir: bin
 cert_chain: []
 
-date: 2008-12-03 00:00:00 -08:00
+date: 2008-12-04 00:00:00 -08:00
 default_executable: 
 dependencies: 
 - !ruby/object:Gem::Dependency 
@@ -342,31 +342,31 @@ files:
 - lib/poolparty/plugins/rsyncmirror.rb
 - lib/poolparty/plugins/runit.rb
 - lib/poolparty/plugins/svn.rb
-- lib/poolparty/pool/base.rb
-- lib/poolparty/pool/cloud.rb
-- lib/poolparty/pool/custom_resource.rb
-- lib/poolparty/pool/loggable.rb
-- lib/poolparty/pool/plugin.rb
-- lib/poolparty/pool/plugin_model.rb
-- lib/poolparty/pool/pool.rb
-- lib/poolparty/pool/resource.rb
-- lib/poolparty/pool/resources/class_package.rb
-- lib/poolparty/pool/resources/conditional.rb
-- lib/poolparty/pool/resources/cron.rb
-- lib/poolparty/pool/resources/custom_service.rb
-- lib/poolparty/pool/resources/directory.rb
-- lib/poolparty/pool/resources/exec.rb
-- lib/poolparty/pool/resources/file.rb
-- lib/poolparty/pool/resources/gem_package.rb
-- lib/poolparty/pool/resources/host.rb
-- lib/poolparty/pool/resources/mount.rb
-- lib/poolparty/pool/resources/package.rb
-- lib/poolparty/pool/resources/remote_file.rb
-- lib/poolparty/pool/resources/service.rb
-- lib/poolparty/pool/resources/sshkey.rb
-- lib/poolparty/pool/resources/symlink.rb
-- lib/poolparty/pool/resources/variable.rb
-- lib/poolparty/pool/script.rb
+- lib/poolparty/poolparty/base.rb
+- lib/poolparty/poolparty/cloud.rb
+- lib/poolparty/poolparty/custom_resource.rb
+- lib/poolparty/poolparty/loggable.rb
+- lib/poolparty/poolparty/plugin.rb
+- lib/poolparty/poolparty/plugin_model.rb
+- lib/poolparty/poolparty/pool.rb
+- lib/poolparty/poolparty/resource.rb
+- lib/poolparty/poolparty/resources/class_package.rb
+- lib/poolparty/poolparty/resources/conditional.rb
+- lib/poolparty/poolparty/resources/cron.rb
+- lib/poolparty/poolparty/resources/custom_service.rb
+- lib/poolparty/poolparty/resources/directory.rb
+- lib/poolparty/poolparty/resources/exec.rb
+- lib/poolparty/poolparty/resources/file.rb
+- lib/poolparty/poolparty/resources/gem_package.rb
+- lib/poolparty/poolparty/resources/host.rb
+- lib/poolparty/poolparty/resources/mount.rb
+- lib/poolparty/poolparty/resources/package.rb
+- lib/poolparty/poolparty/resources/remote_file.rb
+- lib/poolparty/poolparty/resources/service.rb
+- lib/poolparty/poolparty/resources/sshkey.rb
+- lib/poolparty/poolparty/resources/symlink.rb
+- lib/poolparty/poolparty/resources/variable.rb
+- lib/poolparty/poolparty/script.rb
 - lib/poolparty/spec/core/string.rb
 - lib/poolparty/spec/matchers/a_spec_extensions_base.rb
 - lib/poolparty/spec/matchers/have_cron.rb
@@ -411,7 +411,7 @@ files:
 - lib/poolpartycl.rb
 - lib/poolpartyspec.rb
 - log/pool.log
-- log/pool.logs
+- poolparty.gemspec
 - script/destroy
 - script/generate
 - script/txt2html
@@ -507,7 +507,7 @@ files:
 has_rdoc: true
 homepage: http://poolparty.rubyforge.org
 post_install_message: |-
-  Get ready to jump in the pool, you just installed PoolParty! (Updated at 18:16 12/03/08)
+  Get ready to jump in the pool, you just installed PoolParty! (Updated at 16:51 12/04/08)
   
   To get started, run the generator:
   
