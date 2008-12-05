@@ -33,6 +33,11 @@ module PoolParty
               notify exec(:name => "heartbeat-update-cib")
               template File.join(File.dirname(__FILE__), "..", "templates/cib.xml")
             end
+            
+            has_remotefile(:name => "/etc/ha.d/haresources") do
+              mode 644
+              template File.join(File.dirname(__FILE__), "..", "templates/haresources")
+            end
           # end
           
           # variables for the templates
