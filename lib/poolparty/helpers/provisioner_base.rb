@@ -347,6 +347,13 @@ fi
           cp #{Base.remote_storage_path}/poolparty.pp /etc/puppet/manifests/classes
         EOS
       end
+      def setup_system_for_poolparty
+        <<-EOS
+          mkdir -p #{Base.base_config_directory}/ssl/private_keys
+          mkdir -p #{Base.base_config_directory}/ssl/certs
+          mkdir -p #{Base.base_config_directory}/ssl/public_keys
+        EOS
+      end
     end
   end  
 end

@@ -35,7 +35,8 @@ chmod +x /usr/bin/puppetrunner
         <<-EOS          
           echo "#{open(File.join(template_directory, "puppet.conf")).read}" > /etc/puppet/puppet.conf
           /etc/init.d/puppetmaster stop #{unix_hide_string}
-          rm -rf /etc/puppet/ssl
+          mkdir -p #{Base.base_config_directory}
+          # rm -rf /etc/puppet/ssl
           # /usr/bin/puppetrerun
         EOS
       end
