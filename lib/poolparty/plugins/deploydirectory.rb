@@ -28,7 +28,7 @@ module PoolParty
           has_exec({:name => "deploy-directory-#{name}", :requires => get_directory("#{cwd}"), :cwd => cwd}) do
             #  && rm #{Base.tmp_path}/#{parent.name.dir_safe}.tar.gz
             archive_name = "#{::File.basename(name).dir_safe}.tar.gz"
-            command "cd #{cwd}; tar -zxf #{Base.remote_storage_path}/#{archive_name}; rm #{Base.remote_storage_path}/#{archive_name}"
+            command "cd #{cwd}; tar -zxf #{Base.remote_storage_path}/#{archive_name}; rm #{Base.remote_storage_path}/#{archive_name}; chown #{owner} #{::File.basename(name).dir_safe}"
             onlyif "test -f #{Base.remote_storage_path}/#{archive_name}"
           end
         end
