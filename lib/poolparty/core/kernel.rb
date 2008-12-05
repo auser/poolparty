@@ -24,14 +24,21 @@ module Kernel
   ensure
     $-v = saved_verbosity
   end
+
+  #redirect stdout and stderr to /dev/null and reopen after block
   def hide_output
     begin
       old_stdout = STDOUT.dup
+      old_stderr = STDERR.dup
       STDOUT.reopen(File.open((PLATFORM =~ /mswin/ ? "NUL" : "/dev/null"), 'w'))
+      STDERR.reopen(File.open((PLATFORM =~ /mswin/ ? "NUL" : "/dev/null"), 'w'))
       yield if block_given?
     ensure
       STDOUT.flush
       STDOUT.reopen(old_stdout)
+      STDERR.flush
+      STDERR.reopen(old_stderr)
     end
   end
+
 end
