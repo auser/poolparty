@@ -5,7 +5,7 @@ module PoolParty
       def enable
         # execute_on_master do
           has_package(:name => "heartbeat") do
-            has_service(:name => "heartbeat", :hasstatus => true)
+            has_service(:name => "heartbeat", :hasstatus => true, :hasrestart => true)
             has_directory(:name => "/etc/ha.d")
             
             has_remotefile(:name => "/etc/ha.d/ha.cf") do
