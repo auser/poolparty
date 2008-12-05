@@ -102,6 +102,8 @@ module PoolParty
           
           has_cron({:name => "maintain script", :command => ". /etc/profile && cloud-maintain -n #{cloud.name}", :minute => "*/3", :requires => [get_gempackage("poolparty"), get_cron("puppetd runner"), get_cron("Load handler"), get_service("haproxy")]})
           
+          has_cron(:name => "ensure puppetmaster is running", :command => ". /etc/profile && puppetmasterd --verbose", :hour => "0")
+          
         end        
         # has_host(:name => "puppet", :ip => (self.respond_to?(:master) ? self : parent).master.ip)
       end
