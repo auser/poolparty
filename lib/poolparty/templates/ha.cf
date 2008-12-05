@@ -1,7 +1,7 @@
 # Heartbeat
-keepalive 2 # Time inbetween heartbeats
-deadtime 10 # wait 10 seconds before declaring dead
-warntime 2 # issue a warning
+keepalive 5 # Time inbetween heartbeats
+deadtime 32 # wait 10 seconds before declaring dead
+warntime 16 # issue a warning halfway through
 initdead 60 # Don't boot instances between 60 seconds of each other
 logfacility daemon         # Log to syslog as facility "daemon"
 auto_failback on
@@ -9,9 +9,9 @@ use_logd yes
 crm yes
 
 <% ha_node_ips.chomp.split(/\t/).each_with_index do |ip,index| -%>
-  <% if $hostname != ha_nodenames.chomp.split(/\t/)[index] -%>
+  <% if hostname != ha_nodenames.chomp.split(/\t/)[index] -%>
 ucast eth0 <%= ip %>
   <% end -%>
 <% end -%>
 
-node <%= ha_nodenames %>
+node <%= ha_nodenames.chomp.split(/\t/).join(" ") %>
