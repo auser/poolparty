@@ -2,7 +2,7 @@
 
 . /etc/profile
 if [ $(/usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master)]; then
-  echo "Run successfully"
+  echo "Run successfully" && exit 0
   else
   echo "Clearing old certs"
   HN=`hostname`
