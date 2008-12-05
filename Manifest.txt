@@ -284,6 +284,7 @@ lib/poolparty/templates/gem
 lib/poolparty/templates/ha.cf
 lib/poolparty/templates/haproxy.conf
 lib/poolparty/templates/haresources
+lib/poolparty/templates/logd.cf
 lib/poolparty/templates/messenger/client/log-run.erb
 lib/poolparty/templates/messenger/client/run.erb
 lib/poolparty/templates/messenger/master/log-run.erb

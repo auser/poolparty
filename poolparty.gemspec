@@ -1,7 +1,7 @@
 --- !ruby/object:Gem::Specification 
 name: poolparty
 version: !ruby/object:Gem::Version 
-  version: 0.2.76
+  version: 0.2.77
 platform: ruby
 authors: 
 - Ari Lerner
@@ -9,7 +9,7 @@ autorequire:
 bindir: bin
 cert_chain: []
 
-date: 2008-12-04 00:00:00 -08:00
+date: 2008-12-05 00:00:00 -08:00
 default_executable: 
 dependencies: 
 - !ruby/object:Gem::Dependency 
@@ -394,6 +394,7 @@ files:
 - lib/poolparty/templates/ha.cf
 - lib/poolparty/templates/haproxy.conf
 - lib/poolparty/templates/haresources
+- lib/poolparty/templates/logd.cf
 - lib/poolparty/templates/messenger/client/log-run.erb
 - lib/poolparty/templates/messenger/client/run.erb
 - lib/poolparty/templates/messenger/master/log-run.erb
@@ -507,7 +508,7 @@ files:
 has_rdoc: true
 homepage: http://poolparty.rubyforge.org
 post_install_message: |-
-  Get ready to jump in the pool, you just installed PoolParty! (Updated at 23:33 12/04/08)
+  Get ready to jump in the pool, you just installed PoolParty! (Updated at 04:55 12/05/08)
   
   To get started, run the generator:
   

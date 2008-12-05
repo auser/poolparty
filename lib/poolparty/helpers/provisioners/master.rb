@@ -89,7 +89,7 @@ echo "*" > /etc/puppet/autosign.conf
       
       def setup_poolparty
         <<-EOS
-echo "Setting the poolparty configuration"        
+echo "Setting the poolparty configuration"
 cp #{Base.remote_storage_path}/#{Base.key_file_locations.first} "#{Base.base_config_directory}/.ppkeys"
 cp #{Base.remote_storage_path}/#{Base.default_specfile_name} #{Base.base_config_directory}/#{Base.default_specfile_name}
         EOS
