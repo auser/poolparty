@@ -218,7 +218,7 @@ module PoolParty
         haproxy
         ruby
         poolparty_base_packages
-        realize_plugins!
+        realize_plugins!(true) # Force realizing of the plugins
       end
       
       def other_clouds
