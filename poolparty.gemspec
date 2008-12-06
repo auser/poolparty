@@ -514,7 +514,7 @@ files:
 has_rdoc: true
 homepage: http://poolparty.rubyforge.org
 post_install_message: |-
-  Get ready to jump in the pool, you just installed PoolParty! (Updated at 13:17 12/06/08)
+  Get ready to jump in the pool, you just installed PoolParty! (Updated at 13:19 12/06/08)
   
   To get started, run the generator:
   
