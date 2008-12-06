@@ -9,9 +9,12 @@ module PoolParty
   class Optioner
     include Configurable
     include MethodMissingSugar
-        
-    def initialize(args=[], opts={}, &block)
-      @arguments = parse_args(args)      
+    
+    
+    def initialize(args=[], opts={}, &block)      
+      boolean_args << opts[:boolean_args] if opts.has_key?(:boolean_args)
+
+      @arguments = parse_args(args)
       @extra_help = opts.has_key?(:extra_help) ? opts[:extra_help] : ""
       @abstract = opts.has_key?(:abstract) ? opts[:abstract] : false
       @load_pools = opts.has_key?(:load_pools) ? opts[:load_pools] : !@abstract
@@ -22,16 +25,43 @@ module PoolParty
       set_default_options
       self
     end
-    
     def daemonizeable
       @opts.on('-d', '--daemonize', 'Daemonize starting the cloud')    { self.daemon true }
     end
     def cloudnames
       @opts.on('-n cloudname', '--name name', 'Start cloud by this name')    { |c| self.cloudname c }
+    end 
+    def unflagged_args
+      @unflagged_args ||= []
+    end
+    def flagged_args
+      @flagged_args ||= []
+    end
+    def boolean_args
+      @boolean_args ||= ['-V', '-h', '-t', '-v']
     end
     
-    def parse_args(argv, safe=[])
-      argv
+    # Break ARGV into 2 arrays, one for flagged options one for unflagged
+    # For example the "command -v -i 1 five six -x"
+    # becomes ['-v', '-i', 1, '-x'] and ['five', 'six']
+    # Boolean options, such as -v, must be specified in the optioner definition
+    def parse_args(args=[])
+      i=0
+      while i < args.length
+        if boolean_args.include?(args[i])
+          flagged_args << args[i]
+        else
+          if args[i][0].chr == "-"
+            flagged_args << args[i]
+            flagged_args << args[i+1] if (args[i+1] and !args[i+1].nil?)
+            i+=1
+          else
+            unflagged_args << args[i]
+          end
+        end
+        i+=1
+      end
+      args
     end
     
     def parent

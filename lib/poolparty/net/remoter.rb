@@ -7,8 +7,13 @@ require File.dirname(__FILE__) + "/../helpers/provisioner_base"
 module PoolParty
   module Remote
     module Remoter
-      def rsync_storage_files_to_command(remote_instance)        
+      def rsync_storage_files_to_command(remote_instance)
+        #TODO: rsync_to_command("#{Base.storage_directory}/", Base.remote_storage_path, remote_storage_path) if remote_instance
         "#{rsync_command} #{Base.storage_directory}/ #{remote_instance.ip}:#{Base.remote_storage_path}" if remote_instance
+      end
+      # rsync a file to a node.  By default to the master node.
+      def rsync_to_command(source, target=source, remote_instance=master)
+        "#{rsync_command} #{source} #{remote_instance.ip}:#{target}"
       end
       def run_command_on_command(cmd="ls -l", remote_instance=nil)
         vputs "Running #{cmd} on #{remote_instance.name == %x[hostname].chomp ? "self (master)" : "#{remote_instance.name}"}"
@@ -40,6 +45,13 @@ module PoolParty
       def remote_rsync_command
         "rsync -azP --exclude cache -e '#{remote_ssh_string}'"
       end
+      
+      
+      # def scp_command(source, dest=target, remote_instance=master)
+      #   #TODO: check if source is Directory and add -r if it is
+      #   "scp #{source} #{remote_instance.ip}:#{dest} #{ssh_array.join(' ')}"
+      # end
+      
       # Get the names of the nodes. Mainly used for puppet templating
       def list_of_node_names(options={})
         list_of_running_instances.collect {|ri| ri.name }
@@ -71,9 +83,21 @@ module PoolParty
       def minimum_number_of_instances_are_running?
         list_of_running_instances.size >= minimum_instances.to_i
       end
+      # Are the minimum number of instances NOT running?
+      def minimum_number_of_instances_are_not_running?
+        !(minimum_number_of_instances_are_running?)
+      end
       # Can we shutdown an instance?
       def can_shutdown_an_instance?
         list_of_running_instances.size > minimum_instances.to_i
+      end
+      # Are too few instances running?
+      def are_too_few_instances_running?
+        list_of_running_instances.size < minimum_instances.to_i
+      end
+      # Are there more instances than allowed?
+      def are_too_many_instances_running?
+        list_of_running_instances.size > maximum_instances.to_i
       end
       # Request to launch a number of instances
       def request_launch_new_instances(num=1)
@@ -204,11 +228,11 @@ module PoolParty
       end
       # Stub method for the time being to handle expansion of the cloud
       def should_expand_cloud?(force=false)
-        valid_rules?(:expand_when) || force || false
+        (are_too_few_instances_running? || valid_rules?(:expand_when)) || force || false
       end
       # Stub method for the time being to handle the contraction of the cloud
       def should_contract_cloud?(force=false)
-        valid_rules?(:contract_when) || force || false
+        (are_too_many_instances_running? || valid_rules?(:contract_when)) || force || false
       end
       # Expand the cloud
       # If we can start a new instance and the load requires us to expand
@@ -233,12 +257,10 @@ module PoolParty
       # If we can shutdown an instnace and the load allows us to contract
       # the cloud, then we should request_termination_of_non_master_instance
       def contract_cloud_if_necessary(force=false)
-        if can_shutdown_an_instance?          
-          if should_contract_cloud?(force)
-            vputs "Shrinking the cloud by 1"
-            before_shutdown
-            request_termination_of_non_master_instance
-          end
+        if can_shutdown_an_instance? && should_contract_cloud?(force)
+          vputs "Shrinking the cloud by 1"
+          before_shutdown
+          request_termination_of_non_master_instance
         end
       end
       
@@ -252,6 +274,13 @@ module PoolParty
       # Before shutdown callback
       # This is called before the cloud is contracted
       def before_shutdown
+      end
+      
+      # Rsync a file or directory to a node.  Rsync to master by default
+      def rsync_to(source, target=source, num=0)
+        str = "#{rsync_to_command(source, target, get_instance_by_number( num ))}"
+        vputs "Running: #{str}"
+        verbose ?  Kernel.system(str) : hide_output {Kernel.system str}
       end
       
       # Rsync command to the instance
