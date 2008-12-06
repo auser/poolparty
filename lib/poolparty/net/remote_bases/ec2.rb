@@ -117,8 +117,8 @@ begin
       
       def before_configuration_tasks
         if has_cert_and_key?
-          copy_file_to_storage_directory(pub_key)
-          copy_file_to_storage_directory(private_key)
+          # copy_file_to_storage_directory(pub_key)
+          # copy_file_to_storage_directory(private_key)
         end
       end
       def has_cert_and_key?
@@ -140,8 +140,8 @@ begin
       def custom_install_tasks_for(o)
         arr = if has_cert_and_key?
           [ 
-            "mv #{::File.basename(pub_key)} #{Base.base_config_directory}/ssl/public_keys/#{o.name}.pem", 
-            "mv #{::File.basename(private_key)} #{Base.base_config_directory}/ssl/private_keys/#{o.name}.pem"
+            # "mv #{::File.basename(pub_key)} #{Base.base_config_directory}/ssl/public_keys/#{o.name}.pem", 
+            # "mv #{::File.basename(private_key)} #{Base.base_config_directory}/ssl/private_keys/#{o.name}.pem"
           ]
           else 
             []
