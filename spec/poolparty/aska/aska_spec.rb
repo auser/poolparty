@@ -114,9 +114,4 @@ describe "Rules" do
     @car.y = 5    
     @car.valid_rules?(:names).should == true
   end
-  it "should have the rules in an array of hashes" do
-    @car.names.each do |n|
-      
-    end
-  end
 end

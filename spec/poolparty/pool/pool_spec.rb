@@ -25,7 +25,7 @@ describe "Pool" do
       @pool.respond_to?(:cloud).should == true
     end
     it "should evaluate the block when creating a new pool" do
-      Proc.should_receive(:new).once
+      Proc.should_receive(:new).at_least(1)
       Pool.new(:test) do
         Proc.new {puts "hi"}
       end
