@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
 
-# /var/lib/puppet/state/puppetdlock
+ARGS=1        # Number of arguments expected.
+E_BADARGS=85  # Exit value if incorrect number of args passed.
+
+test $# -ne $ARGS && echo "Usage: `basename $0` requires $ARGS argument(s)" && exit $E_BADARGS
+
 . /etc/profile
-ps aux | grep puppetmaster | awk '{print $2}' | xargs kill
-/etc/init.d/puppetmaster stop;rm -rf /etc/puppet/ssl;/etc/init.d/puppetmaster start;puppetmasterd --verbose
+HN=$1
+
+echo "Cleaning $1 signed certs"
+rm /etc/poolparty/ssl/ca/signed/$HN.*

@@ -105,6 +105,11 @@ handle_call({get_current_load, Types}, _From, State) ->
 	LoadForType = [utils:average_of_list(get_load_for_type(Type, State)) || Type <- Types],
 	?TRACE("LoadForType: ",[LoadForType]),
 	{reply, LoadForType, State};
+% Handle puppet needs
+handle_call({clear_cert_for, Name}, _From, State) ->
+	String = string:concat(". /etc/profile && /usr/bin/puppetcleaner ",Name),
+	os:cmd(String),
+	{reply, ok, State};
 handle_call({get_current_nodes, _Args}, _From, State) ->
 	{reply, get_live_nodes(State), State}.
 	

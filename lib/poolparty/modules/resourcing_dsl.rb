@@ -10,12 +10,12 @@ module PoolParty
       str ? options.append!(:require => send_if_method(str)) : options[:require]
     end 
     def ensures(str="running")
-      if %w(absent running).map {|a| self.send a.to_sym}.include?(str)
+      # if %w(absent running).map {|a| self.send a.to_sym}.include?(str)
         str == "absent" ? is_absent : is_present
-      else
-        options.append!(:ensure => str)
-      end
-      str
+      # else
+        # options.append!(:ensure => str)
+      # end
+      # str
     end
     # Allows us to send an ensure to ensure the presence of a resource
     def is_present(*args)

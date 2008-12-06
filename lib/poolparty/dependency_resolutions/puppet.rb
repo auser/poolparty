@@ -1,4 +1,12 @@
 module PoolParty
+  module Resources
+    class Resource
+      def self.resource_string_name(n, key)
+        "#{n.to_s.sanitize.capitalize}['#{key}']"
+      end
+    end
+  end
+  
   module DependencyResolutions
     module Puppet
       
@@ -39,6 +47,7 @@ module PoolParty
       
       def resources_string_from_resources(res, pre="\t")
         @variables = res.extract! {|name,resource| name == :variable}
+        
         returning Array.new do |str|
           unless @variables.empty?
             str << "\n# Variables"
@@ -54,9 +63,8 @@ module PoolParty
       end
       
       def to_s
-        "#{class_type_name.capitalize}['#{key}']"
+        self.class.resource_string_name(class_type_name.capitalize, key)
       end
-      
     end
   end
 end

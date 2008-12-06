@@ -18,7 +18,7 @@ module PoolParty
     end
     
     def add_resource(type, opts={}, parent=self, &block)
-      if in_a_resource_store?(type, opts[:name])
+      if opts[:name] && in_a_resource_store?(type, opts[:name])
         @res = get_from_local_resource_store(type, opts[:name], parent)
         @res ||= get_from_global_resource_store(type, opts[:name])
         # if should_duplicate_resource?(type, @res, parent, opts)
@@ -86,13 +86,16 @@ module PoolParty
       
       include CloudResourcer
       include Configurable
+      # For the time being, we'll make puppet the only available dependency resolution
+      # base, but in the future, we can rip this out and make it an option
+      include PoolParty::DependencyResolutions::Puppet
       
       extend PoolParty::Resources
       include PoolParty::Resources
       
       def self.inherited(subclass)
         subclass = subclass.to_s.split("::")[-1] if subclass.to_s.index("::")
-        lowercase_class_name = subclass.to_s.underscore.downcase
+        lowercase_class_name = subclass.to_s.underscore.downcase || subclass.downcase
         
         # Add add resource method to the Resources module
         unless PoolParty::Resources.respond_to?(lowercase_class_name.to_sym)          
@@ -100,8 +103,14 @@ module PoolParty
             def #{lowercase_class_name}(opts={}, parent=self, &blk)
               add_resource(:#{lowercase_class_name}, opts, parent, &blk)
             end
-            def get_#{lowercase_class_name}(name)              
-              get_resource(:#{lowercase_class_name}, name) if in_a_resource_store?(:#{lowercase_class_name}, name)
+            def get_#{lowercase_class_name}(n, opts={}, parent=self, &block)
+              res = in_a_resource_store?(:#{lowercase_class_name}, n) ?
+                get_resource(:#{lowercase_class_name}, n) :
+                nil
+                # PoolParty::Resources::Resource.resource_string_name(#{lowercase_class_name}, n)
+                # add_resource(:#{lowercase_class_name}, opts, parent, &blk)
+              # res ||= PoolParty::Resources::Resource.resource_string_name(#{lowercase_class_name}, n)
+              res
             end
           EOE
           PoolParty::Resources.module_eval method
@@ -186,7 +195,7 @@ module PoolParty
       end
       # This way we can subclass resources without worry
       def class_type_name
-        self.class.to_s.top_level_class.underscore
+        self.class.to_s.top_level_class.underscore.downcase
       end
       def self.custom_function(str)
         custom_functions << str
@@ -240,24 +249,20 @@ module PoolParty
       def get_modified_options
         unless @modified_options
           if options
-            opts = options.inject({}) do |sum,h| 
+            opts = options.inject({}) do |sum,h|
               sum.merge!({h[0].to_sym => ((h[1].nil?) ? self.send(h[0].to_sym) : h[1]) })
             end
           else
             opts = {}
           end
           @full_allowed_options ||= allowed_options.reject {|ele| disallowed_options.include?(ele) }
-          @modified_options = opts.reject do |k,v| 
+          @modified_options = opts.reject do |k,v|
             !@full_allowed_options.include?(k) || 
-              @parent.respond_to?(:options) && @parent.options.has_key?(k) && @parent.options[k] == options[k]
+              @parent && @parent.respond_to?(:options) && @parent != self && @parent.options.has_key?(k) && @parent.options[k] == options[k]
           end
         end
         @modified_options
       end
-      
-      # For the time being, we'll make puppet the only available dependency resolution
-      # base, but in the future, we can rip this out and make it an option
-      include PoolParty::DependencyResolutions::Puppet
     end
     
     # Adds two methods to the module
@@ -273,12 +278,21 @@ module PoolParty
     def self.add_has_and_does_not_have_methods_for(type=:file)
       module_eval <<-EOE
         def has_#{type}(opts={}, parent=self, &block)
-          #{type}(#{type == :exec ? "opts" : "{:is_present => ''}.merge(opts)"}, parent, &block)
+          #{type}(handle_option_values(opts).merge(:ensures => "present"), parent, &block)
         end
         def does_not_have_#{type}(opts={}, parent=self, &block)
-          #{type}(#{type == :exec ? "opts" : "{:is_absent => ''}.merge(opts)"}, parent, &block)
+          #{type}(handle_option_values(opts).merge(:ensures => "absent"), parent, &block)
         end
       EOE
+    end
+    
+    def handle_option_values(o)
+      case o.class.to_s
+      when "String"
+        {:name => o}
+      else
+        o
+      end
     end
     
   end

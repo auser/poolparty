@@ -74,7 +74,7 @@ describe "ProvisionerBase" do
           "cruel world"
         end
         def default_install_tasks
-          [] << install_tasks
+          [] << install_tasks << custom_install_tasks
         end
       end
       @provisioner = BTestProvisioner.new(@remote_instance, @cloud)
@@ -97,6 +97,10 @@ describe "ProvisionerBase" do
     it "should append the last_install_tasks to the end" do
       @provisioner.stub!(:last_install_tasks).and_return ["pops"]
       @provisioner.install_string.should == "hello \n   \n cruel world \n pops"
+    end
+    it "should append the custom_install_tasks_for from the cloud" do
+      @cloud.stub!(:custom_install_tasks_for).and_return ["echo 'hi from custom'"]
+      @provisioner.install_string.should =~ /echo 'hi from custom'/
     end
     after do
       @provisioner.install_string

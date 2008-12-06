@@ -9,7 +9,7 @@ end
 
 o.loaded_clouds.each do |cloud|
   with_cloud(cloud) do
-    puts "Cloud: #{name}"
+    vputs "Cloud: #{name}"
     
     new_hosts_listing = returning Array.new do |arr|
       
@@ -36,8 +36,9 @@ o.loaded_clouds.each do |cloud|
         new_hosts_listing.split(/\n/).each do |line|
           parts = line.split(/\t/).map {|a| a.chomp }
           ip,hostname,aliases = parts[0], parts[1], parts[2..-1]
-          puts "ip: #{ip} for #{hostname}"
-          arr << PoolParty::Resources::Host.new(:name => hostname, :ip => Resolv::DNS.new.getaddress(ip).to_s, :alias => aliases).to_string
+          vputs "ip: #{ip} for #{hostname} as #{aliases}"
+          h = PoolParty::Resources::Host.new(:name => hostname, :ip => Resolv::DNS.new.getaddress(ip).to_s, :alias => aliases)
+          arr << h.to_string
         end
       end
       

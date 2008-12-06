@@ -29,7 +29,7 @@
   Notice that at the end, you must call register_monitor :monitorname. This will tell your cloud
   that it can monitor it with this monitor.
 =end
-require "#{::File.dirname(__FILE__)}/../pool/base"
+require "#{::File.dirname(__FILE__)}/../poolparty/base"
 
 module PoolParty
   module Monitors    

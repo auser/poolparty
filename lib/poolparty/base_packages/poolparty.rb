@@ -49,12 +49,12 @@ module PoolParty
           template File.join(File.dirname(__FILE__), "..", "templates/puppetrunner")
         end
         
-        execute_on_node do
-          has_cron(:name => "node puppetd runner", :user => Base.user, :minute => "*/5") do
+        # execute_on_node do
+          has_cron(:name => "node puppetd runner", :user => Base.user, :minute => "*/11") do
             requires get_gempackage("poolparty")
             command "/usr/bin/puppetrunner"
           end
-        end
+        # end
         
         # end
         
@@ -68,6 +68,15 @@ module PoolParty
         
         # Custom run puppet to minimize footprint
         # TODO: Update the offsetted times
+        has_remotefile(:name => "/usr/bin/puppetrerun") do
+          mode 744
+          template File.join(File.dirname(__FILE__), "..", "templates/puppetrerun")
+        end
+        has_remotefile(:name => "/usr/bin/puppetcleaner") do
+          mode 744
+          template File.join(File.dirname(__FILE__), "..", "templates/puppetcleaner")
+        end
+        
         execute_on_master do
           has_exec(:name => "update_hosts", :command => ". /etc/profile && server-update-hosts -n #{cloud.name}")
           
@@ -93,15 +102,8 @@ module PoolParty
           
           has_cron({:name => "maintain script", :command => ". /etc/profile && cloud-maintain -n #{cloud.name}", :minute => "*/3", :requires => [get_gempackage("poolparty"), get_cron("puppetd runner"), get_cron("Load handler"), get_service("haproxy")]})
           
-          has_remotefile(:name => "/usr/bin/puppetcleaner") do
-            mode 744
-            template File.join(File.dirname(__FILE__), "..", "templates/puppetcleaner")
-          end
+          has_cron(:name => "ensure puppetmaster is running", :command => ". /etc/profile && puppetmasterd --verbose", :hour => "0")
           
-          has_remotefile(:name => "/usr/bin/puppetrerun") do
-            mode 744
-            template File.join(File.dirname(__FILE__), "..", "templates/puppetrerun")
-          end
         end        
         # has_host(:name => "puppet", :ip => (self.respond_to?(:master) ? self : parent).master.ip)
       end

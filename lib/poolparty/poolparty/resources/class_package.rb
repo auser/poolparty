@@ -22,7 +22,7 @@ module PoolParty
     
     # Wrap all the resources into a class package from 
     def classpackage_with_self(parent=self, &block)
-      name = (parent.options.name || Classpackage.name(parent).to_s).sanitize
+      name = (parent && parent.options.name || Classpackage.name(parent).to_s).sanitize
       if in_global_classpackages?(name)
         returning get_from_global_classpackage_store(name) do |cls|
           cls.run_in_context(parent, &block) if block
@@ -95,7 +95,7 @@ module PoolParty
         false
       end
       
-      def self.name(parent=nil)
+      def self.name(parent=self)
         "custom_#{parent ? parent.object_id.to_s : "parent"}"
       end
 

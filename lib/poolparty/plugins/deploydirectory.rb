@@ -18,17 +18,18 @@ module PoolParty
             
       def package_directory
         path = ::File.join( Base.tmp_path, "#{::File.basename(from_dir)}.tar.gz" )
-        archive_name = "#{name.dir_safe}.tar.gz"
+        archive_name = "#{::File.basename(name).dir_safe}.tar.gz"
         cmd = "cd #{::File.expand_path(from_dir)} && tar -czf #{archive_name} . && mv #{archive_name} #{Base.tmp_path}"
-        `#{cmd}` unless testing
+        Kernel.system(cmd) unless testing
       end
       
       def unpack_directory
         execute_on_master do
           has_exec({:name => "deploy-directory-#{name}", :requires => get_directory("#{cwd}"), :cwd => cwd}) do
             #  && rm #{Base.tmp_path}/#{parent.name.dir_safe}.tar.gz
-            command "cd #{cwd}; tar -zxf #{Base.remote_storage_path}/#{name.dir_safe}.tar.gz; rm #{Base.remote_storage_path}/#{name.dir_safe}.tar.gz"
-            onlyif "test -f #{Base.remote_storage_path}/#{name.dir_safe}.tar.gz"
+            archive_name = "#{::File.basename(name).dir_safe}.tar.gz"
+            command "cd #{cwd}; tar -zxf #{Base.remote_storage_path}/#{archive_name}; rm #{Base.remote_storage_path}/#{archive_name}; chown #{owner} #{::File.basename(name).dir_safe}"
+            onlyif "test -f #{Base.remote_storage_path}/#{archive_name}"
           end
         end
       end
@@ -45,7 +46,11 @@ module PoolParty
       
       def to(dir)
         cwd dir
-        has_directory(:name => "#{dir}", :requires => get_directory("#{::File.dirname(dir)}"))
+        name dir
+        has_directory(:name => "#{dir}", 
+                      :requires => get_directory("#{::File.dirname(dir)}"), 
+                      :owner => owner,
+                      :mode => mode)
       end
       
       # Since git is not a native type, we have to say which core resource
