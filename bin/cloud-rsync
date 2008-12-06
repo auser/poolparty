@@ -3,7 +3,7 @@ $:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
 require "poolparty"
 require "poolpartycl"
 
-o = PoolParty::Optioner.new(ARGV, {:extra_help => "usage: cloud [options] rsync source target"}) do |opts, optioner|
+o = PoolParty::Optioner.new(ARGV, {:extra_help => "\nUsage: cloud [options] rsync source target\n\n"}) do |opts, optioner|
   opts.on('-n name', '--name name', 'Listing for cloud name')    { |c| optioner.cloudname c }
   opts.on('-i num', '--id num', 'Instance num to ssh (default: 0)')    { |i| optioner.num i }
 end
