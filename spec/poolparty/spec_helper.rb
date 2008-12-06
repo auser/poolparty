@@ -16,6 +16,22 @@ ENV["POOL_SPEC"] = nil
 include PoolParty
 extend PoolParty
 
+def are_too_many_instances_running?  
+end
+def are_too_few_instances_running?
+end
+
+class TestClass < PoolParty::Cloud::Cloud
+  include CloudResourcer
+  attr_accessor :parent
+  def initialize(&block)
+    super :test_cloud, nil, &block
+  end
+  def keypair
+    "fake_keypair"
+  end
+end
+
 def setup
   PoolParty::Messenger.stub!(:messenger_send!).and_return false
 end

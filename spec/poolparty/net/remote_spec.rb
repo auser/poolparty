@@ -10,17 +10,6 @@ module Hype
   end
   register_remote_base :Hype
 end
-class TestClass
-  include Remote
-  include RemoterBase
-  
-  def keypair
-    "fake_keypair"
-  end
-  def verbose
-    false
-  end
-end
 
 describe "Remote" do
   before(:each) do
@@ -32,6 +21,9 @@ describe "Remote" do
     @tc.respond_to?(:using).should == true
   end
   it "should include the module with using" do
+    @tc.instance_eval do
+      @remote_base = nil
+    end
     @tc.should_receive(:extend).with("Hype".preserved_module_constant).once
     @tc.using :hype
   end
@@ -59,6 +51,9 @@ describe "Remote" do
       @tc.using :hype
     end
     it "should only include the remote class once" do
+      @tc.instance_eval do
+        @remote_base = nil
+      end
       @tc.should_receive(:extend).with(Hype).once
       @tc.using :hype
       @tc.using :hype
@@ -190,10 +185,6 @@ describe "Remote" do
         @tc.should_receive(:terminate_instance!).once
         @tc.request_termination_of_non_master_instance
       end
-    end
-    describe "should_expand_cloud?" do
-    end
-    describe "should_contract_cloud?" do
     end
     describe "expansions" do
       before(:each) do

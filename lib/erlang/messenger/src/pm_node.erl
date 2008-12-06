@@ -197,5 +197,4 @@ code_change(_OldVsn, State, _Extra) ->
   {ok, State}.
 
 % Private
-server_location() ->
-	global:whereis_name(node()).
+server_location() -> global:whereis_name(node()).
