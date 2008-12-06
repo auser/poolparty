@@ -68,6 +68,7 @@ executables:
 - cloud-osxcopy
 - cloud-provision
 - cloud-refresh
+- cloud-rsync
 - cloud-run
 - cloud-ssh
 - cloud-start
@@ -127,6 +128,7 @@ files:
 - bin/cloud-osxcopy
 - bin/cloud-provision
 - bin/cloud-refresh
+- bin/cloud-rsync
 - bin/cloud-run
 - bin/cloud-ssh
 - bin/cloud-start
@@ -192,6 +194,7 @@ files:
 - lib/erlang/messenger/ebin/pm_node_rel-0.1.rel
 - lib/erlang/messenger/ebin/pm_node_supervisor.beam
 - lib/erlang/messenger/ebin/pm_packager.beam
+- lib/erlang/messenger/ebin/pm_spawner.beam
 - lib/erlang/messenger/ebin/pm_strings.beam
 - lib/erlang/messenger/ebin/utils.beam
 - lib/erlang/messenger/include/defines.hrl
@@ -271,6 +274,7 @@ files:
 - lib/erlang/messenger/src/pm_node.erl
 - lib/erlang/messenger/src/pm_node_supervisor.erl
 - lib/erlang/messenger/src/pm_packager.erl
+- lib/erlang/messenger/src/pm_spawner.erl
 - lib/erlang/messenger/src/pm_strings.erl
 - lib/erlang/messenger/src/utils.erl
 - lib/erlang/messenger/useful_snippets
@@ -502,7 +506,6 @@ files:
 - test/test_helper.rb
 - test/test_pool_spec_generator.rb
 - test/test_poolparty.rb
-- website/index.html
 - website/index.txt
 - website/javascripts/rounded_corners_lite.inc.js
 - website/stylesheets/code.css
@@ -511,7 +514,7 @@ files:
 has_rdoc: true
 homepage: http://poolparty.rubyforge.org
 post_install_message: |-
-  Get ready to jump in the pool, you just installed PoolParty! (Updated at 09:44 12/05/08)
+  Get ready to jump in the pool, you just installed PoolParty! (Updated at 23:36 12/05/08)
   
   To get started, run the generator:
   
