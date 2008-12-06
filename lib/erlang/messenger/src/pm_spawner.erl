@@ -14,7 +14,6 @@
 %% API
 -export([start_link/0]).
 -export ([run_command/1, run_command/2, check_command/1]).
--export ([collect_output/2, collect_port/2]).
 
 %% gen_server callbacks
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
@@ -64,12 +63,33 @@ handle_call({check_command, Cmd}, _From, State) ->
 	AtomCommand = erlang:list_to_atom(Cmd),
 	?TRACE("is_key for ", [AtomCommand, ?DICT:is_key(AtomCommand, State#state.processes)]),
 	case ?DICT:is_key(AtomCommand, State#state.processes) of
-		false -> Reply = nil;
+		false -> 
+			Reply = nil,
+			NewState = State;
 		true ->
-			[_, Port] = ?DICT:fetch(AtomCommand, State#state.processes),
-			Reply = erlang:port_command(Port, collect)
+			Pid = ?DICT:fetch(AtomCommand, State#state.processes),
+			case erlang:is_pid(Pid) of
+				true ->
+					Pid ! {self(), collect},
+					receive
+						{command_response, OutFromCommand} -> 					
+							Reply = OutFromCommand,
+							NewState = State#state{processes = ?DICT:store(AtomCommand, OutFromCommand, State#state.processes)};
+						Msg ->
+							NewState = State,
+							Reply = Msg
+					after 
+						1000 -> 
+							Pid ! {self(), collect},
+							NewState = State,
+							Reply = "no output"
+					end;
+				false ->
+					NewState = State,
+					Reply = Pid
+			end
 	end,
-	{reply, Reply, State};
+	{reply, Reply, NewState};
 handle_call(_Request, _From, State) ->
 	Reply = ok,
 	{reply, Reply, State}.
@@ -120,47 +140,74 @@ check_command(Cmd) ->
 % Run the command, start up the 
 run_command(Cmd, State) ->
 	Command = lists:flatten(io_lib:format("~s", [Cmd])),
-	Port = erlang:open_port({spawn, Command}, [stream, exit_status, stderr_to_stdout]),
-	Pid = spawn(fun() ->
-			collect_port(Port, [])
-		end),
-	Pid ! {command, run},
 	AtomCommand = erlang:list_to_atom(Command),
-	Storage = [Pid, Port],
-	?TRACE("storing into state", [AtomCommand, Port]),
+	Pid = spawn(fun() -> spawn_command(Command) end),
+	Storage = Pid,
+	?TRACE("storing into state", [AtomCommand]),
 	NewState = State#state{processes = ?DICT:store(AtomCommand, Storage, State#state.processes)},
 	{ok, NewState}.
 
-% Collect output for process with Port and Pid
-collect_port(Port, Output) ->
-	?TRACE("in collect_port with ", [Port, Output]),
+spawn_command(Command) ->
+	Port = erlang:open_port({spawn, Command}, [stream, exit_status, stderr_to_stdout, use_stdio]),
+	ResponsePid = response_reader(Port),
+	spawn_command_loop(Command, Port, ResponsePid).
+	
+spawn_command_loop(Command, Port, Responses) ->
 	receive
-		{command, collect} ->
-			?TRACE("received message to collect the output", [Output]),
-			catch erlang:port_close(Port),
-			Output;
-		{command, run} ->
-			?TRACE("received message to run the process", [Output]),
-			Out = collect_output(Port, []),
-			collect_port(Port, Out);
-		Msg ->
-			?TRACE("received unknown message", [Msg]),
-			collect_port(Port, Output)
+		{Pid, collect} ->
+			case erlang:is_pid(Responses) of
+				true ->
+					io:format("There is no output on your command yet, try again in a few seconds ~p~n", [Responses]),
+					spawn_command_loop(Command, Port, Responses);
+				false ->
+					Pid ! {command_response, Responses}
+			end;
+		{exit_status, _} -> 
+			spawn_command_loop(Command, Port, Responses);
+		{done, Port, Response} ->			
+			?TRACE("Received done message", Response),
+			spawn_command_loop(Command, Port, Response);
+	  {Port, {exit_status, 0}} ->			
+			?TRACE("Received exit_status", [Port]),
+			Responses ! {Port, {exit_status, 0, self()}},
+			receive
+				{ok, Resp} ->
+					?TRACE("Received ok back", [Resp]),
+					spawn_command_loop(Command, Port, Resp)
+			end;
+		Mes ->
+			?TRACE("received message", [Mes]),
+			Responses ! Mes,
+			spawn_command_loop(Command, Port, Responses)
 	end.
 
-collect_output(Port, Acc) ->
+response_reader(Port) -> 
+	ResponsePid = spawn(fun() -> response_reader_loop(Port, []) end),
+	ResponsePid.
+	
+response_reader_loop(Port, Acc) ->
 	receive
-		{Port, {data, Data}} ->
-			collect_output(Port, [Data | Acc]);
-		{Port, {exit_status, 0}} ->
-			catch erlang:port_close(Port),
-			lists:flatten(lists:reverse(Acc));
-		{Port, {exit_status, _}} ->
-			catch erlang:port_close(Port),
-			Output = lists:flatten(lists:reverse(Acc)),	
+		{Port, {data, Bin}} ->
+			?TRACE("received data", [Bin]),
+			response_reader_loop(Port, [Bin|Acc]);
+    {Port, {exit_status, 0, Pid}} ->			
+      catch erlang:port_close(Port),
+      Response = lists:flatten(lists:reverse(Acc)),
+			?TRACE("received exit_status", [Response, Port]),
+			Pid ! {ok, Response};
+    {Port, {exit_status, _}} ->
+      catch erlang:port_close(Port),
+      Output = lists:flatten(lists:reverse(Acc)),
 			{error, Output};
-		_ ->
-			collect_output(Port, Acc)
+		{Pid, get_data} ->
+			?TRACE("get_data for", [Pid, Acc]),
+			Pid ! {data, Port, Acc},			
+			response_reader_loop(Port, Acc);
+		{_, collect} ->
+			response_reader_loop(Port, Acc);
+		Mes ->
+			io:format("Unexpected message in response_reader_loop ~p~n", [Mes]),
+			response_reader_loop(Port, Acc)
 	end.
 
 server_location() -> global:whereis_name(?SERVER).
