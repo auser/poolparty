@@ -8,8 +8,7 @@ if [ $(/usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server mast
   HN=`hostname`
   if [[ $HN == "master" ]]; then
       rm /etc/poolparty/ssl/ca/signed/$HN*
-      rm /etc/poolparty/ssl/$HN*
-      if [$(/usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master)]; then        
+      if [ $(/usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master) ]; then
         echo "Run successfully" && exit 0
         else
         /etc/init.d/puppetmaster stop;rm -rf /etc/poolparty/ssl;/etc/init.d/puppetmaster start
