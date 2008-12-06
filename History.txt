@@ -1,3 +1,9 @@
+== 0.2.77 2008-12-5
+  * Added heartbeat failover
+
+== 0.2.72 
+  * Added specs to spec cloud
+  
 == 0.2.6 2008-10-14
   * Maintaining the cloud
   

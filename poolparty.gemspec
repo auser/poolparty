@@ -1,7 +1,7 @@
 --- !ruby/object:Gem::Specification 
 name: poolparty
 version: !ruby/object:Gem::Version 
-  version: 0.2.71
+  version: 0.2.78
 platform: ruby
 authors: 
 - Ari Lerner
@@ -9,7 +9,7 @@ autorequire:
 bindir: bin
 cert_chain: []
 
-date: 2008-11-25 00:00:00 -08:00
+date: 2008-12-05 00:00:00 -08:00
 default_executable: 
 dependencies: 
 - !ruby/object:Gem::Dependency 
@@ -44,13 +44,13 @@ dependencies:
     version: 
 - !ruby/object:Gem::Dependency 
   name: hoe
-  type: :development
+  type: :runtime
   version_requirement: 
   version_requirements: !ruby/object:Gem::Requirement 
     requirements: 
     - - ">="
       - !ruby/object:Gem::Version 
-        version: 1.8.0
+        version: 1.8.2
     version: 
 description: Self-healing, auto-scaling system administration, provisioning and maintaining tool that makes cloud computing fun and easy
 email: 
@@ -82,6 +82,7 @@ executables:
 - pool-list
 - pool-start
 - server-build-messenger
+- server-clean-cert-for
 - server-fire-cmd
 - server-get-load
 - server-list-active
@@ -140,6 +141,7 @@ files:
 - bin/pool-list
 - bin/pool-start
 - bin/server-build-messenger
+- bin/server-clean-cert-for
 - bin/server-fire-cmd
 - bin/server-get-load
 - bin/server-list-active
@@ -163,51 +165,42 @@ files:
 - generators/poolspec/poolspec_generator.rb
 - generators/poolspec/templates/pool_spec_template.erb
 - lib/erlang/messenger/Emakefile
+- lib/erlang/messenger/Makefile
 - lib/erlang/messenger/README
 - lib/erlang/messenger/Rakefile
 - lib/erlang/messenger/control
 - lib/erlang/messenger/ebin/client.app
+- lib/erlang/messenger/ebin/client_app.beam
+- lib/erlang/messenger/ebin/client_server.beam
+- lib/erlang/messenger/ebin/erl_crash.dump
 - lib/erlang/messenger/ebin/master.app
+- lib/erlang/messenger/ebin/master_app.beam
 - lib/erlang/messenger/ebin/node.app
+- lib/erlang/messenger/ebin/node_app.beam
 - lib/erlang/messenger/ebin/packager.app
+- lib/erlang/messenger/ebin/pm_client.beam
+- lib/erlang/messenger/ebin/pm_client_old.beam
 - lib/erlang/messenger/ebin/pm_client_rel-0.1.rel
+- lib/erlang/messenger/ebin/pm_client_supervisor.beam
+- lib/erlang/messenger/ebin/pm_cluster.beam
+- lib/erlang/messenger/ebin/pm_event_manager.beam
+- lib/erlang/messenger/ebin/pm_master.beam
+- lib/erlang/messenger/ebin/pm_master_event_handler.beam
 - lib/erlang/messenger/ebin/pm_master_rel-0.1.rel
+- lib/erlang/messenger/ebin/pm_master_supervisor.beam
+- lib/erlang/messenger/ebin/pm_node.beam
 - lib/erlang/messenger/ebin/pm_node_rel-0.1.rel
+- lib/erlang/messenger/ebin/pm_node_supervisor.beam
+- lib/erlang/messenger/ebin/pm_packager.beam
+- lib/erlang/messenger/ebin/pm_strings.beam
+- lib/erlang/messenger/ebin/utils.beam
 - lib/erlang/messenger/include/defines.hrl
-- lib/erlang/messenger/lib/eunit/.svn/all-wcprops
-- lib/erlang/messenger/lib/eunit/.svn/entries
-- lib/erlang/messenger/lib/eunit/.svn/format
-- lib/erlang/messenger/lib/eunit/.svn/prop-base/NOTES.svn-base
-- lib/erlang/messenger/lib/eunit/.svn/text-base/AUTHORS.svn-base
-- lib/erlang/messenger/lib/eunit/.svn/text-base/CHANGELOG.svn-base
-- lib/erlang/messenger/lib/eunit/.svn/text-base/COPYING.svn-base
-- lib/erlang/messenger/lib/eunit/.svn/text-base/NOTES.svn-base
-- lib/erlang/messenger/lib/eunit/.svn/text-base/README.svn-base
-- lib/erlang/messenger/lib/eunit/.svn/text-base/sys.config.svn-base
-- lib/erlang/messenger/lib/eunit/.svn/text-base/vsn.mk.svn-base
 - lib/erlang/messenger/lib/eunit/AUTHORS
 - lib/erlang/messenger/lib/eunit/CHANGELOG
 - lib/erlang/messenger/lib/eunit/COPYING
+- lib/erlang/messenger/lib/eunit/Makefile
 - lib/erlang/messenger/lib/eunit/NOTES
 - lib/erlang/messenger/lib/eunit/README
-- lib/erlang/messenger/lib/eunit/doc/.svn/all-wcprops
-- lib/erlang/messenger/lib/eunit/doc/.svn/entries
-- lib/erlang/messenger/lib/eunit/doc/.svn/format
-- lib/erlang/messenger/lib/eunit/doc/.svn/prop-base/erlang.png.svn-base
-- lib/erlang/messenger/lib/eunit/doc/.svn/prop-base/eunit.html.svn-base
-- lib/erlang/messenger/lib/eunit/doc/.svn/prop-base/index.html.svn-base
-- lib/erlang/messenger/lib/eunit/doc/.svn/prop-base/modules-frame.html.svn-base
-- lib/erlang/messenger/lib/eunit/doc/.svn/prop-base/overview-summary.html.svn-base
-- lib/erlang/messenger/lib/eunit/doc/.svn/prop-base/packages-frame.html.svn-base
-- lib/erlang/messenger/lib/eunit/doc/.svn/text-base/edoc-info.svn-base
-- lib/erlang/messenger/lib/eunit/doc/.svn/text-base/erlang.png.svn-base
-- lib/erlang/messenger/lib/eunit/doc/.svn/text-base/eunit.html.svn-base
-- lib/erlang/messenger/lib/eunit/doc/.svn/text-base/index.html.svn-base
-- lib/erlang/messenger/lib/eunit/doc/.svn/text-base/modules-frame.html.svn-base
-- lib/erlang/messenger/lib/eunit/doc/.svn/text-base/overview-summary.html.svn-base
-- lib/erlang/messenger/lib/eunit/doc/.svn/text-base/overview.edoc.svn-base
-- lib/erlang/messenger/lib/eunit/doc/.svn/text-base/packages-frame.html.svn-base
-- lib/erlang/messenger/lib/eunit/doc/.svn/text-base/stylesheet.css.svn-base
 - lib/erlang/messenger/lib/eunit/doc/edoc-info
 - lib/erlang/messenger/lib/eunit/doc/erlang.png
 - lib/erlang/messenger/lib/eunit/doc/eunit.html
@@ -217,64 +210,27 @@ files:
 - lib/erlang/messenger/lib/eunit/doc/overview.edoc
 - lib/erlang/messenger/lib/eunit/doc/packages-frame.html
 - lib/erlang/messenger/lib/eunit/doc/stylesheet.css
-- lib/erlang/messenger/lib/eunit/ebin/.svn/all-wcprops
-- lib/erlang/messenger/lib/eunit/ebin/.svn/dir-prop-base
-- lib/erlang/messenger/lib/eunit/ebin/.svn/entries
-- lib/erlang/messenger/lib/eunit/ebin/.svn/format
+- lib/erlang/messenger/lib/eunit/ebin/autoload.beam
+- lib/erlang/messenger/lib/eunit/ebin/code_monitor.beam
 - lib/erlang/messenger/lib/eunit/ebin/eunit.app
 - lib/erlang/messenger/lib/eunit/ebin/eunit.appup
-- lib/erlang/messenger/lib/eunit/examples/.svn/all-wcprops
-- lib/erlang/messenger/lib/eunit/examples/.svn/entries
-- lib/erlang/messenger/lib/eunit/examples/.svn/format
-- lib/erlang/messenger/lib/eunit/examples/.svn/prop-base/eunit_examples.erl.svn-base
-- lib/erlang/messenger/lib/eunit/examples/.svn/prop-base/fib.erl.svn-base
-- lib/erlang/messenger/lib/eunit/examples/.svn/text-base/eunit_examples.erl.svn-base
-- lib/erlang/messenger/lib/eunit/examples/.svn/text-base/fib.erl.svn-base
-- lib/erlang/messenger/lib/eunit/examples/.svn/text-base/tests.txt.svn-base
+- lib/erlang/messenger/lib/eunit/ebin/eunit.beam
+- lib/erlang/messenger/lib/eunit/ebin/eunit_autoexport.beam
+- lib/erlang/messenger/lib/eunit/ebin/eunit_data.beam
+- lib/erlang/messenger/lib/eunit/ebin/eunit_lib.beam
+- lib/erlang/messenger/lib/eunit/ebin/eunit_proc.beam
+- lib/erlang/messenger/lib/eunit/ebin/eunit_serial.beam
+- lib/erlang/messenger/lib/eunit/ebin/eunit_server.beam
+- lib/erlang/messenger/lib/eunit/ebin/eunit_striptests.beam
+- lib/erlang/messenger/lib/eunit/ebin/eunit_test.beam
+- lib/erlang/messenger/lib/eunit/ebin/eunit_tests.beam
+- lib/erlang/messenger/lib/eunit/ebin/eunit_tty.beam
+- lib/erlang/messenger/lib/eunit/ebin/file_monitor.beam
 - lib/erlang/messenger/lib/eunit/examples/eunit_examples.erl
 - lib/erlang/messenger/lib/eunit/examples/fib.erl
 - lib/erlang/messenger/lib/eunit/examples/tests.txt
-- lib/erlang/messenger/lib/eunit/include/.svn/all-wcprops
-- lib/erlang/messenger/lib/eunit/include/.svn/entries
-- lib/erlang/messenger/lib/eunit/include/.svn/format
-- lib/erlang/messenger/lib/eunit/include/.svn/prop-base/eunit.hrl.svn-base
-- lib/erlang/messenger/lib/eunit/include/.svn/text-base/eunit.hrl.svn-base
 - lib/erlang/messenger/lib/eunit/include/eunit.hrl
-- lib/erlang/messenger/lib/eunit/src/.svn/all-wcprops
-- lib/erlang/messenger/lib/eunit/src/.svn/entries
-- lib/erlang/messenger/lib/eunit/src/.svn/format
-- lib/erlang/messenger/lib/eunit/src/.svn/prop-base/autoload.erl.svn-base
-- lib/erlang/messenger/lib/eunit/src/.svn/prop-base/code_monitor.erl.svn-base
-- lib/erlang/messenger/lib/eunit/src/.svn/prop-base/eunit.erl.svn-base
-- lib/erlang/messenger/lib/eunit/src/.svn/prop-base/eunit_autoexport.erl.svn-base
-- lib/erlang/messenger/lib/eunit/src/.svn/prop-base/eunit_data.erl.svn-base
-- lib/erlang/messenger/lib/eunit/src/.svn/prop-base/eunit_internal.hrl.svn-base
-- lib/erlang/messenger/lib/eunit/src/.svn/prop-base/eunit_lib.erl.svn-base
-- lib/erlang/messenger/lib/eunit/src/.svn/prop-base/eunit_proc.erl.svn-base
-- lib/erlang/messenger/lib/eunit/src/.svn/prop-base/eunit_serial.erl.svn-base
-- lib/erlang/messenger/lib/eunit/src/.svn/prop-base/eunit_server.erl.svn-base
-- lib/erlang/messenger/lib/eunit/src/.svn/prop-base/eunit_striptests.erl.svn-base
-- lib/erlang/messenger/lib/eunit/src/.svn/prop-base/eunit_test.erl.svn-base
-- lib/erlang/messenger/lib/eunit/src/.svn/prop-base/eunit_tests.erl.svn-base
-- lib/erlang/messenger/lib/eunit/src/.svn/prop-base/eunit_tty.erl.svn-base
-- lib/erlang/messenger/lib/eunit/src/.svn/prop-base/file_monitor.erl.svn-base
-- lib/erlang/messenger/lib/eunit/src/.svn/text-base/autoload.erl.svn-base
-- lib/erlang/messenger/lib/eunit/src/.svn/text-base/code_monitor.erl.svn-base
-- lib/erlang/messenger/lib/eunit/src/.svn/text-base/eunit.app.src.svn-base
-- lib/erlang/messenger/lib/eunit/src/.svn/text-base/eunit.appup.src.svn-base
-- lib/erlang/messenger/lib/eunit/src/.svn/text-base/eunit.erl.svn-base
-- lib/erlang/messenger/lib/eunit/src/.svn/text-base/eunit_autoexport.erl.svn-base
-- lib/erlang/messenger/lib/eunit/src/.svn/text-base/eunit_data.erl.svn-base
-- lib/erlang/messenger/lib/eunit/src/.svn/text-base/eunit_internal.hrl.svn-base
-- lib/erlang/messenger/lib/eunit/src/.svn/text-base/eunit_lib.erl.svn-base
-- lib/erlang/messenger/lib/eunit/src/.svn/text-base/eunit_proc.erl.svn-base
-- lib/erlang/messenger/lib/eunit/src/.svn/text-base/eunit_serial.erl.svn-base
-- lib/erlang/messenger/lib/eunit/src/.svn/text-base/eunit_server.erl.svn-base
-- lib/erlang/messenger/lib/eunit/src/.svn/text-base/eunit_striptests.erl.svn-base
-- lib/erlang/messenger/lib/eunit/src/.svn/text-base/eunit_test.erl.svn-base
-- lib/erlang/messenger/lib/eunit/src/.svn/text-base/eunit_tests.erl.svn-base
-- lib/erlang/messenger/lib/eunit/src/.svn/text-base/eunit_tty.erl.svn-base
-- lib/erlang/messenger/lib/eunit/src/.svn/text-base/file_monitor.erl.svn-base
+- lib/erlang/messenger/lib/eunit/src/Makefile
 - lib/erlang/messenger/lib/eunit/src/autoload.erl
 - lib/erlang/messenger/lib/eunit/src/code_monitor.erl
 - lib/erlang/messenger/lib/eunit/src/eunit.app.src
@@ -359,6 +315,7 @@ files:
 - lib/poolparty/helpers/provisioner_base.rb
 - lib/poolparty/helpers/provisioners/master.rb
 - lib/poolparty/helpers/provisioners/slave.rb
+- lib/poolparty/helpers/ruberl.rb
 - lib/poolparty/modules/cloud_dsl.rb
 - lib/poolparty/modules/cloud_resourcer.rb
 - lib/poolparty/modules/configurable.rb
@@ -388,38 +345,59 @@ files:
 - lib/poolparty/plugins/rsyncmirror.rb
 - lib/poolparty/plugins/runit.rb
 - lib/poolparty/plugins/svn.rb
-- lib/poolparty/pool/base.rb
-- lib/poolparty/pool/cloud.rb
-- lib/poolparty/pool/custom_resource.rb
-- lib/poolparty/pool/loggable.rb
-- lib/poolparty/pool/plugin.rb
-- lib/poolparty/pool/plugin_model.rb
-- lib/poolparty/pool/pool.rb
-- lib/poolparty/pool/resource.rb
-- lib/poolparty/pool/resources/class_package.rb
-- lib/poolparty/pool/resources/conditional.rb
-- lib/poolparty/pool/resources/cron.rb
-- lib/poolparty/pool/resources/custom_service.rb
-- lib/poolparty/pool/resources/directory.rb
-- lib/poolparty/pool/resources/exec.rb
-- lib/poolparty/pool/resources/file.rb
-- lib/poolparty/pool/resources/gem_package.rb
-- lib/poolparty/pool/resources/host.rb
-- lib/poolparty/pool/resources/mount.rb
-- lib/poolparty/pool/resources/package.rb
-- lib/poolparty/pool/resources/remote_file.rb
-- lib/poolparty/pool/resources/service.rb
-- lib/poolparty/pool/resources/sshkey.rb
-- lib/poolparty/pool/resources/symlink.rb
-- lib/poolparty/pool/resources/variable.rb
-- lib/poolparty/pool/script.rb
-- lib/poolparty/spec/have_base.rb
+- lib/poolparty/poolparty/base.rb
+- lib/poolparty/poolparty/cloud.rb
+- lib/poolparty/poolparty/custom_resource.rb
+- lib/poolparty/poolparty/loggable.rb
+- lib/poolparty/poolparty/plugin.rb
+- lib/poolparty/poolparty/plugin_model.rb
+- lib/poolparty/poolparty/pool.rb
+- lib/poolparty/poolparty/resource.rb
+- lib/poolparty/poolparty/resources/class_package.rb
+- lib/poolparty/poolparty/resources/conditional.rb
+- lib/poolparty/poolparty/resources/cron.rb
+- lib/poolparty/poolparty/resources/custom_service.rb
+- lib/poolparty/poolparty/resources/directory.rb
+- lib/poolparty/poolparty/resources/exec.rb
+- lib/poolparty/poolparty/resources/file.rb
+- lib/poolparty/poolparty/resources/gem_package.rb
+- lib/poolparty/poolparty/resources/host.rb
+- lib/poolparty/poolparty/resources/mount.rb
+- lib/poolparty/poolparty/resources/package.rb
+- lib/poolparty/poolparty/resources/remote_file.rb
+- lib/poolparty/poolparty/resources/service.rb
+- lib/poolparty/poolparty/resources/sshkey.rb
+- lib/poolparty/poolparty/resources/symlink.rb
+- lib/poolparty/poolparty/resources/variable.rb
+- lib/poolparty/poolparty/script.rb
+- lib/poolparty/spec/core/string.rb
+- lib/poolparty/spec/matchers/a_spec_extensions_base.rb
+- lib/poolparty/spec/matchers/have_cron.rb
+- lib/poolparty/spec/matchers/have_deploydirectory.rb
+- lib/poolparty/spec/matchers/have_directory.rb
+- lib/poolparty/spec/matchers/have_exec.rb
+- lib/poolparty/spec/matchers/have_file.rb
+- lib/poolparty/spec/matchers/have_gempackage.rb
+- lib/poolparty/spec/matchers/have_git.rb
+- lib/poolparty/spec/matchers/have_host.rb
+- lib/poolparty/spec/matchers/have_mount.rb
+- lib/poolparty/spec/matchers/have_package.rb
+- lib/poolparty/spec/matchers/have_remotefile.rb
+- lib/poolparty/spec/matchers/have_rsyncmirror.rb
+- lib/poolparty/spec/matchers/have_service.rb
+- lib/poolparty/spec/matchers/have_sshkey.rb
+- lib/poolparty/spec/matchers/have_symlink.rb
+- lib/poolparty/spec/matchers/have_variable.rb
+- lib/poolparty/spec/spec/dynamic_matchers.rb
+- lib/poolparty/spec/spec/ensure_matchers_exist.rb
+- lib/poolparty/spec/templates/have_base.rb
 - lib/poolparty/templates/authkeys
 - lib/poolparty/templates/cib.xml
 - lib/poolparty/templates/gem
 - lib/poolparty/templates/ha.cf
 - lib/poolparty/templates/haproxy.conf
 - lib/poolparty/templates/haresources
+- lib/poolparty/templates/logd.cf
 - lib/poolparty/templates/messenger/client/log-run.erb
 - lib/poolparty/templates/messenger/client/run.erb
 - lib/poolparty/templates/messenger/master/log-run.erb
@@ -436,7 +414,7 @@ files:
 - lib/poolparty/version.rb
 - lib/poolpartycl.rb
 - lib/poolpartyspec.rb
-- log/pool.logs
+- log/pool.log
 - poolparty.gemspec
 - script/destroy
 - script/generate
@@ -509,6 +487,7 @@ files:
 - spec/poolparty/pool/test_plugins/virtual_host_template.erb
 - spec/poolparty/pool/test_plugins/webserver.rb
 - spec/poolparty/poolparty_spec.rb
+- spec/poolparty/spec/core/string_spec.rb
 - spec/poolparty/spec_helper.rb
 - tasks/cloud.rake
 - tasks/deployment.rake
@@ -532,7 +511,7 @@ files:
 has_rdoc: true
 homepage: http://poolparty.rubyforge.org
 post_install_message: |-
-  Get ready to jump in the pool, you just installed PoolParty! (Updated at 16:20 11/25/08)
+  Get ready to jump in the pool, you just installed PoolParty! (Updated at 09:44 12/05/08)
   
   To get started, run the generator:
   
@@ -571,7 +550,7 @@ required_rubygems_version: !ruby/object:Gem::Requirement
 requirements: []
 
 rubyforge_project: poolparty
-rubygems_version: 1.3.1
+rubygems_version: 1.2.0
 signing_key: 
 specification_version: 2
 summary: Self-healing, auto-scaling system administration, provisioning and maintaining tool that makes cloud computing fun and easy

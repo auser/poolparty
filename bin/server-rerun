@@ -18,7 +18,6 @@ include Remote
   with_cloud(cl, {:testing => o.testing}) do
     cmd = PoolParty::Remote::RemoteInstance.puppet_runner_command
     %x[#{cmd}] unless testing
-    puts cmd
   end  
   
 end

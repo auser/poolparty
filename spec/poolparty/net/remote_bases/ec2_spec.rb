@@ -16,6 +16,7 @@ class TestEC2Class
   def size; "small";end
   def security_group; "default";end
   def ebs_volume_id; "ebs_volume_id";end
+  def availabilty_zone; "us-east-1a";end
   def verbose
     false
   end

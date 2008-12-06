@@ -88,6 +88,9 @@ module PoolParty
         name = (i.zero? ? "master" : "node#{i}")
         list.select {|i| i.name == name }.first
       end
+      # A callback before the configuration task takes place
+      def before_configuration_tasks        
+      end
       def remote_instances_list        
         @containing_cloud = self
         # puts "> #{@containing_cloud} #{@describe_instances.nil?}"
