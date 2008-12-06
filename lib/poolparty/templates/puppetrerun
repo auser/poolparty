@@ -7,9 +7,16 @@ if [ $(/usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server mast
   echo "Clearing old certs"
   HN=`hostname`
   if [[ $HN == "master" ]]; then
-      /etc/init.d/puppetmaster stop;rm -rf /etc/poolparty/ssl;/etc/init.d/puppetmaster start
-      /usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master
+      rm /etc/poolparty/ssl/ca/signed/$HN*
+      rm /etc/poolparty/ssl/$HN*
+      if [$(/usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master)]; then        
+        echo "Run successfully" && exit 0
+        else
+        /etc/init.d/puppetmaster stop;rm -rf /etc/poolparty/ssl;/etc/init.d/puppetmaster start
+        /usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master
+      fi
     else
-      rm -rf /etc/poolparty/ssl/*;/usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master
+      rm /etc/poolparty/ssl/ca/signed/$HN*
+      /usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master
   fi
 fi

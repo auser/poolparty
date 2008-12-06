@@ -9,7 +9,7 @@ autorequire:
 bindir: bin
 cert_chain: []
 
-date: 2008-12-05 00:00:00 -08:00
+date: 2008-12-06 00:00:00 -08:00
 default_executable: 
 dependencies: 
 - !ruby/object:Gem::Dependency 
@@ -514,7 +514,7 @@ files:
 has_rdoc: true
 homepage: http://poolparty.rubyforge.org
 post_install_message: |-
-  Get ready to jump in the pool, you just installed PoolParty! (Updated at 23:39 12/05/08)
+  Get ready to jump in the pool, you just installed PoolParty! (Updated at 13:17 12/06/08)
   
   To get started, run the generator:
   
