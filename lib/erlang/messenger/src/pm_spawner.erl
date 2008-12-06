@@ -14,7 +14,7 @@
 %% API
 -export([start_link/0]).
 -export ([run_command/1, run_command/2, check_command/1]).
--export ([collect_output/2]).
+-export ([collect_output/2, collect_port/2]).
 
 %% gen_server callbacks
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
@@ -42,7 +42,7 @@ start_link() -> gen_server:start_link({global, ?MODULE}, ?MODULE, [], []).
 %% Description: Initiates the server
 %%--------------------------------------------------------------------
 init([]) ->
-	process_flag(trap_exit, true),
+	% process_flag(trap_exit, true),
   {ok, #state{
 		processes = ?DICT:new()
 	}}.
@@ -66,9 +66,8 @@ handle_call({check_command, Cmd}, _From, State) ->
 	case ?DICT:is_key(AtomCommand, State#state.processes) of
 		false -> Reply = nil;
 		true ->
-			[Port, Pid] = ?DICT:fetch(AtomCommand, State#state.processes),
-			?TRACE("Port", [Port]),
-			Reply = Pid
+			[_, Port] = ?DICT:fetch(AtomCommand, State#state.processes),
+			Reply = erlang:port_command(Port, collect)
 	end,
 	{reply, Reply, State};
 handle_call(_Request, _From, State) ->
@@ -115,32 +114,53 @@ code_change(_OldVsn, State, _Extra) ->
 % Quick helper for running commands
 run_command(Cmd) -> gen_server:call(server_location(), {run_command, Cmd}).
 check_command(Cmd) -> 
-	Command = lists:flatten(io_lib:format("sh ~s", [Cmd])),
+	Command = lists:flatten(io_lib:format("~s", [Cmd])),
 	gen_server:call(server_location(), {check_command, Command}).
 
 % Run the command, start up the 
 run_command(Cmd, State) ->
-	Command = lists:flatten(io_lib:format("sh ~s", [Cmd])),
+	Command = lists:flatten(io_lib:format("~s", [Cmd])),
 	Port = erlang:open_port({spawn, Command}, [stream, exit_status, stderr_to_stdout]),
-	Pid = spawn(fun() -> collect_output(Port, []) end),
+	Pid = spawn(fun() ->
+			collect_port(Port, [])
+		end),
+	Pid ! {command, run},
 	AtomCommand = erlang:list_to_atom(Command),
-	?TRACE("storing into state", [AtomCommand, Port, Pid]),
-	NewState = State#state{processes = ?DICT:store(Command, [Port, Pid], State#state.processes)},
+	Storage = [Pid, Port],
+	?TRACE("storing into state", [AtomCommand, Port]),
+	NewState = State#state{processes = ?DICT:store(AtomCommand, Storage, State#state.processes)},
 	{ok, NewState}.
 
+% Collect output for process with Port and Pid
+collect_port(Port, Output) ->
+	?TRACE("in collect_port with ", [Port, Output]),
+	receive
+		{command, collect} ->
+			?TRACE("received message to collect the output", [Output]),
+			catch erlang:port_close(Port),
+			Output;
+		{command, run} ->
+			?TRACE("received message to run the process", [Output]),
+			Out = collect_output(Port, []),
+			collect_port(Port, Out);
+		Msg ->
+			?TRACE("received unknown message", [Msg]),
+			collect_port(Port, Output)
+	end.
+
 collect_output(Port, Acc) ->
-		receive
-			{Port, {data, Data}} ->
-				collect_output(Port, [Data | Acc]);
-			{Port, {exit_status, 0}} ->
-				catch erlang:port_close(Port),
-				lists:flatten(lists:reverse(Acc));
-			{Port, {exit_status, _}} ->
-				catch erlang:port_close(Port),
-				Output = lists:flatten(lists:reverse(Acc)),	
-				{error, Output};
-			_ ->
-				collect_output(Port, Acc)				
+	receive
+		{Port, {data, Data}} ->
+			collect_output(Port, [Data | Acc]);
+		{Port, {exit_status, 0}} ->
+			catch erlang:port_close(Port),
+			lists:flatten(lists:reverse(Acc));
+		{Port, {exit_status, _}} ->
+			catch erlang:port_close(Port),
+			Output = lists:flatten(lists:reverse(Acc)),	
+			{error, Output};
+		_ ->
+			collect_output(Port, Acc)
 	end.
 
 server_location() -> global:whereis_name(?SERVER).
