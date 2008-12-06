@@ -356,6 +356,9 @@ fi
           
           cp #{Base.remote_storage_path}/#{Base.template_directory}/puppetrerun /usr/bin/puppetrerun
           chmod +x /usr/bin/puppetrerun
+          
+          cp #{Base.remote_storage_path}/#{Base.template_directory}/puppetcleaner /usr/bin/puppetcleaner
+          chmod +x /usr/bin/puppetcleaner
         EOS
       end
     end
