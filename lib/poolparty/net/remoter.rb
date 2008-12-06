@@ -7,8 +7,13 @@ require File.dirname(__FILE__) + "/../helpers/provisioner_base"
 module PoolParty
   module Remote
     module Remoter
-      def rsync_storage_files_to_command(remote_instance)        
+      def rsync_storage_files_to_command(remote_instance)
+        #TODO: rsync_to_command("#{Base.storage_directory}/", Base.remote_storage_path, remote_storage_path) if remote_instance
         "#{rsync_command} #{Base.storage_directory}/ #{remote_instance.ip}:#{Base.remote_storage_path}" if remote_instance
+      end
+      # rsync a file to a node.  By default to the master node.
+      def rsync_to_command(source, target=source, remote_instance=master)
+        "#{rsync_command} #{source} #{remote_instance.ip}:#{target}"
       end
       def run_command_on_command(cmd="ls -l", remote_instance=nil)
         vputs "Running #{cmd} on #{remote_instance.name == %x[hostname].chomp ? "self (master)" : "#{remote_instance.name}"}"
@@ -40,6 +45,13 @@ module PoolParty
       def remote_rsync_command
         "rsync -azP --exclude cache -e '#{remote_ssh_string}'"
       end
+      
+      
+      # def scp_command(source, dest=target, remote_instance=master)
+      #   #TODO: check if source is Directory and add -r if it is
+      #   "scp #{source} #{remote_instance.ip}:#{dest} #{ssh_array.join(' ')}"
+      # end
+      
       # Get the names of the nodes. Mainly used for puppet templating
       def list_of_node_names(options={})
         list_of_running_instances.collect {|ri| ri.name }
@@ -268,6 +280,13 @@ module PoolParty
       # Before shutdown callback
       # This is called before the cloud is contracted
       def before_shutdown
+      end
+      
+      # Rsync a file or directory to a node.  Rsync to master by default
+      def rsync_to(source, target=source, num=0)
+        str = "#{rsync_to_command(source, target, get_instance_by_number( num ))}"
+        vputs "Running: #{str}"
+        verbose ?  Kernel.system(str) : hide_output {Kernel.system str}
       end
       
       # Rsync command to the instance
