@@ -184,7 +184,7 @@ cp #{Base.remote_storage_path}/poolparty.pp /etc/puppet/manifests/classes/poolpa
         <<-EOS
 echo "Running puppet manifest"
 /usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master
-/usr/bin/puppetcleaner
+/usr/bin/puppetcleaner master
         EOS
       end
     end
