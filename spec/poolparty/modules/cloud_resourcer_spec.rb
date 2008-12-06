@@ -35,6 +35,11 @@ describe "CloudResourcer" do
     @tc.instances 4..10
     @tc.minimum_instances.should == 4
   end
+  it "should be able to accept a Fixnum and set the minimum_instances and maximum_instances" do
+    @tc.instances 1
+    @tc.minimum_instances.should == 1
+    @tc.maximum_instances.should == 1
+  end
   it "should set the max to the maximum instances to the last" do
     @tc.instances 4..10
     @tc.maximum_instances.should == 10
