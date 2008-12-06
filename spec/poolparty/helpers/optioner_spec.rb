@@ -27,6 +27,20 @@ describe "Option Parser" do
       end
     end
   end
+  
+  describe "parse_args" do
+    before(:each) do
+      @op = PoolParty::Optioner.new(%w( -v -i 1 five six -x), {:abstract => true, :parse_options => false})
+    end
+    it "should have an array of default boolean args" do
+      @op.boolean_args.sort.should == ['-V', '-h', '-t', '-v']
+    end
+    it "should split ARGV into flagged and unflagged arg arrays" do
+      @op.unflagged_args.sort.sort.should ==  ["five", "six"]
+      @op.flagged_args.should == ["-v", "-i", "1", "-x"]
+    end
+  end
+  
   it "should be able to take a block and set some options on the block" do
     PoolParty::Optioner.new(["-w"], {:abstract => false, :load_pools => false}) do |opts, optioner|
       opts.on('-w', '--wee')    { optioner.wee "wee" }

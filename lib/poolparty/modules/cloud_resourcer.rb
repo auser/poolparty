@@ -23,11 +23,17 @@ module PoolParty
       self.run_in_context @stored_block if @stored_block
     end
     
-    # Set instances with a range
-    def instances(arg)
-      if arg.is_a?(Range)
+    # Set instances with a range or a number
+    def instances(arg)      
+      case arg
+      when Range
         minimum_instances arg.first
         maximum_instances arg.last
+      when Fixnum
+        minimum_instances arg
+        maximum_instances arg
+      else
+        raise SpecException.new("Don't know how to handle instances cloud input #{arg}")
       end
     end
     
