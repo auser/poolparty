@@ -12,8 +12,9 @@
 -include_lib("../include/defines.hrl").
 
 %% API
--export([start_link/1, start_link/0]).
--export ([run_command/1, collect_output/2]).
+-export([start_link/0]).
+-export ([run_command/1, run_command/2, check_command/1]).
+-export ([collect_output/2]).
 
 %% gen_server callbacks
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
@@ -55,13 +56,21 @@ init([]) ->
 %%                                      {stop, Reason, State}
 %% Description: Handling call messages
 %%--------------------------------------------------------------------
+handle_call({run_command, Cmds}, _From, State) ->
+	{ok, NewState} = run_command(Cmds, State),
+	?TRACE("storing into state from call", [Cmds, NewState]),
+	{reply, ok, NewState};
 handle_call({check_command, Cmd}, _From, State) ->
-	case ?DICT:is_key(Name, State#state.processes) of
+	AtomCommand = erlang:list_to_atom(Cmd),
+	?TRACE("is_key for ", [AtomCommand, ?DICT:is_key(AtomCommand, State#state.processes)]),
+	case ?DICT:is_key(AtomCommand, State#state.processes) of
 		false -> Reply = nil;
 		true ->
-			[Port, Pid] = ?DICT:fetch(Cmd, State#state.processes),
+			[Port, Pid] = ?DICT:fetch(AtomCommand, State#state.processes),
+			?TRACE("Port", [Port]),
+			Reply = Pid
 	end,
-	{reply, Reply, NewState};
+	{reply, Reply, State};
 handle_call(_Request, _From, State) ->
 	Reply = ok,
 	{reply, Reply, State}.
@@ -72,7 +81,7 @@ handle_call(_Request, _From, State) ->
 %% Description: Handling cast messages
 %%--------------------------------------------------------------------
 handle_cast({run_command, Cmd}, State) ->
-	NewState = run_command(Cmd, State),
+	{ok, NewState} = run_command(Cmd, State),
 	{noreply, NewState};
 handle_cast(_Msg, State) ->
   {noreply, State}.
@@ -96,13 +105,28 @@ handle_info(_Info, State) ->
 terminate(_Reason, _State) ->
   ok.
 
+%%--------------------------------------------------------------------
+%% Func: code_change(OldVsn, State, Extra) -> {ok, NewState}
+%% Description: Convert process state when code is changed
+%%--------------------------------------------------------------------
+code_change(_OldVsn, State, _Extra) ->
+  {ok, State}.
+
+% Quick helper for running commands
+run_command(Cmd) -> gen_server:call(server_location(), {run_command, Cmd}).
+check_command(Cmd) -> 
+	Command = lists:flatten(io_lib:format("sh ~s", [Cmd])),
+	gen_server:call(server_location(), {check_command, Command}).
+
 % Run the command, start up the 
 run_command(Cmd, State) ->
-	Command = lists:flatten(io:lib:format("sh ~s", [Cmd])),
+	Command = lists:flatten(io_lib:format("sh ~s", [Cmd])),
 	Port = erlang:open_port({spawn, Command}, [stream, exit_status, stderr_to_stdout]),
 	Pid = spawn(fun() -> collect_output(Port, []) end),
-	NewState = State#state{processes = ?DICT:store(Command, [Port, Pid], State#state.processes)}
-	NewState.
+	AtomCommand = erlang:list_to_atom(Command),
+	?TRACE("storing into state", [AtomCommand, Port, Pid]),
+	NewState = State#state{processes = ?DICT:store(Command, [Port, Pid], State#state.processes)},
+	{ok, NewState}.
 
 collect_output(Port, Acc) ->
 		receive
@@ -118,3 +142,5 @@ collect_output(Port, Acc) ->
 			_ ->
 				collect_output(Port, Acc)				
 	end.
+
+server_location() -> global:whereis_name(?SERVER).

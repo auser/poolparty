@@ -1,21 +1,5 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
-include PoolParty::Remote
-
-def valid_rules?(*args)
-  false
-end
-
-class TestClass
-  include CloudResourcer
-  include Remote
-  using :ec2
-  attr_accessor :parent
-    
-  def keypair
-    "fake_keypair"
-  end
-end
 describe "Remoter" do
   before(:each) do
     setup
@@ -90,6 +74,32 @@ describe "Remoter" do
     end
     after(:each) do
       @tc.launch_and_configure_master!
+    end
+  end
+  describe "expansions and contractions" do
+    before(:each) do
+      @tc = TestClass.new
+      stub_list_from_remote_for @tc # sets the list of instances to 2
+    end
+    describe "are_too_few_instances_running?" do
+      it "should be false if the number of running instances is larger than the minimum instances" do
+        @tc.stub!(:minimum_instances).and_return 1
+        @tc.are_too_few_instances_running?.should == false
+      end
+      it "should be true if the number of running instances is smaller than the minimum instances" do
+        @tc.stub!(:minimum_instances).and_return 5
+        @tc.are_too_few_instances_running?.should == true
+      end
+    end
+    describe "are_too_many_instances_running?" do
+      it "should be true if the number of running instances is larger than the maximum instances" do
+        @tc.stub!(:maximum_instances).and_return 1
+        @tc.are_too_many_instances_running?.should == true
+      end
+      it "should be false if the number of running instances is smaller than the maximum instances" do
+        @tc.stub!(:maximum_instances).and_return 5
+        @tc.are_too_many_instances_running?.should == false
+      end
     end
   end
 

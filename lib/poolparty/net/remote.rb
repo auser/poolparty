@@ -8,8 +8,8 @@ module PoolParty
     
     def using(t)
       @cloud = self
-      if available_bases.include?(t.to_sym)
-        unless using_remoter? || t.nil?
+      if t && available_bases.include?(t.to_sym)
+        unless using_remoter?
           self.class.send :attr_reader, :remote_base
           self.class.send :attr_reader, :parent_cloud
           mod = "#{t}".preserved_module_constant

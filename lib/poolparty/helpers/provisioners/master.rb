@@ -24,7 +24,6 @@ module PoolParty
           setup_fileserver,
           setup_autosigning,
           install_poolparty,
-          setup_poolparty,
           restart_puppetmaster,
           run_first_time,
           create_local_node,
@@ -35,6 +34,7 @@ module PoolParty
         [
           create_local_node,
           move_templates,
+          setup_poolparty,
           create_poolparty_manifest,
           restart_puppetd
         ]
@@ -91,7 +91,7 @@ echo "*" > /etc/puppet/autosign.conf
         <<-EOS
 echo "Setting the poolparty configuration"
 cp #{Base.remote_storage_path}/#{Base.key_file_locations.first} "#{Base.base_config_directory}/.ppkeys"
-cp #{Base.remote_storage_path}/#{Base.default_specfile_name} #{Base.base_config_directory}/#{Base.default_specfile_name}
+mv #{Base.remote_storage_path}/#{Base.default_specfile_name} #{Base.base_config_directory}/
         EOS
       end
             
