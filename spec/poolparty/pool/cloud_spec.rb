@@ -302,6 +302,7 @@ describe "Cloud" do
           describe "prepare_for_configuration" do
             before(:each) do
               @cloud.stub!(:copy_ssh_key).and_return true
+              @cloud.stub!(:before_configuration_tasks).and_return []
             end
             it "should make_base_directory" do
               @cloud.should_receive(:make_base_directory).at_least(1)
@@ -311,6 +312,9 @@ describe "Cloud" do
             end
             it "should copy_custom_monitors" do
               @cloud.should_receive(:copy_custom_monitors).once
+            end
+            it "should call before_configuration_tasks callback" do
+              @cloud.should_receive(:before_configuration_tasks).once
             end
             describe "copy_custom_monitors" do
               before(:each) do                

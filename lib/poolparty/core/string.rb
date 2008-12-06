@@ -22,7 +22,7 @@ class String
     self.strip.split(/\n/).join(" && ")
   end
   def top_level_class
-    self.split("::")[-1].underscore.downcase rescue self
+    self.split("::")[-1].underscore.downcase rescue self.class.to_s
   end
   def sanitize
     self.gsub(/[ \.\/\-]*/, '')

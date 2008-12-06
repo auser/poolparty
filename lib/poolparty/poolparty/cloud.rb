@@ -48,12 +48,15 @@ module PoolParty
         plugin_directory
                 
         p = pare.is_a?(PoolParty::Pool::Pool) ? pare : nil
-        run_setup(p, &block)
+        store_block(&block)
+        run_setup(p, &block)        
         
         # set_parent(parent) if parent && !@parent
         # self.run_in_context parent, &block if block
         setup_defaults
-        reset_remoter_base!        
+        realize_plugins!
+        reset! # reset the clouds
+        reset_remoter_base!
       end
       
       def setup_defaults
@@ -94,6 +97,7 @@ module PoolParty
         Script.save!(self)
         # not my favorite...
         copy_ssh_key
+        before_configuration_tasks
       end
       
       # Copy the ssh keys to the storage directory in preparation for
@@ -209,12 +213,12 @@ module PoolParty
       # Also note that there is no block associated. This is because we have written
       # all that is necessary in a method called enable
       # which is called when there is no block
-      def add_poolparty_base_requirements        
+      def add_poolparty_base_requirements
         heartbeat
         haproxy
         ruby
         poolparty_base_packages
-        realize_plugins!
+        realize_plugins!(true) # Force realizing of the plugins
       end
       
       def other_clouds

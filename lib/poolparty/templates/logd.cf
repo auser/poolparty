@@ -1,0 +1,42 @@
+#	File to write debug messages to
+#	Default: /var/log/ha-debug
+#debugfile /var/log/ha-debug
+
+#
+#
+# 	File to write other messages to
+#	Default: /var/log/ha-log
+#logfile	/var/log/ha-log
+
+#
+#
+#	Facility to use for syslog()/logger 
+#	Default: daemon
+logfacility	daemon
+
+
+#	Entity to be shown at beginning of a message
+# 	for logging daemon
+# 	Default: "logd"
+#entity logd
+
+
+#	Do we register to apphbd
+#	Default: no
+#useapphbd no
+
+#	There are two processes running for logging daemon
+#  		1. parent process which reads messages from all client channels 
+#  		and writes them to the child process 
+#  
+#  		2. the child process which reads messages from the parent process through IPC
+#  		and writes them to syslog/disk
+
+
+#	set the send queue length from the parent process to the child process
+#
+#sendqlen 256 
+
+#	set the recv queue length in child process
+#
+#recvqlen 256

@@ -2,8 +2,14 @@
 
 . /etc/profile
 if [ $(/usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master)]; then
-  echo "Run successfully"
+  echo "Run successfully" && exit 0
   else
-  ps aux | grep puppetmaster | awk '{print $2}' | xargs kill;rm -rf /etc/puppet/ssl;puppetmasterd --verbose;/etc/init.d/puppetmaster start
-  /usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master
+  echo "Clearing old certs"
+  HN=`hostname`
+  if [[ $HN == "master" ]]; then
+      ps aux | grep puppetmaster | awk '{print $2}' | xargs kill;rm -rf /etc/poolparty/ssl;/etc/init.d/puppetmaster start
+      /etc/init.d/puppetmaster start && /usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master
+    else
+      rm -rf /etc/poolparty/ssl/*;/usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master
+  fi
 fi
