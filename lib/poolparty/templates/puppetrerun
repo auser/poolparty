@@ -7,8 +7,8 @@ if [ $(/usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server mast
   echo "Clearing old certs"
   HN=`hostname`
   if [[ $HN == "master" ]]; then
-      ps aux | grep puppetmaster | awk '{print $2}' | xargs kill;rm -rf /etc/poolparty/ssl;/etc/init.d/puppetmaster start
-      /etc/init.d/puppetmaster start && /usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master
+      /etc/init.d/puppetmaster stop;rm -rf /etc/poolparty/ssl;/etc/init.d/puppetmaster start
+      /usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master
     else
       rm -rf /etc/poolparty/ssl/*;/usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master
   fi
