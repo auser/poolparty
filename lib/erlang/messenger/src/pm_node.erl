@@ -133,7 +133,7 @@ init(Args) ->
 %% Description: Handling call messages
 %%--------------------------------------------------------------------
 handle_call({run_command, Cmd}, _From, State) ->
-	Reply = os:cmd(". /etc/profile && server-fire-cmd \""++Cmd++"\""),
+	Reply = os:cmd(Cmd),
 	{reply, Reply, State};
 handle_call({update_load, Type, Load}, _From, State) ->
 	{Type, NewState} = store_load_for_type(Type, Load, State),

@@ -72,6 +72,7 @@ module PoolParty
           mode 744
           template File.join(File.dirname(__FILE__), "..", "templates/puppetrerun")
         end
+        
         has_remotefile(:name => "/usr/bin/puppetcleaner") do
           mode 744
           template File.join(File.dirname(__FILE__), "..", "templates/puppetcleaner")
@@ -80,10 +81,10 @@ module PoolParty
         execute_on_master do
           has_exec(:name => "update_hosts", :command => ". /etc/profile && server-update-hosts -n #{cloud.name}")
           
-          has_cron(:name => "master puppetd runner", :user => Base.user, :minute => "*/15") do
-            requires get_gempackage("poolparty")
-            command(PoolParty::Remote::RemoteInstance.puppet_runner_command)
-          end
+          # has_cron(:name => "master puppetd runner", :user => Base.user, :minute => "*/15") do
+          #   requires get_gempackage("poolparty")
+          #   command(PoolParty::Remote::RemoteInstance.puppet_runner_command)
+          # end
           has_cron(:name => "Load handler", :user => Base.user, :minute => "*/4") do
             requires get_gempackage("poolparty")
             command(". /etc/profile && cloud-handle-load -n #{cloud.name}")
