@@ -26,11 +26,11 @@ module PoolParty
       path = ::File.join( Base.storage_directory, dirname )
       make_base_path path
     end
-    def write_to_file_in_storage_directory(file, str, preceded="", &block)
+    def write_to_file_in_storage_directory(file, str="", preceded="", &block)
       path = ::File.join( Base.storage_directory, preceded, ::File.basename(file) )
       write_to_file(path, str, &block)
     end
-    def write_to_file(file, str, preceded="", &block)
+    def write_to_file(file, str="", preceded="", &block)
       path = ::File.join( Base.storage_directory, preceded, ::File.basename(file) )
       make_base_path( Base.storage_directory )
       ::File.open(path, "w+") do |f|

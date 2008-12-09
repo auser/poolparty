@@ -5,8 +5,8 @@ module PoolParty
       
       default_options({
         :ensure => "file",
-        :mode => 644,
-        :owner => "#{Base.user}"
+        :mode => 644
+        # :owner => "#{Base.user}"
       })
       
       def disallowed_options
