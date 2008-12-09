@@ -1,4 +1,4 @@
-module PoolParty  
+module PoolParty
   module Extra
     class Deployments
 
@@ -19,10 +19,11 @@ module PoolParty
         end
         
         def include_deployments(dir)
-          return nil unless ::File.dir? dir
+          return nil unless ::File.directory? dir
           Dir["#{dir}/*"].each do |fi|
             include_deployment fi
           end
+          dir
         end
       end
     end    
