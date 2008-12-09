@@ -98,7 +98,7 @@ module PoolParty
           
           before_install(@instance)
           
-          process_clean_reconfigure_for!(@instance, testing)
+          # process_clean_reconfigure_for!(@instance, testing)
           
           vputs "Logging in and running provisioning on #{@instance.name}"
           # /bin/rm install_#{name}.sh
