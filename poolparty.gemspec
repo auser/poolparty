@@ -1,7 +1,7 @@
 --- !ruby/object:Gem::Specification 
 name: poolparty
 version: !ruby/object:Gem::Version 
-  version: 0.2.79
+  version: 0.2.80
 platform: ruby
 authors: 
 - Ari Lerner
@@ -9,7 +9,7 @@ autorequire:
 bindir: bin
 cert_chain: []
 
-date: 2008-12-06 00:00:00 -08:00
+date: 2008-12-09 00:00:00 -08:00
 default_executable: 
 dependencies: 
 - !ruby/object:Gem::Dependency 
@@ -70,6 +70,7 @@ executables:
 - cloud-refresh
 - cloud-rsync
 - cloud-run
+- cloud-spec
 - cloud-ssh
 - cloud-start
 - cloud-stats
@@ -130,6 +131,7 @@ files:
 - bin/cloud-refresh
 - bin/cloud-rsync
 - bin/cloud-run
+- bin/cloud-spec
 - bin/cloud-ssh
 - bin/cloud-start
 - bin/cloud-stats
@@ -264,7 +266,6 @@ files:
 - lib/erlang/messenger/src/master_app.erl
 - lib/erlang/messenger/src/node_app.erl
 - lib/erlang/messenger/src/pm_client.erl
-- lib/erlang/messenger/src/pm_client_old.erl
 - lib/erlang/messenger/src/pm_client_supervisor.erl
 - lib/erlang/messenger/src/pm_cluster.erl
 - lib/erlang/messenger/src/pm_event_manager.erl
@@ -311,14 +312,12 @@ files:
 - lib/poolparty/exceptions/SpecException.rb
 - lib/poolparty/exceptions/TemplateNotFound.rb
 - lib/poolparty/exceptions/UnacceptableCommand.rb
+- lib/poolparty/extra/deployments.rb
 - lib/poolparty/helpers/binary.rb
 - lib/poolparty/helpers/console.rb
 - lib/poolparty/helpers/display.rb
 - lib/poolparty/helpers/nice_printer.rb
 - lib/poolparty/helpers/optioner.rb
-- lib/poolparty/helpers/provisioner_base.rb
-- lib/poolparty/helpers/provisioners/master.rb
-- lib/poolparty/helpers/provisioners/slave.rb
 - lib/poolparty/helpers/ruberl.rb
 - lib/poolparty/modules/cloud_dsl.rb
 - lib/poolparty/modules/cloud_resourcer.rb
@@ -369,11 +368,15 @@ files:
 - lib/poolparty/poolparty/resources/mount.rb
 - lib/poolparty/poolparty/resources/package.rb
 - lib/poolparty/poolparty/resources/remote_file.rb
+- lib/poolparty/poolparty/resources/remote_user.rb
 - lib/poolparty/poolparty/resources/service.rb
 - lib/poolparty/poolparty/resources/sshkey.rb
 - lib/poolparty/poolparty/resources/symlink.rb
 - lib/poolparty/poolparty/resources/variable.rb
 - lib/poolparty/poolparty/script.rb
+- lib/poolparty/provisioners/provisioner_base.rb
+- lib/poolparty/provisioners/provisioners/master.rb
+- lib/poolparty/provisioners/provisioners/slave.rb
 - lib/poolparty/spec/core/string.rb
 - lib/poolparty/spec/matchers/a_spec_extensions_base.rb
 - lib/poolparty/spec/matchers/have_cron.rb
@@ -437,6 +440,7 @@ files:
 - spec/poolparty/core/string_spec.rb
 - spec/poolparty/core/time_spec.rb
 - spec/poolparty/dependency_resolutions/base_spec.rb
+- spec/poolparty/extra/deployments_spec.rb
 - spec/poolparty/helpers/binary_spec.rb
 - spec/poolparty/helpers/display_spec.rb
 - spec/poolparty/helpers/optioner_spec.rb
@@ -461,35 +465,36 @@ files:
 - spec/poolparty/plugins/git_spec.rb
 - spec/poolparty/plugins/line_spec.rb
 - spec/poolparty/plugins/svn_spec.rb
-- spec/poolparty/pool/base_spec.rb
-- spec/poolparty/pool/cloud_spec.rb
-- spec/poolparty/pool/configurers/files/ruby_basic.rb
-- spec/poolparty/pool/configurers/files/ruby_plugins.rb
-- spec/poolparty/pool/configurers/ruby_spec.rb
-- spec/poolparty/pool/custom_resource_spec.rb
-- spec/poolparty/pool/example_spec.rb
-- spec/poolparty/pool/plugin_model_spec.rb
-- spec/poolparty/pool/plugin_spec.rb
-- spec/poolparty/pool/pool_spec.rb
-- spec/poolparty/pool/resource_spec.rb
-- spec/poolparty/pool/resources/class_package_spec.rb
-- spec/poolparty/pool/resources/conditional_spec.rb
-- spec/poolparty/pool/resources/cron_spec.rb
-- spec/poolparty/pool/resources/directory_spec.rb
-- spec/poolparty/pool/resources/exec_spec.rb
-- spec/poolparty/pool/resources/file_spec.rb
-- spec/poolparty/pool/resources/gem_spec.rb
-- spec/poolparty/pool/resources/host_spec.rb
-- spec/poolparty/pool/resources/package_spec.rb
-- spec/poolparty/pool/resources/remote_file_spec.rb
-- spec/poolparty/pool/resources/service_spec.rb
-- spec/poolparty/pool/resources/sshkey_spec.rb
-- spec/poolparty/pool/resources/symlink_spec.rb
-- spec/poolparty/pool/resources/variable_spec.rb
-- spec/poolparty/pool/script_spec.rb
-- spec/poolparty/pool/test_plugins/sshkey_test
-- spec/poolparty/pool/test_plugins/virtual_host_template.erb
-- spec/poolparty/pool/test_plugins/webserver.rb
+- spec/poolparty/poolparty/base_spec.rb
+- spec/poolparty/poolparty/cloud_spec.rb
+- spec/poolparty/poolparty/configurers/files/ruby_basic.rb
+- spec/poolparty/poolparty/configurers/files/ruby_plugins.rb
+- spec/poolparty/poolparty/configurers/ruby_spec.rb
+- spec/poolparty/poolparty/custom_resource_spec.rb
+- spec/poolparty/poolparty/example_spec.rb
+- spec/poolparty/poolparty/plugin_model_spec.rb
+- spec/poolparty/poolparty/plugin_spec.rb
+- spec/poolparty/poolparty/pool_spec.rb
+- spec/poolparty/poolparty/resource_spec.rb
+- spec/poolparty/poolparty/resources/class_package_spec.rb
+- spec/poolparty/poolparty/resources/conditional_spec.rb
+- spec/poolparty/poolparty/resources/cron_spec.rb
+- spec/poolparty/poolparty/resources/directory_spec.rb
+- spec/poolparty/poolparty/resources/exec_spec.rb
+- spec/poolparty/poolparty/resources/file_spec.rb
+- spec/poolparty/poolparty/resources/gem_spec.rb
+- spec/poolparty/poolparty/resources/host_spec.rb
+- spec/poolparty/poolparty/resources/package_spec.rb
+- spec/poolparty/poolparty/resources/remote_file_spec.rb
+- spec/poolparty/poolparty/resources/service_spec.rb
+- spec/poolparty/poolparty/resources/sshkey_spec.rb
+- spec/poolparty/poolparty/resources/symlink_spec.rb
+- spec/poolparty/poolparty/resources/user_spec.rb
+- spec/poolparty/poolparty/resources/variable_spec.rb
+- spec/poolparty/poolparty/script_spec.rb
+- spec/poolparty/poolparty/test_plugins/sshkey_test
+- spec/poolparty/poolparty/test_plugins/virtual_host_template.erb
+- spec/poolparty/poolparty/test_plugins/webserver.rb
 - spec/poolparty/poolparty_spec.rb
 - spec/poolparty/spec/core/string_spec.rb
 - spec/poolparty/spec_helper.rb
@@ -506,6 +511,7 @@ files:
 - test/test_helper.rb
 - test/test_pool_spec_generator.rb
 - test/test_poolparty.rb
+- website/index.html
 - website/index.txt
 - website/javascripts/rounded_corners_lite.inc.js
 - website/stylesheets/code.css
@@ -514,7 +520,7 @@ files:
 has_rdoc: true
 homepage: http://poolparty.rubyforge.org
 post_install_message: |-
-  Get ready to jump in the pool, you just installed PoolParty! (Updated at 13:46 12/06/08)
+  Get ready to jump in the pool, you just installed PoolParty! (Updated at 15:39 12/09/08)
   
   To get started, run the generator:
   
