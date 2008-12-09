@@ -54,9 +54,9 @@ module PoolParty
         # set_parent(parent) if parent && !@parent
         # self.run_in_context parent, &block if block
         setup_defaults
-        realize_plugins!
-        reset! # reset the clouds
-        reset_remoter_base!
+        # realize_plugins!
+        # reset! # reset the clouds
+        # reset_remoter_base!
       end
       
       def setup_defaults
@@ -79,7 +79,7 @@ module PoolParty
       def generate_keypair(*args)
         options[:keypair] = "#{parent && parent.is_a?(PoolParty::Pool::Pool) ? parent.name : "poolparty"}_#{name}" unless has_keypair?
       end
-      
+            
       # Prepare to send the new configuration to the instances
       # First, let's make sure that our base directory is made
       # Then copy the templates that have no other reference in
@@ -97,6 +97,7 @@ module PoolParty
         Script.save!(self)
         # not my favorite...
         copy_ssh_key
+        write_unique_cookie
         before_configuration_tasks
       end
       
@@ -110,6 +111,20 @@ module PoolParty
       # that is specific to this cloud
       def store_keys_in_file
         Base.store_keys_in_file_for(self)
+      end
+      
+      # Let's write the cookie into the tmp path
+      def write_unique_cookie
+        write_to_file_in_storage_directory("cookie") do
+          generate_unique_cookie_string
+        end
+      end
+      
+      # Generate a unique cookie string so that our erlang modules can 
+      # talk to each other safely. This is based off the keypair
+      # and the name of the cloud
+      def generate_unique_cookie_string
+        Digest::SHA256.hexdigest("#{full_keypair_name}#{name}")
       end
       
       # Build the new poolparty manifest
@@ -201,10 +216,10 @@ module PoolParty
       # they need a few options to run, these are the required options
       # to be saved on the remote "master" machine
       def minimum_runnable_options
-        [
-          :keypair, :minimum_instances, :maximum_instances, :ami, :security_group,
+        ([
+          :keypair, :minimum_instances, :maximum_instances,
           :expand_when, :contract_when, :set_master_ip_to
-        ]
+        ]<< custom_minimum_runnable_options).flatten
       end
       
       # Add all the poolparty requirements here

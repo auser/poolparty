@@ -359,6 +359,9 @@ fi
           
           cp #{Base.remote_storage_path}/#{Base.template_directory}/puppetcleaner /usr/bin/puppetcleaner
           chmod +x /usr/bin/puppetcleaner
+          
+          mv #{Base.remote_storage_path}/cookie ~/.erlang.cookie
+          chmod 400 ~/.erlang.cookie
         EOS
       end
     end

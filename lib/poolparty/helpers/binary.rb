@@ -13,6 +13,15 @@ module PoolParty
     end
   end
   
+  def print_with_nice_printer(header=nil, strs=[])
+    returning NicePrinter.new do |printer|
+      printer.header
+      printer.center(header) if header
+      strs.each {|st| printer << st if st}
+      printer.footer
+    end.print
+  end
+  
   def pool_specfile
     $pool_specfile
   end

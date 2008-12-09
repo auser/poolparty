@@ -140,6 +140,13 @@ module PoolParty
       # Callback after loaded
       def loaded_remoter_base        
       end
+      
+      # Custom minimum runnable options
+      # Extend the minimum runnable options that are necessary
+      # for poolparty to run on the remote base
+      def custom_minimum_runnable_options
+        []
+      end
             
       # Custom installation tasks
       # Allow the remoter bases to attach their own tasks on the 
