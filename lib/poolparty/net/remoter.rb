@@ -2,8 +2,6 @@
   This module is included by the remote module and defines the remoting methods
   that the clouds can use to rsync or run remote commands
 =end
-require File.dirname(__FILE__) + "/../helpers/provisioner_base"
-
 module PoolParty
   module Remote
     module Remoter

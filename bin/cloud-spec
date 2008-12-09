@@ -19,19 +19,20 @@ end
 o.loaded_clouds.each do |cloud|
   with_cloud(cloud) do
     puts "Are you sure you want to live test?"
-    body = ["normal charges for running instances will apply"]
+    body = ["Normal charges for running instances will apply"]
     body << "as this will run instances"
-    body.each {|st| puts st}
+    body.each {|st| puts "\t#{st}"}
     print "(y|n): "
     input = gets.downcase.chomp
     do_test = input.downcase == "y" ? true : false
     if do_test
       case testtype
       when "launch"
-      else
+      when nil
         print_with_nice_printer("Starting live specing cloud #{name}")      
         # hide_output {launch_and_configure_master!}
         print_with_nice_printer("Waiting for cloud to provision")
+        
       end
     end
   end
