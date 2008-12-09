@@ -181,10 +181,10 @@ cp #{Base.remote_storage_path}/poolparty.pp /etc/puppet/manifests/classes/poolpa
             
       def restart_puppetd
         # /usr/bin/puppetrerun
+        # /usr/bin/puppetcleaner master
         <<-EOS
 echo "Running puppet manifest"
-/usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master
-/usr/bin/puppetcleaner master
+/usr/sbin/puppetd --onetime --daemonize --logdest syslog --server master;/usr/sbin/puppetd --onetime --daemonize --logdest syslog --server master
         EOS
       end
     end
