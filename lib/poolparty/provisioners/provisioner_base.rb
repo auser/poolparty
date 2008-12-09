@@ -154,7 +154,7 @@ module PoolParty
             s << "puppetca --clean #{instance.name}.compute-1.internal 2>&1 > /dev/null;"
             s << "puppetca --clean #{instance.name}.ec2.internal 2>&1 > /dev/null"
           end
-          @cloud.run_command_on(str, @cloud.master)
+          # @cloud.run_command_on(str, @cloud.master)
         end
       end
       def clear_master_ssl_certs
