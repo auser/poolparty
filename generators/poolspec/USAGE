@@ -1,5 +1,5 @@
 Description:
-  Create a basic pool.spec template
+  Create a basic pool template
   
 Usage:
-  pool spec [name]
+  pool generate [name]
