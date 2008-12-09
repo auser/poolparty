@@ -47,6 +47,7 @@ module PoolParty
       
       def setup_defaults
         plugin_directory "#{::File.dirname(pool_specfile ? pool_specfile : Dir.pwd)}/plugins"
+        PoolParty::Extra::Deployments.include_deployments "#{Dir.pwd}/deployments"
       end
             
       # This is where the entire process starts
