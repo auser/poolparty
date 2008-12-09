@@ -4,8 +4,8 @@ module PoolParty
     class Directory < Resource
             
       default_options({
-        :mode => 644,
-        :owner => "#{Base.user}"
+        :mode => 644
+        # :owner => "#{Base.user}"
       })
       
       def class_type_name

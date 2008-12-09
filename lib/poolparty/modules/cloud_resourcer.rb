@@ -55,6 +55,8 @@ module PoolParty
       return nil
     end
     
+    # The keypair name can be one name or another including id_rsa or not
+    # So let's get the name that exists as a keypair
     def full_keypair_name
       keypair_paths.each do |path|
         possible_keypair_basenames.each do |base|

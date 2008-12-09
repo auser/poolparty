@@ -125,8 +125,7 @@ begin
         pub_key && private_key
       end
       # The keys are used only for puppet certificates
-      # and are only used for EC2. These should be abstracted
-      # eventually into the ec2 remoter_base
+      # and are only used for EC2.
       # Public key 
       def pub_key
         @pub_key ||= ENV["EC2_CERT"] ? ENV["EC2_CERT"] : nil
@@ -134,6 +133,10 @@ begin
       # Private key
       def private_key
         @private_key ||= ENV["EC2_PRIVATE_KEY"] ? ENV["EC2_PRIVATE_KEY"] : nil
+      end
+      
+      def custom_minimum_runnable_options
+        [:ami, :availabilty_zone, :security_group]
       end
 
       # Callback

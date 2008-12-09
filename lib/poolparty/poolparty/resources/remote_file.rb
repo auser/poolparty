@@ -8,7 +8,7 @@ module PoolParty
       default_options({
         :ensure => "present",
         :mode => 644,
-        :owner => "#{Base.user}",
+        # :owner => "#{Base.user}",
         :source => nil
       })
       
