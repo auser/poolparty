@@ -11,7 +11,8 @@ if [ $(/usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server mast
       if [ $(/usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master) ]; then
         echo "Run successfully" && exit 0
         else
-        /etc/init.d/puppetmaster stop;rm -rf /etc/poolparty/ssl;/etc/init.d/puppetmaster start
+        # /etc/init.d/puppetmaster stop;rm -rf /etc/poolparty/ssl;/etc/init.d/puppetmaster start
+        rm /etc/poolparty/ssl/$HN*
         /usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master
       fi
     else
