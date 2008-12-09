@@ -5,7 +5,7 @@ module PoolParty
   def load_pool(filename)
 
     unless filename && ::File.readable?(filename)
-      puts "Please specify your cloud with -s, move it to ./pool.spec or in your POOL_SPEC environment variable"
+      puts "Please specify your cloud with -s, move it to ./clouds.pool or in your POOL_SPEC environment variable"
       exit(1)
     else
       $pool_specfile = filename
