@@ -15,10 +15,15 @@ module PoolParty
       def error
         raise RemoteException.new(:could_not_install, "Your cloud does not have a master")
       end
+      
+      def first_install_tasks
+        [
+          create_local_hosts_entry
+        ]
+      end
 
       def install_tasks
-        [
-          create_local_hosts_entry,
+        [          
           setup_basic_structure,
           setup_configs,        
           setup_fileserver,
@@ -128,14 +133,13 @@ wget http://github.com/auser/poolparty/tree/master%2Fpkg%2Fpoolparty.gem?raw=tru
         EOE
       end
       
-      # ps aux | grep puppetmasterd | awk '{print $2}' | xargs kill
       # /etc/init.d/puppetmaster stop; rm -rf /etc/puppet/ssl; /etc/init.d/puppetmaster start
+      # ps aux | grep puppetmaster | grep -v grep | awk '{print $2}' | xargs kill;
       def restart_puppetmaster
         <<-EOS
 echo "(Re)starting poolparty"
 . /etc/profile
-# /etc/init.d/puppetmaster stop #{unix_hide_string}
-ps aux | grep puppetmaster | awk '{print $2}' | xargs kill;rm -rf /etc/poolparty/ssl;puppetmasterd --verbose;/etc/init.d/puppetmaster start
+/etc/init.d/puppetmaster stop;rm -rf /etc/poolparty/ssl;puppetmasterd --verbose;/etc/init.d/puppetmaster start
         EOS
       end
       
@@ -184,7 +188,7 @@ cp #{Base.remote_storage_path}/poolparty.pp /etc/puppet/manifests/classes/poolpa
         # /usr/bin/puppetcleaner master
         <<-EOS
 echo "Running puppet manifest"
-/usr/sbin/puppetd --onetime --daemonize --logdest syslog --server master;/usr/sbin/puppetd --onetime --daemonize --logdest syslog --server master
+/usr/bin/puppetrerun
         EOS
       end
     end

@@ -162,7 +162,7 @@ module PoolParty
           s << "puppetca --clean master.compute-1.internal 2>&1 > /dev/null;"
           s << "puppetca --clean master.ec2.internal 2>&1 > /dev/null"
         end
-        @cloud.run_command_on("if [ -f '/usr/bin/puppetcleaner' ]; then /usr/bin/env puppetcleaner; else #{str}; fi", @cloud.master)
+        @cloud.run_command_on("if [ -f '/usr/bin/puppetcleaner' ]; then /usr/bin/env puppetcleaner `hostname`; else #{str}; fi", @cloud.master)
       end
       def process_reconfigure!(testing=false)
         @cloud.run_command_on(PoolParty::Remote::RemoteInstance.puppet_runner_command, @instance) unless testing
@@ -211,6 +211,7 @@ module PoolParty
       def default_install_tasks
         [
           "#!/usr/bin/env sh",
+          first_install_tasks,
           upgrade_system,
           install_rubygems,
           make_logger_directory,
@@ -230,6 +231,11 @@ module PoolParty
       # Build a list of the tasks to run on the instance
       def install_tasks(a=[])
         @install_task ||= a
+      end
+      # Set the first tasks to be called on the instance
+      # before any other tasks are run
+      def first_install_tasks
+        @cloud.first_install_tasks_for(@instances) || []
       end
       def configure_tasks(a=[])
         @configure_tasks ||= a
@@ -356,9 +362,6 @@ fi
           
           cp #{Base.remote_storage_path}/#{Base.template_directory}/puppetrerun /usr/bin/puppetrerun
           chmod +x /usr/bin/puppetrerun
-          
-          cp #{Base.remote_storage_path}/#{Base.template_directory}/puppetcleaner /usr/bin/puppetcleaner
-          chmod +x /usr/bin/puppetcleaner
           
           mv #{Base.remote_storage_path}/cookie ~/.erlang.cookie
           chmod 400 ~/.erlang.cookie
