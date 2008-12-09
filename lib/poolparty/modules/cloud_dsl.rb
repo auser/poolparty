@@ -6,7 +6,7 @@ module PoolParty
       ebs_volume_mount_point loc
       ebs_volume_device "/dev/#{id.sanitize}"
             
-      has_mount(:name => loc, :device => ebs_volume_device, :onlyif => "test -d #{loc}")
+      has_mount(:name => loc, :device => ebs_volume_device)
       has_directory(:name => loc)
     end
     

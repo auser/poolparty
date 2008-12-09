@@ -18,7 +18,7 @@ o.loaded_clouds.each do |cloud|
     if instance_num
       @instance = get_instance_by_number( instance_num )
       instance_num == 0 ? Provisioner.provision_master(self, testing) : Provisioner.provision_slave(@instance, self, testing)
-      Provisioner.process_clean_reconfigure_for!(@instance, self, testing)
+      # Provisioner.process_clean_reconfigure_for!(@instance, self, testing)
     else
       if provision_slave
         vputs "Provisioning slaves"
