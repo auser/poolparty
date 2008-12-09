@@ -4,7 +4,7 @@ module PoolParty
   module PluginModel
     
     def plugin(name=:plugin, cloud=nil, &block)
-      plugins.has_key?(name) ? plugins[name] : (plugins[name] = PluginModel.new(name, cloud, &block))
+      plugins.has_key?(name) ? plugins[name] : (plugins[name] = PluginModel.new(name, &block))
     end
     alias_method :register_plugin, :plugin
     
@@ -18,15 +18,15 @@ module PoolParty
       include Configurable
       include PrettyPrinter      
       
-      def initialize(name,cld,&block)
+      def initialize(name,&block)
         @name = name
         # @parent = cld
         class_string_name = "#{name}"
         
         # Create the class to evaluate the plugin on the implemented call
-        klass = class_string_name.class_constant(PoolParty::Plugin::Plugin)
+        @klass = klass = class_string_name.class_constant(PoolParty::Plugin::Plugin)
         mod = class_string_name.module_constant(&block)
-
+        
         klass.send :include, mod
         
         # Store the name of the class for pretty printing later
