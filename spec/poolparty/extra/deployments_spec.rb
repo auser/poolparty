@@ -23,7 +23,7 @@ describe "deployments" do
       it "should not be nil if the file does exist" do        
         @klass.include_deployment(@file).should_not == nil
       end
-      it "should create a class called HankyDankyRanky" do
+      it "should create a class called PoolPartyHankyDankyRankyClass" do
         @klass.include_deployment(@file).should_not == nil
         Object.const_defined?(:PoolPartyHankyDankyRankyClass).should == true
       end
@@ -32,6 +32,32 @@ describe "deployments" do
       end
       it "should add the contents of the file to be eval'd on the method" do
         PoolPartyHankyDankyRankyClass.new.enable.should == "hello goober"
+      end
+    end
+    describe "include_deployments" do
+      before(:each) do
+        ::File.stub!(:directory?).and_return false
+        @dir = "/deployments"
+      end
+      it "should have the method include_deployments" do
+        @klass.respond_to?(:include_deployments).should == true
+      end
+      it "should return nil if the directory does not exist" do
+        @klass.include_deployments(@dir).should == nil
+      end
+      describe "existing directory" do
+        before(:each) do          
+          ::File.stub!(:directory?).and_return true
+          @contents = []
+          Dir.stub!(:[]).and_return @contents
+        end
+        it "should not be nil if the directory exists" do
+          @klass.include_deployments(@dir).should_not == nil
+        end
+        it "should call Dir.[] on the directory" do
+          Dir.should_receive(:[]).with("#{@dir}/*").and_return []
+          @klass.include_deployments(@dir)
+        end
       end
     end
   end
