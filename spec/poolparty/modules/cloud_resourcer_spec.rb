@@ -4,6 +4,10 @@ class ResourcerTestClass
   include CloudResourcer
   include Configurable
   
+  default_options({
+    :minimum_runtime => 50.minutes
+  })
+  
   def initialize(&block)
     store_block(&block) if block
   end
@@ -45,7 +49,7 @@ describe "CloudResourcer" do
     @tc.maximum_instances.should == 10
   end
   it "should have default minimum_runtime of 50 minutes (3000 seconds)" do
-    Base.minimum_runtime.should == 50.minutes
+    Base.stub!(:minimum_runtime).and_return 50.minutes
     @tc.minimum_runtime.should ==  50.minutes
   end
   it "should have minimum_runtime" do
