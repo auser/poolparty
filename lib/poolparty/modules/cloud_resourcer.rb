@@ -36,7 +36,6 @@ module PoolParty
         raise SpecException.new("Don't know how to handle instances cloud input #{arg}")
       end
     end
-    
     def full_keypair_path
       unless keypair_path
         raise RuntimeException.new("Keypair cannot be found")        
