@@ -1,3 +1,5 @@
+#TODO: rdoc: this  defines methods on poolparty objects from a passed hash of options.
+# For example, this is how instance.minimum_runtime is set.  See base.rb line 12 for example of default options that are added as methods in this way. 
 module PoolParty
   module Configurable
     module ClassMethods      

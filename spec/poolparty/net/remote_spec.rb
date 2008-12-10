@@ -239,7 +239,7 @@ describe "Remote" do
       describe "contract_cloud_if_necessary" do
         before(:each) do
           @tc.stub!(:request_termination_of_non_master_instance).and_return true
-          @tc.stub!(:can_shutdown_an_instance?).and_return true
+          @tc.stub!(:are_any_nodes_exceeding_minimum_runtime).and_return true
           @tc.stub!(:wait).and_return true
           @tc.stub!(:valid_rules?).and_return false
         end

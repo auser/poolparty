@@ -10,7 +10,6 @@ module PoolParty
     include Configurable
     include MethodMissingSugar
     
-    
     def initialize(args=[], opts={}, &block)      
       boolean_args << opts[:boolean_args] if opts.has_key?(:boolean_args)
 

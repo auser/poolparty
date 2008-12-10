@@ -1,6 +1,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 include Remote
+include Aska
 
 describe "Remote Instance" do
   before(:each) do
@@ -57,6 +58,10 @@ describe "Remote Instance" do
   describe "methods" do
     before(:each) do
       @ri = RemoteInstance.new(@valid_hash, nil)
+    end
+    it "should give the elapsed time" do
+      @ri.stub!(:launching_time).and_return(30.minutes.ago)
+      @ri.elapsed_runtime.should be >= 1800
     end
     it "should be say that it is the master if the name is master" do
       @ri.name.should == "master"
