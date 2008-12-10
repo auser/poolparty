@@ -49,7 +49,7 @@ module PoolParty
       def create_local_hosts_entry
         <<-EOS
 echo "Creating local host entry"
-if [ -z \"$(grep -v '#' /etc/hosts | grep 'puppet')" ]; then echo '#{@master_ip}           puppet master localhost' >> /etc/hosts; fi
+if [ -z \"$(grep -v '#' /etc/hosts | grep 'puppet')" ]; then echo '#{@master_ip}          master puppet localhost' >> /etc/hosts; fi
 hostname master
         EOS
       end
