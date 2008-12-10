@@ -91,7 +91,7 @@ describe "Remoter" do
         @tc.list_of_nodes_exceeding_minimum_runtime.size.should be > 0
       end
       it "should return a RemoteInstance" do
-        @tc.list_of_nodes_exceeding_minimum_runtime.first.should be_instance_of PoolParty::Remote::RemoteInstance
+        @tc.list_of_nodes_exceeding_minimum_runtime.first.should be_instance_of(PoolParty::Remote::RemoteInstance)
       end
       it "are_any_nodes_exceeding_minimum_runtime? should be true" do
         @tc.are_any_nodes_exceeding_minimum_runtime?.should == true

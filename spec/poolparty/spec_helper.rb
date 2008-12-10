@@ -18,6 +18,8 @@ extend PoolParty
 
 def are_too_many_instances_running?  
 end
+def are_any_nodes_exceeding_minimum_runtime?  
+end
 def are_too_few_instances_running?
 end
 
@@ -67,9 +69,14 @@ def read_file(path)
   require "open-uri"
   open(path).read
 end
+def sample_instances_list
+  @sample_instances_lister ||= [
+    {:ip => "127.0.0.1", :name => "master", :launching_time => 2.days.ago}, 
+    {:ip => "127.0.0.2", :name => "node1", :launching_time => 2.days.ago}
+  ]
+end
 
 def sample_instances
-  sample_instances_list = [{:ip => "127.0.0.1", :name => "master"}, {:ip => "127.0.0.2", :name => "node1"}]
   sample_instances_list.map {|h| PoolParty::Remote::RemoteInstance.new(h) }
 end
 def stub_list_from_local_for(o)
@@ -90,14 +97,12 @@ def stub_remoter_for(o)
 end
 def stub_list_from_remote_for(o, launch_stub=true)
   stub_remoter_for(o)
-  @sample_instances_list = [{:ip => "127.0.0.1", :name => "master"}, {:ip => "127.0.0.2", :name => "node1"}]
-  @ris = @sample_instances_list.map {|h| PoolParty::Remote::RemoteInstance.new(h) }
   o.stub!(:access_key).and_return "NOT A KEY"
   o.stub!(:secret_access_key).and_return "NOT A SECRET"
   # o.stub!(:list_from_remote).and_return ris
   # o.stub!(:remote_instances_list).once.and_return ris
   # o.stub!(:master).and_return @ris[0]
-  o.stub!(:launch_new_instance!).and_return @ris.first if launch_stub  
+  o.stub!(:launch_new_instance!).and_return sample_instances.first if launch_stub  
   stub_list_of_instances_for(o)
 end
 
@@ -130,7 +135,9 @@ end
 def add_stub_instance_to(o, num, status="running")  
   reset_response!  
   response_list_of_instances << stub_instance(num, status)
+  sample_instances_list << stub_instance(num, status)
   stub_list_of_instances_for o
+  stub_remoter_for(o)
 end
 def ris
   @ris ||= response_list_of_instances.collect {|h| PoolParty::Remote::RemoteInstance.new(h) }
