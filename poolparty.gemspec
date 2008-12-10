@@ -375,6 +375,7 @@ files:
 - lib/poolparty/poolparty/resources/variable.rb
 - lib/poolparty/poolparty/script.rb
 - lib/poolparty/provisioners/provisioner_base.rb
+- lib/poolparty/provisioners/provisioners/become_master.rb
 - lib/poolparty/provisioners/provisioners/master.rb
 - lib/poolparty/provisioners/provisioners/slave.rb
 - lib/poolparty/spec/core/string.rb
@@ -520,7 +521,7 @@ files:
 has_rdoc: true
 homepage: http://poolparty.rubyforge.org
 post_install_message: |-
-  Get ready to jump in the pool, you just installed PoolParty! (Updated at 04:46 12/10/08)
+  Get ready to jump in the pool, you just installed PoolParty! (Updated at 13:44 12/10/08)
   
   To get started, run the generator:
   

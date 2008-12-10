@@ -262,6 +262,7 @@ lib/poolparty/poolparty/resources/symlink.rb
 lib/poolparty/poolparty/resources/variable.rb
 lib/poolparty/poolparty/script.rb
 lib/poolparty/provisioners/provisioner_base.rb
+lib/poolparty/provisioners/provisioners/become_master.rb
 lib/poolparty/provisioners/provisioners/master.rb
 lib/poolparty/provisioners/provisioners/slave.rb
 lib/poolparty/spec/core/string.rb

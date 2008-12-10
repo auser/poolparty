@@ -40,6 +40,10 @@ module PoolParty
       Provisioner::Slave.new(instance, cloud).process_configure!(testing)
     end
     
+    def self.become_master(cloud, testing=false)
+      Provisioner::BecomeMaster.new(cloud).process_install!(testing)
+    end
+    
     def self.process_clean_reconfigure_for!(instance, cloud, testing=false)
       Provisioner::Master.new(cloud).process_clean_reconfigure_for!(instance, testing)
     end
