@@ -2,7 +2,7 @@ require 'rubygems'
 
 # Load required gems
 @required_software = Array.new
-%w(activesupport ftools logging resolv ruby2ruby digest/sha2).each do |lib|
+%w(activesupport ftools logging resolv ruby2ruby digest/sha2 open3).each do |lib|
   begin
     require lib
   rescue Exception => e
