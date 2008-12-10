@@ -81,6 +81,23 @@ describe "Remoter" do
       @tc = TestClass.new
       stub_list_from_remote_for @tc # sets the list of instances to 2
     end
+    describe "list_of_nodes_exceeding_minimum_runtime" do
+      before(:each) do
+        @tc.stub!(:minimum_runtime).and_return 3000
+      end
+      it "should not be empty" do
+        @tc.list_of_running_instances.size.should == 2
+        @tc.list_of_running_instances.first.elapsed_runtime.should be > 3000
+        @tc.list_of_nodes_exceeding_minimum_runtime.size.should be > 0
+      end
+      it "should return a RemoteInstance" do
+        @tc.list_of_nodes_exceeding_minimum_runtime.first.should be_instance_of(PoolParty::Remote::RemoteInstance)
+      end
+      it "are_any_nodes_exceeding_minimum_runtime? should be true" do
+        @tc.are_any_nodes_exceeding_minimum_runtime?.should == true
+      end
+    end
+    
     describe "are_too_few_instances_running?" do
       it "should be false if the number of running instances is larger than the minimum instances" do
         @tc.stub!(:minimum_instances).and_return 1
