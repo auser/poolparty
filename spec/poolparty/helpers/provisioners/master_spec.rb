@@ -8,12 +8,12 @@ describe "Master provisioner" do
     stub_list_from_remote_for(@cloud)
     @remote_instance = PoolParty::Remote::RemoteInstance.new({:ip => "192.168.0.1", :status => "running", :name => "master"}, @cloud)
     
-    @cloud.stub!(:master).and_return @ris.first
+    @cloud.stub!(:master).and_return sample_instances.first
     @master = Master.new(@cloud, :ubuntu)
   end
   describe "install_tasks" do
     before(:each) do
-      @cloud.stub!(:master).and_return @ris.first
+      @cloud.stub!(:master).and_return sample_instances.first
       @master.stub!(:cloud).and_return @cloud
     end
     it "should call install_puppet_master" do

@@ -101,6 +101,8 @@ describe "Remote" do
       end
       it "should be true if there are" do
         add_stub_instance_to(@tc, 8)
+        add_stub_instance_to(@tc, 9)
+        add_stub_instance_to(@tc, 10)
         @tc.minimum_number_of_instances_are_running?.should == true
       end
     end
@@ -239,9 +241,10 @@ describe "Remote" do
       describe "contract_cloud_if_necessary" do
         before(:each) do
           @tc.stub!(:request_termination_of_non_master_instance).and_return true
-          @tc.stub!(:are_any_nodes_exceeding_minimum_runtime).and_return true
+          @tc.stub!(:are_any_nodes_exceeding_minimum_runtime?).and_return true
           @tc.stub!(:wait).and_return true
           @tc.stub!(:valid_rules?).and_return false
+          @tc.stub!(:can_shutdown_an_instance?).and_return true
         end
         it "should receive can_shutdown_an_instance?" do
           @tc.should_receive(:can_shutdown_an_instance?).once
@@ -250,7 +253,7 @@ describe "Remote" do
           @tc.should_receive(:should_contract_cloud?).once.and_return false
         end
         it "should call request_termination_of_non_master_instance if we should_contract_cloud?" do
-          @tc.should_receive(:should_contract_cloud?).once.and_return true
+          @tc.stub!(:should_contract_cloud?).and_return true
           @tc.should_receive(:request_termination_of_non_master_instance).once.and_return true
         end
         after(:each) do
