@@ -222,7 +222,10 @@ module PoolParty
         end
       end
       def list_of_nodes_exceeding_minimum_runtime
-        list_of_running_instances.reject{|i| i.elapsed_runtime > minimum_runtime}
+        list_of_running_instances.reject{|i| i.elapsed_runtime < minimum_runtime}
+      end
+      def are_any_nodes_exceeding_minimum_runtime?
+        !list_of_nodes_exceeding_minimum_runtime.blank?
       end
       def is_master_running?
         !list_of_running_instances.select {|a| a.name == "master"}.first.nil?
@@ -236,7 +239,8 @@ module PoolParty
       end
       # Stub method for the time being to handle the contraction of the cloud
       def should_contract_cloud?(force=false)
-        (are_too_many_instances_running? || are_contraction_rules_valid?) || force || false
+        return true if force
+        ((are_any_nodes_exceeding_minimum_runtime? and are_too_many_instances_running?) || are_contraction_rules_valid?) || false
       end
       def are_contraction_rules_valid?
         valid_rules?(:contract_when)
