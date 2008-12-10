@@ -10,7 +10,7 @@ module PoolParty
       
       def initialize(opts, parent=self)        
         run_setup(parent)
-                
+
         set_vars_from_options(parent.options) if parent && parent.respond_to?(:options)
         set_vars_from_options(opts) unless opts.nil? || opts.empty?
         
