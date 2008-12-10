@@ -38,6 +38,7 @@ module PoolParty
         :secret_access_key => Base.secret_access_key,
         :ec2_dir => ENV["EC2_HOME"],
         :keypair => (ENV["KEYPAIR_NAME"].nil? || ENV["KEYPAIR_NAME"].empty?) ? nil : ENV["KEYPAIR_NAME"],
+        :minimum_runtime => Base.minimum_runtime,
         :ami => 'ami-44bd592d'
       })
       
