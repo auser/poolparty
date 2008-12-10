@@ -17,7 +17,6 @@ module PoolParty
         on_init
       end
       
-      # TODO:spec
       def elapsed_runtime
         Time.now.to_i - launching_time.to_time.to_i
       end
