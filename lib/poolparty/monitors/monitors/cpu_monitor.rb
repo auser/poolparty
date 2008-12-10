@@ -4,8 +4,8 @@ module PoolParty
     class CpuMonitor < BaseMonitor
       
       def run
-        str = %x[uptime]
-        str.split(/\s+/)[-1].to_f rescue 0.0
+        stdin, stdout, stderr = Open3.popen3('uptime')
+        stdout.split(/\s+/)[-1].to_f rescue 0.0
       end
             
     end
