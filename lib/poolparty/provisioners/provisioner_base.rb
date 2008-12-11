@@ -79,7 +79,11 @@ module PoolParty
         @config = ::Capistrano::Configuration.new
         @config.logger.level = verbose ? ::Capistrano::Logger::INFO : ::Capistrano::Logger::IMPORTANT
         @config.set(:password) { ::Capistrano::CLI.password_prompt }        
-        @config.load @cloud.deploy_file if @cloud.deploy_file
+        if @cloud.deploy_file
+          @config.load @cloud.deploy_file 
+        else
+          set :user, @cloud.user || Base.user
+        end
       end
       # Callback after initialized
       def loaded(opts={}, parent=self)      
@@ -308,6 +312,6 @@ module PoolParty
 end
 
 ## Load the provisioners
-Dir[File.dirname(__FILE__) + "/provisioner_tasks/*.rb"].each do |file|
+Dir[File.dirname(__FILE__) + "/capistrano/*.rb"].each do |file|
   require file
 end

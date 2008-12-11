@@ -48,7 +48,7 @@ module PoolParty
                 
         plugin_directory
                 
-        p = pare.is_a?(PoolParty::Pool::Pool) ? pare : nil
+        p = pare.is_a?(PoolParty::Pool::Pool) ? pare : Base
         store_block(&block)
         run_setup(p, &block)        
         
