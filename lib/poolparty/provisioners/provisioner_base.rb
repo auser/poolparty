@@ -3,6 +3,8 @@
   This class only comes in to play when calling the setup commands on
   the development machine
 =end
+require 'capistrano/cli'
+
 module PoolParty
   module Provisioner
     
@@ -53,6 +55,7 @@ module PoolParty
     end
     
     class ProvisionerBase
+      attr_accessor :config, :loaded_tasks
       
       include Configurable
       include CloudResourcer
@@ -63,16 +66,29 @@ module PoolParty
         @cloud = cld
         
         options(cloud.options) if cloud && cloud.respond_to?(:options)
-        set_vars_from_options(instance.options) unless instance.nil? || !instance.options || !instance.options.empty?
-        options(instance.options) if instance.respond_to?(:options)
+        # set_vars_from_options(instance.options) unless instance.nil? || !instance.options || !instance.options.empty?
+        # options(instance.options) if instance.respond_to?(:options)
         
         @os = os.to_s.downcase.to_sym
+        create_config
+        
         loaded
+      end
+      # Create the config of Cap
+      def create_config
+        @config = ::Capistrano::Configuration.new
+        @config.logger.level = verbose ? ::Capistrano::Logger::INFO : ::Capistrano::Logger::IMPORTANT
+        @config.set(:password) { ::Capistrano::CLI.password_prompt }        
+        @config.load @cloud.deploy_file if @cloud.deploy_file
       end
       # Callback after initialized
       def loaded(opts={}, parent=self)      
       end
       
+      def loaded_tasks
+        @loaded_tasks ||= []
+      end
+            
       ### Installation tasks
       
       # This is the actual runner for the installation    
@@ -80,19 +96,12 @@ module PoolParty
         valid? ? install_string : error
       end
       # Write the installation tasks to a file in the storage directory
-      def write_install_file
-        error unless valid?
-        ::FileUtils.mkdir_p Base.storage_directory unless ::File.exists?(Base.storage_directory)
-        provisioner_file = ::File.join(Base.storage_directory, "install_#{name}.sh")
-        ::File.open(provisioner_file, "w+") {|f| f << install }
-      end
       def name
         @instance.name
       end
       # TODO: Clean up this method
       def process_install!(testing=false)
         error unless valid?
-        write_install_file
         setup_runner
         
         unless testing
@@ -104,15 +113,35 @@ module PoolParty
           
           # process_clean_reconfigure_for!(@instance, testing)
           
-          vputs "Logging in and running provisioning on #{@instance.name}"
+          vputs "Provisioning #{@instance.name}"
           # /bin/rm install_#{name}.sh
-          cmd = "cd #{Base.remote_storage_path} && /bin/chmod +x install_#{name}.sh && /bin/sh install_#{name}.sh"
-          verbose ? @cloud.run_command_on(cmd, @instance) : hide_output {@cloud.run_command_on(cmd, @instance)}
-          
-          process_clean_reconfigure_for!(@instance, testing)
+          # cmd = "cd #{Base.remote_storage_path} && /bin/chmod +x install_#{name}.sh && /bin/sh install_#{name}.sh"
+          # verbose ? @cloud.run_command_on(cmd, @instance) : hide_output {@cloud.run_command_on(cmd, @instance)}
+          do_it(:install)
           
           after_install(@instance)
         end
+      end
+      
+      def run_cap(meth=:install)
+        commands = meth == :install ? install_tasks : configure_tasks
+        
+        define_task(meth, roles) do
+          via = fetch(:run_method, :sudo)
+          commands.each do |command|
+            invoke_command command, :via => via
+          end
+        end
+        
+        begin
+          run(name)
+          return true
+        rescue ::Capistrano::CommandError => e
+          return false unless verbose
+          
+          # Reraise error if we're not suppressing it
+          raise
+        end        
       end
       # Install callbacks
       # Before installation callback
@@ -126,11 +155,6 @@ module PoolParty
       def configure
         valid? ? configure_string : error
       end
-      def write_configure_file
-        error unless valid?
-        provisioner_file = ::File.join(Base.storage_directory, "configure_#{name}.sh")
-        ::File.open(provisioner_file, "w+") {|f| f << configure }
-      end
       def process_configure!(testing=false)
         error unless valid?
         write_configure_file
@@ -143,30 +167,6 @@ module PoolParty
           cmd = "cd #{Base.remote_storage_path} && /bin/chmod +x configure_#{name}.sh && /bin/sh configure_#{name}.sh"
           verbose ? @cloud.run_command_on(cmd, @instance) : hide_output {@cloud.run_command_on(cmd, @instance)}
         end
-      end
-      def process_clean_reconfigure_for!(instance, testing=false)
-        if instance.is_a?(String)
-          name = instance
-          instance = MyOpenStruct.new(:name => name)
-        end
-        vputs "Cleaning certs from master: #{instance.name}"
-        # puppetca --clean #{instance.name}.compute-1.internal; puppetca --clean #{instance.name}.ec2.internal
-        # find /etc/puppet/ssl -type f -exec rm {} \;
-        unless testing
-          # @cloud.run_command_on("rm -rf /etc/puppet/ssl", instance) unless instance.master?
-          str = returning String.new do |s|
-            s << "puppetca --clean #{instance.name}.compute-1.internal 2>&1 > /dev/null;"
-            s << "puppetca --clean #{instance.name}.ec2.internal 2>&1 > /dev/null"
-          end
-          # @cloud.run_command_on(str, @cloud.master)
-        end
-      end
-      def clear_master_ssl_certs
-        str = returning String.new do |s|
-          s << "puppetca --clean master.compute-1.internal 2>&1 > /dev/null;"
-          s << "puppetca --clean master.ec2.internal 2>&1 > /dev/null"
-        end
-        @cloud.run_command_on("if [ -f '/usr/bin/puppetcleaner' ]; then /usr/bin/env puppetcleaner `hostname`; else #{str}; fi", @cloud.master)
       end
       def process_reconfigure!(testing=false)
         @cloud.run_command_on(PoolParty::Remote::RemoteInstance.puppet_runner_command, @instance) unless testing
@@ -183,46 +183,24 @@ module PoolParty
       def error
         "Error in installation"
       end
-      # Gather all the tasks into one string
-      def install_string
-        [default_install_tasks, last_install_tasks].flatten.each do |task|
-          case task.class
-          when String
-            task
-          when Method
-            self.send(task.to_sym)
-          end
-        end.nice_runnable
-      end
-      def last_install_tasks
+      def after_install_tasks
         []
       end
-      def configure_string
-        [default_configure_tasks, last_configure_tasks].flatten.each do |task|
-          case task.class
-          when String
-            task
-          when Method
-            self.send(task.to_sym)
-          end
-        end.nice_runnable
-      end
-      def last_configure_tasks
+      def after_configure_tasks
         []
       end
       # Tasks with default tasks 
       # These are run on all the provisioners, master or slave
       def default_install_tasks
         [
-          "#!/usr/bin/env sh",
-          first_install_tasks,
-          upgrade_system,
-          install_rubygems,
-          make_logger_directory,
-          install_puppet,
-          fix_rubygems,
-          setup_system_for_poolparty,
-          custom_install_tasks
+          :first_install_tasks,
+          :upgrade_system,
+          :install_rubygems,
+          :make_logger_directory,
+          :install_puppet,
+          :fix_rubygems,
+          :setup_system_for_poolparty,
+          :custom_install_tasks
         ] << install_tasks
       end
       # Tasks with default configuration tasks
@@ -279,102 +257,57 @@ module PoolParty
         packages = names.is_a?(Array) ? names.join(" ") : names
         "#{self.class.installers[@os]} #{packages}"
       end
-      
-      # Install from the class-level
-      def self.install(instance, cl=self)
-        new(instance, cl).install
-      end
-
-      def self.configure(instance, cl=self)
-        new(instance, cl).configure
+            
+      def base_gems
+        {
+          :logging => "http://rubyforge.org/frs/download.php/44731/logging-0.9.4.gem",
+          :ZenTest => "http://rubyforge.org/frs/download.php/45581/ZenTest-3.11.0.gem",
+          :ParseTree => "http://rubyforge.org/frs/download.php/45600/ParseTree-3.0.1.gem",
+          :ruby2ruby => "http://rubyforge.org/frs/download.php/45587/ruby2ruby-1.2.0.gem",
+          :activesupport => "http://rubyforge.org/frs/download.php/45627/activesupport-2.1.2.gem",
+          :"xml-simple" => "http://rubyforge.org/frs/download.php/18366/xml-simple-1.0.11.gem",
+          :RubyInline => "http://rubyforge.org/frs/download.php/45683/RubyInline-3.8.1.gem",
+          :flexmock => "http://rubyforge.org/frs/download.php/42580/flexmock-0.8.3.gem",
+          :hoe => "http://rubyforge.org/frs/download.php/45685/hoe-1.8.2.gem",
+          :lockfile => "http://rubyforge.org/frs/download.php/18698/lockfile-1.4.3.gem",
+          :rubyforge => "http://rubyforge.org/frs/download.php/45546/rubyforge-1.0.1.gem",
+          :rake => "http://rubyforge.org/frs/download.php/43954/rake-0.8.3.gem",
+          :sexp_processor => "http://rubyforge.org/frs/download.php/45589/sexp_processor-3.0.0.gem",
+          :capistrano => "http://rubyforge.org/frs/download.php/48031/capistrano-2.5.3.gem",
+          :poolparty => "http://github.com/auser/poolparty/tree/master%2Fpkg%2Fpoolparty.gem?raw=true"
+        }
       end
       
       # Template directory from the provisioner base
       def template_directory
         File.join(File.dirname(__FILE__), "..", "templates")
       end
-      
-      def install_rubygems
-        <<-EOE
-        #{installer_for("ruby rubygems")}
-        EOE
-      end
-      
-      def fix_rubygems        
-        <<-EOE
-          echo '#{open(::File.join(template_directory, "gem")).read}' > /usr/bin/gem
-          echo 'Updating rubygems'
-          PAT=`/usr/bin/gem env gemdir`
-          /usr/bin/gem update --system #{unix_hide_string}
-          /usr/bin/gem update --system #{unix_hide_string}
-        EOE
+                  
+      # Install from the class-level
+      def self.install(instance, cl=self)
+        new(instance, cl).process_install!
       end
 
-      def create_local_node
-        str = <<-EOS
-  node default {
-    include poolparty
-  }
-        EOS
-         @cloud.list_of_running_instances.each do |ri|
-           str << <<-EOS           
-  node "#{ri.name}" {}
-           EOS
-         end
-        "echo '#{str}' > /etc/puppet/manifests/nodes/nodes.pp"
+      def self.configure(instance, cl=self)
+        new(instance, cl).process_configure!
       end
       
-      def upgrade_system
-        case @os
-        when :ubuntu
-          "
-if grep -q 'http://mirrors.kernel.org/ubuntu hardy main universe' /etc/apt/sources.list
-then 
-echo 'Updated already'
-else
-touch /etc/apt/sources.list
-echo 'deb http://mirrors.kernel.org/ubuntu hardy main universe' >> /etc/apt/sources.list
-aptitude update -y #{unix_hide_string} <<heredoc
-Y
+      def define_task(name, roles, &block)
+        @config.task task_sym(name), :roles => roles, &block
+      end
 
-heredoc
-fi
-          "
-        else
-          "# No system upgrade needed"
-        end
+      def run(task)
+        @config.send task_sym(task)
       end
-      
-      def install_puppet
-        "#{installer_for( puppet_packages )}"
-      end
-      
-      def make_logger_directory
-        "mkdir -p /var/log/poolparty"
-      end
-      
-      def create_poolparty_manifest
-        <<-EOS
-          cp #{Base.remote_storage_path}/poolparty.pp /etc/puppet/manifests/classes
-        EOS
-      end
-      def setup_system_for_poolparty
-        <<-EOS
-          mkdir -p #{Base.base_config_directory}/ssl/private_keys
-          mkdir -p #{Base.base_config_directory}/ssl/certs
-          mkdir -p #{Base.base_config_directory}/ssl/public_keys
-          
-          cp #{Base.remote_storage_path}/#{Base.template_directory}/puppetrerun /usr/bin/puppetrerun
-          chmod +x /usr/bin/puppetrerun
-          
-          mv #{Base.remote_storage_path}/cookie ~/.erlang.cookie
-          chmod 400 ~/.erlang.cookie
-        EOS
+
+      def task_sym(name)
+        "install_#{name.to_task_name}".to_sym
       end
     end
   end  
 end
+
 ## Load the provisioners
-Dir[File.dirname(__FILE__) + "/provisioners/*.rb"].each do |file|
+Dir[File.dirname(__FILE__) + "/provisioner_tasks/*.rb"].each do |file|
   require file
 end
