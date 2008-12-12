@@ -2,8 +2,8 @@ module PoolParty
   module FileWriter
     def copy_file_to_storage_directory(file, preceded="")
       make_base_directory
-      path = ::File.join( Base.storage_directory, preceded, ::File.basename(file) )      
-      FileUtils.cp file, path unless file == path || ::File.exists?(path)
+      path = ::File.join( Base.storage_directory, preceded, ::File.basename(file) )
+      ::FileUtils.cp file, path unless file == path || ::File.file?(path)
     end
     def cleanup_storage_directory
       Dir["#{Base.storage_directory}/**/*"].each do |f|

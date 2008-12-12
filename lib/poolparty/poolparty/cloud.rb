@@ -24,6 +24,7 @@ module PoolParty
       include PrettyPrinter
       include Configurable
       include CloudResourcer
+      include Provisioner
       # extend CloudResourcer
       # Net methods      
       include Remote
@@ -39,6 +40,7 @@ module PoolParty
         :ec2_dir => ENV["EC2_HOME"],
         :keypair => (ENV["KEYPAIR_NAME"].nil? || ENV["KEYPAIR_NAME"].empty?) ? nil : ENV["KEYPAIR_NAME"],
         :minimum_runtime => Base.minimum_runtime,
+        :user => Base.user,
         :ami => 'ami-44bd592d'
       })
       

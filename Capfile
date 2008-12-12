@@ -1,0 +1,1 @@
+Dir["#{::File.dirname(__FILE__)}/lib/poolparty/provisioners/capistrano/tasks/*.rb"].each { |plugin| load(plugin) }

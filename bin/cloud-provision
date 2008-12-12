@@ -12,20 +12,20 @@ end
 o.loaded_clouds.each do |cloud|
 
   with_cloud(cloud) do
-
+    setup_dev
     instance_num = instance_number.to_i if instance_number
     
     if instance_num
       @instance = get_instance_by_number( instance_num )
-      instance_num == 0 ? Provisioner.provision_master(self, testing) : Provisioner.provision_slave(@instance, self, testing)
+      instance_num == 0 ? provisioner_for(master).install(testing) : provisioner_for(@instance).install(testing)
       # Provisioner.process_clean_reconfigure_for!(@instance, self, testing)
     else
       if provision_slave
         vputs "Provisioning slaves"
-        Provisioner.provision_slaves(self, testing)
+        verbose ? provisioner_for(nil).install(testing) : hide_output { provisioner_for(nil).install(testing) }
       else
         vputs "Provisioning master"
-        (verbose || testing) ? Provisioner.provision_master(self, testing) : hide_output { Provisioner.provision_master(self, testing) }
+        verbose ? provisioner_for(master).install(testing) : hide_output { provisioner_for(master).install(testing) }
       end
     end
     

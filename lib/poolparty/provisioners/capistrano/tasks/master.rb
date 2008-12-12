@@ -1,5 +1,5 @@
 # Cloud tasks
-namespace(:master) do
+# namespace(:master) do
   desc "Set hostname to master"
   task :set_hostname_to_master do
     run "hostname master"
@@ -88,4 +88,4 @@ node default {
   task :move_poolparty_keys do
     run "cp #{Base.remote_storage_path}/#{@cloud.full_keypair_name} #{@cloud.remote_keypair_path}"
   end
-end
+# end

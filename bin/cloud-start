@@ -10,6 +10,7 @@ end
 
 o.loaded_clouds.each do |cloud|
   with_cloud(cloud) do
+    setup_dev
     vputs header("Starting cloud #{name}")
     vputs "#{list_of_running_instances.size} running instances (#{minimum_instances} - #{maximum_instances})"
     # if list_of_running_instances.size <= 1
