@@ -1,7 +1,7 @@
 =begin rdoc
   Base provisioner capistrano tasks
 =end
-namespace(:base) do
+# namespace(:base) do
   desc "Install rubygems"
   task :install_rubygems do
     run "#{installer_for("ruby rubygems")}"
@@ -98,4 +98,4 @@ fi
       chmod 400 ~/.erlang.cookie
     EOR
   end
-end
+# end
