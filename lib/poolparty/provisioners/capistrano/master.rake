@@ -43,19 +43,19 @@ namespace(:master) do
   end
   desc "Download base gems"
   task :download_base_gems do
-    run returning Array.new do |arr|
+    run(returning(Array.new) do |arr|
       base_gems.each do |name, url|
         arr << "wget #{url} -O #{Base.remote_storage_path}/#{name}.gem 2>&1"
       end
-    end.join("\n")
+    end.join("\n"))
   end
   desc "Install base gems"
   task :install_base_gems do
-    run returning Array.new do |arr|
+    run(returning(Array.new) do |arr|
       base_gems.each do |name, url|
         arr << "/usr/bin/gem install --ignore-dependencies -y --no-ri --no-rdoc #{Base.remote_storage_path}/#{name}.gem"
       end
-    end.join("\n")
+    end.join("\n"))
   end
   desc "Restart provisioner base"
   task :restart_provisioner_base do
