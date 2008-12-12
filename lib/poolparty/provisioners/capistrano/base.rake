@@ -6,6 +6,13 @@ namespace(:base) do
   task :install_rubygems do
     run "#{installer_for("ruby rubygems")}"
   end
+  desc "Install provisioner"
+  task :install_provisioner do
+    run "#{installer_for(puppet_packages)}"
+  end
+  desc "Create poolparty commands"
+  task :create_poolparty_commands do    
+  end
   desc "Create poolparty runner command"
   task :create_puppetrunner_command do
     run <<-EOR
@@ -41,7 +48,7 @@ namespace(:base) do
     run "rm -rf /etc/puppet/ssl"
   end
   desc "Update rubygems"
-  task :update_rubygems => [:fix_rubygems] do
+  task :update_rubygems do
     run "/usr/bin/gem update --system"
   end
   desc "Fix rubygems"
