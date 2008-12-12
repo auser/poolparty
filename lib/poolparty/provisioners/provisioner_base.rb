@@ -9,13 +9,13 @@ module PoolParty
   module Provisioner
     
     class ProvisionerBase
-      attr_accessor :config, :loaded_tasks
+      attr_accessor :config, :loaded_tasks, :instance, :cloud
       
       include Configurable
       include CloudResourcer
       include FileWriter
       
-      def initialize(instance, cld=self, os=:ubuntu, &block)
+      def initialize(instance=nil, cld=self, os=:ubuntu, &block)
         @instance = instance
         @cloud = cld
         
@@ -28,9 +28,13 @@ module PoolParty
         
         loaded
       end
+      
+      def provision_master?
+        !@instance.nil? && @instance.master?
+      end
 
       # Callback after initialized
-      def loaded(opts={}, parent=self)      
+      def loaded
       end
       
       def loaded_tasks
@@ -156,12 +160,12 @@ module PoolParty
       end
                   
       # Install from the class-level
-      def self.install(instance, cl=self)
+      def self.install(instance, cl=self, testing=false)
         new(instance, cl).install(testing)
       end
 
-      def self.configure(instance, cl=self)
-        new(instance, cl).process_configure!
+      def self.configure(instance, cl=self, testing=false)
+        new(instance, cl).configure(testing)
       end
       
     end
@@ -169,6 +173,6 @@ module PoolParty
 end
 
 ## Load the provisioners
-Dir[File.dirname(__FILE__) + "/capistrano/*.rb"].each do |file|
+Dir[File.dirname(__FILE__) + "/*/*.rb"].each do |file|
   require file
 end
