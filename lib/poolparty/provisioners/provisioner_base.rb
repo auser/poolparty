@@ -8,52 +8,6 @@ require 'capistrano/cli'
 module PoolParty
   module Provisioner
     
-    # Provision master
-    # Convenience method to clean 
-    def self.provision_master(cloud, testing=false)
-      Provisioner::Master.new(cloud).process_install!(testing)
-    end
-
-    def self.configure_master(cloud, testing=false)
-      Provisioner::Master.new(cloud).process_configure!(testing)
-    end
-    
-    def self.reconfigure_master(cloud, testing=false)
-      Provisioner::Master.new(cloud).process_reconfigure!(testing)
-    end
-
-    def self.provision_slaves(cloud, testing=false)
-      cloud.nonmaster_nonterminated_instances.each do |sl|
-        provision_slave(sl, cloud, testing)
-      end
-    end
-
-    def self.configure_slaves(cloud, testing=false)
-      cloud.nonmaster_nonterminated_instances.each do |sl|
-        configure_slave(sl, cloud, testing)
-      end
-    end
-        
-    def self.provision_slave(instance, cloud, testing=false)
-      Provisioner::Slave.new(instance, cloud).process_install!(testing)
-    end
-    
-    def self.configure_slave(instance, cloud, testing=false)
-      Provisioner::Slave.new(instance, cloud).process_configure!(testing)
-    end
-    
-    def self.become_master(cloud, testing=false)
-      Provisioner::BecomeMaster.new(cloud).process_install!(testing)
-    end
-    
-    def self.process_clean_reconfigure_for!(instance, cloud, testing=false)
-      Provisioner::Master.new(cloud).process_clean_reconfigure_for!(instance, testing)
-    end
-    
-    def self.clear_master_ssl_certs(cloud, testing=false)
-      Provisioner::Master.new(cloud).clear_master_ssl_certs
-    end
-    
     class ProvisionerBase
       attr_accessor :config, :loaded_tasks
       
@@ -61,7 +15,7 @@ module PoolParty
       include CloudResourcer
       include FileWriter
       
-      def initialize(instance,cld=self, os=:ubuntu)
+      def initialize(instance, cld=self, os=:ubuntu, &block)
         @instance = instance
         @cloud = cld
         
@@ -69,22 +23,12 @@ module PoolParty
         # set_vars_from_options(instance.options) unless instance.nil? || !instance.options || !instance.options.empty?
         # options(instance.options) if instance.respond_to?(:options)
         
-        @os = os.to_s.downcase.to_sym
-        create_config
+        @os = os.to_s.downcase.to_sym        
+        self.instance_eval &block if block
         
         loaded
       end
-      # Create the config of Cap
-      def create_config
-        @config = ::Capistrano::Configuration.new
-        @config.logger.level = verbose ? ::Capistrano::Logger::INFO : ::Capistrano::Logger::IMPORTANT
-        @config.set(:password) { ::Capistrano::CLI.password_prompt }        
-        if @cloud.deploy_file
-          @config.load @cloud.deploy_file 
-        else
-          set :user, @cloud.user || Base.user
-        end
-      end
+
       # Callback after initialized
       def loaded(opts={}, parent=self)      
       end
@@ -92,139 +36,63 @@ module PoolParty
       def loaded_tasks
         @loaded_tasks ||= []
       end
-            
+      
       ### Installation tasks
       
       # This is the actual runner for the installation    
-      def install
-        valid? ? install_string : error
-      end
-      # Write the installation tasks to a file in the storage directory
-      def name
-        @instance.name
-      end
-      # TODO: Clean up this method
-      def process_install!(testing=false)
+      def install(testing=false)
         error unless valid?
         setup_runner
-        
-        unless testing
-          vputs "Logging on to #{@instance.ip} (#{@instance.name})"
-          @cloud.rsync_storage_files_to(@instance)
-          vputs "Preparing configuration on the master"
-          
+        unless testing          
           before_install(@instance)
-          
-          # process_clean_reconfigure_for!(@instance, testing)
-          
+
           vputs "Provisioning #{@instance.name}"
-          # /bin/rm install_#{name}.sh
-          # cmd = "cd #{Base.remote_storage_path} && /bin/chmod +x install_#{name}.sh && /bin/sh install_#{name}.sh"
-          # verbose ? @cloud.run_command_on(cmd, @instance) : hide_output {@cloud.run_command_on(cmd, @instance)}
-          do_it(:install)
-          
+          process_install!(testing)
+
           after_install(@instance)
         end
       end
-      
-      def run_cap(meth=:install)
-        commands = meth == :install ? install_tasks : configure_tasks
-        
-        define_task(meth, roles) do
-          via = fetch(:run_method, :sudo)
-          commands.each do |command|
-            invoke_command command, :via => via
-          end
-        end
-        
-        begin
-          run(name)
-          return true
-        rescue ::Capistrano::CommandError => e
-          return false unless verbose
-          
-          # Reraise error if we're not suppressing it
-          raise
-        end        
-      end
-      # Install callbacks
-      # Before installation callback
-      def before_install(instance)        
-      end
-      def after_install(instance)        
+      # The provisioner bases overwrite this method
+      def process_install!(testing=false)
       end
       
-      ### Configuraton tasks
-      
-      def configure
-        valid? ? configure_string : error
-      end
-      def process_configure!(testing=false)
+      # Configuration
+      def configure(testing=false)
         error unless valid?
-        write_configure_file
         setup_runner
-        
-        unless testing
-          vputs "Logging on to #{@instance.ip}"
-          @cloud.rsync_storage_files_to(@instance)
-          #  && /bin/rm configure_#{name}.sh
-          cmd = "cd #{Base.remote_storage_path} && /bin/chmod +x configure_#{name}.sh && /bin/sh configure_#{name}.sh"
-          verbose ? @cloud.run_command_on(cmd, @instance) : hide_output {@cloud.run_command_on(cmd, @instance)}
+        unless testing          
+          before_configure(@instance)
+
+          vputs "Provisioning #{@instance.name}"
+          process_configure!(testing)
+
+          after_configure(@instance)
         end
       end
-      def process_reconfigure!(testing=false)
-        @cloud.run_command_on(PoolParty::Remote::RemoteInstance.puppet_runner_command, @instance) unless testing
-      end
+      
       # Tasks that need to be performed everytime we do any
       # remote ssh'ing into any instance
       def setup_runner(force=false)
         @cloud.prepare_for_configuration
         @cloud.build_and_store_new_config_file(force)
       end
+      
+      # Callbacks
+      # Before installation callback
+      def before_install(instance)        
+      end
+      def after_install(instance)        
+      end
+      def before_configure(instance)        
+      end
+      def after_configure(instance)        
+      end
+      
       def valid?
         true
       end
       def error
-        "Error in installation"
-      end
-      def after_install_tasks
-        []
-      end
-      def after_configure_tasks
-        []
-      end
-      # Tasks with default tasks 
-      # These are run on all the provisioners, master or slave
-      def default_install_tasks
-        [
-          :first_install_tasks,
-          :upgrade_system,
-          :install_rubygems,
-          :make_logger_directory,
-          :install_puppet,
-          :fix_rubygems,
-          :setup_system_for_poolparty,
-          :custom_install_tasks
-        ] << install_tasks
-      end
-      # Tasks with default configuration tasks
-      # This is run on the provisioner, regardless
-      def default_configure_tasks
-        [
-          custom_configure_tasks
-        ] << configure_tasks
-      end
-      # Build a list of the tasks to run on the instance
-      def install_tasks(a=[])
-        @install_task ||= a
-      end
-      # Set the first tasks to be called on the instance
-      # before any other tasks are run
-      def first_install_tasks
-        @cloud.first_install_tasks_for(@instances) || []
-      end
-      def configure_tasks(a=[])
-        @configure_tasks ||= a
+        raise ProvisionerException.new("Error in installation")
       end
       # Custom installation tasks
       # Allow the remoter bases to attach their own tasks on the 
@@ -289,24 +157,13 @@ module PoolParty
                   
       # Install from the class-level
       def self.install(instance, cl=self)
-        new(instance, cl).process_install!
+        new(instance, cl).install(testing)
       end
 
       def self.configure(instance, cl=self)
         new(instance, cl).process_configure!
       end
       
-      def define_task(name, roles, &block)
-        @config.task task_sym(name), :roles => roles, &block
-      end
-
-      def run(task)
-        @config.send task_sym(task)
-      end
-
-      def task_sym(name)
-        "install_#{name.to_task_name}".to_sym
-      end
     end
   end  
 end
