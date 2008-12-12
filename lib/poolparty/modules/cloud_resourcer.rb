@@ -36,12 +36,29 @@ module PoolParty
         raise SpecException.new("Don't know how to handle instances cloud input #{arg}")
       end
     end
+    
+    def setup_dev
+      unless ::File.exists?("#{full_keypair_basename_path}.pub")
+        cmd = "scp #{ssh_array.join(" ")} #{Base.user}@#{master.ip}:.ssh/authorized_keys #{full_keypair_basename_path}.pub"
+        vputs "Running #{cmd}"
+        Kernel.system(cmd)
+      end
+    end
+    
     def full_keypair_path
       unless keypair_path
         raise RuntimeException.new("Keypair cannot be found")        
       else
         ::File.expand_path(keypair_path)
       end
+    end
+    def full_pub_keypair_path
+      @full_pub_keypair_path ||= ::File.expand_path("#{full_keypair_basename_path}.pub")
+    end
+    def full_keypair_basename_path
+      dir = ::File.dirname(full_keypair_path)
+      basename = ::File.basename(full_keypair_path, ::File.extname(full_keypair_path))
+      ::File.join(dir, basename)
     end
     
     def keypair_path

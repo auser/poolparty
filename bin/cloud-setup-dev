@@ -1,0 +1,16 @@
+#!/usr/bin/env ruby
+$:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
+require "poolparty"
+require "poolpartycl"
+
+o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
+  opts.on('-n name', '--name name', 'Add the keypair for cloud name')    { |c| optioner.cloudname c }
+end
+  
+o.loaded_clouds.each do |cloud|  
+  with_cloud(cloud) do
+    
+    setup_dev
+    
+  end  
+end

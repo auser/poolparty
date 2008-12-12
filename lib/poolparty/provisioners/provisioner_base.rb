@@ -8,6 +8,10 @@ require 'capistrano/cli'
 module PoolParty
   module Provisioner
     
+    def provisioner_for(inst)
+      PoolParty::Provisioner::Capistrano.new(inst, self, :ubuntu)      
+    end
+    
     class ProvisionerBase
       attr_accessor :config, :loaded_tasks, :instance, :cloud
       

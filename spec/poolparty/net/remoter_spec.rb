@@ -11,7 +11,7 @@ describe "Remoter" do
   end
   describe "ssh_string" do
     it "should have the ssh command" do
-      @tc.ssh_string.should =~ /ssh -o StrictHostKeyChecking=no -l '#{Base.user}' -i/
+      @tc.ssh_string.should =~ /ssh -o StrictHostKeyChecking=no -i/
     end
     it "should have the keypair in the ssh_string" do
       @tc.ssh_string.should =~ /#{@tc.keypair}/
@@ -20,9 +20,6 @@ describe "Remoter" do
   describe "ssh_array" do
     it "should have StrictHostKeyChecking set to no" do
       @tc.ssh_array.include?("-o StrictHostKeyChecking=no").should == true
-    end
-    it "should have the user set to the base user class" do
-      @tc.ssh_array.include?("-l '#{Base.user}'").should == true
     end
     it "should have the keypair path in the ssh_array" do
       @tc.ssh_array.include?('-i "'+@tc.full_keypair_path+'"').should == true
@@ -44,6 +41,7 @@ describe "Remoter" do
     before(:each) do
       @tc.stub!(:wait).and_return true
       stub_list_from_remote_for(@tc)
+      stub_remoting_methods_for(@tc)
       @tc.stub!(:maximum_instances).and_return 5
       @tc.stub!(:list_of_pending_instances).and_return []
       @tc.stub!(:list_of_nonterminated_instances).and_return []
@@ -51,9 +49,14 @@ describe "Remoter" do
       @tc.stub!(:master).and_return ris.first
       @tc.stub!(:after_launched).and_return true
       @tc.stub!(:verbose).and_return false
-      Provisioner.stub!(:provision_master).and_return true
-      Provisioner.stub!(:reconfigure_master).and_return true
-      Provisioner.stub!(:clear_master_ssl_certs).and_return true
+      ::File.stub!(:exists?).and_return true
+      
+      @pb = PoolParty::Provisioner::Capistrano.new(nil, @cloud)
+      PoolParty::Provisioner::Capistrano.stub!(:new).and_return @pb
+      @pb.stub!(:setup_runner)
+      @pb.stub!(:install).and_return true
+      @pb.stub!(:configure).and_return true
+      @pb.stub!(:create_roles).and_return true
     end
     it "should have the method launch_master!" do
       @tc.respond_to?(:launch_and_configure_master!).should == true
@@ -68,9 +71,6 @@ describe "Remoter" do
       @tc.should_receive(:request_launch_master_instance)
       @tc.stub!(:can_start_a_new_instance?).and_return true
       @tc.stub!(:is_master_running?).and_return false
-    end
-    it "should tell the provisioner to provision_master" do
-      Provisioner.should_receive(:provision_master).once.and_return true
     end
     after(:each) do
       @tc.launch_and_configure_master!

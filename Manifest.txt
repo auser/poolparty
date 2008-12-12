@@ -18,6 +18,7 @@ bin/cloud-provision
 bin/cloud-refresh
 bin/cloud-rsync
 bin/cloud-run
+bin/cloud-setup-dev
 bin/cloud-spec
 bin/cloud-ssh
 bin/cloud-start
@@ -193,6 +194,7 @@ lib/poolparty/dependency_resolutions/puppet.rb
 lib/poolparty/exceptions/CloudNotFoundException.rb
 lib/poolparty/exceptions/LoadRulesException.rb
 lib/poolparty/exceptions/MasterException.rb
+lib/poolparty/exceptions/ProvisionerException.rb
 lib/poolparty/exceptions/RemoteException.rb
 lib/poolparty/exceptions/ResourceException.rb
 lib/poolparty/exceptions/RuntimeException.rb
@@ -261,10 +263,11 @@ lib/poolparty/poolparty/resources/sshkey.rb
 lib/poolparty/poolparty/resources/symlink.rb
 lib/poolparty/poolparty/resources/variable.rb
 lib/poolparty/poolparty/script.rb
+lib/poolparty/provisioners/capistrano/capistrano.rb
+lib/poolparty/provisioners/capistrano/tasks/base.rb
+lib/poolparty/provisioners/capistrano/tasks/master.rb
+lib/poolparty/provisioners/capistrano/tasks/slave.rb
 lib/poolparty/provisioners/provisioner_base.rb
-lib/poolparty/provisioners/provisioners/become_master.rb
-lib/poolparty/provisioners/provisioners/master.rb
-lib/poolparty/provisioners/provisioners/slave.rb
 lib/poolparty/spec/core/string.rb
 lib/poolparty/spec/matchers/a_spec_extensions_base.rb
 lib/poolparty/spec/matchers/have_cron.rb
@@ -332,9 +335,6 @@ spec/poolparty/extra/deployments_spec.rb
 spec/poolparty/helpers/binary_spec.rb
 spec/poolparty/helpers/display_spec.rb
 spec/poolparty/helpers/optioner_spec.rb
-spec/poolparty/helpers/provisioner_base_spec.rb
-spec/poolparty/helpers/provisioners/master_spec.rb
-spec/poolparty/helpers/provisioners/slave_spec.rb
 spec/poolparty/modules/cloud_resourcer_spec.rb
 spec/poolparty/modules/configurable_spec.rb
 spec/poolparty/modules/definable_resource.rb
@@ -384,6 +384,8 @@ spec/poolparty/poolparty/test_plugins/sshkey_test
 spec/poolparty/poolparty/test_plugins/virtual_host_template.erb
 spec/poolparty/poolparty/test_plugins/webserver.rb
 spec/poolparty/poolparty_spec.rb
+spec/poolparty/provisioners/capistrano/capistrano_spec.rb
+spec/poolparty/provisioners/provisioner_base_spec.rb
 spec/poolparty/spec/core/string_spec.rb
 spec/poolparty/spec_helper.rb
 tasks/cloud.rake

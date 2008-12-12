@@ -20,7 +20,9 @@ describe "Capistrano provisioner" do
       @pb.roles.should == [:master]
     end
     it "should create the role as the slaves if the remote instance is nil" do
-      PoolParty::Provisioner::Capistrano.new(nil, @cloud).roles.should == [:slaves]
+      newone = PoolParty::Provisioner::Capistrano.new(nil, @cloud)
+      newone.prerun_setup
+      newone.roles.should == [:slaves]
     end
     it "should create the role as the slaves if the remote instance is not the master" do
       @remote_instance.stub!(:master?).and_return false

@@ -28,11 +28,12 @@ module PoolParty
       # Includes StrictHostKeyChecking to no
       # Ssh with the user in Base
       # And including the keypair_path
+      # "-l '#{Base.user}'", 
       def ssh_array
-        ["-o StrictHostKeyChecking=no", "-l '#{Base.user}'", '-i "'+full_keypair_path+'"']
+        ["-o StrictHostKeyChecking=no", '-i "'+full_keypair_path+'"']
       end
       def rsync_command
-        "rsync -azP --exclude cache -e '#{ssh_string}'"
+        "rsync -azP --exclude cache -e '#{ssh_string} -l #{Base.user}'"
       end
       def remote_ssh_array
         ["-o StrictHostKeyChecking=no", "-l '#{Base.user}'", '-i "'+remote_keypair_path+'"']
@@ -188,12 +189,13 @@ module PoolParty
           last_instances.each do |inst|
             vputs "Provision slave: #{inst}"
             # hide_output {PoolParty::Provisioner.process_clean_reconfigure_for!(inst, self)}
-            PoolParty::Provisioner.provision_slave(inst, self, false) unless inst.master? rescue vputs "Error"
+            # PoolParty::Provisioner.provision_slave(inst, self, false) unless inst.master? rescue vputs "Error"
+            verbose ? provisioner_for(inst).install(testing) : hide_output { provisioner_for(inst).install(testing) }
             # hide_output {PoolParty::Provisioner.process_clean_reconfigure_for!(inst, self)}
             # cmd = ". /etc/profile && cloud-provision -i #{inst.name.gsub(/node/, '')} &"
             # vputs "Provision slave with command #{cmd}"
           end
-          PoolParty::Provisioner.reconfigure_master(self)
+          # PoolParty::Provisioner.reconfigure_master(self)
         end
       end
       # Launch the master and let the master handle the starting of the cloud
@@ -214,8 +216,8 @@ module PoolParty
             vputs ""
             vputs "Provisioning master..."
             # cleanup_storage_directory
-            verbose ? Provisioner.provision_master(self, testing) : hide_output { Provisioner.provision_master(self, testing) }
-            verbose ? Provisioner.clear_master_ssl_certs(self, testing) : hide_output { Provisioner.clear_master_ssl_certs(self, testing) }
+            @provisioner = PoolParty::Provisioner::Capistrano.new(master, self, :ubuntu)
+            verbose ? @provisioner.install(testing) : hide_output { @provisioner.install(testing) }
           
             after_launched
           end
@@ -306,7 +308,9 @@ module PoolParty
       
       # Ssh into the instance given
       def ssh_into(instance=nil)
-        Kernel.system "#{ssh_command(instance)}" if instance
+        cmd = "#{ssh_command(instance)}"
+        vputs "Running #{cmd}"
+        Kernel.system cmd if instance
       end
       # Find the instance by the number given
       # and then ssh into the instance

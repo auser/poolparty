@@ -104,6 +104,7 @@ def stub_list_from_remote_for(o, launch_stub=true)
   # o.stub!(:master).and_return @ris[0]
   o.stub!(:launch_new_instance!).and_return sample_instances.first if launch_stub  
   stub_list_of_instances_for(o)
+  stub_remoting_methods_for(o)
 end
 def stub_remoting_methods_for(o)
   o.stub!(:keypair).and_return "fake_keypair"
