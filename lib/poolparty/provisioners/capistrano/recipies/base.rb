@@ -9,9 +9,7 @@ Capistrano::Configuration.instance(:must_exist).load do
     end
     desc "Install provisioner"
     task :install_provisioner do
-      run "#{installer_for} #{puppet_packages} <<heredoc
-      Y
-      heredoc"
+      run "#{installer_for} #{puppet_packages}"
     end
     desc "Create poolparty commands"
     task :create_poolparty_commands do
@@ -19,14 +17,14 @@ Capistrano::Configuration.instance(:must_exist).load do
     desc "Create poolparty runner command"
     task :create_puppetrunner_command do
       run <<-EOR
-        cp #{remote_storage_path}/#{template_directory}/puppetrunner /usr/bin/puppetrunner &&
+        cp #{remote_storage_path}/templates/puppetrunner /usr/bin/puppetrunner &&
         chmod +x /usr/bin/puppetrunner
       EOR
     end
     desc "Create poolparty rerun command"
     task :create_puppetrerun_command do
       run <<-EOR
-        cp #{remote_storage_path}/#{template_directory}/puppetrerun /usr/bin/puppetrerun &&
+        cp #{remote_storage_path}/templates/puppetrerun /usr/bin/puppetrerun &&
         chmod +x /usr/bin/puppetrerun
       EOR
     end
@@ -52,7 +50,7 @@ Capistrano::Configuration.instance(:must_exist).load do
     end
     desc "Update rubygems"
     task :update_rubygems do
-      run "/usr/bin/gem update --system && /usr/bin/gem update --system"
+      run "/usr/bin/gem update --system 2>1 > /dev/null && /usr/bin/gem update --system"
     end
     desc "Fix rubygems"
     task :fix_rubygems do
@@ -65,7 +63,7 @@ Capistrano::Configuration.instance(:must_exist).load do
     desc "Upgrade system"
     task :upgrade_system do
       str = case os
-      when "ubuntu"
+      when :ubuntu
         "
 echo 'deb http://mirrors.kernel.org/ubuntu hardy main universe' >> /etc/apt/sources.list &&
 aptitude update -y

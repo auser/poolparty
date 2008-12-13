@@ -15,7 +15,8 @@ o.loaded_clouds.each do |cloud|
     # hide_output do
       # if provision_class == "master" || provision_class == "all"
       @cl = self
-      daemon ? daemonize {Provisioner.configure_master(@cl, testing)} : Provisioner.configure_master(self, testing)
+      # daemon ? daemonize {Provisioner.configure_master(@cl, testing)} : Provisioner.configure_master(self, testing)
+      verbose ? provisioner_for(master).configure(testing) : hide_output { provisioner_for(master).configure(testing) }
       # end
       # if provision_class == "slave" || provision_class == "all"
       #   Provisioner.configure_slaves(self, testing)
