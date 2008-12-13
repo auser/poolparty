@@ -78,10 +78,7 @@ Capistrano::Configuration.instance(:must_exist).load do
     end
     desc "Create local node for puppet manifest"
     task :create_local_node_entry_for_puppet do
-      run "
-        echo 'node default { include poolparty }' > #{manifest_path}/nodes/nodes.pp &&
-        echo '#{node_string}' >> #{manifest_path}/nodes/nodes.pp
-      "
+      run ". /etc/profile && server-write-new-nodes"
     end
     desc "Move template files into place"
     task :move_template_files do

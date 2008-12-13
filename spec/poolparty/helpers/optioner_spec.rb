@@ -33,7 +33,7 @@ describe "Option Parser" do
       @op = PoolParty::Optioner.new(%w( -v -i 1 five six -x), {:abstract => true, :parse_options => false})
     end
     it "should have an array of default boolean args" do
-      @op.boolean_args.sort.should == ['-V', '-h', '-t', '-v']
+      @op.boolean_args.sort.should == ['--debug', '-V', '-h', '-t', '-v']
     end
     it "should split ARGV into flagged and unflagged arg arrays" do
       @op.unflagged_args.sort.sort.should ==  ["five", "six"]
