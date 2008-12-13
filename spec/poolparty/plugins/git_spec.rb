@@ -21,7 +21,7 @@ describe "Remote Instance" do
       @tc.has_git(:at => "/var/www/", :name => "gitrepos.git", :source => "git://source.git").to_string.should =~ /exec/
     end
     it "should included the flushed out options" do
-      @tc.has_git({:name => "git.git", :source => "git://source.git", :user => "finger", :at => "/var/www/"}).to_string.should =~ /finger@git:/
+      @tc.has_git({:name => "git.git", :source => "git://source.git", :requires_user => "finger", :at => "/var/www/"}).to_string.should =~ /finger@git:/
     end
     it "should not include the user if none is given" do
       @tc.has_git({:name => "git.git", :source => "git://source.git",:at => "/var/www/"}).to_string.should =~ /git clone git:/

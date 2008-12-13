@@ -26,7 +26,7 @@ Capistrano::Configuration.instance(:must_exist).load do
     end
     desc "Add host entry into the master instance"
     task :create_local_hosts_entry do
-      run "if [ -z \"$(grep -v '#' /etc/hosts | grep 'puppet')\" ]; then echo '#{master_ip}          master puppet localhost' >> /etc/hosts; fi"
+      run "if [ -z \"$(grep -v '#' /etc/hosts | grep 'puppet')\" ]; then echo '#{cloud.master.ip}          master puppet localhost' >> /etc/hosts; fi"
     end
     desc "Setup basic poolparty structure"
     task :setup_basic_poolparty_structure do
@@ -56,7 +56,7 @@ Capistrano::Configuration.instance(:must_exist).load do
     desc "Setup poolparty structure"
     task :setup_poolparty_base_structure do
       run <<-EOR
-        cp #{remote_storage_path}/#{key_file_location} "#{base_config_directory}/.ppkeys" &&
+        cp #{remote_storage_path}/#{key_file_locations.first} "#{base_config_directory}/.ppkeys" &&
         mv #{remote_storage_path}/#{default_specfile_name} #{base_config_directory}/
       EOR
     end
@@ -66,7 +66,11 @@ Capistrano::Configuration.instance(:must_exist).load do
     end
     desc "Install base gems"
     task :install_base_gems do
-      run install_base_gems_string
+      run(returning(Array.new) do |arr|
+        base_gems.each do |name, url|
+          arr << "/usr/bin/gem install --ignore-dependencies --no-ri --no-rdoc #{Base.remote_storage_path}/#{name}.gem"
+        end
+      end.join(" && "))
     end
     desc "Start provisioner base"
     task :start_provisioner_base do
@@ -78,13 +82,20 @@ Capistrano::Configuration.instance(:must_exist).load do
     end
     desc "Create local node for puppet manifest"
     task :create_local_node_entry_for_puppet do
-      run ". /etc/profile && server-write-new-nodes"
+      # run ". /etc/profile && server-write-new-nodes"
+      str = returning Array.new do |arr|
+        arr << "node default { include poolparty }"
+        list_of_running_instances.each do |ri| 
+          arr << "node \"#{ri.name}\" inherits default {}\n"
+        end
+      end.join("\n")
+      run "echo #{str} > #{manifest_path}/nodes/nodes.pp"
     end
     desc "Move template files into place"
     task :move_template_files do
       run <<-EOR
         mkdir -p #{template_path} &&
-        cp -R #{remote_storage_path}/#{template_directory}/* #{template_path}
+        cp -R #{remote_storage_path}/templates/* #{template_path}
       EOR
     end
     desc "Move manifest into place" 

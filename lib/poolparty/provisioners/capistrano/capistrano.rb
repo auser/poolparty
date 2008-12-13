@@ -68,61 +68,33 @@ module PoolParty
         EOR
       end
       
-      # Very ugly
-      # This is a way to allow common variables to be accessed for the Capistrano
-      # tasks. This should be abstracted
-      def common_variables_string
-        <<-EOS
-          set :master_ip, '#{@cloud.master.ip}'
-          set :puppet_packages, '#{puppet_packages}'
-          set :installer_for, '#{os_installer}'
-          set :os, '#{@os}'
-          set :remote_storage_path, '#{Base.remote_storage_path}'
-          set :poolparty_config_directory, '#{Base.poolparty_config_directory}'
-          set :template_path, '#{Base.template_path}'
-          set :template_directory, '#{Base.template_directory}'
-          set :base_config_directory, '#{Base.base_config_directory}'
-          set :install_base_gems_string, '#{install_base_gems_string}'
-          set :download_base_gems_string, '#{download_base_gems_string}'
-          set :manifest_path, '#{Base.manifest_path}'
-          set :key_file_location, '#{Base.key_file_locations.first}'
-          set :default_specfile_name, '#{Base.default_specfile_name}'
-        EOS
-      end
-      
       # Create the config for capistrano
       # This is a dynamic capistrano configuration file
-      def create_config
-        @config = CapistranoConfigurer.new
-        @config.instance_eval <<-EOM
-          def cloud
-            #{@cloud}
-          end
-          def provisioner
-            #{self}
-          end
-        EOM
-
+      def create_config        
+        @config = ::Capistrano::Configuration.new
         if @cloud.debug || @cloud.verbose 
           @config.logger.level = @cloud.debug ? ::Capistrano::Logger::MAX_LEVEL : ::Capistrano::Logger::INFO
         else
           @config.logger.level = ::Capistrano::Logger::IMPORTANT
         end
         
-        @cloud.deploy_file ? @config.load(@cloud.deploy_file) : @config.set(:user, @cloud.user)
-      end
-      
-      # Prerun
-      def prerun_setup
         capfile = returning Array.new do |arr|
           Dir["#{::File.dirname(__FILE__)}/recipies/*.rb"].each {|a| arr << "require '#{a}'" }
           arr << "ssh_options[:keys] = '#{@cloud.full_keypair_basename_path}'"
           
           arr << role_string
-          arr << common_variables_string
         end.join("\n")
+                
+        @config.provisioner = self
+        @config.cloud = @cloud
         
         @config.load(:string => capfile)
+        
+        @cloud.deploy_file ? @config.load(@cloud.deploy_file) : @config.set(:user, @cloud.user)
+      end
+      
+      # Prerun
+      def prerun_setup
       end
             
       def run_capistrano(roles=[:master], meth=:install)  
@@ -132,7 +104,7 @@ module PoolParty
         commands = meth == :install ? install_tasks : configure_tasks
         name = "provisioner_#{meth}"
         
-        define_task(name, roles) do
+        __define_task(name, roles) do
           commands.each {|command| 
             find_and_execute_task(command.to_sym, :before => :start, :after => :finish) 
           }
@@ -141,7 +113,7 @@ module PoolParty
         # @config.task_list(:all).each {|t| puts "t: #{t.fully_qualified_name}"}  
                 
         begin
-          run(name)
+          __run(name)
           return true
         rescue ::Capistrano::CommandError => e
           return false unless verbose
@@ -149,15 +121,15 @@ module PoolParty
         end
       end
                   
-      def define_task(name, roles, &block)
-        @config.task task_sym(name), :roles => roles, &block
+      def __define_task(name, roles, &block)
+        @config.task __task_sym(name), :roles => roles, &block
       end
 
-      def run(task)
-        @config.send task_sym(task)
+      def __run(task)
+        @config.send __task_sym(task)
       end
 
-      def task_sym(name)
+      def __task_sym(name)
         "#{name.to_s.downcase.underscore}".to_sym
       end
       
