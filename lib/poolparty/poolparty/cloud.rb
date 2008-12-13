@@ -147,7 +147,7 @@ module PoolParty
       end      
       
       def copy_misc_templates
-        ["namespaceauth.conf", "puppet.conf", "puppetrerun", "puppetrunner"].each do |f|
+        ["namespaceauth.conf", "puppet.conf", "gem"].each do |f|
           copy_file_to_storage_directory(::File.join(::File.dirname(__FILE__), "..", "templates", f))
         end
       end
