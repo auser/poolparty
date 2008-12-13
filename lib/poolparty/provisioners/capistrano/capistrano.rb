@@ -92,14 +92,15 @@ module PoolParty
       
       # Create the config for capistrano
       # This is a dynamic capistrano configuration file
-      def create_config        
-        @config = ::Capistrano::Configuration.new
+      def create_config
+        @config = CapistranoConfigurer.new
+
         if @cloud.debug || @cloud.verbose 
           @config.logger.level = @cloud.debug ? ::Capistrano::Logger::MAX_LEVEL : ::Capistrano::Logger::INFO
         else
           @config.logger.level = ::Capistrano::Logger::IMPORTANT
         end
-                
+        
         @cloud.deploy_file ? @config.load(@cloud.deploy_file) : @config.set(:user, @cloud.user)
       end
       

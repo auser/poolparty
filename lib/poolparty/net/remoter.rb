@@ -205,7 +205,7 @@ module PoolParty
       # Then wait for the master to launch
       def launch_and_configure_master!(testing=false)
         vputs "Requesting to launch new instance"
-        logger.debug "Launching master"
+        log.debug "Launching master"
         request_launch_master_instance if list_of_pending_instances.size.zero? && can_start_a_new_instance? && !is_master_running? && !testing
         reset!
         unless testing
