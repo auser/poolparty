@@ -72,7 +72,6 @@ module PoolParty
       # This is a way to allow common variables to be accessed for the Capistrano
       # tasks. This should be abstracted
       def common_variables_string
-        puts "'#{@cloud.list_of_running_instances.map {|ri| "node \"#{ri.name}\" inherits default {}"}.join("\n")}'"
         <<-EOS
           set :master_ip, '#{@cloud.master.ip}'
           set :puppet_packages, '#{puppet_packages}'
@@ -100,7 +99,12 @@ module PoolParty
         else
           @config.logger.level = ::Capistrano::Logger::IMPORTANT
         end
-        
+                
+        @cloud.deploy_file ? @config.load(@cloud.deploy_file) : @config.set(:user, @cloud.user)
+      end
+      
+      # Prerun
+      def prerun_setup
         capfile = returning Array.new do |arr|
           Dir["#{::File.dirname(__FILE__)}/recipies/*.rb"].each {|a| arr << "require '#{a}'" }
           arr << "ssh_options[:keys] = '#{@cloud.full_keypair_basename_path}'"
@@ -110,12 +114,6 @@ module PoolParty
         end.join("\n")
         
         @config.load(:string => capfile)
-        
-        @cloud.deploy_file ? @config.load(@cloud.deploy_file) : @config.set(:user, @cloud.user)
-      end
-      
-      # Prerun
-      def prerun_setup
       end
             
       def run_capistrano(roles=[:master], meth=:install)  
