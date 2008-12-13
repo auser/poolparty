@@ -94,6 +94,14 @@ module PoolParty
       # This is a dynamic capistrano configuration file
       def create_config
         @config = CapistranoConfigurer.new
+        @config.instance_eval <<-EOM
+          def cloud
+            #{@cloud}
+          end
+          def provisioner
+            #{self}
+          end
+        EOM
 
         if @cloud.debug || @cloud.verbose 
           @config.logger.level = @cloud.debug ? ::Capistrano::Logger::MAX_LEVEL : ::Capistrano::Logger::INFO
