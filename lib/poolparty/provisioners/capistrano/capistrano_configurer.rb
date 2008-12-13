@@ -3,12 +3,6 @@ module PoolParty
     def cap_config
       @config ||= ::Capistrano::Configuration.new
     end
-    def cloud
-      #{@cloud}
-    end
-    def provisioner
-      #{self}
-    end
     def method_missing(sym, *args, &block)
       if cloud.methods.include?(sym)
         cloud.send(sym, *args, &block)
