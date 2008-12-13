@@ -1,20 +1,18 @@
-#! /usr/bin/ruby1.8
+#!/usr/bin/env ruby
 #--
 # Copyright 2006 by Chad Fowler, Rich Kilmer, Jim Weirich and others.
 # All rights reserved.
 # See LICENSE.txt for permissions.
-# /usr/bin/gem is broken, so... have to use this until it is fixed
 #++
 
+require 'rubygems'
+require 'rubygems/gem_runner'
+require 'rubygems/exceptions'
 
-require "rubygems"
-require "rubygems/gem_runner"
-Gem.manage_gems
+required_version = Gem::Requirement.new "> 1.8.3"
 
-required_version = Gem::Version::Requirement.new(">= 1.8.0")
-unless  required_version.satisfied_by?(Gem::Version.new(RUBY_VERSION))
-  puts "Expected Ruby Version #{required_version}, was #{RUBY_VERSION}"
-  exit(1)
+unless required_version.satisfied_by? Gem.ruby_version then
+  abort "Expected Ruby Version #{required_version}, was #{Gem.ruby_version}"
 end
 
 # We need to preserve the original ARGV to use for passing gem options
@@ -22,4 +20,8 @@ end
 # it...its for the source building process.
 args = !ARGV.include?("--") ? ARGV.clone : ARGV[0...ARGV.index("--")]
 
-Gem::GemRunner.new.run(args)
+begin
+  Gem::GemRunner.new.run args
+rescue Gem::SystemExitException => e
+  exit e.exit_code
+end

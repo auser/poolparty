@@ -30,7 +30,7 @@ module PoolParty
       # And including the keypair_path
       # "-l '#{Base.user}'", 
       def ssh_array
-        ["-o StrictHostKeyChecking=no", '-i "'+full_keypair_path+'"']
+        ["-o StrictHostKeyChecking=no", "-l #{user}", '-i "'+full_keypair_path+'"']
       end
       def rsync_command
         "rsync -azP --exclude cache -e '#{ssh_string} -l #{Base.user}'"

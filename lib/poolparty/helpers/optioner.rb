@@ -37,7 +37,7 @@ module PoolParty
       @flagged_args ||= []
     end
     def boolean_args
-      @boolean_args ||= ['-V', '-h', '-t', '-v']
+      @boolean_args ||= ['-V', '-h', '-t', '-v', '--debug']
     end
     
     # Break ARGV into 2 arrays, one for flagged options one for unflagged
@@ -83,6 +83,7 @@ module PoolParty
         @opts.separator "Options:"
         
         @opts.on('-v', '--verbose', 'Be verbose')    { self.verbose true }  
+        @opts.on("--debug", "Debug setting") {self.debug true}
         @opts.on('-s [file]', '--spec-file [file]', 'Set the spec file')      { |file| self.spec file.chomp }
         @opts.on('-t', '--test', 'Testing mode')    { self.testing true }
         

@@ -165,7 +165,6 @@ begin
 
       def custom_configure_tasks_for(o)
         [
-          "# ec2 configuration"
         ]
       end
 
