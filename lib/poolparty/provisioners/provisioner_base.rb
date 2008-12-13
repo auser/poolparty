@@ -132,12 +132,17 @@ module PoolParty
           :gentoo => "emerge"
         }
       end
+      def os_installer
+        "#{self.class.installers[@os]}"
+      end
       # Convenience method to grab the installer
       def installer_for(names=[])
         packages = names.is_a?(Array) ? names.join(" ") : names
         "#{self.class.installers[@os]} #{packages}"
       end
             
+      #TODO#
+      # Abstract the gems out
       def base_gems
         {
           :logging => "http://rubyforge.org/frs/download.php/44731/logging-0.9.4.gem",
@@ -154,8 +159,25 @@ module PoolParty
           :rake => "http://rubyforge.org/frs/download.php/43954/rake-0.8.3.gem",
           :sexp_processor => "http://rubyforge.org/frs/download.php/45589/sexp_processor-3.0.0.gem",
           :capistrano => "http://rubyforge.org/frs/download.php/48031/capistrano-2.5.3.gem",
-          :poolparty => "http://github.com/auser/poolparty/tree/master%2Fpkg%2Fpoolparty.gem?raw=true"
+          :poolparty => "http://github.com/auser/poolparty/tree/master%2Fpkg%2Fpoolparty.gem?raw=true",
+          "ec2" => "http://rubyforge.org/frs/download.php/43666/amazon-ec2-0.3.1.gem"
         }
+      end
+      
+      def download_base_gems_string
+        returning(Array.new) do |arr|
+          base_gems.each do |name, url|
+            arr << "wget #{url} -O #{Base.remote_storage_path}/#{name}.gem 2>&1"
+          end
+        end.join(" && ")
+      end
+      
+      def install_base_gems_string
+        returning(Array.new) do |arr|
+          base_gems.each do |name, url|
+            arr << "/usr/bin/gem install --ignore-dependencies --no-ri --no-rdoc #{Base.remote_storage_path}/#{name}.gem"
+          end
+        end.join(" && ")
       end
       
       # Template directory from the provisioner base

@@ -4,7 +4,7 @@ require "poolparty"
 require "poolpartycl"
 
 o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
-  opts.on('-n name', '--name name', 'Add the keypair for cloud name')    { |c| optioner.cloudname c }
+  opts.on('-n name', '--name name', 'Setup development environment for cloud named')    { |c| optioner.cloudname c }
 end
   
 o.loaded_clouds.each do |cloud|  
@@ -12,5 +12,14 @@ o.loaded_clouds.each do |cloud|
     
     setup_dev
     
+    str =<<-EOE
+    Host #{name}-master
+      User        #{user}
+      Hostname    #{master.ip}
+      IdentityFile    #{full_keypair_path}
+    EOE
+    
+    puts "Enter the following in your .ssh/config file"
+    puts str
   end  
 end
