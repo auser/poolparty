@@ -28,6 +28,6 @@ describe "PoolParty" do
     end
   end
   it "should have a logger" do
-    PoolParty.logger.should_not be_nil
+    PoolParty.log.should_not be_nil
   end
 end
