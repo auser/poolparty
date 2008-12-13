@@ -10,7 +10,7 @@ module PoolParty
       def has_git_repos
         has_package(:name => "git-core")
         has_exec({:name => key, :requires => [get_directory("#{working_dir}"), get_package("git-core")] }) do
-          command user ? "git clone #{user}@#{source} #{working_dir}" : "git clone #{source} #{working_dir ? working_dir : ""}"
+          command requires_user ? "git clone #{requires_user}@#{source} #{working_dir}" : "cd #{working_dir} && git clone #{source}"
           cwd "#{working_dir if working_dir}"
           creates creates_dir
         end

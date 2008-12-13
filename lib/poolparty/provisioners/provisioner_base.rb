@@ -13,7 +13,7 @@ module PoolParty
     end
     
     class ProvisionerBase
-      attr_accessor :config, :loaded_tasks, :instance, :cloud
+      attr_accessor :config, :loaded_tasks, :instance, :cloud, :os
       
       include Configurable
       include CloudResourcer
