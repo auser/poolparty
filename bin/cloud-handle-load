@@ -14,12 +14,12 @@ o.loaded_clouds.each do |cloud|
     vputs "should_expand_cloud: #{should_contract_cloud?}"
     if should_expand_cloud?
       vputs "Expanding cloud based on load"
-      logger.debug "Expanding cloud based on load"
-      logger.debug rules_values
+      log.debug "Expanding cloud based on load"
+      log.debug rules_values
       expand_cloud_if_necessary
     elsif should_contract_cloud?
       vputs "Contracting cloud based on load"
-      logger.debug rules_values
+      log.debug rules_values
       contract_cloud_if_necessary
     end
   end

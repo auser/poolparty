@@ -50,7 +50,7 @@ Logging.init :debug, :info, :warn, :error, :fatal
 module PoolParty
   include FileWriter
   
-  def logger
+  def log
     @logger ||= make_new_logger
   end
   

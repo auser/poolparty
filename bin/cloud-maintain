@@ -13,8 +13,8 @@ o.loaded_clouds.each do |cloud|
 
   with_cloud(cloud) do
     vputs header("Maintaining cloud #{name}")
-    logger.warn "Maintaining cloud"
-    logger.warn rules_values
+    log.warn "Maintaining cloud"
+    log.warn rules_values
     if !minimum_number_of_instances_are_running?
       vputs "#{list_of_running_instances.size} running instances of between #{minimum_instances} and #{maximum_instances}"
       vputs "Launching new instance"
