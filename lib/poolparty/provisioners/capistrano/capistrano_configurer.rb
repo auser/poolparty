@@ -26,8 +26,8 @@ module Capistrano
     end
       
     
-    module Namespaces
-      class Namespace
+    module Namespaces            
+      class Namespace        
         
         def provisioner
           parent.provisioner
@@ -50,7 +50,7 @@ module Capistrano
             PoolParty::Base.send(sym, *args, &block)
           else
             super
-          end          
+          end
         end
       end
     end    

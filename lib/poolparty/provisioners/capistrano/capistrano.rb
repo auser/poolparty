@@ -59,13 +59,14 @@ module PoolParty
       # role :#{@cloud.name}master, "#{@cloud.name}-master"
       def role_string
         # @config.role "master.#{@cloud.name}".to_sym, "#{@cloud.master.ip}"
-        # @config.role :slaves, "#{@cloud.nonmaster_nonterminated_instances.map{|a| a.ip}.join('", "')}"
+        # @config.role :master, "#{@cloud.master.ip}"
+        # @config.role :slaves, "#{@cloud.nonmaster_nonterminated_instances.map{|a| a.ip }.join('", "')}"
         # @config.role :all, "#{@cloud.list_of_running_instances.map{|a| a.ip}.join('", "')}"
-        <<-EOR          
-          role :master, "#{@cloud.master.ip}"
-          # role :slaves, '#{@cloud.nonmaster_nonterminated_instances.map{|a| a.ip}.join('", "')}'
-          # role :all, '#{@cloud.list_of_running_instances.map{|a| a.ip }.join('", "')}'
-        EOR
+        returning Array.new do |arr|
+          arr << "role 'master.#{@cloud.name}'.to_sym, '#{@cloud.master.ip}'"
+          arr << "role :master, '#{@cloud.master.ip}'"
+          arr << "role :slaves, '#{@cloud.nonmaster_nonterminated_instances.map{|a| a.ip}.join('", "')}'"
+        end.join("\n")
       end
       
       # Create the config for capistrano
@@ -100,13 +101,14 @@ module PoolParty
       def run_capistrano(roles=[:master], meth=:install)  
         prerun_setup
         
-        # puts @config.invoke_command(@config.task_list(:all).last.fully_qualified_name, {:roles => [:master]})
         commands = meth == :install ? install_tasks : configure_tasks
         name = "provisioner_#{meth}"
         
         __define_task(name, roles) do
-          commands.each {|command| 
-            find_and_execute_task(command.to_sym, :before => :start, :after => :finish) 
+          commands.map {|command| 
+            task = find_task(command)
+            task.options.merge!(:roles => roles)
+            execute_task task
           }
         end
         

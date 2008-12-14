@@ -1,3 +1,4 @@
+Capfile
 History.txt
 License.txt
 Manifest.txt
@@ -48,6 +49,7 @@ bin/server-stop-client
 bin/server-stop-master
 bin/server-stop-node
 bin/server-update-hosts
+bin/server-write-new-nodes
 config/hoe.rb
 config/requirements.rb
 examples/basic.rb
@@ -264,9 +266,10 @@ lib/poolparty/poolparty/resources/symlink.rb
 lib/poolparty/poolparty/resources/variable.rb
 lib/poolparty/poolparty/script.rb
 lib/poolparty/provisioners/capistrano/capistrano.rb
-lib/poolparty/provisioners/capistrano/tasks/base.rb
-lib/poolparty/provisioners/capistrano/tasks/master.rb
-lib/poolparty/provisioners/capistrano/tasks/slave.rb
+lib/poolparty/provisioners/capistrano/capistrano_configurer.rb
+lib/poolparty/provisioners/capistrano/recipies/base.rb
+lib/poolparty/provisioners/capistrano/recipies/master.rb
+lib/poolparty/provisioners/capistrano/recipies/slave.rb
 lib/poolparty/provisioners/provisioner_base.rb
 lib/poolparty/spec/core/string.rb
 lib/poolparty/spec/matchers/a_spec_extensions_base.rb
@@ -343,6 +346,7 @@ spec/poolparty/modules/s3_string_spec.rb
 spec/poolparty/monitors/base_monitor_spec.rb
 spec/poolparty/monitors/monitors/cpu_monitor_spec.rb
 spec/poolparty/monitors/monitors/memory_monitor_spec.rb
+spec/poolparty/net/log/pool.log
 spec/poolparty/net/messenger_spec.rb
 spec/poolparty/net/remote_bases/ec2_spec.rb
 spec/poolparty/net/remote_instance_spec.rb
