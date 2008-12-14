@@ -36,7 +36,7 @@ end
 ActiveSupport::Dependencies.load_paths << File.dirname(__FILE__)
 
 ## Load PoolParty
-%w(version capistrano).each do |f|
+%w(version).each do |f|
   require "#{File.dirname(__FILE__)}/poolparty/#{f}"
 end
 

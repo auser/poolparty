@@ -1,3 +1,5 @@
+require "poolparty/capistrano"
+
 module PoolParty
   module Provisioner
     class Capistrano < ProvisionerBase
@@ -72,7 +74,7 @@ module PoolParty
           
           arr << set_poolparty_roles
         end.join("\n")
-                
+        
         @config.provisioner = self
         @config.cloud = @cloud
         
