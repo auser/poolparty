@@ -2,6 +2,7 @@ module PoolParty
   module Provisioner
     class Capistrano < ProvisionerBase
       
+      include PoolParty::Capistrano
       include ::Capistrano::Configuration::Actions::Invocation
       
       def process_install!(testing=false)
@@ -54,20 +55,6 @@ module PoolParty
       def loaded
         create_config
       end
-            
-      # Create the roles for capistrano
-      # role :#{@cloud.name}master, "#{@cloud.name}-master"
-      def role_string
-        # @config.role "master.#{@cloud.name}".to_sym, "#{@cloud.master.ip}"
-        # @config.role :master, "#{@cloud.master.ip}"
-        # @config.role :slaves, "#{@cloud.nonmaster_nonterminated_instances.map{|a| a.ip }.join('", "')}"
-        # @config.role :all, "#{@cloud.list_of_running_instances.map{|a| a.ip}.join('", "')}"
-        returning Array.new do |arr|
-          arr << "role 'master.#{@cloud.name}'.to_sym, '#{@cloud.master.ip}'"
-          arr << "role :master, '#{@cloud.master.ip}'"
-          arr << "role :slaves, '#{@cloud.nonmaster_nonterminated_instances.map{|a| a.ip}.join('", "')}'"
-        end.join("\n")
-      end
       
       # Create the config for capistrano
       # This is a dynamic capistrano configuration file
@@ -83,7 +70,7 @@ module PoolParty
           Dir["#{::File.dirname(__FILE__)}/recipies/*.rb"].each {|a| arr << "require '#{a}'" }
           arr << "ssh_options[:keys] = '#{@cloud.full_keypair_basename_path}'"
           
-          arr << role_string
+          arr << set_poolparty_roles
         end.join("\n")
                 
         @config.provisioner = self
