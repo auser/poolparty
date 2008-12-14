@@ -291,6 +291,7 @@ files:
 - lib/poolparty/base_packages/poolparty.rb
 - lib/poolparty/base_packages/ruby.rb
 - lib/poolparty/base_packages/runit.rb
+- lib/poolparty/capistrano.rb
 - lib/poolparty/config/postlaunchmessage.txt
 - lib/poolparty/core/array.rb
 - lib/poolparty/core/class.rb
@@ -529,7 +530,7 @@ files:
 has_rdoc: true
 homepage: http://poolparty.rubyforge.org
 post_install_message: |-
-  Get ready to jump in the pool, you just installed PoolParty! (Updated at 17:19 12/13/08)
+  Get ready to jump in the pool, you just installed PoolParty! (Updated at 17:26 12/13/08)
   
   To get started, run the generator:
   
