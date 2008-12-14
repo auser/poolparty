@@ -176,6 +176,7 @@ lib/poolparty/base_packages/heartbeat.rb
 lib/poolparty/base_packages/poolparty.rb
 lib/poolparty/base_packages/ruby.rb
 lib/poolparty/base_packages/runit.rb
+lib/poolparty/capistrano.rb
 lib/poolparty/config/postlaunchmessage.txt
 lib/poolparty/core/array.rb
 lib/poolparty/core/class.rb
