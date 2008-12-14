@@ -51,7 +51,7 @@ describe "Remoter" do
       @tc.stub!(:verbose).and_return false
       ::File.stub!(:exists?).and_return true
       
-      @pb = PoolParty::Provisioner::Capistrano.new(nil, @cloud)
+      @pb = PoolParty::Provisioner::Capistrano.new(nil, @tc)
       PoolParty::Provisioner::Capistrano.stub!(:new).and_return @pb
       @pb.stub!(:setup_runner)
       @pb.stub!(:install).and_return true

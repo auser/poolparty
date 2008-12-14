@@ -18,7 +18,7 @@ o.loaded_clouds.each do |cloud|
       boot_file = "#{Messenger.append_dir}/pm_client_rel-0.1"
 
       Kernel.system "cd #{Messenger.append_dir} && rake build_boot_scripts"  unless ::File.file?("#{boot_file}.boot") || testing    
-      command = Messenger.erl_command("client", "-boot #{boot_file} #{noshell ? "" : "-detached -heart -noshell"}", 7049, 7050)
+      command = Messenger.erl_command("client", "-setcookie #{generate_unique_cookie_string} -boot #{boot_file} #{noshell ? "" : "-detached -heart -noshell"}", 7049, 7050)
       vputs "Running #{command}"
       
       Kernel.system "export HOME=/root && #{command}" unless testing

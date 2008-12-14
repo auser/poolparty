@@ -19,6 +19,14 @@ Capistrano::Configuration.instance(:must_exist).load do
       create_puppetrerun_command
       download_base_gems
       install_base_gems
+      write_erlang_cookie
+    end
+    desc "Configure master"
+    task :configure_master do
+      master:move_provisioner_manifest
+      master:move_template_files
+      master:setup_poolparty_base_structure
+      run_provisioner
     end
     desc "Set hostname to master"
     task :set_hostname_to_master do

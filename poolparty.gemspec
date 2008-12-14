@@ -1,7 +1,7 @@
 --- !ruby/object:Gem::Specification 
 name: poolparty
 version: !ruby/object:Gem::Version 
-  version: 0.2.81
+  version: 0.2.83
 platform: ruby
 authors: 
 - Ari Lerner
@@ -9,7 +9,7 @@ autorequire:
 bindir: bin
 cert_chain: []
 
-date: 2008-12-10 00:00:00 -08:00
+date: 2008-12-13 00:00:00 -08:00
 default_executable: 
 dependencies: 
 - !ruby/object:Gem::Dependency 
@@ -70,6 +70,7 @@ executables:
 - cloud-refresh
 - cloud-rsync
 - cloud-run
+- cloud-setup-dev
 - cloud-spec
 - cloud-ssh
 - cloud-start
@@ -99,6 +100,7 @@ executables:
 - server-stop-master
 - server-stop-node
 - server-update-hosts
+- server-write-new-nodes
 extensions: []
 
 extra_rdoc_files: 
@@ -111,6 +113,7 @@ extra_rdoc_files:
 - lib/poolparty/config/postlaunchmessage.txt
 - website/index.txt
 files: 
+- Capfile
 - History.txt
 - License.txt
 - Manifest.txt
@@ -131,6 +134,7 @@ files:
 - bin/cloud-refresh
 - bin/cloud-rsync
 - bin/cloud-run
+- bin/cloud-setup-dev
 - bin/cloud-spec
 - bin/cloud-ssh
 - bin/cloud-start
@@ -160,6 +164,7 @@ files:
 - bin/server-stop-master
 - bin/server-stop-node
 - bin/server-update-hosts
+- bin/server-write-new-nodes
 - config/hoe.rb
 - config/requirements.rb
 - examples/basic.rb
@@ -306,6 +311,7 @@ files:
 - lib/poolparty/exceptions/CloudNotFoundException.rb
 - lib/poolparty/exceptions/LoadRulesException.rb
 - lib/poolparty/exceptions/MasterException.rb
+- lib/poolparty/exceptions/ProvisionerException.rb
 - lib/poolparty/exceptions/RemoteException.rb
 - lib/poolparty/exceptions/ResourceException.rb
 - lib/poolparty/exceptions/RuntimeException.rb
@@ -374,10 +380,12 @@ files:
 - lib/poolparty/poolparty/resources/symlink.rb
 - lib/poolparty/poolparty/resources/variable.rb
 - lib/poolparty/poolparty/script.rb
+- lib/poolparty/provisioners/capistrano/capistrano.rb
+- lib/poolparty/provisioners/capistrano/capistrano_configurer.rb
+- lib/poolparty/provisioners/capistrano/recipies/base.rb
+- lib/poolparty/provisioners/capistrano/recipies/master.rb
+- lib/poolparty/provisioners/capistrano/recipies/slave.rb
 - lib/poolparty/provisioners/provisioner_base.rb
-- lib/poolparty/provisioners/provisioners/become_master.rb
-- lib/poolparty/provisioners/provisioners/master.rb
-- lib/poolparty/provisioners/provisioners/slave.rb
 - lib/poolparty/spec/core/string.rb
 - lib/poolparty/spec/matchers/a_spec_extensions_base.rb
 - lib/poolparty/spec/matchers/have_cron.rb
@@ -445,9 +453,6 @@ files:
 - spec/poolparty/helpers/binary_spec.rb
 - spec/poolparty/helpers/display_spec.rb
 - spec/poolparty/helpers/optioner_spec.rb
-- spec/poolparty/helpers/provisioner_base_spec.rb
-- spec/poolparty/helpers/provisioners/master_spec.rb
-- spec/poolparty/helpers/provisioners/slave_spec.rb
 - spec/poolparty/modules/cloud_resourcer_spec.rb
 - spec/poolparty/modules/configurable_spec.rb
 - spec/poolparty/modules/definable_resource.rb
@@ -456,6 +461,7 @@ files:
 - spec/poolparty/monitors/base_monitor_spec.rb
 - spec/poolparty/monitors/monitors/cpu_monitor_spec.rb
 - spec/poolparty/monitors/monitors/memory_monitor_spec.rb
+- spec/poolparty/net/log/pool.log
 - spec/poolparty/net/messenger_spec.rb
 - spec/poolparty/net/remote_bases/ec2_spec.rb
 - spec/poolparty/net/remote_instance_spec.rb
@@ -497,6 +503,8 @@ files:
 - spec/poolparty/poolparty/test_plugins/virtual_host_template.erb
 - spec/poolparty/poolparty/test_plugins/webserver.rb
 - spec/poolparty/poolparty_spec.rb
+- spec/poolparty/provisioners/capistrano/capistrano_spec.rb
+- spec/poolparty/provisioners/provisioner_base_spec.rb
 - spec/poolparty/spec/core/string_spec.rb
 - spec/poolparty/spec_helper.rb
 - tasks/cloud.rake
@@ -521,7 +529,7 @@ files:
 has_rdoc: true
 homepage: http://poolparty.rubyforge.org
 post_install_message: |-
-  Get ready to jump in the pool, you just installed PoolParty! (Updated at 13:44 12/10/08)
+  Get ready to jump in the pool, you just installed PoolParty! (Updated at 17:19 12/13/08)
   
   To get started, run the generator:
   
