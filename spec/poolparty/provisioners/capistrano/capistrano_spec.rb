@@ -11,7 +11,7 @@ describe "Capistrano provisioner" do
       @pb = PoolParty::Provisioner::Capistrano.new(@remote_instance, @cloud)
     end
     it "should create the config on the initialize" do    
-      @pb.config.class.should == PoolParty::CapistranoConfigurer
+      @pb.config.class.should == ::Capistrano::Configuration
     end
     describe "config" do
       it "should create the config at ::Capistrano::Logger::INFO if the cloud is verbose" do
