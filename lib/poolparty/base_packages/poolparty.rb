@@ -27,7 +27,7 @@ module PoolParty
           
           has_gempackage(:name => "sexp_processor", :download_url => "http://rubyforge.org/frs/download.php/45589/sexp_processor-3.0.0.gem")
           
-          has_gempackage(:name => "capistrano", :requires => get_gempackage("net-ssh"))
+          has_gempackage(:name => "capistrano")
           
           has_gempackage(:name => "ParseTree", :download_url => "http://rubyforge.org/frs/download.php/45600/ParseTree-3.0.1.gem", :requires => [get_gempackage("sexp_processor"), get_gempackage("ZenTest")])
             

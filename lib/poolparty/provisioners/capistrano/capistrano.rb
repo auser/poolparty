@@ -36,8 +36,7 @@ module PoolParty
       end
       def master_configure_tasks
         [
-          "master:create_local_node_entry_for_puppet", "master:move_template_files", "master:setup_poolparty_base_structure",
-          "master:move_provisioner_manifest", "run_provisioner"
+          "master:configure_master_task"
         ].push(custom_configure_tasks).flatten#.map {|a| a.to_sym }
       end
       
