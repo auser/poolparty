@@ -3,5 +3,5 @@ Dir["#{File.dirname(__FILE__)}/poolparty/helpers/**.rb"].each do |lib|
 end
 
 def help_array
-  ["-h", "--help", "-V", "--version"]
+  ["-h", "--help", "-V", "--version", "--debug", "-d"]
 end
