@@ -127,7 +127,7 @@ module PoolParty
       # talk to each other safely. This is based off the keypair
       # and the name of the cloud
       def generate_unique_cookie_string
-        Digest::SHA256.hexdigest("#{full_keypair_name}#{name}")
+        Digest::SHA256.hexdigest("#{full_keypair_name}#{name}")[0..12]
       end
       
       # Build the new poolparty manifest

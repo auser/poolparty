@@ -22,7 +22,7 @@ o.loaded_clouds.each do |cloud|
       boot_file = "#{Messenger.append_dir}/pm_node_rel-0.1"
 
       Kernel.system ". /etc/profile && server-build-messenger"  unless ::File.file?("#{boot_file}.boot") || testing
-      command = Messenger.erl_command(hostname, "-setcookie #{generate_unique_cookie_string} -boot #{boot_file} #{noshell ? "" : "-noshell -detached -heart"} -- #{available_monitors.join(" ")}")    
+      command = Messenger.erl_command(hostname, "-boot #{boot_file} #{noshell ? "" : "-noshell -detached -heart"} -- #{available_monitors.join(" ")}")    
       vputs "Running #{command}"
       
       Kernel.system "export HOME=/root && #{command}" unless testing
