@@ -13,7 +13,7 @@ Capistrano::Configuration.instance(:must_exist).load do
       setup_provisioner_filestore
       setup_provisioner_autosigning
       install_rubygems
-      fix_rubygems
+      update_rubygems
       add_provisioner_configs
       setup_provisioner_config
       create_puppetrunner_command

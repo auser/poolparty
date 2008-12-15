@@ -389,7 +389,7 @@ describe "Cloud" do
             @cloud.respond_to?(:generate_unique_cookie_string).should == true
           end
           it "should call hexdigest to digest/sha" do
-            Digest::SHA256.should_receive(:hexdigest).with("#{@cloud.full_keypair_name}#{@cloud.name}")
+            Digest::SHA256.should_receive(:hexdigest).with("#{@cloud.full_keypair_name}#{@cloud.name}").and_return "blaaaaah"
             @cloud.generate_unique_cookie_string
           end
           it "should generate the same cookie string every time" do
