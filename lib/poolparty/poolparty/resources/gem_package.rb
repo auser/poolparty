@@ -22,14 +22,14 @@ module PoolParty
           })
                     
           has_exec(opts.merge({:name => "#{name}", :cwd =>"#{Base.remote_storage_path}"})) do
-            command "gem install -y --no-ri --no-rdoc #{Base.remote_storage_path}/#{name}.gem"
+            command "gem install --no-ri --no-rdoc #{Base.remote_storage_path}/#{name}.gem"
             ifnot "gem list --local #{name} | grep #{name} #{"| grep #{version}" if version}"
             requires get_file("#{Base.remote_storage_path}/#{name}.gem")
           end
           
         else
           has_exec(opts.merge({:name => "#{name}", :cwd => "/tmp", :path => "/bin:/usr/bin:/usr/local/bin:/sbin:/usr/sbin:/var/lib/gems/1.8/bin"})) do
-            command "gem install -y --no-ri --no-rdoc #{"--version #{version}" if version} #{"--source #{source}" if source} #{name} <<heredoc
+            command "gem install --no-ri --no-rdoc #{"--version #{version}" if version} #{"--source #{source}" if source} #{name} <<heredoc
             1
             heredoc"
             ifnot "gem list --local #{name} | grep #{name} #{"| grep #{version}" if version}"

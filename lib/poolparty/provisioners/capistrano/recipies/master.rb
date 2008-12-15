@@ -13,7 +13,7 @@ Capistrano::Configuration.instance(:must_exist).load do
       setup_provisioner_filestore
       setup_provisioner_autosigning
       install_rubygems
-      update_rubygems
+      fix_rubygems
       add_provisioner_configs
       setup_provisioner_config
       create_puppetrunner_command
@@ -23,10 +23,12 @@ Capistrano::Configuration.instance(:must_exist).load do
       write_erlang_cookie
     end
     desc "Configure master"
-    task :configure_master do
-      master:move_provisioner_manifest
-      master:move_template_files
-      master:setup_poolparty_base_structure
+    task :configure_master_task do
+      create_local_node_entry_for_puppet
+      move_provisioner_manifest
+      move_template_files
+      setup_poolparty_base_structure
+      ensure_provisioner_is_running
       run_provisioner
     end
     desc "Set hostname to master"
@@ -96,6 +98,10 @@ Capistrano::Configuration.instance(:must_exist).load do
     desc "Restart provisioner base"
     task :restart_provisioner_base do
       run "/etc/init.d/puppetmaster stop;rm -rf /etc/poolparty/ssl;puppetmasterd --verbose;/etc/init.d/puppetmaster start"
+    end
+    desc "Ensure provisioner is running"
+    task :ensure_provisioner_is_running do
+      run "/usr/sbin/puppetmasterd --verbose 2>1 > /dev/null"
     end
     desc "Create local node for puppet manifest"
     task :create_local_node_entry_for_puppet do
