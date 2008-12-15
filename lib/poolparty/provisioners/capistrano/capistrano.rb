@@ -100,8 +100,6 @@ module PoolParty
             execute_task task
           }
         end
-        
-        # @config.task_list(:all).each {|t| puts "t: #{t.fully_qualified_name}"}  
                 
         begin
           __run(name)

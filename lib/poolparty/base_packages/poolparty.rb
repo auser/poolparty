@@ -26,6 +26,9 @@ module PoolParty
           has_gempackage(:name => "amazon-ec2", :download_url => "http://rubyforge.org/frs/download.php/43666/amazon-ec2-0.3.1.gem", :requires => get_gempackage("xml-simple"))
           
           has_gempackage(:name => "sexp_processor", :download_url => "http://rubyforge.org/frs/download.php/45589/sexp_processor-3.0.0.gem")
+          
+          has_gempackage(:name => "capistrano", :requires => get_gempackage("net-ssh"))
+          
           has_gempackage(:name => "ParseTree", :download_url => "http://rubyforge.org/frs/download.php/45600/ParseTree-3.0.1.gem", :requires => [get_gempackage("sexp_processor"), get_gempackage("ZenTest")])
             
           has_gempackage(:name => "ruby2ruby", :download_url => "http://rubyforge.org/frs/download.php/45587/ruby2ruby-1.2.0.gem", :requires => get_gempackage("ParseTree"))
