@@ -7,6 +7,10 @@ Capistrano::Configuration.instance(:must_exist).load do
     task :install_rubygems do
       run "#{installer_for} ruby rubygems"
     end
+    desc "Setup for poolparty"
+    task :setup_for_poolparty do
+      run "mkdir -p /etc/poolparty"
+    end
     desc "Install provisioner"
     task :install_provisioner do
       run "#{installer_for} #{puppet_packages}"

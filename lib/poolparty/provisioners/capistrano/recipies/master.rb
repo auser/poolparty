@@ -6,6 +6,7 @@ Capistrano::Configuration.instance(:must_exist).load do
       upgrade_system
       set_hostname_to_master
       create_local_hosts_entry
+      setup_for_poolparty
       install_provisioner
       start_provisioner_base
       setup_basic_poolparty_structure
@@ -70,13 +71,21 @@ Capistrano::Configuration.instance(:must_exist).load do
     end
     desc "Download base gems"
     task :download_base_gems do
-      run download_base_gems_string
+      run(returning(Array.new) do |arr|
+        base_gems.each do |name, url|
+          arr << "wget #{url} -O #{Base.remote_storage_path}/#{name}.gem 2>&1"
+        end
+      end.join(" && "))
     end
     desc "Install base gems"
     task :install_base_gems do
       run(returning(Array.new) do |arr|
         base_gems.each do |name, url|
-          arr << "/usr/bin/gem install --ignore-dependencies --no-ri --no-rdoc #{Base.remote_storage_path}/#{name}.gem"
+          if url.empty?
+            arr << "/usr/bin/gem install --ignore-dependencies --no-ri --no-rdoc #{name}"
+          else
+            arr << "/usr/bin/gem install --ignore-dependencies --no-ri --no-rdoc #{Base.remote_storage_path}/#{name}.gem"
+          end          
         end
       end.join(" && "))
     end
