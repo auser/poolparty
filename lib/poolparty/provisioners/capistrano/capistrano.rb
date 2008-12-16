@@ -32,28 +32,31 @@ module PoolParty
         [
           "custom_install_tasks",
           "master_provision_master_task",
-          "after_install_tasks"
-        ].push([master_configure_master_task]).flatten#.map {|a| a.to_sym }
-      end
-      def master_configure_master_task
-        [
+          "after_install_tasks",
           "custom_configure_tasks",
           "master_configure_master_task"
-        ].flatten#.map {|a| a.to_sym }
+        ]#.map {|a| a.to_sym }
+      end
+      def master_configure_tasks
+        [
+          "master_configure_master_task"
+        ]#.map {|a| a.to_sym }
       end
       
       def slave_install_tasks
         [
           "custom_install_tasks",
           "slave_provision_slave_task",
-          "after_install_tasks"
-        ].push([slave_configure_tasks]).flatten#.map {|a| a.to_sym }
+          "after_install_tasks",
+          "custom_configure_tasks",
+          "slave_configure_slave_task"
+        ]
       end
       def slave_configure_tasks
         [
           "custom_configure_tasks",
           "slave_configure_slave_task"
-        ].flatten#.map {|a| a.to_sym }
+        ]#.flatten.map {|a| a.to_sym }
       end
       # Run tasks after the initialized
       def loaded
