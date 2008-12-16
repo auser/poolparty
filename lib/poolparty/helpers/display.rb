@@ -19,7 +19,7 @@ module PoolParty
     end
     
     def available_bases
-      puts Remote.available_bases
+      remote_bases
     end
     
     def header(str="")

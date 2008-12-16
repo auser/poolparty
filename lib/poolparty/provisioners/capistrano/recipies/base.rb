@@ -4,60 +4,60 @@
 Capistrano::Configuration.instance(:must_exist).load do
   # namespace(:base) do
     desc "Install rubygems"
-    task :install_rubygems do
+    def install_rubygems
       run "#{installer_for} ruby rubygems"
     end
     desc "Setup for poolparty"
-    task :setup_for_poolparty do
+    def setup_for_poolparty
       run "mkdir -p /etc/poolparty"
     end
     desc "Install provisioner"
-    task :install_provisioner do
+    def install_provisioner
       run "#{installer_for} #{puppet_packages}"
     end
     desc "Create poolparty commands"
-    task :create_poolparty_commands do
+    def create_poolparty_commands
     end
     desc "Create poolparty runner command"
-    task :create_puppetrunner_command do
+    def create_puppetrunner_command
       run <<-EOR
         cp #{remote_storage_path}/templates/puppetrunner /usr/bin/puppetrunner &&
         chmod +x /usr/bin/puppetrunner
       EOR
     end
     desc "Create poolparty rerun command"
-    task :create_puppetrerun_command do
+    def create_puppetrerun_command
       run <<-EOR
         cp #{remote_storage_path}/templates/puppetrerun /usr/bin/puppetrerun &&
         chmod +x /usr/bin/puppetrerun
       EOR
     end
     desc "Add the proper configs for provisioner"
-    task :add_provisioner_configs do
+    def add_provisioner_configs
       run "cp #{remote_storage_path}/namespaceauth.conf /etc/puppet/namespaceauth.conf"
     end
     desc "Setup config file for provisioner"
-    task :setup_provisioner_config do
+    def setup_provisioner_config
       run "mv #{remote_storage_path}/puppet.conf /etc/puppet/puppet.conf"
     end
     desc "Run the provisioner"
-    task :run_provisioner do
+    def run_provisioner
       run "/usr/sbin/puppetd --onetime --daemonize --logdest syslog --server master"
     end
     desc "Rerun the provisioner"
-    task :rerun_provisioner do
+    def rerun_provisioner
       run "/usr/bin/puppetrerun"
     end
     desc "Remove the certs"
-    task :remove_certs do
+    def remove_certs
       run "rm -rf /etc/puppet/ssl"
     end
     desc "Update rubygems"
-    task :update_rubygems do
+    def update_rubygems
       run "/usr/bin/gem update --system 2>1 > /dev/null && /usr/bin/gem update --system"
     end
     desc "Fix rubygems"
-    task :fix_rubygems do
+    def fix_rubygems
       # echo '#{open(::File.join(template_directory, "gem")).read}' > /usr/bin/gem &&
       # cp #{remote_storage_path}/gem /usr/bin/gem
       run <<-EOR
@@ -66,7 +66,7 @@ Capistrano::Configuration.instance(:must_exist).load do
       EOR
     end
     desc "Upgrade system"
-    task :upgrade_system do
+    def upgrade_system
       str = case os
       when :ubuntu
         "
@@ -79,15 +79,15 @@ aptitude update -y
       run str
     end
     desc "Upgrade rubygems"
-    task :upgrade_rubygems do
+    def upgrade_rubygems
       
     end
     desc "Make log directory"
-    task :make_log_directory do
+    def make_log_directory
       run "mkdir -p /var/log/poolparty"
     end
     desc "Create ssl storage directories for poolparty"
-    task :create_poolparty_ssl_store do
+    def create_poolparty_ssl_store
       run <<-EOR
         mkdir -p #{poolparty_config_directory}/ssl/private_keys &&
         mkdir -p #{poolparty_config_directory}/ssl/certs &&
@@ -95,11 +95,44 @@ aptitude update -y
       EOR
     end
     desc "Add erlang cookie"
-    task :write_erlang_cookie do
+    def write_erlang_cookie
       run <<-EOR
         mv #{remote_storage_path}/cookie ~/.erlang.cookie &&
         chmod 400 ~/.erlang.cookie
       EOR
     end
+    desc "Setup basic poolparty structure"
+    def setup_basic_poolparty_structure
+      run <<-EOR
+        echo "Creating basic structure for poolparty" &&
+        mkdir -p /etc/puppet/manifests/nodes  &&
+        mkdir -p /etc/puppet/manifests/classes &&
+        echo "import 'nodes/*.pp'" > /etc/puppet/manifests/site.pp &&
+        echo "import 'classes/*.pp'" >> /etc/puppet/manifests/site.pp          
+      EOR
+    end
+    desc "Setup shareable file system for provisioner"
+    def setup_provisioner_filestore
+      run <<-EOR
+        echo '[files]' > /etc/puppet/fileserver.conf &&
+        echo '  path #{remote_storage_path}' >> /etc/puppet/fileserver.conf &&
+        echo '  allow *' >> /etc/puppet/fileserver.conf &&
+        mkdir -p /var/poolparty/facts &&
+        mkdir -p /var/poolparty/files &&
+        mkdir -p #{base_config_directory}
+      EOR
+    end
+    desc "Setup autosigning for provisioner"
+    def setup_provisioner_autosigning
+      run "echo \"*\" > /etc/puppet/autosign.conf"
+    end
+    desc "Setup poolparty structure"
+    def setup_poolparty_base_structure
+      run <<-EOR
+        cp #{remote_storage_path}/#{key_file_locations.first} "#{base_config_directory}/.ppkeys" &&
+        mv #{remote_storage_path}/#{default_specfile_name} #{base_config_directory}/
+      EOR
+    end
+    
   # end
 end

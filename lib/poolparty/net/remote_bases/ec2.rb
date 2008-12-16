@@ -9,6 +9,20 @@ require "#{::File.dirname(__FILE__)}/ec2/ec2_response_object"
 
 begin
   require 'EC2'
+rescue LoadError
+  puts <<-EOM
+Error: In order to use ec2, you need to install the amazon-ec2 gem
+
+Ec2 is the default remoter base for PoolParty. If you intend on using
+a different remoter base, specify it with:
+
+using :remoter_name
+
+in your config file, otherwise, to continue install amazon-ec2 with
+
+gem install amazon-ec2
+EOM
+end
   
   class String
     def convert_from_ec2_to_ip
@@ -141,26 +155,20 @@ begin
 
       # Hook
       #TODO#: Change this so they match with the cap tasks
-      def custom_install_tasks_for(o)
-        arr = if has_cert_and_key?
-          [ 
-            # "mv #{::File.basename(pub_key)} #{Base.base_config_directory}/ssl/public_keys/#{o.name}.pem", 
-            # "mv #{::File.basename(private_key)} #{Base.base_config_directory}/ssl/private_keys/#{o.name}.pem"
-          ]
-          else 
-            []
-          end
-        arr << [
-          "# ec2 installation tasks",
-          "# Set hostname",
+      def custom_install_tasks_for(o)        
+        [
           # "if [ -z $(grep -v '#' /etc/hosts | grep '#{o.name}') ]; then echo \"$(curl http://169.254.169.254/latest/meta-data/public-ipv4) #{o.name}\" >> /etc/hosts; fi",
           "if [ -z \"$(grep -v '#' /etc/hosts | grep '#{o.name}')\" ]; then echo '127.0.0.1 #{o.name}' >> /etc/hosts; fi",
           "hostname #{o.name}",
-          "echo #{o.name} > /etc/hostname",
-          "cd /var/poolparty && wget http://rubyforge.org/frs/download.php/43666/amazon-ec2-0.3.1.gem -O amazon-ec2.gem 2>&1",
-          "/usr/bin/gem install -y --no-ri --no-rdoc amazon-ec2.gem 2>&1",
+          "echo #{o.name} > /etc/hostname"
         ]
-        []
+      end
+      
+      def after_install_tasks_for(o)
+        [
+          "cd /var/poolparty && wget http://rubyforge.org/frs/download.php/43666/amazon-ec2-0.3.1.gem -O amazon-ec2.gem 2>&1",
+          "/usr/bin/gem install --no-ri --no-rdoc amazon-ec2.gem 2>&1"
+        ]
       end
 
       def custom_configure_tasks_for(o)
@@ -174,17 +182,3 @@ begin
     end
     register_remote_base :Ec2
   end
-rescue LoadError
-  puts <<-EOM
-Error: In order to use ec2, you need to install the amazon-ec2 gem
-
-Ec2 is the default remoter base for PoolParty. If you intend on using
-a different remoter base, specify it with:
-
-using :remoter_name
-
-in your config file, otherwise, to continue install amazon-ec2 with
-
-gem install amazon-ec2
-EOM
-end
