@@ -7,7 +7,7 @@ module PoolParty
           has_package({:name => "haproxy"})
 
           # Restart sysklogd after we update the haproxy.log
-          has_service(:name => "sysklogd")
+          has_service(:name => "sysklogd", :notify => get_service("haproxy"))
           
           # Template variables          
           has_variable(:name => "name_haproxy", :value => "#{cloud.name}")
