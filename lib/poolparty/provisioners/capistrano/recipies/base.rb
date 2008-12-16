@@ -58,16 +58,17 @@ Capistrano::Configuration.instance(:must_exist).load do
     end
     desc "Update rubygems"
     def update_rubygems
-      run "/usr/bin/gem update --system 2>1 > /dev/null && /usr/bin/gem update --system"
+      run "/usr/bin/gem update --system 2>1 > /dev/null;/usr/bin/gem update --system;echo 'gems updated'"
     end
     desc "Fix rubygems"
     def fix_rubygems
       # echo '#{open(::File.join(template_directory, "gem")).read}' > /usr/bin/gem &&
       # cp #{remote_storage_path}/gem /usr/bin/gem
       run <<-EOR
-        if gem -v; then echo "gem is working"; else cp #{remote_storage_path}/gem /usr/bin/gem; fi &&
-        /usr/bin/gem update --system 2>&1 > /dev/null;/usr/bin/gem update --system &&
-        if gem -v; then echo "gem is working"; else cp #{remote_storage_path}/gem /usr/bin/gem; fi
+        if gem -v; then echo "gem is working"; else cp #{remote_storage_path}/gem /usr/bin/gem; fi;
+        /usr/bin/gem update --system 2>&1 > /dev/null;/usr/bin/gem update --system;
+        if gem -v; then echo "gem is working"; else cp #{remote_storage_path}/gem /usr/bin/gem; fi;
+        echo 'gems updated!'
       EOR
     end
     desc "Upgrade system"
