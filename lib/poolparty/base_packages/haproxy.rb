@@ -5,9 +5,6 @@ module PoolParty
       def enable
         execute_on_master do
           has_package({:name => "haproxy"})
-
-          # Restart sysklogd after we update the haproxy.log
-          has_service(:name => "sysklogd", :notify => get_service("haproxy"))
           
           # Template variables          
           has_variable(:name => "name_haproxy", :value => "#{cloud.name}")
@@ -23,6 +20,9 @@ module PoolParty
           has_line_in_file("SYSLOGD=\"-r\"", "/etc/default/syslogd")
           has_line_in_file("local0.* /var/log/haproxy.log", "/etc/syslog.conf", {:notify => get_service("sysklogd")})
 
+          # Restart sysklogd after we update the haproxy.log
+          has_service(:name => "sysklogd", :notify => get_service("haproxy"))
+          
           # Service is required
           has_service(:name => "haproxy", :ensures => "running")
           
