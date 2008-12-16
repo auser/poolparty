@@ -4,6 +4,12 @@ module PoolParty
     MINOR = 2
     TINY  = 89
 
-    STRING = [MAJOR, MINOR, TINY].join('.')
+    STRING = [MAJOR, MINOR, TINY].join('.')    
   end
+  class Version
+    def self.to_s
+      [VERSION::MAJOR, VERSION::MINOR, VERSION::TINY].join('.')
+    end
+  end
+  
 end
