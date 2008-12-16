@@ -4,7 +4,6 @@ module PoolParty
   module Provisioner
     class Capistrano < ProvisionerBase
       
-      include PoolParty::Capistrano
       include ::Capistrano::Configuration::Actions::Invocation
       
       def process_install!(testing=false)
@@ -31,30 +30,42 @@ module PoolParty
       
       def master_install_tasks
         [
-          "master:provision_master"
-        ].push([custom_install_tasks, master_configure_tasks]).flatten#.map {|a| a.to_sym }
+          "custom_install_tasks",
+          "master_provision_master_task",
+          "after_install_tasks"
+        ].push([master_configure_master_task]).flatten#.map {|a| a.to_sym }
       end
-      def master_configure_tasks
+      def master_configure_master_task
         [
-          "master:configure_master_task"
-        ].push(custom_configure_tasks).flatten#.map {|a| a.to_sym }
+          "custom_configure_tasks",
+          "master_configure_master_task"
+        ].flatten#.map {|a| a.to_sym }
       end
       
       def slave_install_tasks
         [
-          "slave:add_master_to_hosts_file", "slave:add_provisioner_configs", "setup_provisioner_config",
-          "create_puppetrunner_command", "create_puppetrerun_command", "install_rubygems",
-          "install_provisioner", "slave:stop_provisioner_daemon"
-        ].push([custom_install_tasks, slave_configure_tasks]).flatten#.map {|a| a.to_sym }
+          "custom_install_tasks",
+          "slave_provision_slave_task",
+          "after_install_tasks"
+        ].push([slave_configure_tasks]).flatten#.map {|a| a.to_sym }
       end
       def slave_configure_tasks
         [
-          "run_provisioner"
-        ].push(custom_configure_tasks).flatten#.map {|a| a.to_sym }
+          "custom_configure_tasks",
+          "slave_configure_slave_task"
+        ].flatten#.map {|a| a.to_sym }
       end
       # Run tasks after the initialized
       def loaded
         create_config
+      end
+      
+      def set_poolparty_roles
+        returning Array.new do |arr|
+          arr << "role 'master.#{@cloud.name}'.to_sym, '#{@cloud.master.ip}'"
+          arr << "role :master, '#{@cloud.master.ip}'"
+          arr << "role :slaves, '#{@cloud.nonmaster_nonterminated_instances.map{|a| a.ip}.join('", "')}'" if @cloud.nonmaster_nonterminated_instances.size > 0
+        end.join("\n")
       end
       
       # Create the config for capistrano
@@ -85,18 +96,31 @@ module PoolParty
       # Prerun
       def prerun_setup
       end
-            
+      
+      # In run_capistrano, we are going to run the entire capistrano process
+      # First, 
       def run_capistrano(roles=[:master], meth=:install)  
         prerun_setup
         
         commands = meth == :install ? install_tasks : configure_tasks
-        name = "provisioner_#{meth}"
-        
+        name = "#{roles.first}_provisioner_#{meth}"
+
         __define_task(name, roles) do
-          commands.map {|command| 
-            task = find_task(command)
-            task.options.merge!(:roles => roles)
-            execute_task task
+          commands.map {|command|
+            task = find_task(command.to_sym)            
+            
+            if task
+              task.options.merge!(:roles => roles)
+              execute_task task
+            else
+              if provisioner.respond_to?(command.to_sym)
+                cmd = provisioner.send(command.to_sym)
+                cmd = cmd.join(" && ") if cmd.is_a?(Array)
+                run(cmd)
+              else
+                self.send(command.to_sym)
+              end
+            end
           }
         end
                 

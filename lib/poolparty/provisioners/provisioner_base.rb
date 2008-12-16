@@ -115,6 +115,11 @@ module PoolParty
         @cloud.custom_configure_tasks_for(@instance) || []
       end
       
+      # Last install tasks, if need to install after everything else
+      def after_install_tasks
+        @cloud.after_install_tasks_for(@instance)
+      end
+      
       # Get the packages associated with each os
       def puppet_packages
         case @os

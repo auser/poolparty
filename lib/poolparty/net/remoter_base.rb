@@ -20,7 +20,8 @@ module PoolParty
 
   def register_remote_base(*args)
     args.each do |arg|
-      (remote_bases << "#{arg}".downcase.to_sym)
+      base_name = "#{arg}".downcase.to_sym
+      (remote_bases << base_name) unless remote_bases.include?(base_name)
     end
   end
   
@@ -85,7 +86,7 @@ module PoolParty
       end
       # Get instance by number
       def get_instance_by_number(i=0, list = remote_instances_list)
-        name = (i.zero? ? "master" : "node#{i}")
+        name = ((i.nil? || i.zero?) ? "master" : "node#{i}")
         list.select {|i| i.name == name }.first
       end
       # A callback before the configuration task takes place
@@ -99,9 +100,10 @@ module PoolParty
       # List the instances for the current key pair, regardless of their states
       # If no keypair is passed, select them all
       def list_of_instances(keyp=nil)
-        tmp_key = (keyp ? keyp : keypair).to_s
+        tmp_key = (keyp ? keyp : nil)
+        
         unless @describe_instances
-          tmpInstanceList = describe_instances.select {|a| a if tmp_key ? a[:keypair] == tmp_key : true }
+          tmpInstanceList = describe_instances.select {|a| a if (tmp_key.nil? || tmp_key.empty? ? true : a[:keypair] == tmp_key) }
           has_master = !tmpInstanceList.select {|a| a[:name] == "master" }.empty?          
           if has_master
             @describe_instances = tmpInstanceList
@@ -134,7 +136,7 @@ module PoolParty
         @describe_instances = nil
       end
       def self.included(other)
-        PoolParty.register_remote_base(self.class.to_s.downcase.to_sym)
+        # PoolParty.register_remote_base(self.class.to_s.downcase.to_sym)
       end
       
       # Callback after loaded
