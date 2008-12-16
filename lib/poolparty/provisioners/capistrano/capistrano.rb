@@ -133,7 +133,7 @@ module PoolParty
           return true
         rescue ::Capistrano::CommandError => e
           return false unless verbose
-          raise ProvisionerException.new("Error: #{e}")
+          puts "Error: #{e} " and raise ProvisionerException.new("Error: #{e}")
         end
       end
                   

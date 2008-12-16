@@ -40,4 +40,7 @@ class Hash
     each {|k,v| m[k] = v.to_os }
     MyOpenStruct.new(m)
   end
+  def method_missing(sym, *args, &block)
+    key?(sym) ? fetch(sym) : super
+  end
 end

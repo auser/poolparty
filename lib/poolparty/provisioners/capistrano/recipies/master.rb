@@ -69,7 +69,7 @@ Capistrano::Configuration.instance(:must_exist).load do
     end
     desc "Ensure provisioner is running"
     def ensure_provisioner_is_running
-      run "/usr/sbin/puppetmasterd --verbose 2>1 > /dev/null"
+      run "/usr/sbin/puppetmasterd --verbose 2>1 > /dev/null;echo ''"
     end
     desc "Create local node for puppet manifest"
     def create_local_node_entry_for_puppet
