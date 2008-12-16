@@ -21,7 +21,12 @@ describe "Capistrano provisioner" do
       it "should create the config at ::Capistrano::Logger::IMPORTANT if the cloud is not verbose" do
         @cloud.stub!(:verbose).and_return false
         PoolParty::Provisioner::Capistrano.new(nil, @cloud).config.logger.level.should == ::Capistrano::Logger::IMPORTANT
-      end      
+      end
+    end
+    describe "install tasks" do
+      it "should have the configure tasks included" do
+        @pb.master_install_tasks.include?("custom_configure_tasks").should == true
+      end
     end
   end
 end
