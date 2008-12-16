@@ -40,6 +40,10 @@ Capistrano::Configuration.instance(:must_exist).load do
     def setup_provisioner_config
       run "mv #{remote_storage_path}/puppet.conf /etc/puppet/puppet.conf"
     end
+    desc "Run the provisioner twice (usually on install)"
+    def run_provisioner_twice
+      run "/usr/sbin/puppetd --test --server master 2>1 > /dev/null && /usr/sbin/puppetd --onetime --daemonize --logdest syslog --server master"
+    end
     desc "Run the provisioner"
     def run_provisioner
       run "/usr/sbin/puppetd --onetime --daemonize --logdest syslog --server master"

@@ -34,6 +34,7 @@ module PoolParty
           "master_provision_master_task",
           "after_install_tasks",
           "custom_configure_tasks",
+          "run_provisioner_twice",
           "master_configure_master_task"
         ]#.map {|a| a.to_sym }
       end
