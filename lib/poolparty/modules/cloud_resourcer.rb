@@ -39,7 +39,7 @@ module PoolParty
     
     def setup_dev
       unless ::File.exists?("#{full_keypair_basename_path}.pub")
-        cmd = "scp #{ssh_array.join(" ")} #{Base.user}@#{master.ip}:.ssh/authorized_keys #{full_keypair_basename_path}.pub"
+        cmd = "scp #{scp_array.join(" ")} #{Base.user}@#{master.ip}:.ssh/authorized_keys #{full_keypair_basename_path}.pub"
         vputs "Running #{cmd}"
         Kernel.system(cmd)
       end

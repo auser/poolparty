@@ -32,6 +32,9 @@ module PoolParty
       def ssh_array
         ["-o StrictHostKeyChecking=no", "-l #{Base.user}", '-i "'+full_keypair_path+'"']
       end
+      def scp_array
+        ["-o StrictHostKeyChecking=no", '-i "'+full_keypair_path+'"']
+      end
       def rsync_command
         "rsync -azP --exclude cache -e '#{ssh_string} -l #{Base.user}'"
       end

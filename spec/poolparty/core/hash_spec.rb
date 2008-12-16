@@ -33,6 +33,14 @@ describe "Hash" do
   it "should be able to flush out with pre and posts" do
     @a.flush_out("hi", "ho").sort.should == ["hia => '10'ho","hib => '20'ho","hic => '30'ho"]
   end
+  describe "method_missing" do
+    it "should be able to call a key on the hash as a method" do
+      {:first_name => "bob", :last_name => "frank"}.first_name.should == "bob"
+    end
+    it "should return nil if there is no key set in the hash" do
+        {:first_name => "bob", :last_name => "frank"}.neighbor.should == nil
+    end
+  end
   describe "select" do
     before(:each) do
       @selected_hash = @a.select {|k,v| k if k == :a}
