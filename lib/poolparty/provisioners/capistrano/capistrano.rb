@@ -9,14 +9,14 @@ module PoolParty
       def process_install!(testing=false)
         unless testing
           @cloud.rsync_storage_files_to(@instance)
-          roles = provision_master? ? [:master] : [:slaves]
+          roles = provision_master? ? [:master] : [:single]
           run_capistrano(roles,:install)
         end
       end
       def process_configure!(testing=false)
         unless testing
           @cloud.rsync_storage_files_to(@instance)
-          roles = provision_master? ? [:master] : [:slaves]
+          roles = provision_master? ? [:master] : [:single]
           run_capistrano(roles, :configure)
         end
       end
@@ -34,8 +34,8 @@ module PoolParty
           "master_provision_master_task",
           "after_install_tasks",
           "custom_configure_tasks",
-          "run_provisioner_twice",
-          "master_configure_master_task"
+          "master_configure_master_task",
+          "run_provisioner_twice"
         ]#.map {|a| a.to_sym }
       end
       def master_configure_tasks
