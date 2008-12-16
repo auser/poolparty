@@ -69,6 +69,7 @@ module PoolParty
           arr << "role 'master.#{@cloud.name}'.to_sym, '#{@cloud.master.ip}'"
           arr << "role :master, '#{@cloud.master.ip}'"
           arr << "role :slaves, '#{@cloud.nonmaster_nonterminated_instances.map{|a| a.ip}.join('", "')}'" if @cloud.nonmaster_nonterminated_instances.size > 0
+          arr << "role :single, '#{@instance.ip}'" if @instance && @instance.ip
         end.join("\n")
       end
       

@@ -41,7 +41,11 @@ module PoolParty
       unless ::File.exists?("#{full_keypair_basename_path}.pub")
         cmd = "scp #{scp_array.join(" ")} #{Base.user}@#{master.ip}:.ssh/authorized_keys #{full_keypair_basename_path}.pub"
         vputs "Running #{cmd}"
-        Kernel.system(cmd)
+        if %x[hostname].chomp == "master"
+          Kernel.system("cat ~/.ssh/authorized_keys > #{full_keypair_basename_path}.pub")
+        else
+          Kernel.system(cmd)
+        end        
       end
     end
     
@@ -100,8 +104,8 @@ module PoolParty
     def keypair_paths
       [
         Base.base_keypair_path,
-        Base.base_config_directory,
-        Base.remote_storage_path
+        Base.remote_storage_path,
+        Base.base_config_directory
       ]
     end
     

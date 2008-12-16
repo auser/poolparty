@@ -47,12 +47,11 @@ module PoolParty
       def remote_rsync_command
         "rsync -azP --exclude cache -e '#{remote_ssh_string}'"
       end
-      
-      
-      # def scp_command(source, dest=target, remote_instance=master)
-      #   #TODO: check if source is Directory and add -r if it is
-      #   "scp #{source} #{remote_instance.ip}:#{dest} #{ssh_array.join(' ')}"
-      # end
+            
+      def scp_to_command(source, dest=target, remote_instance=master)
+        #TODO: check if source is Directory and add -r if it is
+        "scp #{source} #{remote_instance.ip}:#{dest} #{scp_array.join(' ')}"
+      end
       
       # Get the names of the nodes. Mainly used for puppet templating
       def list_of_node_names(options={})

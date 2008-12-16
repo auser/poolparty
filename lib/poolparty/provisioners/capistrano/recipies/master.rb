@@ -97,7 +97,7 @@ Capistrano::Configuration.instance(:must_exist).load do
     end
     desc "Move poolparty keys"
     def move_poolparty_keys
-      run "cp #{remote_storage_path}/#{@full_keypair_name} #{@remote_keypair_path}"
+      run "cp #{remote_storage_path}/#{full_keypair_name} #{remote_keypair_path}"
     end
   # end
 end
