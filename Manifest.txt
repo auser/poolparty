@@ -6,6 +6,7 @@ PostInstall.txt
 README.txt
 Rakefile
 bin/cloud
+bin/cloud-add-access
 bin/cloud-add-keypair
 bin/cloud-configure
 bin/cloud-contract
@@ -231,6 +232,7 @@ lib/poolparty/net/messenger.rb
 lib/poolparty/net/remote.rb
 lib/poolparty/net/remote_bases/ec2.rb
 lib/poolparty/net/remote_bases/ec2/ec2_response_object.rb
+lib/poolparty/net/remote_bases/virtual_box.rb
 lib/poolparty/net/remote_instance.rb
 lib/poolparty/net/remoter.rb
 lib/poolparty/net/remoter_base.rb
