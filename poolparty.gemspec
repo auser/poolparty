@@ -348,7 +348,6 @@ files:
 - lib/poolparty/net/remote.rb
 - lib/poolparty/net/remote_bases/ec2.rb
 - lib/poolparty/net/remote_bases/ec2/ec2_response_object.rb
-- lib/poolparty/net/remote_bases/virtual_box.rb
 - lib/poolparty/net/remote_instance.rb
 - lib/poolparty/net/remoter.rb
 - lib/poolparty/net/remoter_base.rb
@@ -533,7 +532,7 @@ files:
 has_rdoc: true
 homepage: http://poolparty.rubyforge.org
 post_install_message: |-
-  Get ready to jump in the pool, you just installed PoolParty! (Updated at 17:34 12/15/08)
+  Get ready to jump in the pool, you just installed PoolParty! (Updated at 18:50 12/15/08)
   
   To get started, run the generator:
   

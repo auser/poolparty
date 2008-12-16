@@ -232,7 +232,6 @@ lib/poolparty/net/messenger.rb
 lib/poolparty/net/remote.rb
 lib/poolparty/net/remote_bases/ec2.rb
 lib/poolparty/net/remote_bases/ec2/ec2_response_object.rb
-lib/poolparty/net/remote_bases/virtual_box.rb
 lib/poolparty/net/remote_instance.rb
 lib/poolparty/net/remoter.rb
 lib/poolparty/net/remoter_base.rb
