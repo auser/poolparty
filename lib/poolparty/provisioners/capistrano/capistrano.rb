@@ -34,12 +34,14 @@ module PoolParty
           "master_provision_master_task",
           "after_install_tasks",
           "custom_configure_tasks",
+          "before_configuration_tasks",
           "master_configure_master_task",
           "run_provisioner_twice"
         ]#.map {|a| a.to_sym }
       end
       def master_configure_tasks
         [
+          "before_configuration_tasks",
           "master_configure_master_task"
         ]#.map {|a| a.to_sym }
       end

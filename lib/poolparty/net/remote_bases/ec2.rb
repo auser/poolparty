@@ -91,10 +91,10 @@ end
         begin
           # when_no_pending_instances do
             if instance
-              ec2.attach_volume(:volume_id => ebs_volume_id, :instance_id => instance.instance_id, :device => ebs_volume_device) if ebs_volume_id && ebs_volume_mount_point
+              attach_volume(instance)
               # Let's associate the address LAST so that we can still connect to the instance
-              # for the other tasks here              
-              ec2.associate_address(:instance_id => instance.instance_id, :public_ip => set_master_ip_to) if set_master_ip_to              
+              # for the other tasks here
+              associate_address(instance)
               reset_remoter_base!
             end
           # end
@@ -103,6 +103,17 @@ end
         end
         reset_remoter_base!
         when_all_assigned_ips {wait "5.seconds"}
+      end
+      
+      def attach_volume(instance=nil)
+        vputs "Attaching volume #{ebs_volume_id} to the master at #{ebs_volume_device}"
+        instance = master        
+        ec2.attach_volume(:volume_id => ebs_volume_id, :instance_id => instance.instance_id, :device => ebs_volume_device) if ebs_volume_id && ebs_volume_mount_point
+      end
+      def associate_address(instance=nil)
+        vputs "Associating master with #{set_master_ip_to}"
+        instance = master
+        ec2.associate_address(:instance_id => instance.instance_id, :public_ip => set_master_ip_to) if set_master_ip_to
       end
 
       # Help create a keypair for the cloud
@@ -134,6 +145,15 @@ end
           # copy_file_to_storage_directory(pub_key)
           # copy_file_to_storage_directory(private_key)
         end
+        associate_address(master) if set_master_ip_to && master.ip != set_master_ip_to
+        reset_remoter_base!
+        
+        when_no_pending_instances do
+          when_all_assigned_ips do
+            vputs "Associated with #{set_master_ip_to}"
+          end
+        end
+        
       end
       def has_cert_and_key?
         pub_key && private_key
