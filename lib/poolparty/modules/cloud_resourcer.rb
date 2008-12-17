@@ -38,7 +38,7 @@ module PoolParty
     end
     
     def setup_dev
-      return true if ::File.exists?("#{remote_keypair_path}")
+      return true if ::File.exists?("#{remote_keypair_path}") || master.nil?
       unless ::File.exists?("#{full_keypair_basename_path}.pub")
         cmd = "scp #{scp_array.join(" ")} #{Base.user}@#{master.ip}:.ssh/authorized_keys #{full_keypair_basename_path}.pub"
         vputs "Running #{cmd}"

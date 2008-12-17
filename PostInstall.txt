@@ -1,4 +1,4 @@
-Get ready to jump in the pool, you just installed PoolParty! (Updated at 16:47 12/16/08)
+Get ready to jump in the pool, you just installed PoolParty! (Updated at 16:58 12/16/08)
 
 To get started, run the generator:
 
