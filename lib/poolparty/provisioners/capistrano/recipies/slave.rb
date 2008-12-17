@@ -30,7 +30,7 @@ Capistrano::Configuration.instance(:must_exist).load do
     end
     desc "Add master ip to hosts file"
     def add_master_to_hosts_file
-      run "if [ -z \"$(grep -v '#' /etc/hosts | grep 'master')\" ]; then echo '#{cloud.master.ip} puppet master' >> /etc/hosts; else echo 'host already set'; fi"
+      run "if [ -z \"$(grep -v '#' /etc/hosts | grep 'master' | grep '#{cloud.master.ip}' )\" ]; then echo '#{cloud.master.ip} puppet master' >> /etc/hosts; else echo 'host already set'; fi"
     end
     desc "Stop provisioner daemon"
     def stop_provisioner_daemon
