@@ -9,6 +9,9 @@ describe "ProvisionerBase" do
     @pb = PoolParty::Provisioner::ProvisionerBase.new(@remote_instance, @cloud)
     stub_list_from_remote_for(@cloud)
     stub_remoting_methods_for(@cloud)
+    Kernel.stub!(:sleep).and_return true
+    @cloud.stub!(:when_no_pending_instances).and_return true
+    @cloud.stub!(:when_all_assigned_ips).and_return true
   end
   describe "class methods" do
     it "should have install" do
