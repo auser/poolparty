@@ -145,12 +145,14 @@ end
           # copy_file_to_storage_directory(pub_key)
           # copy_file_to_storage_directory(private_key)
         end
-        associate_address(master) if set_master_ip_to && master.ip != set_master_ip_to
-        reset_remoter_base!
+        if set_master_ip_to && master.ip.to_s != set_master_ip_to.to_s
+          associate_address(master)
+          reset_remoter_base!
         
-        when_no_pending_instances do
-          when_all_assigned_ips do
-            vputs "Associated with #{set_master_ip_to}"
+          when_no_pending_instances do
+            when_all_assigned_ips do
+              vputs "Associated master with #{set_master_ip_to}"
+            end
           end
         end
         
