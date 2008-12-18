@@ -37,8 +37,13 @@ module PoolParty
       get_cloud(name).ip
     end
     
-    def cloud_all_instances(name)
-      get_cloud(name).list_of_running_instances.map {|ri| "'#{ri.ip}'" }.join(", ")
+    def set_role_for_all_instances(role, name)
+      ips = get_cloud(name).list_of_running_instances.map {|ri| ri.ip }
+      instance_eval returning Array.new do |arr|
+        ips.each do |ip|
+          arr << "role :#{role}, '#{ip}'"
+        end
+      end
     end
   end
 end
