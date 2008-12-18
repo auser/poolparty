@@ -83,7 +83,7 @@ module PoolParty
       def self.puppet_rerun_commad
         puppet_runner_command
       end
-      def cloud
+      def my_cloud
         @pa = parent
         while !(@pa.is_a?(PoolParty::Cloud::Cloud) || @pa.nil? || @pa == self)
           @pa = @pa.parent
@@ -91,7 +91,7 @@ module PoolParty
         @pa
       end
       def hosts_file_listing_for(cl)
-        string = (cl.name == cloud.name) ? "#{name}.#{cloud.name}\t#{name}" : "#{name}.#{cloud.name}"
+        string = (cl.name == cloud.name) ? "#{name}.#{my_cloud.name}\t#{name}" : "#{name}.#{my_cloud.name}"
         "#{internal_ip}\t#{string}"
       end
     end

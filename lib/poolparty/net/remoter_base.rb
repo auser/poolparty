@@ -80,6 +80,10 @@ module PoolParty
       def list_of_nonterminated_instances(list = remote_instances_list)
         list.reject {|i| i.terminating? || i.terminated? }
       end
+      # We'll stub the ip to be the master ip for ease and accessibility
+      def ip
+        master.ip
+      end
       # get the master instance
       def master
         get_instance_by_number(0)
