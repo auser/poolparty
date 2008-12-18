@@ -18,9 +18,10 @@ module PoolParty
     end
     
     def add_resource(type, opts={}, parent=self, &block)
-      if opts[:name] && in_a_resource_store?(type, opts[:name])
-        @res = get_from_local_resource_store(type, opts[:name], parent)
-        @res ||= get_from_global_resource_store(type, opts[:name])
+      temp_name = (opts[:name] || "#{type}_#{type.to_s.keyerize}")
+      if in_a_resource_store?(type, temp_name)
+        @res = get_from_local_resource_store(type, temp_name, parent)
+        @res ||= get_from_global_resource_store(type, temp_name)
         # if should_duplicate_resource?(type, @res, parent, opts)
         # unless @res.parent == parent
         #   @pa = parent
@@ -89,6 +90,8 @@ module PoolParty
       # For the time being, we'll make puppet the only available dependency resolution
       # base, but in the future, we can rip this out and make it an option
       include PoolParty::DependencyResolutions::Puppet
+      # DSL Overriders
+      include PoolParty::ResourcingDsl
       
       extend PoolParty::Resources
       include PoolParty::Resources
@@ -141,7 +144,7 @@ module PoolParty
         
         set_resource_parent
         
-        loaded(opts, @parent)
+        loaded(opts, @parent, &block)
       end
       
       # Helper to set the containing parent on the resource
@@ -183,9 +186,6 @@ module PoolParty
           end
         end
       end
-      
-      # DSL Overriders
-      include PoolParty::ResourcingDsl
       
       def same_resources_of(t, k)
         key == k && class_name_sym == t

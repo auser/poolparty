@@ -18,18 +18,18 @@ describe "Remote Instance" do
       @tc = TestGitClass.new
     end
     it "should be a string" do
-      @tc.has_git(:at => "/var/www/", :name => "gitrepos.git", :source => "git://source.git").to_string.should =~ /exec/
+      @tc.has_git_repos(:at => "/var/www/", :name => "gitrepos.git", :source => "git://source.git").to_string.should =~ /exec/
     end
     it "should included the flushed out options" do
-      @tc.has_git({:name => "git.git", :source => "git://source.git", :requires_user => "finger", :at => "/var/www/"}).to_string.should =~ /finger@git:/
+      @tc.has_git_repos({:name => "git.git", :source => "git://source.git", :requires_user => "finger", :at => "/var/www/"}).to_string.should =~ /finger@git:/
     end
     it "should not include the user if none is given" do
-      @tc.has_git({:name => "git.git", :source => "git://source.git",:at => "/var/www/"}).to_string.should =~ /git clone git:/
+      @tc.has_git_repos({:name => "git.git", :source => "git://source.git",:at => "/var/www/"}).to_string.should =~ /git clone git:/
     end
     describe "in resource" do
       before(:each) do
         @tc.instance_eval do
-          has_git(:name => "gittr") do
+          has_git_repos(:name => "gittr") do
             source "git://source.git"
             path "/var/www/xnot.org"
             symlink "/var/www/xnot.org/public"
@@ -38,7 +38,7 @@ describe "Remote Instance" do
         end
       end
       it "should have the path set within the resource" do
-        @tc.resource(:git).first.to_string.should =~ /exec \{ \"git-gittr/
+        @tc.resource(:git_repos).first.to_string.should =~ /exec \{ \"git-gittr/
       end
     end
   end

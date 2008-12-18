@@ -23,6 +23,7 @@ module PoolParty
     # Wrap all the resources into a class package from 
     def classpackage_with_self(parent=self, &block)
       name = (parent && parent.options.name || Classpackage.name(parent).to_s).sanitize
+      
       if in_global_classpackages?(name)
         returning get_from_global_classpackage_store(name) do |cls|
           cls.run_in_context(parent, &block) if block

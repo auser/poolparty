@@ -80,13 +80,13 @@ class Object
     meta_undef name rescue ""
   end
   def vputs(m="", o=self)
-    puts m if o.verbose
-  end
-  def dputs(m="", o=self)
-    vputs(">#{::File.basename(__FILE__)} (#{__LINE__}) #{m}", o)
+    puts m if o.verbose rescue ""
   end
   def vprint(m="", o=self)
-    print m if o.verbose
+    print m if o.verbose rescue ""
+  end
+  def dputs(m="", o=self)
+    puts m if o.debugging rescue ""
   end
   def unix_hide_string
     "2>&1 > /dev/null"

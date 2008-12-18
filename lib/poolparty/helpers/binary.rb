@@ -3,7 +3,8 @@ module PoolParty
   
   # Load a file that contains a pool into memory
   def load_pool(filename=nil)
-    filename = Dir["#{Dir.pwd}/**/*.rb"].select {|f| ::File.basename(f) == "clouds.rb" }.first unless filename
+    filename = Binary.get_existing_spec_location#Dir["#{Dir.pwd}/**/*.rb"].select {|f| ::File.basename(f) == "clouds.rb" }.first unless filename
+    dputs "Using spec at #{filename}"
     
     unless filename && ::File.readable?(filename)
       puts "Please specify your cloud with -s, move it to ./clouds.rb or in your POOL_SPEC environment variable"

@@ -83,7 +83,7 @@ module PoolParty
         @opts.separator "Options:"
         
         @opts.on('-v', '--verbose', 'Be verbose')    { self.verbose true }  
-        @opts.on('', "--debug", "Debug setting") {self.debug true}
+        @opts.on('', "--debug", "Debug setting") {self.debugging true}
         @opts.on('-s [file]', '--spec-file [file]', 'Set the spec file')      { |file| self.spec file.chomp }
         @opts.on('-t', '--test', 'Testing mode')    { self.testing true }
         

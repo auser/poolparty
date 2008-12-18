@@ -25,12 +25,14 @@ module PoolParty
       # Generic to_s
       # Most Resources won't need to extend this
       def to_string(pre="")
+        return "" if printed?
         opts = get_modified_options
+        
         returning Array.new do |output|
           unless cancelled?
             output << @prestring || ""
 
-            if resources && !resources.empty?
+            if resources && !resources.empty? 
               output << resources_string_from_resources(resources, pre)
             end
             
@@ -39,13 +41,15 @@ module PoolParty
               output << opts.flush_out("#{pre*2}").join(",\n")
               output << "#{pre}}"
             end
-          
+            
+            printed
             output << @poststring || ""
           end
         end.join("\n")
       end
       
       def resources_string_from_resources(res, pre="\t")
+        return nil if res.keys == [:classpackage] && res.size == 1
         @variables = res.extract! {|name,resource| name == :variable}
         
         returning Array.new do |str|

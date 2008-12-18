@@ -39,15 +39,13 @@ COMING SOON
 sudo gem install auser-poolparty
 
 == TODO:
-* Rewrite the disallowed_options to whitelist allowed_options on resources
+* Update hot reloading of puppet (force-reload?)
 * Add pingback for nodes to master when failure occurs
 * Add become master for the nodes
-* Add soft-stop to haproxy while reconfiguring
+* Add hot reload to haproxy while reconfiguring
 * Replace services with Runit
-* Add more granular spec helpers
 * Refactor provisioning to use erlang
 * Add queuing of tasks on the messenger
-* Add list of latest loads to the messenger
 
 == LICENSE:
 
