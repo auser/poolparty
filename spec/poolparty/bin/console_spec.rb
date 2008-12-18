@@ -6,7 +6,10 @@ reset!
 
 describe "Console" do
   before(:each) do
-    ::File.stub!(:readable?).with("pop").and_return true
+    ::File.stub!(:readable?).and_return true
+    Dir.stub!(:pwd).and_return "/flop"
+    Dir.stub!(:[]).and_return []
+    Dir.stub!(:[]).with("/flop/**/*.rb").and_return ["clouds.rb"]
   end
   describe "load_pool" do
     before(:each) do
@@ -14,7 +17,8 @@ describe "Console" do
       @string =<<-EOS
       pool :app do
         maximum_instances 2
-        cloud :rawr do          
+        cloud :rawr do
+          maximum_instances 2
         end
       end
       EOS
@@ -73,7 +77,7 @@ describe "Console" do
       }
     end
     it "should call inflate from Script with the poolspec" do
-      PoolParty::Script.should_receive(:inflate).with("spec contents", "myspec.spec")
+      PoolParty::Script.should_receive(:inflate).with("spec contents", "myspec.spec").and_return true
       load_pool(@filename)
     end
   end

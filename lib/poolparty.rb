@@ -54,9 +54,12 @@ module PoolParty
   def log
     @logger ||= make_new_logger
   end
-  
+  def reset!
+    $pools = $clouds = $plugins = @describe_instances = nil
+  end  
   class PoolParty
     def initialize(spec)
+      reset!
       Script.inflate(spec) if spec
     end
   end
@@ -89,3 +92,5 @@ module PoolParty
     end
   end
 end
+
+PoolParty.reset!

@@ -59,10 +59,11 @@ module PoolParty
         end
         
         # execute_on_node do
-          has_cron(:name => "node puppetd runner", :user => Base.user, :minute => "*/15") do
+          has_cron(:name => "node puppetd runner", :user => Base.user, :minute => "*/10") do
             requires get_gempackage("poolparty")
             command "/usr/bin/puppetrunner"
           end
+        has_user(:name => user)
         # end
         
         # end

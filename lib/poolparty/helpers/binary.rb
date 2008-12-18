@@ -2,10 +2,11 @@ require "ftools"
 module PoolParty
   
   # Load a file that contains a pool into memory
-  def load_pool(filename)
-
+  def load_pool(filename=nil)
+    filename = Dir["#{Dir.pwd}/**/*.rb"].select {|f| ::File.basename(f) == "clouds.rb" }.first unless filename
+    
     unless filename && ::File.readable?(filename)
-      puts "Please specify your cloud with -s, move it to ./clouds.pool or in your POOL_SPEC environment variable"
+      puts "Please specify your cloud with -s, move it to ./clouds.rb or in your POOL_SPEC environment variable"
       exit(1)
     else
       $pool_specfile = filename
@@ -42,14 +43,14 @@ module PoolParty
       # These are the locations the spec file can be before the cloud
       # aborts because it cannot load the cloud
       def get_existing_spec_location
-        [                            
+        [
             "#{Base.remote_storage_path}/#{Base.default_specfile_name}", 
-            "#{Base.default_specfile_name}",
-            ENV["POOL_SPEC"],            
-            "#{Base.storage_directory}/#{Base.default_specfile_name}",
-            "#{Base.base_config_directory}/#{Base.default_specfile_name}",
-            "#{Base.default_project_specfile_name}"
-        ].reject {|a| a.nil?}.reject do |f|
+            "#{Base.default_specfile_name}",            
+            "#{Base.base_config_directory}/#{Base.default_specfile_name}",            
+            Dir["#{Dir.pwd}/**/clouds.rb"],
+            ENV["POOL_SPEC"],
+            "#{Base.storage_directory}/#{Base.default_specfile_name}"
+        ].flatten.reject {|a| a.nil?}.reject do |f|
           f unless ::File.readable?(f)
         end.first
       end

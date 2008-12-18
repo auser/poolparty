@@ -9,34 +9,37 @@ module PoolParty
     
     def set_poolparty_file(file)
       load_pool file
-      instance_eval <<-EOE
-set :username, "#{PoolParty::Base.user}"
-ssh_options[:forward_agent] = true      
-      EOE
     end
     
     def set_cloud(name)
       cld = PoolParty::Cloud.cloud(name)
-      if cld
+      if cld && !cloud_retrieved_already?
         $cap_clouds[name] = cld
         @cloud = cld
+        instance_eval <<-EOE
+  ssh_options[:keys] = [ '#{cld.full_keypair_basename_path}' ]
+  set :user, '#{cld.user}'
+  set :username, "#{cld.user}"
+  ssh_options[:forward_agent] = true
+  EOE
       end
       cld
     end
     
+    def cloud_retrieved_already?
+      $cap_clouds.key?(name)
+    end
     def get_cloud(name)
-      cld = set_cloud(name)
-      instance_eval <<-EOE
-ssh_options[:keys] = [ '#{cld.full_keypair_basename_path}' ]
-set :user, '#{cld.user}'
-EOE
-      cld
+      set_cloud(name)
     end
     
     def cloud_master(name)
       get_cloud(name).ip
     end
-        
+    
+    def cloud_all_instances(name)
+      get_cloud(name).list_of_running_instances.map {|ri| "'#{ri.ip}'" }.join(", ")
+    end
   end
 end
 
