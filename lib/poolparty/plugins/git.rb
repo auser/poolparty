@@ -1,14 +1,20 @@
 module PoolParty    
   class GitResource
-        
+    
     virtual_resource(:git) do
+      def loaded(*args)
+        has_package(:name => "git-core")
+      end
+    end
+    
+    virtual_resource(:git_repos) do
       
-      def loaded(opts={}, parent=self)
+      def loaded(opts={}, parent=self, &block)
+        has_git
         has_git_repos
       end
             
-      def has_git_repos
-        has_package(:name => "git-core")
+      def has_git_repos        
         has_exec({:name => key, :requires => [get_directory("#{working_dir}"), get_package("git-core")] }) do
           command requires_user ? "git clone #{requires_user}@#{source} #{working_dir}" : "cd #{working_dir} && git clone #{source}"
           cwd "#{working_dir if working_dir}"

@@ -16,6 +16,9 @@ ENV["POOL_SPEC"] = nil
 include PoolParty
 extend PoolParty
 
+def debugging
+  false
+end
 def are_too_many_instances_running?  
 end
 def are_any_nodes_exceeding_minimum_runtime?  

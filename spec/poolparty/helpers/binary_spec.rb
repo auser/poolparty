@@ -32,7 +32,7 @@ describe "Binary" do
       Dir.stub!(:pwd).and_return "/flop"
     end
     it "should call Dir[Dir.pwd] if there is no filename given" do      
-      Dir.should_receive(:[]).with("#{Dir.pwd}/**/*.rb").and_return ["clouds.rb"]
+      Dir.should_receive(:[]).with("#{Dir.pwd}/*/clouds.rb").and_return ["clouds.rb"]
       Binary.load_pool
     end
   end

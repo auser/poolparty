@@ -9,7 +9,7 @@ describe "Console" do
     ::File.stub!(:readable?).and_return true
     Dir.stub!(:pwd).and_return "/flop"
     Dir.stub!(:[]).and_return []
-    Dir.stub!(:[]).with("/flop/**/*.rb").and_return ["clouds.rb"]
+    Dir.stub!(:[]).with("/flop/*/*.rb").and_return ["clouds.rb"]    
   end
   describe "load_pool" do
     before(:each) do
@@ -69,6 +69,7 @@ describe "Console" do
       ::File.stub!(:readable?).with(@filename).and_return true
       @filename.stub!(:read).and_return "spec contents"
       self.stub!(:open).with(@filename).and_return @filename
+      Binary.stub!(:get_existing_spec_location).and_return @filename
     end
     it "should call readable on the string sent in to load_pool" do      
       lambda {
