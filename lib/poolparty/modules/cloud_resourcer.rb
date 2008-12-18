@@ -57,9 +57,6 @@ module PoolParty
         ::File.expand_path(keypair_path)
       end
     end
-    def full_pub_keypair_path
-      @full_pub_keypair_path ||= ::File.expand_path("#{full_keypair_basename_path}.pub")
-    end
     def full_keypair_basename_path
       dir = ::File.dirname(full_keypair_path)
       basename = ::File.basename(full_keypair_path, ::File.extname(full_keypair_path))

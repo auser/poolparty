@@ -44,7 +44,7 @@ describe "Script" do
         before(:each) do
           reset!
           reset_resources!
-          pool :appdotcomcoo do
+          pool :appdotcomcool do
             keypair "snoodle"
             ami "ami-123456"
             

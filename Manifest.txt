@@ -211,6 +211,7 @@ lib/poolparty/extra/deployments.rb
 lib/poolparty/helpers/binary.rb
 lib/poolparty/helpers/console.rb
 lib/poolparty/helpers/display.rb
+lib/poolparty/helpers/loading.rb
 lib/poolparty/helpers/nice_printer.rb
 lib/poolparty/helpers/optioner.rb
 lib/poolparty/helpers/ruberl.rb
