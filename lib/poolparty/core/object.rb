@@ -27,7 +27,7 @@ class Object
     self
   end
   def send_if_method(v, *args)
-    if (v.nil? || v.to_s.empty? || v.is_a?(Array) || v.is_a?(Integer))
+    if (v.nil? || v.to_s.empty? || v.is_a?(Array) || v.is_a?(Integer))# && !v.is_a?(Symbol))#)v.is_a?(String)
       v
     else
       vs = v.to_s.to_sym

@@ -136,7 +136,7 @@ aptitude update -y
     def setup_poolparty_base_structure
       run <<-EOR
         cp #{remote_storage_path}/#{key_file_locations.first} "#{base_config_directory}/.ppkeys" &&
-        mv #{remote_storage_path}/#{default_specfile_name} #{base_config_directory}/
+        mv #{remote_storage_path}/#{default_specfile_name} #{base_config_directory}/#{default_specfile_name}
       EOR
     end
     

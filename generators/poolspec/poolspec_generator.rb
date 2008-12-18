@@ -21,7 +21,7 @@ class PoolspecGenerator < RubiGen::Base
       m.directory ''
       BASEDIRS.each { |path| m.directory path }
       
-      m.template "pool_spec_template.erb", "#{@name}.pool"
+      m.template "pool_spec_template.erb", "clouds.pool"
       # Create stubs
       # m.template "template.rb",  "some_file_after_erb.rb"
       # m.template_copy_each ["template.rb", "template2.rb"]

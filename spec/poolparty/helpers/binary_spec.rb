@@ -17,10 +17,23 @@ describe "Binary" do
   describe "get_existing_spec_location" do
     before(:each) do
       ::File.stub!(:readable?).and_return false
-      ::File.stub!(:readable?).with("#{Base.storage_directory}/clouds.pool").and_return true
+      ::File.stub!(:readable?).with("#{Base.storage_directory}/clouds.rb").and_return true
     end
     it "should be a String" do
       Binary.get_existing_spec_location.class.should == String
+    end
+  end
+  describe "load_pool" do
+    before(:each) do
+      ::File.stub!(:readable?).and_return true
+      Binary.stub!(:open).and_return @obj
+      @obj.stub!(:read).and_return "crazy"
+      Script.stub!(:inflate).and_return true
+      Dir.stub!(:pwd).and_return "/flop"
+    end
+    it "should call Dir[Dir.pwd] if there is no filename given" do      
+      Dir.should_receive(:[]).with("#{Dir.pwd}/**/*.rb").and_return ["clouds.rb"]
+      Binary.load_pool
     end
   end
 end

@@ -24,4 +24,5 @@ EOE
 vputs "** Building messenger **", o
 vputs "Running command #{cmd.runnable}", o
 
-out = %x[#{cmd.runnable}]
+beams_not_running = %x[ps aux | grep beam | grep master].nil?
+out = %x[#{cmd.runnable}] if beams_not_running

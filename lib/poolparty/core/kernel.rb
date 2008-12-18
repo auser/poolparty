@@ -1,7 +1,25 @@
 =begin rdoc
   Kernel overloads
 =end
+
 module Kernel
+  def get_latest_caller
+    returning Array.new do |arr|
+      callstack.size.times {|i| arr << callstack[i][0] unless callstack[i][0] =~ /lib\/poolparty/ }
+    end.first
+  end
+  def callstack( level = 1 )
+    call_str_array = caller(level)
+    stack = []
+    call_str_array.each{ |call_str|
+      file, lineno, method = call_str.split(':')
+      if method =~ /in `(.*)'/ then
+        method = $1.intern()
+      end
+      stack << [file, lineno.to_i, method]
+    }
+    stack
+  end
   # Nice wait instead of sleep
   def wait(time=5)
     sleep time.is_a?(String) ? eval(time) : time

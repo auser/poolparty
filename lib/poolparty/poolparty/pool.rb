@@ -14,6 +14,10 @@ module PoolParty
       pl.options.merge!(opts) if pl.options
       pl.run_in_context &block if block
     end
+    
+    def set_pool_specfile(filename)
+      $pool_specfile = filename unless $pool_specfile
+    end
         
     def reset!
       $pools = $clouds = $plugins = @describe_instances = nil
@@ -34,6 +38,7 @@ module PoolParty
       })
       
       def initialize(name,&block)
+        set_pool_specfile get_latest_caller        
         setup_defaults
         @pool_name = name
         @pool_name.freeze
@@ -46,7 +51,7 @@ module PoolParty
       end
       
       def setup_defaults
-        plugin_directory "#{::File.dirname(pool_specfile ? pool_specfile : Dir.pwd)}/plugins"
+        plugin_directory "#{pool_specfile ? ::File.dirname(pool_specfile) : Dir.pwd}/plugins"
         PoolParty::Extra::Deployments.include_deployments "#{Dir.pwd}/deployments"
       end
             

@@ -14,6 +14,9 @@ class String
   def ^(h={})
     self.gsub(/:([\w]+)/) {h[$1.to_sym] if h.include?($1.to_sym)}
   end
+  def grab_filename_from_caller_trace
+    self.gsub(/\.rb(.*)/, '.rb')
+  end
   def arrayable
     self.strip.split(/\n/)
   end
