@@ -47,7 +47,7 @@ module PoolParty
             "#{Base.remote_storage_path}/#{Base.default_specfile_name}", 
             "#{Base.default_specfile_name}",            
             "#{Base.base_config_directory}/#{Base.default_specfile_name}",            
-            Dir["#{Dir.pwd}/**/clouds.rb"],
+            Dir["#{Dir.pwd}/*/clouds.rb"],
             ENV["POOL_SPEC"],
             "#{Base.storage_directory}/#{Base.default_specfile_name}"
         ].flatten.reject {|a| a.nil?}.reject do |f|
