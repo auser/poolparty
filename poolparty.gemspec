@@ -9,7 +9,7 @@ autorequire:
 bindir: bin
 cert_chain: []
 
-date: 2008-12-16 00:00:00 -08:00
+date: 2008-12-17 00:00:00 -08:00
 default_executable: 
 dependencies: 
 - !ruby/object:Gem::Dependency 
@@ -170,6 +170,7 @@ files:
 - config/hoe.rb
 - config/requirements.rb
 - examples/basic.rb
+- examples/deploy.rb
 - examples/plugin_without_plugin_directory.rb
 - examples/poolparty.rb
 - generators/poolspec/USAGE
@@ -294,6 +295,7 @@ files:
 - lib/poolparty/base_packages/ruby.rb
 - lib/poolparty/base_packages/runit.rb
 - lib/poolparty/capistrano.rb
+- lib/poolparty/capistrano/cloud_tasks.rb
 - lib/poolparty/config/postlaunchmessage.txt
 - lib/poolparty/core/array.rb
 - lib/poolparty/core/class.rb
@@ -532,7 +534,7 @@ files:
 has_rdoc: true
 homepage: http://poolparty.rubyforge.org
 post_install_message: |-
-  Get ready to jump in the pool, you just installed PoolParty! (Updated at 16:58 12/16/08)
+  Get ready to jump in the pool, you just installed PoolParty! (Updated at 21:21 12/17/08)
   
   To get started, run the generator:
   

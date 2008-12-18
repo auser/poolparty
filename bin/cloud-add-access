@@ -10,7 +10,7 @@ end
 
 @instance_number = (o.num || 0 ).to_i
 
-if o.unflagged_args.length == 1
+if o.unflagged_args.length > 1
   @file = o.unflagged_args.pop
 else
   puts header("Error")

@@ -33,9 +33,14 @@ module Capistrano
           parent.provisioner
         end
         
-        def cloud
-          parent.cloud
-        end        
+        def cloud(name=nil)
+          puts "name: #{name}"
+          name ? get_cloud(name) : parent.cloud
+        end
+        
+        def get_cloud(name)
+          PoolParty::Cloud.cloud(name)
+        end  
         
         def method_missing(sym, *args, &block)
           if parent.respond_to?(sym)

@@ -6,8 +6,6 @@ module PoolParty
         execute_on_master do
           has_package({:name => "haproxy"})
           
-          # Service is required
-          has_service(:name => "haproxy", :ensures => "running", :hasrestart => true)
           # Restart sysklogd after we update the haproxy.log
           has_service(:name => "sysklogd")
           
@@ -25,7 +23,9 @@ module PoolParty
           has_line_in_file("SYSLOGD=\"-r\"", "/etc/default/syslogd")
           has_line_in_file("local0.* /var/log/haproxy.log", "/etc/syslog.conf", {:notify => get_service("sysklogd")})
           
-          # has_exec(:name => "reloadhaproxy", :command => "/etc/init.d/haproxy reload", :requires => get_package("haproxy"))
+          has_exec(:name => "reloadhaproxy", :command => "/etc/init.d/haproxy reload", :requires => get_package("haproxy"))
+          # Service is required
+          has_service(:name => "haproxy", :ensures => "running", :hasrestart => true, :notify => get_exec("reloadhaproxy"))
 
           # These can also be passed in via hash
           has_remotefile(:name => "/etc/haproxy.cfg") do
