@@ -1,7 +1,7 @@
 --- !ruby/object:Gem::Specification 
 name: poolparty
 version: !ruby/object:Gem::Version 
-  version: 0.2.90
+  version: 0.2.91
 platform: ruby
 authors: 
 - Ari Lerner
@@ -535,7 +535,7 @@ files:
 has_rdoc: true
 homepage: http://poolparty.rubyforge.org
 post_install_message: |-
-  Get ready to jump in the pool, you just installed PoolParty! (Updated at 13:28 12/18/08)
+  Get ready to jump in the pool, you just installed PoolParty! (Updated at 15:02 12/18/08)
   
   To get started, run the generator:
   

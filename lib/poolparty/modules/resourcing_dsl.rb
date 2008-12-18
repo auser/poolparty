@@ -41,6 +41,12 @@ module PoolParty
     def cancelled?
       options[:cancelled] || false
     end
+    def printed(*args)
+      options[:printed] = true
+    end
+    def printed?
+      options[:printed] || false
+    end
     # Give us a template to work with on the resource
     # Make sure this template is moved to the tmp directory as well
     # 

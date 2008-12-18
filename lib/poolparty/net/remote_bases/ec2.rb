@@ -111,9 +111,11 @@ end
         ec2.attach_volume(:volume_id => ebs_volume_id, :instance_id => instance.instance_id, :device => ebs_volume_device) if ebs_volume_id && ebs_volume_mount_point
       end
       def associate_address(instance=nil)
-        vputs "Associating master with #{set_master_ip_to}"
-        instance = master
-        ec2.associate_address(:instance_id => instance.instance_id, :public_ip => set_master_ip_to) if set_master_ip_to
+        if set_master_ip_to
+          vputs "Associating master with #{set_master_ip_to}"
+          instance = master
+          ec2.associate_address(:instance_id => instance.instance_id, :public_ip => set_master_ip_to) if set_master_ip_to
+        end
       end
 
       # Help create a keypair for the cloud
@@ -145,7 +147,7 @@ end
           # copy_file_to_storage_directory(pub_key)
           # copy_file_to_storage_directory(private_key)
         end
-        if set_master_ip_to && master.ip.to_s != set_master_ip_to.to_s
+        if set_master_ip_to && master.ip && master.ip.to_s != set_master_ip_to.to_s
           associate_address(master)
           reset_remoter_base!
         

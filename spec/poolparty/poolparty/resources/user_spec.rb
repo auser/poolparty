@@ -15,8 +15,9 @@ describe "User" do
         name "bob"
         home "/home/bob"
       end
-      @user.to_string.should =~ /"bob":/
-      @user.to_string.should =~ /home => '\/home\/bob'/
+      @string = @user.to_string
+      @string.should =~ /"bob":/
+      @string.should =~ /home => '\/home\/bob'/
     end
     describe "as included" do            
       before(:each) do
