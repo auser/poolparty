@@ -5,7 +5,7 @@ module PoolParty
     
     def plugin_directory(*args)
       args = ["#{::File.expand_path(Dir.pwd)}/plugins"] if args.empty?
-      args.each {|arg| Dir["#{arg}/*/*.rb"].each {|f| require f rescue "" }}
+      args.each {|arg| Dir["#{arg}/*/*.rb"].each {|f| require f }}
     end
     
     # Store block
@@ -39,15 +39,15 @@ module PoolParty
     
     def setup_dev
       return true if ::File.exists?("#{remote_keypair_path}") || master.nil?
-      unless ::File.exists?("#{full_keypair_basename_path}.pub")
-        cmd = "scp #{scp_array.join(" ")} #{Base.user}@#{master.ip}:.ssh/authorized_keys #{full_keypair_basename_path}.pub"
-        vputs "Running #{cmd}"
-        if %x[hostname].chomp == "master"
-          Kernel.system("cat ~/.ssh/authorized_keys > #{full_keypair_basename_path}.pub")
-        else
-          Kernel.system(cmd)
-        end        
-      end
+      # unless ::File.exists?("#{full_keypair_basename_path}.pub")
+      #   cmd = "scp #{scp_array.join(" ")} #{Base.user}@#{master.ip}:.ssh/authorized_keys #{full_keypair_basename_path}.pub"
+      #   vputs "Running #{cmd}"
+      #   if %x[hostname].chomp == "master"
+      #     Kernel.system("cat ~/.ssh/authorized_keys > #{full_keypair_basename_path}.pub")
+      #   else
+      #     Kernel.system(cmd)
+      #   end
+      # end
     end
     
     def full_keypair_path
