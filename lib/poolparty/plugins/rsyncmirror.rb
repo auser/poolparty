@@ -4,8 +4,11 @@ module PoolParty
     virtual_resource(:rsyncmirror) do
       
       def loaded(opts={}, parent=self)
-        @parent = parent
-        has_exec(opts.merge({:command => "#{cloud.remote_rsync_command} --no-implied-dirs --delete-excluded #{Base.user}@master:#{dir}/ #{dir}/".safe_quote, :name => "rsync-#{name}"}))
+        @parent = parent        
+        execute_on_master do
+          @dir = dir || name
+          has_exec(opts.merge({:command => "#{cloud.remote_rsync_command} --no-implied-dirs --delete-excluded #{Base.user}@master:#{@dir}/ #{@dir}/".safe_quote, :name => "rsync-#{name}"}))
+        end
       end
             
       # Since git is not a native type, we have to say which core resource
