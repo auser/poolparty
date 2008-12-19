@@ -5,7 +5,7 @@ module PoolParty
       
       def loaded(opts={}, parent=self)
         @parent = parent        
-        execute_on_master do
+        execute_on_node do
           @dir = dir || name
           has_exec(opts.merge({:command => "#{cloud.remote_rsync_command} --no-implied-dirs --delete-excluded #{Base.user}@master:#{@dir}/ #{@dir}/".safe_quote, :name => "rsync-#{name}"}))
         end

@@ -24,7 +24,7 @@ module PoolParty
           has_line_in_file("local0.* /var/log/haproxy.log", "/etc/syslog.conf", {:notify => get_service("sysklogd")})
           
           has_exec(:name => "reloadhaproxy", 
-            :command => "/etc/init.d/apache2 stop;/etc/init.d/haproxy reload", 
+            :command => "/etc/init.d/haproxy reload", 
             :requires => get_package("haproxy"))
           # Service is required
           has_service(:name => "haproxy", :ensures => "running", :hasrestart => true, :notify => get_exec("reloadhaproxy"))
