@@ -71,17 +71,6 @@ module PoolParty
       def name
         @cloud_name
       end
-                                    
-      # Keypairs
-      # Let's just make sure that the keypair exists on the options
-      def has_keypair?
-        options.has_key?(:keypair) && options[:keypair] && !options[:keypair].empty?
-      end
-      # Generate a keypair based on the parent's name (if there is a parent)
-      # and the cloud's name
-      def generate_keypair(*args)
-        options[:keypair] = "#{parent && parent.is_a?(PoolParty::Pool::Pool) ? parent.name : "poolparty"}_#{name}" unless has_keypair?
-      end
             
       # Prepare to send the new configuration to the instances
       # First, let's make sure that our base directory is made
