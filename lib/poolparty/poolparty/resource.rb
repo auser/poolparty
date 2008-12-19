@@ -17,18 +17,20 @@ module PoolParty
       resources[type] ||= []
     end
     
+    # Add resource
+    # When we are looking to add a resource, we want to make sure the
+    # resources isn't already added. This way we prevent duplicates 
+    # as puppet can be finicky about duplicate resource definitions. 
+    # We'll look for the resource in either a local or global store
+    # 
+    # A word about stores, the global store stores the entire list of stored
+    # resources. The local resource store is available on all clouds and plugins
+    # which stores the instance variable's local resources. 
     def add_resource(type, opts={}, parent=self, &block)
       temp_name = (opts[:name] || "#{type}_#{type.to_s.keyerize}")
       if in_a_resource_store?(type, temp_name)
         @res = get_from_local_resource_store(type, temp_name, parent)
         @res ||= get_from_global_resource_store(type, temp_name)
-        # if should_duplicate_resource?(type, @res, parent, opts)
-        # unless @res.parent == parent
-        #   @pa = parent
-        #   @res.instance_eval {@parent = @pa}
-        # end
-          # parent.resource(type) << @res
-        # end
       else
         @res = returning "PoolParty::Resources::#{type.to_s.camelize}".camelize.constantize.new(opts, parent, &block) do |o|                    
           store_into_global_resource_store(o)
@@ -96,6 +98,16 @@ module PoolParty
       extend PoolParty::Resources
       include PoolParty::Resources
       
+      # When we subclass Resource, we want to add a few methods to the Resources class
+      # This will anable us to call out to these resources in our DSLified manner
+      # When we call a method from the subclass, say it's the File class
+      # then we want to be able to have the method file() available.
+      # We also want to be able to fetch the resource with a get_file method.
+      # This will just call out to get the resource. If the resource isn't available
+      # in a resource store, we expect to return a nil result. 
+      # Finally, the has_ and does_not_have_ methods are appended. See below for 
+      # those methods. Then we make sure we add these resources as available_resources
+      # onto the class so we know it's available as a resource
       def self.inherited(subclass)
         subclass = subclass.to_s.split("::")[-1] if subclass.to_s.index("::")
         lowercase_class_name = subclass.to_s.underscore.downcase || subclass.downcase
@@ -107,12 +119,8 @@ module PoolParty
               add_resource(:#{lowercase_class_name}, opts, parent, &blk)
             end
             def get_#{lowercase_class_name}(n, opts={}, parent=self, &block)
-              res = in_a_resource_store?(:#{lowercase_class_name}, n) ?
-                get_resource(:#{lowercase_class_name}, n) :
-                nil
-                # PoolParty::Resources::Resource.resource_string_name(#{lowercase_class_name}, n)
-                # add_resource(:#{lowercase_class_name}, opts, parent, &blk)
-              # res ||= PoolParty::Resources::Resource.resource_string_name(#{lowercase_class_name}, n)
+              in_a_resource_store?(:#{lowercase_class_name}, n) ?
+                get_resource(:#{lowercase_class_name}, n) : nil
               res
             end
           EOE
@@ -123,12 +131,10 @@ module PoolParty
         end
       end
       
+      # Keep track of the resources that are available. This way we can show some pretty output
+      # later and ensure that we are only calling available resources
       def self.available_resources
         @available_resources ||= []
-      end
-      
-      def self.available_resource_methods
-        available_resources.map {|a| a.my_methods }
       end
       
       # This is set in order of descending precedence
