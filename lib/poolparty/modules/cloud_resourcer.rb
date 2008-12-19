@@ -50,6 +50,25 @@ module PoolParty
       # end
     end
     
+    # Keypairs
+    def keypair(*args)
+      if args && !args.empty? && !has_keypair?
+        options[:keypair] = args.first
+      else
+        options[:keypair] ||= generate_keypair
+      end
+    end
+        
+    # Let's just make sure that the keypair exists on the options
+    def has_keypair?
+      options.has_key?(:keypair) && options[:keypair] && !options[:keypair].empty?
+    end
+    # Generate a keypair based on the parent's name (if there is a parent)
+    # and the cloud's name
+    def generate_keypair(*args)
+      options[:keypair] = "#{parent && parent.is_a?(PoolParty::Pool::Pool) ? parent.name : "poolparty"}_#{name}" unless has_keypair?
+    end
+    
     def full_keypair_path
       unless keypair_path
         raise RuntimeException.new("Keypair cannot be found")        
@@ -102,8 +121,8 @@ module PoolParty
     def keypair_paths
       [
         Base.base_keypair_path,
-        Base.remote_storage_path,
-        Base.base_config_directory
+        Base.base_config_directory,
+        Base.remote_storage_path        
       ]
     end
     
