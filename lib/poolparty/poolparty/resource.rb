@@ -22,6 +22,9 @@ module PoolParty
     # resources isn't already added. This way we prevent duplicates 
     # as puppet can be finicky about duplicate resource definitions. 
     # We'll look for the resource in either a local or global store
+    # If the resource appears in either, return that resource, we'll just append
+    # to the resource config, otherwise instantiate a new resource of the type
+    # and store it into the global and local resource stores
     # 
     # A word about stores, the global store stores the entire list of stored
     # resources. The local resource store is available on all clouds and plugins
@@ -121,7 +124,6 @@ module PoolParty
             def get_#{lowercase_class_name}(n, opts={}, parent=self, &block)
               in_a_resource_store?(:#{lowercase_class_name}, n) ?
                 get_resource(:#{lowercase_class_name}, n) : nil
-              res
             end
           EOE
           PoolParty::Resources.module_eval method

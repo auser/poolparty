@@ -9,7 +9,7 @@ autorequire:
 bindir: bin
 cert_chain: []
 
-date: 2008-12-18 00:00:00 -08:00
+date: 2008-12-19 00:00:00 -08:00
 default_executable: 
 dependencies: 
 - !ruby/object:Gem::Dependency 
@@ -392,6 +392,7 @@ files:
 - lib/poolparty/provisioners/capistrano/recipies/master.rb
 - lib/poolparty/provisioners/capistrano/recipies/slave.rb
 - lib/poolparty/provisioners/provisioner_base.rb
+- lib/poolparty/spec.rb
 - lib/poolparty/spec/core/string.rb
 - lib/poolparty/spec/matchers/a_spec_extensions_base.rb
 - lib/poolparty/spec/matchers/have_cron.rb
@@ -435,7 +436,6 @@ files:
 - lib/poolparty/templates/yaws.conf
 - lib/poolparty/version.rb
 - lib/poolpartycl.rb
-- lib/poolpartyspec.rb
 - log/pool.log
 - poolparty.gemspec
 - script/destroy
@@ -535,7 +535,7 @@ files:
 has_rdoc: true
 homepage: http://poolparty.rubyforge.org
 post_install_message: |-
-  Get ready to jump in the pool, you just installed PoolParty! (Updated at 17:42 12/18/08)
+  Get ready to jump in the pool, you just installed PoolParty! (Updated at 17:36 12/19/08)
   
   To get started, run the generator:
   

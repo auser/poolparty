@@ -105,14 +105,16 @@ end
         when_all_assigned_ips {wait "5.seconds"}
       end
       
+      # Attach a volume to the instance
       def attach_volume(instance=nil)
         vputs "Attaching volume #{ebs_volume_id} to the master at #{ebs_volume_device}"
         instance = master        
         ec2.attach_volume(:volume_id => ebs_volume_id, :instance_id => instance.instance_id, :device => ebs_volume_device) if ebs_volume_id && ebs_volume_mount_point
       end
+      # Associate an address with the instance using ec2
       def associate_address(instance=nil)
         if set_master_ip_to
-          vputs "Associating master with #{set_master_ip_to}"
+          dputs "Associating master with #{set_master_ip_to}"
           instance = master
           ec2.associate_address(:instance_id => instance.instance_id, :public_ip => set_master_ip_to) if set_master_ip_to
         end
@@ -142,11 +144,8 @@ end
                               )
       end
       
+      # These are tasks that run before the configuration runs
       def before_configuration_tasks
-        if has_cert_and_key?
-          # copy_file_to_storage_directory(pub_key)
-          # copy_file_to_storage_directory(private_key)
-        end
         if set_master_ip_to && master.ip && master.ip.to_s != set_master_ip_to.to_s
           associate_address(master)
           reset_remoter_base!
