@@ -46,6 +46,7 @@ sudo gem install auser-poolparty
 * Replace services with Runit
 * Refactor provisioning to use erlang
 * Add queuing of tasks on the messenger
+* Add syntax checker on the manifests
 
 == LICENSE:
 

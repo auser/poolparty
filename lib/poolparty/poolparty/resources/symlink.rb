@@ -11,8 +11,10 @@ module PoolParty
         [:name, :source]
       end
       
+      # We can set the source several ways, with either source or from
+      # in the manifest
       def present
-        source
+        source || from
       end
       
       def printable?

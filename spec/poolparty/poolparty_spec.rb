@@ -26,6 +26,9 @@ describe "PoolParty" do
       PoolParty.write_to_file_in_storage_directory("/usr/bin/happydayz", "write this text")
       File.open(@path).read.should == "write this text"
     end
+    after(:each) do
+      ::FileUtils.rm @path rescue ""
+    end
   end
   it "should have a logger" do
     PoolParty.log.should_not be_nil
