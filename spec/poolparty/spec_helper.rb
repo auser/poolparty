@@ -122,6 +122,8 @@ def stub_remoting_methods_for(o)
   o.stub!(:before_install).and_return true
   o.stub!(:process_install).and_return true
   o.stub!(:after_install).and_return true
+  o.stub!(:can_contract_cloud?).and_return false
+  o.stub!(:can_expand_cloud?).and_return false
 end
 def stub_list_of_instances_for(o)  
   # o.stub!(:list_of_running_instances).once.and_return running_remote_instances

@@ -144,9 +144,9 @@ module PoolParty
       # A convenience method for waiting until there are no more
       # pending instances and then running the block
       def when_no_pending_instances(&block)
-        reset!        
-        if list_of_pending_instances.size == 0
-          vputs ""
+        reset!
+        if list_of_pending_instances && list_of_pending_instances.size == 0
+          vputs "" # Clear the terminal with a newline
           block.call if block
         else
           vprint "."
@@ -236,14 +236,14 @@ module PoolParty
         !list_of_running_instances.select {|a| a.name == "master"}.first.nil?
       end
       # Stub method for the time being to handle expansion of the cloud
-      def should_expand_cloud?(force=false)
+      def can_expand_cloud?(force=false)
         (are_too_few_instances_running? || are_expansion_rules_valid? ) || force || false
       end
       def are_expansion_rules_valid?
         valid_rules?(:expand_when)
       end
       # Stub method for the time being to handle the contraction of the cloud
-      def should_contract_cloud?(force=false)
+      def can_contract_cloud?(force=false)
         return true if force
         ((are_any_nodes_exceeding_minimum_runtime? and are_too_many_instances_running?) || are_contraction_rules_valid?) || false
       end
@@ -257,7 +257,7 @@ module PoolParty
       # online, then provision it as a slave, this way, it is ready for action from the
       # get go
       def expand_cloud_if_necessary(force=false)
-        if can_start_a_new_instance? && should_expand_cloud?(force)
+        if can_start_a_new_instance? && can_expand_cloud?(force)
           vputs "Expanding the cloud based on load"
           @num = 1
           @num.times do |i|
@@ -273,7 +273,7 @@ module PoolParty
       # If we can shutdown an instnace and the load allows us to contract
       # the cloud, then we should request_termination_of_non_master_instance
       def contract_cloud_if_necessary(force=false)
-        if can_shutdown_an_instance? && should_contract_cloud?(force)
+        if can_shutdown_an_instance? && can_contract_cloud?(force)
           vputs "Shrinking the cloud by 1"
           before_shutdown
           request_termination_of_non_master_instance
