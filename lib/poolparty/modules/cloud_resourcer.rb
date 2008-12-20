@@ -1,3 +1,11 @@
+=begin rdoc
+  CloudResourcer provides the cloud with convenience methods
+  that you can call on your cloud. This is where the 
+  
+    instances 2..10
+    
+  method is stored, for instance. It's also where the key convenience methods are written
+=end
 require "ftools"
 
 module PoolParty
