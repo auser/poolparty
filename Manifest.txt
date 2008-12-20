@@ -276,6 +276,7 @@ lib/poolparty/provisioners/capistrano/recipies/base.rb
 lib/poolparty/provisioners/capistrano/recipies/master.rb
 lib/poolparty/provisioners/capistrano/recipies/slave.rb
 lib/poolparty/provisioners/provisioner_base.rb
+lib/poolparty/spec.rb
 lib/poolparty/spec/core/string.rb
 lib/poolparty/spec/matchers/a_spec_extensions_base.rb
 lib/poolparty/spec/matchers/have_cron.rb
@@ -319,7 +320,6 @@ lib/poolparty/templates/puppetrunner
 lib/poolparty/templates/yaws.conf
 lib/poolparty/version.rb
 lib/poolpartycl.rb
-lib/poolpartyspec.rb
 log/pool.log
 poolparty.gemspec
 script/destroy

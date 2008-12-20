@@ -20,7 +20,18 @@ module PoolParty
       end
     end
     
-    # Wrap all the resources into a class package from 
+    # Wrap all the resources into a class package.
+    # This method will first check to see if a class has already been declared
+    # and run the containing block on it to attach the new resources on to the new block
+    # If the class does not exist, then it is the responsibility of this method to pull
+    # the resources from the parent into the new class package resource and remove them
+    # from the parent. This way we can conveniently write classes into the manifest, 
+    # giving us separation for variables and the like.
+    # Finally, the method will remove the all resources from the contianing parent and add
+    # the class package as the resource. 
+    # Note that it only removes resources that are not class packages, so this method will
+    # not remove other classes that have been attached to the same resource.
+    # TODO CLEAN THIS UP
     def classpackage_with_self(parent=self, &block)
       name = (parent && parent.options.name || Classpackage.name(parent).to_s).sanitize
       
@@ -56,13 +67,8 @@ module PoolParty
       })
       
       def initialize(opts={}, parent=self, &block)
-        # Take the options of the parents
-        # set_parent(parent, false) if parent
         set_vars_from_options(opts) unless opts.empty?
-        # self.instance_eval &block if block
         run_setup(parent, &block) if block
-        # self.run_in_context &block if block
-        # store_block(&block)
         loaded
       end
                         
