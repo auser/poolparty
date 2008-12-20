@@ -229,14 +229,14 @@ describe "Remote" do
           @tc.should_receive(:can_start_a_new_instance?).once
         end
         it "should see if we should expand the cloud" do
-          @tc.should_receive(:should_expand_cloud?).once.and_return false
+          @tc.should_receive(:can_expand_cloud?).once.and_return false
         end
-        it "should call request_launch_new_instances if we should_expand_cloud?" do
-          @tc.should_receive(:should_expand_cloud?).once.and_return true
+        it "should call request_launch_new_instances if we can_expand_cloud?" do
+          @tc.should_receive(:can_expand_cloud?).once.and_return true
           @tc.should_receive(:request_launch_one_instance_at_a_time).once.and_return [{:ip => "127.0.0.5", :name => "node2"}]
         end
         it "should call a new slave provisioner" do
-          @tc.stub!(:should_expand_cloud?).once.and_return true
+          @tc.stub!(:can_expand_cloud?).once.and_return true
           @provisioner.should_receive(:install).at_least(1)
         end
         after(:each) do
@@ -255,10 +255,10 @@ describe "Remote" do
           @tc.should_receive(:can_shutdown_an_instance?).once
         end
         it "should see if we should contract the cloud" do
-          @tc.should_receive(:should_contract_cloud?).once.and_return false
+          @tc.should_receive(:can_contract_cloud?).once.and_return false
         end
-        it "should call request_termination_of_non_master_instance if we should_contract_cloud?" do
-          @tc.stub!(:should_contract_cloud?).and_return true
+        it "should call request_termination_of_non_master_instance if we can_contract_cloud?" do
+          @tc.stub!(:can_contract_cloud?).and_return true
           @tc.should_receive(:request_termination_of_non_master_instance).once.and_return true
         end
         after(:each) do
