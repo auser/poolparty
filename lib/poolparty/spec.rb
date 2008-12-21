@@ -1,5 +1,5 @@
 ["core", "spec"].each do |dir|
-  Dir[File.join(File.dirname(__FILE__), "poolparty", "spec", dir, "*.rb")].each {|f| require f}
+  Dir[File.join(File.dirname(__FILE__), "spec", dir, "*.rb")].each {|f| require f}
 end
 
 class TestCloudClass < PoolParty::Cloud::Cloud  
