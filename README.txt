@@ -47,6 +47,7 @@ sudo gem install auser-poolparty
 * Refactor provisioning to use erlang
 * Add queuing of tasks on the messenger
 * Add syntax checker on the manifests
+* Move in collectd support
 
 == LICENSE:
 

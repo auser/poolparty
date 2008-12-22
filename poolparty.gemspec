@@ -1,7 +1,7 @@
 --- !ruby/object:Gem::Specification 
 name: poolparty
 version: !ruby/object:Gem::Version 
-  version: 0.2.92
+  version: 0.2.93
 platform: ruby
 authors: 
 - Ari Lerner
@@ -9,7 +9,7 @@ autorequire:
 bindir: bin
 cert_chain: []
 
-date: 2008-12-21 00:00:00 -08:00
+date: 2008-12-22 00:00:00 -08:00
 default_executable: 
 dependencies: 
 - !ruby/object:Gem::Dependency 
@@ -91,9 +91,11 @@ executables:
 - server-get-load
 - server-list-active
 - server-list-responding
+- server-query-agent
 - server-rerun
 - server-send-command
 - server-show-stats
+- server-start-agent
 - server-start-client
 - server-start-master
 - server-start-node
@@ -156,9 +158,11 @@ files:
 - bin/server-get-load
 - bin/server-list-active
 - bin/server-list-responding
+- bin/server-query-agent
 - bin/server-rerun
 - bin/server-send-command
 - bin/server-show-stats
+- bin/server-start-agent
 - bin/server-start-client
 - bin/server-start-master
 - bin/server-start-node
@@ -334,6 +338,7 @@ files:
 - lib/poolparty/modules/cloud_dsl.rb
 - lib/poolparty/modules/cloud_resourcer.rb
 - lib/poolparty/modules/configurable.rb
+- lib/poolparty/modules/daemonizable.rb
 - lib/poolparty/modules/definable_resource.rb
 - lib/poolparty/modules/file_writer.rb
 - lib/poolparty/modules/method_missing_sugar.rb
@@ -392,6 +397,7 @@ files:
 - lib/poolparty/provisioners/capistrano/recipies/master.rb
 - lib/poolparty/provisioners/capistrano/recipies/slave.rb
 - lib/poolparty/provisioners/provisioner_base.rb
+- lib/poolparty/server/agent.rb
 - lib/poolparty/spec.rb
 - lib/poolparty/spec/core/string.rb
 - lib/poolparty/spec/matchers/a_spec_extensions_base.rb
@@ -436,6 +442,7 @@ files:
 - lib/poolparty/templates/yaws.conf
 - lib/poolparty/version.rb
 - lib/poolpartycl.rb
+- log/agent.log
 - log/pool.log
 - poolparty.gemspec
 - script/destroy
@@ -535,7 +542,7 @@ files:
 has_rdoc: true
 homepage: http://poolparty.rubyforge.org
 post_install_message: |-
-  Get ready to jump in the pool, you just installed PoolParty! (Updated at 21:10 12/21/08)
+  Get ready to jump in the pool, you just installed PoolParty! (Updated at 14:30 12/22/08)
   
   To get started, run the generator:
   
