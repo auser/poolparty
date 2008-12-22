@@ -43,7 +43,7 @@ Capistrano::Configuration.instance(:must_exist).load do
     def download_base_gems
       run(returning(Array.new) do |arr|
         base_gems.each do |name, url|
-          arr << "wget #{url} -O #{Base.remote_storage_path}/#{name}.gem 2>&1"
+          arr << "wget #{url} -O #{Base.remote_storage_path}/#{name}.gem 2>&1; echo 'downloaded #{name}'" if url
         end
       end.join(" && "))
     end
@@ -51,11 +51,8 @@ Capistrano::Configuration.instance(:must_exist).load do
     def install_base_gems
       run(returning(Array.new) do |arr|
         base_gems.each do |name, url|
-          if url.empty?
-            arr << "/usr/bin/gem install --ignore-dependencies --no-ri --no-rdoc #{name}"
-          else
-            arr << "/usr/bin/gem install --ignore-dependencies --no-ri --no-rdoc #{Base.remote_storage_path}/#{name}.gem"
-          end          
+          str = url.empty? ? "#{name}" : "#{Base.remote_storage_path}/#{name}.gem"
+          arr << "/usr/bin/gem install --ignore-dependencies --no-ri --no-rdoc #{str}"
         end
       end.join(" && "))
     end
