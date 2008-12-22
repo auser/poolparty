@@ -22,6 +22,6 @@ o.loaded_clouds.each do |cloud|
       #   Provisioner.configure_slaves(self, testing)
       # end
     # end    
-    clear_base_directory unless testing
+    cleanup_storage_directory unless testing
   end    
 end

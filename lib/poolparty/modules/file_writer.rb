@@ -6,9 +6,7 @@ module PoolParty
       ::FileUtils.cp file, path unless file == path || ::File.file?(path)
     end
     def cleanup_storage_directory
-      Dir["#{Base.storage_directory}/**/*"].each do |f|
-        ::FileUtils.rm f if ::File.file?(f)
-      end
+      ::FileUtils.rm_rf "#{Base.storage_directory}"
     end
     def copy_template_to_storage_directory(file)
       make_template_directory
@@ -25,11 +23,10 @@ module PoolParty
     def copy_directory_into_storage_directory(from, pat)
       to = ::File.join(Base.storage_directory, pat)
       
-      make_directory_in_storage_directory(to) unless ::File.directory?(to)
-      puts "from: #{to}"
+      # make_directory_in_storage_directory(to) unless ::File.directory?(to)
       FileUtils.cp_r(from, to)
     end
-    def make_directory_in_storage_directory(dirname="newdir")
+    def make_directory_in_storage_directory(dirname="newdir")      
       path = ::File.join( Base.storage_directory, dirname )
       make_base_path path
     end

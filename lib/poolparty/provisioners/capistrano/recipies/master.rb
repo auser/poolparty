@@ -27,6 +27,7 @@ Capistrano::Configuration.instance(:must_exist).load do
       create_local_node_entry_for_puppet
       move_provisioner_manifest
       move_template_files
+      move_custom_modules
       setup_poolparty_base_structure
       ensure_provisioner_is_running
       run_provisioner
@@ -92,7 +93,8 @@ Capistrano::Configuration.instance(:must_exist).load do
     desc "Move custom modules"
     def move_custom_modules
       run <<-EOR
-        mkdir -p 
+        mkdir -p #{base_config_directory}/modules &&
+        cp -R #{remote_storage_path}/modules #{base_config_directory}
       EOR
     end
     desc "Move manifest into place" 
