@@ -18,7 +18,7 @@ module Spec
           "file"
         end
         def is_valid_resource?
-          grab_entry.split(/\n/).select {|l| l.match(/(.*)=>(\W+),$/) }.empty?
+          grab_entry.split(/\n/).select {|l| nil unless l.match(/(.*)=>([\n\t ]*),$/) }.empty?
         end
       end
     end

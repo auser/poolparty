@@ -168,7 +168,7 @@ module PoolParty
           "net-scp" => "http://rubyforge.org/frs/download.php/37664/net-scp-1.0.1.gem",
           "net-ssh-gateway" => "http://rubyforge.org/frs/download.php/36389/net-ssh-gateway-1.0.0.gem",
           :highline => "http://rubyforge.org/frs/download.php/46328/highline-1.5.0.gem",
-          :capistrano => "http://rubyforge.org/frs/download.php/48031/capistrano-2.5.3.gem",
+          :capistrano => "",
           :poolparty => "http://github.com/auser/poolparty/tree/master%2Fpkg%2Fpoolparty.gem?raw=true",
           "ec2" => "http://rubyforge.org/frs/download.php/43666/amazon-ec2-0.3.1.gem"
         }
