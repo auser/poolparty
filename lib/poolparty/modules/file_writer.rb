@@ -22,6 +22,13 @@ module PoolParty
       end
       ::File.basename(path)
     end
+    def copy_directory_into_storage_directory(from, pat)
+      to = ::File.join(Base.storage_directory, pat)
+      
+      make_directory_in_storage_directory(to) unless ::File.directory?(to)
+      puts "from: #{to}"
+      FileUtils.cp_r(from, to)
+    end
     def make_directory_in_storage_directory(dirname="newdir")
       path = ::File.join( Base.storage_directory, dirname )
       make_base_path path

@@ -1,7 +1,6 @@
 # Basic poolparty template
 
 pool :<%= name -%> do
-  plugin_directory "#{File.dirname(__FILE__)}/plugins"
   
   cloud :app do
     instances 2..5

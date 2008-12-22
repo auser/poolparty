@@ -43,7 +43,10 @@ Capistrano::Configuration.instance(:must_exist).load do
     def download_base_gems
       run(returning(Array.new) do |arr|
         base_gems.each do |name, url|
-          arr << "wget #{url} -O #{Base.remote_storage_path}/#{name}.gem 2>&1; echo 'downloaded #{name}'" if url
+          if url && !url.empty?
+            arr << "curl -L -o #{Base.remote_storage_path}/#{name}.gem #{url} 2>&1; echo 'downloaded #{name}'"
+            arr << "if test -s #{Base.remote_storage_path}/#{name}.gem; then echo ''; else rm #{Base.remote_storage_path}/#{name}.gem; fi; echo ''"
+          end
         end
       end.join(" && "))
     end
@@ -52,7 +55,7 @@ Capistrano::Configuration.instance(:must_exist).load do
       run(returning(Array.new) do |arr|
         base_gems.each do |name, url|
           str = url.empty? ? "#{name}" : "#{Base.remote_storage_path}/#{name}.gem"
-          arr << "/usr/bin/gem install --ignore-dependencies --no-ri --no-rdoc #{str}"
+          arr << "/usr/bin/gem install --ignore-dependencies --no-ri --no-rdoc #{str}; echo 'insatlled #{name}'"
         end
       end.join(" && "))
     end
@@ -62,7 +65,7 @@ Capistrano::Configuration.instance(:must_exist).load do
     end
     desc "Restart provisioner base"
     def restart_provisioner_base
-      run "/etc/init.d/puppetmaster stop;rm -rf /etc/poolparty/ssl;puppetmasterd --verbose;/etc/init.d/puppetmaster start"
+      run "/etc/init.d/puppetmaster stop;rm -rf /etc/poolparty/ssl;start_provisioner_based --verbose;/etc/init.d/puppetmaster start"
     end
     desc "Ensure provisioner is running"
     def ensure_provisioner_is_running
@@ -84,6 +87,12 @@ Capistrano::Configuration.instance(:must_exist).load do
       run <<-EOR
         mkdir -p #{template_path} &&
         cp -R #{remote_storage_path}/templates/* #{template_path}
+      EOR
+    end
+    desc "Move custom modules"
+    def move_custom_modules
+      run <<-EOR
+        mkdir -p 
       EOR
     end
     desc "Move manifest into place" 
