@@ -13,6 +13,6 @@ class String
     grab_entry_for(type, name).scan(/#{key}[ =>]*(.*)[,?]?$/).flatten.first rescue ""
   end
   def grab_key_value_for(ty, name, key)
-    _grab_key_value_for(ty,name,key).gsub(/,/, '')
+    _grab_key_value_for(ty,name,key).gsub(/,/, '') rescue ""
   end
 end
