@@ -40,9 +40,11 @@ bin/server-fire-cmd
 bin/server-get-load
 bin/server-list-active
 bin/server-list-responding
+bin/server-query-agent
 bin/server-rerun
 bin/server-send-command
 bin/server-show-stats
+bin/server-start-agent
 bin/server-start-client
 bin/server-start-master
 bin/server-start-node
@@ -218,6 +220,7 @@ lib/poolparty/helpers/ruberl.rb
 lib/poolparty/modules/cloud_dsl.rb
 lib/poolparty/modules/cloud_resourcer.rb
 lib/poolparty/modules/configurable.rb
+lib/poolparty/modules/daemonizable.rb
 lib/poolparty/modules/definable_resource.rb
 lib/poolparty/modules/file_writer.rb
 lib/poolparty/modules/method_missing_sugar.rb
@@ -276,6 +279,7 @@ lib/poolparty/provisioners/capistrano/recipies/base.rb
 lib/poolparty/provisioners/capistrano/recipies/master.rb
 lib/poolparty/provisioners/capistrano/recipies/slave.rb
 lib/poolparty/provisioners/provisioner_base.rb
+lib/poolparty/server/agent.rb
 lib/poolparty/spec.rb
 lib/poolparty/spec/core/string.rb
 lib/poolparty/spec/matchers/a_spec_extensions_base.rb
@@ -320,6 +324,7 @@ lib/poolparty/templates/puppetrunner
 lib/poolparty/templates/yaws.conf
 lib/poolparty/version.rb
 lib/poolpartycl.rb
+log/agent.log
 log/pool.log
 poolparty.gemspec
 script/destroy

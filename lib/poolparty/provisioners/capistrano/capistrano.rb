@@ -6,6 +6,12 @@ module PoolParty
       
       include ::Capistrano::Configuration::Actions::Invocation
       
+      def loaded
+        dputs "Capistrano provisioner loaded..."
+        @cloud.cleanup_storage_directory
+        @cloud.make_base_directory
+        create_config
+      end
       def process_install!(testing=false)
         unless testing
           @cloud.rsync_storage_files_to(@instance)
@@ -27,7 +33,6 @@ module PoolParty
       def configure_tasks
         provision_master? ? master_configure_tasks : slave_configure_tasks
       end
-      
       def master_install_tasks
         [
           "custom_install_tasks",
@@ -60,10 +65,6 @@ module PoolParty
           "custom_configure_tasks",
           "slave_configure_slave_task"
         ]#.flatten.map {|a| a.to_sym }
-      end
-      # Run tasks after the initialized
-      def loaded
-        create_config
       end
             
       def set_poolparty_roles

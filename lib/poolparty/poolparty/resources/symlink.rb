@@ -17,6 +17,10 @@ module PoolParty
         source || from
       end
       
+      def ensure
+        present
+      end
+      
       def printable?
         true
       end

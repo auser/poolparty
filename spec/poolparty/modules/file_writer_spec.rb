@@ -52,6 +52,12 @@ describe "FileWriter" do
       @test.copy_file_to_storage_directory(@filepath)
     end
   end
+  describe "cleanup_storage_directory" do
+    it "should call rm_rf on the FileUtils class with the storage_directory" do
+      ::FileUtils.should_receive(:rm_rf).with("#{Base.storage_directory}").and_return true
+      @test.cleanup_storage_directory
+    end
+  end
   after(:all) do
     ::File.unlink @path if ::File.file? @path
   end

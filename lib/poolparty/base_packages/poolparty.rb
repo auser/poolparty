@@ -58,8 +58,8 @@ module PoolParty
           template File.join(File.dirname(__FILE__), "..", "templates/puppetrunner")
         end
         
-        has_exec(:name => "Puppet runner", :command => "/usr/bin/puppetrunner")
-        has_cron(:name => "ensure puppetmaster is running", :command => "/usr/bin/puppetrunner", :minute => "*/15")
+        # has_exec(:name => "Puppet runner", :command => "/usr/bin/puppetrunner")
+        has_cron(:name => "Run the provisioner", :command => "/usr/bin/puppetrunner", :minute => "*/15")
         has_user(:name => user)
         
         # Custom run puppet to minimize footprint
