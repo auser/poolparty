@@ -57,19 +57,7 @@ module PoolParty
       end
       # Daemonize the process
       def daemonize(&block)
-        vputs "Daemonizing..."
-        trap("CHLD") {Process.wait(-1, Process::WNOHANG)}        
-        pid = fork do
-          Signal.trap('HUP', 'IGNORE') # Don't die upon logout
-          File.open("/dev/null", "r+") do |devnull|
-            $stdout.reopen(devnull)
-            $stderr.reopen(devnull)
-            $stdin.reopen(devnull) unless @use_stdin
-          end
-          block.call if block
-        end
-        Process.detach(pid)
-        pid
+        Daemonize.daemonize(&block)
       end
       
     end

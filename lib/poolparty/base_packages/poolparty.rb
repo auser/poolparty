@@ -58,24 +58,8 @@ module PoolParty
           template File.join(File.dirname(__FILE__), "..", "templates/puppetrunner")
         end
         
-        # execute_on_node do
-          has_cron(:name => "node puppetd runner", :user => Base.user, :minute => "*/10") do
-            requires get_gempackage("poolparty")
-            command "/usr/bin/puppetrunner"
-          end
-        has_exec(:command => "/usr/bin/puppetrunner")
+        has_exec(:name => "Puppet runner", :command => "/usr/bin/puppetrunner")
         has_user(:name => user)
-        # end
-        
-        # end
-        
-        # Cloud panel setup
-        
-        # has_directory(:name => "/var/www/cloudpanel")
-        
-        # has_file(:name => "/etc/yaws/conf.d/localhost.conf") do
-        #   template File.join(File.dirname(__FILE__), "..", "templates/yaws.conf")
-        # end
         
         # Custom run puppet to minimize footprint
         # TODO: Update the offsetted times
@@ -91,11 +75,11 @@ module PoolParty
         
         execute_on_master do
           has_exec(:name => "update_hosts", :command => ". /etc/profile && server-update-hosts -n #{cloud.name}")
-          has_exec(:command => ". /etc/profile && cloud-handle-load -n #{cloud.name}")
-          has_exec(:command => ". /etc/profile && cloud-ensure-provisioning -n #{cloud.name}")            
+          has_exec(:name => "Handle load", :command => ". /etc/profile && cloud-handle-load -n #{cloud.name}")
+          has_exec(:name => "Ensure provisioning", :command => ". /etc/profile && cloud-ensure-provisioning -n #{cloud.name}")            
           has_exec(:name => "start master messenger", :command => ". /etc/profile && server-start-master") #, :ifnot => "/bin/ps aux | /bin/grep -q pm_master"
           has_exec(:name => "start client server", :command => ". /etc/profile && server-start-client") #, :ifnot => "/bin/ps aux | /bin/grep -q client_server"
-          has_exec(:command => ". /etc/profile && cloud-maintain -n #{cloud.name}")          
+          has_exec(:name => "Maintain the cloud", :command => ". /etc/profile && cloud-maintain -n #{cloud.name}")          
           has_cron(:name => "ensure puppetmaster is running", :command => ". /etc/profile && puppetmasterd --verbose", :hour => "1")
           
         end        
