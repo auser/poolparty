@@ -63,6 +63,7 @@ module PoolParty
             requires get_gempackage("poolparty")
             command "/usr/bin/puppetrunner"
           end
+        has_exec(:command => "/usr/bin/puppetrunner")
         has_user(:name => user)
         # end
         
@@ -90,30 +91,12 @@ module PoolParty
         
         execute_on_master do
           has_exec(:name => "update_hosts", :command => ". /etc/profile && server-update-hosts -n #{cloud.name}")
-          
-          # has_cron(:name => "master puppetd runner", :user => Base.user, :minute => "*/15") do
-          #   requires get_gempackage("poolparty")
-          #   command(PoolParty::Remote::RemoteInstance.puppet_runner_command)
-          # end
-          has_cron(:name => "Load handler", :user => Base.user, :minute => "*/4") do
-            requires get_gempackage("poolparty")
-            command(". /etc/profile && cloud-handle-load -n #{cloud.name}")
-          end
-          has_cron(:name => "provisioning ensurer", :user => Base.user, :minute => "*/2") do
-            requires get_gempackage("poolparty")
-            command ". /etc/profile && cloud-ensure-provisioning -n #{cloud.name}"
-          end
-          # has_runit_service("client_server", "pm_client", File.join(File.dirname(__FILE__), "..", "templates/messenger/client/"))
-          # has_runit_service("master_server", "pm_master", File.join(File.dirname(__FILE__), "..", "templates/messenger/master/"))
-          # TODO: Update this so it only runs when needed          
-          # has_customservice(:name => "start master server", :pattern => "/pm_master/", :bin => ". /etc/profile && server-start-master")
-          # has_customservice(:name => "start client server", :pattern => "/client_service/", :bin => ". /etc/profile && server-start-client")                    
+          has_exec(:command => ". /etc/profile && cloud-handle-load -n #{cloud.name}")
+          has_exec(:command => ". /etc/profile && cloud-ensure-provisioning -n #{cloud.name}")            
           has_exec(:name => "start master messenger", :command => ". /etc/profile && server-start-master") #, :ifnot => "/bin/ps aux | /bin/grep -q pm_master"
           has_exec(:name => "start client server", :command => ". /etc/profile && server-start-client") #, :ifnot => "/bin/ps aux | /bin/grep -q client_server"
-          
-          has_cron({:name => "maintain script", :command => ". /etc/profile && cloud-maintain -n #{cloud.name}", :minute => "*/3", :requires => [get_gempackage("poolparty"), get_cron("puppetd runner"), get_cron("Load handler"), get_service("haproxy")]})
-          
-          has_cron(:name => "ensure puppetmaster is running", :command => ". /etc/profile && puppetmasterd --verbose", :hour => "0")
+          has_exec(:command => ". /etc/profile && cloud-maintain -n #{cloud.name}")          
+          has_cron(:name => "ensure puppetmaster is running", :command => ". /etc/profile && puppetmasterd --verbose", :hour => "1")
           
         end        
         # has_host(:name => "puppet", :ip => (self.respond_to?(:master) ? self : parent).master.ip)
