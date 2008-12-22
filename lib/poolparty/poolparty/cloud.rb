@@ -85,6 +85,7 @@ module PoolParty
         make_base_directory
         copy_misc_templates
         copy_custom_monitors
+        copy_custom_modules
         store_keys_in_file
         Script.save!(self)
         # not my favorite...
@@ -150,10 +151,22 @@ module PoolParty
       def copy_custom_monitors
         unless Base.custom_monitor_directories.empty?
           make_directory_in_storage_directory("monitors")
-          Dir["#{Base.custom_monitor_directories}/*.rb"].each do |f|
-            copy_file_to_storage_directory(f, "monitors")
+          Base.custom_monitor_directories.each do |dir|
+            Dir["#{dir}/*.rb"].each {|f| copy_file_to_storage_directory(f, "monitors")}
           end
         end        
+      end
+      
+      def copy_custom_modules
+        unless Base.custom_modules_directories.empty?
+          make_directory_in_storage_directory("modules")
+          Base.custom_modules_directories.each do |dir|
+            Dir["#{dir}/*"].each do |d|
+              to = ::File.join("modules", ::File.basename(d))
+              copy_directory_into_storage_directory(d, to) if ::File.directory?(d)
+            end
+          end
+        end
       end
             
       # Configuration files

@@ -26,6 +26,8 @@ module PoolParty
       :proxy_mode => "http",
       :messenger_client_port => 7050,
       :minimum_runtime  => 3000, #50.minutes in seconds
+      :agent_pid_file => ::File.readable?("/var/run/poolparty_agent.pid") ? "/var/run/agent.pid" : "#{Dir.pwd}/agent.pid",
+      :agent_port => 8081,
       # EC2 Options
       :ami => "ami-1cd73375",
       :size => 'm1.small', # must be 'm1.small', 'm1.large', 'm1.xlarge', 'c1.medium', or 'c1.xlarge'
@@ -109,6 +111,14 @@ module PoolParty
           "/var/poolparty/monitors",
           "/etc/poolparty/monitors",
           "#{Dir.pwd}/monitors"
+        ].select {|d| d if viable_directory?(d) }
+      end
+      
+      def custom_modules_directories
+        [
+          "/var/poolparty/modules",
+          "/etc/poolparty/modules",
+          "#{Dir.pwd}/modules"
         ].select {|d| d if viable_directory?(d) }
       end
       # Only return true if the directory we are reading is both readable
