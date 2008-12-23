@@ -48,6 +48,7 @@ sudo gem install auser-poolparty
 * Add queuing of tasks on the messenger
 * Add syntax checker on the manifests
 * Move in collectd support
+* Add master query
 
 == LICENSE:
 
