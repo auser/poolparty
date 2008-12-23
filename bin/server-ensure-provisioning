@@ -26,8 +26,8 @@ o.loaded_clouds.each do |cloud|
   
       node_id = node.gsub(/node/, '')
       
-      cmd = ". /etc/profile && #{str};cloud-provision -n #{cloud.name} -i #{node_id};#{str}"
-      running_cmd = "ps aux | grep -v grep | grep \"cloud-provision -n #{cloud.name} -i #{node_id};\""
+      cmd = ". /etc/profile && #{str};server-provision -n #{cloud.name} -i #{node_id};#{str}"
+      running_cmd = "ps aux | grep -v grep | grep \"server-provision -n #{cloud.name} -i #{node_id};\""
       
       vputs "Executing #{cmd}"
       running = %x[#{running_cmd}]

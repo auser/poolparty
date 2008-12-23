@@ -61,7 +61,6 @@ executables:
 - cloud-add-keypair
 - cloud-configure
 - cloud-contract
-- cloud-ensure-provisioning
 - cloud-expand
 - cloud-handle-load
 - cloud-list
@@ -87,10 +86,12 @@ executables:
 - pool-start
 - server-build-messenger
 - server-clean-cert-for
+- server-ensure-provisioning
 - server-fire-cmd
 - server-get-load
 - server-list-active
 - server-list-responding
+- server-provision
 - server-query-agent
 - server-rerun
 - server-send-command
@@ -128,7 +129,6 @@ files:
 - bin/cloud-add-keypair
 - bin/cloud-configure
 - bin/cloud-contract
-- bin/cloud-ensure-provisioning
 - bin/cloud-expand
 - bin/cloud-handle-load
 - bin/cloud-list
@@ -154,10 +154,12 @@ files:
 - bin/pool-start
 - bin/server-build-messenger
 - bin/server-clean-cert-for
+- bin/server-ensure-provisioning
 - bin/server-fire-cmd
 - bin/server-get-load
 - bin/server-list-active
 - bin/server-list-responding
+- bin/server-provision
 - bin/server-query-agent
 - bin/server-rerun
 - bin/server-send-command
@@ -542,7 +544,7 @@ files:
 has_rdoc: true
 homepage: http://poolparty.rubyforge.org
 post_install_message: |-
-  Get ready to jump in the pool, you just installed PoolParty! (Updated at 16:29 12/22/08)
+  Get ready to jump in the pool, you just installed PoolParty! (Updated at 16:55 12/22/08)
   
   To get started, run the generator:
   
