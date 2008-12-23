@@ -61,22 +61,6 @@ module PoolParty
       def list_of_node_ips(options={})
         list_of_running_instances.collect {|ri| ri.ip }
       end
-
-      # Get the instance first instance file that exists on the system from the expected places
-      # denoted in the local_instances_list_file_locations
-      def get_working_listing_file
-        local_instances_list_file_locations.reject {|f| f unless File.file?(f) }.first
-      end
-      # Expected places for the instances.list to be located at on the machine
-      def local_instances_list_file_locations
-        [
-          "#{Base.storage_directory}/#{name}-instances.list",
-          "#{Base.base_config_directory}/#{name}-instances.list",
-          "~/.#{name}-instances.list",
-          "~/#{name}-instances.list",          
-          "#{name}-instances.list"
-        ]
-      end
       
       # List calculation methods
       # 
@@ -290,7 +274,7 @@ module PoolParty
       # Rsync a file or directory to a node.  Rsync to master by default
       def rsync_to(source, target=source, num=0)
         str = "#{rsync_to_command(source, target, get_instance_by_number( num ))}"
-        vputs "Running: #{str}"
+        dputs "Running: #{str}"
         verbose ?  Kernel.system(str) : hide_output {Kernel.system str}
       end
       
@@ -321,18 +305,6 @@ module PoolParty
         run_command_on(cmd, get_instance_by_number( num || 0 ) )
       end
       
-      # Prepare reconfiguration on the master
-      # TODO: Curious about the puppet/ssl problems...
-      # puppetd --test --no-daemonize 2>&1 &
-      # rm -rf /etc/puppet/ssl/*; 
-      def prepare_reconfiguration
-        unless @prepared
-          # cmd = "/etc/init.d/puppetmaster restart"
-          # run_command_on(cmd, master)
-          @prepared = true
-        end
-      end
-
       def self.included(receiver)
         receiver.extend self
       end
