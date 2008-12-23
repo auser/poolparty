@@ -8,8 +8,6 @@ module PoolParty
       
       def loaded
         dputs "Capistrano provisioner loaded..."
-        @cloud.cleanup_storage_directory
-        @cloud.make_base_directory
         create_config
       end
       def process_install!(testing=false)
