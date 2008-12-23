@@ -89,7 +89,6 @@ def stub_list_from_local_for(o)
   EOS
   @file = "filename"
   @file.stub!(:read).and_return @list
-  o.stub!(:get_working_listing_file).and_return @file
   o.stub!(:open).and_return @file
 
   @ris = @list.split(/\n/).map {|line| PoolParty::Remote::RemoteInstance.new(line) }
