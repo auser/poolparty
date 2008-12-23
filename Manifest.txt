@@ -10,7 +10,6 @@ bin/cloud-add-access
 bin/cloud-add-keypair
 bin/cloud-configure
 bin/cloud-contract
-bin/cloud-ensure-provisioning
 bin/cloud-expand
 bin/cloud-handle-load
 bin/cloud-list
@@ -36,10 +35,12 @@ bin/pool-list
 bin/pool-start
 bin/server-build-messenger
 bin/server-clean-cert-for
+bin/server-ensure-provisioning
 bin/server-fire-cmd
 bin/server-get-load
 bin/server-list-active
 bin/server-list-responding
+bin/server-provision
 bin/server-query-agent
 bin/server-rerun
 bin/server-send-command

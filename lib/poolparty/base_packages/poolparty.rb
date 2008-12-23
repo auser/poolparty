@@ -77,7 +77,7 @@ module PoolParty
         execute_on_master do
           has_exec(:name => "update_hosts", :command => ". /etc/profile && server-update-hosts -n #{cloud.name}")
           has_exec(:name => "Handle load", :command => ". /etc/profile && cloud-handle-load -n #{cloud.name}")
-          has_exec(:name => "Ensure provisioning", :command => ". /etc/profile && cloud-ensure-provisioning -n #{cloud.name}")            
+          has_exec(:name => "Ensure provisioning", :command => ". /etc/profile && server-ensure-provisioning -n #{cloud.name}")            
           has_exec(:name => "start master messenger", :command => ". /etc/profile && server-start-master") #, :ifnot => "/bin/ps aux | /bin/grep -q pm_master"
           has_exec(:name => "start client server", :command => ". /etc/profile && server-start-client") #, :ifnot => "/bin/ps aux | /bin/grep -q client_server"
           has_exec(:name => "Maintain the cloud", :command => ". /etc/profile && cloud-maintain -n #{cloud.name}")          
