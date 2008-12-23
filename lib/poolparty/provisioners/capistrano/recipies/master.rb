@@ -93,8 +93,9 @@ Capistrano::Configuration.instance(:must_exist).load do
     desc "Move custom modules"
     def move_custom_modules
       run <<-EOR
-        mkdir -p #{base_config_directory}/modules &&
-        cp -R #{remote_storage_path}/modules #{base_config_directory}
+        if test -d #{remote_storage_path}/modules; then
+          mkdir -p #{base_config_directory}/modules && cp -R #{remote_storage_path}/modules #{base_config_directory};
+        fi
       EOR
     end
     desc "Move manifest into place" 
