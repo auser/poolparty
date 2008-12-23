@@ -1,0 +1,33 @@
+#!/usr/bin/env ruby
+$:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
+require "poolparty"
+require "poolpartycl"
+
+o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
+  opts.on('-n cloudname', '--name name', 'Start cloud by this name')    { |c| optioner.cloudname c }
+  opts.on('-p', '--slave', 'Provision slave (default: false)')    { optioner.provision_slave true }
+  opts.on('-i num', '--id num', 'Instance num to provision')    { |i| optioner.instance_number i }
+end
+
+o.loaded_clouds.each do |cloud|
+
+  with_cloud(cloud) do
+    setup_dev
+    instance_num = instance_number.to_i if instance_number
+    
+    if instance_num
+      @instance = get_instance_by_number( instance_num )
+      instance_num == 0 ? provisioner_for(master).install(testing) : provisioner_for(@instance).install(testing)
+      # Provisioner.process_clean_reconfigure_for!(@instance, self, testing)
+    else
+      if provision_slave
+        vputs "Provisioning slaves"
+        verbose ? provisioner_for(nil).install(testing) : hide_output { provisioner_for(nil).install(testing) }
+      else
+        vputs "Provisioning master"
+        verbose ? provisioner_for(master).install(testing) : hide_output { provisioner_for(master).install(testing) }
+      end
+    end
+  end
+
+end
