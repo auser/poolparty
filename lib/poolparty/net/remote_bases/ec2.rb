@@ -107,9 +107,11 @@ end
       
       # Attach a volume to the instance
       def attach_volume(instance=nil)
-        vputs "Attaching volume #{ebs_volume_id} to the master at #{ebs_volume_device}"
-        instance = master        
-        ec2.attach_volume(:volume_id => ebs_volume_id, :instance_id => instance.instance_id, :device => ebs_volume_device) if ebs_volume_id && ebs_volume_mount_point
+        if ebs_volume_id
+          vputs "Attaching volume #{ebs_volume_id} to the master at #{ebs_volume_device}"
+          instance = master        
+          ec2.attach_volume(:volume_id => ebs_volume_id, :instance_id => instance.instance_id, :device => ebs_volume_device) if ebs_volume_id && ebs_volume_mount_point
+        end
       end
       # Associate an address with the instance using ec2
       def associate_address(instance=nil)
