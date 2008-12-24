@@ -1,0 +1,15 @@
+#!/usr/bin/env ruby
+$:.unshift(File.join(File.dirname(__FILE__), "..", "lib", "poolparty"))
+require "socket"
+Dir["#{::File.dirname(__FILE__)}/../lib/poolparty/modules/*.rb"].each {|f| require f }
+require "poolparty/base"
+
+def query(meth, *args)
+  socket = TCPSocket.open("127.0.0.1", PoolParty::Base.agent_port)
+  out = socket.send("#{meth} #{args}", 100)
+  socket.close
+  out
+end
+
+meth = ARGV.shift
+puts query(meth, ARGV)
