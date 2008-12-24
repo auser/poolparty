@@ -1,0 +1,15 @@
+#!/usr/bin/env ruby
+$:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
+require "poolparty"
+require "poolpartycl"
+
+o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
+  opts.on('-n name', '--name name', 'Host name')    { |h| optioner.hostname h }
+  opts.on('-k', '--kill', 'Kill the server')    { optioner.kill true }
+end
+
+o.loaded_clouds.each do |cloud|
+    
+  PoolParty::Agent.run_for cloud
+  
+end
