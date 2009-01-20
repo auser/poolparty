@@ -1,3 +1,7 @@
+== 1.0.0 2009-1-20
+	* Released 1.0 at CitrusByte
+	* Party
+	
 == 0.2.77 2008-12-5
   * Added heartbeat failover
 

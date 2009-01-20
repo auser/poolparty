@@ -32,7 +32,8 @@ several options on how to begin configuring the cloud.
 
 == REQUIREMENTS:
 
-COMING SOON
+Ruby
+Erlang
 
 == INSTALL:
 
