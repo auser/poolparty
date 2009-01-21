@@ -18,6 +18,7 @@ include Remote
   with_cloud(cl, {:testing => o.testing}) do
     cmd = "hostname master && #{PoolParty::Remote::RemoteInstance.puppet_runner_command}"
     %x[#{cmd}] unless testing
+    after_launch_master
   end  
   
 end
