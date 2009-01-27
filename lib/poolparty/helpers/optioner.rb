@@ -74,7 +74,7 @@ module PoolParty
     
     def parse_options(&blk)
       progname = $0.include?("-") ? "#{::File.basename($0[/(\w+)-/, 1])} #{::File.basename($0[/-(.*)/, 1])}" : ::File.basename($0)
-      @opts = OptionParser.new 
+      @opts = OptionParser.new
       @opts.banner = "Usage: #{progname} #{@abstract ? "[command] " : ""}[options]"
 
       @opts.separator ""
