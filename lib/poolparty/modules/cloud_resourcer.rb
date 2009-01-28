@@ -130,7 +130,8 @@ module PoolParty
       [
         Base.base_keypair_path,
         Base.base_config_directory,
-        Base.remote_storage_path        
+        Base.remote_storage_path,
+        Dir.pwd
       ]
     end
     
