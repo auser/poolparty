@@ -3,6 +3,7 @@
   This class only comes in to play when calling the setup commands on
   the development machine
 =end
+require "capistrano"
 require 'capistrano/cli'
 
 module PoolParty
