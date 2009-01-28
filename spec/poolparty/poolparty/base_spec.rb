@@ -7,6 +7,7 @@ describe "Base" do
       @access_key = @secret_access_key = nil
     end
     ENV.stub!(:[]).with("AWS_ACCESS_KEY").and_return "KEY"
+    ENV.stub!(:[]).with("AWS_ACCESS_KEY_ID").and_return nil
     ENV.stub!(:[]).with("AWS_SECRET_ACCESS_KEY").and_return "SECRET"
   end
   it "should set the user to root" do
@@ -27,7 +28,7 @@ describe "Base" do
   it "should set the fileserver_base to puppet://" do
     Base.fileserver_base.should =~ /puppet:\/\//
   end
-  it "should have an access key" do
+  it "should have an access key" do    
     Base.access_key.should == "KEY"
   end
   it "should have a secret access key" do
