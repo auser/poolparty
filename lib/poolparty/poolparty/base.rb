@@ -44,10 +44,16 @@ module PoolParty
       end
       # Get the access_key
       def access_key
-        @access_key ||= ENV["AWS_ACCESS_KEY"] ? ENV["AWS_ACCESS_KEY"] : load_keys_from_file[:access_key]
+        @access_key ||= load_access_keys_from_environment_var || load_keys_from_file[:access_key]
+      end
+      def load_access_keys_from_environment_var
+        [ ENV["AWS_ACCESS_KEY"], ENV["AWS_ACCESS_KEY_ID"]].reject {|a| a.nil? }.first
       end
       def secret_access_key
-        @secret_access_key ||= ENV["AWS_SECRET_ACCESS_KEY"] ? ENV["AWS_SECRET_ACCESS_KEY"] : load_keys_from_file[:secret_access_key]
+        @secret_access_key ||= load_secret_access_keys_from_environment_var || load_keys_from_file[:secret_access_key]
+      end
+      def load_secret_access_keys_from_environment_var
+        [ ENV["AWS_SECRET_ACCESS_KEY"] ].reject {|a| a.nil? }.first
       end
       def read_keyfile
         open(get_working_key_file_locations).read
