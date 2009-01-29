@@ -33,8 +33,8 @@ module PoolParty
           has_remotefile(:name => "/etc/haproxy.cfg") do
             mode 644
             requires get_package("haproxy")
-            notify get_service("haproxy")
-            template get_client_or_gem_template("haproxy.conf")
+            notify get_service("haproxy")            
+            template "haproxy.conf"
           end
         end
       end

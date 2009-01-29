@@ -94,13 +94,8 @@ describe "Resource" do
             @resource.template
           }.should raise_error
         end
-        it "should raise an excepton if the file cannot be found" do
-          lambda {
-            @resource.template("radar")
-          }.should raise_error
-        end
         it "should not raise an exception if there is a file passed and the file is found" do
-          File.should_receive(:file?).with("radar").and_return true
+          File.stub!(:file?).and_return true
           lambda {
             @resource.template("radar")
           }.should_not raise_error

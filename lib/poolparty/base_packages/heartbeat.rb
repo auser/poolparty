@@ -11,7 +11,7 @@ module PoolParty
             has_remotefile(:name => "/etc/ha.d/ha.cf") do
               mode 444
               notify service(:name => "heartbeat")
-              template File.join(File.dirname(__FILE__), "..", "templates/ha.cf")
+              template "ha.cf"
             end
             
             has_remotefile(:name => "/etc/ha.d/logd.cf") do
