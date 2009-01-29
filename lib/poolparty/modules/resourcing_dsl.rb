@@ -68,8 +68,10 @@ module PoolParty
     
     def get_client_or_gem_template(file)      
       if client_templates_directory_exists? && client_template_exists?(file)
+        vputs "using custom template #{::File.join(Dir.pwd, "templates/#{file}")}"
         ::File.join(Dir.pwd, "templates/#{file}")
       else
+        puts "using standard template: #{::File.join(::File.dirname(__FILE__), "..", "templates/#{file}")}"
         ::File.join(::File.dirname(__FILE__), "..", "templates/#{file}")
       end      
     end
