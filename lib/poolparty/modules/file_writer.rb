@@ -8,10 +8,10 @@ module PoolParty
     def cleanup_storage_directory
       ::FileUtils.rm_rf "#{Base.storage_directory}"
     end
-    def copy_template_to_storage_directory(file)
+    def copy_template_to_storage_directory(file, force=false)
       make_template_directory
       path = ::File.join( Base.tmp_path, Base.template_directory, ::File.basename(file) )
-      FileUtils.cp file, path unless file == path || ::File.exists?(path)
+      FileUtils.cp file, path unless !force || file == path || ::File.exists?(path)
     end
     def copy_directory_into_template_storage_directory(dir)
       path = make_template_directory(dir)
