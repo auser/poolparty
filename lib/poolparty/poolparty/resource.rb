@@ -100,7 +100,7 @@ module PoolParty
       
       extend PoolParty::Resources
       include PoolParty::Resources
-      
+            
       # When we subclass Resource, we want to add a few methods to the Resources class
       # This will anable us to call out to these resources in our DSLified manner
       # When we call a method from the subclass, say it's the File class
