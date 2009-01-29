@@ -86,12 +86,18 @@ module PoolParty
         copy_misc_templates
         copy_custom_monitors
         copy_custom_modules
+        copy_custom_templates
         store_keys_in_file
         Script.save!(self)
         # not my favorite...
         copy_ssh_key
         write_unique_cookie
         before_configuration_tasks
+      end
+      
+      def copy_custom_templates
+        return true unless ::File.directory?("#{Dir.pwd}/templates")
+        Dir["#{Dir.pwd}/templates/*"].each {|file| copy_template_to_storage_directory file}        
       end
       
       # Copy the ssh keys to the storage directory in preparation for
