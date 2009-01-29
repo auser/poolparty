@@ -65,5 +65,19 @@ module PoolParty
         copy_file_to_storage_directory(file)
       end
     end
+    
+    def get_client_or_gem_template(file)
+      if client_templates_directory_exists? && client_template_exists?(file)
+        File.join(Dir.pwd, "templates/#{file}")
+      else
+        File.join(File.dirname(__FILE__), "..", "templates/#{file}")
+      end      
+    end
+    def client_templates_directory_exists?
+      ::File.directory?("#{Dir.pwd}/templates")
+    end
+    def client_template_exists?(file)
+      ::File.file?(file) && ::File.readable?(file)
+    end
   end
 end
