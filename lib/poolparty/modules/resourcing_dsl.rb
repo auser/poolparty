@@ -71,7 +71,7 @@ module PoolParty
         vputs "using custom template #{::File.join(Dir.pwd, "templates/#{file}")}"
         ::File.join(Dir.pwd, "templates/#{file}")
       else
-        puts "using standard template: #{::File.join(::File.dirname(__FILE__), "..", "templates/#{file}")}"
+        vputs "using standard template: #{::File.join(::File.dirname(__FILE__), "..", "templates/#{file}")}"
         ::File.join(::File.dirname(__FILE__), "..", "templates/#{file}")
       end      
     end
