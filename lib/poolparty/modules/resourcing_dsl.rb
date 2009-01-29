@@ -54,29 +54,30 @@ module PoolParty
     # copying to prevent unnecessary copying and tons of directories
     # everywhere
     def template(file, opts={})
+      file = ::File.basename(file)
       raise TemplateNotFound.new("no template given") unless file
-      raise TemplateNotFound.new("template cannot be found #{file}") unless ::File.file?(file)
       
       unless opts[:just_copy]
         options.merge!({:content => "template(\"#{::File.basename(file)}\")"})
         options.delete(:source) if options.has_key?(:source)
-        copy_template_to_storage_directory(file)
+        copy_template_to_storage_directory get_client_or_gem_template(file)
       else
-        copy_file_to_storage_directory(file)
+        copy_file_to_storage_directory get_client_or_gem_template(file)
       end
     end
     
     def get_client_or_gem_template(file)
       if client_templates_directory_exists? && client_template_exists?(file)
-        File.join(Dir.pwd, "templates/#{file}")
+        ::File.join(Dir.pwd, "templates/#{file}")
       else
-        File.join(File.dirname(__FILE__), "..", "templates/#{file}")
+        ::File.join(::File.dirname(__FILE__), "..", "templates/#{file}")
       end      
     end
     def client_templates_directory_exists?
       ::File.directory?("#{Dir.pwd}/templates")
     end
-    def client_template_exists?(file)
+    def client_template_exists?(filename)
+      file = ::File.join("#{Dir.pwd}/templates", filename)
       ::File.file?(file) && ::File.readable?(file)
     end
   end
