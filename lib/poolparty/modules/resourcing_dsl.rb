@@ -66,7 +66,7 @@ module PoolParty
       end
     end
     
-    def get_client_or_gem_template(file)
+    def get_client_or_gem_template(file)      
       if client_templates_directory_exists? && client_template_exists?(file)
         ::File.join(Dir.pwd, "templates/#{file}")
       else

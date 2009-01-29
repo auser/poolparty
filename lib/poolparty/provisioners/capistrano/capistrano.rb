@@ -66,6 +66,7 @@ module PoolParty
       end
             
       def set_poolparty_roles
+        return "" if testing
         returning Array.new do |arr|
           arr << "role 'master.#{@cloud.name}'.to_sym, '#{@cloud.master.ip}'"
           arr << "role :master, '#{@cloud.master.ip}'"
