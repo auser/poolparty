@@ -323,7 +323,7 @@ describe "Cloud" do
                 Dir.stub!(:[]).with("#{Dir.pwd}/templates/*").and_return ["pop"]
                 ::File.stub!(:directory?).with("#{Dir.pwd}/templates").and_return true
                 ::File.stub!(:directory?).and_return true
-                @cloud.should_receive(:copy_template_to_storage_directory).with("pop").once
+                @cloud.should_receive(:copy_template_to_storage_directory).with("pop", true).once
                 @cloud.stub!(:copy_template_to_storage_directory).and_return true
                 @cloud.copy_custom_templates
               end
