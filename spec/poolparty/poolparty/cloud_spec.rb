@@ -310,6 +310,24 @@ describe "Cloud" do
             it "should copy_misc_templates" do
               @cloud.should_receive(:copy_misc_templates).once
             end
+            describe "copy_custom_templates" do
+              it "should receive copy_custom_templates" do
+                @cloud.should_receive(:copy_custom_templates).once
+              end
+              it "test to see if the directory Dir.pwd/templates exists" do
+                ::File.should_receive(:directory?).with("#{Dir.pwd}/templates").and_return false
+                ::File.stub!(:directory?).and_return true
+                @cloud.copy_custom_templates
+              end
+              it "copy each file to the template directory" do
+                Dir.stub!(:[]).with("#{Dir.pwd}/templates/*").and_return ["pop"]
+                ::File.stub!(:directory?).with("#{Dir.pwd}/templates").and_return true
+                ::File.stub!(:directory?).and_return true
+                @cloud.should_receive(:copy_template_to_storage_directory).with("pop").once
+                @cloud.stub!(:copy_template_to_storage_directory).and_return true
+                @cloud.copy_custom_templates
+              end
+            end
             it "should copy_custom_monitors" do
               @cloud.should_receive(:copy_custom_monitors).once
             end
