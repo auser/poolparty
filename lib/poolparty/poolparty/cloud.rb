@@ -97,7 +97,7 @@ module PoolParty
       
       def copy_custom_templates
         return true unless ::File.directory?("#{Dir.pwd}/templates")
-        Dir["#{Dir.pwd}/templates/*"].each {|file| copy_template_to_storage_directory file}        
+        Dir["#{Dir.pwd}/templates/*"].each {|file| copy_template_to_storage_directory(file, true) }        
       end
       
       # Copy the ssh keys to the storage directory in preparation for
