@@ -1,8 +1,11 @@
 #!/usr/bin/env bash
 
 . /etc/profile
-if [ $(/usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master)]; then
-  echo "Run successfully"
-  else
-  /usr/bin/puppetrerun;/usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master
+running=`ps aux | grep blah | grep -v grep | wc -c`
+if [ $running -eq 0 ]; then 
+	if [ $(/usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master)]; then
+	  	echo "Run successfully"
+	  else		
+	  /usr/bin/puppetrerun;/usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master
+	fi
 fi
