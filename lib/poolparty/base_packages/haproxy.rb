@@ -34,7 +34,7 @@ module PoolParty
             mode 644
             requires get_package("haproxy")
             notify get_service("haproxy")
-            template File.join(File.dirname(__FILE__), "..", "templates/haproxy.conf")
+            template get_client_or_gem_template("haproxy.conf")
           end
         end
       end
