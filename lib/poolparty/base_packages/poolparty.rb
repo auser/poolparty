@@ -28,12 +28,13 @@ module PoolParty
           has_gempackage(:name => "sexp_processor", :download_url => "http://rubyforge.org/frs/download.php/45589/sexp_processor-3.0.0.gem")
           
           # Capistrano
-          has_gempackage(:name => "net-ssh", :download_url => "http://rubyforge.org/frs/download.php/48041/net-ssh-2.0.6.gem")
+          has_gempackage(:name => "net-ssh", :download_url => "http://rubyforge.org/frs/download.php/51288/net-ssh-2.0.10.gem")
           has_gempackage(:name => "net-sftp", :download_url => "http://rubyforge.org/frs/download.php/37669/net-sftp-2.0.1.gem")
           has_gempackage(:name => "net-scp", :download_url => "http://rubyforge.org/frs/download.php/37664/net-scp-1.0.1.gem")
           has_gempackage(:name => "net-ssh-gateway", :download_url => "http://rubyforge.org/frs/download.php/36389/net-ssh-gateway-1.0.0.gem")
+          has_gempackage(:name => "echoe", :download_url => "http://rubyforge.org/frs/download.php/51240/echoe-3.1.gem")
           has_gempackage(:name => "highline", :download_url => "http://rubyforge.org/frs/download.php/46328/highline-1.5.0.gem")
-          has_gempackage(:name => "capistrano", :requires => get_gempackage("highline"))
+          has_gempackage(:name => "capistrano", :download_url => "http://rubyforge.org/frs/download.php/51294/capistrano-2.5.4.gem", :requires => get_gempackage("highline"))
           
           has_gempackage(:name => "ParseTree", :download_url => "http://rubyforge.org/frs/download.php/45600/ParseTree-3.0.1.gem", :requires => [get_gempackage("sexp_processor"), get_gempackage("ZenTest")])
             
