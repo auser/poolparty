@@ -164,12 +164,13 @@ module PoolParty
           :rubyforge => "http://rubyforge.org/frs/download.php/45546/rubyforge-1.0.1.gem",
           :rake => "http://rubyforge.org/frs/download.php/43954/rake-0.8.3.gem",
           :sexp_processor => "http://rubyforge.org/frs/download.php/45589/sexp_processor-3.0.0.gem",
-          "net-ssh" => "http://rubyforge.org/frs/download.php/48041/net-ssh-2.0.6.gem",
+          "net-ssh" => "http://rubyforge.org/frs/download.php/51288/net-ssh-2.0.10.gem",
           "net-sftp" => "http://rubyforge.org/frs/download.php/37669/net-sftp-2.0.1.gem",
           "net-scp" => "http://rubyforge.org/frs/download.php/37664/net-scp-1.0.1.gem",
           "net-ssh-gateway" => "http://rubyforge.org/frs/download.php/36389/net-ssh-gateway-1.0.0.gem",
+          :echoe => "http://rubyforge.org/frs/download.php/51240/echoe-3.1.gem",
           :highline => "http://rubyforge.org/frs/download.php/46328/highline-1.5.0.gem",
-          :capistrano => "",
+          :capistrano => "http://rubyforge.org/frs/download.php/51294/capistrano-2.5.4.gem",
           :poolparty => "http://github.com/auser/poolparty/tree/master%2Fpkg%2Fpoolparty.gem?raw=true",
           "ec2" => "http://rubyforge.org/frs/download.php/43666/amazon-ec2-0.3.1.gem"
         }
