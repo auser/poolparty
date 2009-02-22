@@ -13,5 +13,5 @@ o.loaded_clouds.each do |cloud|
   with_cloud(cloud) do
     verbose ? provisioner_for(master).configure(testing) : hide_output { provisioner_for(master).configure(testing) }
     cleanup_storage_directory unless testing
-  end    
+  end
 end
