@@ -105,6 +105,10 @@ module PoolParty
       def self.name(parent=self)
         "custom_#{parent ? parent.object_id.to_s : "parent"}"
       end
+      
+      def resource?
+        true
+      end
 
     end
     

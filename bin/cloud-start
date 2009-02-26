@@ -20,7 +20,7 @@ o.loaded_clouds.each do |cloud|
       # else
         vputs "Launching and configuring the master"
         @cl = self
-        daemon ? daemonize {@cl.launch_and_configure_master!} : launch_and_configure_master!
+        daemon ? daemonize {@cl.launch_and_configure_master!(testing)} : launch_and_configure_master!(testing)
       # end
     # end
     when_no_pending_instances do

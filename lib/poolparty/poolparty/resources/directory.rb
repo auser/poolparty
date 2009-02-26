@@ -20,6 +20,9 @@ module PoolParty
         'directory'
       end
       
+      def resource?
+        true
+      end
     end
     
   end
