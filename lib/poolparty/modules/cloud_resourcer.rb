@@ -153,7 +153,7 @@ module PoolParty
       unless context_stack.last.nil?
         @parent = context_stack.last
         # Add self as a service on the parent
-        parent.add_service(self) if parent.respond_to?(:add_service)
+        parent.add_service(self) if parent.respond_to?(:add_service) && !self.resource?
         # Take the options of the parents
         configure(parent.options) if parent && parent.respond_to?(:options) && sink_options
       end
