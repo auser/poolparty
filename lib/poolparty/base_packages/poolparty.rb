@@ -53,27 +53,14 @@ module PoolParty
         has_exec(:name => "build_messenger", :command => ". /etc/profile && server-build-messenger")
         has_exec(:name => "start_node", :command => ". /etc/profile && server-start-node")        
         
-        # execute_on_node do
         has_remotefile(:name => "/usr/bin/puppetrunner") do
           mode 744
           template File.join(File.dirname(__FILE__), "..", "templates/puppetrunner")
         end
         
-        # has_exec(:name => "Puppet runner", :command => "/usr/bin/puppetrunner")
+        has_exec(:name => "Puppet runner", :command => "/usr/bin/puppetrunner")
         has_cron(:name => "Run the provisioner", :command => "/usr/bin/puppetrunner", :minute => "*/15")
         has_user(:name => user)
-        
-        # Custom run puppet to minimize footprint
-        # TODO: Update the offsetted times
-        has_remotefile(:name => "/usr/bin/puppetrerun") do
-          mode 744
-          template File.join(File.dirname(__FILE__), "..", "templates/puppetrerun")
-        end
-        
-        has_remotefile(:name => "/usr/bin/puppetcleaner") do
-          mode 744
-          template File.join(File.dirname(__FILE__), "..", "templates/puppetcleaner")
-        end
         
         execute_on_master do
           has_exec(:name => "update_hosts", :command => ". /etc/profile && server-update-hosts -n #{cloud.name}")
@@ -82,7 +69,7 @@ module PoolParty
           has_exec(:name => "start master messenger", :command => ". /etc/profile && server-start-master") #, :ifnot => "/bin/ps aux | /bin/grep -q pm_master"
           has_exec(:name => "start client server", :command => ". /etc/profile && server-start-client") #, :ifnot => "/bin/ps aux | /bin/grep -q client_server"
           has_exec(:name => "Maintain the cloud", :command => ". /etc/profile && cloud-maintain -n #{cloud.name}")          
-          has_cron(:name => "ensure puppetmaster is running", :command => ". /etc/profile && puppetmasterd --verbose", :hour => "1")
+          # has_cron(:name => "ensure puppetmaster is running", :command => ". /etc/profile && puppetmasterd --verbose", :hour => "1")
           
         end        
         # has_host(:name => "puppet", :ip => (self.respond_to?(:master) ? self : parent).master.ip)

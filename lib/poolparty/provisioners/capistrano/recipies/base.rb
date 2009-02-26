@@ -50,7 +50,7 @@ Capistrano::Configuration.instance(:must_exist).load do
     end
     desc "Rerun the provisioner"
     def rerun_provisioner
-      run "/usr/bin/puppetrerun"
+      run "/usr/bin/puppetrunner"
     end
     desc "Remove the certs"
     def remove_certs

@@ -71,7 +71,17 @@ module PoolParty
       def name
         @cloud_name
       end
-            
+      
+      # provide a public ips to get into the cloud
+      def ips
+        list_of_running_instances.map {|ri| ri.ip }
+      end
+      
+      # FIXME: this is a quick hack.  refactor this to the resources class #MF
+      def dependency_resolver_command
+         "/usr/bin/puppet -v --logdest syslog /etc/puppet/manifests/site.pp"
+      end
+      
       # Prepare to send the new configuration to the instances
       # First, let's make sure that our base directory is made
       # Then copy the templates that have no other reference in

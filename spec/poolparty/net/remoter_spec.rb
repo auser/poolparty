@@ -49,6 +49,7 @@ describe "Remoter" do
       @tc.stub!(:master).and_return ris.first
       @tc.stub!(:after_launched).and_return true
       @tc.stub!(:verbose).and_return false
+      # @tc.stub!(:testing).and_return true #MF
       ::File.stub!(:exists?).and_return true
       
       @pb = PoolParty::Provisioner::Capistrano.new(nil, @tc)
@@ -57,6 +58,10 @@ describe "Remoter" do
       @pb.stub!(:install).and_return true
       @pb.stub!(:configure).and_return true
       @pb.stub!(:create_roles).and_return true
+    end
+    it "should have dependency_resolver_command" do
+      @tc.respond_to?(:dependency_resolver_command)
+      @tc.dependency_resolver_command.should match /puppet/
     end
     it "should have the method launch_master!" do
       @tc.respond_to?(:launch_and_configure_master!).should == true

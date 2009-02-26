@@ -70,6 +70,11 @@ module PoolParty
         "#{name}\t#{ip}\t#{instance_id}"
       end
       
+      def dependency_resolver_command
+        cloud.dependency_resolver_command
+      end
+      
+      #FIXME: deprecate puppet specific commands in this class
       def puppet_runner_command
         self.class.send :puppet_runner_command
       end
@@ -83,6 +88,8 @@ module PoolParty
       def self.puppet_rerun_commad
         puppet_runner_command
       end
+      #
+      
       def my_cloud
         @pa = parent
         while !(@pa.is_a?(PoolParty::Cloud::Cloud) || @pa.nil? || @pa == self)

@@ -86,17 +86,18 @@ module PoolParty
       end
       # get the master instance
       def master
-        get_instance_by_number(0)
+        # get_instance_by_number(0)
+        list_of_instances.select {|i| i.name == 'master' }.first
       end
       # Get instance by number
-      def get_instance_by_number(i=0, list = remote_instances_list)
+      def get_instance_by_number(i=0, list = list_of_instances)
         name = ((i.nil? || i.zero?) ? "master" : "node#{i}")
         list.select {|i| i.name == name }.first
       end
       # A callback before the configuration task takes place
       def before_configuration_tasks        
       end
-      def remote_instances_list        
+      def remote_instances_list        #TODO: do we need this method?  duplication onf list_of_instances  #MF
         @containing_cloud = self
         # puts "> #{@containing_cloud} #{@describe_instances.nil?}"
         list_of_instances(keypair).collect {|h| PoolParty::Remote::RemoteInstance.new(h, @containing_cloud) }
@@ -106,7 +107,7 @@ module PoolParty
       def list_of_instances(keyp=nil)
         tmp_key = (keyp ? keyp : nil)
         
-        unless @describe_instances
+        unless @describe_instances && !@describe_instances.blank?
           tmpInstanceList = describe_instances.select {|a| a if (tmp_key.nil? || tmp_key.empty? ? true : a[:keypair] == tmp_key) }
           has_master = !tmpInstanceList.select {|a| a[:name] == "master" }.empty?          
           if has_master
