@@ -17,7 +17,7 @@ Capistrano::Configuration.instance(:must_exist).load do
       add_provisioner_configs
       setup_provisioner_config
       create_puppetrunner_command
-      create_puppetrerun_command
+      # create_puppetrerun_command
       download_base_gems
       install_base_gems
       write_erlang_cookie
@@ -57,20 +57,25 @@ Capistrano::Configuration.instance(:must_exist).load do
         base_gems.each do |name, url|
           str = url.empty? ? "#{name}" : "#{Base.remote_storage_path}/#{name}.gem"
           arr << "/usr/bin/gem install --ignore-dependencies --no-ri --no-rdoc #{str}; echo 'insatlled #{name}'"
+          arr << "GEMPATH=`gem env gempath`"
+          arr << "cp  $GEMPATH/bin/* /usr/bin"
         end
       end.join(" && "))
     end
     desc "Start provisioner base"
     def start_provisioner_base
-      run "/etc/init.d/puppetmaster start"
+      # run "/etc/init.d/puppetmaster start"
+      run "/usr/bin/puppetrunner"
     end
     desc "Restart provisioner base"
-    def restart_provisioner_base
-      run "/etc/init.d/puppetmaster stop;rm -rf /etc/poolparty/ssl;start_provisioner_based --verbose;/etc/init.d/puppetmaster start"
+    def restart_provisioner_base #FIXME: should inherit from cloud dependency_resolver_command
+      "/usr/bin/puppetrunner"
+      # run "/etc/init.d/puppetmaster stop;rm -rf /etc/poolparty/ssl;start_provisioner_based --verbose;/etc/init.d/puppetmaster start"
     end
     desc "Ensure provisioner is running"
     def ensure_provisioner_is_running
-      run "/usr/sbin/puppetmasterd --verbose 2>1 > /dev/null;echo ''"
+      "/usr/bin/puppetrunner"
+      # run "/usr/sbin/puppetmasterd --verbose 2>1 > /dev/null;echo ''"
     end
     desc "Create local node for puppet manifest"
     def create_local_node_entry_for_puppet

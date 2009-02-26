@@ -1,11 +1,7 @@
 #!/usr/bin/env bash
 
 . /etc/profile
-running=`ps aux | grep blah | grep -v grep | wc -c`
+running=`ps aux | grep puppet | grep -v grep | wc -c`
 if [ $running -eq 0 ]; then 
-	if [ $(/usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master)]; then
-	  	echo "Run successfully"
-	  else		
-	  /usr/bin/puppetrerun;/usr/sbin/puppetd --onetime --no-daemonize --logdest syslog --server master
-	fi
+  /usr/bin/puppet -v --logdest syslog /etc/puppet/manifests/site.pp
 fi

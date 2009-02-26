@@ -14,7 +14,7 @@ module PoolParty
         unless testing
           @cloud.rsync_storage_files_to(@instance)
           roles = provision_master? ? [:master] : [:single]
-          run_capistrano(roles,:install)
+          run_capistrano(roles, :install)
         end
       end
       def process_configure!(testing=false)
@@ -114,7 +114,7 @@ module PoolParty
 
         __define_task(name, roles) do
           commands.map {|command|
-            task = find_task(command.to_sym)            
+            task = find_task(command.to_sym)
             
             if task
               task.options.merge!(:roles => roles)
@@ -152,6 +152,6 @@ module PoolParty
         "#{name.to_s.downcase.underscore}".to_sym
       end
       
-    end    
+    end
   end
 end

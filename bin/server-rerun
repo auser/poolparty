@@ -16,7 +16,7 @@ include Remote
 @clouds.each do |cl|
   
   with_cloud(cl, {:testing => o.testing}) do
-    cmd = PoolParty::Remote::RemoteInstance.puppet_runner_command
+    cmd = PoolParty::Remote::RemoteInstance.dependency_resolver_comand
     %x[#{cmd}] unless testing
   end  
   

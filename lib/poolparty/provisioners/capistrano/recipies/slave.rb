@@ -15,7 +15,7 @@ Capistrano::Configuration.instance(:must_exist).load do
       add_provisioner_configs
       setup_provisioner_config
       create_puppetrunner_command
-      create_puppetrerun_command
+      # create_puppetrerun_command
       download_base_gems
       install_base_gems
       write_erlang_cookie
