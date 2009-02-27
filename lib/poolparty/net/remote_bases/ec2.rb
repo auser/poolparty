@@ -36,16 +36,24 @@ end
     module Ec2
       include PoolParty::Remote::RemoterBase
       
-      def launch_new_instance!(num=1)
-        instance = ec2.run_instances(
-          :image_id => (ami || Base.ami),
+      def instance_options(opts={}) #TODO: merge in from global options hash
+        { :image_id  => (ami || Base.ami),
           :user_data => "",
-          :minCount => 1,
-          :maxCount => num,
-          :key_name => (keypair || Base.keypair),
-          :availability_zone => (availabilty_zone || Base.availabilty_zone),
+          :minCount  => 1,
+          :maxCount  => 2,
+          :key_name  => (keypair || Base.keypair),
+          :group_id  => ["#{security_group || Base.security_group}"],
           :instance_type => "#{size || Base.size}",
-          :group_id => ["#{security_group || Base.security_group}"])
+          :availability_zone => (availabilty_zone || Base.availabilty_zone)}.merge(opts)
+      end
+      
+      def launch_new_instance!(num=1)
+        if cloud.testing
+          # require "../../../../spec/spec_helper.rb"
+           instance = {:ip => "127.0.0.1", :name => "master", :launching_time => 2.days.ago}
+        else
+          instance = ec2.run_instances(instance_options(:minCount=>num, :maxCount=>num))
+        end
         begin
           h = EC2ResponseObject.get_hash_from_response(instance)
           #h = instance.instancesSet.item.first

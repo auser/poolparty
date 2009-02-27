@@ -13,15 +13,13 @@ module PoolParty
       def process_install!(testing=false)
         unless testing
           @cloud.rsync_storage_files_to(@instance)
-          roles = provision_master? ? [:master] : [:single]
-          run_capistrano(roles, :install)
+          run_capistrano(roles_to_provision, :install)
         end
       end
       def process_configure!(testing=false)
         unless testing
           @cloud.rsync_storage_files_to(@instance)
-          roles = provision_master? ? [:master] : [:single]
-          run_capistrano(roles, :configure)
+          run_capistrano(roles_to_provision, :configure)
         end
       end
       
@@ -68,8 +66,8 @@ module PoolParty
       def set_poolparty_roles
         return "" if testing
         returning Array.new do |arr|
-          arr << "role 'master.#{@cloud.name}'.to_sym, '#{@cloud.master.ip}'"
-          arr << "role :master, '#{@cloud.master.ip}'"
+          arr << "role 'master.#{@cloud.name}'.to_sym, '#{@cloud.ip}'"
+          arr << "role :master, '#{@cloud.ip}'"
           arr << "role :slaves, '#{@cloud.nonmaster_nonterminated_instances.map{|a| a.ip}.join('", "')}'" if @cloud.nonmaster_nonterminated_instances.size > 0
           arr << "role :single, '#{@instance.ip}'" if @instance && @instance.ip
         end.join("\n")
@@ -106,16 +104,15 @@ module PoolParty
       
       # In run_capistrano, we are going to run the entire capistrano process
       # First, 
-      def run_capistrano(roles=[:master], meth=:install)  
+      def run_capistrano(roles = [:master], meth = :install)
         prerun_setup
-        
-        commands = meth == :install ? install_tasks : configure_tasks
+        commands = (meth == :install ? install_tasks : configure_tasks)
         name = "#{roles.first}_provisioner_#{meth}"
 
         __define_task(name, roles) do
-          commands.map {|command|
+          commands.map do |command|
+            puts "executing task #{command}"
             task = find_task(command.to_sym)
-            
             if task
               task.options.merge!(:roles => roles)
               execute_task task
@@ -128,7 +125,7 @@ module PoolParty
                 self.send(command.to_sym)
               end
             end
-          }
+          end
         end
                 
         begin

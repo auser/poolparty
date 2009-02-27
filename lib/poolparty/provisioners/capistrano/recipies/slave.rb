@@ -18,6 +18,7 @@ Capistrano::Configuration.instance(:must_exist).load do
       # create_puppetrerun_command
       download_base_gems
       install_base_gems
+      copy_gem_bins_to_usr_bin
       write_erlang_cookie
     end
     desc "Configure a slave"

@@ -1,7 +1,14 @@
 #!/usr/bin/env bash
-
 . /etc/profile
-running=`ps aux | grep puppet | grep -v grep | wc -c`
-if [ $running -eq 0 ]; then 
-  /usr/bin/puppet -v --logdest syslog /etc/puppet/manifests/site.pp
+echo 'checking if puppet is running'
+PUPRUN=`ps aux | grep \/usr\/bin\/puppet\/  | grep -v grep | wc -c`
+echo "$PUPRUN"
+if [ $PUPRUN -eq 0 ]; then 
+  # /usr/bin/puppet -d --logdest syslog /etc/puppet/manifests/site.pp
+  /usr/bin/puppet -d /etc/puppet/manifests/site.pp
+  echo "puppet was run"
+  echo "puppet was run `date`">>/root/log/pool.log
+else
+  echo "puppet was not run.  It may already be running."
+  echo "puppet was not run.  It may already be running.">>/root/log/pool.log
 fi

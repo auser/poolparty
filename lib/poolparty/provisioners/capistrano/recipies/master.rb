@@ -1,4 +1,5 @@
 # Cloud tasks
+# Run each of these methods inside the Capistrano:Configuration context, dynamicly adding each method as a capistrano task.
 Capistrano::Configuration.instance(:must_exist).load do
   # namespace(:master) do
     desc "Provision master"
@@ -20,8 +21,11 @@ Capistrano::Configuration.instance(:must_exist).load do
       # create_puppetrerun_command
       download_base_gems
       install_base_gems
+      copy_gem_bins_to_usr_bin
       write_erlang_cookie
+      vputs "#{__method__} complete"
     end
+    
     desc "Configure master"
     def master_configure_master_task
       create_local_node_entry_for_puppet
@@ -57,11 +61,10 @@ Capistrano::Configuration.instance(:must_exist).load do
         base_gems.each do |name, url|
           str = url.empty? ? "#{name}" : "#{Base.remote_storage_path}/#{name}.gem"
           arr << "/usr/bin/gem install --ignore-dependencies --no-ri --no-rdoc #{str}; echo 'insatlled #{name}'"
-          arr << "GEMPATH=`gem env gempath`"
-          arr << "cp  $GEMPATH/bin/* /usr/bin"
         end
       end.join(" && "))
     end
+    
     desc "Start provisioner base"
     def start_provisioner_base
       # run "/etc/init.d/puppetmaster start"

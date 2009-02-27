@@ -82,7 +82,7 @@ module PoolParty
       end
       # We'll stub the ip to be the master ip for ease and accessibility
       def ip
-        master.ip
+        master ? master.ip : nil
       end
       # get the master instance
       def master
@@ -95,7 +95,7 @@ module PoolParty
         list.select {|i| i.name == name }.first
       end
       # A callback before the configuration task takes place
-      def before_configuration_tasks        
+      def before_configuration_tasks
       end
       def remote_instances_list        #TODO: do we need this method?  duplication onf list_of_instances  #MF
         @containing_cloud = self
