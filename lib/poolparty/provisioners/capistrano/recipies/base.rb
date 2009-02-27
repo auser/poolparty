@@ -1,7 +1,10 @@
 =begin rdoc
   Base provisioner capistrano tasks
 =end
+
+# Run each of these methods inside the Capistrano:Configuration context, dynamicly adding each method as a capistrano task.
 Capistrano::Configuration.instance(:must_exist).load do
+  
   # namespace(:base) do
     desc "Install rubygems"
     def install_rubygems
@@ -42,11 +45,13 @@ Capistrano::Configuration.instance(:must_exist).load do
     end
     desc "Run the provisioner twice (usually on install)"
     def run_provisioner_twice
-      run "/usr/sbin/puppetd --test --server master 2>1 > /dev/null && /usr/sbin/puppetd --onetime --daemonize --logdest syslog --server master"
+      # run "/usr/sbin/puppetd --test --server master 2>1 > /dev/null && /usr/sbin/puppetd --onetime --daemonize --logdest syslog --server master"
+      run "/usr/bin/puppetrunner"
     end
     desc "Run the provisioner"
     def run_provisioner
-      run "/usr/sbin/puppetd --onetime --daemonize --logdest syslog --server master"
+      # run "/usr/sbin/puppetd --onetime --daemonize --logdest syslog --server master"
+      run "/usr/bin/puppetrunner"
     end
     desc "Rerun the provisioner"
     def rerun_provisioner
@@ -66,7 +71,9 @@ Capistrano::Configuration.instance(:must_exist).load do
       # cp #{remote_storage_path}/gem /usr/bin/gem
       run <<-EOR
         if gem -v; then echo "gem is working"; else cp #{remote_storage_path}/gem /usr/bin/gem; fi;
-        /usr/bin/gem update --system 2>&1 > /dev/null;/usr/bin/gem update --system;
+        /usr/bin/gem update --system 2>&1 > /dev/null;/usr/bin/gem update --system
+        GEMPATH=`gem env gempath`
+        cp  $GEMPATH/bin/* /usr/bin;
         if gem -v; then echo "gem is working"; else cp #{remote_storage_path}/gem /usr/bin/gem; fi;
         echo 'gems updated!'
       EOR
@@ -138,6 +145,13 @@ aptitude update -y
         cp #{remote_storage_path}/#{key_file_locations.first} "#{base_config_directory}/.ppkeys" &&
         mv #{remote_storage_path}/#{default_specfile_name} #{base_config_directory}/#{default_specfile_name}
       EOR
+    end
+    
+    desc "ensure gem binaries are copied to /usr/bin/"
+    def copy_gem_bins_to_usr_bin
+      run 'GEMPATH=`gem env gempath` && cp $GEMPATH/bin/* /usr/bin/'
+      run 'ls /usr/bin/|grep server'
+      run 'echo ---------   binaries copied  ---------\n\n'
     end
     
   # end

@@ -10,7 +10,7 @@ module PoolParty
   module Provisioner
     
     def provisioner_for(inst)
-      PoolParty::Provisioner::Capistrano.new(inst, self, :ubuntu)      
+      PoolParty::Provisioner::Capistrano.new(inst, self, :ubuntu)
     end
     
     class ProvisionerBase
@@ -23,19 +23,23 @@ module PoolParty
       def initialize(instance=nil, cld=self, os=:ubuntu, &block)
         @instance = instance
         @cloud = cld
-        
         options(cloud.options) if cloud && cloud.respond_to?(:options)
         # set_vars_from_options(instance.options) unless instance.nil? || !instance.options || !instance.options.empty?
         # options(instance.options) if instance.respond_to?(:options)
         
-        @os = os.to_s.downcase.to_sym        
+        @os = os.to_s.downcase.to_sym
         self.instance_eval &block if block
         
         loaded
       end
       
-      def provision_master?
+      # deprecate
+      def provision_master? 
         !@instance.nil? && @instance.master?
+      end
+      
+      def roles_to_provision
+        [:master]  #always provision the master role for now.  When do we ever want anything else? MF
       end
 
       # Callback after initialized
@@ -48,11 +52,11 @@ module PoolParty
       
       ### Installation tasks
       
-      # This is the actual runner for the installation    
+      # This is the actual runner for the installation
       def install(testing=false)
         error unless valid?
         setup_runner
-        unless testing          
+        unless testing
           before_install(@instance)
 
           vputs "Provisioning #{@instance.name}"
@@ -63,13 +67,14 @@ module PoolParty
       end
       # The provisioner bases overwrite this method
       def process_install!(testing=false)
+        # raise ProvisionerException(" process_install! should be overwritten by provioner, but it was not.") #MF todo
       end
       
       # Configuration
       def configure(testing=false)
         error unless valid?
         setup_runner
-        unless testing          
+        unless testing
           before_configure(@instance)
 
           vputs "Provisioning #{@instance.name}"
@@ -88,13 +93,13 @@ module PoolParty
       
       # Callbacks
       # Before installation callback
-      def before_install(instance)        
+      def before_install(instance)
       end
-      def after_install(instance)        
+      def after_install(instance)
       end
-      def before_configure(instance)        
+      def before_configure(instance)
       end
-      def after_configure(instance)        
+      def after_configure(instance)
       end
       
       def valid?
@@ -129,7 +134,7 @@ module PoolParty
         else
           "puppet puppetmaster"
         end
-      end    
+      end
       # Package installers for general *nix operating systems
       def self.installers
         @installers ||= {
@@ -146,7 +151,7 @@ module PoolParty
         packages = names.is_a?(Array) ? names.join(" ") : names
         "#{self.class.installers[@os]} #{packages}"
       end
-            
+      
       #TODO#
       # Abstract the gems out
       def base_gems
@@ -156,6 +161,7 @@ module PoolParty
           :ParseTree => "http://rubyforge.org/frs/download.php/45600/ParseTree-3.0.1.gem",
           :ruby2ruby => "http://rubyforge.org/frs/download.php/45587/ruby2ruby-1.2.0.gem",
           :activesupport => "http://rubyforge.org/frs/download.php/45627/activesupport-2.1.2.gem",
+          # http://rubyforge.org/frs/download.php/47166/activesupport-2.2.2.gem
           :"xml-simple" => "http://rubyforge.org/frs/download.php/18366/xml-simple-1.0.11.gem",
           :RubyInline => "http://rubyforge.org/frs/download.php/45683/RubyInline-3.8.1.gem",
           :flexmock => "http://rubyforge.org/frs/download.php/42580/flexmock-0.8.3.gem",
@@ -196,7 +202,7 @@ module PoolParty
       def template_directory
         File.join(File.dirname(__FILE__), "..", "templates")
       end
-                  
+      
       # Install from the class-level
       def self.install(instance, cl=self, testing=false)
         new(instance, cl).install(testing)
@@ -207,7 +213,7 @@ module PoolParty
       end
       
     end
-  end  
+  end
 end
 
 ## Load the provisioners

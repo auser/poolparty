@@ -33,6 +33,6 @@ module PoolParty
     def using_remoter?
       @remote_base ||= nil
     end
-                
-  end  
+    
+  end
 end

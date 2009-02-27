@@ -24,7 +24,7 @@ o.loaded_clouds.each do |cloud|
       # end
     # end
     when_no_pending_instances do
-      puts open(::File.join(File.dirname(__FILE__), "..", "lib", "poolparty", "config", "postlaunchmessage.txt")).read ^ {:master_ip => master.ip.chomp}
+      puts open(::File.join(File.dirname(__FILE__), "..", "lib", "poolparty", "config", "postlaunchmessage.txt")).read ^ {:first_ip => ip}
       clear_base_directory unless testing
     end
   end

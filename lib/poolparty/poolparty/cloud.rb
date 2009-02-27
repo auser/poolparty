@@ -77,6 +77,10 @@ module PoolParty
         list_of_running_instances.map {|ri| ri.ip }
       end
       
+      def ip
+        master ? master.ip : ips.first
+      end
+      
       # FIXME: this is a quick hack.  refactor this to the resources class #MF
       def dependency_resolver_command
          "/usr/bin/puppet -v --logdest syslog /etc/puppet/manifests/site.pp"

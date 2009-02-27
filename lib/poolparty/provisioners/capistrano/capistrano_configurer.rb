@@ -8,7 +8,7 @@
 module Capistrano
   class Configuration
     attr_accessor :cloud, :provisioner
-    
+
     def method_missing_without_variables(sym, *args, &block)
       if parent.respond_to?(sym)
         parent.send(sym, *args, &block)
@@ -42,7 +42,7 @@ module Capistrano
           PoolParty::Cloud.cloud(name)
         end  
         
-        def method_missing(sym, *args, &block)
+        def method_missing(sym, *args, &block)          
           if parent.respond_to?(sym)
             parent.send(sym, *args, &block)
           elsif provisioner.respond_to?(sym)

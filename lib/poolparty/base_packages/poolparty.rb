@@ -59,16 +59,17 @@ module PoolParty
         end
         
         has_exec(:name => "Puppet runner", :command => "/usr/bin/puppetrunner")
-        has_cron(:name => "Run the provisioner", :command => "/usr/bin/puppetrunner", :minute => "*/15")
+        has_cron(:name => "Run the provisioner", :command => "/usr/bin/puppetrunner", :minute => "*/10")
         has_user(:name => user)
         
         execute_on_master do
-          has_exec(:name => "update_hosts", :command => ". /etc/profile && server-update-hosts -n #{cloud.name}")
-          has_exec(:name => "Handle load", :command => ". /etc/profile && cloud-handle-load -n #{cloud.name}")
-          has_exec(:name => "Ensure provisioning", :command => ". /etc/profile && server-ensure-provisioning -n #{cloud.name}")            
-          has_exec(:name => "start master messenger", :command => ". /etc/profile && server-start-master") #, :ifnot => "/bin/ps aux | /bin/grep -q pm_master"
-          has_exec(:name => "start client server", :command => ". /etc/profile && server-start-client") #, :ifnot => "/bin/ps aux | /bin/grep -q client_server"
-          has_exec(:name => "Maintain the cloud", :command => ". /etc/profile && cloud-maintain -n #{cloud.name}")          
+          poolparty_bin_path="/var/lib/gems/1.8/bin"
+          has_exec(:name => "update_hosts", :command => ". /etc/profile && #{poolparty_bin_path}/server-update-hosts -n #{cloud.name}")
+          has_exec(:name => "Handle load", :command => ". /etc/profile && #{poolparty_bin_path}/cloud-handle-load -n #{cloud.name}")
+          has_exec(:name => "Ensure provisioning", :command => ". /etc/profile && #{poolparty_bin_path}/server-ensure-provisioning -n #{cloud.name}")            
+          has_exec(:name => "start master messenger", :command => ". /etc/profile && #{poolparty_bin_path}/server-start-master") #, :ifnot => "/bin/ps aux | /bin/grep -q pm_master"
+          has_exec(:name => "start client server", :command => ". /etc/profile && #{poolparty_bin_path}/server-start-client") #, :ifnot => "/bin/ps aux | /bin/grep -q client_server"
+          has_exec(:name => "Maintain the cloud", :command => ". /etc/profile && #{poolparty_bin_path}/cloud-maintain -n #{cloud.name}")          
           # has_cron(:name => "ensure puppetmaster is running", :command => ". /etc/profile && puppetmasterd --verbose", :hour => "1")
           
         end        

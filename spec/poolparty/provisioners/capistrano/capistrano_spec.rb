@@ -27,6 +27,9 @@ describe "Capistrano provisioner" do
       it "should have the configure tasks included" do
         @pb.master_install_tasks.include?("custom_configure_tasks").should == true
       end
+      it "should call the copy_gem_bins_to_usr_bin method" do
+        pending
+      end
     end
   end
 end
