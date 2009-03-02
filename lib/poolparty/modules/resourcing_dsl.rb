@@ -55,7 +55,7 @@ module PoolParty
     # everywhere
     def template(file, opts={})
       # require 'rubygems'; require 'ruby-debug'; debugger
-      puts file
+      vputs "Template called on #{file}"
       filename = ::File.basename(file)
       raise TemplateNotFound.new("no template given") unless filename
       #TODO: check more MF
