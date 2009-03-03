@@ -20,7 +20,7 @@ describe "Script" do
 
     describe "with a script" do
       before(:each) do
-        @script = 'script'
+        @script = 'script' 
         @filename = 'filename'
 
         @pool = Script.new

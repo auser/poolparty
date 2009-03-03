@@ -21,19 +21,23 @@ module PoolParty
     end
     
     def self.for_save_string
-      returning Array.new do |out|
-        pools.collect {|n,pl| pl}.each do |pl|
-          out << "pool :#{pl.name} do"
-          clouds.each do |n,cl|
-            out << <<-EOE
-  cloud :#{cl.name} do
-    #{cl.minimum_runnable_options.map {|o| "#{o} #{cl.send(o).respec_string}"}.join("\n")}
-  end
-            EOE
+      out = []
+      pools.collect {|n,pl| pl}.each do |pl|
+        out << "pool :#{pl.name} do"
+        clouds.each do |n,cl|
+          # grossy-gross
+          minimum_runnable_options_string = cl.minimum_runnable_options.collect do |o|
+            "#{o} #{cl.send(o).respec_string}" unless cl.send(o).nil?
           end
-          out << "end"
+          out << <<-EOE
+cloud :#{cl.name} do
+  #{minimum_runnable_options_string.join("\n")}
+end
+          EOE
         end
-      end.join("\n")
+        out << "end"
+      end
+      out.join("\n")
     end
     
     def self.save!(to_file=true)
