@@ -1,2 +1,6 @@
 .DS_Store
 *tmp*
+/lib/
+/pkg/
+.com.apple.timemachine.supported
+/vendor/
