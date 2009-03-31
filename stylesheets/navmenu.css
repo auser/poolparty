@@ -32,14 +32,14 @@
       #sidebar ul li a {
         color: #000043; }
     #sidebar ul .home {
-      background: url("/images/site/i/home.png") no-repeat; }
+      background: url("images/site/i/home.png") no-repeat; }
     #sidebar ul .docs {
-      background: url("/images/site/i/docs.png") no-repeat; }
+      background: url("images/site/i/docs.png") no-repeat; }
     #sidebar ul .examples {
-      background: url("/images/site/i/examples.png") no-repeat; }
+      background: url("images/site/i/examples.png") no-repeat; }
     #sidebar ul .community {
-      background: url("/images/site/i/community.png") no-repeat; }
+      background: url("images/site/i/community.png") no-repeat; }
     #sidebar ul .tutorials {
-      background: url("/images/site/i/tutorials.png") no-repeat; }
+      background: url("images/site/i/tutorials.png") no-repeat; }
     #sidebar ul .plugins {
-      background: url("/images/site/i/plugins.png") no-repeat; }
+      background: url("images/site/i/plugins.png") no-repeat; }
