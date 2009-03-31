@@ -1,0 +1,128 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>PoolParty!</title>
+    <link href="../stylesheets/application.css" media="all" rel="stylesheet" type="text/css"/><link href="../stylesheets/blackboard.css" media="all" rel="stylesheet" type="text/css"/><link href="../stylesheets/classes.css" media="all" rel="stylesheet" type="text/css"/><link href="../stylesheets/header.css" media="all" rel="stylesheet" type="text/css"/><link href="../stylesheets/navmenu.css" media="all" rel="stylesheet" type="text/css"/><link href="../stylesheets/sunburst.css" media="all" rel="stylesheet" type="text/css"/>
+  </head>
+  <body>
+    <div id='wrapper'>
+      <div id='masthead'>
+        <h2>CitrusByte Labs</h2>
+        <div id='external_links'>
+          <!-- =link (img("/images/site/logo.gif"), "http://citrusbyte.com") -->
+        </div>
+      </div>
+      <div class='spacer clear'>
+        &nbsp;
+      </div>
+      <div id='sidebar'>
+        <h3><a href="/"><img alt="Pplogo2" src="/images/site/pplogo2.png"/></a></h3>
+        <ul class='left'>
+          <li class='home'>
+            <a href="/">Home</a>
+          </li>
+          <li class='docs'>
+            <a href="../docs.html">Docs</a>
+          </li>
+          <li class='examples'>
+            <a href="../examples.html">Examples</a>
+          </li>
+        </ul>
+        <ul class='left'>
+          <li class='community'>
+            <a href="../community.html">Community</a>
+          </li>
+          <li class='tutorials'>
+            <a href="../tutorials.html">Tutorials</a>
+          </li>
+          <li class='plugins'>
+            <a href="../plugins.html">Plugins</a>
+          </li>
+        </ul>
+      </div>
+      <div class='spacer clear'>
+        &nbsp;
+      </div>
+      <div id='content'>
+        <div class='tutorial'>
+          <h2>Getting started on EC2</h2>
+          <h4>Sign up</h4>
+          <ol>
+            <li>
+              Navigate to
+              <a href="http://aws.amazon.com/">Amazon's aws page</a>
+              and click on the
+              <a href="http://www.amazon.com/gp/aws/registration/registration-form.html">Getting started</a>
+              link. If you already have an aws account, log in and skip the next step.
+            </li>
+            <div class='right'>
+              <a href="http://www.amazon.com/gp/aws/registration/registration-form.html"><img alt="Signup" src="/images/tutorials/ec2/signup.png"/></a>
+            </div>
+            <li>
+              Sign up and validate your account
+            </li>
+            <li>
+              Once you've signed up or signed in, hover over the product's menu and click on Elastic Computing Cloud.
+              <a href="http://aws.amazon.com/ec2/"><img alt="Service ec2" src="/images/tutorials/ec2/service_ec2.png"/></a>
+            </li>
+            <li>
+              Then, click on the Sign up for Amazon EC2 button to sign up for the ec2 service
+              <img alt="Ec2 button" src="/images/tutorials/ec2/ec2_button.png"/>
+            </li>
+            <li>
+              Now, once you have access to ec2, get your access identifiers by hovering over Your Account in the menu and clicking on Access Identifiers
+              <img alt="Access ids" src="/images/tutorials/ec2/access_ids.png"/>
+            </li>
+            <li>
+              Scroll down the page and find the box titled "Access Key ID and Secret Access Key," In the box, you should see a box titled "Your Access Key ID." Make note of this string.
+              <img alt="Access key id" src="/images/tutorials/ec2/access_key_id.png"/>
+            </li>
+            <li>
+              Scroll down a little further and find the box titled "Your Secret Access Key." This box is hidden for security reasons, so you'll have to click on the show link. Make note of this string as well.
+              <img alt="Secret access key id" src="/images/tutorials/ec2/secret_access_key_id.png"/>
+            </li>
+          </ol>
+          <div class='clear'>
+            I like to copy and paste the identifiers into a temporary location so I don't have to navigate to the AWS page constantly.
+          </div>
+          <h4>Setup</h4>
+          <p>
+            These access identifiers are crucial for your cloud to operate, so we need to expose them to your cloud. PoolParty expects these identifiers to be in one of several places. You can explicitely set them in your pool.spec like so:
+            <pre class="blackboard"><span class="line-numbers">   1 </span> cloud <span class="Constant"><span class="Constant">:</span>app</span> <span class="Keyword">do</span>&#x000A;<span class="line-numbers">   2 </span> 	access_key <span class="String"><span class="String">&quot;</span>AAAAAAAAAABBBBBB<span class="String">&quot;</span></span>&#x000A;<span class="line-numbers">   3 </span> 	secret_access_key <span class="String"><span class="String">&quot;</span>NRLSKDM@$@$/4@$%%NNNSN<span class="String">&quot;</span></span>&#x000A;<span class="line-numbers">   4 </span> 	...</pre>
+          </p>
+          <p>
+            Of course, this works if you are going to keep your spec local and private, but that doesn't really bod well for sharing, so instead, let's set them as environment variables. You can do this by setting them explicitly in a profile file. I develop on a mac, so this file for me is at ~/.profile. Check your OS for your profile file.
+          </p>
+          <p>
+            Export the variables AWS_ACCESS_KEY_ID with the access key you found above on the AWS site and export the AWS_SECRET_ACCESS_KEY with the secret access key you found from the AWS site as well like so:
+            <pre class="blackboard"><span class="line-numbers">   1 </span> <span class="Storage">export</span> AWS_ACCESS_KEY_ID=AAAAAAAAAABBBBBB&#x000A;<span class="line-numbers">   2 </span> <span class="Storage">export</span> AWS_SECRET_ACCESS_KEY=NRLSKDM@<span class="Variable"><span class="Variable">$</span>@</span>$/4@$%%NNNSN</pre>
+            I tend to like keeping things separate, so I create a shell script to source. For me, this looks like:
+            <pre class="blackboard"><span class="line-numbers">   1 </span> <span class="Comment"><span class="Comment">#</span>!/bin/sh</span>&#x000A;<span class="line-numbers">   2 </span> <span class="Storage">export</span> AWS_ACCESS_KEY_ID=AAAAAAAAAABBBBBB&#x000A;<span class="line-numbers">   3 </span> <span class="Storage">export</span> AWS_SECRET_ACCESS_KEY=NRLSKDM@<span class="Variable"><span class="Variable">$</span>@</span>$/4@$%%NNNSN&#x000A;<span class="line-numbers">   4 </span> &#x000A;<span class="line-numbers">   5 </span> <span class="Storage">export</span> POOL_SPEC=/home/auser/Sites/pp/pool.spec</pre>
+          </p>
+          <p>
+            What's the POOL_SPEC doing there? This will save a lot of headache if you export this in the file. PoolParty expects to be able to find the pool.spec in one of several locations. The current directory, the file pointed to by the POOL_SPEC environment variable, /etc/poolparty/pool.spec, and a few other places. You can also explicitly set these when calling pool functions with the -n switch, but that gets old and fast.
+          </p>
+          <p>
+            Great! Now we are ready to interact with our cloud on ec2! You can head to the
+            <a href="../tutorials/getting_started">Getting Started</a>
+            tutorial for more information about communicating to your cloud or head back
+            <a href="/">Home</a>
+            for other resources
+          </p>
+        </div>
+      </div>
+      <div id='footer'>
+        Copyright 2008 - Ari Lerner
+        <br />
+        <script type='text/javascript'>
+          var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+          document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+        </script>
+        <script type='text/javascript'>
+          var pageTracker = _gat._getTracker("UA-137009-7");
+          pageTracker._trackPageview();
+        </script>
+      </div>
+    </div>
+  </body>
+</html>

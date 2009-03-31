@@ -1,0 +1,34 @@
+#masthead {
+  margin: 0;
+  width: 500px;
+  line-height: 34px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 2; }
+  #masthead h2 {
+    display: none;
+    margin: 0 0px;
+    height: 62px;
+    text-indent: -1000px; }
+  #masthead #external_links {
+    display: inline;
+    position: absolute;
+    right: 0;
+    top: 0; }
+    #masthead #external_links ul {
+      margin: 0;
+      padding: 0;
+      display: inline;
+      height: 32px; }
+      #masthead #external_links ul li {
+        padding-right: 20px;
+        margin-right: 7px;
+        display: inline;
+        margin-right: 10px;
+        list-style: none;
+        text-transform: uppercase;
+        padding-left: 28px; }
+      #masthead #external_links ul a {
+        color: #000;
+        text-decoration: none; }

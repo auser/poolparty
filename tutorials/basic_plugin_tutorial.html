@@ -1,0 +1,130 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>PoolParty!</title>
+    <link href="../stylesheets/application.css" media="all" rel="stylesheet" type="text/css"/><link href="../stylesheets/blackboard.css" media="all" rel="stylesheet" type="text/css"/><link href="../stylesheets/classes.css" media="all" rel="stylesheet" type="text/css"/><link href="../stylesheets/header.css" media="all" rel="stylesheet" type="text/css"/><link href="../stylesheets/navmenu.css" media="all" rel="stylesheet" type="text/css"/><link href="../stylesheets/sunburst.css" media="all" rel="stylesheet" type="text/css"/>
+  </head>
+  <body>
+    <div id='wrapper'>
+      <div id='masthead'>
+        <h2>CitrusByte Labs</h2>
+        <div id='external_links'>
+          <!-- =link (img("/images/site/logo.gif"), "http://citrusbyte.com") -->
+        </div>
+      </div>
+      <div class='spacer clear'>
+        &nbsp;
+      </div>
+      <div id='sidebar'>
+        <h3><a href="/"><img alt="Pplogo2" src="/images/site/pplogo2.png"/></a></h3>
+        <ul class='left'>
+          <li class='home'>
+            <a href="/">Home</a>
+          </li>
+          <li class='docs'>
+            <a href="../docs.html">Docs</a>
+          </li>
+          <li class='examples'>
+            <a href="../examples.html">Examples</a>
+          </li>
+        </ul>
+        <ul class='left'>
+          <li class='community'>
+            <a href="../community.html">Community</a>
+          </li>
+          <li class='tutorials'>
+            <a href="../tutorials.html">Tutorials</a>
+          </li>
+          <li class='plugins'>
+            <a href="../plugins.html">Plugins</a>
+          </li>
+        </ul>
+      </div>
+      <div class='spacer clear'>
+        &nbsp;
+      </div>
+      <div id='content'>
+        <h2>Basic plugin tutorial</h2>
+        <p>
+          Plugins provide the meat of PoolParty's functionality. We'll dive a little bit into the process of plugin development. They are intended on being very easy and fun to write, so with no further ado...
+        </p>
+        <h3>First steps</h3>
+        <p>
+          You have a bunch of resources (unlimited amount considering you can create your own, but that's out of the scope for this tutorial) at your disposal to use on your server. These are described more in-depth
+          <a href="../lib/Resources">here</a>
+          <small class='note'>Thanks to benburkert, a plugin generator is in progress!</small>
+        </p>
+        <p>
+          The structure of a gem is standard and should look like
+          <pre class="blackboard"><span class="line-numbers">   1 </span>   plugin_name/&#x000A;<span class="line-numbers">   2 </span>     plugin_name.rb&#x000A;<span class="line-numbers">   3 </span>     spec/&#x000A;<span class="line-numbers">   4 </span>         spec_helper.rb&#x000A;<span class="line-numbers">   5 </span>         plugin_name_spec.rb</pre>
+          The spec_helper will be generated for you or looks something like:
+          <pre class="blackboard"><span class="line-numbers">   1 </span> [<span class="Support">File</span>.<span class="Entity">dirname</span>(<span class="Variable">__FILE__</span>), <span class="String"><span class="String">&quot;</span><span class="String"><span class="String">#{</span><span class="Support">File</span><span class="String"><span class="String">.</span><span class="Entity">dirname</span></span><span class="String">(</span><span class="Variable">__FILE__</span><span class="String">)</span><span class="String">}</span></span>/..<span class="String">&quot;</span></span>].<span class="Entity">each</span> {|<span class="Variable">dir</span>| <span class="Variable"><span class="Variable">$</span>:</span>.<span class="Entity">unshift</span>(dir) }&#x000A;<span class="line-numbers">   2 </span> <span class="Keyword">require</span> <span class="String"><span class="String">&quot;</span>poolparty<span class="String">&quot;</span></span>&#x000A;<span class="line-numbers">   3 </span> &#x000A;<span class="line-numbers">   4 </span> <span class="Keyword">include</span> <span class="Support">PoolParty</span>::<span class="Variable">Resources</span></pre>
+          Of course, you can write your own helpers in here to help out with your specs as well.
+        </p>
+        <p>
+          Now it's time to start writing some plugin functionality, of course after you have spec'd the functionality you want in your spec file.
+        </p>
+        <p>
+          We'll write a basic plugin to setup mysql on your servers. This is what our directory will look like:
+          <pre class="blackboard"><span class="line-numbers">   1 </span>   mysql_plugin/&#x000A;<span class="line-numbers">   2 </span>     mysql.rb&#x000A;<span class="line-numbers">   3 </span>     spec/&#x000A;<span class="line-numbers">   4 </span>         spec_helper.rb&#x000A;<span class="line-numbers">   5 </span>         mysql_spec.rb</pre>
+        </p>
+        <p>
+          First, let's look at the finished
+          <strong>basic</strong>
+          plugin, then we'll disect it
+        </p>
+        <p>
+          <pre class="blackboard"><span class="line-numbers">   1 </span> <span class="Keyword">module</span> <span class="Entity">PoolParty</span>&#x000A;<span class="line-numbers">   2 </span>   <span class="Keyword">class</span> <span class="Entity">Database</span>&#x000A;<span class="line-numbers">   3 </span>     &#x000A;<span class="line-numbers">   4 </span>     plugin <span class="Constant"><span class="Constant">:</span>mysql</span> <span class="Keyword">do</span>&#x000A;<span class="line-numbers">   5 </span>       &#x000A;<span class="line-numbers">   6 </span> <span class="Comment">      <span class="Comment">#</span> Enable is called if there is no block given when the </span>&#x000A;<span class="line-numbers">   7 </span> <span class="Comment">      <span class="Comment">#</span> mysql plugin is called in the cloud</span>&#x000A;<span class="line-numbers">   8 </span>       <span class="Keyword">def</span> <span class="Entity">enable</span>&#x000A;<span class="line-numbers">   9 </span>         base_install&#x000A;<span class="line-numbers">  10 </span>       <span class="Keyword">end</span>&#x000A;<span class="line-numbers">  11 </span>             &#x000A;<span class="line-numbers">  12 </span>       <span class="Keyword">def</span> <span class="Entity">base_install</span>&#x000A;<span class="line-numbers">  13 </span> <span class="Comment">        <span class="Comment">#</span> Required packages</span>&#x000A;<span class="line-numbers">  14 </span>         <span class="Entity">has_package</span>(<span class="Constant"><span class="Constant">:</span>name</span> =&gt; <span class="String"><span class="String">&quot;</span>MySQL-server<span class="String">&quot;</span></span>)&#x000A;<span class="line-numbers">  15 </span>         <span class="Entity">has_package</span>(<span class="Constant"><span class="Constant">:</span>name</span> =&gt; <span class="String"><span class="String">&quot;</span>MySQL-shared<span class="String">&quot;</span></span>)&#x000A;<span class="line-numbers">  16 </span>         <span class="Entity">has_package</span>(<span class="Constant"><span class="Constant">:</span>name</span> =&gt; <span class="String"><span class="String">&quot;</span>MySQL-client<span class="String">&quot;</span></span>)&#x000A;<span class="line-numbers">  17 </span>         &#x000A;<span class="line-numbers">  18 </span> <span class="Comment">        <span class="Comment">#</span> Setting the Mysql password</span>&#x000A;<span class="line-numbers">  19 </span>         <span class="Entity">has_exec</span>(<span class="Constant"><span class="Constant">:</span>name</span> =&gt; <span class="String"><span class="String">&quot;</span>Set the Mysql Password<span class="String">&quot;</span></span>) <span class="Keyword">do</span>&#x000A;<span class="line-numbers">  20 </span>           subscribe [<span class="Entity">package</span>(<span class="Constant"><span class="Constant">:</span>name</span> =&gt; <span class="String"><span class="String">&quot;</span>MySQL-server<span class="String">&quot;</span></span>), <span class="Entity">package</span>(<span class="Constant"><span class="Constant">:</span>name</span> =&gt; <span class="String"><span class="String">&quot;</span>MySQL-client<span class="String">&quot;</span></span>), <span class="Entity">package</span>(<span class="Constant"><span class="Constant">:</span>name</span> =&gt; <span class="String"><span class="String">&quot;</span>MySQL-shared<span class="String">&quot;</span></span>)]&#x000A;<span class="line-numbers">  21 </span>           refreshonly <span class="Constant">true</span>&#x000A;<span class="line-numbers">  22 </span>           ifnot <span class="String"><span class="String">&quot;</span>mysqladmin -uroot -p$password status<span class="String">&quot;</span></span>&#x000A;<span class="line-numbers">  23 </span>           command <span class="String"><span class="String">&quot;</span>mysqladmin -uroot password $password<span class="String">&quot;</span></span>&#x000A;<span class="line-numbers">  24 </span>         <span class="Keyword">end</span>&#x000A;<span class="line-numbers">  25 </span>       <span class="Keyword">end</span>&#x000A;<span class="line-numbers">  26 </span>       &#x000A;<span class="line-numbers">  27 </span> <span class="Comment">      <span class="Comment">#</span> Allow us to set a password</span>&#x000A;<span class="line-numbers">  28 </span>       <span class="Keyword">def</span> <span class="Entity">password</span>(<span class="Variable">pass<span class="Keyword">=</span><span class="String"><span class="String">&quot;</span>default_poolparty_password<span class="String">&quot;</span></span></span>)&#x000A;<span class="line-numbers">  29 </span>         <span class="Entity">has_variable</span>(<span class="Constant"><span class="Constant">:</span>name</span> =&gt; <span class="String"><span class="String">&quot;</span>password<span class="String">&quot;</span></span>, <span class="Constant"><span class="Constant">:</span>value</span> =&gt; pass)&#x000A;<span class="line-numbers">  30 </span>       <span class="Keyword">end</span>&#x000A;<span class="line-numbers">  31 </span>       &#x000A;<span class="line-numbers">  32 </span>     <span class="Keyword">end</span>&#x000A;<span class="line-numbers">  33 </span>     &#x000A;<span class="line-numbers">  34 </span>   <span class="Keyword">end</span>&#x000A;<span class="line-numbers">  35 </span> <span class="Keyword">end</span></pre>
+        </p>
+        <h3>Packages</h3>
+        <p>
+          First, you'll notice that there are some lines with
+          <strong>has_package</strong>
+          This tells your nodes and instances that they make sure they have these packages and if not, that they should be installed (installed with the preferred package manager). These are called "Resources." There is a list of the available
+          <a href="../libresources.html">lib/Resources</a>
+          here. Note that they can be preceeded by either has_ or does_not_have_, which does exactly what it sounds like. has_ sends a present notice to the resource and does_not_have_ sends an absent notice to the resource.
+        </p>
+        <h3>Setup</h3>
+        <p>
+          The has_exec function from within the base_install method is relatively obvious, however let's run through it, just in case. The function is used to set the mysqladmin password, as noted by the description.
+        </p>
+        <p>
+          <strong>Subscribe</strong>
+          Anytime that the packages Mysql-server, Mysql-shared and/or Mysql-client are changed, the exec will run.
+          <br />
+          <strong>Refreshonly</strong>
+          It will only run if there is a change to these packages.
+          <br />
+          <strong>ifnot</strong>
+          First and foremost, it will run the ifnot command before running the exec. If the ifnot command returns anything other than an empty string or false, then the exec will be run.
+          <br />
+          <strong>command</strong>
+          This defines the command that we are going to run.
+        </p>
+        <h3>Functions</h3>
+        <p>
+          Notice there is a password function defined on the plugin. This way, from within the plugin call, we can say password("mypassword"). This will set the variable: $password so we can use it from within the plugin.
+        </p>
+        <h3>Usage</h3>
+        <p>
+          <pre class="blackboard"><span class="line-numbers">   1 </span> pool <span class="Constant"><span class="Constant">:</span>app</span> <span class="Keyword">do</span>&#x000A;<span class="line-numbers">   2 </span>   &#x000A;<span class="line-numbers">   3 </span> <span class="Comment">  <span class="Comment">#</span> this will load all the plugins in the directory</span>&#x000A;<span class="line-numbers">   4 </span> <span class="Comment">  <span class="Comment">#</span> It deep includes every .rb file in the directory</span>&#x000A;<span class="line-numbers">   5 </span> <span class="Comment">  <span class="Comment">#</span> </span>&#x000A;<span class="line-numbers">   6 </span> <span class="Comment">  <span class="Comment">#</span> Example will require mysql.rb and apache.rb</span>&#x000A;<span class="line-numbers">   7 </span> <span class="Comment">  <span class="Comment">#</span> plugins/</span>&#x000A;<span class="line-numbers">   8 </span> <span class="Comment">  <span class="Comment">#</span>   mysql/</span>&#x000A;<span class="line-numbers">   9 </span> <span class="Comment">  <span class="Comment">#</span>     mysql.rb</span>&#x000A;<span class="line-numbers">  10 </span> <span class="Comment">  <span class="Comment">#</span>   apache/</span>&#x000A;<span class="line-numbers">  11 </span> <span class="Comment">  <span class="Comment">#</span>     apache.rb</span>&#x000A;<span class="line-numbers">  12 </span> <span class="Comment">  <span class="Comment">#</span>     spec/</span>&#x000A;<span class="line-numbers">  13 </span> <span class="Comment">  <span class="Comment">#</span>       apache_spec.rb</span>&#x000A;<span class="line-numbers">  14 </span>   plugin_directory <span class="Support">File</span>.<span class="Entity">dirname</span>(<span class="Variable">__FILE__</span>) <span class="Keyword">+</span> <span class="String"><span class="String">&quot;</span>/plugins<span class="String">&quot;</span></span>&#x000A;<span class="line-numbers">  15 </span>   &#x000A;<span class="line-numbers">  16 </span>   cloud <span class="Constant"><span class="Constant">:</span>app</span> <span class="Keyword">do</span>&#x000A;<span class="line-numbers">  17 </span>     &#x000A;<span class="line-numbers">  18 </span> <span class="Comment">    <span class="Comment">#</span> Call the mysql plugin</span>&#x000A;<span class="line-numbers">  19 </span>     mysql <span class="Keyword">do</span>&#x000A;<span class="line-numbers">  20 </span> <span class="Comment">      <span class="Comment">#</span> It's important to set the password before installing to set the password</span>&#x000A;<span class="line-numbers">  21 </span> <span class="Comment">      <span class="Comment">#</span> on the server</span>&#x000A;<span class="line-numbers">  22 </span>       <span class="Entity">password</span>(<span class="String"><span class="String">&quot;</span>frankspassword<span class="String">&quot;</span></span>)&#x000A;<span class="line-numbers">  23 </span>       base_install&#x000A;<span class="line-numbers">  24 </span>     <span class="Keyword">end</span>&#x000A;<span class="line-numbers">  25 </span>     &#x000A;<span class="line-numbers">  26 </span>   <span class="Keyword">end</span>&#x000A;<span class="line-numbers">  27 </span> <span class="Keyword">end</span></pre>
+        </p>
+        <p>
+          Stay tuned for more updates to this tutorial as we continue to advance the plugin and give it some virtual resources where we can ensure that there are specific databases setup and other setups for mysql.
+        </p>
+      </div>
+      <div id='footer'>
+        Copyright 2008 - Ari Lerner
+        <br />
+        <script type='text/javascript'>
+          var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+          document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+        </script>
+        <script type='text/javascript'>
+          var pageTracker = _gat._getTracker("UA-137009-7");
+          pageTracker._trackPageview();
+        </script>
+      </div>
+    </div>
+  </body>
+</html>

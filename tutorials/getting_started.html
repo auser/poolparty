@@ -1,0 +1,160 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>PoolParty!</title>
+    <link href="../stylesheets/application.css" media="all" rel="stylesheet" type="text/css"/><link href="../stylesheets/blackboard.css" media="all" rel="stylesheet" type="text/css"/><link href="../stylesheets/classes.css" media="all" rel="stylesheet" type="text/css"/><link href="../stylesheets/header.css" media="all" rel="stylesheet" type="text/css"/><link href="../stylesheets/navmenu.css" media="all" rel="stylesheet" type="text/css"/><link href="../stylesheets/sunburst.css" media="all" rel="stylesheet" type="text/css"/>
+  </head>
+  <body>
+    <div id='wrapper'>
+      <div id='masthead'>
+        <h2>CitrusByte Labs</h2>
+        <div id='external_links'>
+          <!-- =link (img("/images/site/logo.gif"), "http://citrusbyte.com") -->
+        </div>
+      </div>
+      <div class='spacer clear'>
+        &nbsp;
+      </div>
+      <div id='sidebar'>
+        <h3><a href="/"><img alt="Pplogo2" src="/images/site/pplogo2.png"/></a></h3>
+        <ul class='left'>
+          <li class='home'>
+            <a href="/">Home</a>
+          </li>
+          <li class='docs'>
+            <a href="../docs.html">Docs</a>
+          </li>
+          <li class='examples'>
+            <a href="../examples.html">Examples</a>
+          </li>
+        </ul>
+        <ul class='left'>
+          <li class='community'>
+            <a href="../community.html">Community</a>
+          </li>
+          <li class='tutorials'>
+            <a href="../tutorials.html">Tutorials</a>
+          </li>
+          <li class='plugins'>
+            <a href="../plugins.html">Plugins</a>
+          </li>
+        </ul>
+      </div>
+      <div class='spacer clear'>
+        &nbsp;
+      </div>
+      <div id='content'>
+        <h2>Getting started on PoolParty</h2>
+        <p>
+          Congrats! You've decided to try out PoolParty, what next? Follow along as we go from zero to done! Time it, let's see how long it takes for you to have a full-blown application up on your cloud!
+        </p>
+        <h4>Installation</h4>
+        <p>
+          Installing poolparty is simple:
+          <pre class="blackboard"><span class="line-numbers">   1 </span> gem install auser-poolparty</pre>
+          Make sure you have executed
+          <pre class="blackboard"><span class="line-numbers">   1 </span> gem sources --add http://gems.github.com</pre>
+          so that rubygems can find the gem.
+        </p>
+        <h4>Bleeding edge install</h4>
+        <p>
+          Grab the code from github:
+          <pre class="blackboard"><span class="line-numbers">   1 </span> git clone git://github.com/auser/poolparty.git</pre>
+          Make the gem
+          <pre class="blackboard"><span class="line-numbers">   1 </span> cd poolparty <span class="Keyword">&amp;&amp;</span> rake local_deploy</pre>
+        </p>
+        <h4>Pool spec</h4>
+        <p>
+          Everything in your pool is decided by your spec file. This is where all the logic for your cloud will go. This can be generated with the command:
+          <pre class="blackboard"><span class="line-numbers">   1 </span> pool spec [name]</pre>
+          You will now have a spec file in the location: "name/pool.spec." There will also be a directory called plugins/. Don't worry about that now, we'll get back to the plugins directory and how to use it
+        </p>
+        <p>
+          Although more advanced examples can be found throughout the site, we'll use a basic one to get us going. First, we can start out by making a pool.
+          <pre class="blackboard"><span class="line-numbers">   1 </span> pool <span class="Constant"><span class="Constant">:</span>app</span> <span class="Keyword">do</span>&#x000A;<span class="line-numbers">   2 </span> <span class="Keyword">end</span></pre>
+          This doesn't really do anything, but it gives us a convenient wrapper around our clouds, You don't need to define a pool, but it's usually a good idea if the clouds of nodes are going to talk to each other.
+          Now let's make a cloud that actually does something.
+          <pre class="blackboard"><span class="line-numbers">   1 </span> pool <span class="Constant"><span class="Constant">:</span>app</span> <span class="Keyword">do</span>&#x000A;<span class="line-numbers">   2 </span>   plugin_directory <span class="String"><span class="String">&quot;</span><span class="String"><span class="String">#{</span><span class="Support">File</span><span class="String"><span class="String">.</span><span class="Entity">dirname</span></span><span class="String">(</span><span class="Variable">__FILE__</span><span class="String">)</span><span class="String">}</span></span>/plugins<span class="String">&quot;</span></span>&#x000A;<span class="line-numbers">   3 </span>   instances <span class="Constant">2</span>..<span class="Constant">5</span>&#x000A;<span class="line-numbers">   4 </span>   &#x000A;<span class="line-numbers">   5 </span>   cloud <span class="Constant"><span class="Constant">:</span>app</span> <span class="Keyword">do</span>&#x000A;<span class="line-numbers">   6 </span>     &#x000A;<span class="line-numbers">   7 </span>   <span class="Keyword">end</span>&#x000A;<span class="line-numbers">   8 </span> &#x000A;<span class="line-numbers">   9 </span> <span class="Keyword">end</span></pre>
+          Your cloud is now setup to scale from 2 instances to 5 instances at a maximum. You've defined one cloud (called app) inside the pool (called app).
+        </p>
+        <p>
+          From within this cloud block is where you describe your server setup. You there are a quite few built-in
+          <a href="../lib/resources.html">Resources</a>
+          that you can describe here, for instance for a git repository
+          <pre class="blackboard"><span class="line-numbers">   1 </span> <span class="Entity">has_git</span>({<span class="Constant"><span class="Constant">:</span>name</span> =&gt; <span class="String"><span class="String">&quot;</span>poolpartyrepos<span class="String">&quot;</span></span>, &#x000A;<span class="line-numbers">   2 </span> 	<span class="Constant"><span class="Constant">:</span>source</span> =&gt; <span class="String"><span class="String">&quot;</span>git://github.com/auser/poolparty-website.git<span class="String">&quot;</span></span>, &#x000A;<span class="line-numbers">   3 </span> 	<span class="Constant"><span class="Constant">:</span>at</span> =&gt; <span class="String"><span class="String">&quot;</span>/var/www/poolpartyrb.com<span class="String">&quot;</span></span>})</pre>
+          or a file
+          <pre class="blackboard"><span class="line-numbers">   1 </span> <span class="Entity">has_file</span>(<span class="Constant"><span class="Constant">:</span>name</span> =&gt; <span class="String"><span class="String">&quot;</span>/var/www/index.html<span class="String">&quot;</span></span>, <span class="Constant"><span class="Constant">:</span>content</span> =&gt; <span class="String"><span class="String">&quot;</span>&lt;h2&gt;Hello world&lt;/h2&gt;<span class="String">&quot;</span></span>)</pre>
+          The full list can be found
+          <a href="../lib/resources.html">Resources</a>
+          There are also
+          <a href="/lib/built_in_helpers.html">Built in helpers</a>
+          that you can use in your spec.
+        </p>
+        <p>
+          Things get a lot more interesting when plugins get involved. Currently, as of the time of this writing there are plugins in the works to setup apache2, passenger, ruby on rails, postgresql, mysql and more. The plugin syntax is clear and enjoyable as well, so if you require something different, please checkout the
+          <a href="/tutorials/basic_plugin_tutorial.html">Basic Plugin Tutorial</a>
+        </p>
+        <h4>Starting your cloud</h4>
+        <p>
+          PoolParty isn't based on any remoter base itself, but can be extended to support anyt hat provides an api for starting, stopping and listing instances. The default remoter base for PoolParty is ec2. You can specify the remoter base with the command:
+          <pre class="blackboard"><span class="line-numbers">   1 </span> using <span class="Constant"><span class="Constant">:</span>ec2</span></pre>
+          in your spec file.
+        </p>
+        <p>
+          To get started on ec2, go ahead and check out the
+          <a href="../tutorials/getting_started_on_ec2">Getting started on ec2</a>
+          tutorial. Don't worry, this tutorial will be here when you get back.
+        </p>
+        <h4>Interacting with your cloud</h4>
+        <p>
+          If you have followed a tutorial from above, then you should be ready to interact with your cloud. Before we start it, we will need to make sure we have a key set for the clouds. Let's make note of what keypairs we need by running the command:
+          <pre class="blackboard"><span class="line-numbers">   1 </span> cloud add-keypair --listing</pre>
+          This will list the keypairs you need to have for your clouds. If you run the same command without the --listing, PoolParty will create these keypairs for you.
+          <pre class="blackboard"><span class="line-numbers">   1 </span> cloud add-keypair --verbose</pre>
+        </p>
+        <p>
+          Now we are ready to play with the cloud!
+        </p>
+        <h4><a href="/lib/cloud_speak.html">Cloud Speak</a></h4>
+        <p>
+          Once you have your pool spec at a comfortable spot, it's time to get your cloud launched.
+          <pre class="blackboard"><span class="line-numbers">   1 </span> cloud start --name app</pre>
+        </p>
+        <p>
+          <ul>
+            <li>PoolParty will launch your master instance</li>
+            <li>Configure the master instance based on the values in your manifest</li>
+            <li>Install the appropriate software</li>
+            <li>Start monitoring the cloud</li>
+          </ul>
+        </p>
+        <p>
+          Now, let's list the cloud and see what instances we have up...
+          <pre class="blackboard"><span class="line-numbers">   1 </span> cloud list --name app</pre>
+          Hey! What do you know? It started a new instance for us based on the minimum instances requirement
+          <pre class="blackboard"><span class="line-numbers">   1 </span> *** Listing cloud app&#x000A;<span class="line-numbers">   2 </span> ****** Active instances&#x000A;<span class="line-numbers">   3 </span> master	75.101.162.232&#x000A;<span class="line-numbers">   4 </span> node1	67.202.61.184</pre>
+        </p>
+        <p>
+          Let's not forget to terminate the clouds so we aren't charged too much for playtime
+          <pre class="blackboard"><span class="line-numbers">   1 </span> cloud terminate</pre>
+          Note, I left off the --name this time. If you do, it will pick the first cloud. I tend to leave it off when I only have one cloud in my pool.
+        </p>
+        <p>
+          PoolParty sets up a lightweight communication network and handles the provisioning and load balancing. The master instance is the main connection between your cloud and the rest of the world.
+        </p>
+      </div>
+      <div id='footer'>
+        Copyright 2008 - Ari Lerner
+        <br />
+        <script type='text/javascript'>
+          var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+          document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+        </script>
+        <script type='text/javascript'>
+          var pageTracker = _gat._getTracker("UA-137009-7");
+          pageTracker._trackPageview();
+        </script>
+      </div>
+    </div>
+  </body>
+</html>

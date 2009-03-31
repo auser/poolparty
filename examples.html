@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>PoolParty!</title>
+    <link href="stylesheets/application.css" media="all" rel="stylesheet" type="text/css"/><link href="stylesheets/blackboard.css" media="all" rel="stylesheet" type="text/css"/><link href="stylesheets/classes.css" media="all" rel="stylesheet" type="text/css"/><link href="stylesheets/header.css" media="all" rel="stylesheet" type="text/css"/><link href="stylesheets/navmenu.css" media="all" rel="stylesheet" type="text/css"/><link href="stylesheets/sunburst.css" media="all" rel="stylesheet" type="text/css"/>
+  </head>
+  <body>
+    <div id='wrapper'>
+      <div id='masthead'>
+        <h2>CitrusByte Labs</h2>
+        <div id='external_links'>
+          <!-- =link (img("/images/site/logo.gif"), "http://citrusbyte.com") -->
+        </div>
+      </div>
+      <div class='spacer clear'>
+        &nbsp;
+      </div>
+      <div id='sidebar'>
+        <h3><a href="/"><img alt="Pplogo2" src="/images/site/pplogo2.png"/></a></h3>
+        <ul class='left'>
+          <li class='home'>
+            <a href="/">Home</a>
+          </li>
+          <li class='docs'>
+            <a href="docs.html">Docs</a>
+          </li>
+          <li class='examples'>
+            <a href="examples.html">Examples</a>
+          </li>
+        </ul>
+        <ul class='left'>
+          <li class='community'>
+            <a href="community.html">Community</a>
+          </li>
+          <li class='tutorials'>
+            <a href="tutorials.html">Tutorials</a>
+          </li>
+          <li class='plugins'>
+            <a href="plugins.html">Plugins</a>
+          </li>
+        </ul>
+      </div>
+      <div class='spacer clear'>
+        &nbsp;
+      </div>
+      <div id='content'>
+        <h2>Examples</h2>
+        <p>
+          This site is maintained using the following specfile
+          <script src='http://gist.github.com/69121.js'></script>
+          <pre class="blackboard"><span class="line-numbers">   1 </span> <span class="Keyword">&lt;</span>script src<span class="Keyword">=</span><span class="String"><span class="String">&quot;</span>http://gist.github.com/69121.js<span class="String">&quot;</span></span>&gt;<span class="Keyword">&lt;</span><span class="Keyword">/</span>script<span class="Keyword">&gt;</span>&#x000A;<span class="line-numbers">   2 </span> &#x000A;<span class="line-numbers">   3 </span> &#x000A;<span class="line-numbers">   4 </span> <span class="Comment"><span class="Comment">#</span> Basic poolparty template</span>&#x000A;<span class="line-numbers">   5 </span> <span class="Keyword">require</span> <span class="String"><span class="String">&quot;</span>poolparty_apache2_plugin<span class="String">&quot;</span></span>&#x000A;<span class="line-numbers">   6 </span> &#x000A;<span class="line-numbers">   7 </span> pool <span class="Constant"><span class="Constant">:</span>cb</span> <span class="Keyword">do  </span>&#x000A;<span class="line-numbers">   8 </span>   instances <span class="Constant">2</span>..<span class="Constant">5</span>&#x000A;<span class="line-numbers">   9 </span>   port <span class="Constant">80</span>&#x000A;<span class="line-numbers">  10 </span>   ami <span class="String"><span class="String">&quot;</span>ami-1cd73375<span class="String">&quot;</span></span> <span class="Comment"><span class="Comment">#</span>Alestic's base Ubuntu AMI</span>&#x000A;<span class="line-numbers">  11 </span>   &#x000A;<span class="line-numbers">  12 </span>   cloud <span class="Constant"><span class="Constant">:</span>app</span> <span class="Keyword">do</span>&#x000A;<span class="line-numbers">  13 </span>         &#x000A;<span class="line-numbers">  14 </span>     apache <span class="Keyword">do</span>&#x000A;<span class="line-numbers">  15 </span>       installed_as_worker      &#x000A;<span class="line-numbers">  16 </span>       &#x000A;<span class="line-numbers">  17 </span>       has_virtualhost <span class="Keyword">do        </span>&#x000A;<span class="line-numbers">  18 </span>         name <span class="String"><span class="String">&quot;</span>poolpartyrb.com<span class="String">&quot;</span></span>&#x000A;<span class="line-numbers">  19 </span>         <span class="Entity">listen</span>(<span class="String"><span class="String">&quot;</span>8080<span class="String">&quot;</span></span>)&#x000A;<span class="line-numbers">  20 </span>         virtual_host_entry ::<span class="Entity">File</span>.<span class="Entity">join</span>(<span class="Support">File</span>.<span class="Entity">dirname</span>(<span class="Variable">__FILE__</span>), <span class="String"><span class="String">&quot;</span>cb/templates<span class="String">&quot;</span></span>, <span class="String"><span class="String">&quot;</span>virtual_host.conf.erb<span class="String">&quot;</span></span>)&#x000A;<span class="line-numbers">  21 </span>         &#x000A;<span class="line-numbers">  22 </span> <span class="Comment">        <span class="Comment">#</span> We are going to have a repository that is updated across the servers</span>&#x000A;<span class="line-numbers">  23 </span>         <span class="Entity">has_git</span>({<span class="Constant"><span class="Constant">:</span>name</span> =&gt; <span class="String"><span class="String">&quot;</span>poolpartyrepos<span class="String">&quot;</span></span>, &#x000A;<span class="line-numbers">  24 </span>           <span class="Constant"><span class="Constant">:</span>source</span> =&gt; <span class="String"><span class="String">&quot;</span>git://github.com/auser/poolparty-website.git<span class="String">&quot;</span></span>, &#x000A;<span class="line-numbers">  25 </span>           <span class="Constant"><span class="Constant">:</span>cwd</span> =&gt; <span class="String"><span class="String">&quot;</span>/var/www/poolpartyrb.com<span class="String">&quot;</span></span>}) <span class="Keyword">do</span>&#x000A;<span class="line-numbers">  26 </span>         &#x000A;<span class="line-numbers">  27 </span> <span class="Comment">          <span class="Comment">#</span> We don't keep the site in the top level of the repos, so let's create</span>&#x000A;<span class="line-numbers">  28 </span> <span class="Comment">          <span class="Comment">#</span> a symlink so that the public directory is a symlink of the root level</span>&#x000A;<span class="line-numbers">  29 </span> <span class="Comment">          <span class="Comment">#</span> site directory</span>&#x000A;<span class="line-numbers">  30 </span>           <span class="Entity">has_symlink</span>({<span class="Constant"><span class="Constant">:</span>name</span> =&gt; <span class="String"><span class="String">&quot;</span>/var/www/poolpartyrb.com/public<span class="String">&quot;</span></span>, <span class="Constant"><span class="Constant">:</span>from</span> =&gt; <span class="String"><span class="String">&quot;</span>/var/www/poolpartyrb.com/repos/site<span class="String">&quot;</span></span>})&#x000A;<span class="line-numbers">  31 </span>         <span class="Keyword">end</span>&#x000A;<span class="line-numbers">  32 </span>       <span class="Keyword">end</span>&#x000A;<span class="line-numbers">  33 </span>     <span class="Keyword">end</span>&#x000A;<span class="line-numbers">  34 </span>     &#x000A;<span class="line-numbers">  35 </span>   <span class="Keyword">end</span>&#x000A;<span class="line-numbers">  36 </span> &#x000A;<span class="line-numbers">  37 </span> <span class="Keyword">end</span></pre>
+        </p>
+      </div>
+      <div id='footer'>
+        Copyright 2008 - Ari Lerner
+        <br />
+        <script type='text/javascript'>
+          var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+          document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+        </script>
+        <script type='text/javascript'>
+          var pageTracker = _gat._getTracker("UA-137009-7");
+          pageTracker._trackPageview();
+        </script>
+      </div>
+    </div>
+  </body>
+</html>

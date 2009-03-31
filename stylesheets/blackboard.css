@@ -1,0 +1,59 @@
+.blackboard {
+  background-color: #0C1021;
+  color: #F8F8F8; }
+  .blackboard .LatexSupport {
+    color: #FBDE2D; }
+  .blackboard .OcamlInfixOperator {
+    color: #8DA6CE; }
+  .blackboard .MetaFunctionCallPy {
+    color: #BECDE6; }
+  .blackboard .Superclass {
+    color: #FF6400;
+    font-style: italic; }
+  .blackboard .Constant {
+    color: #D8FA3C; }
+  .blackboard .OcamlFPConstant {
+    text-decoration: underline; }
+  .blackboard .OcamlFPInfixOperator {
+    text-decoration: underline; }
+  .blackboard .Support {
+    color: #8DA6CE; }
+  .blackboard .OcamlOperator {
+    color: #F8F8F8; }
+  .blackboard .Storage {
+    color: #FBDE2D; }
+  .blackboard .line-numbers {
+    background-color: #253B76;
+    color: #FFFFFF; }
+  .blackboard .StringInterpolation {
+    color: #FF6400; }
+  .blackboard .InvalidIllegal {
+    background-color: #9D1E15;
+    color: #F8F8F8; }
+  .blackboard .PlistUnquotedString {
+    color: #FFFFFF; }
+  .blackboard .OcamlVariant {
+    color: #D5E0F3; }
+  .blackboard .MetaTag {
+    color: #7F90AA; }
+  .blackboard .LatexEnvironment {
+    background-color: #F7F7F8; }
+  .blackboard .OcamlFPPrefixOperator {
+    text-decoration: underline; }
+  .blackboard .OcamlPrefixOperator {
+    color: #8DA6CE; }
+  .blackboard .EntityNameSection {
+    color: #FFFFFF; }
+  .blackboard .String {
+    color: #61CE3C; }
+  .blackboard .Keyword {
+    color: #FBDE2D; }
+  .blackboard .LatexEnvironmentNested {
+    background-color: #7691F3; }
+  .blackboard .InvalidDeprecated {
+    color: #AB2A1D;
+    font-style: italic; }
+  .blackboard .Entity {
+    color: #FF6400; }
+  .blackboard .Comment {
+    color: #AEAEAE; }

@@ -1,0 +1,127 @@
+.sunburst {
+  background-color: #FFF;
+  border: 1px solid #333; }
+  .sunburst .DiffInserted {
+    background-color: #253B22;
+    color: #F8F8F8; }
+  .sunburst .DiffHeader {
+    background-color: #0E2231;
+    color: #F8F8F8;
+    font-style: italic; }
+  .sunburst .CssPropertyValue {
+    color: #F9EE98; }
+  .sunburst .CCCPreprocessorDirective {
+    color: #AFC4DB; }
+  .sunburst .Constant {
+    color: #238799; }
+  .sunburst .DiffChanged {
+    background-color: #4A410D;
+    color: #F8F8F8; }
+  .sunburst .Support {
+    color: #9B859D; }
+  .sunburst .MarkupList {
+    color: #E1D4B9; }
+  .sunburst .CssConstructorArgument {
+    color: #8F9D6A; }
+  .sunburst .Storage {
+    color: #99CF50; }
+  .sunburst .line-numbers {
+    background-color: #DDF0FF;
+    color: #000000; }
+  .sunburst .CssClass {
+    color: #9B703F; }
+  .sunburst .StringConstant {
+    color: #DDF2A4; }
+  .sunburst .MarkupSeparator {
+    background-color: #242424;
+    color: #60A633; }
+  .sunburst .MarkupUnderline {
+    text-decoration: underline;
+    color: #E18964; }
+  .sunburst .CssAtRule {
+    color: #8693A5; }
+  .sunburst .MetaTagInline {
+    color: #E0C589; }
+  .sunburst .JEntityNameType {
+    text-decoration: underline; }
+  .sunburst .LogEntryError {
+    background-color: #751012; }
+  .sunburst .MarkupHeading {
+    background-color: #632D04;
+    color: #FEDCC5; }
+  .sunburst .CssTagName {
+    color: #CDA869; }
+  .sunburst .SupportConstant {
+    color: #CF6A4C; }
+  .sunburst .MarkupQuote {
+    background-color: #ECD091;
+    color: #E1D4B9;
+    font-style: italic; }
+  .sunburst .DiffDeleted {
+    background-color: #420E09;
+    color: #F8F8F8; }
+  .sunburst .CCCPreprocessorLine {
+    color: #8996A8; }
+  .sunburst .StringRegexpSpecial {
+    color: #CF7D34; }
+  .sunburst .EmbeddedSourceBright {
+    background-color: #ABADB4; }
+  .sunburst .InvalidIllegal {
+    background-color: #150B15;
+    color: #FD5FF1; }
+  .sunburst .MarkupRaw {
+    background-color: #ABADB4;
+    color: #578BB3; }
+  .sunburst .SupportFunction {
+    color: #DAD085; }
+  .sunburst .CssAdditionalConstants {
+    color: #DD7B3B; }
+  .sunburst .MetaTagAll {
+    color: #89BDFF; }
+  .sunburst .StringRegexp {
+    color: #E9C062; }
+  .sunburst .StringEmbeddedSource {
+    color: #DAEFA3; }
+  .sunburst .EntityInheritedClass {
+    color: #9B5C2E;
+    font-style: italic; }
+  .sunburst .MarkupComment {
+    color: #F67B37;
+    font-style: italic; }
+  .sunburst .MarkupBold {
+    font-weight: bold;
+    color: #E9C062; }
+  .sunburst .CssId {
+    color: #8B98AB; }
+  .sunburst .CssPseudoClass {
+    color: #8F9D6A; }
+  .sunburst .JCast {
+    color: #676767;
+    font-style: italic; }
+  .sunburst .StringVariable {
+    color: #8A9A95; }
+  .sunburst .String {
+    color: #65B042; }
+  .sunburst .Keyword {
+    color: #F90911; }
+  .sunburst .LogEntry {
+    background-color: #C7C7C7; }
+  .sunburst .MarkupItalic {
+    color: #E9C062;
+    font-style: italic; }
+  .sunburst .CssPropertyName {
+    color: #C5AF75; }
+  .sunburst .Namespaces {
+    color: #E18964; }
+  .sunburst .DoctypeXmlProcessing {
+    color: #494949; }
+  .sunburst .InvalidDeprecated {
+    color: #FD5FF1;
+    font-style: italic; }
+  .sunburst .Variable {
+    color: #3E87E3; }
+  .sunburst .Entity {
+    color: #BE11BB; }
+  .sunburst .Comment {
+    color: #AEAEAE;
+    font-style: italic; }
