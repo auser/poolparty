@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>PoolParty!</title>
+    <link href="../../stylesheets/application.css" media="all" rel="stylesheet" type="text/css"/><link href="../../stylesheets/blackboard.css" media="all" rel="stylesheet" type="text/css"/><link href="../../stylesheets/classes.css" media="all" rel="stylesheet" type="text/css"/><link href="../../stylesheets/header.css" media="all" rel="stylesheet" type="text/css"/><link href="../../stylesheets/navmenu.css" media="all" rel="stylesheet" type="text/css"/><link href="../../stylesheets/sunburst.css" media="all" rel="stylesheet" type="text/css"/>
+  </head>
+  <body>
+    <div id='wrapper'>
+      <div id='masthead'>
+        <h2>AT&T Interactive R&D</h2>
+        <div id='external_links'>
+          <!-- =link (img("attir_and_d_logo.gif"), "http://poolpartyrb.com") -->
+        </div>
+      </div>
+      <div class='spacer clear'>
+        &nbsp;
+      </div>
+      <div id='sidebar'>
+        <h3><a href="../../index.html"><img alt="Pplogo2" src="../../images/site/pplogo2.png"/></a></h3>
+        <ul class='left'>
+          <li class='home'>
+            <a href="../../index.html">Home</a>
+          </li>
+          <li class='docs'>
+            <a href="../../docs.html">Docs</a>
+          </li>
+          <li class='examples'>
+            <a href="../../examples.html">Examples</a>
+          </li>
+        </ul>
+        <ul class='left'>
+          <li class='community'>
+            <a href="../../community.html">Community</a>
+          </li>
+          <li class='tutorials'>
+            <a href="../../tutorials.html">Tutorials</a>
+          </li>
+          <li class='plugins'>
+            <a href="../../plugins.html">Plugins</a>
+          </li>
+        </ul>
+      </div>
+      <div class='spacer clear'>
+        &nbsp;
+      </div>
+      <div id='content'>
+        <div class='small right'>
+          <a href="../../docs/resources"><< Back to resources</a>
+        </div>
+        <h3>File</h3>
+        The file resource is used to describe a file that should be present on all of the instances.
+        <h3>Usage</h3>
+        <pre class="blackboard"><span class="line-numbers">   1 </span> <span class="Entity">has_file</span>(<span class="Constant"><span class="Constant">:</span>name</span> =&gt; <span class="String"><span class="String">'</span>...<span class="String">'</span></span>) <span class="Keyword">do</span>&#x000A;<span class="line-numbers">   2 </span> <span class="Comment">	<span class="Comment">#</span> More options. </span>&#x000A;<span class="line-numbers">   3 </span> <span class="Comment">	<span class="Comment">#</span> This block is optional</span>&#x000A;<span class="line-numbers">   4 </span> <span class="Keyword">end</span></pre>
+        <h3>Options</h3>
+        <ul>
+          <dt class='option'><a>name</a><dd>Describe the location of the file with the name</dd></dt>
+          <dt class='option'><a>mode</a><dd>Describe the mode of the file (default: 644)</dd></dt>
+          <dt class='option'><a>owner</a><dd>The owner of the file (default: poolparty user)</dd></dt>
+          <dt class='option'><a>content</a><dd>The contents of the file</dd></dt>
+          <dt class='option'><a>source</a><dd>Used to describe a file that is hosted on the master instance.</dd></dt>
+          <p>
+            To write a file to the template directory, use:
+            <pre class="blackboard"><span class="line-numbers">   1 </span> <span class="Entity">copy_template_to_storage_directory</span>(filepath)</pre>
+          </p>
+          <dt class='option'><a>template</a><dd>The file contents are described with the template. The location given must be readable</dd></dt>
+        </ul>
+        <h3>Example</h3>
+        <pre class="blackboard"><span class="line-numbers">   1 </span> <span class="Entity">has_file</span>(<span class="Constant"><span class="Constant">:</span>name</span> =&gt; <span class="String"><span class="String">'</span>/etc/motd<span class="String">'</span></span>, <span class="Constant"><span class="Constant">:</span>content</span> =&gt; <span class="String"><span class="String">'</span>Hey and welcome to your node today!<span class="String">'</span></span>)</pre>
+      </div>
+      <div id='footer'>
+        Copyright 2008 - Ari Lerner & Cloudteam@ATTinteractive
+        <br />
+        <script type='text/javascript'>
+          var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+          document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+        </script>
+        <script type='text/javascript'>
+          var pageTracker = _gat._getTracker("UA-137009-7");
+          pageTracker._trackPageview();
+        </script>
+      </div>
+    </div>
+  </body>
+</html>

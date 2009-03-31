@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>PoolParty!</title>
+    <link href="../stylesheets/application.css" media="all" rel="stylesheet" type="text/css"/><link href="../stylesheets/blackboard.css" media="all" rel="stylesheet" type="text/css"/><link href="../stylesheets/classes.css" media="all" rel="stylesheet" type="text/css"/><link href="../stylesheets/header.css" media="all" rel="stylesheet" type="text/css"/><link href="../stylesheets/navmenu.css" media="all" rel="stylesheet" type="text/css"/><link href="../stylesheets/sunburst.css" media="all" rel="stylesheet" type="text/css"/>
+  </head>
+  <body>
+    <div id='wrapper'>
+      <div id='masthead'>
+        <h2>AT&T Interactive R&D</h2>
+        <div id='external_links'>
+          <!-- =link (img("attir_and_d_logo.gif"), "http://poolpartyrb.com") -->
+        </div>
+      </div>
+      <div class='spacer clear'>
+        &nbsp;
+      </div>
+      <div id='sidebar'>
+        <h3><a href="../index.html"><img alt="Pplogo2" src="../images/site/pplogo2.png"/></a></h3>
+        <ul class='left'>
+          <li class='home'>
+            <a href="../index.html">Home</a>
+          </li>
+          <li class='docs'>
+            <a href="../docs.html">Docs</a>
+          </li>
+          <li class='examples'>
+            <a href="../examples.html">Examples</a>
+          </li>
+        </ul>
+        <ul class='left'>
+          <li class='community'>
+            <a href="../community.html">Community</a>
+          </li>
+          <li class='tutorials'>
+            <a href="../tutorials.html">Tutorials</a>
+          </li>
+          <li class='plugins'>
+            <a href="../plugins.html">Plugins</a>
+          </li>
+        </ul>
+      </div>
+      <div class='spacer clear'>
+        &nbsp;
+      </div>
+      <div id='content'>
+        <h3>Spec shortcuts</h3>
+        <p>
+          There is some pretty sugar that PoolParty gives you for free.
+        </p>
+        <h3>EC2 specific</h3>
+        <ul>
+          <li>
+            mount_ebs_volume_at "vol-4e48ad27", "/vol"
+            <p>
+              You can make sure that your master has the volume vol-4e48ad27 mounted at the location /vol. This way, any and all of your data set in the directory /vol is saved in the Elastic Block Store volume.
+            </p>
+          </li>
+          <li>
+            set_master_ip_to "75.101.162.232"
+            <p>
+              This will tell your master instance to requisition the ip address 75.101.162.232 when it starts up.
+            </p>
+          </li>
+        </ul>
+      </div>
+      <div id='footer'>
+        Copyright 2008 - Ari Lerner & Cloudteam@ATTinteractive
+        <br />
+        <script type='text/javascript'>
+          var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+          document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+        </script>
+        <script type='text/javascript'>
+          var pageTracker = _gat._getTracker("UA-137009-7");
+          pageTracker._trackPageview();
+        </script>
+      </div>
+    </div>
+  </body>
+</html>

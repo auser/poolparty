@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>PoolParty!</title>
+    <link href="../../stylesheets/application.css" media="all" rel="stylesheet" type="text/css"/><link href="../../stylesheets/blackboard.css" media="all" rel="stylesheet" type="text/css"/><link href="../../stylesheets/classes.css" media="all" rel="stylesheet" type="text/css"/><link href="../../stylesheets/header.css" media="all" rel="stylesheet" type="text/css"/><link href="../../stylesheets/navmenu.css" media="all" rel="stylesheet" type="text/css"/><link href="../../stylesheets/sunburst.css" media="all" rel="stylesheet" type="text/css"/>
+  </head>
+  <body>
+    <div id='wrapper'>
+      <div id='masthead'>
+        <h2>AT&T Interactive R&D</h2>
+        <div id='external_links'>
+          <!-- =link (img("attir_and_d_logo.gif"), "http://poolpartyrb.com") -->
+        </div>
+      </div>
+      <div class='spacer clear'>
+        &nbsp;
+      </div>
+      <div id='sidebar'>
+        <h3><a href="../../index.html"><img alt="Pplogo2" src="../../images/site/pplogo2.png"/></a></h3>
+        <ul class='left'>
+          <li class='home'>
+            <a href="../../index.html">Home</a>
+          </li>
+          <li class='docs'>
+            <a href="../../docs.html">Docs</a>
+          </li>
+          <li class='examples'>
+            <a href="../../examples.html">Examples</a>
+          </li>
+        </ul>
+        <ul class='left'>
+          <li class='community'>
+            <a href="../../community.html">Community</a>
+          </li>
+          <li class='tutorials'>
+            <a href="../../tutorials.html">Tutorials</a>
+          </li>
+          <li class='plugins'>
+            <a href="../../plugins.html">Plugins</a>
+          </li>
+        </ul>
+      </div>
+      <div class='spacer clear'>
+        &nbsp;
+      </div>
+      <div id='content'>
+        <div class='small right'>
+          <a href="../../docs/resources"><< Back to resources</a>
+        </div>
+        <h3>Gempackage</h3>
+        Gempackages describe distributed gems on the cloud. The gem is only downloaded once and then hosted on the master if a download url is given.
+        <h3>Usage</h3>
+        <pre class="blackboard"><span class="line-numbers">   1 </span> <span class="Entity">has_gempackage</span>(<span class="Constant"><span class="Constant">:</span>name</span> =&gt; <span class="String"><span class="String">'</span>...<span class="String">'</span></span>) <span class="Keyword">do</span>&#x000A;<span class="line-numbers">   2 </span> <span class="Comment">	<span class="Comment">#</span> More options. </span>&#x000A;<span class="line-numbers">   3 </span> <span class="Comment">	<span class="Comment">#</span> This block is optional</span>&#x000A;<span class="line-numbers">   4 </span> <span class="Keyword">end</span></pre>
+        <h3>Options</h3>
+        <dd>
+          <dt class='option'><a>name</a><dd>The gem name</dd></dt>
+          <dt class='option'><a>download_url</a><dd>The location of the gem to download and server across the instances</dd></dt>
+          <dt class='option'><a>version</a><dd>The gem version requirement (optional and useless if download_url is given)</dd></dt>
+          <dt class='option'><a>source</a><dd>The gem source (optional and useless matter if download_url is given)</dd></dt>
+        </dd>
+        <h3>Examples</h3>
+        <pre class="blackboard"><span class="line-numbers">   1 </span> <span class="Entity">has_gempackage</span>(<span class="Constant"><span class="Constant">:</span>name</span> =&gt; <span class="String"><span class="String">'</span>rake<span class="String">'</span></span>, &#x000A;<span class="line-numbers">   2 </span> 	<span class="Constant"><span class="Constant">:</span>download_url</span> =&gt; <span class="String"><span class="String">'</span>http://rubyforge.org/frs/download.php/43954/rake-0.8.3.gem<span class="String">'</span></span>)</pre>
+      </div>
+      <div id='footer'>
+        Copyright 2008 - Ari Lerner & Cloudteam@ATTinteractive
+        <br />
+        <script type='text/javascript'>
+          var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+          document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+        </script>
+        <script type='text/javascript'>
+          var pageTracker = _gat._getTracker("UA-137009-7");
+          pageTracker._trackPageview();
+        </script>
+      </div>
+    </div>
+  </body>
+</html>
