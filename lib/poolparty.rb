@@ -9,6 +9,8 @@ $LOAD_PATH<< File.dirname(__FILE__)
     @required_software << lib
   end  
 end
+require 'ruby-debug'
+require "pp"
 
 require "#{File.dirname(__FILE__)}/poolparty/helpers/nice_printer"
 
@@ -62,6 +64,7 @@ $_poolparty_load_directories = [
   "core",
   "dependencies.rb",
   "dependency_resolver/dependency_resolver_cloud_extensions.rb",
+  "dependency_resolver/dependency_resolver.rb",
   "poolparty/poolparty_base_class.rb",
   "modules",
   "exceptions",

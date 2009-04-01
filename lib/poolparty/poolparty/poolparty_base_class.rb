@@ -103,7 +103,7 @@ module PoolParty
       !resource(ty).select {|r| r.name == k }.empty? rescue false
     end
     def get_local_resource(ty, k)
-      resource(ty).select {|r| r.resource_name == k }.first
+      resource(ty).select {|r| r.name == k }.first
     end
     
     def get_resource(ty, n, opts={}, &block)

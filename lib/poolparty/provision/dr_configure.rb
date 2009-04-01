@@ -23,6 +23,9 @@ module PoolParty
        self.class.defaults.merge(opts).to_instance_variables(self)
        @target_host = host
        @configurator = "::PoolParty::Provision::#{dependency_resolver.capitalize}".constantize
+       @cloud = opts[:cloud]
+       
+       @cloud.call_before_configure_callbacks if @cloud
        prescribe_configuration
        execute!
      end
@@ -33,9 +36,11 @@ module PoolParty
       ::File.open "/tmp/poolparty/dr_configure/clouds.json", "w" do |f|
         f << cloud.to_properties_hash.to_json rescue debugger
       end
+      
+      pack_up_and_ship_off_suitcase
       setup_configurator
       write_erlang_cookie
-      @configurator.files_to_upload.each {|f| ::File.cp f, "/tmp/poolparty/dr_configure/#{::File.basename(f)}"}
+      @configurator.files_to_upload.each {|f| ::FileUtils.cp f, "/tmp/poolparty/dr_configure/#{::File.basename(f)}"}
             
       rsync "/tmp/poolparty/dr_configure/", "/var/poolparty/dr_configure/" 
       commands << [
@@ -48,6 +53,12 @@ module PoolParty
         'ruby /var/poolparty/dr_configure/erlang_cookie_maker'
         ]
       commands << @configurator.commands
+     end
+     
+     def pack_up_and_ship_off_suitcase
+       ::Suitcase::Zipper.build_dir!("#{Default.tmp_path}/dr_configure")
+       
+       rsync "#{Default.tmp_path}/dr_configure", '/var/poolparty'
      end
      
      def setup_configurator

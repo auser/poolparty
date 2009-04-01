@@ -7,7 +7,7 @@ module PoolParty
   module DependencyResolverCloudExtensions    
     def to_properties_hash
       {
-        :options => options,
+        :options => options.merge(:cloud_name => name),
         :services => services.keys.inject({}) do |sum,k|
           sum.merge!(Hash[k.to_sym, services[k].to_properties_hash] )
         end,
