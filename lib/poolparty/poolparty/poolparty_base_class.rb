@@ -58,11 +58,11 @@ module PoolParty
     end
     # Container for the services
     def services
-      @services ||= {}
+      @services ||= OrderedHash.new
     end
     
     def resources
-      @resources ||= {}
+      @resources ||= OrderedHash.new
     end
     
     # Add resource
