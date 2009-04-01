@@ -4,7 +4,7 @@
 =end
 module PoolParty
   class Base
-    plugin :runit do
+    plugin :poolparty_base_runit do
       
       def enable
         unless enabled

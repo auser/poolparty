@@ -54,7 +54,7 @@ task :compile => ['ebin'] + OBJ
 desc "Rebuild the boot scripts"
 task :build_boot_scripts => [:recompile] do
   puts "Rebuilding boot scripts"
-  @version = "0.1"
+  @version = ENV["VERSION"] || ENV["V"] || 0.1
   cmd = "erl -pa ./ebin/ -run pm_packager recompile_scripts #{@version} -run init stop -noshell"
   Kernel.system cmd
 end

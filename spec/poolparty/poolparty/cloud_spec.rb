@@ -1,11 +1,11 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
-include PoolParty::Cloud
-include PoolParty::Resources
-
-class TestServiceClass
+class TestService
   plugin :test_service do
-    def enable
+    def initialize(o={}, e=nil, &block)
+      super(&block)
+    end
+    def enable(o={})
       has_file(:name => "/etc/poolparty/lobos")
     end                  
   end
@@ -14,7 +14,7 @@ end
 describe "Cloud" do
   before(:each) do
     setup
-    reset_resources!
+    # 
   end
   describe "wrapped" do
     before(:each) do
@@ -38,7 +38,7 @@ describe "Cloud" do
         @cloud1.using_remoter?.should_not == nil
       end
       it "should say the remoter_base is ec2 (by default)" do
-        @cloud1.remote_base.should == PoolParty::Ec2
+        @cloud1.remote_base.class.should == Kernel::Ec2
       end
     end
     it "should return the cloud if the cloud key is already in the clouds list" do
@@ -49,32 +49,44 @@ describe "Cloud" do
       before(:each) do
         reset!
         setup
-        @p = pool :options do
+        pool :options do
+          user "bob"
+          pop_stick true
           minimum_instances 100
-          access_key "access_key"
-          cloud :apple do          
+          access_key "pool_access_key"
+          cloud :apple do
             access_key "cloud_access_key"
           end
         end
-        @c = @p.cloud(:apple)
       end
       it "should be able to grab the cloud from the pool" do
-        @c.should == @p.cloud(:apple)
+        clouds[:apple].should == pools[:options].cloud(:apple)
       end
       it "should take the options set on the pool" do
-        @p.minimum_instances.should == 100
+        pools[:options].minimum_instances.should == 100
       end
       it "should take the access_key option set from the cloud" do
-        @c.access_key.should == "cloud_access_key"
+        clouds[:apple].access_key.should == "cloud_access_key"
+      end
+      it "should take the option pop_stick from the superclass" do
+        clouds[:apple].pop_stick.should == true
+      end
+      it "should take the option testing true from the superclass" do
+        pools[:options].user.should == "bob"
+        clouds[:apple].user.should == "bob"
       end
     end
     describe "block" do
       before(:each) do
         reset!
-        @cloud = Cloud.new(:test, @pool) do
-          # Inside cloud block
-          keypair "fake_keypair"
+        pool :test do
+          Cloud.new(:test) do
+            # Inside cloud block
+            testing true
+            keypair "fake_keypair"
+          end
         end
+        @cloud = cloud :test
         @cloud.stub!(:plugin_store).and_return []
       end
 
@@ -88,19 +100,19 @@ describe "Cloud" do
         end
         cloud(:paddy_wack).parent.should == pool(:knick_knack)
       end
-      it "should have services in an array" do
-        @cloud.services.class.should == Array
+      it "should have services in an hash" do
+        @cloud.services.class.should == Hash
       end
       it "should have no services in the array when there are no services defined" do
         @cloud.services.size.should == 0
       end
-      it "should respond to a configure method" do
-        @cloud.respond_to?(:configure).should == true
+      it "should respond to a options method (from Dslify)" do
+        @cloud.respond_to?(:options).should == true
       end
       describe "configuration" do
         before(:each) do
           reset!
-          @cloud2 = Cloud.new(:test, @pool) do
+          @cloud2 = Cloud.new(:test) do
             minimum_instances 1
             maximum_instances 2
           end
@@ -124,8 +136,8 @@ describe "Cloud" do
           @cloud.minimum_instances.should == 3
         end
         it "should be able to take a hash from configure and convert it to the options" do
-          @cloud.configure( {:minimum_instances => 1, :maximum_instances => 10, :keypair => "friend"} )
-          @cloud.keypair.should == "friend"
+          @cloud.set_vars_from_options( {:minimum_instances => 1, :maximum_instances => 10, :keypair => "friend"} )
+          @cloud.minimum_instances.should == 1
         end
         describe "minimum_instances/maximum_instances as a range" do
           before(:each) do
@@ -152,35 +164,32 @@ describe "Cloud" do
             @c = cloud :app do
               keypair "hotdog"
             end
-            @c.keypair.should == "hotdog"
+            @c.keypairs.first.filepath.should == "hotdog"
           end
           it "should take the pool parent's keypair if it's defined on the pool" do
             pool :pool do
               keypair "ney"
               cloud :app do
               end
-              cloud :group do
-              end
             end
-            pool(:pool).cloud(:app).keypair.should == "ney"
-            pool(:pool).cloud(:group).keypair.should == "ney"
+            clouds[:app]._keypairs.first.stub!(:exists?).and_return true
+            clouds[:app]._keypairs.first.stub!(:full_filepath).and_return "ney"
+            clouds[:app].keypair.full_filepath.should == "ney"
           end
-          it "should generate a keypair based on the cloud name if none is defined" do
+          it "should default to ~/.ssh/id_rsa if none are defined" do
+            File.stub!(:exists?).with("#{ENV["HOME"]}/.ssh/id_rsa").and_return(true)
             pool :pool do
               cloud :app do
               end
-              cloud :nickes do
-              end
             end
-            pool(:pool).cloud(:app).keypair.should == "pool_app"
-            pool(:pool).cloud(:nickes).keypair.should == "pool_nickes"
+            clouds[:app].keypair.full_filepath.should match(/\.ssh\/id_rsa/)
           end
         end
         describe "Manifest" do
           before(:each) do
             reset!
             stub_list_from_remote_for(@cloud)
-            @cloud.instance_eval do
+            @cloud = TestClass.new :test_more_manifest do
               has_file(:name => "/etc/httpd/http.conf") do
                 content <<-EOE
                   hello my lady
@@ -189,22 +198,25 @@ describe "Cloud" do
               has_gempackage(:name => "poolparty")
               has_package(:name => "dummy")            
             end
+            context_stack.push @cloud
           end
           it "should it should have the method build_manifest" do
             @cloud.respond_to?(:build_manifest).should == true
           end
           it "should make a new 'haproxy' class" do
-            @cloud.stub!(:realize_plugins!).and_return true
-            PoolPartyHaproxyClass.should_receive(:new).once
+            PoolpartyBaseHaproxyClass.should_receive(:new).once
             @cloud.add_poolparty_base_requirements
           end
-          it "should have 3 resources" do
+          it "should have 3 resources" do            
             @cloud.add_poolparty_base_requirements
-            @cloud.number_of_resources.should > 2
+            @cloud.services.size.should > 2
           end
           it "should receive add_poolparty_base_requirements before building the manifest" do
             @cloud.should_receive(:add_poolparty_base_requirements).once
             @cloud.build_manifest
+          end
+          after(:each) do
+            context_stack.pop
           end
           describe "add_poolparty_base_requirements" do
             before(:each) do
@@ -212,28 +224,26 @@ describe "Cloud" do
               @cloud.instance_eval do
                 @heartbeat = nil
               end
-              @hb = "heartbeat".class_constant.new(@cloud)
-              @cloud.stub!(:realize_plugins!).and_return []
+              @hb = PoolpartyBaseHeartbeatClass.new
             end
             it "should call initialize on heartbeat (in add_poolparty_base_requirements)" do
-              @cloud.stub!(:realize_plugins!).and_return []
               @hb.class.should_receive(:new).and_return true
               @cloud.add_poolparty_base_requirements
             end
             it "should call heartbeat on the cloud" do
-              @cloud.should_receive(:heartbeat).and_return true
+              @cloud.should_receive(:poolparty_base_heartbeat).and_return true
               @cloud.add_poolparty_base_requirements
             end
             it "should call Hearbeat.new" do
-              "heartbeat".class_constant.should_receive(:new).and_return @hb
+              PoolpartyBaseHeartbeatClass.should_receive(:new).and_return @hb
               @cloud.add_poolparty_base_requirements            
             end
             it "should call enable on the plugin call" do
-              @hb = "heartbeat".class_constant
-              "heartbeat".class_constant.stub!(:new).and_return @hb
+              @hb = PoolpartyBaseHeartbeatClass.new
+              PoolpartyBaseHeartbeatClass.stub!(:new).and_return @hb
               
               @cloud.add_poolparty_base_requirements
-              @cloud.heartbeat.should == @hb
+              @cloud.poolparty_base_heartbeat.should == @hb
             end
             describe "after adding" do
               before(:each) do
@@ -243,18 +253,18 @@ describe "Cloud" do
               it "should add resources onto the heartbeat class inside the cloud" do
                 @cloud.services.size.should > 0
               end
-              it "should store the class heartbeat" do              
-                @cloud.services.map {|a| a.class}.include?("heartbeat".class_constant).should == true
+              it "should store the class heartbeat" do
+                @cloud.services.map {|k,v| k}.include?(:poolparty_base_heartbeat_class).should == true
               end
               it "should have an array of resources on the heartbeat" do
-                @cloud.services.first.resources.class.should == Hash
+                @cloud.services.class.should == Hash
               end
               describe "resources" do
                 before(:each) do
-                  @cloud8 = Cloud.new(:tester, @pool) do     
-                    test_service             
+                  @cloud8 = cloud :tester do
+                    test_service
                   end
-                  @service = @cloud8.services.first
+                  @service = clouds[:tester].services.test_service_class
                   @files = @service.resource(:file)
                 end
                 it "should have a file resource" do
@@ -294,9 +304,6 @@ describe "Cloud" do
             end
             it "should include the poolparty gem" do
               @manifest.should =~ /package \{/
-            end
-            it "should include custom functions" do
-              @manifest.should =~ /define line\(\$file/
             end
           end
           describe "prepare_for_configuration" do
@@ -339,8 +346,8 @@ describe "Cloud" do
             end
             describe "copy_custom_monitors" do
               before(:each) do                
-                Base.stub!(:custom_monitor_directories).and_return ["/tmp/monitors/custom_monitor.rb"]
-                Dir.stub!(:[]).with("#{Base.custom_monitor_directories}/*.rb").and_return ["/tmp/monitors/custom_monitor.rb"]
+                Default.stub!(:custom_monitor_directories).and_return ["/tmp/monitors/custom_monitor.rb"]
+                Dir.stub!(:[]).with("#{Default.custom_monitor_directories}/*.rb").and_return ["/tmp/monitors/custom_monitor.rb"]
                 @cloud.stub!(:copy_misc_templates).and_return true
                 @cloud.stub!(:copy_file_to_storage_directory).and_return true
               end
@@ -360,7 +367,7 @@ describe "Cloud" do
               @cloud.should_receive(:store_keys_in_file).once
             end
             it "should call save! on Script" do
-              Script.should_receive(:save!).with(@cloud).once
+              pending
             end
             it "should copy_ssh_key" do
               @cloud.should_receive(:copy_ssh_key).once
@@ -407,7 +414,7 @@ describe "Cloud" do
             @cloud.respond_to?(:generate_unique_cookie_string).should == true
           end
           it "should call hexdigest to digest/sha" do
-            Digest::SHA256.should_receive(:hexdigest).with("#{@cloud.full_keypair_name}#{@cloud.name}").and_return "blaaaaah"
+            Digest::SHA256.should_receive(:hexdigest).with("#{@cloud.keypair.basename}#{@cloud.name}").and_return "blaaaaah"
             @cloud.generate_unique_cookie_string
           end
           it "should generate the same cookie string every time" do
@@ -421,18 +428,19 @@ describe "Cloud" do
         end
       end
 
-      describe "instances" do
-        before(:each) do
-          @cloud3 = cloud :pop do;keypair "fake_keypair";end
-          stub_list_from_remote_for(@cloud3)
-        end
-        it "should respond to the method master" do
-          @cloud3.respond_to?(:master).should == true
-        end
-        it "should return a master that is not nil" do
-          @cloud3.master.should_not be_nil
-        end
-      end
+      # describe "instances" do
+      #   before(:each) do
+      #     @cloud3 = cloud :pop do;keypair "fake_keypair";end
+      #     stub_list_from_remote_for(@cloud3)
+      #   end
+      #   it "should respond to the method master" do
+      #     @cloud3.master.should_not be_nil
+      #     @cloud3.respond_to?(:master).should == true
+      #   end
+      #   it "should return a master that is not nil" do
+      #     @cloud3.master.should_not be_nil
+      #   end
+      # end
     end
   end
 end

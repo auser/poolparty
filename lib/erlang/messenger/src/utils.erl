@@ -58,7 +58,6 @@ average_for_list(Num, L) ->
 % Provisioning utils
 distribute_modules_to(Modules, Nodes) ->
 	% transfer the modules to all the nodes
-	io:format("Sending ~p to ~p~n", [Modules, Nodes]),
 	lists:foreach(fun(Node) ->
 			transfer_modules(Node, Modules)
 	end, Nodes).

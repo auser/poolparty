@@ -5,7 +5,7 @@ Dir["#{::File.dirname(__FILE__)}/../lib/poolparty/modules/*.rb"].each {|f| requi
 require "poolparty/base"
 
 def query(meth, *args)
-  socket = TCPSocket.open("127.0.0.1", PoolParty::Base.agent_port)
+  socket = TCPSocket.open("127.0.0.1", PoolParty::Default.agent_port)
   out = socket.send("#{meth} #{args}", 100)
   socket.close
   out

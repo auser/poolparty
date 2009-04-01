@@ -9,25 +9,32 @@ module PoolParty
     
     virtual_resource(:git_repos) do
       
-      def loaded(opts={}, parent=self, &block)
-        has_git
-        has_git_repos
+      def loaded(opts={}, &block)        
+        # opts.has_key?(:at) ? at(opts.delete(:at)) : raise(Exception.new("You must include a directory for the git repos set by :at"))
+        # opts.has_key?(:source) ? git_repos(opts.delete(:source) || opts[:name]) : raise(Exception.new("You must include the git source set by :source"))        
+        has_package("git-core")
+        has_git_repository
       end
-            
-      def has_git_repos        
-        has_exec({:name => key, :requires => [get_directory("#{working_dir}"), get_package("git-core")] }) do
-          command requires_user ? "git clone #{requires_user}@#{source} #{working_dir}" : "cd #{working_dir} && git clone #{source}"
+
+      def has_git_repository
+        has_exec(:name => "git-#{name}", :requires => [get_directory("#{working_dir}"), get_package("git-core")] ) do
+          # Cloud, GitRepos, Exec
+          command parent.requires_user? ? "git clone #{requires_user}@#{source} #{working_dir}" : "cd #{working_dir} && git clone #{source}"
           cwd "#{working_dir if working_dir}"
           creates creates_dir
         end
-        has_exec(:name => "update-#{name}") do
-          cwd ::File.dirname( creates_dir )
+        has_exec(:name => "update-#{name}", :cwd => ::File.dirname( creates_dir )) do          
           command "git pull"
         end                
       end
       
+      def git_repos(src)
+        source src
+      end
+      
       def at(dir)
         working_dir dir
+        has_directory(::File.dirname(dir))
         has_directory(:name => "#{dir}", :requires => get_directory("#{::File.dirname(dir)}"))
       end
       
@@ -43,12 +50,6 @@ module PoolParty
       # it is using to be able to require it
       def class_type_name
         "exec"
-      end
-      
-      # Because we are requiring an exec, instead of a built-in package of the git, we have to overload
-      # the to_s method and prepend it with the same name as above
-      def key
-        "git-#{name}"
       end
       
     end

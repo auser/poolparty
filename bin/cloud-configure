@@ -1,17 +1,22 @@
 #!/usr/bin/env ruby
 $:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
 require "poolparty"
-require "poolpartycl"
+# require "poolpartycl"
+
 
 o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
   optioner.cloudnames
   # optioner.daemonizeable
 end
 
-o.loaded_clouds.each do |cloud|
+o.loaded_clouds.each do |cld|
   
-  with_cloud(cloud) do
-    verbose ? provisioner_for(master).configure(testing) : hide_output { provisioner_for(master).configure(testing) }
-    cleanup_storage_directory unless testing
-  end    
+  # If an IP or DNS name is given, configure that node, otherwise, configure all running nodes.
+  nodes = !o.unflagged_args.empty? ?  o.unflagged_args : cld.remote_instances_list.collect {|inst| inst.ip if inst.running? }.compact
+  nodes.each do |address|
+    puts "configuring: #{address}"
+    ::PoolParty::Provision::DrConfigure.new( address, 
+                                             :full_keypair_path => cld.keypair.full_filepath, 
+                                             :cloud => cld )
+  end
 end

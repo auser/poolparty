@@ -17,11 +17,7 @@ module PoolParty
       puts ""
       pools.size
     end
-    
-    def available_bases
-      remote_bases
-    end
-    
+        
     def header(str="")
       "*** #{str}"
     end

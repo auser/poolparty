@@ -11,9 +11,15 @@ require "ftools"
 module PoolParty
   module CloudResourcer
     
-    def plugin_directory(*args)
-      args = ["#{::File.expand_path(Dir.pwd)}/plugins"] if args.empty?
-      args.each {|arg| Dir["#{arg}/*/*.rb"].each {|f| require f }}
+    def plugin_directory(arr=[])
+      arr = [arr] if arr.is_a?(String)
+      arr << [
+        "#{::File.expand_path(Dir.pwd)}/plugins",
+        "#{::File.expand_path(Default.poolparty_home_path)}/plugins"
+      ]
+      arr.flatten.each {|arg|    
+        Dir["#{arg}/*/*.rb"].each {|f| require f } if ::File.directory?(arg)
+      }
     end
     
     # Store block
@@ -32,7 +38,7 @@ module PoolParty
     end
     
     # Set instances with a range or a number
-    def instances(arg)      
+    def instances(arg)
       case arg
       when Range
         minimum_instances arg.first
@@ -46,119 +52,56 @@ module PoolParty
     end
     
     def setup_dev
-      return true if ::File.exists?("#{remote_keypair_path}") || master.nil?
-      # unless ::File.exists?("#{full_keypair_basename_path}.pub")
-      #   cmd = "scp #{scp_array.join(" ")} #{Base.user}@#{master.ip}:.ssh/authorized_keys #{full_keypair_basename_path}.pub"
-      #   vputs "Running #{cmd}"
-      #   if %x[hostname].chomp == "master"
-      #     Kernel.system("cat ~/.ssh/authorized_keys > #{full_keypair_basename_path}.pub")
-      #   else
-      #     Kernel.system(cmd)
-      #   end
-      # end
+      return true if keypair || master.nil?
+    end
+    
+    def using(t)
+      @cloud = self
+      if t && self.class.available_bases.include?(t.to_sym)
+        unless using_remoter?
+          self.class.send :attr_reader, :remote_base
+          self.class.send :attr_reader, :parent_cloud
+          klass_string = "#{t}".classify
+          klass = "::PoolParty::Remote::#{klass_string}".constantize
+          @remote_base = klass.send :new, self
+          options[:remote_base] = klass.to_s if respond_to?(:options)
+                    
+          remote_instance_klass = "::PoolParty::Remote::#{klass_string}RemoteInstance"
+          options[:remote_instance_base] = remote_instance_klass if respond_to?(:options)
+          
+          @parent_cloud = @cloud
+          instance_eval "def #{t};@remote_base;end;"
+        end
+      else
+        puts "Unknown remote base" 
+      end
+    end
+    
+    def using_remoter?
+      @remote_base
     end
     
     # Keypairs
+    # Use the keypair path
     def keypair(*args)
-      if args && !args.empty? && !has_keypair?
-        options[:keypair] = args.first
+      if args && !args.empty?
+        args.each {|arg| _keypairs.unshift Key.new(arg) }
       else
-        options[:keypair] ||= generate_keypair
+        _keypairs.select {|key| key.exists? }.first
       end
     end
-        
-    # Let's just make sure that the keypair exists on the options
-    def has_keypair?
-      options.has_key?(:keypair) && options[:keypair] && !options[:keypair].empty?
-    end
-    # Generate a keypair based on the parent's name (if there is a parent)
-    # and the cloud's name
-    def generate_keypair(*args)
-      options[:keypair] = "#{parent && parent.is_a?(PoolParty::Pool::Pool) ? parent.name : "poolparty"}_#{name}" unless has_keypair?
+    
+    alias :set_keypairs :keypair
+    
+    def _keypairs
+      dsl_options[:keypairs] ||= [Key.new]
     end
     
-    def full_keypair_path
-      unless keypair_path
-        raise RuntimeException.new("Keypair cannot be found")        
-      else
-        ::File.expand_path(keypair_path)
-      end
-    end
-    def full_keypair_basename_path
-      dir = ::File.dirname(full_keypair_path)
-      basename = ::File.basename(full_keypair_path, ::File.extname(full_keypair_path))
-      ::File.join(dir, basename)
+    def full_keypair_path      
+      @full_keypair_path ||= keypair.full_filepath
     end
     
-    def keypair_path
-      keypair_paths.each do |path|
-        possible_keypair_basenames.each do |base|
-          full_path = ::File.join( File.expand_path(path), "#{base}#{keypair}")
-          return full_path if ::File.exists?(full_path)
-        end
-      end
-      return nil
-    end
-    
-    # The keypair name can be one name or another including id_rsa or not
-    # So let's get the name that exists as a keypair
-    def full_keypair_name
-      keypair_paths.each do |path|
-        possible_keypair_basenames.each do |base|
-          full_path = ::File.join( File.expand_path(path), "#{base}#{keypair}")
-          return "#{base}#{keypair}" if ::File.exists?(full_path)
-        end
-      end
-      return nil
-    end
-    
-    def remote_keypair_path
-      ::File.join( keypair_paths.last, "#{possible_keypair_basenames.first}#{keypair}" )
-    end
-    def new_keypair_path
-      ::File.join( keypair_paths.first, "#{possible_keypair_basenames.first}#{keypair}" )
-    end
-    
-    def possible_keypair_basenames
-      [
-        "id_rsa-",
-        ""
-      ]
-    end
-    
-    def keypair_paths
-      [
-        Base.base_keypair_path,
-        Base.base_config_directory,
-        Base.remote_storage_path,
-        Dir.pwd
-      ]
-    end
-    
-    def context_stack
-      @@context_stack ||= []
-    end
-    
-    def run_setup(parent, should_set_parent=true, &block)
-      context_stack.push parent
-      
-      set_parent if should_set_parent
-      run_in_context self, &block if block
-      
-      context_stack.pop
-    end
-    
-    # Set the parent on the resource
-    def set_parent(sink_options=true)
-      unless context_stack.last.nil?
-        @parent = context_stack.last
-        # Add self as a service on the parent
-        parent.add_service(self) if parent.respond_to?(:add_service)
-        # Take the options of the parents
-        configure(parent.options) if parent && parent.respond_to?(:options) && sink_options
-      end
-    end
-            
+    # TODO: deprecate
     def number_of_resources
       arr = resources.map do |n, r|
         r.size
@@ -166,20 +109,13 @@ module PoolParty
       resources.map {|n,r| r.size}.inject(0){|sum,i| sum+=i}
     end
     
-    def parent
-      @parent ||= nil
-    end
-    
     def plugin_store
       @plugin_store ||= []
     end
     
+    # TODO: deprecate
     def realize_plugins!(force=false)
-      plugin_store.each {|plugin| plugin.realize!(force) if plugin }
-    end
-    
-    def plugin_store
-      @plugins ||= []
+      plugin_store.each {|plugin| puts "plugin: #{plugin}";plugin.realize!(force) if plugin }
     end
     
   end

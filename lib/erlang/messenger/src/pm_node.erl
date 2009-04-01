@@ -38,7 +38,7 @@
 
 % Get the load for the type sent...
 get_current_load_for_type(Type) ->
-	String = string:concat(". /etc/profile && server-get-load -m ",Type),
+	String = string:concat(". /etc/profile && server-get-load ",Type),
 	LatestLoad = os:cmd(String), 
 	Load = gen_server:call(server_location(), {update_load, Type, LatestLoad}),
 	{Load}.

@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+
+require "fileutils"
+if !::File.file?("/root/.erlang.cookie")
+  ::FileUtils.cp "/var/poolparty/dr_configure/.erlang.cookie", "/root/.erlang.cookie" 
+end

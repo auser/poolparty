@@ -1,0 +1,9 @@
+[submodule "vendor/gems/parenting"]
+	path = vendor/gems/parenting
+	url = git://github.com/auser/parenting.git
+[submodule "vendor/gems/dslify"]
+	path = vendor/gems/dslify
+	url = git://github.com/auser/dslify.git
+[submodule "vendor/gems/suitcase"]
+	path = vendor/gems/suitcase
+	url = git://github.com/auser/suitcase.git

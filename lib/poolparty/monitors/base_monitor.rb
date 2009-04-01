@@ -29,7 +29,7 @@
   Notice that at the end, you must call register_monitor :monitorname. This will tell your cloud
   that it can monitor it with this monitor.
 =end
-require "#{::File.dirname(__FILE__)}/../poolparty/base"
+require "#{::File.dirname(__FILE__)}/../poolparty/default"
 
 module PoolParty
   module Monitors    
@@ -78,12 +78,4 @@ end
 # Require included monitors
 Dir["#{File.dirname(__FILE__)}/monitors/*.rb"].each {|f| require f}
 # Require custom monitors
-Dir["#{PoolParty::Base.custom_monitor_directories}/*.rb"].each {|f| require f}
-
-module PoolParty
-  module Cloud
-    class Cloud
-      include PoolParty::Monitors
-    end
-  end
-end
+Dir["#{PoolParty::Default.custom_monitor_directories}/*.rb"].each {|f| require f}
