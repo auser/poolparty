@@ -2,6 +2,7 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe "ChefResolver" do
   before :all do
+    reset!
     @cloud_reference_hash = {
       :options => {:name => "dog", :keypair => "bob", :users => ["ari", "michael"]},
       :resources => {
@@ -52,7 +53,7 @@ describe "ChefResolver" do
     
     describe "resources" do
       it "should print resources in the proper layout" do
-        @compiled.should =~ /file "\/etc\/motd" do/
+        @compiled.should =~ /template "\/etc\/motd" do/
       end
     end
     

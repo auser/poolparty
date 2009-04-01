@@ -294,7 +294,7 @@ describe "Cloud" do
               @manifest.class.should == String
             end
             it "should have a comment of # file in the manifest as described by the has_file" do
-              @manifest.should =~ /file \"\/etc\/httpd\/http.conf\" do/
+              @manifest.should =~ /template \"\/etc\/httpd\/http.conf\" do/
             end
             it "should have the comment of a package in the manifest" do
               @manifest.should =~ /package "dummy" do/
