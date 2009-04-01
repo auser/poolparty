@@ -26,7 +26,7 @@ module PoolParty
     def pretty_options(pre, o)
       return "" unless o.respond_to?(:options)
       print_options = (o.respond_to?(:parent) && o.parent && o.parent.respond_to?(:options)) ? 
-        (o.options.delete_if {|k,v| o.parent.options.has_key?(k) && o.parent.options[k] == o.options[k] && !o.options[k].nil? } ) : 
+        (o.dsl_options.delete_if {|k,v| o.parent.dsl_options.has_key?(k) && o.parent.options[k] == o.options[k] && !o.options[k].nil? } ) : 
         o.options
       print_options = print_options.map {|k,v| [k, o.send(k.to_sym).to_s] }.inject({}) { |r,e| r[e[0]] = e[1] unless o.class.default_options[e[0]] == e[1] || e[1].nil? || e[1].empty?; r }
       print_options.flush_out("#{pre}\t")

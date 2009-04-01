@@ -1,6 +1,8 @@
 $:.unshift(File.dirname(__FILE__) + '/../../lib')
 require 'poolparty'
 
+# TODO: FIX THE STUBS
+# %w(context matchy).each do |library|
 %w(spec).each do |library|
   begin
     require library
@@ -12,33 +14,78 @@ end
 # Dir["#{File.dirname(__FILE__)}/helpers/**"].each {|a| require a}
 
 ENV["POOL_SPEC"] = nil
+ENV["AWS_ACCESS_KEY"] = 'fake_access_key'
+ENV["AWS_SECRET_ACCESS_KEY"] = 'fake_aws_secret_access_key'
 
 include PoolParty
 extend PoolParty
 
-def debugging
-  false
-end
-def are_too_many_instances_running?  
-end
-def are_any_nodes_exceeding_minimum_runtime?  
-end
-def are_too_few_instances_running?
+def debugging(*args); false; end
+def are_too_many_instances_running?; end
+def are_any_nodes_exceeding_minimum_runtime?; end
+def are_too_few_instances_running?; end
+
+include Remote
+require File.dirname(__FILE__)+'/net/remoter_bases/ec2_mocks_and_stubs.rb'
+
+# Append this directory - which contains a mock key named id_rsa - to the list of searchable locations 
+class Key
+  class << self
+    alias :keypair_paths_without_spec_dir :keypair_paths unless method_defined?(:keypair_paths_without_spec_dir)
+    def keypair_paths
+      [keypair_paths_without_spec_dir, File.dirname(__FILE__)].flatten
+    end
+  end
+  
 end
 
-class TestClass < PoolParty::Cloud::Cloud
+class TestRemoterClass < ::PoolParty::Remote::Ec2
   include CloudResourcer
+  include CloudDsl
+  
+  def ami;"ami-abc123";end
+  def size; "small";end
+  def security_group; "default";end
+  def ebs_volume_id; "ebs_volume_id";end
+  def availabilty_zone; "us-east-1a";end
+  def verbose; false; end
+  def debugging; false; end
+  def ec2
+    @ec2 ||= EC2::Base.new( :access_key_id => "not_an_access_key", :secret_access_key => "not_a_secret_access_key")
+  end
+  def describe_instances(o={})
+    response_list_of_instances
+  end
+end
+
+class TestClass < ::PoolParty::Cloud::Cloud
+  include CloudResourcer
+  include PoolParty::Remote
   attr_accessor :parent
-  def initialize(&block)
-    super :test_cloud, nil, &block
+  def initialize(name=:name, &block)
+    super :test_cloud, &block
   end
-  def keypair
-    "fake_keypair"
+  def verbose
+    false
   end
+end
+class TestCloud < TestClass  
+end
+
+class TestBaseClass < PoolParty::PoolPartyBaseClass
 end
 
 def setup
-  PoolParty::Messenger.stub!(:messenger_send!).and_return false
+  PoolParty::Messenger.stub!(:messenger_send!).and_return false  
+end
+
+def new_test_cloud(force_new=false)
+  unless @test_cloud || force_new
+    @test_cloud = TestCloud.new("test_cloud_#{rand(10000)}")
+    stub_list_from_remote_for @test_cloud
+    @test_cloud.stub!(:describe_instances).and_return response_list_of_instances
+  end
+  @test_cloud
 end
 
 def setup_cl
@@ -93,9 +140,17 @@ def stub_list_from_local_for(o)
 
   @ris = @list.split(/\n/).map {|line| PoolParty::Remote::RemoteInstance.new(line) }
 end
-def stub_remoter_for(o)
-  o.stub!(:ec2).and_return EC2::Base.new( :access_key_id => "not a key",  :secret_access_key => "even more not a key")
+def stub_remoter_for(o)  
+  @ec2 = EC2::Base.new( :access_key_id => "not a key",  :secret_access_key => "even more not a key")
+  EC2::Base.stub!(:new).and_return @ec2
+  
+  o.class.stub!(:ec2).and_return @ec2 
   o.stub!(:list_of_running_instances).and_return sample_instances
+  
+  o.stub!(:list_of_instances).and_return sample_instances
+  @ec2.stub!(:run_instances).and_return true
+  @ec2.stub!(:describe_instances).and_return sample_instances
+  @ec2.stub!(:describe_instance).and_return sample_instances
 end
 def stub_list_from_remote_for(o, launch_stub=true)
   stub_remoter_for(o)
@@ -109,8 +164,6 @@ def stub_list_from_remote_for(o, launch_stub=true)
   stub_remoting_methods_for(o)
 end
 def stub_remoting_methods_for(o)
-  o.stub!(:keypair).and_return "fake_keypair"
-  o.stub!(:keypair_path).and_return "~/.ec2/fake_keypair"
   o.stub!(:other_clouds).and_return []
   o.stub!(:expand_when).and_return "cpu > 10"
   o.stub!(:copy_file_to_storage_directory).and_return true
@@ -125,20 +178,26 @@ def stub_remoting_methods_for(o)
   o.stub!(:can_expand_cloud?).and_return false
 end
 def stub_list_of_instances_for(o)  
-  # o.stub!(:list_of_running_instances).once.and_return running_remote_instances
-  o.stub!(:keypair).and_return "fake_keypair"
-  o.stub!(:describe_instances).and_return response_list_of_instances
+  o.stub!(:list_of_running_instances).once.and_return running_remote_instances
+  # o.stub!(:describe_instances).and_return response_list_of_instances
+end
+
+def stub_running_remote_instances(o)
+  o.stub!(:list_of_running_instances).and_return(running_remote_instances.map {|h| PoolParty::Remote::RemoteInstance.new(h) })
 end
 
 def response_list_of_instances(arr=[])
   unless @response_list_of_instances
     @a1 = stub_instance(1); 
     @a1[:name] = "master"
-    @a2 = stub_instance(1); @a3 = stub_instance(2, "terminated"); @a4 = stub_instance(3, "pending")
-    @b1 = stub_instance(4, "shutting down", "blist"); @c1 = stub_instance(5, "pending", "clist")
+    @a2 = stub_instance(1); 
+    @a3 = stub_instance(2, "terminated"); 
+    @a4 = stub_instance(3, "pending")
+    @b1 = stub_instance(4, "shutting down", "blist"); 
+    @c1 = stub_instance(5, "pending", "clist")
     @response_list_of_instances = [@a1, @a2, @a3, @a4, @b1, @c1]
   end
-  @response_list_of_instances
+  @response_list_of_instances+arr
 end
 
 def running_remote_instances
@@ -179,4 +238,26 @@ class Object
   def messenger_send!(*args)
     true
   end
+end
+
+class Object
+  def to_html_list
+    str = ''
+    str << "<ul>"
+    str << self.collect {|k,v| 
+      "<li>#{k} => #{(v.instance_of?(Hash) || v.instance_of?(Array)) ? v.to_html_list : v.inspect}</li> "
+      }.join(" ")
+    str << "</ul>"
+  end
+end
+
+class Array 
+    def to_html_list
+         str =''
+        str<< "<ul class='array'>"
+        str<< self.collect {|v| 
+          "<li>#{(v.is_a?(Array) || v.is_a?(Hash)) ? v.to_html_list : v.inspect}</li>"
+          }.join(' ')
+        str<<"</ul>"
+    end
 end

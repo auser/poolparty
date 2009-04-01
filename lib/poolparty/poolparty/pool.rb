@@ -2,8 +2,8 @@ module PoolParty
   module Pool
     
     def pool(name=:app, &block)
-      pools.has_key?(name) ? pools[name] : (pools[name] = Pool.new(name, &block))
-    end    
+      pools[name] ||= Pool.new(name, &block)
+    end
     
     def pools
       $pools ||= {}
@@ -23,40 +23,39 @@ module PoolParty
       $pools = $clouds = $plugins = @describe_instances = nil
     end
 
-    class Pool
-      # include PoolParty::Cloud
-      include MethodMissingSugar
-      # include PluginModel
-      include Configurable
+    class Pool < PoolParty::PoolPartyBaseClass
       include PrettyPrinter
       include CloudResourcer
       include Remote
       
-      default_options({
-        :access_key => Base.access_key,
-        :secret_access_key => Base.secret_access_key
-      })
+      default_options Default.default_options
       
       def initialize(name,&block)
-        set_pool_specfile get_latest_caller        
-        setup_defaults
         @pool_name = name
         @pool_name.freeze
-        # run_in_context &block if block
-        run_setup(self, &block)        
+        
+        ::PoolParty.context_stack.clear
+        
+        set_pool_specfile get_latest_caller
+        setup_defaults
+
+        super(&block)
       end
-      
-      def name
-        @pool_name
+      def self.load_from_file(filename=nil)
+        # a = new ::File.basename(filename, ::File.extname(filename))
+        File.open(filename, 'r') do |f|
+          instance_eval f.read
+        end
+        # a
       end
+      def name(*args)
+        @pool_name ||= @pool_name ? @pool_name : (args.empty? ? :default_pool : args.first)
+      end
+
+      def parent;nil;end
       
-      def setup_defaults
-        plugin_directory "#{pool_specfile ? ::File.dirname(pool_specfile) : Dir.pwd}/plugins"
+      def setup_defaults        
         PoolParty::Extra::Deployments.include_deployments "#{Dir.pwd}/deployments"
-      end
-            
-      # This is where the entire process starts
-      def inflate
       end
       
       def pool_clouds

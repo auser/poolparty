@@ -23,9 +23,24 @@ describe "Array" do
       @array.to_os
     end
   end
-  describe "to_option_string" do
-    it "should map the to_option_strings in an array of strings" do
-      ["hi", "be"].to_option_string.should == "[ 'hi', 'be' ]"
+  require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+
+  describe "select_with_hash" do
+    before(:all) do
+      @remote_instances_list =[
+        {:status=>'running', :ip=>'10'}, 
+        {:status => 'pending', :ip=>'not.assigned'}, 
+        {:status=>'running', :ip=>'192', :bogus=>nil} 
+      ]
+    end
+    it "should return the selected array" do
+        @remote_instances_list.select_with_hash( {:status => 'running'}).size.should == 2
+        @remote_instances_list.select_with_hash( {:ip => 'not.assigned'}).should == [{:status => 'pending', :ip=>'not.assigned'},]
+        @remote_instances_list.select_with_hash( {:bogus => nil}).size.should == 1
+        @remote_instances_list.select_with_hash().size.should == 0
+    end
+    it "should not raise an error if element does not have key" do
+      @remote_instances_list.select_with_hash( {:snot => 'runny'}).size.should == 0
     end
   end
 end

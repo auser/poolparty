@@ -1,0 +1,21 @@
+#!/usr/bin/env ruby
+$:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
+require "poolparty"
+require "poolparty/provision/boot_strapper"
+
+o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
+  opts.on('-n cloudname', '--name name', 'Start cloud by this name')    { |c| optioner.cloudname c }
+end
+
+o.loaded_clouds.each do |cld|
+  # If an IP or DNS name is given, bootstrap that node, otherwise, bootstrap all running nodes.
+  nodes = !o.unflagged_args.empty? ?  o.unflagged_args : cld.running_instance_ips
+  if nodes.empty?
+    puts "No nodes to bootstrap"
+  else
+    nodes.each do |address|
+      puts "\nBootStrapping: #{address}\n--------------------"
+      ::PoolParty::Provision::BootStrapper.new address, {:full_keypair_path => cld.keypair.full_filepath, :cloud => cld}
+    end
+  end
+end

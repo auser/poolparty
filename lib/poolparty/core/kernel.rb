@@ -27,20 +27,24 @@ module Kernel
   def as(klass_or_obj, &block)
     block.in_context(klass_or_obj).call
   end
-  def load_p(dir)
-    Dir["#{dir}/*.rb"].sort.each do |file|
-      require "#{file}" if ::FileTest.file?(file)
-    end
-    Dir["#{dir}/*"].sort.each do |dir|
-      load_p(dir) if ::FileTest.directory?(dir)
-    end
-  end
   def with_warnings_suppressed
     saved_verbosity = $-v
     $-v = nil
     yield
   ensure
     $-v = saved_verbosity
+  end
+  
+  def capture_stdout(&block)
+     old_stdout = $stdout
+     out = StringIO.new
+     $stdout = out
+     begin
+        block.call if block
+     ensure
+        $stdout = old_stdout
+     end
+     out.string
   end
 
   #redirect stdout and stderr to /dev/null and reopen after block

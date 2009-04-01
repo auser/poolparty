@@ -14,7 +14,7 @@ describe "Option Parser" do
       @op.verbose.should == false
     end
     it "should call a method called on it that is not defined on the options if they exist" do
-      @op.options.should_receive(:[]).with(:verbose).once.and_return true
+      @op.dsl_options.should_receive(:[]).with(:verbose).at_least(1).and_return true
       @op.verbose
     end
     it "should exit after displaying the help message" do

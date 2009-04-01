@@ -17,7 +17,7 @@ module PoolParty
         $cap_clouds[name] = cld
         @cloud = cld
         instance_eval <<-EOE
-  ssh_options[:keys] = [ '#{cld.full_keypair_basename_path}' ]
+  ssh_options[:keys] = [ '#{cld.full_keypair_path}' ]
   set :user, '#{cld.user}'
   set :username, "#{cld.user}"
   ssh_options[:forward_agent] = true
@@ -33,6 +33,7 @@ module PoolParty
       set_cloud(name)
     end
     
+    # Get the master ip for the cloud to set in the deploy.rb file
     def cloud_master(name)
       get_cloud(name).ip
     end

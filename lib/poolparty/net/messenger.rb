@@ -9,7 +9,7 @@ module PoolParty
     def with_socket(testing=false, &block)
       host = testing ? "localhost" : (master.ip)
       vputs "Pinging #{host} with the messenger"
-      socket = TCPSocket.open(host, Base.messenger_client_port)
+      socket = TCPSocket.open(host, Default.messenger_client_port)
       out = yield(socket)
       socket.close
       out
@@ -51,22 +51,5 @@ module PoolParty
       # testing ? command : %x[#{command}]
     end
     
-  end
-end
-
-module PoolParty
-  module Cloud
-    class Cloud
-      include PoolParty::Messenger
-      
-      def get_current_nodes
-        nodes = messenger_send!("get_current_nodes")
-        nodes.split(" ").map {|a| a.split(/@/)[-1] }
-      end
-      
-      def reconfigure_cloud!(msg="force_reconfig")
-        messenger_cast!(msg)
-      end
-    end
   end
 end

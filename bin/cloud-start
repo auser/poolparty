@@ -1,32 +1,36 @@
 #!/usr/bin/env ruby
 $:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
 require "poolparty"
-require "poolpartycl"
 
-o = PoolParty::Optioner.new(ARGV) do |opts, optioner|  
-  optioner.cloudnames
-  optioner.daemonizeable
+o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
+  opts.on('-n cloudname', '--name name', 'Start cloud by this name')    { |c| optioner.cloudname c }
 end
 
-o.loaded_clouds.each do |cloud|
-  with_cloud(cloud) do
-    setup_dev
-    vputs header("Starting cloud #{name}")
-    vputs "#{list_of_running_instances.size} running instances (#{minimum_instances} - #{maximum_instances})"
-    # if list_of_running_instances.size <= 1
-      puts "Starting the master instance"    
-      # if testing
-      #   puts("\tNot launching while in testing mode")
-      # else
-        vputs "Launching and configuring the master"
-        @cl = self
-        daemon ? daemonize {@cl.launch_and_configure_master!} : launch_and_configure_master!
-      # end
+o.loaded_clouds.each do |cld|
+  if cld.list_of_running_instances.size.zero?
+    puts header("Starting cloud #{cld.name}")
+    puts "#{cld.list_of_running_instances.size} running instances (#{cld.minimum_instances} - #{cld.maximum_instances})"
+    
+    inst = cld.launch_instance!
+    # unil inst.ip do 
+    #   sleep 2
+    #   node = cld.remote_instances_list.select {|i| i.running? }
     # end
-    when_no_pending_instances do
-      puts open(::File.join(File.dirname(__FILE__), "..", "lib", "poolparty", "config", "postlaunchmessage.txt")).read ^ {:master_ip => master.ip.chomp}
-      clear_base_directory unless testing
+    
+    cld.when_no_pending_instances do
+      cld.remote_instances_list.select {|i| i.running? }.each do |node|
+        ::PoolParty::Provision::BootStrapper.new(node.ip, :full_keypair_path => cld.keypair.full_filepath, :cloud => cld)
+        ::PoolParty::Provision::DrConfigure.new(node.ip,  :full_keypair_path => cld.keypair.full_filepath, :cloud => cld)
+      end
+
+      first_inst = cld.remote_instances_list.select {|i| i.running? }.first
+      puts <<-EOM
+        Your cloud has started. Your ip is #{first_inst.ip}
+      EOM
     end
+  else
+    puts <<-EOE
+      Your cloud is already running.
+    EOE
   end
-  
 end

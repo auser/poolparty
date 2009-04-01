@@ -13,7 +13,7 @@ o.loaded_clouds.each do |cloud|
     
     list_of_running_instances.each do |inst|
       puts "Shutting down #{inst.instance_id}"
-      terminate_instance!(inst.instance_id)
+      terminate_instance!(:instance_id => inst.instance_id)
     end
     
   end    
