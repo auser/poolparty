@@ -15,10 +15,10 @@ module PoolParty
         nil
       end
       
-      def key
-        options[:name] || options[:command]
+      def after_create
+        options[:name] = options[:command] unless options.has_key?(:name)
       end
-                  
+
     end
     
   end
