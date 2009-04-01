@@ -14,7 +14,7 @@ describe "Remote Instance" do
       @compiled = PuppetResolver.new(@tc.to_properties_hash).compile
     end
     it "should have the line in the file from PuppetResolver" do
-      @compiled.should match(/grep -q "hi" ho/)
+      @compiled.should match(/grep -q 'hi' ho/)
     end
   end
 end
