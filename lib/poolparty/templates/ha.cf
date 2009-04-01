@@ -6,7 +6,7 @@ initdead 60 # Don't boot instances between 60 seconds of each other
 logfacility daemon         # Log to syslog as facility "daemon"
 auto_failback on
 use_logd yes
-crm yes
+bcast eth0
 
 <% ha_node_ips.chomp.split(/\t/).each_with_index do |ip,index| -%>
   <% if hostname != ha_nodenames.chomp.split(/\t/)[index] -%>

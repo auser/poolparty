@@ -47,16 +47,16 @@ describe "Rules" do
     @car.names.to_s.should == "'x > 0', 'y > 0', 'x > y'"
   end
   it "should be able to say that rules are defined when they are defined" do
-    @car.names.should_not be_nil
+    @car.names.should_not == nil
   end
-  it "should be able tos ay that rules are not defined when they are not defined" do
-    @car.look_up_rules(:cars_and_wheels).should be_empty
+  it "should be able to say that rules are not defined when they are not defined" do
+    @car.look_up_rules(:cars_and_wheels).empty?.should == true
   end
   it "should be able to say if the rules are not rules" do
-    @car.are_rules?(:cars_and_wheels).should be_false
+    @car.are_rules?(:cars_and_wheels).should == false
   end
   it "should be able to say that rules are rules" do
-    @car.are_rules?(:names).should be_true
+    @car.are_rules?(:names).should == true
   end
   describe "parsing" do
     it "should be able to parse the x > 0 into an array" do

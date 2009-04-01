@@ -30,7 +30,7 @@ o.loaded_clouds.each do |cloud|
     if testing
       puts new_hosts_listing
     else
-      new_hosts_file = "#{Base.manifest_path}/classes/hosts.pp"
+      new_hosts_file = "#{Default.manifest_path}/classes/hosts.pp"
       
       arr = returning Array.new do |arr|
         new_hosts_listing.split(/\n/).each do |line|

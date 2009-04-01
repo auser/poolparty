@@ -1,16 +1,20 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
-class TestClass
-  include PoolParty::Resources
-end
 describe "Remote Instance" do
   before(:each) do
-    @tc = TestClass.new
+    @tc = TestBaseClass.new do
+    end
   end
-  it "should be a string" do
-    @tc.has_line_in_file("hi", "ho").to_string.should =~ /line \{/
+  it "should have the method has_line_in_file available on the class" do
+    @tc.respond_to?(:has_line_in_file).should == true
   end
-  it "should included the flushed out options" do
-    @tc.has_line_in_file("hi", "who", {:name => "finger"}).to_string.should =~ /name => 'finger'/
+  describe "call" do
+    before(:each) do
+      @line = @tc.has_line_in_file({:line => "hi", :file => "ho"})
+      @compiled = PuppetResolver.new(@tc.to_properties_hash).compile
+    end
+    it "should have the line in the file from PuppetResolver" do
+      @compiled.should match(/grep -q "hi" ho/)
+    end
   end
 end
