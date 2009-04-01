@@ -10,5 +10,11 @@ module PoolParty
       has_directory(:name => loc)
     end
     
+    def dependency_resolver(name='puppet')
+      klass = name.preserved_class_constant("Resolver")
+      raise DependencyResolverException.new("Unknown resolver") unless klass
+      dsl_options[:dependency_resolver] = klass unless dsl_options[:dependency_resolver]
+    end
+    
   end
 end

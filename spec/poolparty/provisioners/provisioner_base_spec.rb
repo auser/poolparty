@@ -4,7 +4,9 @@ include Provisioner
 
 describe "ProvisionerBase" do
   before(:each) do    
-    @cloud = cloud :app do;end
+    ::Suitcase::Zipper.stub!(:gems).and_return true
+    # ::Suitcase::Zipper.stub!(:packages).and_return true
+    @cloud = new_test_cloud
     @remote_instance = PoolParty::Remote::RemoteInstance.new({:ip => "192.168.0.1", :status => "running", :name => "master"}, @cloud)
     @pb = PoolParty::Provisioner::ProvisionerBase.new(@remote_instance, @cloud)
     stub_list_from_remote_for(@cloud)
@@ -23,6 +25,7 @@ describe "ProvisionerBase" do
     describe "in action" do
       it "should call a new ProvisionerBase" do
         ProvisionerBase.should_receive(:new).with(@remote_instance, @cloud).and_return @pb
+        @cloud.stub!(:remote_instances_list).and_return sample_instances_list
         ProvisionerBase.install(@remote_instance, @cloud)
       end
     end
@@ -32,6 +35,7 @@ describe "ProvisionerBase" do
       @pb = PoolParty::Provisioner::ProvisionerBase.new(@remote_instance, @cloud)
       stub_list_from_remote_for(@pb)
       stub_list_from_remote_for(@cloud)
+      @cloud.stub!(:remote_instances_list).and_return sample_instances_list
       stub_remoting_methods_for(@pb)
     end
     it "should store the instance on the ProvisionerBase" do

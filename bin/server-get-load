@@ -1,18 +1,15 @@
 #!/usr/bin/env ruby
 $:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
-require "poolparty"
-require "poolpartycl"
+require "poolparty/lite"
+Dir["#{File.dirname(__FILE__)}/../lib/poolparty/monitors/base_monitor.rb"].each {|f| require f}
 
-available_monitors = PoolParty::Monitors.available_monitors
-o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
-  # opts.on('-n name', '--name name', 'Listing for cloud name')    { |c| optioner.cloudname c }
-  opts.on('-m name', '--monitor monitor_name', "Monitor name (default: cpu) (Available monitors: #{available_monitors.join(", ")})") {|c| optioner.monitorname c}
-end
+monitor = ARGV.pop || "cpu"
 
-@monitor = o.monitorname ? o.monitorname : "cpu"
+begin
+  Dir["#{File.dirname(__FILE__)}/../lib/poolparty/monitors/monitors/#{monitor}_monitor.rb"].each {|f| require f}
   
-if PoolParty::Monitors.available_monitors.include?(@monitor.downcase.to_sym)
-  print "PoolParty::Monitors::#{@monitor.capitalize}Monitor".constantize.run.to_f
-else
-  puts "Unknown monitor"
+  klass = eval("PoolParty::Monitors::#{monitor.capitalize}Monitor")
+  print (klass.send :run).to_f rescue -1.0
+rescue Exception => e
+  puts -1.0
 end

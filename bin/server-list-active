@@ -1,18 +1,14 @@
 #!/usr/bin/env ruby
 $:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
-require "poolparty"
-require "poolpartycl"
+require "poolparty/lite"
 
-o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
-  opts.on('-c name', '--class name', 'Listing for cloud class (valid args: [name|ip])')    { |t| optioner.classname t }
-  opts.on('-n name', '--name name', 'Listing for cloud name')    { |c| optioner.cloudname c }
-end
+list_type = ARGV.pop || "ip"
 
-@ctype = (o.classname || "name").downcase.to_sym
+json_file = ARGV[0] || PoolParty::Default.properties_hash_file
+raise "ERROR: no json_file given" if !json_file
+schema = PoolParty::Schema.new( ::File.read(json_file) )
 
-o.loaded_clouds.each do |cloud|
-  with_cloud(cloud, {:ctype => @ctype}) do
-    print "#{list_of_running_instances.collect{|a| "#{a.send ctype}" }.join("\t")}"
-  end  
-  
-end
+remoter_base = schema.options.remote_base
+
+instances = PoolParty::Remote::Ec2.describe_instances(schema.options)
+print instances.map {|inst| inst.send list_type.to_sym }.join("\t")

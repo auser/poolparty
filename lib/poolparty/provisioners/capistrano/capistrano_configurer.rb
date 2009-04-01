@@ -8,7 +8,7 @@
 module Capistrano
   class Configuration
     attr_accessor :cloud, :provisioner
-    
+
     def method_missing_without_variables(sym, *args, &block)
       if parent.respond_to?(sym)
         parent.send(sym, *args, &block)
@@ -16,10 +16,10 @@ module Capistrano
         provisioner.send(sym, *args, &block)
       elsif cloud.respond_to?(sym)
         cloud.send(sym, *args, &block)
-      elsif PoolParty::Base.options.has_key?(sym)
-        PoolParty::Base.options[sym]
-      elsif PoolParty::Base.respond_to?(sym)
-        PoolParty::Base.send(sym, *args, &block)
+      elsif PoolParty::Default.options.has_key?(sym)
+        PoolParty::Default.options[sym]
+      elsif PoolParty::Default.respond_to?(sym)
+        PoolParty::Default.send(sym, *args, &block)
       else
         super
       end
@@ -35,27 +35,34 @@ module Capistrano
         
         def cloud(name=nil)
           puts "name: #{name}"
-          name ? get_cloud(name) : parent.cloud
+          name ? PoolParty::Cloud.clouds[name] : parent.cloud
         end
         
-        def get_cloud(name)
-          PoolParty::Cloud.cloud(name)
-        end  
+        def parent
+          cloud 
+        end
         
         def method_missing(sym, *args, &block)
+          # if parent
+          #   parent.send(sym, *args, &block) rescue super
+          # else
+          #   super
+          # end
+
           if parent.respond_to?(sym)
             parent.send(sym, *args, &block)
           elsif provisioner.respond_to?(sym)
             provisioner.send(sym, *args, &block)
           elsif cloud.respond_to?(sym)
             cloud.send(sym, *args, &block)
-          elsif PoolParty::Base.options.has_key?(sym)
-            PoolParty::Base.options[sym]
-          elsif PoolParty::Base.respond_to?(sym)
-            PoolParty::Base.send(sym, *args, &block)
+          elsif PoolParty::Default.options.has_key?(sym)
+            PoolParty::Default.options[sym]
+          elsif PoolParty::Default.respond_to?(sym)
+            PoolParty::Default.send(sym, *args, &block)
           else
             super
           end
+
         end
       end
     end    

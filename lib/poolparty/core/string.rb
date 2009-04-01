@@ -43,23 +43,13 @@ class String
     self.downcase.gsub(/[ ]/, '_')
   end
   def safe_quote
-    self.gsub(/[']/, '\\\\\'')
+    self.gsub(/['"]/, '\\\"')
+    # self.gsub(/["']/, "\\\"")
   end
   def nice_runnable(quite=true)
     self.split(/ && /).join("\n")
   end
-  # This is the method we use to turn the options into a string to build the main 
-  # manifests
-  def to_option_string(ns=[])
-    a_template = (self =~ /template/) == 0
-    a_service = self =~ /^[A-Z][a-zA-Z]*\[[a-zA-Z0-9\-\.\"\'_\$\{\}\/]*\]/
-    a_function = self =~/(.)*\((.)*\)(.)*/
-    if is_a?(PoolParty::Resources::Resource)
-      self.to_s
-    else
-      (a_service || a_template || a_function) ? self : "'#{self}'"
-    end    
-  end
+
   # Refactor this guy to get the class if the class is defined, and not always create a new one
   # although, it doesn't really matter as ruby will just reopen the class
   def class_constant(superclass=nil, opts={}, &block)
@@ -75,6 +65,42 @@ class String
     klass.module_eval &block if block
     
     klass
+  end
+  
+  def camel_case
+    gsub(/(^|_|-)(.)/) { $2.upcase }
+  end
+  
+  # "FooBar".snake_case #=> "foo_bar"
+   def snake_case
+     gsub(/\B[A-Z]+/, '_\&').downcase
+   end
+   
+    # "FooBar".dasherize #=> "foo-bar"
+    def dasherize
+      gsub(/\B[A-Z]+/, '-\&').downcase
+    end
+    
+  # Constantize tries to find a declared constant with the name specified
+  # in the string. It raises a NameError when the name is not in CamelCase
+  # or is not initialized.
+  #
+  # Examples
+  #   "Module".constantize #=> Module
+  #   "Class".constantize #=> Class
+  def constantize
+    camel_cased_word = camel_case
+    begin
+      Object.module_eval(camel_cased_word, __FILE__, __LINE__)
+    rescue NameError
+      puts "#{camel_cased_word} is not defined."
+      nil
+    end
+  end
+  
+  def preserved_class_constant(append="")
+    klass = "#{self}#{append}".classify
+    Object.const_defined?(klass.to_sym) ? klass.to_s.constantize : nil
   end
   
   def module_constant(append="", &block)

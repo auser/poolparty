@@ -7,8 +7,8 @@ module PoolParty
 
   module Resources
     
-    def call_custom_function(str, opts={}, parent=self, &block)
-      add_resource(:call_function, opts.merge({:str => str, :name => str.keyerize}), parent, &block)
+    def call_custom_function(str, opts={}, &block)
+      add_resource(:call_function, opts.merge({:str => str, :name => str.keyerize}), &block)
     end
                 
     # Resources for function call

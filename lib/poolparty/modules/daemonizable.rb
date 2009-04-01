@@ -13,7 +13,7 @@ module PoolParty
     end
     
     def pid_file
-      @pid_file ||= PoolParty::Base.agent_pid_file
+      @pid_file ||= PoolParty::Default.agent_pid_file
     end
     
     # Returns +true+ the process identied by +pid+ is running.

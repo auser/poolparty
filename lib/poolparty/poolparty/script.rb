@@ -1,21 +1,29 @@
+require "parenting"
 module PoolParty
   
   class Script
+    include Parenting
     
     def self.inflate_file(file)
       inflate open(file).read if file
     end
         
     def self.inflate(script, file="__SCRIPT__")
-      apool = new
-      apool.instance_eval script, file
-      apool.inflate
+      module_eval script, file
+      # a = new
+      # a.instance_eval <<-EOM
+      #   def run_child(pa)
+      #     context_stack.push pa
+      #     #{str}
+      #     context_stack.pop
+      #     remove_method(:run_child)
+      #     self
+      #   end
+      # EOM
+      # a.run_child(self)
+      # a
     end
-    
-    def inflate
-      pools.map {|name,pool| pool.inflate } unless pools.empty?
-    end
-    
+        
     def self.to_ruby(opts={},&blk)
       blk.to_ruby(opts)
     end
@@ -41,7 +49,7 @@ end
     end
     
     def self.save!(to_file=true)
-      write_to_file_in_storage_directory(Base.default_specfile_name, for_save_string) if to_file
+      write_to_file_in_storage_directory(Default.default_specfile_name, for_save_string) if to_file
       for_save_string
     end
     

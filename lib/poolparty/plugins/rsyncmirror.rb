@@ -3,11 +3,10 @@ module PoolParty
         
     virtual_resource(:rsyncmirror) do
       
-      def loaded(opts={}, parent=self)
-        @parent = parent        
+      def loaded(opts={})
         execute_on_node do
           @dir = dir || name
-          has_exec(opts.merge({:command => "#{cloud.remote_rsync_command} --no-implied-dirs --delete-excluded #{Base.user}@master:#{@dir}/ #{@dir}/".safe_quote, :name => "rsync-#{name}"}))
+          has_exec(opts.merge({:command => "#{cloud.remote_rsync_command} --no-implied-dirs --delete-excluded #{Default.user}@master:#{@dir}/ #{@dir}/".safe_quote, :name => "rsync-#{name}"}))
         end
       end
             

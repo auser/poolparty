@@ -21,7 +21,7 @@ class PoolspecGenerator < RubiGen::Base
       m.directory ''
       BASEDIRS.each { |path| m.directory path }
       
-      m.template "pool_spec_template.erb", "clouds.pool"
+      m.template "pool_spec_template.erb", "clouds.rb"
       # Create stubs
       # m.template "template.rb",  "some_file_after_erb.rb"
       # m.template_copy_each ["template.rb", "template2.rb"]
@@ -31,14 +31,6 @@ class PoolspecGenerator < RubiGen::Base
   end
 
   protected
-    def banner
-      <<-EOS
-Creates a basic poolparty spec tempalte
-
-USAGE: #{spec.name} name
-EOS
-    end
-
     def add_options!(opts)
       opts.separator ''
       opts.separator 'Options:'

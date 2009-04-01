@@ -4,11 +4,19 @@ require "poolparty"
 require "poolpartycl"
 
 o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
+  optioner.options( :num => 0 )
   opts.on('-n name', '--name name', 'Listing for cloud name')    { |c| optioner.cloudname c }
-  opts.on('-i num', '--id num', 'Instance num to ssh (default: 0)')    { |i| optioner.num i }
+  # opts.on('-i num', '--id num', 'Instance num to ssh (default: 0)')    { |i| optioner.num i.to_i }
 end
-load_pool(o.spec || Binary.get_existing_spec_location)
+load_pool(o.spec? ? o.spec : Binary.get_existing_spec_location)
 
 @cloud = o.loaded_clouds.first
+nodes = @cloud.list_of_running_instances
 
-@cloud.ssh_into_instance_number( o.num.to_i || 0 ) if @cloud
+puts nodes.map {|a| a.to_s}.join("\n")
+
+if !nodes.empty?
+  @cloud.ssh_into( nodes.first ) if @cloud
+else
+  puts "No running instances can be found"
+end
