@@ -32,7 +32,7 @@ module PoolParty
       base_dir(nm)
     end
     
-    def base_dir(nm)
+    def base_dir(nm=nil)
       @base_dir ||= "/tmp/poolparty/dr_configure/chef/recipes/#{nm}"
     end
     
@@ -54,10 +54,20 @@ module PoolParty
           handle_print_variables(vars, (opts.name rescue "default"))
         end
         
+        if opts.has_key?(:line_in_file)
+          lines = opts.delete(:line_in_file).inject([]) do |sum, l|
+            sum << PoolParty::Resources::Exec.new(:name => l[:name], :command => PoolParty::Resources::LineInFile.command(l[:line], l[:file]) ).to_properties_hash
+          end          
+          if lines && lines.size > 0            
+            opts.has_key?(:exec) ? (opts[:exec] << lines) : opts.merge!(:exec => lines)
+          end
+        end
+        
         out << opts.map do |type, arr|
           arr.map do |res|
             real_type = handle_types(type)
             real_name = handle_names(type, res)
+            res = before_filter_check_on_hash(res, real_name)
             "#{tf(tabs)}#{real_type} \"#{real_name}\" do\n#{tf(tabs+1)}#{hash_flush_out(res).compact.join("\n#{tf(tabs+1)}")}\n#{tf(tabs)}end"
           end
         end
@@ -90,6 +100,12 @@ module PoolParty
       case ty
       when :exec
         "execute"
+      when :file
+        "template"
+      when :symlink
+        "link"
+      when :line_in_file
+        "execute"
       else
         ty
       end
@@ -98,13 +114,13 @@ module PoolParty
     def handle_names(ty, res)
       case ty
       when :exec
-        res.command
+        res[:command]
       else
-        res.name        
+        res[:name]
       end
     end
     
-    def hash_flush_out(hash, pre="", post="")
+    def hash_flush_out(hash, pre="", post="")      
       hash.map do |k,v|
         key = to_chef_key(k)
         res = to_option_string(v)
@@ -120,6 +136,19 @@ module PoolParty
         kname = klassname.to_s.gsub(/pool_party_/, '').gsub(/_class/, '')
         "\n#{tf(tabs)}# #{kname}\n#{tf(tabs)}#{tf(tabs)}#{compile(klasshash,tabs+1)}#{tf(tabs)}"
       end
+    end
+    
+    def before_filter_check_on_hash(hsh, nm)
+      if hsh.has_key?(:content)
+        cont = hsh.delete(:content)
+        temp_file = "#{base_dir}/templates/default/#{nm}.erb"
+        ::FileUtils.mkdir_p(::File.dirname(temp_file)) unless ::File.directory? temp_file
+        ::File.open(temp_file, "w+") {|f| f.print cont }
+        hsh.merge!({:source => "#{nm}.erb", :variables => hsh})
+      end
+      # 
+      hsh.delete(:require) if hsh.has_key?(:require)
+      hsh
     end
     
     def services_to_string(opts,tabs=0)
@@ -153,6 +182,8 @@ module PoolParty
         "[ #{obj.map {|e| to_option_string(e) }.reject {|a| a.nil? || a.empty? }.join(", ")} ]"
       when nil
         nil
+      when Hash
+        "#{obj.map {|k,v| ":#{k} => #{to_option_string(v)}" unless v == obj }.compact.join(",\n")}"
       else
         "#{obj}"
       end

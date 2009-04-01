@@ -71,12 +71,16 @@ describe "PuppetResolver" do
         plugin :apache do
         end
       end
+      reset!
       @cloud = cloud :hope do
         keypair "bob"
         has_file :name => "/etc/motd", :content => "Welcome to the cloud"        
         has_file :name => "/etc/profile", :content => "profile info"        
+        
         has_directory :name => "/var/www"
         has_file :name => "/var/www/index.html", :content => "profile info", :requires => get_directory("/var/www")
+        
+        dependency_resolver "puppet"
         # has_package :name => "bash"        
         # parent == cloud
         apache do
