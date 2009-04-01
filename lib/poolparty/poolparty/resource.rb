@@ -45,7 +45,7 @@ module PoolParty
         unless PoolParty::PoolPartyBaseClass.respond_to?(method_name)
           method =<<-EOE
             private 
-            def #{method_name}(opts={}, &blk)
+            def #{method_name}(opts={}, &blk)              
               add_resource(:#{lowercase_class_name}, opts, &blk)
             end
             def get_#{lowercase_class_name}(n, opts={}, &block)
