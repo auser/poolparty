@@ -2,16 +2,13 @@ module PoolParty
   class ChefRecipe
     include Dslify
   end
-  class ChefTemplate
-    include Dslify
-  end
   class Chef
     
     plugin :chef do
       def before_load(o, &block)        
         bootstrap_gems "chef", "ohai"
         bootstrap_commands [
-          "mkdir -p /etc/chef/cookbooks /etc/chef/cache"      
+          "mkdir -p /etc/chef/cookbooks /etc/chef/cache"
         ]
       end
       
@@ -21,21 +18,24 @@ module PoolParty
       
       def recipe file=nil, o={}, &block
         if file
-          file = ::File.expand_path file
-          basedir = "/tmp/poolparty/dependencies/recipes/cookbooks/poolparty"
-          ::FileUtils.mkdir_p "#{basedir}/recipes" unless ::File.directory? basedir
-          ::File.cp file, "#{basedir}/recipes/default.rb"
-          
-          if o[:templates]
-            ::FileUtils.mkdir_p "#{basedir}/templates/default/"
-            
-            o[:templates].each do |f|
-              ::File.cp f, "#{basedir}/templates/default/#{::File.basename(f)}"
+          if ::File.file? file
+            file = ::File.expand_path file
+            basedir = "/tmp/poolparty/dr_configure/tmp/recipes/main"
+            ::FileUtils.mkdir_p "#{basedir}/recipes" unless ::File.directory? basedir
+            ::File.cp file, "#{basedir}/recipes/default.rb"
+
+            if o[:templates]
+              ::FileUtils.mkdir_p "#{basedir}/templates/default/"
+              o[:templates].each {|f| ::File.cp f, "#{basedir}/templates/default/#{::File.basename(f)}" }
             end
+            
+            recipe_files << basedir
           end
-          recipe_files << basedir
         # TODO: Enable neat syntax from within poolparty
-        # else
+        else
+          raise <<-EOR
+            PoolParty currently only supports passing recipes as files. Please specify a file in your chef block and try again"
+          EOR
         #   recipe = ChefRecipe.new
         #   recipe.instance_eval &block          
         #   ::File.open("/tmp/poolparty/chef_main.rb", "w+") {|f| f << @recipe.options.to_json }
@@ -45,12 +45,24 @@ module PoolParty
       
       def json file=nil, &block
         if file
-          @json_file = file
+          if ::File.file? file
+            ::File.cp file, "/tmp/poolparty/dna.json"
+            @json_file = "/tmp/poolparty/dna.json"
+          elsif file.is_a?(String)
+            require "tempfile"
+            ::File.open("/tmp/poolparty/dna.json", "w+") do |tf|
+              tf << file # is really a string
+            end
+          else
+            raise <<-EOM
+              Your json must either point to a file that exists or a string. Please check your configuration and try again
+            EOM
+          end
         else
           unless @recipe
             @recipe = ChefRecipe.new
             @recipe.instance_eval &block
-            @recipe.recipes(@recipe.recipes? ? (@recipe.recipes << "poolparty") : ["poolparty"])
+            @recipe.recipes(@recipe.recipes? ? (@recipe.recipes << ["main", "poolparty"]) : ["main", "poolparty"])
             ::File.open("/tmp/poolparty/dna.json", "w+") {|f| f << @recipe.options.to_json }
             @json_file = "/tmp/poolparty/dna.json"
           end
@@ -60,17 +72,16 @@ module PoolParty
       def include_recipes *recps
         unless recps.empty?
           recps.each do |rcp|
-            Dir[::File.expand_path(rcp)].each do |f|
+            Dir[::File.expand_path(rcp)].each do |f|              
               added_recipes << f
             end            
           end
-          bootstrap_commands ["cp -R /var/poolparty/dependencies/chef/recipes/* /etc/chef/cookbooks"] unless added_recipes.empty?
         end
       end
       
       def config file=""
         if ::File.file? file
-          ::Suitcase::Zipper.add(file, "chef")
+          @config_file = file
         else
           conf_string = if file.empty?
 # default config
@@ -84,32 +95,28 @@ file_cache_path  "/etc/chef"
           else
             open(file).read
           end
-          require "tempfile"
           ::File.open("/tmp/poolparty/chef_config.rb", "w+") do |tf|
             tf << conf_string
           end
-          ::Suitcase::Zipper.add("/tmp/poolparty/chef_config.rb", "chef")
+          @config_file = "/tmp/poolparty/chef_config.rb"
         end
-        bootstrap_commands ["cp /var/poolparty/dependencies/chef/chef_config.rb /etc/chef/solo.rb"]
-        @config_set = true
       end
       
       def added_recipes
         @added_recipes ||= []
       end
       
-      # TODO: Change to before_configure
-      def before_bootstrap
-        config unless @config_set
+      def before_configure
+        config unless @config_file
+        ::Suitcase::Zipper.add(@config_file, "chef")
         added_recipes.each do |rcp|
+          # ::FileUtils.cp_r rcp, "/tmp/poolparty/dr_configure/recipes/"
           ::Suitcase::Zipper.add(rcp, "chef/recipes")
-        end
-        if @json_file
-          bootstrap_commands ["cp /var/poolparty/dependencies/chef/json/#{::File.basename(@json_file)} /etc/chef/dna.json"]
-          ::Suitcase::Zipper.add(@json_file, "chef/json")
-        end
+        end        
+        ::Suitcase::Zipper.add(@json_file, "chef/json") if @json_file
         recipe_files.each do |rf|
-          ::Suitcase::Zipper.add(rf, "chef/recipes")
+          # ::FileUtils.cp_r rf, "/tmp/poolparty/dr_configure/recipes/#{::File.basename(rf)}"
+          ::Suitcase::Zipper.add(rf, "chef/recipes") 
         end
       end
       

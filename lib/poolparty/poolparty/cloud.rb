@@ -85,7 +85,7 @@ module PoolParty
         # this can be overridden in the spec, but ec2 is the default
         using :ec2
         options[:keypair] = keypair.basename
-        dependency_resolver 'puppet'
+        dependency_resolver 'chef'
       end
       
       # provide list of public ips to get into the cloud
@@ -286,6 +286,10 @@ module PoolParty
       
       def call_before_bootstrap_callbacks
         plugin_store.each {|a| a.before_bootstrap }
+      end
+      
+      def call_before_configure_callbacks
+        plugin_store.each {|a| a.before_configure }
       end
       
       # Add all the poolparty requirements here
