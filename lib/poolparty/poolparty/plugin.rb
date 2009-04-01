@@ -30,6 +30,8 @@ module PoolParty
       end
       def before_bootstrap
       end
+      def before_configure
+      end
       def enable
       end
       def is_plugin?
