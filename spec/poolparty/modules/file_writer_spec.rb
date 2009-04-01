@@ -7,7 +7,7 @@ describe "FileWriter" do
   before(:each) do
     @test = TestClass.new
     @filepath = File.join("nilly.rb")
-    @path = File.join(Base.storage_directory, @filepath)
+    @path = File.join(Default.storage_directory, @filepath)
   end
   %w(write_to_file_in_storage_directory copy_file_to_storage_directory write_to_temp_file).each do |method|
     eval <<-EOE
@@ -16,8 +16,8 @@ describe "FileWriter" do
     end
     EOE
   end
-  it "should copy the file to the Base.storage_directory when calling copy_file_to_storage_directory" do
-    FileUtils.should_receive(:cp).with("ranger", Base.storage_directory+"/ranger").and_return true
+  it "should copy the file to the Default.storage_directory when calling copy_file_to_storage_directory" do
+    FileUtils.should_receive(:cp).with("ranger", Default.storage_directory+"/ranger").and_return true
     @test.copy_file_to_storage_directory("ranger")
   end
   describe "write to file in storage directory" do
@@ -37,7 +37,7 @@ describe "FileWriter" do
     end
     it "should write the string in the file" do
       @test.write_to_file_in_storage_directory(@filepath, "STRING TO WRITE")
-      open(::File.join( Base.storage_directory, @filepath)).read.should == "STRING TO WRITE"
+      open(::File.join( Default.storage_directory, @filepath)).read.should == "STRING TO WRITE"
     end
     after do
       @test.write_to_file_in_storage_directory(@filepath, "STRING TO WRITE")
@@ -54,7 +54,7 @@ describe "FileWriter" do
   end
   describe "cleanup_storage_directory" do
     it "should call rm_rf on the FileUtils class with the storage_directory" do
-      ::FileUtils.should_receive(:rm_rf).with("#{Base.storage_directory}").and_return true
+      ::FileUtils.should_receive(:rm_rf).with("#{Default.storage_directory}").and_return true
       @test.cleanup_storage_directory
     end
   end

@@ -1,8 +1,8 @@
 module PoolParty
   class Base
-    plugin :ruby do
+    plugin :poolparty_base_ruby do
       
-      def enable                
+      def enable
         install_base_packages
       end
       
@@ -10,9 +10,9 @@ module PoolParty
         has_package(:name => "libreadline-ruby1.8")
         has_package(:name => "libruby1.8")                
         has_package(:name => "ruby1.8-dev")
-        has_package(:name => "ruby1.8")        
+        has_package(:name => "ruby1.8")
         
-        has_line_in_file("export PATH=$PATH:/var/lib/gems/1.8/bin:/sbin", "/etc/profile")
+        has_line_in_file(:line => "export PATH=$PATH:/var/lib/gems/1.8/bin", :file => "/etc/profile")
         
         # exec(:name => "update-rubygems") do
         #   command "gem update --system"

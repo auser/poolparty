@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 class TestMonitorClass
   include PoolParty::Monitors
-  include Configurable
+  include Dslify
   def default_options
     {}
   end

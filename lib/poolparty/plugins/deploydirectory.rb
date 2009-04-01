@@ -5,33 +5,35 @@
   the master instance of the cloud. This enables you to send a directory
   up to the cloud and let the master host it for the remote slaves
 =end
-module PoolParty    
+module PoolParty
   class Deploydirectory
-        
+    
     virtual_resource(:deploydirectory) do
       
-      def loaded(opts={}, parent=self)
-        package_directory        
+      def loaded(opts={})
+        package_directory
         unpack_directory
         sync_directories
       end
-            
+      
       def package_directory
-        path = ::File.join( Base.tmp_path, "#{::File.basename(from_dir)}.tar.gz" )
+        path = ::File.join( Default.tmp_path, "#{::File.basename(from_dir)}.tar.gz" )
         archive_name = "#{::File.basename(name).dir_safe}.tar.gz"
-        cmd = "cd #{::File.expand_path(from_dir)} && tar -czf #{archive_name} . && mv #{archive_name} #{Base.tmp_path}"
+        cmd = "cd #{::File.expand_path(from_dir)} && tar -czf #{archive_name} . && mv #{archive_name} #{Default.tmp_path}"
         Kernel.system(cmd) unless testing
       end
       
       def unpack_directory
-        execute_on_master do
+        case_of "hostname"
+        when_is "master" do
           has_exec({:name => "deploy-directory-#{name}", :requires => get_directory("#{cwd}"), :cwd => cwd}) do
             #  && rm #{Base.tmp_path}/#{parent.name.dir_safe}.tar.gz
             archive_name = "#{::File.basename(name).dir_safe}.tar.gz"
-            command "cd #{cwd}; tar -zxf #{Base.remote_storage_path}/#{archive_name}; rm #{Base.remote_storage_path}/#{archive_name}; chown #{owner} #{::File.basename(name).dir_safe}"
-            onlyif "test -f #{Base.remote_storage_path}/#{archive_name}"
+            command "cd #{cwd}; tar -zxf #{Default.remote_storage_path}/#{archive_name}; rm #{Default.remote_storage_path}/#{archive_name}; chown #{owner} #{::File.basename(name).dir_safe}"
+            onlyif "test -f #{Default.remote_storage_path}/#{archive_name}"
           end
         end
+        end_of
       end
       
       def sync_directories
@@ -48,7 +50,6 @@ module PoolParty
         cwd dir
         name dir
         has_directory(:name => "#{dir}", 
-                      :requires => get_directory("#{::File.dirname(dir)}"), 
                       :owner => owner,
                       :mode => mode)
       end

@@ -46,7 +46,7 @@ describe "Custom Resource" do
     end
     describe "printing" do
       before do
-        reset_resources!
+        
         define_resource(:rockstar) do
           def has_a_line_in_file(line="line_in_file", file="file")
             call_custom_function "line(#{file}, #{line})"
@@ -72,48 +72,7 @@ describe "Custom Resource" do
         @resource.resource(:call_function).first.to_string.should == "line(filename, hi)"
       end
       it "should be stored in an array" do
-        resource(:rockstar).class.should == Array
-      end
-      describe "call function" do
-        before(:each) do
-          @res = Class.new
-          @res.stub!(:class_name_sym).and_return :bunk
-          @res.stub!(:key).and_return "bunk"
-        end
-        it "should have the class CallFunction available" do
-          lambda {PoolParty::Resources::CallFunction}.should_not raise_error
-        end
-        it "should create a new CallFunction instance when calling call_function with a string" do
-          PoolParty::Resources::CallFunction.should_receive(:new).and_return @res
-          add_resource(:call_function, :name => "line")
-        end
-        it "should create a call function in the function call array" do
-          add_resource(:call_function, {:name => "custom_function"}, @cloud)
-          resource(:call_function).size.should == 1
-        end
-        describe "defining" do
-          it "should add the methods to the class through module_eval" do
-            PoolParty::Resources.should_receive(:module_eval).at_least(1)
-            define_resource :imarockstar2YEAH do
-            end
-          end
-        end
-      
-        describe "within context" do
-          before(:each) do
-            cloud :apple do
-              has_line_in_file("hello", "messages")
-              brain_child("meee")
-            end
-            @cloud = cloud(:apple)
-          end
-          it "should have 1 resource (the line resource)" do
-            @cloud.resources.should_not be_empty
-          end
-          it "should have one call_function resource" do
-            @cloud.resource(:call_function).first.to_string.should =~ /line \{/
-          end
-        end
+        @resource.resource(:rockstar).class.should == Array
       end
     end
   end

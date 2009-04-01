@@ -21,10 +21,16 @@ class Array
   def get_named(str="")
     map {|a| a.name == str ? a : nil }.reject {|a| a.nil? }
   end
-  def to_option_string(ns=[])
-    "[ #{map {|e| e.to_option_string }.reject {|a| a.nil? || a.empty? }.join(", ")} ]"
-  end
   def respec_string(ns=[])
     "'#{map {|e| e.to_option_string }.join("', '")}'"
   end
+  # Example  nodes.select_with_hash(:status=>'running')
+  def select_with_hash(conditions={})
+    select do |node|
+      conditions.any? do |k,v| 
+        ( node.has_key?(k) && node[k]==v ) or ( node.respond_to?(k) && node.send(k)==v )
+      end
+    end
+  end
+    
 end

@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
 $:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
 require "poolparty"
-require "poolpartycl"
 
 o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
   opts.on('-f [remote|local]', '--from [remote|local]', 'Remote or local (default: local)')    { |o| optioner.location o }
@@ -10,17 +9,15 @@ o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
   opts.on('-n name', '--name name', 'Listing for cloud name')    { |c| optioner.cloudname c }
 end
 
-o.loaded_clouds.each do |cloud|
+o.loaded_clouds.each do |cld|
   
-  with_cloud(cloud) do
-    puts header("Listing cloud #{name}")
-    puts subheader("Active instances")
-    puts list_of_running_instances.map{|a| a.to_s}.join("\n")
-    puts ""
-    if list_of_pending_instances.size > 0
-      puts subheader("Pending instances")
-      puts list_of_pending_instances.map{|a| a.to_s}.join("\n")
-    end
-  end  
+  puts header("Listing cloud #{cld.name}")
   
+  puts subheader("Active instances")
+  puts cld.list_of_running_instances.map{|a| a.to_s}.join("\n")
+    
+  if cld.list_of_pending_instances.size > 0
+    puts subheader("Pending instances")
+    puts cld.list_of_pending_instances.map{|a| a.to_s}.join("\n")
+  end
 end

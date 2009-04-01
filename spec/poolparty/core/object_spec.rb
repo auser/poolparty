@@ -42,8 +42,7 @@ describe "Object" do
     describe "running" do
       before(:each) do
         Class.stub!(:default_options).and_return({})
-        Class.send :include, Configurable
-        Class.send :include, MethodMissingSugar
+        Class.send :include, Dslify
         @a = Class.new        
         @b = Class.new
         
@@ -59,7 +58,7 @@ describe "Object" do
     describe "contextual running" do
       before(:each) do
         @obj.stub!(:default_options).and_return {}
-        @a = @obj.run_in_context { @a = "hello world" }
+        @a = @obj.instance_eval { @a = "hello world" }
       end
       it "should have the method meta_eval" do
         @obj.respond_to?(:meta_eval).should == true

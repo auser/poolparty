@@ -2,18 +2,18 @@ require File.dirname(__FILE__) + '/spec_helper'
 
 describe "PoolParty" do
   after(:all) do
-    # FileUtils.rm_r(Base.storage_directory) rescue ""
+    # FileUtils.rm_r(Default.storage_directory) rescue ""
   end
   it "should have the method copy_file_to_storage_directory on the PoolParty" do
     PoolParty.respond_to?(:copy_file_to_storage_directory).should == true
   end
   it "should copy the file given with File" do
-    FileUtils.should_receive(:cp).with("haymaker", Base.storage_directory + "/haymaker").once
+    FileUtils.should_receive(:cp).with("haymaker", Default.storage_directory + "/haymaker").once
     PoolParty.copy_file_to_storage_directory("haymaker")
   end
   describe "writing file to storage_directory" do
     before(:each) do
-      @path = "#{Base.storage_directory}/happydayz"
+      @path = "#{Default.storage_directory}/happydayz"
     end
     it "should have the method write_to_file_in_storage_directory" do
       PoolParty.respond_to?(:write_to_file_in_storage_directory).should == true
@@ -31,6 +31,6 @@ describe "PoolParty" do
     end
   end
   it "should have a logger" do
-    PoolParty.log.should_not be_nil
+    PoolParty.log.should_not == nil
   end
 end
