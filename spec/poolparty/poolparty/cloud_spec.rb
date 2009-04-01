@@ -294,16 +294,16 @@ describe "Cloud" do
               @manifest.class.should == String
             end
             it "should have a comment of # file in the manifest as described by the has_file" do
-              @manifest.should =~ /file \{/
+              @manifest.should =~ /file \"\/etc\/httpd\/http.conf\" do/
             end
             it "should have the comment of a package in the manifest" do
-              @manifest.should =~ /package \{/
+              @manifest.should =~ /package "dummy" do/
             end
             it "should have the comment for haproxy in the manifest" do
               @manifest.should =~ /haproxy/            
             end
             it "should include the poolparty gem" do
-              @manifest.should =~ /package \{/
+              pending
             end
           end
           describe "prepare_for_configuration" do

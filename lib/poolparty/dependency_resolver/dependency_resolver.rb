@@ -33,5 +33,9 @@ module PoolParty
       self.class.permitted_resource_options
     end
     
+    def tf(count)
+      "\t" * count
+    end
+    
   end
 end

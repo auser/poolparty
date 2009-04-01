@@ -73,10 +73,6 @@ module PoolParty
       end
     end
     
-    def tf(count)
-      "\t" * count
-    end
-    
     def hash_flush_out(hash, pre="", post="")
       hash.map do |k,v|
         key = to_puppet_key(k)
