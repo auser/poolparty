@@ -29,6 +29,7 @@ module PoolParty
                         grempe-amazon-ec2
                         RubyInline
                         archive-tar-minitar
+                        chef
                         )
       end
   

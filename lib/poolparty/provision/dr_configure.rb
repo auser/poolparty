@@ -40,7 +40,7 @@ module PoolParty
       pack_up_and_ship_off_suitcase
       setup_configurator
       write_erlang_cookie
-      @configurator.files_to_upload.each {|f| ::FileUtils.cp f, "/tmp/poolparty/dr_configure/#{::File.basename(f)}"}
+      @configurator.files_to_upload.each {|f| ::FileUtils.cp f, "/tmp/poolparty/dr_configure/#{::File.basename(f)}" if ::File.file?(f) }
             
       rsync "/tmp/poolparty/dr_configure/", "/var/poolparty/dr_configure/" 
       commands << [
