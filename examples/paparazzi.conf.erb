@@ -1,0 +1,10 @@
+<VirtualHost *:80>
+  ServerName <%= @params[:server_name] %>
+  DocumentRoot <%= @params[:docroot] %>
+  
+  <Directory <%= @params[:docroot] %>>
+    Order allow,deny
+    Allow from all
+  </Directory>
+  
+</VirtualHost>

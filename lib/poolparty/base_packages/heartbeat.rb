@@ -4,7 +4,10 @@ module PoolParty
       
       def enable        
         # execute_on_master do
-        has_package({:name => "heartbeat"})
+        has_package({:name => "heartbeat-2"})
+        has_package({:name => "heartbeat-2-dev"})
+        
+        has_service("heartbeat")
       
         # has_service(:name => "heartbeat", :hasstatus => true, :hasrestart => true)
         # has_directory(:name => "/etc/ha.d")

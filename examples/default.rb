@@ -3,20 +3,22 @@ include_recipe "apache2"
 include_recipe "passenger"
 include_recipe "rails"
 include_recipe "git"
+include_recipe "ec2"
+include_recipe "sqlite"
 
-deploy "/var/www/bort" do
-  repo "git://github.com/fudgestudios/bort.git"
-  branch "HEAD"
-  enable_submodules true
-  shallow_clone true
-  action :manage
+gem_package "sqlite3-ruby" do
+  action :install
 end
 
-web_app "bort" do
-  docroot "/var/www/bort/current/public"
-  template "suspenders.conf.erb"
-  server_name node[:fqdn]
-  server_aliases [node[:hostname], "bort"]
+web_app "paparazzi" do
+  docroot "/srv/paparazzi/public"
+  template "paparazzi.conf.erb"
+  server_name "www.paparazzi.com" #node[:fqdn]
+  server_aliases [node[:hostname], "paparazzi.com"]
   passenger_version "2.1.3"
   rails_env "production"
+end
+
+directory "/srv" do
+  mode 755
 end
