@@ -6,6 +6,7 @@ end
 describe "Remote Instance" do
   describe "wrapped" do
     before(:each) do
+      reset!
       @tc = cloud :test_git_class_cloud do
         has_git_repos :at => "/var/www/", :name => "gitrepos.git", :source => "git://git/repos/source.git", :requires_user => "finger"
       end
