@@ -18,7 +18,6 @@ module PoolParty
       
       def recipe file=nil, o={}, &block
         if file
-          puts "::File.file?(::File.expand_path file): #{::File.file?(::File.expand_path(file))} (#{::File.expand_path(file)})"
           if ::File.file?(::File.expand_path(file))
             file = ::File.expand_path file
             basedir = "/tmp/poolparty/dr_configure/recipes/main"
