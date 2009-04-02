@@ -34,7 +34,7 @@ module PoolParty
       ::FileUtils.mkdir_p("/tmp/poolparty/dr_configure")
       ::File.cp $pool_specfile, '/tmp/poolparty/dr_configure/clouds.rb'
       ::File.open "/tmp/poolparty/dr_configure/clouds.json", "w" do |f|
-        f << cloud.to_properties_hash.to_json rescue debugger
+        f << cloud.to_properties_hash.to_json
       end
       
       pack_up_and_ship_off_suitcase

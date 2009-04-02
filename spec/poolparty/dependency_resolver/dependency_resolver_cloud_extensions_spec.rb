@@ -65,10 +65,10 @@ describe "Resolution spec" do
   end
   describe "to_properties_hash" do
     it "should output a hash" do
-      @cloud.to_properties_hash.class.should == Hash
+      @cloud.to_properties_hash.class.should == OrderedHash
       # puts "<pre>#{@cloud.to_properties_hash.to_yaml}</pre>"
     end
-    it "should have resources on the cloud as an array of hashes" do
+    it "should have resources on the cloud as an array of hashes" do      
       @cloud.to_properties_hash[:resources].class.should == Hash      
     end
     it "should have services on the cloud as an array of hashes" do

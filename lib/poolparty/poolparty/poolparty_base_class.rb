@@ -11,7 +11,6 @@ module PoolParty
     
     include PoolParty::DependencyResolverCloudExtensions
     # attr_accessor :depth
-    # attr_reader :parent
 
     def initialize(opts={}, extra_opts={}, &block)      
       add_to_parent_if_parent_exists_and_is_a_service
@@ -38,7 +37,7 @@ module PoolParty
       end
     end
     
-    def add_to_parent_if_parent_exists_and_is_a_service
+    def add_to_parent_if_parent_exists_and_is_a_service      
       if parent && !parent.is_a?(PoolParty::Resources::Resource)
         dsl_options(parent.dsl_options) if parent.is_a?(PoolParty::Pool::Pool)
         parent.add_service(self) if parent.respond_to?(:add_service) && !is_a_resource?
@@ -54,7 +53,8 @@ module PoolParty
       subclass = "#{serv.class.to_s.top_level_class.underscore.downcase}#{extra_name}"
       lowercase_class_name = subclass.to_s.underscore.downcase || subclass.downcase
       
-      services.merge!(lowercase_class_name.to_sym => serv)
+      services[lowercase_class_name.to_sym] = serv
+      # services.merge!({lowercase_class_name.to_sym => serv})
     end
     # Container for the services
     def services
@@ -118,10 +118,6 @@ module PoolParty
     
     def resource(type=:file)
       resources[type.to_sym] ||= []
-    end
-    
-    def resources
-      @resources ||= {}
     end
     
     def is_plugin?

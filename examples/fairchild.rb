@@ -5,7 +5,7 @@ pool :application do
   # keypair "#{ENV["HOME"]}/.ssh/r_and_d.pem"
   keypair "auser-work"
   verbose true
-  ami 'ami-7cfd1a15'
+  ami 'ami-7cfd1a15'  
   # testing false
   
   cloud :pp1 do
@@ -25,8 +25,6 @@ pool :application do
               :templates => ["#{::File.dirname(__FILE__)}/examples/suspenders.conf.erb"]
       
       json do
-        user "ez"
-        apps "beast", "mephisto"
         gems [
           { "name" => "rake",
             "version" => "0.8.3"

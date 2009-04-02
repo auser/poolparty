@@ -11,7 +11,7 @@ module PoolParty
     attr_reader :properties_hash
     
     def initialize(hsh)
-      raise DependencyResolverException.new('must pass a hash') if hsh.nil? || !hsh.instance_of?(Hash)
+      raise DependencyResolverException.new('must pass a hash') if hsh.nil? || (!hsh.instance_of?(OrderedHash) && !hsh.instance_of?(Hash))
       @properties_hash = hsh
     end
     

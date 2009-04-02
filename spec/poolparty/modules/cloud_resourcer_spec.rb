@@ -6,12 +6,12 @@ class ResourcerTestClass < PoolParty::Cloud::Cloud
   })
 end
 class TestParentClass < PoolParty::Cloud::Cloud  
-  def services
-    @services ||= []
-  end
-  def add_service(s)
-    services << s
-  end
+  # def services
+  #   @services ||= []
+  # end
+  # def add_service(s)
+  #   services << s
+  # end
 end
 describe "CloudResourcer" do
   before(:each) do

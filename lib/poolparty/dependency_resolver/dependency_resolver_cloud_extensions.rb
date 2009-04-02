@@ -6,15 +6,15 @@ module PoolParty
   # Take the cloud dependency tree
   module DependencyResolverCloudExtensions    
     def to_properties_hash
-      {
-        :options => options.merge(:cloud_name => name),
-        :services => services.keys.inject({}) do |sum,k|
-          sum.merge!(Hash[k.to_sym, services[k].to_properties_hash] )
-        end,
-        :resources => resources.keys.inject({}) do |sum,k|
-          sum.merge!(Hash[k.to_sym, resources[k].map {|a| a.to_properties_hash } ])
-        end
-      }
+      oh = OrderedHash.new
+      oh[:options] = options.merge(:cloud_name => name)
+      oh[:resources] = resources.keys.inject(OrderedHash.new) do |sum,k|
+        sum.merge!(Hash[k.to_sym, resources[k].map {|a| a.to_properties_hash } ])
+      end
+      oh[:services] = services.keys.inject(OrderedHash.new) do |sum,k|
+        sum.merge!(Hash[k.to_sym, services[k].to_properties_hash] )
+      end
+      oh
     end
     
   end
