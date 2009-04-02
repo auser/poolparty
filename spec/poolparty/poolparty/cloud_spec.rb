@@ -100,8 +100,8 @@ describe "Cloud" do
         end
         cloud(:paddy_wack).parent.should == pool(:knick_knack)
       end
-      it "should have services in an hash" do
-        @cloud.services.class.should == Hash
+      it "should have services in an OrderedHash" do
+        @cloud.services.class.should == OrderedHash
       end
       it "should have no services in the array when there are no services defined" do
         @cloud.services.size.should == 0
@@ -254,17 +254,19 @@ describe "Cloud" do
                 @cloud.services.size.should > 0
               end
               it "should store the class heartbeat" do
-                @cloud.services.map {|k,v| k}.include?(:poolparty_base_heartbeat_class).should == true
+                @cloud.services.keys.include?(:poolparty_base_heartbeat_class).should == true
               end
-              it "should have an array of resources on the heartbeat" do
-                @cloud.services.class.should == Hash
+              it "should have an array of services on the heartbeat" do
+                @cloud.services.class.should == OrderedHash
               end
               describe "resources" do
                 before(:each) do
+                  reset!
                   @cloud8 = cloud :tester do
                     test_service
                   end
-                  @service = clouds[:tester].services.test_service_class
+                  tskey = clouds[:tester].services.keys.first
+                  @service = clouds[:tester].services[tskey]
                   @files = @service.resource(:file)
                 end
                 it "should have a file resource" do
