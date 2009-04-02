@@ -8,62 +8,37 @@
 module PoolParty
   class Deploydirectory
     
-    virtual_resource(:deploydirectory) do
+    virtual_resource(:deploy_directory) do
       
-      def loaded(opts={})
-        package_directory
-        unpack_directory
-        sync_directories
+      def loaded(opts={}, &block)        
+        # raise(Exception.new("You must include a directory for the git repos set by :at")) if at?.nil?
+        # opts.has_key?(:at) ? at(opts.delete(:at)) : raise(Exception.new("You must include a directory for the git repos set by :at"))
+
+        package_deploy_directory
+        add_unpack_directory
       end
       
-      def package_directory
-        path = ::File.join( Default.tmp_path, "#{::File.basename(from_dir)}.tar.gz" )
-        archive_name = "#{::File.basename(name).dir_safe}.tar.gz"
-        cmd = "cd #{::File.expand_path(from_dir)} && tar -czf #{archive_name} . && mv #{archive_name} #{Default.tmp_path}"
-        Kernel.system(cmd) unless testing
+      def package_deploy_directory
+        ::Suitcase::Zipper.add(sync_dir, "user_directory/")
       end
       
-      def unpack_directory
-        case_of "hostname"
-        when_is "master" do
-          has_exec({:name => "deploy-directory-#{name}", :requires => get_directory("#{cwd}"), :cwd => cwd}) do
-            #  && rm #{Base.tmp_path}/#{parent.name.dir_safe}.tar.gz
-            archive_name = "#{::File.basename(name).dir_safe}.tar.gz"
-            command "cd #{cwd}; tar -zxf #{Default.remote_storage_path}/#{archive_name}; rm #{Default.remote_storage_path}/#{archive_name}; chown #{owner} #{::File.basename(name).dir_safe}"
-            onlyif "test -f #{Default.remote_storage_path}/#{archive_name}"
-          end
-        end
-        end_of
-      end
-      
-      def sync_directories
-        execute_on_node do
-          has_rsyncmirror(:dir => cwd, :name => "deploydirectory-#{name}")
+      def add_unpack_directory
+        has_directory("#{::File.dirname(basedir)}")
+        
+        has_exec("unpack-#{::File.basename(basedir)}-deploy-directory") do
+          requires get_directory("#{::File.dirname(basedir)}")
+          cwd basedir
+          onlyif "test -f #{basedir}/#{sync_dir}"
+          command "cd #{cwd}; cp -R /var/poolparty/dr_configure/user_directory/#{sync_dir}; rm -rf /var/poolparty/dr_configure/#{name}"
         end
       end
-      
+            
       def from(dir)
-        from_dir (dir.include?(" ") ? dir.gsub(/[ ]/, '') : dir)
+        sync_dir dir
       end
       
       def to(dir)
-        cwd dir
-        name dir
-        has_directory(:name => "#{dir}", 
-                      :owner => owner,
-                      :mode => mode)
-      end
-      
-      # Since git is not a native type, we have to say which core resource
-      # it is using to be able to require it
-      def class_type_name
-        "exec"
-      end
-      
-      # Because we are requiring an exec, instead of a built-in package of the git, we have to overload
-      # the to_s method and prepend it with the same name as above
-      def key
-        "deploy-directory-#{name}"
+        basedir dir
       end
       
     end

@@ -53,7 +53,7 @@ module PoolParty
       subclass = "#{serv.class.to_s.top_level_class.underscore.downcase}#{extra_name}"
       lowercase_class_name = subclass.to_s.underscore.downcase || subclass.downcase
       
-      services[lowercase_class_name.to_sym] = serv
+      (services[lowercase_class_name.to_sym] ||= []) << serv if serv && !serv.empty?
       # services.merge!({lowercase_class_name.to_sym => serv})
     end
     # Container for the services
