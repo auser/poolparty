@@ -52,7 +52,8 @@ module PoolParty
         'ruby /var/poolparty/dr_configure/erlang_cookie_maker',
         'echo "configure" >> /var/poolparty/POOLPARTY.PROGRESS'
         ]
-      commands << @configurator.commands
+      commands << self.class.class_commands unless self.class.class_commands.empty?
+      commands << @configurator.commands      
      end
      
      def pack_up_and_ship_off_suitcase
@@ -73,8 +74,11 @@ module PoolParty
        # cookie = (1..16).collect { chars[rand(chars.size)] }.pack("C*")
        cookie =  (1..65).collect {rand(9)}.join()
        cookie_file = ::File.open("/tmp/poolparty/dr_configure/erlang.cookie", 'w+'){|f| f << cookie }
-       ::File.cp "#{::File.dirname(__FILE__)}/../templates/erlang_cookie_maker", '/tmp/poolparty/dr_configure/'
-       
+       ::File.cp "#{::File.dirname(__FILE__)}/../templates/erlang_cookie_maker", '/tmp/poolparty/dr_configure/'       
+     end
+     
+     def self.class_commands
+       @class_commands ||= []
      end
     
    end 

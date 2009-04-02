@@ -66,12 +66,14 @@ module PoolParty
         end
         # Add the gems to the suitcase
         puts "Adding default gem depdendencies"
-        ::Suitcase::Zipper.gems self.class.gem_list, "#{Default.vendor_path}/dependencies"
+        ::Suitcase::Zipper.gems self.class.gem_list, "/tmp/poolparty/trash/dependencies"
 
-        ::Suitcase::Zipper.packages "http://rubyforge.org/frs/download.php/45905/rubygems-1.3.1.tgz", "#{Default.vendor_path}/dependencies/packages"
+        ::Suitcase::Zipper.packages "http://rubyforge.org/frs/download.php/45905/rubygems-1.3.1.tgz", "/tmp/poolparty/trash/dependencies/packages"
 
-        ::Suitcase::Zipper.add("#{Default.vendor_path}/dependencies/cache", "gems")
+        ::Suitcase::Zipper.add("/tmp/poolparty/trash/dependencies/cache", "gems")
         ::Suitcase::Zipper.build_dir!("#{Default.tmp_path}/dependencies")
+        
+        #         ::FileUtils.rm_rf "/tmp/poolparty/trash/"
       end
   
       def default_commands
