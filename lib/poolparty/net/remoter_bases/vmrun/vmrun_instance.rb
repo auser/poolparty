@@ -2,13 +2,17 @@ module PoolParty
   module Remote
     
     class VmwareInstance
+      attr_accessor :ip, :mac_address, :vmx_file
       
-      def initialize(opts={}, prnt=Ec2.new)
-        @uniquely_identifiable_by = [:ip, :name, :dns_name, :instance_id]
-        @original_options = opts
-        @my_cloud = prnt
-        super(opts, prnt)
-        find_myself(@uniquely_identifiable_by && opts.keys) if prnt.respond_to?(:describe_instances)
+      def initialize(opts={})
+        @status = opts[:status] || 'running'
+        @ip = opts[:ip]
+        @vmx_file = opts[:vmx_file]
+        # super
+      end
+      
+      def my_cloud
+        Vmrun.new
       end
       
       # Is this instance running?

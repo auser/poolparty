@@ -1,5 +1,5 @@
 =begin rdoc
-  The base for Remote Bases
+  The Vmrun remote base calls out to for Remote Bases
   
   By extending this class, you can easily add remoters to 
   PoolParty. There are 4 methods that the remote base needs to implement
@@ -35,10 +35,17 @@ module PoolParty
         :network_addresses => DEFAULT_NETWORK_ADDRESSES
       )
 
-      def initialize(parent, opts={}, &block)
+      def initialize(parent=nil, opts={}, &block)
         dsl_options opts
         name = ::File.basename(opts[:vmx_file], '.vmx') if opts[:vmx_file]
-        super
+        super(parent, &block)
+      end
+      
+      #terminate all running instances
+      def self.terminate!(o={})
+        Vmrun.describe_instances(o).each do |vmxf|
+           Vmrun.terminate_instance! vmxf
+        end
       end
 
       def self.launch_new_instance!(o={})
@@ -62,7 +69,7 @@ module PoolParty
 
       # Describe an instance's status, must pass :vmx_file in the options
       def self.describe_instance(_vmx_file=nil, o={})
-        vmx_file = _vmx_file || Vmrun.describe_instances.first
+        vmx_file = _vmx_file || o[:vmx_file] || Vmrun.describe_instances.first
         p vmx_file
         Vmrun.new( o.merge(:vmx_file=>_vmx_file) ).describe_instance(_vmx_file)
       end
@@ -73,10 +80,10 @@ module PoolParty
       end
 
       def self.describe_instances(o={})
-        output = run_local "#{default_options.path} list"
+        output = run_local "#{default_options.merge(o).path} list"
         lines = output.split("\n")
         lines.shift
-        lines
+        lines #todo, reuturn array of vmrun_instances
       end
       def describe_instances(o={})
         self.class.describe_instances(o)
