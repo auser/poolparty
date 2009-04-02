@@ -59,10 +59,8 @@ module PoolParty
       def json file=nil, &block
         if file
           if ::File.file? file
-            ::File.cp file, "/tmp/poolparty/dna.json"
-            @json_file = "/tmp/poolparty/dna.json"
+            ::File.cp file, "/tmp/poolparty/dna.json"            
           elsif file.is_a?(String)
-            require "tempfile"
             ::File.open("/tmp/poolparty/dna.json", "w+") do |tf|
               tf << file # is really a string
             end
@@ -71,10 +69,11 @@ module PoolParty
               Your json must either point to a file that exists or a string. Please check your configuration and try again
             EOM
           end
+          @json_file = "/tmp/poolparty/dna.json"
         else
           unless @recipe
             @recipe = ChefRecipe.new
-            @recipe.instance_eval &block
+            @recipe.instance_eval &block if block
             @recipe.recipes(@recipe.recipes? ? (@recipe.recipes << ["main", "poolparty"]) : ["main", "poolparty"])
             ::File.open("/tmp/poolparty/dna.json", "w+") {|f| f << @recipe.options.to_json }
             @json_file = "/tmp/poolparty/dna.json"
@@ -125,8 +124,12 @@ file_cache_path  "/etc/chef"
         added_recipes.each do |rcp|
           # ::FileUtils.cp_r rcp, "/tmp/poolparty/dr_configure/recipes/"
           ::Suitcase::Zipper.add(rcp, "chef/recipes")
-        end        
-        ::Suitcase::Zipper.add(@json_file, "chef/json") if @json_file
+        end
+
+        json unless @json_file
+        ::Suitcase::Zipper.add(@json_file, "chef/json")
+        configure_commands ["cp /var/poolparty/dr_configure/dna.json /etc/chef/dna.json"]
+
         recipe_files.each do |rf|
           # ::FileUtils.cp_r rf, "/tmp/poolparty/dr_configure/recipes/#{::File.basename(rf)}"
           ::Suitcase::Zipper.add(rf, "chef/recipes") 
