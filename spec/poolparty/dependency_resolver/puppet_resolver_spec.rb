@@ -14,7 +14,7 @@ describe "PuppetResolver" do
                       ]    
       },
       :services => {
-        :apache => {
+        :apache => [{
           :options => {:listen => "8080"},
           :resources => {
                           :file => [
@@ -22,7 +22,7 @@ describe "PuppetResolver" do
                             ]
                         },
           :services => {}
-        }
+        }]
       }
     }
   end
