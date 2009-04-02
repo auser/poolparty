@@ -16,21 +16,27 @@ module PoolParty
         @recipe_files ||= []
       end
       
+      def basedir
+        @basedir ||= "/tmp/poolparty/dr_configure/recipes/main"
+      end
+      
       def recipe file=nil, o={}, &block
-        if file
+        if file          
+          ::FileUtils.mkdir_p "#{basedir}/recipes" unless ::File.directory? basedir
+          
           if ::File.file?(::File.expand_path(file))
-            file = ::File.expand_path file
-            basedir = "/tmp/poolparty/dr_configure/recipes/main"
-            ::FileUtils.mkdir_p "#{basedir}/recipes" unless ::File.directory? basedir
-            ::File.cp file, "#{basedir}/recipes/default.rb"
-
-            if o[:templates]
-              ::FileUtils.mkdir_p "#{basedir}/templates/default/"
-              o[:templates].each {|f| ::File.cp f, "#{basedir}/templates/default/#{::File.basename(f)}" }
-            end
-            
-            recipe_files << basedir
+            file = ::File.expand_path file            
+          else
+            file = Tempfile.open("main-poolparty-recipe") do |f|
+              f << file # copy the string into the temp file
+            end.path
           end
+          
+          ::File.cp file, "#{basedir}/recipes/default.rb"
+          
+          template o[:templates] if o[:templates]
+          
+          recipe_files << basedir
         # TODO: Enable neat syntax from within poolparty
         else
           raise <<-EOR
@@ -40,6 +46,13 @@ module PoolParty
         #   recipe.instance_eval &block          
         #   ::File.open("/tmp/poolparty/chef_main.rb", "w+") {|f| f << @recipe.options.to_json }
         #   recipe_dirs << "/tmp/poolparty/poolparty_chef_recipe.rb"
+        end
+      end
+      
+      def template templates=[]
+        if templates
+          ::FileUtils.mkdir_p "#{basedir}/templates/default/"
+          templates.each {|f| ::File.cp f, "#{basedir}/templates/default/#{::File.basename(f)}" }
         end
       end
       
