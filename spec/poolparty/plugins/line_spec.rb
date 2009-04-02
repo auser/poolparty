@@ -10,11 +10,13 @@ describe "Remote Instance" do
   end
   describe "call" do
     before(:each) do
-      @line = @tc.has_line_in_file({:line => "hi", :file => "ho"})
+      @tc.run_in_context do
+        has_line_in_file({:line => 'hi', :file => "ho"})
+      end
       @compiled = PuppetResolver.new(@tc.to_properties_hash).compile
     end
     it "should have the line in the file from PuppetResolver" do
-      @compiled.should match(/grep -q 'hi' ho/)
+      @compiled.should match(/grep -q/)
     end
   end
 end

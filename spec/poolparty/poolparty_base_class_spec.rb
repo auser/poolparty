@@ -1,6 +1,16 @@
 require File.dirname(__FILE__) + '/spec_helper'
 
 describe "BaseClass" do
+  describe "services" do
+    before(:each) do
+      @tbc = TestBaseClass.new do
+        has_git_repos :name => "test git", :at => "/var/www/google", :source => "git://pop.git"
+      end
+    end
+    it "should add a service when a service is called" do
+      @tbc.services.size.should == 1
+    end
+  end
   describe "context_stack" do
     before(:each) do
       ::PoolParty.reset!
