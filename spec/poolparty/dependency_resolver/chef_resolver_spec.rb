@@ -15,7 +15,7 @@ describe "ChefResolver" do
                       ]    
       },
       :services => {
-        :apache => {
+        :apache => [{
           :options => {:listen => "8080"},
           :resources => {
                           :file => [
@@ -23,7 +23,7 @@ describe "ChefResolver" do
                             ]
                         },
           :services => {}
-        }
+        }]
       }
     }
   end

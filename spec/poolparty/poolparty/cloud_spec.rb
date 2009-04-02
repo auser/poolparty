@@ -266,7 +266,7 @@ describe "Cloud" do
                     test_service
                   end
                   tskey = clouds[:tester].services.keys.first
-                  @service = clouds[:tester].services[tskey]
+                  @service = clouds[:tester].services[tskey].first
                   @files = @service.resource(:file)
                 end
                 it "should have a file resource" do
