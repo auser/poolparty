@@ -12,7 +12,10 @@ module PoolParty
     
     def compile(props=@properties_hash, tabs=0, default_namespace="poolparty")
       cld_name = default_namespace
-      
+      comp(cld_name, props, tabs)
+    end
+    
+    def comp(cld_name, props, tabs)
       basedir = build_base_recipe_directory( cld_name )
       handle_print_variables(props[:options], cld_name) if props && props.has_key?(:options)
       
@@ -114,9 +117,9 @@ module PoolParty
     def handle_names(ty, res)
       case ty
       when :exec
-        res[:command]
+        res.name
       else
-        res[:name]
+        res.name
       end
     end
     
@@ -128,13 +131,18 @@ module PoolParty
       end
     end
     
-    def handle_print_service(klassname, klasshash, tabs)
+    def handle_print_service(klassname, klassarray, tabs)
       case klassname
       when nil
         nil
       else
         kname = klassname.to_s.gsub(/pool_party_/, '').gsub(/_class/, '')
-        "\n#{tf(tabs)}# #{kname}\n#{tf(tabs)}#{tf(tabs)}#{compile(klasshash,tabs+1)}#{tf(tabs)}"
+        str = "\n#{tf(tabs)}# #{kname}\n"
+        str << "#{tf(tabs+1)}"
+        klassarray.each do |hsh|
+          str << compile(hsh,tabs+1, klassname)
+        end        
+        str << "#{tf(tabs)}"
       end
     end
     
@@ -154,6 +162,9 @@ module PoolParty
     def services_to_string(opts,tabs=0)
       if opts
         str = ""
+        [:control_statements, :conditional].each do |k|
+          opts.delete(k)
+        end
         opts.map do |klassname, klasshash|
           str << handle_print_service(klassname, klasshash, tabs)
         end
@@ -165,6 +176,8 @@ module PoolParty
       case key
       when :ensures
         nil
+      when :onlyif
+        "only_if"
       else
         "#{key}"        
       end
