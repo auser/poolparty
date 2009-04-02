@@ -18,9 +18,10 @@ module PoolParty
       
       def recipe file=nil, o={}, &block
         if file
-          if ::File.file? file
+          puts "::File.file?(::File.expand_path file): #{::File.file?(::File.expand_path(file))} (#{::File.expand_path(file)})"
+          if ::File.file?(::File.expand_path(file))
             file = ::File.expand_path file
-            basedir = "/tmp/poolparty/dr_configure/tmp/recipes/main"
+            basedir = "/tmp/poolparty/dr_configure/recipes/main"
             ::FileUtils.mkdir_p "#{basedir}/recipes" unless ::File.directory? basedir
             ::File.cp file, "#{basedir}/recipes/default.rb"
 
