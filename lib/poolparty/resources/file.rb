@@ -1,11 +1,7 @@
 module PoolParty    
   module Resources
         
-    class File < Resource      
-      
-      default_options({
-        :mode => 644
-      })
+    class File < Resource
       
       def after_create
         if dsl_options.include?(:template)          

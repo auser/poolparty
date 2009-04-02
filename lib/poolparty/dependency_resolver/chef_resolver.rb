@@ -191,7 +191,7 @@ module PoolParty
       when PoolParty::Resources::Resource
         "resources(:#{obj.class.to_s.top_level_class.downcase} => \"#{obj.name}\")"
       when Fixnum
-        "#{obj}"
+        "#{obj.to_i}"
       when String
         "\"#{obj}\""
       when Array
