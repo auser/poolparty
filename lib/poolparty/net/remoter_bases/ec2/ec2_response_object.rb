@@ -60,6 +60,7 @@ class EC2ResponseObject
         :security_group => group
       }        
     rescue Exception => e
+      puts "E: #{e}"
       nil
     end      
   end
