@@ -16,7 +16,7 @@ nodes = @cloud.list_of_running_instances
 puts nodes.map {|a| a.to_s}.join("\n")
 
 if !nodes.empty?
-  @cloud.ssh_into( nodes.first ) if @cloud
+  @cloud.ssh_into( nodes.first.ip ) if @cloud
 else
   puts "No running instances can be found"
 end

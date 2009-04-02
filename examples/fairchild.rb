@@ -11,18 +11,24 @@ pool :application do
   cloud :pp1 do
     # junk_yard_dogs "pains"
     has_file :name => "/etc/motd", :content => "Welcome to your PoolParty instance"
-    does_not_have_directory :name => '/has_dir_test'
     has_package :name => 'nmap'
-    
-    has_git_repos(:name => "poolpartyrepos", 
-            :source => "git://github.com/auser/poolparty-website.git", 
-            :at => "/var/www/poolpartyrb.com")
             
     chef do
-      include_recipes "~/.poolparty/chef/cookbooks/*"
+      include_recipes "~/.poolparty/chef/37s_signals/*"
       
+      has_git_repos :name => "/srv/paparazzi" do
+        source "git://github.com/auser/paparazzi.git"
+        at "/srv"
+      end
+      
+      has_exec :name => "setup var for passenger" do
+        command "chmod 755 -R /srv && chown -R www-data:www-data /srv"
+      end
+            
       recipe "#{::File.dirname(__FILE__)}/examples/default.rb", 
-              :templates => ["#{::File.dirname(__FILE__)}/examples/suspenders.conf.erb"]
+              :templates => [
+                              "#{::File.dirname(__FILE__)}/examples/paparazzi.conf.erb"
+                            ]
       
       json do
         gems [
