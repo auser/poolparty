@@ -10,22 +10,20 @@ pool :application do
   
   cloud :pp1 do
     # junk_yard_dogs "pains"
-    has_file :name => "/etc/motd", :content => "Welcome to your PoolParty instance"
+    has_file :name => "/etc/motd", 
+      :content => "Welcome to your PoolParty instance: <%= @node[:fqdn] %>", :mode => 644
+      
     has_package :name => 'nmap'
-            
+    
+    has_git_repos :name => "paparazzi" do
+      source "git://github.com/auser/paparazzi.git"
+      at "/var/www"
+    end
+
     chef do
-      include_recipes "~/.poolparty/chef/37s_signals/*"
-      
-      has_git_repos :name => "/srv/paparazzi" do
-        source "git://github.com/auser/paparazzi.git"
-        at "/srv"
-      end
-      
-      has_exec :name => "setup var for passenger" do
-        command "chmod 755 -R /srv && chown -R www-data:www-data /srv"
-      end
+      include_recipes "~/.poolparty/chef/cookbooks/*"
             
-      recipe "#{::File.dirname(__FILE__)}/examples/default.rb", 
+      recipe "#{::File.dirname(__FILE__)}/examples/fairchild_chef.rb", 
               :templates => [
                               "#{::File.dirname(__FILE__)}/examples/paparazzi.conf.erb"
                             ]
