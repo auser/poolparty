@@ -16,6 +16,7 @@ module PoolParty
     end
     
     def comp(cld_name, props, tabs)
+      base_dir cld_name
       basedir = build_base_recipe_directory( cld_name )
       handle_print_variables(props[:options], cld_name) if props && props.has_key?(:options)
       
@@ -30,9 +31,9 @@ module PoolParty
     
     def build_base_recipe_directory(nm)
       [ "recipes", "templates", "attributes" ].each do |bdir|
-        ::FileUtils.mkdir_p "#{base_dir(nm)}/#{bdir}" unless ::File.directory? "#{base_dir(nm)}/#{bdir}"
+        ::FileUtils.mkdir_p "#{base_dir}/#{bdir}" unless ::File.directory? "#{base_dir}/#{bdir}"
       end
-      base_dir(nm)
+      base_dir
     end
     
     def base_dir(nm=nil)
@@ -85,14 +86,14 @@ module PoolParty
         val = to_option_string(value)
         out << "#{vname} = #{val}" if vname && val
       end
-      ::File.open("#{base_dir(nm)}/attributes/#{nm}.rb", "w+") do |f| 
+      ::File.open("#{base_dir}/attributes/#{nm}.rb", "w+") do |f| 
         f << out.join("\n")
       end
     end
     
     def handle_chef_vars(nm, varname)
       case varname
-      when :ensures
+      when :enable
         "action"
       else
         "#{nm}[:#{varname}]"
@@ -175,6 +176,8 @@ module PoolParty
     def to_chef_key(key)
       case key
       when :ensures
+        nil
+      when :enable
         nil
       when :onlyif
         "only_if"
