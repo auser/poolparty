@@ -11,23 +11,30 @@ o.loaded_clouds.each do |cld|
     puts header("Starting cloud #{cld.name}")
     puts "#{cld.list_of_running_instances.size} running instances (#{cld.minimum_instances} - #{cld.maximum_instances})"
     
-    inst = cld.launch_instance!
+    cld.launch_instance! do |node|
+      ::PoolParty::Provision::BootStrapper.new(node.ip, :full_keypair_path => cld.keypair.full_filepath, :cloud => cld)
+      ::PoolParty::Provision::DrConfigure.new(node.ip,  :full_keypair_path => cld.keypair.full_filepath, :cloud => cld)
+      
+      puts <<-EOM
+        Your cloud has started. Your ip is #{node.ip}
+      EOM
+    end
     # unil inst.ip do 
     #   sleep 2
     #   node = cld.remote_instances_list.select {|i| i.running? }
     # end
     
-    cld.when_no_pending_instances do
-      cld.remote_instances_list.select {|i| i.running? }.each do |node|
-        ::PoolParty::Provision::BootStrapper.new(node.ip, :full_keypair_path => cld.keypair.full_filepath, :cloud => cld)
-        ::PoolParty::Provision::DrConfigure.new(node.ip,  :full_keypair_path => cld.keypair.full_filepath, :cloud => cld)
-      end
+    # cld.when_no_pending_instances do
+      # cld.remote_instances_list.select {|i| i.running? }.each do |node|
+      #   ::PoolParty::Provision::BootStrapper.new(node.ip, :full_keypair_path => cld.keypair.full_filepath, :cloud => cld)
+      #   ::PoolParty::Provision::DrConfigure.new(node.ip,  :full_keypair_path => cld.keypair.full_filepath, :cloud => cld)
+      # end
 
-      first_inst = cld.remote_instances_list.select {|i| i.running? }.first
-      puts <<-EOM
-        Your cloud has started. Your ip is #{first_inst.ip}
-      EOM
-    end
+      # first_inst = cld.remote_instances_list.select {|i| i.running? }.first
+      # puts <<-EOM
+      #   Your cloud has started. Your ip is #{first_inst.ip}
+      # EOM
+    # end
   else
     puts <<-EOE
       Your cloud is already running.

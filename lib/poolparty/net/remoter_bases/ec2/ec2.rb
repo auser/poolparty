@@ -49,7 +49,7 @@ module PoolParty
           :instance_type => o[:size],
           :group_id => o[:security_group])
         begin
-          h = EC2ResponseObject.get_hash_from_response(instance)
+          h = EC2ResponseObject.get_hash_from_response(instance.instancesSet.item.first)
           #h = instance.instancesSet.item.first
         rescue Exception => e
           h = instance
@@ -63,7 +63,7 @@ module PoolParty
       # Describe an instance's status
       def self.describe_instance(o={})
         return describe_instances.first if o[:instance_id].nil?
-        describe_instances.detect {|a| a[:name] == o[:instance_id] || a[:ip] == o[:instance_id] }
+        describe_instances.detect {|a| a[:name] == o[:instance_id] || a[:ip] == o[:instance_id] || a[:instance_id] == o[:instance_id] }
       end
       def self.describe_instances(o={})
         id = 0

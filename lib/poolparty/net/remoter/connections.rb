@@ -1,5 +1,6 @@
 require 'rubygems'
 require 'net/ssh'
+require "socket"
 
 module PoolParty
   module Remote
@@ -53,6 +54,18 @@ module PoolParty
         [commands.compact.join(' && ')], 
         :host=>target_host, :user=>'root')
       # commands.each {|c| run_remote(c, target_host) }
+    end    
+
+    def ping_port(host, port=22, retry_times=400)
+      connected = false
+      retry_times.times do |i|
+        begin
+          break if connected = TCPSocket.new(host, port).is_a?(TCPSocket)      
+        rescue Exception => e
+          sleep(2)
+        end
+      end
+      connected
     end
     
     def netssh(cmds=[], opts={})
