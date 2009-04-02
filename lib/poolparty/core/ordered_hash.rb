@@ -13,6 +13,20 @@ class OrderedHash < Hash
     @a << k unless @h.has_key?(k)
     @h[k] = v
   end
+  def merge(o={})
+    na = dup
+    o.each {|k,v| na[k] = v }
+    na
+  end
+  def keys
+    map {|k,v| k }
+  end
+  def size
+    @h.size
+  end
+  def merge!(o={})
+    o.each {|k,v| self[k] = v }
+  end
   def each
     @a.each { |k| yield k,@h[k] }
   end
