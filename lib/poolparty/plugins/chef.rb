@@ -1,3 +1,4 @@
+require "tempfile"
 module PoolParty
   class ChefRecipe
     include Dslify
@@ -27,9 +28,9 @@ module PoolParty
           if ::File.file?(::File.expand_path(file))
             file = ::File.expand_path file            
           else
-            file = Tempfile.open("main-poolparty-recipe") do |f|
-              f << file # copy the string into the temp file
-            end.path
+            tfile = Tempfile.new("main-poolparty-recipe")
+            tfile << file # copy the string into the temp file
+            file = tfile.path
           end
           
           ::File.cp file, "#{basedir}/recipes/default.rb"
