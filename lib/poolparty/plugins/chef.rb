@@ -74,7 +74,7 @@ module PoolParty
           unless @recipe
             @recipe = ChefRecipe.new
             @recipe.instance_eval &block if block
-            @recipe.recipes(@recipe.recipes? ? (@recipe.recipes << ["main", "poolparty"]) : ["main", "poolparty"])
+            @recipe.recipes(@recipe.recipes? ? (@recipe.recipes << ["poolparty", "main"]) : ["poolparty", "main"])
             ::File.open("/tmp/poolparty/dna.json", "w+") {|f| f << @recipe.options.to_json }
             @json_file = "/tmp/poolparty/dna.json"
           end
