@@ -23,7 +23,7 @@ module PoolParty
     alias :to_s :full_filepath
     
     def basename
-      @basename ||= ::File.basename(full_filepath, ::File.extname(full_filepath))
+      @basename ||= ::File.basename(full_filepath, ::File.extname(full_filepath)) rescue filepath
     end
     
     def search_in_known_locations
@@ -42,6 +42,10 @@ module PoolParty
         Default.remote_storage_path,
         Dir.pwd
       ]
+    end
+    
+    def to_json
+      "{'keypair':'#{basename}'}"
     end
     
   end
