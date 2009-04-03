@@ -7,3 +7,6 @@
 [submodule "vendor/gems/suitcase"]
 	path = vendor/gems/suitcase
 	url = git://github.com/auser/suitcase.git
+[submodule "vendor/gems/butterfly"]
+	path = vendor/gems/butterfly
+	url = git://github.com/auser/butterfly.git
