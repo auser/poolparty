@@ -75,16 +75,24 @@ class OrderedHash
 		self
 	end
 	def to_json
-	  "{#{collect{|k, v| "\"#{k}\":#{v.to_json}"}.join(',')}}"
+	  "{#{collect{|k, v| "\"#{k.to_s}\":#{v.to_json}"}.join(',')}}"
 	end
-	
 end
 
+# {}.to_json
+# oh2= OrderedHash.new
+# oh2[:thing] = 'majobber'
+# oh2['stuff'] = 'bb'
 # 
 # oh = OrderedHash.new
-# oh["var1"]=3
-# oh["var2"]=Time.now
-# oh["var3"]=[1,2,3]
+# oh[nil] = nil
+# oh[:var1]=3
+# oh['time']=Time.now
+# oh[3]=[1,2,3]
+# oh['false'] = false
+# oh['ordered_hash'] = oh2
 # oh["var4"]={:keyme=>'valueme'}
 # oh.each { |k,v| puts "#{k}=>#{v}" }
 # p oh.to_json
+
+
