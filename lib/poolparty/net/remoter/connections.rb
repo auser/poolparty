@@ -51,7 +51,6 @@ module PoolParty
     # TODO: make extendable multithreaded version
     def execute!(cmds=commands)
       netssh(
-        [cmds.compact.join(' && ')], 
         :host=>target_host, :user=>'root')
       # commands.each {|c| run_remote(c, target_host) }
     end    
