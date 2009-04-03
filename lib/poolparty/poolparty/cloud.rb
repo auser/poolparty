@@ -53,14 +53,13 @@ module PoolParty
       default_options(
         :minimum_instances => 2,
         :maximum_instances => 5,
-        :contract_when => "cpu < 0.65",
-        :expand_when => "cpu > 1.9",
+        :contract_when => "load < 0.65",
+        :expand_when => "load > 1.9",
         :access_key => Default.access_key,
         :secret_access_key => Default.secret_access_key,
         :ec2_dir => ENV["EC2_HOME"],
         :minimum_runtime => Default.minimum_runtime,
-        :user => Default.user,
-        :ami => 'ami-44bd592d'
+        :user => Default.user
       )
       
       def initialize(name, &block)
@@ -85,6 +84,7 @@ module PoolParty
         # this can be overridden in the spec, but ec2 is the default
         using :ec2
         options[:keypair] = keypair.basename
+        options[:rules] = {:expand => expand_when, :contract => contract_when}
         dependency_resolver 'chef'
       end
       
@@ -97,7 +97,7 @@ module PoolParty
         ips.first  #TODO: make this be a random ip, since we should not rely on it being the same each time
       end
       
-      # FIXME: this is a quick hack.  refactor this to the resources class #MF
+      # TODO: Deprecated
       def dependency_resolver_command
          "/usr/bin/puppet -v --logdest syslog /etc/puppet/manifests/site.pp"
       end
