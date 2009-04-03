@@ -30,6 +30,7 @@ module PoolParty
       :vendor_path => "#{::File.dirname(__FILE__)}/../../../vendor",
       :port => "80",
       :forwarding_port => "8080",
+      :monitor_port => 8081,
       :proxy_mode => "http",
       :messenger_client_port => 7050,
       :minimum_runtime  => 3000, #50.minutes in seconds
