@@ -7,3 +7,4 @@
 # Change all the copying to /tmp/poolparty statements to be handled with zipper
 # Change line in file from a native resource to be a plugin (like git)
 # Add puppet/chef syntax checker
+# Place suitcase and dependencie files in ~/.poolparty/tmp-poolname/ instead of /tmp/
