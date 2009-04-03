@@ -1,14 +1,11 @@
-# =begin rdoc
-#   Web monitor.
-# =end
 # module PoolParty
 #   module Monitors
 #     
-#     class WebMonitor < BaseMonitor
+#     class LoadMonitor < BaseMonitor
 #       
 #       def run
-#         str = %x[httperf]
-#         str.split(/\s+/)[-1].to_f rescue 0.0
+#         stdout = %x[uptime]
+#         stdout.split(/\s+/)[-1].to_f rescue 0.0
 #       end
 #             
 #     end
