@@ -1,5 +1,5 @@
-# require File.dirname(__FILE__) + '/../spec_helper'
-require File.join(File.dirname(__FILE__), '../../../lib/poolparty/core/ordered_hash.rb')
+require File.dirname(__FILE__) + '/../spec_helper'
+
 describe "Ordered Hash" do
   before(:each) do
     @oh = OrderedHash.new
@@ -37,5 +37,9 @@ describe "Ordered Hash" do
   it "should to_json" do
     @oh[:arr] = [1,2,3]
     @oh.to_json.should == "{\"var1\":10,\"var2\":2,\"var3\":3,\"var4\":4,\"arr\":[1,2,3]}"
+  end
+  it "PoolParty Key" do
+      @oh[:keyy] = [Key.new, Key.new('path/to/nowhere')]
+      @oh.to_json.should
   end
 end
