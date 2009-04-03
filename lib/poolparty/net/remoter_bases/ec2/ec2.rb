@@ -24,14 +24,14 @@ sudo gem install grempe-amazon-ec2 --source http://gems.github.com
 EOM
 end
   
-  class String
-    def convert_from_ec2_to_ip
-      self.gsub(/.compute-1.amazonaws.com*/, '').gsub(/ec2-/, '').gsub(/-/, '.')
-    end
-    def parse_datetime
-      DateTime.parse( self.chomp ) rescue self
-    end
+class String
+  def convert_from_ec2_to_ip
+    self.gsub(/.compute-1.amazonaws.com*/, '').gsub(/ec2-/, '').gsub(/-/, '.')
   end
+  def parse_datetime
+    DateTime.parse( self.chomp ) rescue self
+  end
+end
   
 module PoolParty    
   module Remote
@@ -57,7 +57,7 @@ module PoolParty
         h
       end
       # Terminate an instance by id
-      def self.terminate_instance!(o={})  #MF why allow this command wihtout an instance_idˇ
+      def self.terminate_instance!(o={})  #NOTE: maybe we should not allow this command wihtout an instance_idˇ
         ec2(o).terminate_instances(:instance_id => o[:instance_id])
       end
       # Describe an instance's status
