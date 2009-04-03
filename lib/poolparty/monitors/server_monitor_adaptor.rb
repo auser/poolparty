@@ -1,8 +1,8 @@
-require "rubygems"
-require "butterfly"
-require "poolparty/poolparty/default"
-require 'net/http'
-Dir["#{::File.dirname(__FILE__)}/butterfly_adaptors/*"].each {|lib| require lib }
+# require "rubygems"
+# require "butterfly"
+# require "poolparty/poolparty/default"
+# require 'net/http'
+# Dir["#{::File.dirname(__FILE__)}/butterfly_adaptors/*"].each {|lib| require lib }
 
 module Butterfly
   class AdaptorBase
@@ -41,9 +41,9 @@ module Butterfly
   end
 end
 
-fork do
-  Butterfly::Server.new(:clouds_json_file => "#{::File.dirname(__FILE__)}/../../../spec/poolparty/fixtures/clouds.json").start!
-end
-fork do
-  Butterfly::Server.new(:port => 8082, :clouds_json_file => "#{::File.dirname(__FILE__)}/../../../spec/poolparty/fixtures/clouds.json").start!
-end
+# fork do
+#   Butterfly::Server.new(:clouds_json_file => "#{::File.dirname(__FILE__)}/../../../spec/poolparty/fixtures/clouds.json").start!
+# end
+# fork do
+#   Butterfly::Server.new(:port => 8082, :clouds_json_file => "#{::File.dirname(__FILE__)}/../../../spec/poolparty/fixtures/clouds.json").start!
+# end
