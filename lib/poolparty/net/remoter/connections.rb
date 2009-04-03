@@ -82,7 +82,7 @@ module PoolParty
             if stream == :stdou
              print data
             else
-              $stderr.print "ERROR: #{data}"
+              $stderr.print "#{host} stderr => #{data}"
             end
           end
         end
