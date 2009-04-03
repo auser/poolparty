@@ -32,6 +32,7 @@ namespace(:poolparty) do
     desc "Update the submodules"
     task :update do
       Dir["#{::File.dirname(__FILE__)}/../vendor/gems/*"].each do |dir|
+        puts "Fetching #{dir}"
         `cd #{dir} && git fetch && git rebase origin/master`
       end
       # `git submodule update`
