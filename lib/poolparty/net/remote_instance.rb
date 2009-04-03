@@ -78,6 +78,7 @@ module PoolParty
         new(hsh).to_s
       end
       
+      #TODO: Diet the next 5 commands
       def dependency_resolver_command
         cloud.dependency_resolver_command
       end
