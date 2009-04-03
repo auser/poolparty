@@ -30,6 +30,7 @@ module PoolParty
                         RubyInline
                         archive-tar-minitar
                         chef
+                        auser-butterfly
                         )
       end
   
@@ -50,6 +51,8 @@ module PoolParty
         
         default_commands
         execute!
+
+        after_bootstrap
       end
       
       def self.class_commands
@@ -97,6 +100,10 @@ module PoolParty
           'echo "bootstrap" >> /var/poolparty/POOLPARTY.PROGRESS']
         commands << self.class.class_commands unless self.class.class_commands.empty?
       end
+    end
+    
+    def after_bootstrap
+      execute! ["server-butterfly start"]
     end
     
   end
