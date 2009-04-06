@@ -80,7 +80,7 @@ module PoolParty
       Net::SSH.start(host, user, ssh_options_hash) do |ssh|  
         cmds.each do |command|
           ssh.exec!(command) do |ch, stream, data| 
-            if stream == :stdou
+            if stream == :stdout
              print data
             else
               $stderr.print "#{host} stderr => #{data}"
