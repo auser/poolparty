@@ -46,7 +46,7 @@ Capistrano::Configuration.instance(:must_exist).load do
     desc "Create poolparty commands"
     def create_poolparty_commands
     end
-  
+
     desc "Fix rubygems"
     def fix_rubygems
       # echo '#{open(::File.join(template_directory, "gem")).read}' > /usr/bin/gem &&
@@ -152,6 +152,13 @@ aptitude update -y
       run 'cp /usr/lib/ruby/gems/1.8/gems/*/bin/* /usr/bin'
     end
 
+    
+    desc "ensure gem binaries are copied to /usr/bin/"
+    def copy_gem_bins_to_usr_bin
+      run 'GEMPATH=`gem env gempath` && cp $GEMPATH/bin/* /usr/bin/'
+      run 'ls /usr/bin/|grep server'
+      run 'echo ---------   binaries copied  ---------\n\n'
+    end
     
   # end
 end

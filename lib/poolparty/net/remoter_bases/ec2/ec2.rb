@@ -48,6 +48,7 @@ module PoolParty
           :availability_zone => o[:availabilty_zone],
           :instance_type => o[:size],
           :group_id => o[:security_group])
+
         begin
           h = EC2ResponseObject.get_hash_from_response(instance.instancesSet.item.first)
           #h = instance.instancesSet.item.first

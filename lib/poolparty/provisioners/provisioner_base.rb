@@ -26,7 +26,7 @@ module PoolParty
         options(cloud.options) if cloud && cloud.respond_to?(:options)
         
         dputs "Using key at: #{cld.keypair}"
-        
+
         @os = os.to_s.downcase.to_sym
         self.instance_eval &block if block
         
