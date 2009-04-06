@@ -31,18 +31,17 @@ module PoolParty
      end
      
      def prescribe_configuration
-      ::FileUtils.mkdir_p("/tmp/poolparty/dr_configure")
-      ::File.cp $pool_specfile, '/tmp/poolparty/dr_configure/clouds.rb'
-      ::File.open "/tmp/poolparty/dr_configure/clouds.json", "w" do |f|
+      ::File.cp $pool_specfile, "#{Default.tmp_path}/dr_configure/clouds.rb"
+      ::File.open "#{Default.tmp_path}/dr_configure/clouds.json", "w" do |f|
         f << cloud.to_properties_hash.to_json
       end
       
       pack_up_and_ship_off_suitcase
       setup_configurator
       write_erlang_cookie
-      @configurator.files_to_upload.each {|f| ::FileUtils.cp f, "/tmp/poolparty/dr_configure/#{::File.basename(f)}" if ::File.file?(f) }
+      @configurator.files_to_upload.each {|f| ::FileUtils.cp f, "#{Default.tmp_path}/dr_configure/#{::File.basename(f)}" if ::File.file?(f) }
             
-      rsync "/tmp/poolparty/dr_configure/", "/var/poolparty/dr_configure/" 
+      rsync "#{Default.tmp_path}/dr_configure/", "/var/poolparty/dr_configure/" 
       commands << [
         'chmod 600 /var/poolparty/dr_configure/clouds.json',
         'chmod 600 /var/poolparty/dr_configure/clouds.rb',
@@ -73,8 +72,8 @@ module PoolParty
      def write_erlang_cookie
        # cookie = (1..16).collect { chars[rand(chars.size)] }.pack("C*")
        cookie =  (1..65).collect {rand(9)}.join()
-       cookie_file = ::File.open("/tmp/poolparty/dr_configure/erlang.cookie", 'w+'){|f| f << cookie }
-       ::File.cp "#{::File.dirname(__FILE__)}/../templates/erlang_cookie_maker", '/tmp/poolparty/dr_configure/'       
+       cookie_file = ::File.open("#{Default.tmp_path}/dr_configure/erlang.cookie", 'w+'){|f| f << cookie }
+       ::File.cp "#{::File.dirname(__FILE__)}/../templates/erlang_cookie_maker", "#{Default.tmp_path}/dr_configure/"
      end
      
      def self.class_commands
