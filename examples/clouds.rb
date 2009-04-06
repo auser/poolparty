@@ -12,6 +12,14 @@ pool :application do
       :content => "Welcome to LARubyConf"
     has_file :name => "/var/www/index.html" do
       content "<h1>Welcome to your new poolparty instance</h1>"
+      mode 0644
+      owner "www-data"
+    end
+    
+    chef do
+      include_recipes "~/.poolparty/chef/cookbooks/*"
+      
+      recipe "#{File.dirname(__FILE__)}/examples/fairchild_chef.rb"
     end
     
   end

@@ -29,7 +29,7 @@ module PoolParty
     end
     
     def base_dir(nm=nil)
-      @base_dir ||= "/tmp/poolparty/dr_configure/chef/recipes/#{nm}"
+      @base_dir ||= "#{Default.tmp_path}/dr_configure/chef/recipes/#{nm}"
     end
     
     def options_to_string(opts,tabs=0)

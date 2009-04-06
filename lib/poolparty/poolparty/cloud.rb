@@ -78,6 +78,14 @@ module PoolParty
       
       # Callback
       def after_create
+        dputs "In after create"
+        ::FileUtils.mkdir_p("#{Default.tmp_path}/dr_configure")
+        run_in_context do
+          add_poolparty_base_requirements
+          chef do
+          end
+        end
+        plugin_store.each {|a| a.after_create }
       end
       
       def setup_defaults
@@ -212,9 +220,7 @@ module PoolParty
       def build_manifest
         vputs "Building manifest"
         @build_manifest ||= build_from_existing_file
-        unless @build_manifest
-          run_in_context(&lambda {add_poolparty_base_requirements})
-          
+        unless @build_manifest          
           props = to_properties_hash
          
           @build_manifest =  options[:dependency_resolver].send(:compile, props, self)
@@ -283,21 +289,17 @@ module PoolParty
       def remote_base
         @remote_base ||= nil
       end
-      
+            
       # Callbacks on before_bootstrap
-      def call_before_bootstrap_callbacks
-        plugin_store.each {|a| a.before_bootstrap }
-      end
-      
-      # Callbacks on before_configure
-      def call_before_configure_callbacks
-        call_default_dependency_provider
-        plugin_store.each {|a| a.before_configure }
-      end
-      
-      # TODO: Modularize
-      def call_default_dependency_provider
-        run_in_context(&lambda {chef})
+      %w( before_bootstrap 
+          after_bootstrap 
+          before_configure 
+          after_configure).each do |meth|
+        module_eval <<-EOE
+          def call_#{meth}_callbacks
+            plugin_store.each {|a| a.#{meth} }
+          end
+        EOE
       end
       
       # Add all the poolparty requirements here
@@ -306,7 +308,7 @@ module PoolParty
       # Also note that there is no block associated. This is because we have written
       # all that is necessary in a method called enable
       # which is called when there is no block
-      def add_poolparty_base_requirements        
+      def add_poolparty_base_requirements
         poolparty_base_haproxy
         poolparty_base_heartbeat
         poolparty_base_ruby

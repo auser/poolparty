@@ -52,6 +52,7 @@ module PoolParty
         default_commands
         execute!
 
+        @cloud.call_after_bootstrap_callbacks if @cloud
         after_bootstrap
       end
       
@@ -69,11 +70,11 @@ module PoolParty
         end
         # Add the gems to the suitcase
         puts "Adding default gem dependencies"
-        ::Suitcase::Zipper.gems self.class.gem_list, "/tmp/poolparty/trash/dependencies"
+        ::Suitcase::Zipper.gems self.class.gem_list, "#{Default.tmp_path}/trash/dependencies"
 
-        ::Suitcase::Zipper.packages "http://rubyforge.org/frs/download.php/45905/rubygems-1.3.1.tgz", "/tmp/poolparty/trash/dependencies/packages"
+        ::Suitcase::Zipper.packages "http://rubyforge.org/frs/download.php/45905/rubygems-1.3.1.tgz", "#{Default.tmp_path}/trash/dependencies/packages"
 
-        ::Suitcase::Zipper.add("/tmp/poolparty/trash/dependencies/cache", "gems")
+        ::Suitcase::Zipper.add("#{Default.tmp_path}/trash/dependencies/cache", "gems")
         ::Suitcase::Zipper.build_dir!("#{Default.tmp_path}/dependencies")
         
         #         ::FileUtils.rm_rf "/tmp/poolparty/trash/"
@@ -102,7 +103,7 @@ module PoolParty
       end
       
       def after_bootstrap
-        execute! ["server-butterfly start"]
+        execute! ['echo "Starting butterfly daemon"']
       end
     end
     
