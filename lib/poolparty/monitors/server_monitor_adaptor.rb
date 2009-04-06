@@ -1,3 +1,5 @@
+Dir["#{::File.dirname(__FILE__)}/butterfly_adaptors/*"].each {|lib| require lib }
+
 module Butterfly
   class ServerMonitorAdaptor < AdaptorBase
     attr_reader :data

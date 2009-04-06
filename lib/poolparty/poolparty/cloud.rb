@@ -66,8 +66,7 @@ module PoolParty
         @cloud_name = name
         @cloud_name.freeze
         plugin_directory "#{pool_specfile ? ::File.dirname(pool_specfile) : Dir.pwd}/plugins"
-        super
-        setup_defaults
+        super        
         
         after_create
       end
@@ -86,6 +85,7 @@ module PoolParty
           end
         end
         plugin_store.each {|a| a.after_create }
+        setup_defaults
       end
       
       def setup_defaults

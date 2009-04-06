@@ -32,7 +32,8 @@ describe "ec2 remote base" do
   end
   describe "launching" do
     before(:each) do
-      @tr.ec2.stub!(:run_instances).and_return true
+      @ret_hash = {:instance_id => "1", :name => "instance"}
+      @tr.ec2.stub!(:run_instances).and_return @ret_hash
     end
     it "should call run_instances on the ec2 Base class when asking to launch_new_instance!" do
       # @tr.ec2.should_receive(:run_instances).and_return true
@@ -40,16 +41,16 @@ describe "ec2 remote base" do
     end
     it "should use a specific security group if one is specified" do
       @tr.stub!(:security_group).and_return "web"
-      @tr.ec2.should_receive(:run_instances).and_return true
+      @tr.ec2.should_receive(:run_instances).and_return @ret_hash
       @tr.launch_new_instance!      
     end
     it "should use the default security group if none is specified" do
-      @tr.ec2.should_receive(:run_instances).with(hash_including(:group_id => ['default'])).and_return true
+      @tr.ec2.should_receive(:run_instances).with(hash_including(:group_id => ['default'])).and_return @ret_hash
       @tr.launch_new_instance!      
     end
     it "should get the hash response from EC2ResponseObject" do
-      EC2ResponseObject.should_receive(:get_hash_from_response).and_return true
-      @tr.launch_new_instance!
+      EC2ResponseObject.should_receive(:get_hash_from_response).and_return @ret_hash
+      @tr.launch_new_instance! :keypair => "keys"
     end
   end
   describe "terminating" do

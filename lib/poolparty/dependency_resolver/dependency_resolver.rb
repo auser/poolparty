@@ -10,7 +10,7 @@ module PoolParty
     
     attr_reader :properties_hash, :the_cloud
     
-    def initialize(hsh, contxt)
+    def initialize(hsh, contxt=nil)
       raise DependencyResolverException.new('must pass a hash') if hsh.nil? || (!hsh.instance_of?(OrderedHash) && !hsh.instance_of?(Hash))
       @properties_hash = hsh
       @the_cloud = contxt
@@ -22,7 +22,7 @@ module PoolParty
       raise "Not Implemented"
     end
     
-    def self.compile(hsh, contxt)
+    def self.compile(hsh, contxt=nil)
       new(hsh, contxt).compile
     end
     
