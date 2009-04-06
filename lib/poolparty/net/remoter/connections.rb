@@ -78,7 +78,7 @@ module PoolParty
         cmds.each do |command|
           puts "running command: #{command}"
           ssh.exec!(command) do |ch, stream, data| 
-            if stream == :stdou
+            if stream == :stdout
              print data
             else
               $stderr.print "#{host} stderr => #{data}"
