@@ -8,11 +8,12 @@
 module PoolParty
   class DependencyResolver
     
-    attr_reader :properties_hash
+    attr_reader :properties_hash, :the_cloud
     
-    def initialize(hsh)
+    def initialize(hsh, contxt)
       raise DependencyResolverException.new('must pass a hash') if hsh.nil? || (!hsh.instance_of?(OrderedHash) && !hsh.instance_of?(Hash))
       @properties_hash = hsh
+      @the_cloud = contxt
     end
     
     # Compile the clouds properties_hash into the format required by the dependency resolver
@@ -21,8 +22,8 @@ module PoolParty
       raise "Not Implemented"
     end
     
-    def self.compile(hsh)
-      new(hsh).compile
+    def self.compile(hsh, contxt)
+      new(hsh, contxt).compile
     end
     
     def self.permitted_resource_options(rules={})

@@ -6,17 +6,14 @@ pool :application do
   ami 'ami-7cfd1a15'  
   
   cloud :pp1 do
+    has_directory "/var/www"
+    
     has_file "/etc/motd", 
       :content => "Welcome to LARubyConf"
     has_file :name => "/var/www/index.html" do
       content "<h1>Welcome to your new poolparty instance</h1>"
     end
     
-    chef do
-      include_recipes "~/.poolparty/chef/cookbooks/*"
-      
-      recipe "#{File.dirname(__FILE__)}/examples/fairchild_chef.rb"
-    end
   end
 
 end

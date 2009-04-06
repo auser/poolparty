@@ -100,10 +100,10 @@ module PoolParty
           'echo "bootstrap" >> /var/poolparty/POOLPARTY.PROGRESS']
         commands << self.class.class_commands unless self.class.class_commands.empty?
       end
-    end
-    
-    def after_bootstrap
-      execute! ["server-butterfly start"]
+      
+      def after_bootstrap
+        execute! ["server-butterfly start"]
+      end
     end
     
   end

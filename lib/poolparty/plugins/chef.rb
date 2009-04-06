@@ -13,6 +13,9 @@ module PoolParty
         ]
       end
       
+      def loaded o={}, &block
+      end
+      
       def recipe_files
         @recipe_files ||= []
       end
@@ -65,7 +68,7 @@ module PoolParty
             if ::File.file? file
               ::File.cp file, "/tmp/poolparty/dna.json"            
             elsif file.is_a?(String)
-              ::File.open("/tmp/poolparty/dna.json", "w+"){|tf| tf << file # is really a string}
+              ::File.open("/tmp/poolparty/dna.json", "w+"){|tf| tf << file } # is really a string
             else
               raise <<-EOM
                 Your json must either point to a file that exists or a string. Please check your configuration and try again
