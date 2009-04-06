@@ -51,6 +51,7 @@ module PoolParty
     # TODO: make extendable multithreaded version
     def execute!(cmds=commands)
       netssh(
+        [commands.compact.join(' && ')], 
         :host=>target_host, :user=>'root')
       # commands.each {|c| run_remote(c, target_host) }
     end    
@@ -74,9 +75,10 @@ module PoolParty
                           :auth_methods => 'publickey',
                           :paranoid => false
                            }.merge(opts)
+      
+      # Start the connection
       Net::SSH.start(host, user, ssh_options_hash) do |ssh|  
         cmds.each do |command|
-          puts "running command: #{command}"
           ssh.exec!(command) do |ch, stream, data| 
             if stream == :stdout
              print data

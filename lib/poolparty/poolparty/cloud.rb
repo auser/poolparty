@@ -217,7 +217,7 @@ module PoolParty
           
           props = to_properties_hash
          
-          @build_manifest =  options[:dependency_resolver].send(:compile, props)
+          @build_manifest =  options[:dependency_resolver].send(:compile, props, self)
         end
         @build_manifest
       end
@@ -284,12 +284,20 @@ module PoolParty
         @remote_base ||= nil
       end
       
+      # Callbacks on before_bootstrap
       def call_before_bootstrap_callbacks
         plugin_store.each {|a| a.before_bootstrap }
       end
       
+      # Callbacks on before_configure
       def call_before_configure_callbacks
+        call_default_dependency_provider
         plugin_store.each {|a| a.before_configure }
+      end
+      
+      # TODO: Modularize
+      def call_default_dependency_provider
+        run_in_context(&lambda {chef})
       end
       
       # Add all the poolparty requirements here

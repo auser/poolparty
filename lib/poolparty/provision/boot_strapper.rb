@@ -51,6 +51,7 @@ module PoolParty
         
         default_commands
         execute!
+
         after_bootstrap
       end
       
@@ -67,7 +68,7 @@ module PoolParty
           self.class.gem_list << 'auser-poolparty'
         end
         # Add the gems to the suitcase
-        puts "Adding default gem depdendencies"
+        puts "Adding default gem dependencies"
         ::Suitcase::Zipper.gems self.class.gem_list, "/tmp/poolparty/trash/dependencies"
 
         ::Suitcase::Zipper.packages "http://rubyforge.org/frs/download.php/45905/rubygems-1.3.1.tgz", "/tmp/poolparty/trash/dependencies/packages"
@@ -99,10 +100,10 @@ module PoolParty
           'echo "bootstrap" >> /var/poolparty/POOLPARTY.PROGRESS']
         commands << self.class.class_commands unless self.class.class_commands.empty?
       end
-    end
-    
-    def after_bootstrap
-      execute! ["server-butterfly start"]
+      
+      def after_bootstrap
+        execute! ["server-butterfly start"]
+      end
     end
     
   end

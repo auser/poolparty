@@ -5,12 +5,6 @@
 # Dir["#{::File.dirname(__FILE__)}/butterfly_adaptors/*"].each {|lib| require lib }
 
 module Butterfly
-  class AdaptorBase
-    def request_from_local(uri)
-      res = Net::HTTP.start("127.0.0.1", 8082) {|http| http.get(uri) }
-      res.body
-    end
-  end
   class ServerMonitorAdaptor < AdaptorBase
     attr_reader :data
     def initialize(o={})
@@ -19,7 +13,7 @@ module Butterfly
     def get(req, resp)
       begin
         if req.params.empty?
-          data["load"] ||= ServerMonitor.send(:load)
+          default_data
         else
           data[req.params[0]] ||= ServerMonitor.send(req.params[0])
         end        
@@ -30,6 +24,12 @@ module Butterfly
     end
     
     private
+    def default_data
+      %w(load).each do |var|
+        data["#{var}"] ||= ServerMonitor.send(var.to_sym)
+      end
+      data
+    end
     
     def data
       @data ||= reload_data!

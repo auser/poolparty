@@ -13,6 +13,12 @@ module PoolParty
           template_opts = (parent ? options.merge(parent.options) : options)
           options.merge!(:content => Template.compile_file(filename, template_opts).gsub("\"", "\""))
         end
+        
+        if dsl_options.include?(:content)
+          cont = dsl_options.delete(:content)
+          template_opts = (parent ? options.merge(parent.options) : options)
+          options.merge!(:content => Template.compile_string(cont, template_opts))
+        end
       end
       
     end

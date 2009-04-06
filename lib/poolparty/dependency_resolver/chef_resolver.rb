@@ -1,14 +1,6 @@
 module PoolParty
   
   class ChefResolver< DependencyResolver
-        
-    def initialize(hsh=nil)
-      super(hsh)
-    end
-    
-    def self.compile(props)      
-      new(props).compile
-    end
     
     def compile(props=@properties_hash, tabs=0, default_namespace="poolparty")
       cld_name = default_namespace
