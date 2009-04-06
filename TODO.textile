@@ -1,3 +1,4 @@
+# REORDER RESOURCES TO RETAIN ORDER
 # Remove Monitors from cloud.rb
 # Remove Ruby2Ruby dependency
 # Move server binaries to use props_hash
