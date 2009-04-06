@@ -58,26 +58,28 @@ module PoolParty
       end
       
       def json file=nil, &block
-        if file
-          if ::File.file? file
-            ::File.cp file, "/tmp/poolparty/dna.json"            
-          elsif file.is_a?(String)
-            ::File.open("/tmp/poolparty/dna.json", "w+") do |tf|
-              tf << file # is really a string
-            end
-          else
-            raise <<-EOM
-              Your json must either point to a file that exists or a string. Please check your configuration and try again
-            EOM
-          end
-          @json_file = "/tmp/poolparty/dna.json"
+        if @json_file
+          @json_file
         else
-          unless @recipe
-            @recipe = ChefRecipe.new
-            @recipe.instance_eval &block if block
-            @recipe.recipes(@recipe.recipes? ? (@recipe.recipes << ["poolparty", "main"]) : ["poolparty", "main"])
-            ::File.open("/tmp/poolparty/dna.json", "w+") {|f| f << @recipe.options.to_json }
+          if file
+            if ::File.file? file
+              ::File.cp file, "/tmp/poolparty/dna.json"            
+            elsif file.is_a?(String)
+              ::File.open("/tmp/poolparty/dna.json", "w+"){|tf| tf << file # is really a string}
+            else
+              raise <<-EOM
+                Your json must either point to a file that exists or a string. Please check your configuration and try again
+              EOM
+            end
             @json_file = "/tmp/poolparty/dna.json"
+          else
+            unless @recipe
+              @recipe = ChefRecipe.new
+              @recipe.instance_eval &block if block
+              @recipe.recipes(@recipe.recipes? ? (@recipe.recipes << ["poolparty", "main"]) : ["poolparty", "main"])
+              ::File.open("/tmp/poolparty/dna.json", "w+") {|f| f << @recipe.options.to_json }
+              @json_file = "/tmp/poolparty/dna.json"
+            end
           end
         end
       end
@@ -93,10 +95,13 @@ module PoolParty
       end
       
       def config file=""
-        if ::File.file? file
-          @config_file = file
+        if @config_file
+          @config_file
         else
-          conf_string = if file.empty?
+          if ::File.file? file
+            @config_file = file
+          else
+            conf_string = if file.empty?
 # default config
             <<-EOE
 cookbook_path     "/etc/chef/cookbooks"
@@ -105,13 +110,14 @@ log_level         :info
 file_store_path  "/etc/chef"
 file_cache_path  "/etc/chef"
             EOE
-          else
-            open(file).read
+            else
+              open(file).read
+            end
+            ::File.open("/tmp/poolparty/chef_config.rb", "w+") do |tf|
+              tf << conf_string
+            end
+            @config_file = "/tmp/poolparty/chef_config.rb"
           end
-          ::File.open("/tmp/poolparty/chef_config.rb", "w+") do |tf|
-            tf << conf_string
-          end
-          @config_file = "/tmp/poolparty/chef_config.rb"
         end
       end
       
@@ -120,14 +126,14 @@ file_cache_path  "/etc/chef"
       end
       
       def before_configure
-        config unless @config_file
+        config
+        json
         ::Suitcase::Zipper.add(@config_file, "chef")
         added_recipes.each do |rcp|
           # ::FileUtils.cp_r rcp, "/tmp/poolparty/dr_configure/recipes/"
           ::Suitcase::Zipper.add(rcp, "chef/recipes")
         end
-
-        json unless @json_file
+        
         ::Suitcase::Zipper.add(@json_file, "chef/json")
         configure_commands ["cp /var/poolparty/dr_configure/dna.json /etc/chef/dna.json"]
 
