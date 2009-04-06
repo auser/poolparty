@@ -9,3 +9,4 @@
 # Add puppet/chef syntax checker
 # Place suitcase and dependencie files in ~/.poolparty/tmp-poolname/ instead of /tmp/
 # Remove vendor/dependencies from the gemspec... grrr
+# XMPP
