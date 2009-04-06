@@ -52,7 +52,7 @@ module PoolParty
         default_commands
         execute!
 
-        # after_bootstrap
+        after_bootstrap
       end
       
       def self.class_commands
