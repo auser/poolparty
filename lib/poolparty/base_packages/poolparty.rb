@@ -2,6 +2,9 @@ module PoolParty
   class Base
     plugin :poolparty_base_packages do
       
+      def enable
+        has_package "erlang"
+      end      
       # def enable
       #   # Build hostsfile
       #   

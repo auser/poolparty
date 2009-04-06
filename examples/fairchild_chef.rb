@@ -1,10 +1,10 @@
 # require "/etc/chef/cookbooks/chef-deploy/lib/chef-deploy.rb"
 include_recipe "apache2"
 include_recipe "passenger"
-# include_recipe "rails"
+include_recipe "rails"
 # include_recipe "git"
-# include_recipe "ec2"
-# include_recipe "sqlite"
+include_recipe "ec2"
+include_recipe "sqlite"
 
 # gem_package "sqlite3-ruby" do
 #   action :install

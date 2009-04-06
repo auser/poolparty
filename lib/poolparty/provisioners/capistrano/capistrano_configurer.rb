@@ -48,7 +48,6 @@ module Capistrano
           # else
           #   super
           # end
-
           if parent.respond_to?(sym)
             parent.send(sym, *args, &block)
           elsif provisioner.respond_to?(sym)

@@ -4,7 +4,6 @@
 pkg/*.tgz
 pkg/poolparty*/*
 .git/
-.gitignore
 log/
 log/*
 test_manifest.pp

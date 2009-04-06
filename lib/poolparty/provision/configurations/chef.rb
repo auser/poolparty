@@ -12,8 +12,8 @@
       end
       def self.files_to_upload
         [ 
-          "/tmp/poolparty/chef_config.rb",
-          "/tmp/poolparty/dna.json"
+          "#{Default.tmp_path}/chef_config.rb",
+          "#{Default.tmp_path}/dna.json"
         ]
       end
     end

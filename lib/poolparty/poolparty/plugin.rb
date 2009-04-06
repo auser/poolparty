@@ -28,9 +28,16 @@ module PoolParty
       end
       def loaded(o={}, &block)
       end
+      # Callbacks available to plugins
+      def after_create
+      end
       def before_bootstrap
       end
+      def after_bootstrap
+      end
       def before_configure
+      end
+      def after_configure
       end
       def enable
       end
