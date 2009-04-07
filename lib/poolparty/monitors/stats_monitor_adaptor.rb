@@ -60,10 +60,10 @@ module Butterfly
       # Expand the cloud if 50+% of the votes are for expansion
       # Contract the cloud if 51+% of the votes are for contraction
       if (candidates[:expand] - candidates[:contract])/stats.keys.size > 0.5
-        %x["server-expand-cloud"] unless elected_action == "expand"
+        %x["/usr/bin/server-expand-cloud"] unless elected_action == "expand"
         @elected_action = "expand"
       elsif (candidates[:contract] - candidates[:expand])/stats.keys.size > 0.5
-        %x["server-contract-cloud"] unless elected_action == "contract"
+        %x["/usr/bin/server-contract-cloud"] unless elected_action == "contract"
         @elected_action = "contract"
       end
       
@@ -112,7 +112,7 @@ module Butterfly
     
     def instances
       # res = PoolParty::Neighborhoods.load_default.instances
-      res ||= %x{"server-list-active name"}.split(" ")
+      res ||= %x{"/usr/bin/server-list-active name"}.split("\t")
       res
     end
     
