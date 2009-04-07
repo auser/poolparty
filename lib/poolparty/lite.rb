@@ -11,3 +11,9 @@ module PoolParty
     PoolParty::Schema.new( ::File.read(json_file) )
   end
 end
+
+class
+  def camel_case
+    gsub(/(^|_|-)(.)/) { $2.upcase }
+  end
+end
