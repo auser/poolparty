@@ -47,4 +47,8 @@ class Hash
   def method_missing(sym, *args, &block)
     has_key?(sym) ? fetch(sym) : super
   end
+  def next_sorted_key(from)
+    idx = (size - keys.sort.index(from))
+    keys.sort[idx - 1]
+  end
 end

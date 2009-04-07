@@ -25,7 +25,7 @@ module Butterfly
     def get(req, resp)
       begin
         if !req.params || req.params.empty?
-          default_stats.to_json
+          default_stats
         else
           stats[req.params[0].to_sym] ||= self.send(req.params[0])
           stats[req.params[0].to_sym]
@@ -33,7 +33,58 @@ module Butterfly
       rescue Exception => e
         resp.fail!
         "Error: #{e}"
-      end 
+      end
+    end
+    
+    def put(req, resp)
+      if d = JSON.parse(req.post_content)
+        hsh = d.reject {|ip, _node| ip == my_ip }
+        stats.merge!(hsh)
+        handle_election
+      else
+        "boom"
+      end
+    end
+    
+    # Handle the elections
+    def handle_election
+      # Ballots look like:
+      # host => ["contract"]
+      candidates = {:expand => 0, :contract => 0}
+      candidates.each do |action, ballots|
+        stats.each do |ip, node_hsh|
+          candidates[action]+=1 if node_hsh["nominations"] && node_hsh["nominations"].include?(action.to_s)
+        end
+      end
+      # TODO: Move?
+      # Expand the cloud if 50+% of the votes are for expansion
+      # Contract the cloud if 51+% of the votes are for contraction
+      if (candidates[:expand] - candidates[:contract])/stats.keys.size > 0.5
+        %x["server-expand-cloud"] unless elected_action == "expand"
+        @elected_action = "expand"
+      elsif (candidates[:contract] - candidates[:expand])/stats.keys.size > 0.5
+        %x["server-contract-cloud"] unless elected_action == "contract"
+        @elected_action = "contract"
+      end
+      
+      reload_data!
+      fork do
+        # put to next node
+        # TODO: Fix mysterious return of the nil (HASH next_sorted_key(my_ip))
+        # next_node = stats.next_sorted_key(my_ip)
+        idx = (stats.size - stats.keys.sort.index(my_ip))
+        next_node = stats.keys.sort[idx - 1]
+        
+        sleep(10)
+        Net::HTTP.start(next_node, PoolParty::Default.butterfly_port) do |http|
+          http.send_request('PUT', '/stats_monitor.json', stats.to_json)
+        end
+      end
+      "ok"
+    end
+    
+    def elected_action
+      @elected_action ||= nil
     end
     
     def rules
@@ -46,13 +97,13 @@ module Butterfly
     
     def default_stats
       %w(load nominations).each do |var|
-        stats[var.to_sym] ||= self.send(var.to_sym)
+        stats[my_ip][var] ||= self.send(var.to_sym)
       end
       stats
     end
 
     def stats
-      @stats ||= {}
+      @stats ||= {my_ip  => {}}
     end
     
     def load
@@ -60,7 +111,8 @@ module Butterfly
     end
     
     def instances
-      res = %x{"server-list-active names"}.split(" ")
+      # res = PoolParty::Neighborhoods.load_default.instances
+      res ||= %x{"server-list-active name"}.split(" ")
       res
     end
     
@@ -81,8 +133,8 @@ module Butterfly
     end
     
     def nominations
-      load = stats[:load] ||= self.send(:load)
-      stats[:nominations] ||= rules.collect do |k,cld_rules|
+      load = stats[my_ip]["load"] ||= self.send(:load)
+      stats[my_ip]["nominations"] ||= rules.collect do |k,cld_rules|
         t = cld_rules.collect do |r|
           # If the comparison works
           if self.send(r.key.to_sym).to_f.send(r.comparison, r.var.to_f)
@@ -99,10 +151,19 @@ module Butterfly
         end.compact
       end.flatten.compact
     end
+    
+    def my_ip
+      @my_ip ||= ohai["ipaddress"]
+    end
+    
+    def ohai
+      @ohai ||= JSON.parse(%x["ohai"])
+    end
   
     def reload_data!
       super
-      @stats = {}
+      @stats[my_ip] = {}
+      instances.each {|inst| @stats[inst] ||= {} }
     end
   end
 end

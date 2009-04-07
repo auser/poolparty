@@ -45,17 +45,26 @@ module PoolParty
       # Launch a new instance
       def self.launch_new_instance!(o={})
         raise RemoteException.new(:method_not_defined, "launch_new_instance!")
-      end
+      end 
       def launch_new_instance!(o={})
         self.class.launch_new_instance!( options.merge(o) )
       end
+      
       # Terminate an instance by id
       def self.terminate_instance!(o={})
         raise RemoteException.new(:method_not_defined, "terminate_instance!")
-      end
+      end      
       def terminate_instance!(o={})
         self.class.terminate_instance!(o ? options.merge(o) : options)
       end
+      
+      alias :contract :terminate_instance!
+      alias :expand :launch_new_instance!
+      class << self
+        alias :expand :launch_new_instance!
+        alias :contract :terminate_instance!
+      end
+      
       # Describe an instance's status
       def self.describe_instance(o={})
         raise RemoteException.new(:method_not_defined, "describe_instance")
@@ -63,6 +72,7 @@ module PoolParty
       def describe_instance(o={})
         self.class.describe_instance(o ? options.merge(o) : options)
       end
+      
       # Get instances
       # The instances must have a status associated with them on the hash
       def self.describe_instances(o={})
