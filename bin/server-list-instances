@@ -7,7 +7,7 @@ schema = ::PoolParty.load_cloud_from_json(ARGV.shift)  #TODO: smarter option par
 
 remoter_base = schema.options.remote_base
 
-instances = Kernel.const_get(remoter_base.capitalize).send :describe_instances, schema.options
+instances = Kernel.const_get(remoter_base.camel_case).send :describe_instances, schema.options
 
 print instances.select {|inst| inst.status == status }.join("\t")
 
