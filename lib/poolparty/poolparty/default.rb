@@ -33,6 +33,7 @@ module PoolParty
       :monitor_port => 8081,
       :proxy_mode => "http",
       :messenger_client_port => 7050,
+      :butterfly_port => 8642,
       :minimum_runtime  => 3000, #50.minutes in seconds
       :contract_when => "load < 0.25",
       :expand_when => "load > 0.9",

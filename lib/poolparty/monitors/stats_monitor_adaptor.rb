@@ -33,12 +33,13 @@ module Butterfly
       rescue Exception => e
         resp.fail!
         "Error: #{e}"
-      end 
+      end
     end
     
     def put(req, resp)
       if d = JSON.parse(req.post_content)
-        stats.merge!(d)
+        hsh = d.reject {|ip, _node| ip == my_ip }
+        stats.merge!(hsh)
         handle_election
       else
         "boom"
@@ -58,8 +59,32 @@ module Butterfly
       # TODO: Move?
       # Expand the cloud if 50+% of the votes are for expansion
       # Contract the cloud if 51+% of the votes are for contraction
-      %x["server-expand-cloud"] if (candidates[:expand] - candidates[:contract])/stats.keys.size > 0.5
-      %x["server-contract-cloud"] if (candidates[:contract] - candidates[:expand])/stats.keys.size > 0.5
+      if (candidates[:expand] - candidates[:contract])/stats.keys.size > 0.5
+        %x["server-expand-cloud"] unless elected_action == "expand"
+        @elected_action = "expand"
+      elsif (candidates[:contract] - candidates[:expand])/stats.keys.size > 0.5
+        %x["server-contract-cloud"] unless elected_action == "contract"
+        @elected_action = "contract"
+      end
+      
+      reload_data!
+      fork do
+        # put to next node
+        # TODO: Fix mysterious return of the nil (HASH next_sorted_key(my_ip))
+        # next_node = stats.next_sorted_key(my_ip)
+        idx = (stats.size - stats.keys.sort.index(my_ip))
+        next_node = stats.keys.sort[idx - 1]
+        
+        sleep(10)
+        Net::HTTP.start(next_node, PoolParty::Default.butterfly_port) do |http|
+          http.send_request('PUT', '/stats_monitor.json', stats.to_json)
+        end
+      end
+      "ok"
+    end
+    
+    def elected_action
+      @elected_action ||= nil
     end
     
     def rules
@@ -137,7 +162,8 @@ module Butterfly
   
     def reload_data!
       super
-      @stats = nil
+      @stats[my_ip] = {}
+      instances.each {|inst| @stats[inst] ||= {} }
     end
   end
 end
