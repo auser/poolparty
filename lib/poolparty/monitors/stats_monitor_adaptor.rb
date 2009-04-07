@@ -8,7 +8,12 @@ module Butterfly
     
     def initialize(o={})
       super
-      @cloud = JSON.parse( open(o[:clouds_json_file]).read ) rescue {}
+      o[:clouds_json_file]='/Users/mfairchild/Code/poolparty/spec/poolparty/fixtures/clouds.json'
+      
+      @cloud = JSON.parse( open(o[:clouds_json_file]).read ) rescue {"options" => 
+                                                                      {"rules" => {"expand" => PoolParty::Default.expand_when, 
+                                                                                    "contract" => PoolParty::Default.contract_when
+                                                                                  }}}
       # Our cloud.options.rules looks like
       #  {"expand_when" => "load > 0.9", "contract_when" => "load < 0.4"}
       # We set these as rules on ourselves so we can use aska to parse the rules
@@ -54,8 +59,25 @@ module Butterfly
       %x{"uptime"}.split[-3].to_f
     end
     
-    def rules
-      @rules ||= {}
+    def instances
+      res = %x{"server-list-active names"}.split(" ") rescue 1
+      res
+    end
+    
+    def can_expand?
+      instances.size < max_instances
+    end
+    
+    def can_contract?
+      instances.size > min_instances
+    end
+    
+    def min_instances
+      (@cloud["options"]["minimum_instances"] || PoolParty::Default.minimum_instances).to_i
+    end
+    
+    def max_instances
+      (@cloud["options"]["maximum_instances"] || PoolParty::Default.maximum_instances).to_i
     end
     
     def nominations

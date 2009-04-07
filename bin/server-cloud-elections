@@ -1,0 +1,10 @@
+#!/usr/bin/env ruby
+$:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
+require "poolparty/lite"
+
+elected_action = ARGV.shift || "expand"
+schema = ::PoolParty.load_cloud_from_json(ARGV.shift)  #TODO: smarter option parser
+
+remoter_base = schema.options.remote_base
+
+p Kernel.const_get(remoter_base.capitalize).send elected_action.to_sym, schema.options
