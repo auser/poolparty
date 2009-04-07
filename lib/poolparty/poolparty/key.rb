@@ -45,7 +45,7 @@ module PoolParty
     end
     
     def to_json
-      "{'keypair':'#{basename}'}"
+      "\"#{basename}\""
     end
     
   end
