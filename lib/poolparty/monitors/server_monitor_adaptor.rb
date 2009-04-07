@@ -1,8 +1,4 @@
-# require "rubygems"
-# require "butterfly"
-# require "poolparty/poolparty/default"
-# require 'net/http'
-# Dir["#{::File.dirname(__FILE__)}/butterfly_adaptors/*"].each {|lib| require lib }
+Dir["#{::File.dirname(__FILE__)}/butterfly_adaptors/*"].each {|lib| require lib }
 
 module Butterfly
   class ServerMonitorAdaptor < AdaptorBase

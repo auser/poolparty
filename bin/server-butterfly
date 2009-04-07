@@ -75,11 +75,26 @@ module Daemon
     end
   end
 end
-  
+
+
+monitor_dir = ::File.join(::File.dirname(__FILE__),'..','lib/poolparty/monitors/')
+require(::File.join(monitor_dir, 'stats_monitor_adaptor.rb') )
+
+# Butterfly.register_adaptor(::File.join(monitor_dir, 'monitors/server_monitor.rb'))
+# Butterfly.register_adaptor(::File.join(monitor_dir, 'server_monitor_adaptor.rb') )
+
 class Butterfly::Server
   include Daemon
 end
-Butterfly::Server.daemonize
+# puts Butterfly.constants.inspect
+# Butterfly::Server.daemonize
+
+Butterfly::Server.new(
+  { :adaptor_opts => { 
+    :file => ::File.join(monitor_dir, 'stats_monitor_adaptor.rb')}
+  }
+).start!
+
 
 # class ButterflyDaemon < Daemon::Base
 #   def self.start

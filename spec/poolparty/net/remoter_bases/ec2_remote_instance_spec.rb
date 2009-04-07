@@ -2,7 +2,7 @@ require File.join(File.dirname(__FILE__), '../../spec_helper')
 require File.dirname(__FILE__) + '/ec2_mocks_and_stubs.rb'
 
 include PoolParty::Remote
-include Aska
+# include Aska
 
 # require File.dirname(__FILE__) + '/ec2_mocks_and_stubs.rb'
 

@@ -53,8 +53,6 @@ module PoolParty
       default_options(
         :minimum_instances => 2,
         :maximum_instances => 5,
-        :contract_when => "load < 0.65",
-        :expand_when => "load > 1.9",
         :access_key => Default.access_key,
         :secret_access_key => Default.secret_access_key,
         :ec2_dir => ENV["EC2_HOME"],
@@ -66,8 +64,7 @@ module PoolParty
         @cloud_name = name
         @cloud_name.freeze
         plugin_directory "#{pool_specfile ? ::File.dirname(pool_specfile) : Dir.pwd}/plugins"
-        super
-        setup_defaults
+        super        
         
         after_create
       end
@@ -86,6 +83,7 @@ module PoolParty
           end
         end
         plugin_store.each {|a| a.after_create }
+        setup_defaults
       end
       
       def setup_defaults

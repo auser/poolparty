@@ -50,7 +50,6 @@ class EC2ResponseObject
     group
   end
   def self.get_hash_from_response(resp, group = 'default')
-    begin
       {
         :instance_id => resp.instanceId,
         :name => resp.instanceId, 
@@ -61,9 +60,5 @@ class EC2ResponseObject
         :keypair => resp.keyName,
         :security_group => group
       }        
-    rescue Exception => e
-      puts "E: #{e}"
-      nil
-    end
   end
 end
