@@ -2,7 +2,7 @@
 $:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
 require "poolparty/lite"
 
-list_type = ARGV.pop || "ip"
+list_type = ARGV.shift || "ip"
 
 json_file = ARGV[0] || PoolParty::Default.properties_hash_file
 raise "ERROR: no json_file given" if !json_file
