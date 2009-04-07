@@ -60,18 +60,19 @@ module Butterfly
       # Expand the cloud if 50+% of the votes are for expansion
       # Contract the cloud if 51+% of the votes are for contraction
       if (candidates[:expand] - candidates[:contract])/stats.keys.size > 0.5
-        %x["/usr/bin/server-expand-cloud"] unless elected_action == "expand"
+        %x["/usr/bin/server-cloud-elections expand"] unless elected_action == "expand"
         @elected_action = "expand"
       elsif (candidates[:contract] - candidates[:expand])/stats.keys.size > 0.5
-        %x["/usr/bin/server-contract-cloud"] unless elected_action == "contract"
+        %x["/usr/bin/server-cloud-elections contract"] unless elected_action == "contract"
         @elected_action = "contract"
       end
+      stats[my_ip]["elected_action"] = @elected_action if @elected_action
       
       reload_data!
       fork do
         # put to next node
         # TODO: Fix mysterious return of the nil (HASH next_sorted_key(my_ip))
-        # next_node = stats.next_sorted_key(my_ip)
+        # next_node = stats.next_sorted_key(my_ip)        
         idx = (stats.size - stats.keys.sort.index(my_ip))
         next_node = stats.keys.sort[idx - 1]
         
