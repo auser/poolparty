@@ -25,7 +25,7 @@ module Butterfly
     def get(req, resp)
       begin
         if !req.params || req.params.empty?
-          default_stats.to_json
+          default_stats
         else
           stats[req.params[0].to_sym] ||= self.send(req.params[0])
           stats[req.params[0].to_sym]
@@ -34,6 +34,32 @@ module Butterfly
         resp.fail!
         "Error: #{e}"
       end 
+    end
+    
+    def put(req, resp)
+      if d = JSON.parse(req.post_content)
+        stats.merge!(d)
+        handle_election
+      else
+        "boom"
+      end
+    end
+    
+    # Handle the elections
+    def handle_election
+      # Ballots look like:
+      # host => ["contract"]
+      candidates = {:expand => 0, :contract => 0}
+      candidates.each do |action, ballots|
+        stats.each do |ip, node_hsh|
+          candidates[action]+=1 if node_hsh["nominations"] && node_hsh["nominations"].include?(action.to_s)
+        end
+      end
+      # TODO: Move?
+      # Expand the cloud if 50+% of the votes are for expansion
+      # Contract the cloud if 51+% of the votes are for contraction
+      %x["server-expand-cloud"] if (candidates[:expand] - candidates[:contract])/stats.keys.size > 0.5
+      %x["server-contract-cloud"] if (candidates[:contract] - candidates[:expand])/stats.keys.size > 0.5
     end
     
     def rules
@@ -46,13 +72,13 @@ module Butterfly
     
     def default_stats
       %w(load nominations).each do |var|
-        stats[var.to_sym] ||= self.send(var.to_sym)
+        stats[my_ip][var] ||= self.send(var.to_sym)
       end
       stats
     end
 
     def stats
-      @stats ||= default_stats_hash
+      @stats ||= {my_ip  => {}}
     end
     
     def load
@@ -82,8 +108,8 @@ module Butterfly
     end
     
     def nominations
-      load = stats[:load] ||= self.send(:load)
-      stats[:nominations] ||= rules.collect do |k,cld_rules|
+      load = stats[my_ip]["load"] ||= self.send(:load)
+      stats[my_ip]["nominations"] ||= rules.collect do |k,cld_rules|
         t = cld_rules.collect do |r|
           # If the comparison works
           if self.send(r.key.to_sym).to_f.send(r.comparison, r.var.to_f)
@@ -101,17 +127,17 @@ module Butterfly
       end.flatten.compact
     end
     
-    def ohai
-      @ohai ||= JSON.parse(%x["ohai"])
+    def my_ip
+      @my_ip ||= ohai["ipaddress"]
     end
     
-    def default_stats_hash
-      {"ip" => ohai["ipaddress"]}
+    def ohai
+      @ohai ||= JSON.parse(%x["ohai"])
     end
   
     def reload_data!
       super
-      @stats = default_stats_hash
+      @stats = nil
     end
   end
 end
