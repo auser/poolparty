@@ -58,11 +58,11 @@ module PoolParty
         self.class.terminate_instance!(o ? options.merge(o) : options)
       end
       
-      alias :terminate_instance! :contract
-      alias :launch_new_instance! :expand
+      alias :contract :terminate_instance!
+      alias :expand :launch_new_instance!
       class << self
-        alias :launch_new_instance! :expand
-        alias :terminate_instance! :contract
+        alias :expand :launch_new_instance!
+        alias :contract :terminate_instance!
       end
       
       # Describe an instance's status
