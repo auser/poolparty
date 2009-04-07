@@ -52,7 +52,7 @@ module Butterfly
     end
 
     def stats
-      @stats ||= {}
+      @stats ||= default_stats_hash
     end
     
     def load
@@ -60,7 +60,8 @@ module Butterfly
     end
     
     def instances
-      res = %x{"server-list-active names"}.split(" ")
+      # res = PoolParty::Neighborhoods.load_default.instances
+      res ||= %x{"server-list-active name"}.split(" ")
       res
     end
     
@@ -99,10 +100,18 @@ module Butterfly
         end.compact
       end.flatten.compact
     end
+    
+    def ohai
+      @ohai ||= JSON.parse(%x["ohai"])
+    end
+    
+    def default_stats_hash
+      {"ip" => ohai["ipaddress"]}
+    end
   
     def reload_data!
       super
-      @stats = {}
+      @stats = default_stats_hash
     end
   end
 end
