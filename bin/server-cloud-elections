@@ -7,4 +7,4 @@ schema = ::PoolParty.load_cloud_from_json(ARGV.shift)  #TODO: smarter option par
 
 remoter_base = schema.options.remote_base
 
-p PoolParty.constantize(remoter_base).send elected_action.to_sym, schema.options
+p PoolParty.constantize(remoter_base).send(elected_action.to_sym, schema.options)
