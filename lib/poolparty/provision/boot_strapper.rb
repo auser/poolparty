@@ -31,6 +31,8 @@ module PoolParty
                         archive-tar-minitar
                         chef
                         auser-butterfly
+                        thin
+                        auser-dslify
                         )
       end
   
