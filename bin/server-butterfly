@@ -90,7 +90,7 @@ end
 # Butterfly::Server.daemonize
 
 Butterfly::Server.new(
-  {:adaptor_opts => { 
+  { :adaptor_opts => { 
     :file => ::File.join(monitor_dir, 'stats_monitor_adaptor.rb')}
   }
 ).start!

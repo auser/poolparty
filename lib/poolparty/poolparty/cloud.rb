@@ -53,8 +53,6 @@ module PoolParty
       default_options(
         :minimum_instances => 2,
         :maximum_instances => 5,
-        :contract_when => "load < 0.65",
-        :expand_when => "load > 1.9",
         :access_key => Default.access_key,
         :secret_access_key => Default.secret_access_key,
         :ec2_dir => ENV["EC2_HOME"],
