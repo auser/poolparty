@@ -1,5 +1,5 @@
 require ::File.dirname(__FILE__)+"/../aska/aska.rb"
-require ::File.dirname(__FILE__)+"/../poolparty/default.rb"
+require ::File.dirname(__FILE__)+"/../../poolparty/lite.rb"
 
 module Butterfly
   class StatsMonitorAdaptor < AdaptorBase
@@ -59,18 +59,50 @@ module Butterfly
       %x{"uptime"}.split[-3].to_f
     end
     
+    def instances
+      res = %x{"server-list-active names"}.split(" ")
+      res
+    end
+    
+    def can_expand?
+      instances.size < max_instances
+    end
+    
+    def can_contract?
+      instances.size > min_instances
+    end
+    
+    def min_instances
+      (@cloud["options"]["minimum_instances"] || PoolParty::Default.minimum_instances).to_i
+    end
+    
+    def max_instances
+      (@cloud["options"]["maximum_instances"] || PoolParty::Default.maximum_instances).to_i
+    end
+    
     def nominations
       load = stats[:load] ||= self.send(:load)
       stats[:nominations] ||= rules.collect do |k,cld_rules|
         t = cld_rules.collect do |r|
-          k if self.send(r.key.to_sym).to_f.send(r.comparison, r.var.to_f)
+          # If the comparison works
+          if self.send(r.key.to_sym).to_f.send(r.comparison, r.var.to_f)
+            # if we are facing an expansion rule
+            if k =~ /expand/
+              k if can_expand?
+            # if we are facing a contraction rule
+            elsif k =~ /contract/
+              k if can_contract?
+            else
+              k
+            end
+          end
         end.compact
       end.flatten.compact
     end
   
     def reload_data!
       super
-      @data = {}
+      @stats = {}
     end
   end
 end
