@@ -84,6 +84,8 @@ module PoolParty
         ::Suitcase::Zipper.add("#{::File.dirname(__FILE__)}/../templates/monitor.ru", "etc/poolparty")
         ::Suitcase::Zipper.build_dir!("#{Default.tmp_path}/dependencies")
         
+        ::Suitcase::Zipper.add("#{Default.tmp_path}/trash/dependencies/cache", "gems")
+        ::Suitcase::Zipper.build_dir!("#{Default.tmp_path}/dependencies")        
         #         ::FileUtils.rm_rf "/tmp/poolparty/trash/"
       end
   
