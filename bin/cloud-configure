@@ -15,7 +15,7 @@ o.loaded_clouds.each do |cld|
   if nodes.empty?
     puts "No nodes to configure"
   else
-    if o.inst_num
+    if o.inst_num?
       ::PoolParty::Provision::DrConfigure.new( nodes[o.inst_num], :full_keypair_path => cld.keypair.full_filepath,  :cloud => cld )
     else
       nodes.each do |address|

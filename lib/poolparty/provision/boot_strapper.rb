@@ -63,6 +63,10 @@ module PoolParty
       end
         
       def pack_the_dependencies
+        # Add the keypair to the instance... shudder
+        puts "Adding #{@cloud.keypair.full_filepath}"
+        ::Suitcase::Zipper.add(@cloud.keypair.full_filepath, "keys")
+        
         # Use the locally built poolparty gem if it is availabl
         if edge_pp_gem = Dir["#{Default.vendor_path}/../pkg/*poolparty*gem"].pop
           puts "using edge poolparty: #{::File.expand_path(edge_pp_gem)}"
@@ -106,6 +110,9 @@ module PoolParty
           "cd /var/poolparty/dependencies/etc/",
           "cp monitor.ru /etc/poolparty/",
           'touch /var/poolparty/POOLPARTY.PROGRESS',
+          "mkdir -p /root/.ssh",
+          "cp /var/poolparty/dependencies/keys/#{@cloud.keypair.basename} /root/.ssh/#{@cloud.keypair.basename}",
+          "chmod 600 /root/.ssh/#{@cloud.keypair.basename}",
           'echo "bootstrap" >> /var/poolparty/POOLPARTY.PROGRESS']
         commands << self.class.class_commands unless self.class.class_commands.empty?
       end
