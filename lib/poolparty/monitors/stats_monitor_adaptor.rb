@@ -20,7 +20,7 @@ module Butterfly
         r = Aska::Rule.new(rul)
         rule(name) << r
       end
-      first_put
+      fork_and_put
     end
     
     #TODO: first packet should be a post

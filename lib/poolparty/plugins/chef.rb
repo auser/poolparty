@@ -148,7 +148,7 @@ file_cache_path  "/etc/chef"
 
         recipe_files.each do |rf|
           # ::FileUtils.cp_r rf, "/tmp/poolparty/dr_configure/recipes/#{::File.basename(rf)}"
-          ::Suitcase::Zipper.add(rf, "chef/recipes") 
+          # ::Suitcase::Zipper.add(rf, "chef/recipes") 
         end
       end
       
