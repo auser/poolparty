@@ -23,4 +23,4 @@ else
   inst_array
 end
 
-print print_array.join("\t")
+print print_array.compact.join("\t")
