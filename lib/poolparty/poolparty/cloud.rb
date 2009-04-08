@@ -89,7 +89,7 @@ module PoolParty
       def setup_defaults
         # this can be overridden in the spec, but ec2 is the default
         using :ec2
-        options[:keypair] = keypair.basename
+        options[:keypair] ||= keypair.basename rescue nil
         options[:rules] = {:expand => expand_when, :contract => contract_when}
         dependency_resolver 'chef'
       end

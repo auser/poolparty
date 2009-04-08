@@ -1,13 +1,27 @@
 #!/usr/bin/env ruby
 $:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
-require "poolparty/lite"
+require "poolparty"
 
-elected_action = ARGV.shift || "expand"
-schema = ::PoolParty.load_cloud_from_json(ARGV.shift)  #TODO: smarter option parser
+o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
+  opts.on('-n cloudname', '--name name', 'Start cloud by this name')    { |c| optioner.cloudname c }
+  opts.on('-i num', '--num i', 'Instance number')    { |i| optioner.inst_num i.to_i }
+end
 
-remoter_base = schema.options.remote_base
-remoter_base = remoter_base.split("::")[-1] if remoter_base.include?("::")
+schema = ::PoolParty.load_cloud_from_json  #TODO: smarter option parser
 
-konst = PoolParty::Remote.const_get(remoter_base)
- 
-p konst.send(elected_action.to_sym, schema.options)
+o.loaded_clouds.each do |cld|
+  vote_action = (o.unflagged_args.first || "expand")
+  
+  case vote_action
+  when "expand"
+    cld.launch_instance! cld.options.merge(schema.options) do |node|
+      ::PoolParty::Provision::BootStrapper.new( node[:ip], :full_keypair_path => cld.keypair.full_filepath, :cloud => cld )
+      ::PoolParty::Provision::DrConfigure.new( node[:ip], :full_keypair_path => cld.keypair.full_filepath, :cloud => cld )
+    end
+  when "contract"
+    cld.terminate_instance! cld.options.merge(schema.options)
+  else
+    puts "Unknown action: #{vote_action}"
+  end
+    
+end
