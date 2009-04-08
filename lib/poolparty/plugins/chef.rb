@@ -136,6 +136,13 @@ file_cache_path  "/etc/chef"
       def before_configure
         config
         json
+        
+        if ::File.directory?("/etc/chef")
+          ::Suitcase::Zipper.add("/etc/chef/cookbooks/*", "chef/recipes")
+          ::Suitcase::Zipper.add("/etc/chef/dna.json", "chef/json")
+          ::Suitcase::Zipper.add("/etc/chef/solo.rb", "chef/")
+        end
+        
         ::Suitcase::Zipper.add(@config_file, "chef")
         added_recipes.each do |rcp|
           # ::FileUtils.cp_r rcp, "/tmp/poolparty/dr_configure/recipes/"

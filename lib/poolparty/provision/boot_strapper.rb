@@ -79,10 +79,9 @@ module PoolParty
         ::Suitcase::Zipper.gems self.class.gem_list, "#{Default.tmp_path}/trash/dependencies"
 
         ::Suitcase::Zipper.packages "http://rubyforge.org/frs/download.php/45905/rubygems-1.3.1.tgz", "#{Default.tmp_path}/trash/dependencies/packages"
-
-        ::Suitcase::Zipper.add("#{Default.tmp_path}/trash/dependencies/cache", "gems")
-        ::Suitcase::Zipper.build_dir!("#{Default.tmp_path}/dependencies")
         
+        ::Suitcase::Zipper.add("#{Default.tmp_path}/trash/dependencies/cache", "gems")
+        ::Suitcase::Zipper.build_dir!("#{Default.tmp_path}/dependencies")        
         #         ::FileUtils.rm_rf "/tmp/poolparty/trash/"
       end
   
@@ -112,7 +111,7 @@ module PoolParty
       end
       
       def after_bootstrap
-        execute! ["/usr/bin/server-butterfly &"]
+        execute! ["/usr/bin/server-butterfly &", 'echo "done" >> /var/poolparty/POOLPARTY.PROGRESS']
       end
     end
     

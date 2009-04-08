@@ -39,7 +39,8 @@ module PoolParty
         "#{Default.poolparty_home_path}/keys",
         Default.base_keypair_path,
         Default.base_config_directory,
-        Default.remote_storage_path,
+        Default.base_ssh_path,
+        Default.remote_storage_path,        
         Dir.pwd
       ]
     end
