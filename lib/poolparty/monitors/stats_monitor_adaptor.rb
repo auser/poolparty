@@ -16,9 +16,18 @@ module Butterfly
       # We set these as rules on ourselves so we can use aska to parse the rules
       # So later, we can call vote_rules on ourself and we'll get back Aska::Rule(s)
       # which we'll call valid_rule? for each Rule and return the result
-      @cloud["options"]["rules"].each do |name,rul|
+      @cloud["options"]["rules"].each do |name, rul|
         r = Aska::Rule.new(rul)
         rule(name) << r
+      end
+      first_put
+    end
+    
+    #TODO: first packet should be a post
+    def first_put(time_to_wait=60)
+      sleep time_to_wait  #lets see if we receive a stats update before puting a new one
+      if stats=={my_ip  => {}}
+        fork_and_put
       end
     end
     
@@ -70,19 +79,22 @@ module Butterfly
       reload_data!
       stats[my_ip]["elected_action"] = @elected_action if @elected_action
       
+      fork_and_put
+      "ok"
+    end
+    
+    def fork_and_put
       fork do
         # put to next node
         # TODO: Fix mysterious return of the nil (HASH next_sorted_key(my_ip))
         # next_node = stats.next_sorted_key(my_ip)        
         idx = (stats.size - stats.keys.sort.index(my_ip))
         next_node = stats.keys.sort[idx - 1]
-        
         sleep(10)
         Net::HTTP.start(next_node, PoolParty::Default.butterfly_port) do |http|
           http.send_request('PUT', '/stats_monitor.json', stats.to_json)
         end
       end
-      "ok"
     end
     
     def elected_action
