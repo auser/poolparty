@@ -20,13 +20,16 @@ module Butterfly
         r = Aska::Rule.new(rul)
         rule(name) << r
       end
-      first_put
+      fork_and_put
     end
     
     #TODO: first packet should be a post
     def first_put(time_to_wait=60)
+      puts " waiting #{time_to_wait} seconds for a put, otherwise initiating. #{stats.inspect}"
       sleep time_to_wait  #lets see if we receive a stats update before puting a new one
       if stats=={my_ip  => {}}
+        puts "Initiating first put"
+        touch ''
         fork_and_put
       end
     end

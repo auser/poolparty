@@ -13,8 +13,15 @@ class Hash
     end
   end
   
-  def value_at(*indecies)
-    indecies.collect {|i| self[i] }
+  # extracted from activesupport
+  # Returns an array of the values at the specified indices:
+  #
+  #   hash = HashWithIndifferentAccess.new
+  #   hash[:a] = "x"
+  #   hash[:b] = "y"
+  #   hash.values_at("a", "b") # => ["x", "y"]
+  def values_at(*indices)
+    indices.collect {|key| self[key]}
   end
   
   #TODO: deprecate
