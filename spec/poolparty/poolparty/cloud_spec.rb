@@ -103,8 +103,8 @@ describe "Cloud" do
       it "should have services in an OrderedHash" do
         @cloud.services.class.should == OrderedHash
       end
-      it "should have no services in the array when there are no services defined" do
-        @cloud.services.size.should == 0
+      it "should have no services (other than the base ones) in the array when there are no services defined" do
+        @cloud.services.size.should == 5
       end
       it "should respond to a options method (from Dslify)" do
         @cloud.respond_to?(:options).should == true
@@ -213,7 +213,7 @@ describe "Cloud" do
           end
           it "should receive add_poolparty_base_requirements before building the manifest" do
             @cloud.should_receive(:add_poolparty_base_requirements).once
-            @cloud.build_manifest
+            @cloud.after_create
           end
           after(:each) do
             context_stack.pop

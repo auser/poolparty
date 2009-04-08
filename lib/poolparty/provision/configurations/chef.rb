@@ -1,4 +1,4 @@
--module PoolParty
+module PoolParty
   module Provision
     
     class Chef

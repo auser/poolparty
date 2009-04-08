@@ -53,7 +53,8 @@ module PoolParty
           h = EC2ResponseObject.get_hash_from_response(instance.instancesSet.item.first)
           #h = instance.instancesSet.item.first
         rescue Exception => e
-          h = instance
+          h = EC2ResponseObject.get_hash_from_response(instance) rescue instance
+          # h = instance
         end
         h
       end

@@ -1,15 +1,12 @@
 require ::File.dirname(__FILE__)+"/../aska/aska.rb"
+require ::File.dirname(__FILE__)+"/../../poolparty/lite.rb"
 
 module Butterfly
   class StatsMonitorAdaptor < AdaptorBase
     attr_reader :stats
     
-    puts "self = #{self}"
-    
     def initialize(o={})
       super
-      o[:clouds_json_file]='/Users/mfairchild/Code/poolparty/spec/poolparty/fixtures/clouds.json'
-      
       @cloud = JSON.parse( open(o[:clouds_json_file]).read ) rescue {"options" => 
                                                                       {"rules" => {"expand" => PoolParty::Default.expand_when, 
                                                                                     "contract" => PoolParty::Default.contract_when
@@ -19,40 +16,94 @@ module Butterfly
       # We set these as rules on ourselves so we can use aska to parse the rules
       # So later, we can call vote_rules on ourself and we'll get back Aska::Rule(s)
       # which we'll call valid_rule? for each Rule and return the result
-      @cloud["options"]["rules"].each do |name,rule|
-        r = Aska::Rule.new(rule)
-        (rules[name] ||= []) << r
+      @cloud["options"]["rules"].each do |name,rul|
+        r = Aska::Rule.new(rul)
+        rule(name) << r
       end
     end
     
     def get(req, resp)
       begin
         if !req.params || req.params.empty?
-          default_stats.to_json
+          default_stats
         else
-          stats[req.params[0]] ||= self.send(req.params[0])
-          stats[req.params[0]].to_json
+          stats[req.params[0].to_sym] ||= self.send(req.params[0])
+          stats[req.params[0].to_sym]
         end
       rescue Exception => e
         resp.fail!
         "Error: #{e}"
-      end 
+      end
+    end
+    
+    def put(req, resp)
+      if d = JSON.parse(req.post_content)
+        hsh = d.reject {|ip, _node| ip == my_ip }
+        stats.merge!(hsh)
+        handle_election
+      else
+        "boom"
+      end
+    end
+    
+    # Handle the elections
+    def handle_election
+      # Ballots look like:
+      # host => ["contract"]
+      candidates = {:expand => 0, :contract => 0}
+      candidates.each do |action, ballots|
+        stats.each do |ip, node_hsh|
+          candidates[action]+=1 if node_hsh["nominations"] && node_hsh["nominations"].include?(action.to_s)
+        end
+      end
+      # TODO: Move?
+      # Expand the cloud if 50+% of the votes are for expansion
+      # Contract the cloud if 51+% of the votes are for contraction
+      if (candidates[:expand] - candidates[:contract])/stats.keys.size > 0.5
+        %x["server-expand-cloud"] unless elected_action == "expand"
+        @elected_action = "expand"
+      elsif (candidates[:contract] - candidates[:expand])/stats.keys.size > 0.5
+        %x["server-contract-cloud"] unless elected_action == "contract"
+        @elected_action = "contract"
+      end
+      
+      reload_data!
+      fork do
+        # put to next node
+        # TODO: Fix mysterious return of the nil (HASH next_sorted_key(my_ip))
+        # next_node = stats.next_sorted_key(my_ip)
+        idx = (stats.size - stats.keys.sort.index(my_ip))
+        next_node = stats.keys.sort[idx - 1]
+        
+        sleep(10)
+        Net::HTTP.start(next_node, PoolParty::Default.butterfly_port) do |http|
+          http.send_request('PUT', '/stats_monitor.json', stats.to_json)
+        end
+      end
+      "ok"
+    end
+    
+    def elected_action
+      @elected_action ||= nil
     end
     
     def rules
       @rules ||= {}
     end
     
+    def rule(name)
+      rules[name] ||= []
+    end
+    
     def default_stats
-      %w(load).each do |var|
-        stats["#{var}"] ||= self.send(var.to_sym)
+      %w(load nominations).each do |var|
+        stats[my_ip][var] ||= self.send(var.to_sym)
       end
-      puts "default stats =  #{stats.inspect}"
       stats
     end
 
     def stats
-      @stats ||= {}
+      @stats ||= {my_ip  => {}}
     end
     
     def load
@@ -60,7 +111,8 @@ module Butterfly
     end
     
     def instances
-      res = %x{"server-list-active names"}.split(" ") rescue 1
+      # res = PoolParty::Neighborhoods.load_default.instances
+      res ||= %x{"server-list-active name"}.split(" ")
       res
     end
     
@@ -81,14 +133,37 @@ module Butterfly
     end
     
     def nominations
-      load = stats[:load] ||= self.send(:load)
-      stats[:nominations] ||= rules.collect do |k,cld_rules|
+      load = stats[my_ip]["load"] ||= self.send(:load)
+      stats[my_ip]["nominations"] ||= rules.collect do |k,cld_rules|
         t = cld_rules.collect do |r|
-          self.send(r.key.to_sym).to_f.send(r.comparison, r.var.to_f) == true ? k : nil
+          # If the comparison works
+          if self.send(r.key.to_sym).to_f.send(r.comparison, r.var.to_f)
+            # if we are facing an expansion rule
+            if k =~ /expand/
+              k if can_expand?
+            # if we are facing a contraction rule
+            elsif k =~ /contract/
+              k if can_contract?
+            else
+              k
+            end
+          end
         end.compact
-        nil unless t.empty?
-      end
+      end.flatten.compact
+    end
+    
+    def my_ip
+      @my_ip ||= ohai["ipaddress"]
+    end
+    
+    def ohai
+      @ohai ||= JSON.parse(%x["ohai"])
     end
   
+    def reload_data!
+      super
+      @stats[my_ip] = {}
+      instances.each {|inst| @stats[inst] ||= {} }
+    end
   end
 end

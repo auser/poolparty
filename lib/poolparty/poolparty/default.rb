@@ -33,7 +33,10 @@ module PoolParty
       :monitor_port => 8081,
       :proxy_mode => "http",
       :messenger_client_port => 7050,
+      :butterfly_port => 8642,
       :minimum_runtime  => 3000, #50.minutes in seconds
+      :contract_when => "load < 0.25",
+      :expand_when => "load > 0.9",
       # :agent_pid_file => ::File.readable?("/var/run/poolparty_agent.pid") ? "/var/run/agent.pid" : "#{Dir.pwd}/agent.pid",
       # :agent_port => 8081,
       # EC2 Options
