@@ -5,18 +5,24 @@ require "poolparty"
 
 
 o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
-  optioner.cloudnames
-  # optioner.daemonizeable
+  opts.on('-n cloudname', '--name name', 'Start cloud by this name')    { |c| optioner.cloudname c }
+  opts.on('-i num', '--num i', 'Instance number')    { |i| optioner.inst_num i.to_i }
 end
 
 o.loaded_clouds.each do |cld|
-  
-  # If an IP or DNS name is given, configure that node, otherwise, configure all running nodes.
+  # If an IP or DNS name is given, bootstrap that node, otherwise, bootstrap all running nodes.
   nodes = !o.unflagged_args.empty? ?  o.unflagged_args : cld.remote_instances_list.collect {|inst| inst.ip if inst.running? }.compact
-  nodes.each do |address|
-    puts "configuring: #{address}"
-    ::PoolParty::Provision::DrConfigure.new( address, 
-                                             :full_keypair_path => cld.keypair.full_filepath, 
-                                             :cloud => cld )
+  if nodes.empty?
+    puts "No nodes to configure"
+  else
+    if o.inst_num
+      ::PoolParty::Provision::DrConfigure.new( nodes[o.inst_num], :full_keypair_path => cld.keypair.full_filepath,  :cloud => cld )
+    else
+      nodes.each do |address|
+        puts "Configuring: #{address}"
+        ::PoolParty::Provision::DrConfigure.new( address, :full_keypair_path => cld.keypair.full_filepath,  :cloud => cld )
+      end
+    end
   end
 end
+

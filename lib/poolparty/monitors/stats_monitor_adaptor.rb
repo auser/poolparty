@@ -155,7 +155,7 @@ module Butterfly
     end
     
     def my_ip
-      @my_ip ||= ohai["ipaddress"]
+      @my_ip ||= ohai["public_ipv4"]
     end
     
     def ohai
