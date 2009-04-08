@@ -111,7 +111,7 @@ module PoolParty
       end
       
       def after_bootstrap
-        execute! ["/usr/bin/server-butterfly &", 'echo "done" >> /var/poolparty/POOLPARTY.PROGRESS']
+        execute! ['echo "done" >> /var/poolparty/POOLPARTY.PROGRESS', "/usr/bin/server-butterfly &"]
       end
     end
     

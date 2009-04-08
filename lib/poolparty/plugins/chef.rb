@@ -24,13 +24,11 @@ module PoolParty
         @basedir ||= "#{Default.tmp_path}/dr_configure/recipes/main"
       end
       
-      def recipe file=nil, o={}, &block
-        if file          
+      def recipe file=nil, o={}, &block        
+        if file
           ::FileUtils.mkdir_p "#{basedir}/recipes" unless ::File.directory? basedir
           
-          if ::File.file?(::File.expand_path(file))
-            file = ::File.expand_path file            
-          else
+          unless ::File.file?(file)
             tfile = Tempfile.new("main-poolparty-recipe")
             tfile << file # copy the string into the temp file
             file = tfile.path
@@ -46,10 +44,6 @@ module PoolParty
           raise <<-EOR
             PoolParty currently only supports passing recipes as files. Please specify a file in your chef block and try again"
           EOR
-        #   recipe = ChefRecipe.new
-        #   recipe.instance_eval &block          
-        #   ::File.open("#{Default.tmp_path}/chef_main.rb", "w+") {|f| f << @recipe.options.to_json }
-        #   recipe_dirs << "/tmp/poolparty/poolparty_chef_recipe.rb"
         end
       end
       

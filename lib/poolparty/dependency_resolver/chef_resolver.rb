@@ -10,7 +10,7 @@ module PoolParty
     def comp(cld_name, props, tabs)
       base_dir cld_name
       basedir = build_base_recipe_directory( cld_name )
-      handle_print_variables(props[:options], cld_name) if props && props.has_key?(:options)
+      handle_print_variables(props[:options]) if props && props.has_key?(:options)
       
       default_recipe = [ 
         resources_to_string(props[:resources],tabs),
@@ -37,17 +37,17 @@ module PoolParty
       #   res = to_option_string(v)
       #   next unless res && !res.empty?
       #   # "#{tf(tabs)}$#{k} = #{res}"
-      handle_print_variables(opts, opts.name) if opts
+      handle_print_variables(opts) if opts
       # end.join("\n") if opts
     end
     
     def resources_to_string(opts,tabs=0)
       out = []
       if opts
-        
-        if opts.has_key?(:variable)
+
+        if opts[:variable] && !opts[:variable].empty?
           vars = opts.delete(:variable)          
-          handle_print_variables(vars, (opts.name rescue "default"))
+          handle_print_variables(vars)
         end
         
         if opts.has_key?(:line_in_file)
@@ -71,14 +71,13 @@ module PoolParty
       out.join("\n")
     end
     
-    def handle_print_variables(vars, nm)
-      out = ["\n#{nm} Mash.new unless attribute?('#{nm}')\n\n"]
-      vars.each do |varname, value|
-        vname = handle_chef_vars(nm, varname)
-        val = to_option_string(value)
-        out << "#{vname} = #{val}" if vname && val
+    def handle_print_variables(vars)
+      
+      out = ["\npoolparty Mash.new unless attribute?('poolparty')\n\n"]
+      vars.each do |varhash|
+        out << "poolparty[:#{varhash[:name]}] = #{to_option_string(varhash[:value])}"
       end
-      ::File.open("#{base_dir}/attributes/#{nm}.rb", "w+") do |f| 
+      ::File.open("#{base_dir}/attributes/poolparty.rb", "w+") do |f| 
         f << out.join("\n")
       end
     end

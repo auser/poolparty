@@ -3,10 +3,6 @@ module PoolParty
         
     class Variable < Resource
       
-      default_options({
-        :value => ""
-      })
-      
     end
     
   end
