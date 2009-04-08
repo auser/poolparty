@@ -14,7 +14,7 @@ module PoolParty
 end
 
 class String
-  def camel_case
+  def camelcase
     gsub(/(^|_|-)(.)/) { $2.upcase }
   end
 end

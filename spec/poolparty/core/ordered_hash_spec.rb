@@ -41,7 +41,7 @@ describe "Ordered Hash" do
   it "PoolParty Key" do
       @oh[:keyy] = [Key.new, Key.new('path/to/nowhere')]
       expected=<<JSO
-{"var1":10,"var2":2,"var3":3,"var4":4,"keyy":[{'keypair':'id_rsa'},{'keypair':'path/to/nowhere'}]}
+{\"var1\":10,\"var2\":2,\"var3\":3,\"var4\":4,\"keyy\":[\"id_rsa\",\"path/to/nowhere\"]}
 JSO
       @oh.to_json.should == expected.strip
   end

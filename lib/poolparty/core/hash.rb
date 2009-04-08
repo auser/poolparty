@@ -13,6 +13,10 @@ class Hash
     end
   end
   
+  def value_at(*indecies)
+    indecies.collect {|i| self[i] }
+  end
+  
   #TODO: deprecate
   # def extract!(&block)
   #   o = Hash[*select(&block).flatten]

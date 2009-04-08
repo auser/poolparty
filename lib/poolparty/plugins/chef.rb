@@ -21,7 +21,7 @@ module PoolParty
       end
       
       def basedir
-        @basedir ||= "#{Default.tmp_path}/dr_configure/recipes/main"
+        @basedir ||= "#{Default.tmp_path}/dr_configure/chef/recipes/main"
       end
       
       def recipe file=nil, o={}, &block        
@@ -73,7 +73,7 @@ module PoolParty
             unless @recipe
               @recipe = ChefRecipe.new
               @recipe.instance_eval &block if block
-              @recipe.recipes(@recipe.recipes? ? (@recipe.recipes << ["poolparty", "main"]) : ["poolparty", "main"])
+              @recipe.recipes(@recipe.recipes? ? (@recipe.recipes << ["poolparty", "main"]) : ["poolparty"])
               ::File.open("#{Default.tmp_path}/dna.json", "w+") {|f| f << @recipe.options.to_json }
               @json_file = "#{Default.tmp_path}/dna.json"
             end
@@ -123,7 +123,7 @@ file_cache_path  "/etc/chef"
       end
       
       def after_create
-        dputs "Called after_create in chef"
+        puts "Called after_create in chef"
         before_configure
       end
       

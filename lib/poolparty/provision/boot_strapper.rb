@@ -8,38 +8,38 @@ module PoolParty
       include ::PoolParty::Remote
       
       def self.gem_list
-        @gem_list ||= %w(  flexmock
-                        lockfile
-                        logging
-                        ZenTest
-                        rake
-                        xml-simple
-                        sexp_processor
-                        net-ssh
-                        net-sftp
-                        net-scp
-                        net-ssh-gateway
-                        echoe
-                        highline
-                        json
-                        capistrano
-                        ParseTree
-                        ruby2ruby
-                        activesupport
-                        grempe-amazon-ec2
-                        RubyInline
-                        archive-tar-minitar
-                        chef
-                        auser-butterfly
-                        thin
-                        auser-dslify
+        @gem_list ||= %w( flexmock
+                          lockfile
+                          logging
+                          ZenTest
+                          rake
+                          xml-simple
+                          sexp_processor
+                          net-ssh
+                          net-sftp
+                          net-scp
+                          net-ssh-gateway
+                          echoe
+                          highline
+                          json
+                          capistrano
+                          ParseTree
+                          ruby2ruby
+                          activesupport
+                          grempe-amazon-ec2
+                          RubyInline
+                          archive-tar-minitar
+                          chef
+                          auser-dslify
+                          auser-butterfly
+                          thin
                         )
       end
   
       @defaults = ::PoolParty::Default.default_options.merge({
         :full_keypair_path   => "#{ENV["AWS_KEYPAIR_NAME"]}" || "~/.ssh/id_rsa",
         :installer           => 'apt-get',
-        :dependency_resolver => 'puppet'
+        :dependency_resolver => 'chef'
       })
       class <<self; attr_reader :defaults; end
       
@@ -78,7 +78,11 @@ module PoolParty
         puts "Adding default gem dependencies"
         ::Suitcase::Zipper.gems self.class.gem_list, "#{Default.tmp_path}/trash/dependencies"
 
-        ::Suitcase::Zipper.packages "http://rubyforge.org/frs/download.php/45905/rubygems-1.3.1.tgz", "#{Default.tmp_path}/trash/dependencies/packages"
+        ::Suitcase::Zipper.packages( "http://rubyforge.org/frs/download.php/45905/rubygems-1.3.1.tgz",
+         "#{Default.tmp_path}/trash/dependencies/packages")
+        ::Suitcase::Zipper.add("templates/")
+        ::Suitcase::Zipper.add("#{::File.dirname(__FILE__)}/../templates/monitor.ru", "etc/poolparty")
+        ::Suitcase::Zipper.build_dir!("#{Default.tmp_path}/dependencies")
         
         ::Suitcase::Zipper.add("#{Default.tmp_path}/trash/dependencies/cache", "gems")
         ::Suitcase::Zipper.build_dir!("#{Default.tmp_path}/dependencies")        
@@ -92,6 +96,9 @@ module PoolParty
         
         commands << [
           "mkdir -p /etc/poolparty",
+          "mkdir -p /var/log/poolparty",
+          "groupadd -f poolparty",
+          # "useradd poolparty  --home-dir /var/poolparty  --groups poolparty  --create-home",
           'cd /var/poolparty/dependencies',
           "#{installer} update",
           "#{installer} install -y ruby1.8 ruby1.8-dev libopenssl-ruby1.8 build-essential wget",  #optional, but nice to have
@@ -102,16 +109,20 @@ module PoolParty
           "cd ../ && rm -rf rubygems-1.3.1*",
           "cd /var/poolparty/dependencies/gems/",
           "gem install --no-rdoc --no-ri -y *.gem",
+          "cd /var/poolparty/dependencies",
+          "cp etc/monitor.ru /etc/poolparty/",
           'touch /var/poolparty/POOLPARTY.PROGRESS',
           "mkdir -p /root/.ssh",
-          "cp /var/poolparty/dependencies/keys/#{@cloud.keypair.basename} /root/.ssh/#{@cloud.keypair.basename}",
+          "cp /var/poolparty/dependencies/keys/* /root/.ssh/",
           "chmod 600 /root/.ssh/#{@cloud.keypair.basename}",
           'echo "bootstrap" >> /var/poolparty/POOLPARTY.PROGRESS']
         commands << self.class.class_commands unless self.class.class_commands.empty?
       end
       
       def after_bootstrap
-        execute! ['echo "done" >> /var/poolparty/POOLPARTY.PROGRESS', "/usr/bin/server-butterfly &"]
+        thin_cmd = "thin -R /etc/poolparty/monitor.ru start -p 8642 --daemonize --pid /var/run/poolparty/monitor.pid --log /var/log/poolparty/monitor.log --environment production --chdir /var/poolparty" 
+        vputs "thin_cmd = #{thin_cmd}"
+        execute! [ thin_cmd ] #TODO --user poolparty --group poolparty
       end
     end
     
