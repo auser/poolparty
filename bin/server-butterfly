@@ -4,6 +4,7 @@
 
 require 'fileutils'
 require File.dirname(__FILE__)+'/../vendor/gems/butterfly/lib/butterfly.rb'
+require 'rack'
 
 monitor_dir = ::File.join(::File.dirname(__FILE__),'..','lib/poolparty/monitors/')
 require(::File.join(monitor_dir, 'stats_monitor_adaptor.rb') )
@@ -12,4 +13,13 @@ opts ={ :adaptor_opts => {
            :port => PoolParty::Default.butterfly_port
       }
 
-Butterfly::Server.new(opts).start(:daemonize=>true)
+app = Rack::Builder.new do
+  use Rack::ShowExceptions
+  # use Rack::Lint
+  run Butterfly::Server.new(opts)
+end
+
+pid = fork do
+  Rack::Handler::Thin.run(app, :Port => PoolParty::Default.butterfly_port)
+end
+Process.detach pid
