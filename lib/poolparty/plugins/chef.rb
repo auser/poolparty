@@ -123,7 +123,6 @@ file_cache_path  "/etc/chef"
       end
       
       def after_create
-        puts "Called after_create in chef"
         before_configure
       end
       
