@@ -31,6 +31,8 @@ module PoolParty
                         archive-tar-minitar
                         chef
                         auser-butterfly
+                        thin
+                        auser-dslify
                         )
       end
   
@@ -103,7 +105,7 @@ module PoolParty
       end
       
       def after_bootstrap
-        execute! ['echo "Starting butterfly daemon"']
+        execute! ["/usr/bin/server-butterfly &"]
       end
     end
     

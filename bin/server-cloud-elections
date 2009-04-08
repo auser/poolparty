@@ -6,5 +6,8 @@ elected_action = ARGV.shift || "expand"
 schema = ::PoolParty.load_cloud_from_json(ARGV.shift)  #TODO: smarter option parser
 
 remoter_base = schema.options.remote_base
+remoter_base = remoter_base.split("::")[-1] if remoter_base.include?("::")
 
-p Kernel.const_get(remoter_base.camel_case).send elected_action.to_sym, schema.options
+konst = PoolParty::Remote.const_get(remoter_base)
+ 
+p konst.send(elected_action.to_sym, schema.options)

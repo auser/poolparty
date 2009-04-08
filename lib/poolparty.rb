@@ -9,8 +9,6 @@ $LOAD_PATH<< File.dirname(__FILE__)
     @required_software << lib
   end  
 end
-require 'ruby-debug'
-require "pp"
 
 require "#{File.dirname(__FILE__)}/poolparty/helpers/nice_printer"
 
