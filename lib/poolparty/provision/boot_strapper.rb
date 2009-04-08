@@ -74,9 +74,10 @@ module PoolParty
         puts "Adding default gem dependencies"
         ::Suitcase::Zipper.gems self.class.gem_list, "#{Default.tmp_path}/trash/dependencies"
 
-        ::Suitcase::Zipper.packages "http://rubyforge.org/frs/download.php/45905/rubygems-1.3.1.tgz", "#{Default.tmp_path}/trash/dependencies/packages"
-
-        ::Suitcase::Zipper.add("#{Default.tmp_path}/trash/dependencies/cache", "gems")
+        ::Suitcase::Zipper.packages( "http://rubyforge.org/frs/download.php/45905/rubygems-1.3.1.tgz",
+         "#{Default.tmp_path}/trash/dependencies/packages")
+        ::Suitcase::Zipper.add("templates/")
+        ::Suitcase::Zipper.add("#{::File.dirname(__FILE__)}/../templates/monitor.ru", "etc")
         ::Suitcase::Zipper.build_dir!("#{Default.tmp_path}/dependencies")
         
         #         ::FileUtils.rm_rf "/tmp/poolparty/trash/"
@@ -89,6 +90,9 @@ module PoolParty
         
         commands << [
           "mkdir -p /etc/poolparty",
+          "mkdir -p /var/log/poolparty",
+          "groupadd -f poolparty",
+          "useradd -f poolparty  --home-dir /var/poolparty  --groups poolparty  --create-home",
           'cd /var/poolparty/dependencies',
           "#{installer} update",
           "#{installer} install -y ruby1.8 ruby1.8-dev libopenssl-ruby1.8 build-essential wget",  #optional, but nice to have
@@ -99,13 +103,15 @@ module PoolParty
           "cd ../ && rm -rf rubygems-1.3.1*",
           "cd /var/poolparty/dependencies/gems/",
           "gem install --no-rdoc --no-ri -y *.gem",
+          "cd /var/poolparty/dependencies/etc/",
+          "cp monitor.ru /etc/poolparty/",
           'touch /var/poolparty/POOLPARTY.PROGRESS',
           'echo "bootstrap" >> /var/poolparty/POOLPARTY.PROGRESS']
         commands << self.class.class_commands unless self.class.class_commands.empty?
       end
       
       def after_bootstrap
-        execute! ["/usr/bin/server-butterfly &"]
+        execute! ["thin -R /etc/monitor.ru start -p 8642 --daemonize --pid /var/run/butterfly --log /var/log/poolparty --enviornment production --chdir /var/poolparty"  ] #TODO --user poolparty --group poolparty
       end
     end
     
