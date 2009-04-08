@@ -105,7 +105,7 @@ module PoolParty
       end
       
       def after_bootstrap
-        execute! ['echo "Starting butterfly daemon"', "/usr/bin/server-butterfly &"]
+        execute! ["/usr/bin/server-butterfly &"]
       end
     end
     

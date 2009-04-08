@@ -114,7 +114,7 @@ module Butterfly
     
     def instances
       # res = PoolParty::Neighborhoods.load_default.instances
-      res ||= %x[/usr/bin/server-list-active ip].split("\t")
+      res ||= %x[/usr/bin/server-list-active internal_ip].split("\t")
       res
     end
     
@@ -155,7 +155,7 @@ module Butterfly
     end
     
     def my_ip
-      @my_ip ||= ohai["public_ipv4"]
+      @my_ip ||= ohai["ipaddress"]
     end
     
     def ohai
