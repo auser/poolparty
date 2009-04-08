@@ -26,6 +26,10 @@ module PoolParty
       @basename ||= ::File.basename(full_filepath, ::File.extname(full_filepath)) rescue filepath
     end
     
+    def filename
+      @filename ||= ::File.basename(full_filepath) rescue filepath
+    end
+    
     def search_in_known_locations
       self.class.keypair_paths.each do |path|
         full_path = ::File.join( ::File.expand_path(path), filepath)
