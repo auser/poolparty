@@ -8,5 +8,6 @@ opts ={ :adaptor_opts => {
            :file => 'poolparty/monitors/stats_monitor_adaptor.rb'},
            :port => PoolParty::Default.butterfly_port
       }
-
+      
+use Rack::CommonLogger
 run Butterfly::Server.new(opts)

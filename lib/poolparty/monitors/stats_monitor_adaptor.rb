@@ -20,16 +20,21 @@ module Butterfly
         r = Aska::Rule.new(rul)
         rule(name) << r
       end
-      fork_and_put
+      # fork_and_put
+      log << "#{Time.now.strftime("%Y-%m-%d-%H-%M")}, #{stats.to_json}\n"
     end
     
-    #TODO: first packet should be a post
-    def first_put(time_to_wait=60)
+    def log(log_file_path="/var/log/poolparty/stats_monitor.log")
+      ::File.file? log_file_path
+      @logfile ||= ::File.new(log_file_path, 'a')
+    end
+    
+    #TODO: first packet should be a post  
+    def first_put(time_to_wait=10)
       puts " waiting #{time_to_wait} seconds for a put, otherwise initiating. #{stats.inspect}"
       sleep time_to_wait  #lets see if we receive a stats update before puting a new one
       if stats=={my_ip  => {}}
         puts "Initiating first put"
-        touch ''
         fork_and_put
       end
     end
@@ -81,11 +86,11 @@ module Butterfly
       
       reload_data!
       stats[my_ip]["elected_action"] = @elected_action if @elected_action
-      
+      log << "#{Time.now.strftime("%Y-%m-%d-%H-%M")}, #{stats.to_json}\n"
       fork_and_put
       "ok"
     end
-    
+        
     def fork_and_put
       fork do
         # put to next node
@@ -99,7 +104,7 @@ module Butterfly
         end
       end
     end
-    
+        
     def elected_action
       @elected_action ||= nil
     end
@@ -180,7 +185,7 @@ module Butterfly
     def reload_data!
       super
       @stats[my_ip] = {}
-      instances.each {|inst| @stats[inst] ||= {} }
+      instances.each {|inst| @stats[inst] = {} }
     end
   end
 end
