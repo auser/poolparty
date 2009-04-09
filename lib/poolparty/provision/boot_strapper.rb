@@ -81,7 +81,7 @@ module PoolParty
         ::Suitcase::Zipper.packages( "http://rubyforge.org/frs/download.php/45905/rubygems-1.3.1.tgz",
          "#{Default.tmp_path}/trash/dependencies/packages")
         ::Suitcase::Zipper.add("templates/")
-        ::Suitcase::Zipper.add("#{::File.dirname(__FILE__)}/../templates/monitor.ru", "etc/poolparty")
+        ::Suitcase::Zipper.add("#{::File.dirname(__FILE__)}/../templates/monitor.ru", "/etc/poolparty/")
         ::Suitcase::Zipper.build_dir!("#{Default.tmp_path}/dependencies")
         
         ::Suitcase::Zipper.add("#{Default.tmp_path}/trash/dependencies/cache", "gems")
@@ -110,7 +110,7 @@ module PoolParty
           "cd /var/poolparty/dependencies/gems/",
           "gem install --no-rdoc --no-ri -y *.gem",
           "cd /var/poolparty/dependencies",
-          "cp etc/monitor.ru /etc/poolparty/",
+          "cp /var/poolparty/dependencies/etc/poolparty/monitor.ru /etc/poolparty/",
           'touch /var/poolparty/POOLPARTY.PROGRESS',
           "mkdir -p /root/.ssh",
           "cp /var/poolparty/dependencies/keys/* /root/.ssh/",
@@ -120,9 +120,10 @@ module PoolParty
       end
       
       def after_bootstrap
-        thin_cmd = "thin -R /etc/poolparty/monitor.ru start -p 8642 --daemonize --pid /var/run/poolparty/monitor.pid --log /var/log/poolparty/monitor.log --environment production --chdir /var/poolparty" 
+        thin_cmd = "thin -R /etc/poolparty/monitor.ru start -p 8642 --daemonize --pid /var/run/poolparty/monitor.pid --log /var/log/poolparty/monitor.log --environment production --chdir /var/poolparty" #TODO --user poolparty --group poolparty
         vputs "thin_cmd = #{thin_cmd}"
-        execute! [ thin_cmd ] #TODO --user poolparty --group poolparty
+        curl_put = "curl -i -XPUT -d'{}' http://localhost:8642/stats_monitor"
+        execute! [ thin_cmd, "sleep 10", curl_put  ] 
       end
     end
     

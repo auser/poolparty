@@ -19,7 +19,7 @@ app = Rack::Builder.new do
   run Butterfly::Server.new(opts)
 end
 
-pid = fork do
+# pid = fork do
   Rack::Handler::Thin.run(app, :Port => PoolParty::Default.butterfly_port)
-end
-Process.detach pid
+# end
+# Process.detach pid
