@@ -87,25 +87,24 @@ module Butterfly
       reload_data!
       stats[my_ip]["elected_action"] = @elected_action if @elected_action
       log << "#{Time.now.strftime("%Y-%m-%d-%H-%M")}, #{stats.to_json}\n"
+      fork_and_put
       "ok"
     end
         
-    def after_return
-      # fork do
+    def fork_and_put
+      fork do
         # put to next node
         # TODO: Fix mysterious return of the nil (HASH next_sorted_key(my_ip))
         # next_node = stats.next_sorted_key(my_ip)        
         idx = (stats.size - stats.keys.sort.index(my_ip))
         next_node = stats.keys.sort[idx - 1]
-       puts "after return is passing the baton to #{next_node}" rescue 'dputs broke'
-        
         sleep(10)
         Net::HTTP.start(next_node, PoolParty::Default.butterfly_port) do |http|
           http.send_request('PUT', '/stats_monitor.json', stats.to_json)
         end
-      # end
+      end
     end
-    
+        
     def elected_action
       @elected_action ||= nil
     end
