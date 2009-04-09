@@ -17,7 +17,7 @@ module PoolParty
         if dsl_options.include?(:content)
           cont = dsl_options.delete(:content)
           template_opts = (parent ? options.merge(parent.options) : options)
-          options.merge!(:content => ((dsl_options.include?(:erb) && dsl_options[:erb]) ? Template.compile_string(cont, template_opts) : cont))
+          options.merge!(:content => ((dsl_options.include?(:erb) && dsl_options.delete(:erb)) ? Template.compile_string(cont, template_opts) : cont))
         end
       end
       

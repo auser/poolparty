@@ -45,7 +45,7 @@ module PoolParty
       commands << [
         'chmod 600 /var/poolparty/dr_configure/clouds.json',
         'chmod 600 /var/poolparty/dr_configure/clouds.rb',
-        'cp /var/poolparty/dr_configure/clouds.json /etc/poolparty',
+        'cp -f /var/poolparty/dr_configure/clouds.json /etc/poolparty',
         'cp /var/poolparty/dr_configure/clouds.rb /etc/poolparty',
         'cp /var/poolparty/dr_configure/erlang.cookie /root/.erlang.cookie',        
         'ruby /var/poolparty/dr_configure/erlang_cookie_maker',

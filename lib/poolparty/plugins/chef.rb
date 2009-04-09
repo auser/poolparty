@@ -60,22 +60,22 @@ module PoolParty
         else
           if file
             if ::File.file? file
-              ::File.cp file, "#{Default.tmp_path}/dna.json"            
+              ::File.cp file, "#{Default.tmp_path}/dr_configure/dna.json"
             elsif file.is_a?(String)
-              ::File.open("#{Default.tmp_path}/dna.json", "w+"){|tf| tf << file } # is really a string
+              ::File.open("#{Default.tmp_path}/dr_configure/dna.json", "w+"){|tf| tf << file } # is really a string
             else
               raise <<-EOM
                 Your json must either point to a file that exists or a string. Please check your configuration and try again
               EOM
             end
-            @json_file = "#{Default.tmp_path}/dna.json"
+            @json_file = "#{Default.tmp_path}/dr_configure/dna.json"
           else
             unless @recipe
               @recipe = ChefRecipe.new
               @recipe.instance_eval &block if block
-              @recipe.recipes(@recipe.recipes? ? (@recipe.recipes << ["poolparty", "main"]) : ["poolparty"])
-              ::File.open("#{Default.tmp_path}/dna.json", "w+") {|f| f << @recipe.options.to_json }
-              @json_file = "#{Default.tmp_path}/dna.json"
+              @recipe.recipes(recipe_files.empty? ? ["poolparty"] : ["poolparty", "main"])
+              ::File.open("#{Default.tmp_path}/dr_configure/dna.json", "w+") {|f| f << @recipe.options.to_json }
+              @json_file = "#{Default.tmp_path}/dr_configure/dna.json"
             end
           end
         end
@@ -113,7 +113,7 @@ file_cache_path  "/etc/chef"
             ::File.open("#{Default.tmp_path}/dr_configure/chef_config.rb", "w+") do |tf|
               tf << conf_string
             end
-            @config_file = "#{Default.tmp_path}/chef_config.rb"
+            @config_file = "#{Default.tmp_path}/dr_configure/chef_config.rb"
           end
         end
       end
@@ -143,7 +143,7 @@ file_cache_path  "/etc/chef"
         end
         
         ::Suitcase::Zipper.add(@json_file, "chef/json")
-        configure_commands ["cp /var/poolparty/dr_configure/dna.json /etc/chef/dna.json"]
+        configure_commands ["cp -f /var/poolparty/dr_configure/chef/json/dna.json /etc/chef/dna.json"]
 
         recipe_files.each do |rf|
           # ::FileUtils.cp_r rf, "/tmp/poolparty/dr_configure/recipes/#{::File.basename(rf)}"

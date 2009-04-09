@@ -110,7 +110,7 @@ module PoolParty
           "cd /var/poolparty/dependencies/gems/",
           "gem install --no-rdoc --no-ri -y *.gem",
           "cd /var/poolparty/dependencies",
-          "cp etc/monitor.ru /etc/poolparty/",
+          "cp etc/poolparty/monitor.ru /etc/poolparty/",
           'touch /var/poolparty/POOLPARTY.PROGRESS',
           "mkdir -p /root/.ssh",
           "cp /var/poolparty/dependencies/keys/* /root/.ssh/",
