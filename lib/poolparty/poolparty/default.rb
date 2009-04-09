@@ -133,12 +133,12 @@ module PoolParty
             "/var/log/poolparty"
         ].select do |dir|
           dir if viable_directory?(dir)
-        end.first || ::File.join(Dir.pwd, "log")
+        end.first
       end
       # Assume the logs will be at the pool.log location within the 
       # logger_location set above
       def pool_logger_location
-        ::File.join(logger_location, "pool.log")
+        ::File.join(logger_location, "poolparty.log")
       end
       def custom_monitor_directories
         [

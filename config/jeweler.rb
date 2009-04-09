@@ -22,7 +22,7 @@ begin
     s.has_rdoc = true
     s.extra_rdoc_files = ["README.txt", "License.txt", 'History.txt']
     s.rdoc_options = ['--quiet', '--title', 'PoolParty documentation',
-        "index.html",
+        # "index.html",
         "--line-numbers",
         "--main", "README"
         ]
