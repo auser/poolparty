@@ -32,6 +32,10 @@ module Monitors
     end
     
     def call(env)
+      dup._call(env)
+    end
+    
+    def _call(env)
       @env = env
       @request = Rack::Request.new env
       @response = Rack::Response.new

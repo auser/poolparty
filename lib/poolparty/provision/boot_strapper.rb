@@ -65,7 +65,7 @@ module PoolParty
         
       def pack_the_dependencies
         # Add the keypair to the instance... shudder
-        ::Suitcase::Zipper.add(@cloud.keypair.full_filepath, "keys")
+        ::Suitcase::Zipper.add(@cloud.keypair, "keys")
         
         # Use the locally built poolparty gem if it is availabl
         if edge_pp_gem = Dir["#{Default.vendor_path}/../pkg/*poolparty*gem"].pop
