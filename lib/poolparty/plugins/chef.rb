@@ -36,7 +36,7 @@ module PoolParty
           
           ::File.cp file, "#{basedir}/recipes/default.rb"
           
-          templates *o[:templates] if o[:templates]
+          templates o[:templates] if o[:templates]
           
           recipe_files << basedir
         # TODO: Enable neat syntax from within poolparty
@@ -156,7 +156,8 @@ file_cache_path  "/etc/chef"
         configure_commands ["cp -f /var/poolparty/dr_configure/chef/json/dna.json /etc/chef/dna.json"]
 
         recipe_files.each do |rf|
-          # ::FileUtils.cp_r rf, "/tmp/poolparty/dr_configure/recipes/#{::File.basename(rf)}"
+          ::FileUtils.mkdir_p "/tmp/poolparty/dr_configure/recipes/#{::File.basename(rf)}"
+          ::FileUtils.cp_r rf, "/tmp/poolparty/dr_configure/recipes/#{::File.basename(rf)}"
           # ::Suitcase::Zipper.add(rf, "chef/recipes") 
         end
       end
