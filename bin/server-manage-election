@@ -3,6 +3,10 @@
 # then call each of those at the port of butterfly and retain the json
 # From there, mash it up together and call server-handle-election
 # to handle the election process
+
+# Error codes
+# 1 -> clouds.json was not loaded
+# 2 -> server-list-active didn't run
 require "rubygems"
 require 'net/http'
 require 'json'
@@ -11,14 +15,18 @@ require "poolparty/lite"
 status = ARGV.shift || "running" # or pending or terminated
 schema = ::PoolParty.load_cloud_from_json(ARGV.shift)  #TODO: smarter option parser
 
+exit(1) unless schema
+
 def get_json_stats_from(ip, port)
-  Net::HTTP.start(ip, port) {|http| http.get('/stats.json') }.body
+  Net::HTTP.start(ip, port) {|http| http.get('/stats.json') }.body rescue "{}"
 end
  
-ips = %x["server-list-active internal_ips"].split("\t")
+ips = %x[/usr/bin/server-list-active internal_ip].split("\t")
 
-min_instances = schema.options.minimum_instances
-max_instances = schema.options.maximum_instances
+exit(2) unless ips
+
+minimum_instances = schema.options.minimum_instances
+maximum_instances = schema.options.maximum_instances
 
 if ips.size < minimum_instances
   %x[/usr/bin/server-cloud-elections expand]
@@ -30,14 +38,17 @@ elsif ips.size > maximum_instances
   exit(0)
 end
 
-total_json_array = {}
+total_json_hash = {}
 ips.each do |ip|
-  total_json_array.merge!(JSON.parse(get_json_stats_from(ip, 8642)))
+  node_hsh = JSON.parse(get_json_stats_from(ip, 8642))
+  total_json_hash.merge!(node_hsh) if node_hsh
 end
+
+puts total_json_hash.inspect
 
 candidates = {:expand => 0, :contract => 0, :elected_action => nil}
 candidates.each do |action, ballots|
-  total_json_array.each do |ip, node_hsh|
+  total_json_hash.each do |ip, node_hsh|
     candidates[action]+=1 if node_hsh["nominations"] && node_hsh["nominations"].include?(action.to_s)
     candidates[:elected_action] = node_hsh["elected_action"]
   end
@@ -46,10 +57,10 @@ end
 # Expand the cloud if 50+% of the votes are for expansion
 # Contract the cloud if 51+% of the votes are for contraction
 @elected_action = candidates[:elected_action] || "none"
-if (candidates[:expand] - candidates[:contract])/total_json_array.size > 0.5
+if (candidates[:expand] - candidates[:contract])/total_json_hash.size > 0.5
   %x[/usr/bin/server-cloud-elections expand] unless @elected_action == "expand"
   @elected_action = "expand"
-elsif (candidates[:contract] - candidates[:expand])/total_json_array.size > 0.5
+elsif (candidates[:contract] - candidates[:expand])/total_json_hash.size > 0.5
   %x[/usr/bin/server-cloud-elections contract] unless @elected_action == "contract"
   @elected_action = "contract"
 end      

@@ -19,10 +19,9 @@ o.loaded_clouds.each do |cld|
       ::PoolParty::Provision::BootStrapper.new( node[:ip], :full_keypair_path => cld.keypair.full_filepath, :cloud => cld )
       ::PoolParty::Provision::DrConfigure.new( node[:ip], :full_keypair_path => cld.keypair.full_filepath, :cloud => cld )
     end
-  when "contract"    
-    last_inst = cld.remote_instances_list.last
-    PoolParty.log <<  "Contracting cloud instance #{last_inst.instance_id}"
-    cld.terminate_instance! cld.options.merge(schema.options.merge(:instance_id => last_inst.instance_id))
+  when "contract"
+    last_instance_id = %x[/usr/bin/server-list-active instance_id].split("\t").last
+    cld.terminate_instance! cld.options.merge(schema.options.merge(:instance_id => last_instance_id))
   else
     puts "Unknown action: #{vote_action}"
   end

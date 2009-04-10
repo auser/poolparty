@@ -76,17 +76,14 @@ module PoolParty
         end
         # Add the gems to the suitcase
         puts "Adding default gem dependencies"
-        ::Suitcase::Zipper.gems self.class.gem_list, "#{Default.tmp_path}/trash/dependencies"
+        ::Suitcase::Zipper.gems self.class.gem_list, "#{Default.tmp_path}/dependencies/gems"
 
-        ::Suitcase::Zipper.packages( "http://rubyforge.org/frs/download.php/45905/rubygems-1.3.1.tgz",
-         "#{Default.tmp_path}/trash/dependencies/packages")
+        ::Suitcase::Zipper.packages( "http://rubyforge.org/frs/download.php/45905/rubygems-1.3.1.tgz", "#{Default.tmp_path}/dependencies/packages")
         ::Suitcase::Zipper.add("templates/")
         
         ::Suitcase::Zipper.add("#{::File.dirname(__FILE__)}/../templates/monitor.ru", "/etc/poolparty/")
         ::Suitcase::Zipper.add("#{::File.dirname(__FILE__)}/../templates/monitor.god", "/etc/poolparty/")
-        
-        ::Suitcase::Zipper.build_dir!("#{Default.tmp_path}/dependencies")
-        
+                
         ::Suitcase::Zipper.add("#{Default.tmp_path}/trash/dependencies/cache", "gems/cache")
         
         ::Suitcase::Zipper.add("#{::File.join(File.dirname(__FILE__), '..', 'templates', 'gemrc' )}", "etc/poolparty")
@@ -105,7 +102,7 @@ module PoolParty
           "groupadd -f poolparty",
           # "useradd poolparty  --home-dir /var/poolparty  --groups poolparty  --create-home",
           'cd /var/poolparty/dependencies',
-          "cp /var/poolparty/dependencies/etc/gemrc /etc/poolparty",
+          "cp /var/poolparty/dependencies/etc/poolparty/gemrc /etc/poolparty",
           "#{installer} update",
           "#{installer} install -y ruby1.8 ruby1.8-dev libopenssl-ruby1.8 build-essential wget",  #optional, but nice to have
           "tar -zxvf packages/rubygems-1.3.1.tgz",
@@ -122,7 +119,7 @@ module PoolParty
           "cp /var/poolparty/dependencies/keys/* /root/.ssh/",
           "chmod 600 /root/.ssh/#{@cloud.keypair.basename}",
           # "god -c /etc/poolparty/monitor.god",
-          "thin -R /etc/poolparty/monitor.ru -p 8642 --daemon --pid /var/run/stats_monitor.pid start",
+          "thin -R /etc/poolparty/monitor.ru -p 8642 --daemon --pid /var/run/stats_monitor.pid start 2>/dev/null",
           'echo "bootstrap" >> /var/poolparty/POOLPARTY.PROGRESS']
         commands << self.class.class_commands unless self.class.class_commands.empty?
       end
