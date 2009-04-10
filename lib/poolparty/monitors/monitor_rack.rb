@@ -99,6 +99,7 @@ module Monitors
   
   #load our monitors
   require ::File.dirname(__FILE__)+"/stats_monitor.rb"
+  require ::File.dirname(__FILE__)+"/neighborhood_monitor.rb"
   
 
   # just here as an example

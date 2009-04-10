@@ -76,19 +76,21 @@ module PoolParty
         end
         # Add the gems to the suitcase
         puts "Adding default gem dependencies"
-        ::Suitcase::Zipper.gems self.class.gem_list, "#{Default.tmp_path}/dependencies/gems"
+        ::Suitcase::Zipper.gems self.class.gem_list, "#{Default.tmp_path}/trash/dependencies"        
 
-        ::Suitcase::Zipper.packages( "http://rubyforge.org/frs/download.php/45905/rubygems-1.3.1.tgz", "#{Default.tmp_path}/dependencies/packages")
+        ::Suitcase::Zipper.packages( "http://rubyforge.org/frs/download.php/45905/rubygems-1.3.1.tgz",
+                 "#{Default.tmp_path}/trash/dependencies/packages")
         ::Suitcase::Zipper.add("templates/")
         
         ::Suitcase::Zipper.add("#{::File.dirname(__FILE__)}/../templates/monitor.ru", "/etc/poolparty/")
         ::Suitcase::Zipper.add("#{::File.dirname(__FILE__)}/../templates/monitor.god", "/etc/poolparty/")
                 
-        ::Suitcase::Zipper.add("#{Default.tmp_path}/trash/dependencies/cache", "gems/cache")
+        ::Suitcase::Zipper.add("#{Default.tmp_path}/trash/dependencies/cache", "gems")        
         
         ::Suitcase::Zipper.add("#{::File.join(File.dirname(__FILE__), '..', 'templates', 'gemrc' )}", "etc/poolparty")
-        ::Suitcase::Zipper.build_dir!("#{Default.tmp_path}/dependencies")        
-        #         ::FileUtils.rm_rf "/tmp/poolparty/trash/"
+        ::Suitcase::Zipper.build_dir!("#{Default.tmp_path}/dependencies")
+        
+        # ::FileUtils.rm_rf "#{Default.tmp_path}/trash"
       end
   
       def default_commands
