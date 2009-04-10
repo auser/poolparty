@@ -15,4 +15,11 @@ app = Rack::Builder.new do
   run Monitors::MonitorRack.new()
 end
 
-run app
+if __FILE__ == $0
+# at_exit do
+  Rack::Handler::Thin.run app, :daemonize=>true, :pid_file=>'/tmp/monitor.pid'
+  # Thin::Server.new(app, :daemonize=>true, :pid_file=>'/tmp/monitor.pid').daemonize
+# end
+else
+  run app
+end
