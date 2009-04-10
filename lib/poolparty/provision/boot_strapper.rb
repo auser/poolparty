@@ -88,6 +88,8 @@ module PoolParty
         ::Suitcase::Zipper.build_dir!("#{Default.tmp_path}/dependencies")
         
         ::Suitcase::Zipper.add("#{Default.tmp_path}/trash/dependencies/cache", "gems/cache")
+        
+        ::Suitcase::Zipper.add("#{::File.join(File.dirname(__FILE__), '..', 'templates', 'gemrc' )}", "etc/poolparty")
         ::Suitcase::Zipper.build_dir!("#{Default.tmp_path}/dependencies")        
         #         ::FileUtils.rm_rf "/tmp/poolparty/trash/"
       end
@@ -96,7 +98,6 @@ module PoolParty
         pack_the_dependencies
         ::FileUtils.rm_rf "#{Default.tmp_path}/dependencies/gems/cache"
         rsync "#{Default.tmp_path}/dependencies", '/var/poolparty'
-        rsync "#{::File.join(File.dirname(__FILE__), '..', 'templates', 'gemrc' )}", '/etc/gemrc'
         
         commands << [
           "mkdir -p /etc/poolparty",
@@ -104,6 +105,7 @@ module PoolParty
           "groupadd -f poolparty",
           # "useradd poolparty  --home-dir /var/poolparty  --groups poolparty  --create-home",
           'cd /var/poolparty/dependencies',
+          "cp /var/poolparty/dependencies/etc/gemrc /etc/poolparty",
           "#{installer} update",
           "#{installer} install -y ruby1.8 ruby1.8-dev libopenssl-ruby1.8 build-essential wget",  #optional, but nice to have
           "tar -zxvf packages/rubygems-1.3.1.tgz",
@@ -128,9 +130,9 @@ module PoolParty
       def after_bootstrap
         # thin_cmd = "thin -R /etc/poolparty/monitor.ru start -p 8642 --daemonize --pid /var/run/poolparty/monitor.pid --log /var/log/poolparty/monitor.log --environment production --chdir /var/poolparty" #TODO --user poolparty --group poolparty
         # vputs "thin_cmd = #{thin_cmd}"
-        curl_put = "curl -i -XPUT -d'{}' http://localhost:8642/stats_monitor"
+        # curl_put = "curl -i -XPUT -d'{}' http://localhost:8642/stats_monitor"
         # execute! [ thin_cmd, "sleep 10", curl_put  ] 
-        execute! ["sleep 5", curl_put]
+        # execute! ["sleep 5", curl_put]
       end
     end
     
