@@ -50,7 +50,8 @@ module PoolParty
     end
     
     def to_json
-      "\"#{basename}\""
+      "{\"basename\":\"#{basename}\",
+       \"full_filepath\": \"/etc/poolparty/#{filename}\"}"
     end
     
   end

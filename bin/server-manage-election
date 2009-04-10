@@ -15,8 +15,6 @@ require "poolparty/lite"
 status = ARGV.shift || "running" # or pending or terminated
 schema = ::PoolParty.load_cloud_from_json(ARGV.shift)  #TODO: smarter option parser
 
-exit(1) unless schema
-
 def get_json_stats_from(ip, port)
   Net::HTTP.start(ip, port) {|http| http.get('/stats.json') }.body rescue "{}"
 end

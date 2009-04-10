@@ -79,11 +79,5 @@ describe "Console" do
       @string.stub!(:read).and_return @string
       PoolParty::Pool::Pool.new(:dummy).instance_eval @string
     end
-    it "should be able to print the clouds" do      
-      pools.empty?.should == false
-      hide_output do
-        pool_describe.should == pools.size
-      end      
     end
-  end
 end

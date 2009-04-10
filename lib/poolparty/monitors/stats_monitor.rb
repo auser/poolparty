@@ -12,14 +12,14 @@ module Monitors
       @response = Rack::Response.new
       
       begin
-        @cloud = JSON.parse( open(o[:clouds_json_file]).read ) 
+        @cloud = JSON.parse( open('/etc/poolparty/clouds.json' ).read )
       rescue 
-        @cloud = {"options" => 
+        @cloud = ::PoolParty::Default.options.merge({"options" => 
           {"rules" => {"expand" => PoolParty::Default.expand_when, 
                         "contract" => PoolParty::Default.contract_when
                       }
           }
-        }
+        })
       end      
       # Our cloud.options.rules looks like
       #  {"expand_when" => "load > 0.9", "contract_when" => "load < 0.4"}
