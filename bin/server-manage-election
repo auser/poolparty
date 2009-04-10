@@ -6,19 +6,34 @@
 require "rubygems"
 require 'net/http'
 require 'json'
+require "poolparty/lite"
+
+status = ARGV.shift || "running" # or pending or terminated
+schema = ::PoolParty.load_cloud_from_json(ARGV.shift)  #TODO: smarter option parser
 
 def get_json_stats_from(ip, port)
   Net::HTTP.start(ip, port) {|http| http.get('/stats.json') }.body
 end
  
-ips = ["72.44.47.198"] # %x["server-list-active internal_ips"].split("\t")
+ips = %x["server-list-active internal_ips"].split("\t")
+
+min_instances = schema.options.minimum_instances
+max_instances = schema.options.maximum_instances
+
+if ips.size < minimum_instances
+  %x[/usr/bin/server-cloud-elections expand]
+  puts "Cloud is too small, need to expand"
+  exit(0)
+elsif ips.size > maximum_instances
+  %x[/usr/bin/server-cloud-elections contract]
+  puts "Cloud is too big, need to contract"
+  exit(0)
+end
 
 total_json_array = {}
 ips.each do |ip|
   total_json_array.merge!(JSON.parse(get_json_stats_from(ip, 8642)))
 end
-
-puts total_json_array.inspect
 
 candidates = {:expand => 0, :contract => 0, :elected_action => nil}
 candidates.each do |action, ballots|
