@@ -44,8 +44,6 @@ ips.each do |ip|
   total_json_hash.merge!(node_hsh) if node_hsh
 end
 
-puts total_json_hash.inspect
-
 candidates = {:expand => 0, :contract => 0, :elected_action => nil}
 candidates.each do |action, ballots|
   total_json_hash.each do |ip, node_hsh|
@@ -53,6 +51,9 @@ candidates.each do |action, ballots|
     candidates[:elected_action] = node_hsh["elected_action"]
   end
 end
+
+puts total_json_hash.inspect
+puts candidates.inspect
 
 # Expand the cloud if 50+% of the votes are for expansion
 # Contract the cloud if 51+% of the votes are for contraction
