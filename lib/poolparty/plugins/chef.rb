@@ -36,7 +36,7 @@ module PoolParty
           
           ::File.cp file, "#{basedir}/recipes/default.rb"
           
-          template o[:templates] if o[:templates]
+          templates *o[:templates] if o[:templates]
           
           recipe_files << basedir
         # TODO: Enable neat syntax from within poolparty
@@ -47,10 +47,20 @@ module PoolParty
         end
       end
       
-      def template templates=[]
+      def templates templates=[]
         if templates
           ::FileUtils.mkdir_p "#{basedir}/templates/default/"
-          templates.each {|f| ::File.cp f, "#{basedir}/templates/default/#{::File.basename(f)}" }
+          templates.each do |f|
+            if ::File.file?(f)
+              ::File.cp f, "#{basedir}/templates/default/#{::File.basename(f)}"
+            elsif ::File.directory?(f)
+              Dir["#{f}/*"].each {|f| ::File.cp f, "#{basedir}/templates/default/#{::File.basename(f)}" }
+            else
+              tfile = Tempfile.new("main-poolparty-recipe")
+              tfile << f # copy the string into the temp file
+              ::File.cp tfile.path, "#{basedir}/templates/default/#{::File.basename(f)}"
+            end            
+          end
         end
       end
       
