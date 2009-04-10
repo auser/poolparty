@@ -13,7 +13,7 @@ module Monitors
       @request = Rack::Request.new env
       @response = Rack::Response.new
       @cloud = JSON.parse( open( "/etc/poolparty/clouds.json" ).read )
-      @opts = @cloud["options"].key_strings_to_symbols!
+      @opts = @cloud["options"]
       @remoter_base = PoolParty::Remote.const_get(@opts.remote_base.split("::")[-1].camelcase)
     end
     
