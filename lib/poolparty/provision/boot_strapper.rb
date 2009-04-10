@@ -65,7 +65,6 @@ module PoolParty
         
       def pack_the_dependencies
         # Add the keypair to the instance... shudder
-        puts "Adding #{@cloud.keypair.full_filepath}"
         ::Suitcase::Zipper.add(@cloud.keypair.full_filepath, "keys")
         
         # Use the locally built poolparty gem if it is availabl
@@ -88,13 +87,14 @@ module PoolParty
         
         ::Suitcase::Zipper.build_dir!("#{Default.tmp_path}/dependencies")
         
-        ::Suitcase::Zipper.add("#{Default.tmp_path}/trash/dependencies/cache", "gems")
+        ::Suitcase::Zipper.add("#{Default.tmp_path}/trash/dependencies/cache", "gems/cache")
         ::Suitcase::Zipper.build_dir!("#{Default.tmp_path}/dependencies")        
         #         ::FileUtils.rm_rf "/tmp/poolparty/trash/"
       end
   
       def default_commands
         pack_the_dependencies
+        ::FileUtils.rm_rf "#{Default.tmp_path}/dependencies/gems/cache"
         rsync "#{Default.tmp_path}/dependencies", '/var/poolparty'
         rsync "#{::File.join(File.dirname(__FILE__), '..', 'templates', 'gemrc' )}", '/etc/gemrc'
         
