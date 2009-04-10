@@ -1,4 +1,6 @@
 require ::File.dirname(__FILE__)+"/monitor_rack.rb"
+require ::File.dirname(__FILE__)+"/../lite.rb"
+require ::File.dirname(__FILE__)+"/../core/hash.rb"
 
 module Monitors
     
@@ -10,14 +12,13 @@ module Monitors
       @env = env
       @request = Rack::Request.new env
       @response = Rack::Response.new
-      puts "Started with #{o.inspect}"
-      @cloud = JSON.parse( open( "/etc/poolparty/clouds.json" ).read ) 
-      @remoter_base = Kernel.const_get(@cloud.options.remote_base.camelcase)
+      @cloud = JSON.parse( open( "/etc/poolparty/clouds.json" ).read )
+      @opts = @cloud["options"].key_strings_to_symbols!
+      @remoter_base = PoolParty::Remote.const_get(@opts.remote_base.split("::")[-1].camelcase)
     end
     
     def default
-      instances = @remoter_base.send :describe_instances, @cloud.options
-      instances.inspect
+      @remoter_base.send :describe_instances, @opts
     end
     
   end

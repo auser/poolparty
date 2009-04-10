@@ -13,6 +13,20 @@ class Hash
     end
   end
   
+  def key_strings_to_symbols!
+    r = Hash.new
+    self.each_pair do |k,v|
+      if (k.kind_of? String)
+        v.key_strings_to_symbols! if v.kind_of? Hash and v.respond_to? :key_strings_to_symbols!
+        r[k.to_sym] = v
+      else
+        v.key_strings_to_symbols! if v.kind_of? Hash and v.respond_to? :key_strings_to_symbols!
+        r[k] = v
+      end
+    end
+    self.replace(r)
+  end
+  
   # extracted from activesupport
   # Returns an array of the values at the specified indices:
   #
