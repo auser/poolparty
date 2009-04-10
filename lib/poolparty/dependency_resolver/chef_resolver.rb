@@ -10,7 +10,7 @@ module PoolParty
     def comp(cld_name, props, tabs)
       base_dir cld_name
       basedir = build_base_recipe_directory( cld_name )
-      handle_print_variables(props[:options]) if props && props.has_key?(:options)
+      # handle_print_variables(props[:options]) if props && props.has_key?(:options)
       
       default_recipe = [ 
         resources_to_string(props[:resources],tabs),

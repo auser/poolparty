@@ -151,7 +151,7 @@ module PoolParty
         else
           type
         end
-        "#{tf(tabs)}#{klasstype} { \"#{res.has_key?(:name) ? res.delete(:name) : res.key }\": #{res.empty? ? "" : "\n#{tf(tabs+1)}#{hash_flush_out(res.reject {|k,v| !permitted_option?(type, k) }).reject {|s| s.nil? }.join(",\n#{tf(tabs+1)}")}"}\n#{tf(tabs)}}"
+        "#{tf(tabs)}#{klasstype} { \"#{res.delete(:name) }\": #{res.empty? ? "" : "\n#{tf(tabs+1)}#{hash_flush_out(res.reject {|k,v| !permitted_option?(type, k) }).reject {|s| s.nil? }.join(",\n#{tf(tabs+1)}")}"}\n#{tf(tabs)}}"
       end
     end
     

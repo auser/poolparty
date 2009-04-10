@@ -117,19 +117,19 @@ module PoolParty
       # remote master access to the cloud options that are required
       # for the master to run checks
       def prepare_for_configuration        
-        # clear_base_directory
-        make_base_directory
-        copy_misc_templates
-        copy_custom_monitors
-        copy_custom_modules
-        copy_custom_templates
-        store_keys_in_file
-        # Script.save!(self)
-        # not my favorite...
-        copy_ssh_key
-        write_unique_cookie
-        before_configuration_tasks
-        write_properties_hash if debugging || testing
+        # # clear_base_directory
+        # make_base_directory
+        # copy_misc_templates
+        # copy_custom_monitors
+        # copy_custom_modules
+        # copy_custom_templates
+        # store_keys_in_file
+        # # Script.save!(self)
+        # # not my favorite...
+        # copy_ssh_key
+        # write_unique_cookie
+        # before_configuration_tasks
+        # write_properties_hash if debugging || testing
       end
       
       def copy_custom_templates

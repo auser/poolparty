@@ -16,7 +16,7 @@ module PoolParty
       end
       
       def after_create
-        options[:name] = options[:command] unless options.has_key?(:name)
+        options[:name] = options[:command] unless options.name
       end
 
     end
