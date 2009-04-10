@@ -6,21 +6,21 @@ require "poolparty/lite"
 
 vote_for = ARGV.shift || "none" # or pending or terminated
 schema = ::PoolParty.load_cloud_from_json(ARGV.shift)  #TODO: smarter option parser
-remoter_base = schema.options.remote_base
-remote_base_class = PoolParty::Remote.const_get(remoter_base.split('::')[-1].camelcase)
-
+remote_base_name = schema.options.remote_base.split('::')[-1].camelcase
+remoter_base = PoolParty::Remote.module_eval(remote_base_name)
+require 'rubygems'; require 'ruby-debug'; debugger
 
 case vote_for
 when "expand"
-  PoolParty.log << "Launching new instance"
-  remote_base_class.launch_instance! schema.options do |node|
+  # PoolParty.log << "Launching new instance"
+  remoter_base.send :launch_new_instance!, schema.options do |node|
     ::PoolParty::Provision::BootStrapper.new( node[:ip], :full_keypair_path => cld.keypair.full_filepath, :cloud => schema.options )
     ::PoolParty::Provision::DrConfigure.new( node[:ip], :full_keypair_path => cld.keypair.full_filepath, :cloud => schema.options )
   end
 when "contract"
   last_instance_id = %x[/usr/bin/server-list-active instance_id].split("\t").last
-  cld.terminate_instance! cld.options.merge(schema.options.merge(:instance_id => last_instance_id))
+  remoter_base.terminate_instance! schema.options.merge(:instance_id => last_instance_id)
 else
-  puts "Unknown action: #{vote_action}"
+  puts "Unknown action: #{vote_for}"
 end
   
