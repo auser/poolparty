@@ -1,13 +1,18 @@
+#!/usr/bin/env ruby
 require 'rubygems'
-require 'butterfly'
-# require 'poolparty'
-require 'poolparty/monitors/stats_monitor_adaptor.rb'
 require 'rack'
+require 'rack/contrib'
+require 'json'
+require 'thin'
+require ::File.join(::File.dirname(__FILE__),'..','lib/poolparty/monitors/', 'monitor_rack.rb') 
 
-opts ={ :adaptor_opts => {
-           :file => 'poolparty/monitors/stats_monitor_adaptor.rb'},
-           :port => PoolParty::Default.butterfly_port
-      }
-      
-use Rack::CommonLogger
-run Butterfly::Server.new(opts)
+
+app = Rack::Builder.new do
+  use Rack::Reloader, 2
+  use Rack::ShowExceptions
+  use Rack::Lint
+  # use Rack::PostBodyContentTypeParser  #parses json requests to params hash
+  run Monitors::MonitorRack.new()
+end
+
+run app

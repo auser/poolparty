@@ -35,27 +35,29 @@ module Monitors
       @env = env
       @request = Rack::Request.new env
       @response = Rack::Response.new
-      
       begin
-        path_array= path_map(env) || []
+        path_array= path_map(env['REQUEST_PATH']) || []
         puts "-- trying to map #{path_array.inspect}"
         @response.write map_to_class_method(path_array).to_json
       # rescue Exception=>e
       #   @response.write e
       #   @response.status = 500
       end
-      @response.finish # [response.status, response.headers, response.body]
+      @response.finish # this is [response.status, response.headers, response.body]
     end
     
-    def request
-      @request
+    def env
+      @env
     end
     def response
       @response
     end
-  
-    def path_map(env)
-      env['REQUEST_PATH'].split('.')[0].split('/')[1..-1]
+    def request
+      @request
+    end
+    
+    def path_map(requested_path)
+      requested_path.split('.')[0].split('/')[1..-1]
     end
   
     # Find class and call method from the pattern /class_name/method/args
@@ -68,11 +70,11 @@ module Monitors
         raise "#{path[0]} did not map to a Constant" if !klass
         case path.size
         when 0
-          default
+          self.respond_to?(:default) ? self.send(:default) : response.status='404'
         when 1
-          klass.send(:default) rescue klass.new.send(:default)
+          klass.send(:default) rescue klass.new(env).send(:default)
         when 2
-          klass.send(path[1].to_sym) rescue klass.new.send(path[1].to_sym)
+          klass.send(path[1].to_sym) rescue klass.new(env).send(path[1].to_sym)
         else
           klass.send(path[1].to_sym, *path[2..-1])
         end
