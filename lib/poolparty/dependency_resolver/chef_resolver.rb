@@ -144,7 +144,7 @@ module PoolParty
         temp_file = "#{base_dir}/templates/default/#{nm}.erb"
         ::FileUtils.mkdir_p(::File.dirname(temp_file)) unless ::File.directory? temp_file
         ::File.open(temp_file, "w+") {|f| f.print cont }
-        hsh.merge!({:source => "#{nm}.erb", :variables => hsh})
+        hsh.merge!({:source => "#{nm}.erb", :variables => hsh.dup})
       end
       # 
       hsh.delete(:require) if hsh.has_key?(:require)
