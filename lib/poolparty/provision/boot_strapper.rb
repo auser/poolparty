@@ -32,6 +32,7 @@ module PoolParty
                           chef
                           auser-dslify
                           auser-butterfly
+                          auser-parenting
                           thin
                           god
                         )

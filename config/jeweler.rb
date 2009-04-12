@@ -29,7 +29,9 @@ begin
     
     s.add_dependency 'activesupport'
     s.add_dependency 'logging'
-    # s.add_dependency 'dslify'
+    s.add_dependency 'auser-dslify'
+    s.add_dependency 'auser-parenting'
+    # s.add_dependency 'auser-suitcase'
     s.add_dependency 'ruby2ruby'
     s.add_dependency 'grempe-amazon-ec2'
     s.add_dependency 'rubigen', ">=1.5.2"

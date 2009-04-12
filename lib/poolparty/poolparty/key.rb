@@ -49,6 +49,11 @@ module PoolParty
       ]
     end
     
+    def each
+      yield full_filepath #if ::File.file?(full_filepath)
+      # self.class.keypair_paths.each{|k| yield k if ::File.file?(k)}
+    end
+    
     def to_json
       "{\"basename\":\"#{basename}\",
        \"full_filepath\": \"/etc/poolparty/#{filename}\"}"
