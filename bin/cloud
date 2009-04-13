@@ -3,7 +3,8 @@ $:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
 require "poolparty"
 require "poolpartycl"
 
-name = ARGV.select {|arg| arg if Binary.available_binaries_for("cloud").include?(arg) }.first
+# name = ARGV.select {|arg| arg if Binary.available_binaries_for("cloud").include?(arg) }.first
+name = ARGV.shift if Binary.available_binaries_for("cloud").include?(ARGV.first)
 # If the options include -h and they don't include a valid command, then we can just pass the 
 # original options back, but if they do contain a binary, we don't want -h getting through to 
 # these options, so we'll strip it if it's included
@@ -25,7 +26,7 @@ command_line = "#{program_location}"
 
 # Run it from the command-line first
 if Binary.available_binaries_for("cloud").include?(name)
-  system command_line, *ARGV
+  system command_line, *new_args
 else
   puts "Unknown poolparty binary: #{name}"
 end

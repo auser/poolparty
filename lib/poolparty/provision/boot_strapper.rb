@@ -7,6 +7,7 @@ module PoolParty
     class BootStrapper
       include ::PoolParty::Remote
       
+      # List of gems that are default to install
       def self.gem_list
         @gem_list ||= %w( flexmock
                           lockfile
@@ -28,16 +29,16 @@ module PoolParty
                           activesupport
                           grempe-amazon-ec2
                           RubyInline
-                          archive-tar-minitar
                           chef
                           auser-dslify
                           auser-butterfly
                           auser-parenting
                           thin
-                          god
+                          # god
                         )
       end
   
+      # Default options for the boot_strapper
       @defaults = ::PoolParty::Default.default_options.merge({
         :full_keypair_path   => "#{ENV["AWS_KEYPAIR_NAME"]}" || "~/.ssh/id_rsa",
         :installer           => 'apt-get',
