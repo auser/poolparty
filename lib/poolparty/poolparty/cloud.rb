@@ -18,7 +18,7 @@ module PoolParty
     end
     
     class Cloud < PoolParty::PoolPartyBaseClass
-      attr_reader :templates, :cloud_name
+      attr_reader :templates, :cloud_name, :remote_base
 
       include CloudResourcer
       include PoolParty::PluginModel

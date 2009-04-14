@@ -29,15 +29,16 @@ module PoolParty
           :requires => get_package("haproxy")
         
         # Service is required
-        has_service("haproxy", :ensures => "running")
+        has_service("haproxy", :ensures => "running") do
+          stops get_service("apache2"), :immediately
+          starts get_service("apache2")
+        end
         
         has_directory "/var/run/haproxy"
         
         has_file "/etc/haproxy/haproxy.cfg" do
           template "#{::File.dirname(__FILE__)}/../templates/haproxy.conf"
           calls get_exec("reloadhaproxy")
-          stops get_service("apache2"), :immediately
-          starts get_service("apache2")
         end
       end
     end
