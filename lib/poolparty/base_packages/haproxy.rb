@@ -13,7 +13,7 @@ module PoolParty
     
         # Template variables
         has_variable("haproxy_name", :value => "#{cloud.name}")
-        has_variable("listen_ports", :value => [ "8080" ], :namespace => "apache")
+        # has_variable("listen_ports", :value => [ "8080" ], :namespace => "apache")
         
         has_variable("ports_haproxy", :value => ([(self.respond_to?(:port) ? port : Default.port)].flatten))        
         has_variable("forwarding_port", :value => (respond_to?(:forwarding_port) ? forwarding_port : Default.forwarding_port))
