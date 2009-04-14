@@ -30,15 +30,12 @@ module Monitors
         r = Aska::Rule.new(rul)
         rule(name) << r
       end
-      log << "#{Time.now.strftime("%Y-%m-%d-%H-%M")}, #{stats.to_json}\n"
+      # log << "#{Time.now.strftime("%Y-%m-%d-%H-%M")}, #{stats.to_json}\n"
     end
     
-    def default
-      stats.to_json
-    end
-
     def log(log_file_path="/var/log/poolparty/stats_monitor.log")
       ::File.file? log_file_path
+      ::FileUtils.mkdir_p ::File.dirname(log_file_path) unless ::File.directory?(::File.dirname(log_file_path))
       @logfile ||= ::File.new(log_file_path, 'a')
     end
 
