@@ -56,7 +56,7 @@ module PoolParty
       tmp_key = (keyp ? keyp : nil)
       
       unless @describe_instances
-        tmpInstanceList = describe_instances(options).select {|a| a if (tmp_key.nil? || tmp_key.empty? ? true : a[:keypair] == tmp_key) }
+        tmpInstanceList = remote_base.describe_instances(options).select {|a| a if (tmp_key.nil? || tmp_key.empty? ? true : a[:keypair] == tmp_key) }
         has_master = !tmpInstanceList.select {|a| a[:name] == "master" }.empty?          
         if has_master
           @describe_instances = tmpInstanceList

@@ -9,8 +9,9 @@ end
 
 o.loaded_clouds.each do |cld|
   
-  ip = cld.list_of_running_instances.first
+  node = cld.list_of_running_instances.first
+  ip = node.ip
   puts "ip: #{ip}"
-  Kernel.system "echo #{master.ip.chomp} | pbcopy"
+  Kernel.system "echo #{ip} | pbcopy"
   
 end

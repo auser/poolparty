@@ -31,6 +31,11 @@ module PoolParty
         has_exec(:name => "update-#{name}", :cwd => ::File.dirname( creates_dir )) do          
           command "git pull"
         end
+        if owner?
+          has_exec(:name => "chown-#{name}", :cwd => ::File.dirname( creates_dir )) do
+            command "chown #{owner} * -R"
+          end
+        end
       end
       
       def git_repos(src)

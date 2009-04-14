@@ -33,8 +33,7 @@ module PoolParty
                           auser-dslify
                           auser-butterfly
                           auser-parenting
-                          thin
-                          # god
+                          thin                          
                         )
       end
   
@@ -78,7 +77,7 @@ module PoolParty
         end
         # Add the gems to the suitcase
         puts "Adding default gem dependencies"
-        ::Suitcase::Zipper.gems self.class.gem_list, "#{Default.tmp_path}/trash/dependencies"        
+        ::Suitcase::Zipper.gems self.class.gem_list, "#{Default.tmp_path}/trash/dependencies"
 
         ::Suitcase::Zipper.packages( "http://rubyforge.org/frs/download.php/45905/rubygems-1.3.1.tgz",
                  "#{Default.tmp_path}/trash/dependencies/packages")

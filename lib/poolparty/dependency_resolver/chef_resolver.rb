@@ -75,7 +75,7 @@ module PoolParty
       
       out = ["\npoolparty Mash.new unless attribute?('poolparty')\n\n"]
       vars.each do |varhash|
-        out << "poolparty[:#{varhash[:name]}] = #{to_option_string(varhash[:value])}"
+        out << "#{varhash[:namespace] || "poolparty"}[:#{varhash[:name]}] = #{to_option_string(varhash[:value])}"
       end
       ::File.open("#{base_dir}/attributes/poolparty.rb", "w+") do |f| 
         f << out.join("\n")
@@ -168,6 +168,14 @@ module PoolParty
       case key
       when :ensures
         nil
+      when :reloads
+        "notifies :reload,"
+      when :calls
+        "notifies :run,"
+      when :stops
+        "notifies :stop,"
+      when :starts
+        "notifies :start,"
       when :enable
         nil
       when :onlyif
@@ -180,7 +188,7 @@ module PoolParty
     def to_option_string(obj)
       case obj
       when PoolParty::Resources::Resource
-        "resources(:#{obj.class.to_s.top_level_class.downcase} => \"#{obj.name}\")"
+        "resources(:#{handle_types(obj.class.to_s.top_level_class.downcase.to_sym)} => \"#{obj.name}\")"
       when Fixnum
         "#{obj.to_i}"
       when String
