@@ -1,47 +1,62 @@
 module PoolParty    
-  class Svn
+  class SvnResource
         
-    define_resource(:svn) do
+    virtual_resource :svn do
+      def loaded(*args)
+        has_package :name => "subversion"
+      end
+    end
+    
+    virtual_resource :svn_repos do
       
-      def has_svnpath(opts={})
-        call_custom_function <<-EOE
-        svnserve { #{opts[:name]}:
-          source => "#{opts[:source]}",
-          path => "#{opts[:path]}",
-          user => "#{opts[:user] || false}",
-          password => "#{opts[:password] || ""}"
-        }
-        EOE
+      def loaded(opts={}, &block)
+        has_package("subversion")
+        has_svn_repository
+      end
+
+      def has_svn_repository
+        puts "wd #{working_dir}"
+        puts "cd #{creates_dir}"
+        has_directory(::File.dirname(working_dir))
+        has_directory(:name => "#{working_dir}", :requires => get_directory("#{::File.dirname(working_dir)}"))
+        
+        has_exec(:name => "svn-#{name}", :requires => [get_directory("#{working_dir}"), get_package("subversion")] ) do
+          cwd working_dir
+          svn_cmd = if parent.requires_user?
+            "svn co #{source} --username #{requires_user} --password #{requires_password}" 
+          else
+            "svn co #{source}"
+          end
+          command svn_cmd
+          creates creates_dir
+        end
+        has_exec(:name => "update-#{name}", :cwd => ::File.dirname( creates_dir )) do
+          command "svn up"
+        end
       end
       
-      custom_function <<-EOF
-      # Serve subversion-based code from a local location.  The job of this
-      # module is to check the data out from subversion and keep it up to
-      # date, especially useful for providing data to your Puppet server.
-      define svnserve($source, $path, $user = false, $password = false) {
-          file { $path:
-              ensure => directory,
-              owner => root,
-              group => root
-          }
-          $svncmd = $user ? {
-              false => "/usr/bin/svn co --non-interactive $source/$name .",
-              default => "/usr/bin/svn co --non-interactive --username $user --password '$password' $source/$name ."
-          }   
-          exec { "svnco-$name":
-              command => $svncmd,
-              cwd => $path,
-              require => File[$path],
-              creates => "$path/.svn"
-          }
-          exec { "svnupdate-$name":
-              command => "/usr/bin/svn update",
-              require => Exec["svnco-$name"],
-              onlyif => '/usr/bin/svn status -u --non-interactive | /bin/grep "\*"',
-              cwd => $path
-          }
-      }
-      EOF
+      def svn_repos(src)
+        source src
+      end
+      
+      def at(dir)
+        working_dir dir
+      end
+      
+      def to(dir)
+        at(dir)
+      end
+      
+      def creates_dir
+       "#{::File.join( working_dir, ::File.basename(source, ::File.extname(source)) )}/.svn"
+      end
+      
+      # Since svn is not a native type, we have to say which core resource
+      # it is using to be able to require it
+      def class_type_name
+        "exec"
+      end
+      
     end
     
   end
