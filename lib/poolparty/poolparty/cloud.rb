@@ -100,6 +100,7 @@ module PoolParty
         options[:keypair] ||= keypair.basename rescue nil
         options[:rules] = {:expand => expand_when, :contract => contract_when}
         dependency_resolver 'chef'
+        enable :haproxy
       end
       
       # provide list of public ips to get into the cloud
