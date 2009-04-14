@@ -138,6 +138,8 @@ module PoolParty
       end
     end
     
+    # Check if the hash has content and that the content exists here. This is used
+    # to provide a check
     def before_filter_check_on_hash(hsh, nm)
       if hsh.has_key?(:content)
         cont = hsh.delete(:content)
@@ -151,6 +153,8 @@ module PoolParty
       hsh
     end
     
+    # Turn the services into strings using the handle_print_service method
+    # Here we can strip out non-meaningful chef services
     def services_to_string(opts,tabs=0)
       if opts
         str = ""
@@ -164,6 +168,8 @@ module PoolParty
       end
     end
     
+    # Take the keys from the resource hash and turn them into chef-like
+    # meaningful keys. This is how helpers are created for chef
     def to_chef_key(key)
       case key
       when :ensures
@@ -185,6 +191,8 @@ module PoolParty
       end
     end
     
+    # Resolve the value of the resource hash into a meaningful chef
+    # value. Resources are turned into resource strings here
     def to_option_string(obj)
       case obj
       when PoolParty::Resources::Resource
@@ -207,12 +215,6 @@ module PoolParty
         "#{obj}"
       end
     end
-    
-    # def addendum_code(key, val)
-    #   if key =~ /notifies/
-    #     
-    #   end
-    # end
     
   end
 
