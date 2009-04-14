@@ -42,8 +42,8 @@ module Monitors
         @logfile ||= ::File.open(log_file_path, 'a+')
       end
     end
-
-    def default
+    
+    def default      
       begin
         if !request.params || request.params.empty?
           default_stats
@@ -53,11 +53,9 @@ module Monitors
           stats.to_json
         end
       rescue Exception => e
-        response.fail!
         "Error: #{e}"
       end
     end
-    alias :get :default
 
     def put
       if d = JSON.parse(request.params)
@@ -113,7 +111,7 @@ module Monitors
     def default_stats
       %w(load nominations).each do |var|
         stats[my_ip][var] ||= self.send(var.to_sym)
-      end
+      end      
       stats
     end
 

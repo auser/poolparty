@@ -76,8 +76,7 @@ module Monitors
         when 0
           self.respond_to?(:default) ? self.send(:default) : response.status='404'
         when 1
-          # klass.send(:default) rescue 
-          klass.new(env).send(:default)
+          klass.send(:default) rescue klass.new(env).send(:default)
         when 2
           klass.send(path[1].to_sym) rescue klass.new(env).send(path[1].to_sym)
         else
