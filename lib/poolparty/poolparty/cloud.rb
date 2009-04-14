@@ -193,7 +193,7 @@ module PoolParty
       # all that is necessary in a method called enable
       # which is called when there is no block
       def add_poolparty_base_requirements
-        poolparty_base_haproxy
+        poolparty_base_haproxy if haproxy?
         poolparty_base_heartbeat
         poolparty_base_ruby
         poolparty_base_packages

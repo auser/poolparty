@@ -16,5 +16,9 @@ module PoolParty
       dsl_options[:dependency_resolver] = klass unless dsl_options[:dependency_resolver]
     end
     
+    def enable(service)
+      dsl_options[service] = :enabled
+    end
+    
   end
 end
