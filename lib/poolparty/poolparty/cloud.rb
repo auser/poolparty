@@ -46,6 +46,8 @@ module PoolParty
       
       alias :name :cloud_name
       
+      # Call the remoter commands on the cloud if they don't exist on the cloud itself
+      # This gives the cloud access to the remote_base's methods
       def method_missing(m, *args, &block)
         remote_base.respond_to?(m) ? remote_base.send(m, *args, &block) : super
       end
@@ -60,6 +62,8 @@ module PoolParty
         :user => Default.user
       )
       
+      # Freeze the cloud_name so we can't modify it at all, set the plugin_directory
+      # call and run instance_eval on the block and then call the after_create callback
       def initialize(name, &block)
         @cloud_name = name
         @cloud_name.freeze
@@ -69,11 +73,15 @@ module PoolParty
         after_create
       end
       
+      # Fetch the name of the cloud
       def name(*args)
         @cloud_name ||= @cloud_name ? @cloud_name : (args.empty? ? :default_cloud : args.first)
       end
       
       # Callback
+      # called after the cloud has been created, everything has run and is set at this point
+      # here the base requirements are added as well as an empty chef recipe is called
+      # Also, the after_create hook on the plugins used by the cloud are called here
       def after_create
         dputs "In after create"
         ::FileUtils.mkdir_p("#{Default.tmp_path}/dr_configure")
@@ -86,6 +94,7 @@ module PoolParty
         setup_defaults
       end
       
+      # setup defaults for the cloud
       def setup_defaults
         # this can be overridden in the spec, but ec2 is the default
         using :ec2
@@ -99,8 +108,9 @@ module PoolParty
         list_of_running_instances.map {|ri| ri.ip }
       end
       
+      # TODO: make this be a random ip, since we should not rely on it being the same each time
       def ip
-        ips.first  #TODO: make this be a random ip, since we should not rely on it being the same each time
+        ips.first
       end
       
       # TODO: Deprecated
