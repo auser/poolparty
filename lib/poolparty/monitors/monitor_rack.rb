@@ -70,14 +70,14 @@ module Monitors
         response.write 'cannot map an empty path' 
         response.status='404'
       else
-        klass = module_eval(path[0])
+        klass = constantize(path[0])
         raise "#{path[0]} did not map to a Constant" if !klass
         case path.size
         when 0
           self.respond_to?(:default) ? self.send(:default) : response.status='404'
         when 1
-          puts "Calling: #{klass.new(env)}"
-          klass.send(:default) rescue klass.new(env).send(:default)
+          # klass.send(:default) rescue 
+          klass.new(env).send(:default)
         when 2
           klass.send(path[1].to_sym) rescue klass.new(env).send(path[1].to_sym)
         else
@@ -102,6 +102,13 @@ module Monitors
   
   end
   
+  # Base monitor
+  class MonitorBase
+    def initialize(env={})
+      @env = env
+    end
+  end
+  
   #load our monitors
   require ::File.dirname(__FILE__)+"/stats_monitor.rb"
   require ::File.dirname(__FILE__)+"/neighborhood_monitor.rb"
@@ -109,11 +116,6 @@ module Monitors
 
   # just here as an example
   # access it at /monitor_time/ or /monitor_time/now
-  class MonitorBase
-    def initialize(env={})
-      @env = env
-    end
-  end
   class MonitorTime
     def self.default
       now
@@ -123,7 +125,7 @@ module Monitors
     end
   end
   
-  class Favicon
+  class Favicon < MonitorBase
     def self.default
       ''
     end

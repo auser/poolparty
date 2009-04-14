@@ -29,7 +29,7 @@ module PoolParty
       # Net methods
       include ::PoolParty::Remote
       include PoolParty::CloudDsl
-      include PoolParty::Monitors
+      # include PoolParty::Monitors
 
       def verbose
         true
