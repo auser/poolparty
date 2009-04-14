@@ -6,6 +6,7 @@ module PoolParty
         has_package "build-essential"
         has_package "zlib1g-dev"
         has_package "libbz2-dev"
+        has_gem_package "rufus-tokyo"
         
         has_exec "install tokyo-cabinet" do
           command "cd ~ && git clone git://github.com/etrepum/tokyo-cabinet.git && cd tokyo-cabinet/ && ./configure && make && make install && cd ~"
