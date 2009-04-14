@@ -2,7 +2,7 @@ require ::File.dirname(__FILE__)+"/monitor_rack.rb"
 
 module Monitors
     
-  class Stats 
+  class Stats
     attr_reader :stats, :request
     attr_accessor :response
     
