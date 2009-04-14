@@ -96,7 +96,7 @@ describe "Resolution spec" do
           # parent == TestClass
           # puts "<pre>#{parent}</pre> on <pre>#{context_stack.map {|a| a.class }.join(", ")} from #{self.class}</pre>"
           listen "8080"
-          has_file :name => "/etc/apache2/apache2.conf", :template => "/absolute/path/to/template", :friends => "bob"
+          has_file :name => "/etc/apache2/apache2.conf", :template => "/absolute/path/to/template", :friends => "bob", :render_as => :erb
         end
       end
       @cloud = clouds[:dog_for_test]

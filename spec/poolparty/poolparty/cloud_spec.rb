@@ -313,8 +313,8 @@ describe "Cloud" do
             before(:each) do
               @file = "/etc/puppet/manifests/nodes/nodes.pp"
               @file.stub!(:read).and_return "nodes generate"
-              ::FileTest.stub!(:file?).with("/etc/puppet/manifests/classes/poolparty.pp").and_return true
-              @cloud.stub!(:open).with("/etc/puppet/manifests/classes/poolparty.pp").and_return @file
+              ::FileTest.stub!(:file?).with("/etc/poolparty/poolparty.pp").and_return true
+              @cloud.stub!(:open).with("/etc/poolparty/poolparty.pp").and_return @file
             end
             it "should not call resources_string_from_resources if the file /etc/puppet/manifests/nodes/nodes.pp exists" do
               @cloud.should_not_receive(:add_poolparty_base_requirements)
@@ -323,40 +323,6 @@ describe "Cloud" do
             it "should build from the existing file" do
               @cloud.build_manifest.should == "nodes generate"
             end
-          end
-        end
-        describe "minimum_runnable_options" do
-          it "should be an array on the cloud" do
-            @cloud.minimum_runnable_options.class.should == Array
-          end
-          ["keypair","minimum_instances","maximum_instances",
-            "expand_when","contract_when","set_master_ip_to"].each do |k|
-            eval <<-EOE
-              it "should have #{k} in the minimum_runnable_options" do
-                @cloud.minimum_runnable_options.include?(:#{k}).should == true
-              end
-            EOE
-          end
-          it "should include the custom_minimum_runnable_options" do
-            @cloud.stub!(:custom_minimum_runnable_options).and_return [:blank]
-            @cloud.minimum_runnable_options.include?(:blank).should == true
-          end
-        end
-        describe "unique_cookie" do
-          it "should have the method generate generate_unique_cookie_string" do
-            @cloud.respond_to?(:generate_unique_cookie_string).should == true
-          end
-          it "should call hexdigest to digest/sha" do
-            Digest::SHA256.should_receive(:hexdigest).with("#{@cloud.keypair.basename}#{@cloud.name}").and_return "blaaaaah"
-            @cloud.generate_unique_cookie_string
-          end
-          it "should generate the same cookie string every time" do
-            older = @cloud.generate_unique_cookie_string
-            old = @cloud.generate_unique_cookie_string
-            new_one = @cloud.generate_unique_cookie_string
-            older.should == old
-            old.should == new_one
-            new_one.should == older
           end
         end
       end

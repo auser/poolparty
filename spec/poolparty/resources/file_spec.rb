@@ -30,6 +30,7 @@ describe "File" do
             template "/absolute/path/to/template"
             runner "is super fast"
             friends "bob"
+            render_as :erb
           end
         end
         @file = @tc.resource(:file).first
