@@ -105,7 +105,7 @@ module PoolParty
           "groupadd -f poolparty",
           # "useradd poolparty  --home-dir /var/poolparty  --groups poolparty  --create-home",
           'cd /var/poolparty/dependencies',
-          "cp /var/poolparty/dependencies/etc/poolparty/gemrc /etc/poolparty",
+          "cp /var/poolparty/dependencies/etc/poolparty/gemrc /etc/poolparty",          
           "#{installer} update",
           "#{installer} install -y ruby1.8 ruby1.8-dev libopenssl-ruby1.8 build-essential wget",  #optional, but nice to have
           "tar -zxvf packages/rubygems-1.3.1.tgz",
@@ -113,6 +113,7 @@ module PoolParty
           "ruby setup.rb --no-ri --no-rdoc",
           "ln -sfv /usr/bin/gem1.8 /usr/bin/gem", #TODO: check if this is really needed
           "cd ../ && rm -rf rubygems-1.3.1*",
+          "gem source --add http://gems.github.com",
           "cd /var/poolparty/dependencies/gems/",
           "gem install --no-rdoc --no-ri -y *.gem",
           "cd /var/poolparty/dependencies",

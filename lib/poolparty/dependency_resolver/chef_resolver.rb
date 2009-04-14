@@ -144,7 +144,7 @@ module PoolParty
         temp_file = "#{base_dir}/templates/default/#{nm}.erb"
         ::FileUtils.mkdir_p(::File.dirname(temp_file)) unless ::File.directory? temp_file
         ::File.open(temp_file, "w+") {|f| f.print cont }
-        hsh.merge!({:source => "#{nm}.erb", :variables => hsh.dup})
+        hsh.merge!({:source => "#{nm}.erb"})
       end
       # 
       hsh.delete(:require) if hsh.has_key?(:require)
@@ -194,7 +194,11 @@ module PoolParty
       when String
         "\"#{obj}\""
       when Array
-        "[ #{obj.map {|e| to_option_string(e) }.reject {|a| a.nil? || a.empty? }.join(", ")} ]"
+        if obj[1] && [:immediately, :delayed].include?(obj[1])
+          "#{to_option_string(obj[0])}, :#{obj[1]}"
+        else
+          "[ #{obj.map {|e| to_option_string(e) }.reject {|a| a.nil? || a.empty? }.join(", ")} ]"
+        end        
       when nil
         nil
       when Hash
@@ -203,6 +207,12 @@ module PoolParty
         "#{obj}"
       end
     end
+    
+    # def addendum_code(key, val)
+    #   if key =~ /notifies/
+    #     
+    #   end
+    # end
     
   end
 

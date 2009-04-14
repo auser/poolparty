@@ -36,7 +36,7 @@ module PoolParty
         has_file "/etc/haproxy/haproxy.cfg" do
           template "#{::File.dirname(__FILE__)}/../templates/haproxy.conf"
           calls get_exec("reloadhaproxy")
-          stops get_service("apache2")
+          stops get_service("apache2"), :immediately
           starts get_service("apache2")
         end
       end
