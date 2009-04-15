@@ -29,7 +29,7 @@ module PoolParty
             if i
               i
             else
-              inst = #{lowercase_class_name.camelcase}Class.new(opts, parent, &block)            
+              inst = #{lowercase_class_name.camelcase}Class.new(opts, parent, &block)
               this_context.plugin_store << inst if this_context
               inst
             end

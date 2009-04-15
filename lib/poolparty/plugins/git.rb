@@ -31,11 +31,19 @@ module PoolParty
         has_exec(:name => "update-#{name}", :cwd => ::File.dirname( creates_dir )) do          
           command "git pull"
         end
+        
         if owner?
           has_exec(:name => "chown-#{name}", :cwd => ::File.dirname( creates_dir )) do
             command "chown #{owner} * -R"
           end
         end
+        
+        if deploy_key?
+          raise Exception.new("Cannot find the git deploy key: #{deploy_key}") unless ::File.file?(::File.expand_path(deploy_key))
+          ::Suitcase::Zipper.add(::File.expand_path(deploy_key), "keys")
+          PoolParty::Provision::DrConfigure.class_commands << "cp -f /var/poolparty/dr_configure/keys/* ~/.ssh"
+        end
+        
       end
       
       def git_repos(src)
@@ -52,12 +60,6 @@ module PoolParty
       
       def creates_dir
         "#{::File.join( working_dir, ::File.basename(source, ::File.extname(source)) )}/.git"
-      end
-      
-      # Since git is not a native type, we have to say which core resource
-      # it is using to be able to require it
-      def class_type_name
-        "exec"
       end
       
     end

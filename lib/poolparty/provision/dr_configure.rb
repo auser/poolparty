@@ -35,13 +35,13 @@ module PoolParty
       ::File.open "#{Default.tmp_path}/dr_configure/clouds.json", "w" do |f|
         f << cloud.to_properties_hash.to_json
       end
-      
-      pack_up_and_ship_off_suitcase
+            
       setup_configurator
       write_erlang_cookie
       @configurator.files_to_upload.each {|f| ::FileUtils.cp f, "#{Default.tmp_path}/dr_configure/#{::File.basename(f)}" if ::File.file?(f) }
-            
-      rsync "#{Default.tmp_path}/dr_configure/", "/var/poolparty/dr_configure/" 
+      
+      pack_up_and_ship_off_suitcase
+                  
       commands << [
         'chmod 600 /var/poolparty/dr_configure/clouds.json',
         'chmod 600 /var/poolparty/dr_configure/clouds.rb',
@@ -49,6 +49,7 @@ module PoolParty
         'cp /var/poolparty/dr_configure/clouds.rb /etc/poolparty',
         'cp /var/poolparty/dr_configure/erlang.cookie /root/.erlang.cookie',        
         'ruby /var/poolparty/dr_configure/erlang_cookie_maker',
+        "touch /var/poolparty/POOLPARTY.PROGRESS",
         'echo "configure" >> /var/poolparty/POOLPARTY.PROGRESS'
         ]
       commands << self.class.class_commands unless self.class.class_commands.empty?
@@ -58,7 +59,7 @@ module PoolParty
      def pack_up_and_ship_off_suitcase
        ::Suitcase::Zipper.build_dir!("#{Default.tmp_path}/dr_configure")
        
-       rsync "#{Default.tmp_path}/dr_configure", '/var/poolparty'
+       rsync "#{Default.tmp_path}/dr_configure/", "/var/poolparty/dr_configure/"
      end
      
      def setup_configurator
