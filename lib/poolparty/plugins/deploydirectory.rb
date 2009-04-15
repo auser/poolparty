@@ -1,9 +1,13 @@
 =begin rdoc
   DeployDirectory
+
+  Deploy directory will rsync a local directory to 
+  each instance of your cloud. 
   
-  Deploy directory will tar.gz a local directory and sync it up to 
-  the master instance of the cloud. This enables you to send a directory
-  up to the cloud and let the master host it for the remote slaves
+  example:
+    has_directory 'name', :from => '/local/path', :to => '/path/on/server/'
+    
+  The above example will place the contents of '/local/path' at '/path/on/server/name'
 =end
 module PoolParty
   class Deploydirectory
@@ -11,34 +15,21 @@ module PoolParty
     virtual_resource(:deploy_directory) do
       
       def loaded(opts={}, &block)        
-        # raise(Exception.new("You must include a directory for the git repos set by :at")) if at?.nil?
-        # opts.has_key?(:at) ? at(opts.delete(:at)) : raise(Exception.new("You must include a directory for the git repos set by :at"))
-
         package_deploy_directory
         add_unpack_directory
       end
       
       def package_deploy_directory
-        ::Suitcase::Zipper.add(sync_dir, "user_directory/")
+        ::Suitcase::Zipper.add("#{from}", "user_directory/")
       end
       
       def add_unpack_directory
-        has_directory("#{::File.dirname(basedir)}")
-        
-        has_exec("unpack-#{::File.basename(basedir)}-deploy-directory") do
-          requires get_directory("#{::File.dirname(basedir)}")
-          cwd basedir
-          onlyif "test -f #{basedir}/#{sync_dir}"
-          command "cd #{cwd}; cp -R /var/poolparty/dr_configure/user_directory/#{sync_dir}; rm -rf /var/poolparty/dr_configure/#{name}"
+        has_directory("#{::File.dirname(to)}")
+        has_exec("unpack-#{::File.basename(to)}-deploy-directory") do
+          requires get_directory("#{::File.dirname(to)}")
+          not_if "test -f #{to}"
+          command "cp -R /var/poolparty/dr_configure/user_directory/#{name}/* #{to}"
         end
-      end
-            
-      def from(dir)
-        sync_dir dir
-      end
-      
-      def to(dir)
-        basedir dir
       end
       
     end
