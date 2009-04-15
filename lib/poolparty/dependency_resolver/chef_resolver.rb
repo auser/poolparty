@@ -33,12 +33,7 @@ module PoolParty
     end
     
     def options_to_string(opts,tabs=0)
-      # opts.map do |k,v| 
-      #   res = to_option_string(v)
-      #   next unless res && !res.empty?
-      #   # "#{tf(tabs)}$#{k} = #{res}"
       handle_print_variables(opts) if opts
-      # end.join("\n") if opts
     end
     
     def resources_to_string(opts,tabs=0)
@@ -186,6 +181,10 @@ module PoolParty
         "notifies :start,"
       when :enable
         nil
+      when :if_not
+        "not_if"
+      when :notif
+        "not_if"
       when :onlyif
         "only_if"
       else

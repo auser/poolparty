@@ -15,6 +15,7 @@ module PoolParty
     end
   end
   
+  # Helper to print with the nice printer
   def print_with_nice_printer(header=nil, strs=[], &block)
     printer = NicePrinter.new
     printer.header
@@ -25,6 +26,7 @@ module PoolParty
     printer.print
   end
   
+  # Keep the pool_specfile 
   def pool_specfile
     $pool_specfile
   end

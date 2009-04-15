@@ -1,6 +1,7 @@
 require ::File.dirname(__FILE__)+"/monitor_rack.rb"
 require ::File.dirname(__FILE__)+"/../lite.rb"
 require ::File.dirname(__FILE__)+"/../core/hash.rb"
+require "#{::File.dirname(__FILE__)}/../poolparty/neighborhoods"
 
 module Monitors
     
@@ -12,13 +13,11 @@ module Monitors
       @env = env
       @request = Rack::Request.new env
       @response = Rack::Response.new
-      @cloud = JSON.parse( open( "/etc/poolparty/clouds.json" ).read )
-      @opts = @cloud["options"]
-      @remoter_base = PoolParty::Remote.const_get(@opts.remote_base.split("::")[-1].camelcase)
+      @neighboorhoods = ::PoolParty::Neighborhoods.load_default || 
     end
     
     def default
-      @remoter_base.send :describe_instances, @opts
+      @neighboorhoods.to_json
     end
     
   end
