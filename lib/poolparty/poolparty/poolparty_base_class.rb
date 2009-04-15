@@ -37,6 +37,7 @@ module PoolParty
       end
     end
     
+    # Add the parent's options to my own and add myself as a service if I am not a resource
     def add_to_parent_if_parent_exists_and_is_a_service      
       if parent && !parent.is_a?(PoolParty::Resources::Resource)
         dsl_options(parent.dsl_options) if parent.is_a?(PoolParty::Pool::Pool)
@@ -44,6 +45,7 @@ module PoolParty
       end
     end
     
+    # Try to extract the name from the options
     def get_name_from_options_and_extra_options(opts={}, extra_opts={})
       opts.is_a?(Hash) ? (opts.has_key?(:name) ? opts.delete(:name) : nil) : dsl_options[:name] = opts
     end

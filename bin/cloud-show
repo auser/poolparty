@@ -7,11 +7,11 @@ o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
 end
 
 o.loaded_clouds.each do |cld|
-    
+  
   print_with_nice_printer "Cloud: #{cld.name}", [
     "instances #{cld.minimum_instances}..#{cld.maximum_instances}",
     "keypair #{cld.keypair}"
-  ] do |printer|    
+  ] do |printer|
     if cld.list_of_running_instances.size > 0
       printer.empty
       printer.center("Active instances")

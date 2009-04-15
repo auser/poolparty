@@ -42,6 +42,7 @@ module PoolParty
     # A callback before the configuration task takes place
     def before_configuration_tasks        
     end
+    
     def remote_instances_list        
       @containing_cloud = self
       n = Neighborhoods.load_default

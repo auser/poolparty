@@ -3,14 +3,17 @@ require File.dirname(__FILE__) + "/resource"
 
 module PoolParty    
   module Cloud
+    # Instantiate a new cloud
     def cloud(name=:app, &block)
       clouds[name] ||= Cloud.new(name, &block)
     end
 
+    # Global hash of clouds
     def clouds
       $clouds ||= {}
     end
     
+    # TODO: Deprecate
     def with_cloud(cl, opts={}, &block)
       raise CloudNotFoundException.new("Cloud not found") unless cl
       cl.options.merge!(opts) if opts
@@ -39,6 +42,7 @@ module PoolParty
         [:name]
       end
       
+      # Redefining methods are not allowed
       def self.method_added sym        
         raise "Exception: #{sym.to_s.capitalize} method has been redefined" if immutable_methods.include?(sym) && !respond_to?(sym)
       end      
@@ -51,6 +55,7 @@ module PoolParty
         remote_base.respond_to?(m) ? remote_base.send(m, *args, &block) : super
       end
       
+      # Default set of options. Most take the Default options from the default class
       default_options(
         :minimum_instances => 2,
         :maximum_instances => 5,
@@ -158,12 +163,13 @@ module PoolParty
         @build_manifest
       end
       
+      # Force rebuilding of the manifest
       def rebuild_manifest
         @build_manifest = nil
         build_manifest
       end
       
-      # If the 
+      # If the pp already exists, then let's not recreate it
       def build_from_existing_file
         ::FileTest.file?("#{Default.base_config_directory}/poolparty.pp") ? open("#{Default.base_config_directory}/poolparty.pp").read : nil
       end
@@ -199,14 +205,21 @@ module PoolParty
         poolparty_base_ruby
         poolparty_base_packages
         
-        poolparty_base_haproxy if enabled? :haproxy
+        add_optional_base_packages
+      end
+      
+      # Add optional base packages included with PP
+      def add_optional_base_packages
+        poolparty_base_haproxy      if enabled? :haproxy
         poolparty_base_tokyo_tyrant if enabled? :tokyo_tyrant
       end
       
+      # Check to see if the package has been enabled
       def enabled?(srv)
         dsl_options.has_key?(srv) && dsl_options[srv] == :enabled
       end
       
+      # TODO: Deprecate
       def other_clouds
         arr = []
         clouds.each do |name, cl|
@@ -215,6 +228,7 @@ module PoolParty
         arr
       end
       
+      # Reset the entire cloud
       def reset!
         reset_remoter_base!
         @build_manifest = @describe_instances = @remote_instances_list = nil
