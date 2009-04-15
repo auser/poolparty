@@ -10,9 +10,11 @@ module PoolParty
         
         has_exec "install tokyo-cabinet" do
           command "cd ~ && git clone git://github.com/etrepum/tokyo-cabinet.git && cd tokyo-cabinet/ && ./configure && make && make install && cd ~"
+          not_if "which tcrtest"
         end
         has_exec "install tokyo-tyrant" do
           command "cd ~ && git clone git://github.com/etrepum/tokyo-tyrant.git && cd tokyo-tyrant/ && ./configure && make && make install && cd ~"
+          not_if "which ttserver"
         end
       end
       
