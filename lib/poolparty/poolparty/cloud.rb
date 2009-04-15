@@ -66,7 +66,10 @@ module PoolParty
       def initialize(name, &block)
         @cloud_name = name
         @cloud_name.freeze
+        
         plugin_directory "#{pool_specfile ? ::File.dirname(pool_specfile) : Dir.pwd}/plugins"
+        enable :haproxy
+        
         super        
         
         after_create
@@ -99,8 +102,7 @@ module PoolParty
         using :ec2
         options[:keypair] ||= keypair.basename rescue nil
         options[:rules] = {:expand => expand_when, :contract => contract_when}
-        dependency_resolver 'chef'
-        enable :haproxy
+        dependency_resolver 'chef'        
       end
       
       # provide list of public ips to get into the cloud

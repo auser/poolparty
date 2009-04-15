@@ -6,7 +6,10 @@ module PoolParty
         # We need the haproxy package
         ::Suitcase::Zipper.add("#{::File.dirname(__FILE__)}/../../../vendor/chef/apache2", "chef/recipes")
         has_service "apache2"
-        has_package({:name => "haproxy"})
+        
+        has_package({:name => "haproxy"}) do
+          stops get_service("apache2")
+        end
     
         # Restart sysklogd after we update the haproxy.log
         has_service(:name => "sysklogd")    
@@ -26,8 +29,6 @@ module PoolParty
         has_exec "reloadhaproxy", 
           :command => "/etc/init.d/haproxy reload", 
           :requires => get_package("haproxy")
-          # :stops => [get_service("apache2"), :immediately],
-          # :starts => get_service("apache2")
         
         # Service is required
         has_service("haproxy", :ensures => "running") do
