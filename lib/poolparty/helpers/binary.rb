@@ -45,8 +45,9 @@ module PoolParty
       # These are the locations the spec file can be before the cloud
       # aborts because it cannot load the cloud
       def get_existing_spec_location
-        [          
-          Dir["#{Dir.pwd}/*/clouds.rb"],
+        [ 
+          "#{Dir.pwd}/#{Default.default_specfile_name}",
+          Dir["#{Dir.pwd}/*/#{Default.default_specfile_name}"],
           "#{Default.remote_storage_path}/#{Default.default_specfile_name}", 
           "#{Default.default_specfile_name}",            
           "#{Default.base_config_directory}/#{Default.default_specfile_name}",

@@ -57,6 +57,8 @@ module PoolParty
       
       # Default set of options. Most take the Default options from the default class
       default_options(
+        :expand_when => Default.expand_when,
+        :contract_when => Default.contract_when,
         :minimum_instances => 2,
         :maximum_instances => 5,
         :access_key => Default.access_key,
@@ -212,11 +214,6 @@ module PoolParty
       def add_optional_base_packages
         poolparty_base_haproxy      if enabled? :haproxy
         poolparty_base_tokyo_tyrant if enabled? :tokyo_tyrant
-      end
-      
-      # Check to see if the package has been enabled
-      def enabled?(srv)
-        dsl_options.has_key?(srv) && dsl_options[srv] == :enabled
       end
       
       # TODO: Deprecate
