@@ -4,6 +4,11 @@ module PoolParty
     include Dslify
   end
   class Chef
+    define_resource :chef_recipe do
+      def loaded o={}, &block
+        puts "Added chef_recipe virtual_resource"
+      end
+    end
     
     plugin :chef do
       def before_load(o, &block)        
