@@ -32,6 +32,8 @@ module PoolParty
         end
         has_exec(:name => "update-#{name}", :cwd => ::File.dirname( creates_dir )) do
           command "svn up"
+          # If the parent has after_update_svn set on it, then run it
+          runs parent.after_update_svn if parent.after_update_svn?
         end
       end
       
