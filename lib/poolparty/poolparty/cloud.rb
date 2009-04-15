@@ -67,10 +67,8 @@ module PoolParty
         @cloud_name = name
         @cloud_name.freeze
         
-        plugin_directory "#{pool_specfile ? ::File.dirname(pool_specfile) : Dir.pwd}/plugins"
-        enable :haproxy
-        
-        super        
+        plugin_directory "#{pool_specfile ? ::File.dirname(pool_specfile) : Dir.pwd}/plugins"        
+        super
         
         after_create
       end
@@ -102,7 +100,8 @@ module PoolParty
         using :ec2
         options[:keypair] ||= keypair.basename rescue nil
         options[:rules] = {:expand => expand_when, :contract => contract_when}
-        dependency_resolver 'chef'        
+        dependency_resolver 'chef'
+        enable :haproxy unless dsl_options[:haproxy] == :disabled
       end
       
       # provide list of public ips to get into the cloud
@@ -200,8 +199,12 @@ module PoolParty
         poolparty_base_ruby
         poolparty_base_packages
         
-        poolparty_base_haproxy if haproxy?
-        poolparty_base_tokyo_tyrant if tokyo_tyrant?
+        poolparty_base_haproxy if enabled? :haproxy
+        poolparty_base_tokyo_tyrant if enabled? :tokyo_tyrant
+      end
+      
+      def enabled?(srv)
+        dsl_options.has_key?(srv) && dsl_options[srv] == :enabled
       end
       
       def other_clouds

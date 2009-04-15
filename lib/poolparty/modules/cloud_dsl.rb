@@ -17,7 +17,7 @@ module PoolParty
     end
     
     def enable(service);dsl_options[service] = :enabled;end
-    def disable(service);dsl_options.delete(service);end
+    def disable(service);dsl_options[service] = :disabled;end
     
   end
 end
