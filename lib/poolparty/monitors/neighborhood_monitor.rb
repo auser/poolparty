@@ -13,7 +13,7 @@ module Monitors
       @env = env
       @request = Rack::Request.new env
       @response = Rack::Response.new
-      @neighboorhoods = ::PoolParty::Neighborhoods.load_default || 
+      @neighboorhoods = ::PoolParty::Neighborhoods.load_default
     end
     
     def default
