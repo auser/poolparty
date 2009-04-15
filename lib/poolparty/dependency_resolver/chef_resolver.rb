@@ -115,6 +115,8 @@ module PoolParty
       end
     end
     
+    # TODO: This is brittle, need to find a way to make them reactive, rather than 
+    # separate (the key/value pairs)
     def hash_flush_out(hash, pre="", post="")      
       hash.map do |k,v|
         key = to_chef_key(k)
