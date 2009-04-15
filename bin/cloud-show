@@ -7,7 +7,7 @@ o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
 end
 
 o.loaded_clouds.each do |cld|
-  
+  puts "\nFrom #{$pool_specfile}\n"
   print_with_nice_printer "Cloud: #{cld.name}", [
     "instances #{cld.minimum_instances}..#{cld.maximum_instances}",
     "keypair #{cld.keypair}"
