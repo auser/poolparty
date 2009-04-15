@@ -67,6 +67,20 @@ class String
     klass
   end
   
+  def new_resource_class(superclass=nil, opts={}, &block)
+    symc = "::PoolParty::Resources::#{self.camelcase}"
+    kla=<<-EOE
+      class #{symc} < ::PoolParty::Resources::Resource
+      end
+    EOE
+    
+    Kernel.module_eval kla
+    klass = symc.constantize
+    klass.module_eval &block if block
+
+    klass
+  end
+  
   def camelcase
     gsub(/(^|_|-)(.)/) { $2.upcase }
   end

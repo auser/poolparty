@@ -45,6 +45,12 @@ module PoolParty
           handle_print_variables(vars)
         end
         
+        if opts[:chef_recipe]
+          opts.delete(:chef_recipe).each do |rcp|
+            out << "include_recipe #{to_option_string(rcp.name)}"
+          end          
+        end
+        
         if opts.has_key?(:line_in_file)
           lines = opts.delete(:line_in_file).inject([]) do |sum, l|
             sum << PoolParty::Resources::Exec.new(:name => l[:name], :command => PoolParty::Resources::LineInFile.command(l[:line], l[:file]) ).to_properties_hash

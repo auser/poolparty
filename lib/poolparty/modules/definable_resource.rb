@@ -16,10 +16,7 @@ module PoolParty
     # 
     # For example usage, see lib/poolparty/plugins/line.rb
     def define_resource(name, &block)
-      symc = "#{name}".camelcase
-      klass = symc.class_constant(PoolParty::Resources::CustomResource, {:preserve => true}, &block)
-      PoolParty::Resources.module_eval &block
-      klass
+      name.to_s.new_resource_class(PoolParty::Resources::Resource, &block)
     end
     
     # Allow us to create virtual resources
