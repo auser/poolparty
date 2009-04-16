@@ -85,7 +85,7 @@ module PoolParty
     # Use the keypair path
     def keypair(*args)
       if args && !args.empty?
-        args.each {|arg| _keypairs.unshift Key.new(arg) }
+        args.each {|arg| _keypairs.unshift Key.new(arg) unless arg.nil? || arg.empty? }
       else
         _keypairs.select {|key| key.exists? }.first
       end

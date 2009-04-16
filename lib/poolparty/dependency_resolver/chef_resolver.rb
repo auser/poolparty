@@ -1,7 +1,26 @@
+=begin rdoc
+  ChefResolver
+  
+  This takes the internal structure
+  {
+    :options => {},
+    :services => [{}],
+    :resources => {}
+  }
+  
+  and creates a chef recipe to reflect.
+  
+  /cookbooks/
+    namespace/
+      recipes/
+      templates/
+      attributes/
+=end
 module PoolParty
   
   class ChefResolver< DependencyResolver
     
+    # Compile and add to the zipper
     def compile(props=@properties_hash, tabs=0, default_namespace="poolparty")      
       o = _compile(props, tabs, default_namespace)
       ::Suitcase::Zipper.add(build_base_recipe_directory( default_namespace ), "chef/cookbooks")
