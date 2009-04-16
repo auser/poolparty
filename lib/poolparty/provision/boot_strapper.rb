@@ -45,7 +45,7 @@ module PoolParty
       })
       class <<self; attr_reader :defaults; end
       
-      def initialize(host, opts={}, &block)
+      def initialize(host, opts={}, &block)        
         self.class.defaults.merge(opts).to_instance_variables(self)
         @target_host = host
         @cloud = opts[:cloud]

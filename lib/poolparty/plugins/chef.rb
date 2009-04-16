@@ -5,9 +5,6 @@ module PoolParty
   end
   class Chef
     define_resource :chef_recipe do
-      def loaded o={}, &block
-        puts "Added chef_recipe virtual_resource"
-      end
     end
     
     plugin :chef do
