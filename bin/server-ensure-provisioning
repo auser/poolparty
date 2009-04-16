@@ -1,26 +1,35 @@
 #!/usr/bin/env ruby
-require "rubygems"
-require 'net/http'
-require 'json'
+$:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
+require "poolparty"
 require "poolparty/lite"
 
-vote_for = ARGV.shift || "none" # or pending or terminated
-schema = ::PoolParty.load_cloud_from_json(ARGV.shift)  #TODO: smarter option parser
-remote_base_name = schema.options.remote_base.split('::')[-1].camelcase
-remoter_base = PoolParty::Remote.module_eval(remote_base_name)
-
-remoter_base.send(:describe_instances, schema.options).each do |node|
-  require "ostruct"
-  require "poolparty/provision/boot_strapper"
-  require "poolparty/provision/dr_configure"
-  require "#{::File.dirname(__FILE__)}/../vendor/gems/suitcase/lib/suitcase"
-  require "poolparty/poolparty/key"
-
-  unless node[:ip] == "not.assigned"
-    cld = schema.to_cloud(node)
-    
-    ::PoolParty::Provision::BootStrapper.new( node[:ip], :cloud => cld )
-    ::PoolParty::Provision::DrConfigure.new( node[:ip], :cloud => cld )
-  end
-  
+o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
+  opts.on('-n cloudname', '--name name', 'Start cloud by this name')    { |c| optioner.cloudname c }
+  opts.on('-i num', '--num i', 'Instance number')    { |i| optioner.inst_num i.to_i }
 end
+
+schema = ::PoolParty.load_cloud_from_json
+
+o.loaded_clouds.each do |cld|
+  keypairs = schema.options.delete(:keypairs).map {|a| PoolParty::Key.new(a.full_filepath) }
+  cld.options.merge!(schema.options.merge(:keypairs => keypairs))
+  cld.dependency_provider schema.options.dependency_resolver.split("::")[-1].gsub(/Resolver/, '')
+  
+  # If an IP or DNS name is given, bootstrap that node, otherwise, bootstrap all running nodes.
+  nodes = !o.unflagged_args.empty? ?  o.unflagged_args : cld.remote_instances_list.collect {|inst| inst.ip if inst.running? }.compact
+  if nodes.empty?
+    puts "No nodes to bootstrap"
+  else
+    if o.inst_num?
+      ::PoolParty::Provision::BootStrapper.new( nodes[o.inst_num], :cloud => cld )
+      ::PoolParty::Provision::DrConfigure.new( nodes[o.inst_num], :cloud => cld )
+    else
+      nodes.each do |address|
+        puts "bootstrapping: #{address}"
+        ::PoolParty::Provision::BootStrapper.new( address, :cloud => cld )
+        ::PoolParty::Provision::DrConfigure.new( address, :cloud => cld )
+      end
+    end
+  end
+end
+

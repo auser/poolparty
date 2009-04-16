@@ -1,33 +1,35 @@
 #!/usr/bin/env ruby
-require "rubygems"
-require 'net/http'
-require 'json'
+$:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
+require "poolparty"
 require "poolparty/lite"
 
-vote_for = ARGV.shift || "none" # or pending or terminated
+o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
+  opts.on('-n cloudname', '--name name', 'Start cloud by this name')    { |c| optioner.cloudname c }
+  opts.on('-i num', '--num i', 'Instance number')    { |i| optioner.inst_num i.to_i }
+end
+
+vote_for = o.unflagged_args || "none"
+
 schema = ::PoolParty.load_cloud_from_json(ARGV.shift)  #TODO: smarter option parser
 remote_base_name = schema.options.remote_base.split('::')[-1].camelcase
 remoter_base = PoolParty::Remote.module_eval(remote_base_name)
 
-case vote_for
-when "expand"
-  # PoolParty.log << "Launching new instance"
-  remoter_base.send :launch_instance!, schema.options do |node|
-    require "poolparty/provision/boot_strapper"
-    require "poolparty/provision/dr_configure"
-    require "#{::File.dirname(__FILE__)}/../vendor/gems/suitcase/lib/suitcase"
-    require "poolparty/poolparty/key"
-    require "ostruct"
-    
-    cld = schema.to_cloud(node)
-    
-    ::PoolParty::Provision::BootStrapper.new( node[:ip], :cloud => cld )
-    ::PoolParty::Provision::DrConfigure.new( node[:ip], :cloud => cld )
-  end
-when "contract"
-  last_instance_id = %x[/usr/bin/server-list-active instance_id].split("\t").last
-  remoter_base.terminate_instance! schema.options.merge(:instance_id => last_instance_id)
-else
-  puts "Unknown action: #{vote_for}"
-end
+o.loaded_clouds.each do |cld|
+  keypairs = schema.options.delete(:keypairs).map {|a| PoolParty::Key.new(a.full_filepath) }
+  cld.options.merge!(schema.options.merge(:keypairs => keypairs))
   
+  case vote_for
+  when "expand"
+    # PoolParty.log << "Launching new instance"
+    cld.send :launch_instance!, schema.options do |node|
+      ::PoolParty::Provision::BootStrapper.new( node[:ip], :cloud => cld )
+      ::PoolParty::Provision::DrConfigure.new( node[:ip], :cloud => cld )
+    end
+  when "contract"
+    last_instance_id = %x[/usr/bin/server-list-active instance_id].split("\t").last
+    remoter_base.terminate_instance! schema.options.merge(:instance_id => last_instance_id)
+  else
+    puts "Unknown action: #{vote_for}"
+  end
+
+end

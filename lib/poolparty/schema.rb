@@ -51,8 +51,10 @@ module PoolParty
       
       cld = OpenStruct.new(options)
       cld.keypair = ::PoolParty::Key.new("/etc/poolparty/#{node[:keypair]}")
-      cld.dependency_resolver = remoter_base
+      cld.remoter_base = remoter_base
       cld.build_and_store_new_config_file = "/etc/poolparty/clouds.json"
+      cld.dependency_resolver = PoolParty.module_eval(options.dependency_resolver.split("::")[-1].camelcase).send(:new)
+      
       cld
     end
   end
