@@ -45,7 +45,9 @@ module PoolParty
         full_path = ::File.join( ::File.expand_path(path), basename)
         return full_path if ::File.exists?(full_path)
       end
-      raise Exception.new("We cannot continue without a keypair. Please define a keypair in your clouds.rb")
+      # raise Exception.new("We cannot continue without a keypair. Please define a keypair in your clouds.rb")
+      # TODO: Add raise for keypair
+      nil
     end
     
     # Default locations to search for the key
