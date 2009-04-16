@@ -5,9 +5,6 @@ module PoolParty
   end
   class Chef
     define_resource :chef_recipe do
-      def loaded o={}, &block
-        puts "Added chef_recipe virtual_resource"
-      end
     end
     
     plugin :chef do
@@ -31,14 +28,15 @@ module PoolParty
       
       def recipe file=nil, o={}, &block        
         if file
+          file = ::File.expand_path(file)
           ::FileUtils.mkdir_p "#{basedir}/recipes" unless ::File.directory? basedir
-          
+                    
           unless ::File.file?(file)
             tfile = Tempfile.new("main-poolparty-recipe")
             tfile << file # copy the string into the temp file
             file = tfile.path
           end
-          
+                    
           ::File.cp file, "#{basedir}/recipes/default.rb"
           
           templates o[:templates] if o[:templates]
@@ -56,10 +54,11 @@ module PoolParty
         if templates
           ::FileUtils.mkdir_p "#{basedir}/templates/default/"
           templates.each do |f|
+            f = ::File.expand_path(f)
             if ::File.file?(f)
               ::File.cp f, "#{basedir}/templates/default/#{::File.basename(f)}"
             elsif ::File.directory?(f)
-              Dir["#{f}/*"].each {|f| ::File.cp f, "#{basedir}/templates/default/#{::File.basename(f)}" }
+              Dir["#{f}/**"].each {|f| ::File.cp f, "#{basedir}/templates/default/#{::File.basename(f)}" }
             else
               tfile = Tempfile.new("main-poolparty-recipe")
               tfile << f # copy the string into the temp file
