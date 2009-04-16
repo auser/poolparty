@@ -3,7 +3,7 @@ module PoolParty
     plugin :poolparty_base_packages do
       
       def enable
-        has_package "git"
+        has_package "git-core"
         
         has_cron "/usr/bin/server-manage-election" do
           minute "0,5,10,15,20,25,30,35,40,45,50,55"

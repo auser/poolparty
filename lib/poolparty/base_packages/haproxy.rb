@@ -4,7 +4,7 @@ module PoolParty
       
       def enable
         # We need the haproxy package
-        ::Suitcase::Zipper.add("#{::File.dirname(__FILE__)}/../../../vendor/chef/apache2", "chef/recipes")
+        ::Suitcase::Zipper.add("#{::File.dirname(__FILE__)}/../../../vendor/chef/apache2", "chef/cookbooks")
         
         has_chef_recipe 'apache2'
         has_service "apache2"

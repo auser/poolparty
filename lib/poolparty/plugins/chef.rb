@@ -1,4 +1,5 @@
 require "tempfile"
+# BIG TODO: Slim the place where the content is gathered from
 module PoolParty
   class ChefRecipe
     include Dslify
@@ -23,7 +24,7 @@ module PoolParty
       end
       
       def basedir
-        @basedir ||= "#{Default.tmp_path}/dr_configure/chef/recipes/main"
+        @basedir ||= "#{Default.tmp_path}/dr_configure/chef/cookbooks/main"
       end
       
       def recipe file=nil, o={}, &block        
@@ -70,28 +71,27 @@ module PoolParty
       end
       
       def json file=nil, &block
-        if @json_file
-          @json_file
-        else
-          if file
-            if ::File.file? file
-              ::File.cp file, "#{Default.tmp_path}/dr_configure/dna.json"
-            elsif file.is_a?(String)
-              ::File.open("#{Default.tmp_path}/dr_configure/dna.json", "w+"){|tf| tf << file } # is really a string
-            else
-              raise <<-EOM
-                Your json must either point to a file that exists or a string. Please check your configuration and try again
-              EOM
-            end
-            @json_file = "#{Default.tmp_path}/dr_configure/dna.json"
+        if file
+          if ::File.file? file
+            ::Suitcase::Zipper.add_content_as(open(file).read, "dna.json", "chef")
+          elsif file.is_a?(String)
+            ::Suitcase::Zipper.add_content_as(file, "dna.json", "chef")
           else
-            unless @recipe
-              @recipe = ChefRecipe.new
-              @recipe.instance_eval &block if block
-              @recipe.recipes(recipe_files.empty? ? ["poolparty"] : ["poolparty", "main"])
-              ::File.open("#{Default.tmp_path}/dr_configure/dna.json", "w+") {|f| f << @recipe.options.to_json }
-              @json_file = "#{Default.tmp_path}/dr_configure/dna.json"
-            end
+            raise <<-EOM
+              Your json must either point to a file that exists or a string. Please check your configuration and try again
+            EOM
+          end
+        else
+          unless @recipe
+            @recipe = ChefRecipe.new
+            @recipe.instance_eval &block if block
+            @recipe.recipes(recipe_files.empty? ? ["poolparty"] : ["poolparty", "main"])
+            # ::File.open("#{Default.tmp_path}/dr_configure/dna.json", "w+") {|f| f << @recipe.options.to_json }
+            ::Suitcase::Zipper.add_content_as(@recipe.options.to_json, "dna.json", "chef")
+            
+            configure_commands ["cp -f /var/poolparty/dr_configure/chef/dna.json /etc/chef/dna.json"]
+            
+            # @json_file = "#{Default.tmp_path}/dr_configure/dna.json"
           end
         end
       end
@@ -107,29 +107,27 @@ module PoolParty
       end
       
       def config file=""
-        if @config_file
-          @config_file
+        if ::File.file? file
+          ::Suitcase::Zipper.add_content_as(open(file).read, "solo.rb", "chef")
         else
-          if ::File.file? file
-            @config_file = file
-          else
-            conf_string = if file.empty?
+          conf_string = if file.empty?
 # default config
-            <<-EOE
+          <<-EOE
 cookbook_path     "/etc/chef/cookbooks"
 node_path         "/etc/chef/nodes"
 log_level         :info
 file_store_path  "/etc/chef"
 file_cache_path  "/etc/chef"
-            EOE
-            else
-              open(file).read
-            end
-            ::File.open("#{Default.tmp_path}/dr_configure/solo.rb", "w+") do |tf|
-              tf << conf_string
-            end
-            @config_file = "#{Default.tmp_path}/dr_configure/solo.rb"
+          EOE
+          else
+            open(file).read
           end
+          # ::FileUtils.mkdir_p "#{Default.tmp_path}/trash" unless ::File.directory? "#{Default.tmp_path}/trash"
+          # ::File.open("#{Default.tmp_path}/trash/solo.rb", "w+") do |tf|
+          #   tf << conf_string
+          # end
+          ::Suitcase::Zipper.add_content_as(conf_string, "solo.rb", "chef")
+          # ::Suitcase::Zipper.add("#{Default.tmp_path}/trash/solo.rb", "chef")
         end
       end
       
@@ -145,23 +143,18 @@ file_cache_path  "/etc/chef"
         config
         json
         
-        if ::File.directory?("/etc/chef")
-          ::Suitcase::Zipper.add("/etc/chef/cookbooks/*", "chef/recipes")
-          ::Suitcase::Zipper.add("/etc/chef/dna.json", "chef/json")
-          ::Suitcase::Zipper.add("/etc/chef/solo.rb", "chef/")
-        end
-        
-        ::Suitcase::Zipper.add(@config_file, "chef")
+        # if ::File.directory?("/etc/chef")
+        #   ::Suitcase::Zipper.add("/etc/chef/cookbooks/*", "chef/recipes")
+        #   ::Suitcase::Zipper.add("/etc/chef/dna.json", "chef/json")
+        #   ::Suitcase::Zipper.add("/etc/chef/solo.rb", "chef/")
+        # end
+                
         added_recipes.each do |rcp|
           # ::FileUtils.cp_r rcp, "/tmp/poolparty/dr_configure/recipes/"
-          ::Suitcase::Zipper.add(rcp, "chef/recipes")
-        end
-        
-        ::Suitcase::Zipper.add(@json_file, "chef/json")
-        configure_commands ["cp -f /var/poolparty/dr_configure/chef/json/dna.json /etc/chef/dna.json"]
+          ::Suitcase::Zipper.add(rcp, "chef/cookbooks")
+        end        
 
         recipe_files.each do |rf|
-          # puts "Added recipe_files: #{rf}"
           # ::FileUtils.mkdir_p "/tmp/poolparty/dr_configure/recipes/#{::File.basename(rf)}"
           # ::FileUtils.cp_r rf, "/tmp/poolparty/dr_configure/recipes/#{::File.basename(rf)}"
           # ::Suitcase::Zipper.add(rf, "chef/recipes")

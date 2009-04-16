@@ -79,7 +79,7 @@ module PoolParty
         
       def pack_the_dependencies
         # Add the keypair to the instance... shudder
-        ::Suitcase::Zipper.add(@cloud.keypair.full_filepath, "keys")
+        ::Suitcase::Zipper.add(keypair, "keys")
         
         # Use the locally built poolparty gem if it is availabl
         if edge_pp_gem = Dir["#{Default.vendor_path}/../pkg/*poolparty*gem"].pop
@@ -103,6 +103,7 @@ module PoolParty
         
         ::Suitcase::Zipper.add("#{::File.join(File.dirname(__FILE__), '..', 'templates', 'gemrc' )}", "etc/poolparty")
         ::Suitcase::Zipper.build_dir!("#{Default.tmp_path}/dependencies")
+        # ::Suitcase::Zipper.flush!
         
         # ::FileUtils.rm_rf "#{Default.tmp_path}/trash"
       end

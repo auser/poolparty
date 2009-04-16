@@ -2,7 +2,13 @@ module PoolParty
   
   class ChefResolver< DependencyResolver
     
-    def compile(props=@properties_hash, tabs=0, default_namespace="poolparty")
+    def compile(props=@properties_hash, tabs=0, default_namespace="poolparty")      
+      o = _compile(props, tabs, default_namespace)
+      ::Suitcase::Zipper.add(build_base_recipe_directory( default_namespace ), "chef/cookbooks")
+      o
+    end
+    
+    def _compile(props=@properties_hash, tabs=0, default_namespace="poolparty")
       cld_name = default_namespace
       comp(cld_name, props, tabs)
     end
@@ -16,8 +22,8 @@ module PoolParty
         resources_to_string(props[:resources],tabs),
         services_to_string(props[:services],tabs)
       ].join("\n")
-      ::File.open("#{basedir}/recipes/default.rb", "w+") {|f| f << default_recipe }        
-      # ::Suitcase::Zipper.add(basedir, "chef/recipes/cookbooks")
+      ::File.open("#{basedir}/recipes/default.rb", "w+") {|f| f << default_recipe }      
+      
       default_recipe
     end
     
@@ -29,7 +35,7 @@ module PoolParty
     end
     
     def base_dir(nm=nil)
-      @base_dir ||= "#{Default.tmp_path}/dr_configure/chef/recipes/cookbooks/#{nm}"
+      @base_dir ||= "#{Default.tmp_path}/trash/chef/cookbooks/#{nm}"
     end
     
     def options_to_string(opts,tabs=0)
@@ -135,7 +141,7 @@ module PoolParty
         str = "\n#{tf(tabs)}# #{kname}\n"
         str << "#{tf(tabs+1)}"
         klassarray.each do |hsh|
-          str << compile(hsh,tabs+1, klassname)
+          str << _compile(hsh,tabs+1, klassname)
         end        
         str << "#{tf(tabs)}"
       end

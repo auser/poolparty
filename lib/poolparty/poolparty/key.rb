@@ -42,7 +42,7 @@ module PoolParty
     # then it returns nil and assumes we it doesn't exist
     def search_in_known_locations
       self.class.keypair_paths.each do |path|
-        full_path = ::File.join( ::File.expand_path(path), filepath)
+        full_path = ::File.join( ::File.expand_path(path), ::File.basename(filepath))
         return full_path if ::File.exists?(full_path)
       end
       raise Exception.new("We cannot continue without a keypair. Please define a keypair in your clouds.rb")
@@ -52,10 +52,10 @@ module PoolParty
     def self.keypair_paths
       [ "#{ENV["HOME"]}/.ssh",
         "#{Default.poolparty_home_path}/keys",
-        Default.base_keypair_path,
-        Default.base_config_directory,
-        Default.base_ssh_path,
-        Default.remote_storage_path,        
+        PoolParty::Default.base_keypair_path,
+        PoolParty::Default.base_config_directory,
+        PoolParty::Default.base_ssh_path,
+        PoolParty::Default.remote_storage_path,        
         Dir.pwd
       ]
     end

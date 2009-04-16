@@ -49,7 +49,7 @@ module PoolParty
       ::File.open "#{Default.tmp_path}/dr_configure/clouds.json", "w" do |f|
         f << cloud.to_properties_hash.to_json
       end
-            
+      
       setup_configurator
       write_erlang_cookie
       @configurator.files_to_upload.each {|f| ::FileUtils.cp f, "#{Default.tmp_path}/dr_configure/#{::File.basename(f)}" if ::File.file?(f) }
@@ -61,13 +61,13 @@ module PoolParty
         'chmod 600 /var/poolparty/dr_configure/clouds.rb',
         'cp -f /var/poolparty/dr_configure/clouds.json /etc/poolparty',
         'cp /var/poolparty/dr_configure/clouds.rb /etc/poolparty',
-        'cp /var/poolparty/dr_configure/erlang.cookie /root/.erlang.cookie',        
+        'cp /var/poolparty/dr_configure/erlang.cookie /root/.erlang.cookie',
         'ruby /var/poolparty/dr_configure/erlang_cookie_maker',
         "touch /var/poolparty/POOLPARTY.PROGRESS",
         'echo "configure" >> /var/poolparty/POOLPARTY.PROGRESS'
         ]
       commands << self.class.class_commands unless self.class.class_commands.empty?
-      commands << @configurator.commands      
+      commands << @configurator.commands
      end
      
      def pack_up_and_ship_off_suitcase
@@ -79,7 +79,6 @@ module PoolParty
      def setup_configurator
        # @cloud.write_properties_hash("#{Default.tmp_path}/properties_hash.rb")
        #TODO: move to puppet class
-       puts "writting new config file"
        @cloud.build_and_store_new_config_file("#{Default.tmp_path}/dr_configure/poolparty.pp") 
        # Neighborhoods.clump(@cloud.remote_instances_list, "#{Default.tmp_path}/neighborhood.json")
      end
