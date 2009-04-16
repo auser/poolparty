@@ -6,8 +6,8 @@ module PoolParty
     attr_accessor :filepath
     
     # Create a new key that defaults to id_rsa as the name. 
-    def initialize(filepath=nil)
-      @filepath = (filepath.nil? || filepath.empty?) ? "id_rsa" : filepath
+    def initialize(fpath=nil)
+      @filepath = (fpath.nil? || fpath.empty?) ? "id_rsa" : fpath
     end
     
     # If the full_filepath is nil, then the key doesn't exist
@@ -42,7 +42,7 @@ module PoolParty
     # then it returns nil and assumes we it doesn't exist
     def search_in_known_locations
       self.class.keypair_paths.each do |path|
-        full_path = ::File.join( ::File.expand_path(path), ::File.basename(filepath))
+        full_path = ::File.join( ::File.expand_path(path), basename)
         return full_path if ::File.exists?(full_path)
       end
       raise Exception.new("We cannot continue without a keypair. Please define a keypair in your clouds.rb")
