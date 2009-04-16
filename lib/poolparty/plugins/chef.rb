@@ -141,20 +141,17 @@ file_cache_path  "/etc/chef"
         config
         json
         
-        # if ::File.directory?("/etc/chef")
-        #   ::Suitcase::Zipper.add("/etc/chef/cookbooks/*", "chef/recipes")
-        #   ::Suitcase::Zipper.add("/etc/chef/dna.json", "chef/json")
-        #   ::Suitcase::Zipper.add("/etc/chef/solo.rb", "chef/")
-        # end
-                
+        if ::File.directory?("/etc/chef")
+          ::Suitcase::Zipper.add("/etc/chef/cookbooks/*", "chef/recipes")
+          ::Suitcase::Zipper.add("/etc/chef/dna.json", "chef/json")
+          ::Suitcase::Zipper.add("/etc/chef/solo.rb", "chef/")
+        end
+
         added_recipes.each do |rcp|
-          # ::FileUtils.cp_r rcp, "/tmp/poolparty/dr_configure/recipes/"
           ::Suitcase::Zipper.add(rcp, "chef/cookbooks")
         end
 
         recipe_files.each do |rf|
-          # ::FileUtils.mkdir_p "/tmp/poolparty/dr_configure/recipes/#{::File.basename(rf)}"
-          # ::FileUtils.cp_r rf, "/tmp/poolparty/dr_configure/recipes/#{::File.basename(rf)}"
           ::Suitcase::Zipper.add(rf, "chef/recipes")
         end
       end
