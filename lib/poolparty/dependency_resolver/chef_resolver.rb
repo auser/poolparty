@@ -17,7 +17,7 @@ module PoolParty
         services_to_string(props[:services],tabs)
       ].join("\n")
       ::File.open("#{basedir}/recipes/default.rb", "w+") {|f| f << default_recipe }        
-      ::Suitcase::Zipper.add(basedir, "chef/recipes/cookbooks")
+      # ::Suitcase::Zipper.add(basedir, "chef/recipes/cookbooks")
       default_recipe
     end
     
@@ -29,7 +29,7 @@ module PoolParty
     end
     
     def base_dir(nm=nil)
-      @base_dir ||= "#{Default.tmp_path}/dr_configure/chef/recipes/#{nm}"
+      @base_dir ||= "#{Default.tmp_path}/dr_configure/chef/recipes/cookbooks/#{nm}"
     end
     
     def options_to_string(opts,tabs=0)

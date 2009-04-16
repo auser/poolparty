@@ -27,6 +27,13 @@ when "expand"
     cld.dependency_resolver = remoter_base
     cld.build_and_store_new_config_file = "/etc/poolparty/clouds.json"
     
+    # Chef stuff???
+    if ::File.directory?("/etc/chef")      
+      ::Suitcase::Zipper.add("/etc/chef/solo.rb", "chef/")
+      ::Suitcase::Zipper.add("/etc/chef/dna.json", "chef/json")
+      ::Suitcase::Zipper.add("/etc/chef/cookbooks", "chef/recipes")
+    end    
+    
     ::PoolParty::Provision::BootStrapper.new( node[:ip], :cloud => cld )
     ::PoolParty::Provision::DrConfigure.new( node[:ip], :cloud => cld )
   end

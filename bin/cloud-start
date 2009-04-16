@@ -12,8 +12,8 @@ o.loaded_clouds.each do |cld|
     puts "#{cld.list_of_running_instances.size} running instances (#{cld.minimum_instances} - #{cld.maximum_instances})"
     
     cld.launch_instance! do |node|
-      ::PoolParty::Provision::BootStrapper.new(node.ip, :full_keypair_path => cld.keypair.full_filepath, :cloud => cld)
-      ::PoolParty::Provision::DrConfigure.new(node.ip,  :full_keypair_path => cld.keypair.full_filepath, :cloud => cld)
+      ::PoolParty::Provision::BootStrapper.new(node.ip, :cloud => cld)
+      ::PoolParty::Provision::DrConfigure.new(node.ip,  :cloud => cld)
       
       puts <<-EOM
         Your cloud has started. Your ip is #{node.ip}

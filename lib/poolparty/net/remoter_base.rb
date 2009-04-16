@@ -94,7 +94,7 @@ module PoolParty
         end
         @inst
       end
-      def launch_instance!(o={}, &block);self.class.launch_instance!(o, block);end
+      def launch_instance!(o={}, &block); self.class.launch_instance!(self.options.merge(o), &block);end
 
       # Called after an instance is launched
       def self.after_launch_instance(instance=nil);end

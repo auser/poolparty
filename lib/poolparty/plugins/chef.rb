@@ -37,6 +37,7 @@ module PoolParty
             file = tfile.path
           end
                     
+          ::FileUtils.rm "#{basedir}/recipes/default.rb" if ::File.file?("#{basedir}/recipes/default.rb")
           ::File.cp file, "#{basedir}/recipes/default.rb"
           
           templates o[:templates] if o[:templates]
@@ -124,10 +125,10 @@ file_cache_path  "/etc/chef"
             else
               open(file).read
             end
-            ::File.open("#{Default.tmp_path}/dr_configure/chef_config.rb", "w+") do |tf|
+            ::File.open("#{Default.tmp_path}/dr_configure/solo.rb", "w+") do |tf|
               tf << conf_string
             end
-            @config_file = "#{Default.tmp_path}/dr_configure/chef_config.rb"
+            @config_file = "#{Default.tmp_path}/dr_configure/solo.rb"
           end
         end
       end
@@ -160,9 +161,10 @@ file_cache_path  "/etc/chef"
         configure_commands ["cp -f /var/poolparty/dr_configure/chef/json/dna.json /etc/chef/dna.json"]
 
         recipe_files.each do |rf|
-          ::FileUtils.mkdir_p "/tmp/poolparty/dr_configure/recipes/#{::File.basename(rf)}"
-          ::FileUtils.cp_r rf, "/tmp/poolparty/dr_configure/recipes/#{::File.basename(rf)}"
-          # ::Suitcase::Zipper.add(rf, "chef/recipes") 
+          # puts "Added recipe_files: #{rf}"
+          # ::FileUtils.mkdir_p "/tmp/poolparty/dr_configure/recipes/#{::File.basename(rf)}"
+          # ::FileUtils.cp_r rf, "/tmp/poolparty/dr_configure/recipes/#{::File.basename(rf)}"
+          # ::Suitcase::Zipper.add(rf, "chef/recipes")
         end
       end
       
