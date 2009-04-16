@@ -189,9 +189,9 @@ module PoolParty
         nil
       when :if_not
         "not_if"
-      when :notif
+      when :not_if
         "not_if"
-      when :onlyif
+      when :only_if
         "only_if"
       else
         "#{key}"        
