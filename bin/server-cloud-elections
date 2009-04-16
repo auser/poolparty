@@ -19,9 +19,13 @@ when "expand"
     require "poolparty/poolparty/key"
     require "#{::File.dirname(__FILE__)}/../vendor/gems/suitcase/lib/suitcase"
     
+    $pool_specfile = "/etc/poolparty/clouds.rb"
+    
     # TODO: Seriously, make this sexier
     cld = OpenStruct.new(schema.options)
     cld.keypair = ::PoolParty::Key.new("/etc/poolparty/#{node[:keypair]}")
+    cld.dependency_resolver = remoter_base
+    cld.build_and_store_new_config_file = "/etc/poolparty/clouds.json"
     
     ::PoolParty::Provision::BootStrapper.new( node[:ip], :cloud => cld )
     ::PoolParty::Provision::DrConfigure.new( node[:ip], :cloud => cld )

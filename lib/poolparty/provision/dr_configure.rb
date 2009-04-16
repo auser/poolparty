@@ -17,9 +17,22 @@ module PoolParty
          :dependency_resolver => 'chef'
        })
      end
-          
+     
+     # In case the method is being called on ourself, let's check the 
+     # defaults hash to see if it's available there
+     def method_missing(m,*a,&block)
+       if self.class.defaults.has_key?(m) 
+         self.class.defaults[m]
+       elsif @cloud
+         @cloud.send m, *a, &block
+       else
+         super
+       end
+     end
+    
+     attr_reader :cloud
      attr_accessor :full_keypair_path
-     def initialize(host, opts={}, &block)            
+     def initialize(host, opts={}, &block)
        self.class.defaults.merge(opts).to_instance_variables(self)
        @target_host = host
        @configurator = "::PoolParty::Provision::#{dependency_resolver.capitalize}".constantize
@@ -31,6 +44,7 @@ module PoolParty
      end
      
      def prescribe_configuration
+       ::FileUtils.mkdir_p "#{Default.tmp_path}/dr_configure" unless ::File.directory?("#{Default.tmp_path}/dr_configure")
       ::File.cp $pool_specfile, "#{Default.tmp_path}/dr_configure/clouds.rb"
       ::File.open "#{Default.tmp_path}/dr_configure/clouds.json", "w" do |f|
         f << cloud.to_properties_hash.to_json

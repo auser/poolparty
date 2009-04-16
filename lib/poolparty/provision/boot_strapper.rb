@@ -29,6 +29,7 @@ module PoolParty
                           activesupport
                           grempe-amazon-ec2
                           RubyInline
+                          ohai
                           chef
                           auser-dslify
                           auser-butterfly
