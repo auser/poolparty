@@ -44,7 +44,9 @@ module PoolParty
           templates o[:templates] if o[:templates]
           
           recipe_files << basedir
+          ::Suitcase::Zipper.add(basedir, "chef/cookbooks")
         # TODO: Enable neat syntax from within poolparty
+        
         else
           raise <<-EOR
             PoolParty currently only supports passing recipes as files. Please specify a file in your chef block and try again"
@@ -134,11 +136,7 @@ file_cache_path  "/etc/chef"
       def added_recipes
         @added_recipes ||= []
       end
-      
-      def after_create
-        before_configure
-      end
-      
+            
       def before_configure
         config
         json
@@ -152,12 +150,12 @@ file_cache_path  "/etc/chef"
         added_recipes.each do |rcp|
           # ::FileUtils.cp_r rcp, "/tmp/poolparty/dr_configure/recipes/"
           ::Suitcase::Zipper.add(rcp, "chef/cookbooks")
-        end        
+        end
 
         recipe_files.each do |rf|
           # ::FileUtils.mkdir_p "/tmp/poolparty/dr_configure/recipes/#{::File.basename(rf)}"
           # ::FileUtils.cp_r rf, "/tmp/poolparty/dr_configure/recipes/#{::File.basename(rf)}"
-          # ::Suitcase::Zipper.add(rf, "chef/recipes")
+          ::Suitcase::Zipper.add(rf, "chef/recipes")
         end
       end
       

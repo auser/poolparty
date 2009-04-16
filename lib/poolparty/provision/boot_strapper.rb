@@ -103,7 +103,7 @@ module PoolParty
         
         ::Suitcase::Zipper.add("#{::File.join(File.dirname(__FILE__), '..', 'templates', 'gemrc' )}", "etc/poolparty")
         ::Suitcase::Zipper.build_dir!("#{Default.tmp_path}/dependencies")
-        # ::Suitcase::Zipper.flush!
+        ::Suitcase::Zipper.flush!
         
         # ::FileUtils.rm_rf "#{Default.tmp_path}/trash"
       end
