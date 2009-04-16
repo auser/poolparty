@@ -30,6 +30,13 @@ module PoolParty
           not_if "test -f #{to}"
           command "cp -R /var/poolparty/dr_configure/user_directory/#{name}/* #{to}"
         end
+        
+        if owner?
+          has_exec(:name => "chown-#{name}", :cwd => ::File.dirname( creates_dir )) do
+            command "chown #{owner} * -R"
+          end
+        end
+        
       end
       
     end
