@@ -27,7 +27,7 @@ module PoolParty
     end
     
     def ssh_options(opts={})
-      o = {"-i" => full_keypair_path,
+      o = {"-i" => keypair.full_filepath,
            "-l" => user,
            "-o" =>"StrictHostKeyChecking=no"
            }.merge(opts)
@@ -55,23 +55,24 @@ module PoolParty
         :host=>target_host, :user=>'root')
       # commands.each {|c| run_remote(c, target_host) }
     end    
-
-    def ping_port(host, port=22, retry_times=400)
+    
+    def self.ping_port(host, port=22, retry_times=400)
       connected = false
       retry_times.times do |i|
         begin
-          break if connected = TCPSocket.new(host, port).is_a?(TCPSocket)      
+          break if connected = TCPSocket.new(host, port).is_a?(TCPSocket)
         rescue Exception => e
           sleep(2)
         end
       end
       connected
     end
+    def ping_port(ip, port, retry_times=500);self.class.ping_port(ip, port, retry_times);end
     
     def netssh(cmds=[], opts={})
       user = opts.delete(:user) || user #rescue 'root'
       host = opts.delete(:host) || target_host
-      ssh_options_hash = {:keys => [full_keypair_path],
+      ssh_options_hash = {:keys => [keypair.full_filepath],
                           :auth_methods => 'publickey',
                           :paranoid => false
                            }.merge(opts)
@@ -79,7 +80,7 @@ module PoolParty
       # Start the connection
       Net::SSH.start(host, user, ssh_options_hash) do |ssh|  
         cmds.each do |command|
-          ssh.exec!(command) do |ch, stream, data| 
+          ssh.exec!(command) do |ch, stream, data|
             if stream == :stdout
              print data
             else

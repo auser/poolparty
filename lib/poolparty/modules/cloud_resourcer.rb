@@ -97,7 +97,7 @@ module PoolParty
       dsl_options[:keypairs] ||= [Key.new]
     end
     
-    def full_keypair_path      
+    def full_keypair_path
       @full_keypair_path ||= keypair.full_filepath
     end
     

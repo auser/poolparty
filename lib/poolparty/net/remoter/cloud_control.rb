@@ -3,36 +3,6 @@ require "ping"
 module PoolParty
   module Remote
     
-    # TODO: Rename and modularize the @inst.status =~ /pending/ so that it works on all 
-    # remoter_bases
-    def launch_instance!(o={}, &block)
-      @inst = launch_new_instance!( o )
-      wait "2.seconds"
-      500.times do |i|
-        if @inst.status =~ /pending/
-          sleep(2)
-          @inst = describe_instance(@inst)          
-        end
-      end
-      when_instance_is_responding @inst do
-        block.call(@inst) if block
-        after_launch_instance(@inst)
-      end
-      @inst
-    end
-    
-    # Called after an instance is launched
-    def after_launch_instance(instance=nil)      
-    end
-    
-    def when_instance_is_responding(inst, &block)
-      if ping_port(inst.ip, 22)
-        block.call if block
-      else
-        raise "Instance not responding at #{inst.ip}"
-      end
-    end
-    
     # A convenience method for waiting until there are no more
     # pending instances and then running the block
     def when_no_pending_instances(&block)

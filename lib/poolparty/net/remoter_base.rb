@@ -23,7 +23,7 @@ module PoolParty
     # This class is the base class for all remote types, such as ec2
     # Everything remoting-wise is derived from this class
     class RemoterBase
-      include  Remote
+      include  ::PoolParty::Remote
       
       def initialize(prnt = nil)
         @parent = prnt
@@ -75,6 +75,50 @@ module PoolParty
       end
       def describe_instances(o={})
         self.class.describe_instances(o ? options.merge(o) : options)
+      end
+      
+      # TODO: Rename and modularize the @inst.status =~ /pending/ so that it works on all 
+      # remoter_bases
+      def self.launch_instance!(o={}, &block)
+        @inst = launch_new_instance!( o )
+        sleep(2)
+        500.times do |i|
+          if @inst.status =~ /pending/
+            sleep(2)
+            @inst = describe_instance(@inst)          
+          end
+        end
+        when_instance_is_responding @inst do
+          block.call(@inst) if block
+          after_launch_instance(@inst)
+        end
+        @inst
+      end
+      def launch_instance!(o={}, &block);self.class.launch_instance!(o, block);end
+
+      # Called after an instance is launched
+      def self.after_launch_instance(instance=nil);end
+
+      def self.when_instance_is_responding(inst, &block)
+        if ping_port(inst.ip, 22)
+          block.call if block
+        else
+          raise "Instance not responding at #{inst.ip}"
+        end
+      end
+      def when_instance_is_responding(inst, &block);self.class.when_instance_is_responding;end
+      
+      # TODO: BAD FORM, already defined in connections.rb. Fix this, ASAP
+      def self.ping_port(host, port=22, retry_times=400)
+        connected = false
+        retry_times.times do |i|
+          begin
+            break if connected = TCPSocket.new(host, port).is_a?(TCPSocket)
+          rescue Exception => e
+            sleep(2)
+          end
+        end
+        connected
       end
       
       # After launch callback

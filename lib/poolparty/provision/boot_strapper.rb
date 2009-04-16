@@ -45,6 +45,18 @@ module PoolParty
       })
       class <<self; attr_reader :defaults; end
       
+      # In case the method is being called on ourself, let's check the 
+      # defaults hash to see if it's available there
+      def method_missing(m,*a,&block)
+        if self.class.defaults.has_key?(m) 
+          self.class.defaults[m]
+        elsif @cloud
+          @cloud.send m, *a, &block
+        else
+          super
+        end
+      end
+      
       def initialize(host, opts={}, &block)        
         self.class.defaults.merge(opts).to_instance_variables(self)
         @target_host = host
@@ -66,7 +78,7 @@ module PoolParty
         
       def pack_the_dependencies
         # Add the keypair to the instance... shudder
-        ::Suitcase::Zipper.add(@cloud.keypair, "keys")
+        ::Suitcase::Zipper.add(@cloud.keypair.full_filepath, "keys")
         
         # Use the locally built poolparty gem if it is availabl
         if edge_pp_gem = Dir["#{Default.vendor_path}/../pkg/*poolparty*gem"].pop

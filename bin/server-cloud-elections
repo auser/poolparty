@@ -2,20 +2,29 @@
 require "rubygems"
 require 'net/http'
 require 'json'
+require "ostruct"
 require "poolparty/lite"
 
 vote_for = ARGV.shift || "none" # or pending or terminated
 schema = ::PoolParty.load_cloud_from_json(ARGV.shift)  #TODO: smarter option parser
 remote_base_name = schema.options.remote_base.split('::')[-1].camelcase
 remoter_base = PoolParty::Remote.module_eval(remote_base_name)
-require 'rubygems'; require 'ruby-debug'; debugger
 
 case vote_for
 when "expand"
   # PoolParty.log << "Launching new instance"
-  remoter_base.send :launch_new_instance!, schema.options do |node|
-    ::PoolParty::Provision::BootStrapper.new( node[:ip], :full_keypair_path => cld.keypair.full_filepath, :cloud => schema.options )
-    ::PoolParty::Provision::DrConfigure.new( node[:ip], :full_keypair_path => cld.keypair.full_filepath, :cloud => schema.options )
+  remoter_base.send :launch_instance!, schema.options do |node|
+    require "poolparty/provision/boot_strapper"
+    require "poolparty/provision/dr_configure"
+    require "poolparty/poolparty/key"
+    require "#{::File.dirname(__FILE__)}/../vendor/gems/suitcase/lib/suitcase"
+    
+    # TODO: Seriously, make this sexier
+    cld = OpenStruct.new(schema.options)
+    cld.keypair = ::PoolParty::Key.new("/etc/poolparty/#{node[:keypair]}")
+    
+    ::PoolParty::Provision::BootStrapper.new( node[:ip], :cloud => cld )
+    ::PoolParty::Provision::DrConfigure.new( node[:ip], :cloud => cld )
   end
 when "contract"
   last_instance_id = %x[/usr/bin/server-list-active instance_id].split("\t").last
