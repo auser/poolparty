@@ -11,10 +11,8 @@ end
 schema = ::PoolParty.load_cloud_from_json
 
 o.loaded_clouds.each do |cld|
-  keypairs = schema.options.delete(:keypairs).map {|a| PoolParty::Key.new(a.full_filepath) }
-  cld.options.merge!(schema.options.merge(:keypairs => keypairs))
-  cld.dependency_provider schema.options.dependency_resolver.split("::")[-1].gsub(/Resolver/, '')
-  
+  cld.update_from_schema(schema)
+    
   # If an IP or DNS name is given, bootstrap that node, otherwise, bootstrap all running nodes.
   nodes = !o.unflagged_args.empty? ?  o.unflagged_args : cld.remote_instances_list.collect {|inst| inst.ip if inst.running? }.compact
   if nodes.empty?

@@ -87,7 +87,7 @@ module PoolParty
       if args && !args.empty?
         args.each {|arg| _keypairs.unshift Key.new(arg) unless arg.nil? || arg.empty? }
       else
-        _keypairs.select {|key| key.exists? }.first
+        @keypair ||= _keypairs.select {|key| key.exists? }.first
       end
     end
     
@@ -101,6 +101,15 @@ module PoolParty
       @full_keypair_path ||= keypair.full_filepath
     end
     
+    def update_from_schema(schema)
+      keypairs = schema.options.delete(:keypairs).map {|a| PoolParty::Key.new(a.basename) }
+      cld.options.merge! schema.options
+      cld.dsl_options[:keypairs] = keypairs
+
+      cld.dsl_options[:dependency_resolver] = schema.options.dependency_resolver.split("::")[-1].gsub(/Resolver/, '').preserved_class_constant("Resolver") rescue PoolParty::Chef
+      
+    end
+        
     # TODO: deprecate
     def number_of_resources
       arr = resources.map do |n, r|

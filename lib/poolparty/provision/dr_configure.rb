@@ -30,13 +30,14 @@ module PoolParty
        end
      end
     
-     attr_reader :cloud
-     attr_accessor :full_keypair_path
+     attr_reader :cloud, :keypair
+     
      def initialize(host, opts={}, &block)
        self.class.defaults.merge(opts).to_instance_variables(self)
        @target_host = host
        @configurator = "::PoolParty::Provision::#{dependency_resolver.capitalize}".constantize
        @cloud = opts[:cloud]
+       @keypair = @cloud.keypair
        
        @cloud.call_before_configure_callbacks if @cloud
        prescribe_configuration

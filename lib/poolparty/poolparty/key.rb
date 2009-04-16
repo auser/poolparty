@@ -52,7 +52,8 @@ module PoolParty
     
     # Default locations to search for the key
     def self.keypair_paths
-      [ "#{ENV["HOME"]}/.ssh",
+      [ 
+        "#{ENV["HOME"]}/.ssh",
         "#{Default.poolparty_home_path}/keys",
         PoolParty::Default.base_keypair_path,
         PoolParty::Default.base_config_directory,

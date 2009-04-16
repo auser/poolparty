@@ -15,8 +15,7 @@ remote_base_name = schema.options.remote_base.split('::')[-1].camelcase
 remoter_base = PoolParty::Remote.module_eval(remote_base_name)
 
 o.loaded_clouds.each do |cld|
-  keypairs = schema.options.delete(:keypairs).map {|a| PoolParty::Key.new(a.full_filepath) }
-  cld.options.merge!(schema.options.merge(:keypairs => keypairs))
+  cld.update_from_schema(schema)
   
   case vote_for
   when "expand"
