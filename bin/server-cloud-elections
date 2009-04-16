@@ -2,7 +2,6 @@
 require "rubygems"
 require 'net/http'
 require 'json'
-require "ostruct"
 require "poolparty/lite"
 
 vote_for = ARGV.shift || "none" # or pending or terminated
@@ -16,23 +15,11 @@ when "expand"
   remoter_base.send :launch_instance!, schema.options do |node|
     require "poolparty/provision/boot_strapper"
     require "poolparty/provision/dr_configure"
-    require "poolparty/poolparty/key"
     require "#{::File.dirname(__FILE__)}/../vendor/gems/suitcase/lib/suitcase"
+    require "poolparty/poolparty/key"
+    require "ostruct"
     
-    $pool_specfile = "/etc/poolparty/clouds.rb"
-    
-    # TODO: Seriously, make this sexier
-    cld = OpenStruct.new(schema.options)
-    cld.keypair = ::PoolParty::Key.new("/etc/poolparty/#{node[:keypair]}")
-    cld.dependency_resolver = remoter_base
-    cld.build_and_store_new_config_file = "/etc/poolparty/clouds.json"
-    
-    # # Chef stuff???
-    # if ::File.directory?("/etc/chef")
-    #   ::Suitcase::Zipper.add("/etc/chef/solo.rb", "chef")
-    #   ::Suitcase::Zipper.add("/etc/chef/dna.json", "chef")
-    #   ::Suitcase::Zipper.add("/etc/chef/cookbooks", "chef")
-    # end    
+    cld = schema.to_cloud(node)
     
     ::PoolParty::Provision::BootStrapper.new( node[:ip], :cloud => cld )
     ::PoolParty::Provision::DrConfigure.new( node[:ip], :cloud => cld )

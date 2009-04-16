@@ -1,38 +1,26 @@
 #!/usr/bin/env ruby
-$:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
-require "poolparty"
-require "poolpartycl"
+require "rubygems"
+require 'net/http'
+require 'json'
+require "poolparty/lite"
 
-available_monitors = PoolParty::Monitors.available_monitors
-o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
-  opts.on('-n name', '--name name', 'Host name')    { |h| optioner.hostname h }
-  opts.on('-l', '--no-shell', 'No shell') {optioner.noshell true}
-end
+vote_for = ARGV.shift || "none" # or pending or terminated
+schema = ::PoolParty.load_cloud_from_json(ARGV.shift)  #TODO: smarter option parser
+remote_base_name = schema.options.remote_base.split('::')[-1].camelcase
+remoter_base = PoolParty::Remote.module_eval(remote_base_name)
 
-o.loaded_clouds.each do |cloud|
-  
-  with_cloud(cloud) do
+remoter_base.send(:describe_instances, schema.options).each do |node|
+  require "ostruct"
+  require "poolparty/provision/boot_strapper"
+  require "poolparty/provision/dr_configure"
+  require "#{::File.dirname(__FILE__)}/../vendor/gems/suitcase/lib/suitcase"
+  require "poolparty/poolparty/key"
+
+  unless node[:ip] == "not.assigned"
+    cld = schema.to_cloud(node)
     
-    @nonprovisioned_nodes = list_of_running_instances.map {|a| a.name } - cloud.get_current_nodes
-    # @tp = ThreadPool.new(10)
-    @nonprovisioned_nodes.each do |node|
-      vputs "Provisioning #{node}"
-      next if node == "master"
-      # @tp.process do
-      str = returning Array.new do |s|
-        s << cloud.dependency_resolver_command
-      end.join(";")
-  
-      node_id = node.gsub(/node/, '')
-      
-      cmd = ". /etc/profile && #{str};server-provision -n #{cloud.name} -i #{node_id};#{str}"
-      running_cmd = "ps aux | grep -v grep | grep \"server-provision -n #{cloud.name} -i #{node_id};\""
-      
-      vputs "Executing #{cmd}"
-      running = %x[#{running_cmd}]
-      `#{cmd}` if running.chomp.empty?
-    end
-    # @tp.join
-  end  
+    ::PoolParty::Provision::BootStrapper.new( node[:ip], :cloud => cld )
+    ::PoolParty::Provision::DrConfigure.new( node[:ip], :cloud => cld )
+  end
   
 end

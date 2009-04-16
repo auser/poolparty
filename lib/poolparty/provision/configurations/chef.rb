@@ -14,7 +14,9 @@ module PoolParty
       def self.files_to_upload
         [ 
           "#{Default.tmp_path}/dr_configure/chef/solo.rb",
-          "#{Default.tmp_path}/dr_configure/chef/dna.json"
+          "#{Default.tmp_path}/dr_configure/chef/dna.json",
+          "#{Default.base_config_directory}/chef/solo.rb",
+          "#{Default.base_config_directory}/chef/dna.json"
         ]
       end
     end

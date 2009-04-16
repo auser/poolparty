@@ -9,11 +9,7 @@ module PoolParty
     end
     
     plugin :chef do
-      def before_load(o, &block)        
-        bootstrap_gems "chef", "ohai"
-        bootstrap_commands [
-          "mkdir -p /etc/chef/cookbooks /etc/chef/cache"
-        ]
+      def before_load(o, &block)
       end
       
       def loaded o={}, &block
@@ -92,8 +88,6 @@ module PoolParty
             ::Suitcase::Zipper.add_content_as(@recipe.options.to_json, "dna.json", "chef")
             
             configure_commands ["cp -f /var/poolparty/dr_configure/chef/dna.json /etc/chef/dna.json"]
-            
-            # @json_file = "#{Default.tmp_path}/dr_configure/dna.json"
           end
         end
       end
@@ -136,8 +130,16 @@ file_cache_path  "/etc/chef"
       def added_recipes
         @added_recipes ||= []
       end
-            
+      
+      def before_bootstrap
+        puts "Called before_bootstrap in chef"
+        bootstrap_gems "chef", "ohai"
+        bootstrap_commands [
+          "mkdir -p /etc/chef/cookbooks /etc/chef/cache"
+        ]
+      end
       def before_configure
+        puts "Calling before_configure in Chef (dir: #{::File.directory?("/etc/chef")})"
         config
         json
         
