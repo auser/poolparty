@@ -9,6 +9,8 @@ end
 
 o.loaded_clouds.each do |cld|
   # If an IP or DNS name is given, bootstrap that node, otherwise, bootstrap all running nodes.
+  ::FileUtils.rm_rf "#{Default.tmp_path}/" unless o.testing?
+  
   nodes = !o.unflagged_args.empty? ?  o.unflagged_args : cld.remote_instances_list.collect {|inst| inst.ip if inst.running? }.compact
   if nodes.empty?
     puts "No nodes to configure"

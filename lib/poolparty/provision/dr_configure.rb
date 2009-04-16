@@ -19,7 +19,7 @@ module PoolParty
      end
           
      attr_accessor :full_keypair_path
-     def initialize(host, opts={}, &block)
+     def initialize(host, opts={}, &block)            
        self.class.defaults.merge(opts).to_instance_variables(self)
        @target_host = host
        @configurator = "::PoolParty::Provision::#{dependency_resolver.capitalize}".constantize
