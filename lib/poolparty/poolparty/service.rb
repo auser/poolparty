@@ -18,7 +18,7 @@ module PoolParty
       
       meth = <<-EOM
         def __#{lowercase_class_name}(opts={}, &block)
-          PoolParty::#{lowercase_class_name.camelcase}Class.new(opts, &block)
+          plugin_store << PoolParty::#{lowercase_class_name.camelcase}Class.new(opts, &block)
         end
         alias :#{lowercase_class_name} :__#{lowercase_class_name}
       EOM

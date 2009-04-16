@@ -2,10 +2,12 @@ module PoolParty
   class Base
     plugin :poolparty_base_haproxy do
       
-      def enable
+      def before_configure
         # We need the haproxy package
         ::Suitcase::Zipper.add("#{::File.dirname(__FILE__)}/../../../vendor/chef/apache2", "chef/cookbooks")
-        
+      end
+      
+      def enable
         has_chef_recipe 'apache2'
         has_service "apache2"
         
