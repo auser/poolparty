@@ -43,8 +43,8 @@ module PoolParty
           
           templates o[:templates] if o[:templates]
           
-          recipe_files << basedir
-          ::Suitcase::Zipper.add(basedir, "chef/cookbooks")
+          # recipe_files << basedir
+          # ::Suitcase::Zipper.add(basedir, "chef/cookbooks")
         # TODO: Enable neat syntax from within poolparty
         
         else
@@ -101,8 +101,8 @@ module PoolParty
       def include_recipes *recps
         unless recps.empty?
           recps.each do |rcp|
-            Dir[::File.expand_path(rcp)].each do |f|              
-              added_recipes << f
+            Dir[::File.expand_path(rcp)].each do |f|
+              ::Suitcase::Zipper.add(f, "chef/cookbooks")
             end            
           end
         end
@@ -142,18 +142,11 @@ file_cache_path  "/etc/chef"
         json
         
         if ::File.directory?("/etc/chef")
-          ::Suitcase::Zipper.add("/etc/chef/cookbooks/*", "chef/recipes")
+          ::Suitcase::Zipper.add("/etc/chef/cookbooks/*", "chef/cookbooks")
           ::Suitcase::Zipper.add("/etc/chef/dna.json", "chef/json")
           ::Suitcase::Zipper.add("/etc/chef/solo.rb", "chef/")
         end
-
-        added_recipes.each do |rcp|
-          ::Suitcase::Zipper.add(rcp, "chef/cookbooks")
-        end
-
-        recipe_files.each do |rf|
-          ::Suitcase::Zipper.add(rf, "chef/recipes")
-        end
+        
       end
       
     end
