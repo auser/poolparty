@@ -14,7 +14,7 @@ module PoolParty
     
     virtual_resource(:deploy_directory) do
       
-      def loaded(opts={}, &block)        
+      def loaded(opts={}, &block)
         package_deploy_directory
         add_unpack_directory
       end
@@ -32,8 +32,8 @@ module PoolParty
         end
         
         if owner?
-          has_exec(:name => "chown-#{name}", :cwd => ::File.dirname( creates_dir )) do
-            command "chown #{owner} * -R"
+          has_exec(:name => "chown-#{name}") do
+            command "chown #{owner} -R #{to}"
           end
         end
         
