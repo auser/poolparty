@@ -8,9 +8,9 @@ o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
   opts.on('-i num', '--num i', 'Instance number')    { |i| optioner.inst_num i.to_i }
 end
 
-vote_for = o.unflagged_args || "none"
+vote_for = o.unflagged_args.shift || "none"
 
-schema = ::PoolParty.load_cloud_from_json(ARGV.shift)  #TODO: smarter option parser
+schema = ::PoolParty.load_cloud_from_json(o.unflagged_args.shift)  #TODO: smarter option parser
 remote_base_name = schema.options.remote_base.split('::')[-1].camelcase
 remoter_base = PoolParty::Remote.module_eval(remote_base_name)
 
