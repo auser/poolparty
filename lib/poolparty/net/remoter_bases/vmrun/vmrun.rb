@@ -22,71 +22,74 @@ module PoolParty
     class Vmrun < Remote::RemoterBase
       include Dslify
 
-      # FIXME: replace this hash with a real method to determine the ip using arp
-       DEFAULT_NETWORK_ADDRESSES = {'00:0c:29:55:f1:0f'=> '192.168.4.104',
-                                    '00:0c:29:2e:ad:db'=> '172.16.68.130'}
-                                          
       default_options(
-        :path => 'vmrun',
+        :path_to_binary => 'vmrun',
         :images_repo_path => ::File.expand_path("/Documents/Virtual_Machines.localized/"),
         :default_cli_options => 'gui',
         :terminate_options => 'soft',
-        :vmx_file => 'need to specify a vmx_file',
-        :network_addresses => DEFAULT_NETWORK_ADDRESSES
+        :vmx_file => 'need to specify a vmx_file'
       )
-
+      
       def initialize(parent=nil, opts={}, &block)
         dsl_options opts
         name = ::File.basename(opts[:vmx_file], '.vmx') if opts[:vmx_file]
+        instance_eval &block if block
         super(parent, &block)
       end
       
       #terminate all running instances
       def self.terminate!(o={})
         Vmrun.describe_instances(o).each do |vmxf|
-           Vmrun.terminate_instance! vmxf
+           Vmrun.terminate_instance! o.merge(:vmx_file => vmxf)
         end
       end
 
       def self.launch_new_instance!(o={})
-        Vmrun.new(o).launch_new_instance(o)
+        Vmrun.new(parent, o).launch_new_instance!
       end
-      def launch_new_instance!(o={})
-        puts cmd = "#{path} start #{vmx_file}"
-        after_launched if run_local cmd
+      def launch_new_instance!
+        cmd = "#{path_to_binary} start \"#{vmx_file}\""
+        if run_local cmd        
+          describe_instance options.merge({
+            :mac_address => mac_address,
+            :ip => ip
+          })
+        end
       end
 
       # Terminate an instance by id
       def self.terminate_instance!(o)
-        raise "You must provide a valid vmx path"  if !o[:vmx_file] || !::File.exists?(o[:vmx_file])
-        `#{path} stop #{o[:vmx_file]}`
+        Vmrun.new(parent, o).terminate_instance!
       end
-      def terminate_instance!(o)
-        dsl_options(o)
-        before_shutdown
-        run_local("#{path} stop #{vmx} #{terminate_options} ")
+      def terminate_instance!(o={})
+        dsl_options o
+        run_local("#{path_to_binary} stop \"#{vmx_file}\" #{terminate_options} ")
       end
 
       # Describe an instance's status, must pass :vmx_file in the options
       def self.describe_instance(_vmx_file=nil, o={})
         vmx_file = _vmx_file || o[:vmx_file] || Vmrun.describe_instances.first
-        p vmx_file
-        Vmrun.new( o.merge(:vmx_file=>_vmx_file) ).describe_instance(_vmx_file)
+        Vmrun.new(parent, o.merge(:vmx_file=>_vmx_file) ).describe_instance(_vmx_file)
       end
       def describe_instance(o={})
-        {:running? => run_local("#{path} list").grep( ::File.expand_path(vmx_file) ).empty?,
-        :mac_addresses => mac_addresses,
-        :ip => ip}
+        {
+          :status => (run_local("#{path_to_binary} list").grep( ::File.expand_path(vmx_file) ).empty? ? "terminated" : "running"),
+          :mac_addresses => mac_address,
+          :status => "running",
+          :ip => ip,
+          :internal_ip => ip
+          # :keypair => keypair
+        }
       end
 
       def self.describe_instances(o={})
-        output = run_local "#{default_options.merge(o).path} list"
-        lines = output.split("\n")
-        lines.shift
-        lines #todo, reuturn array of vmrun_instances
+        Vmrun.new(parent, o).describe_instances
       end
       def describe_instances(o={})
-        self.class.describe_instances(o)
+        output = run_local "#{path_to_binary} list"
+        lines = output.split("\n")
+        lines.shift
+        lines.each {|vmx_file| describe_instance(o.merge({:vmx_file => vmx_file})) }
       end
 
       # After launch callback
@@ -102,7 +105,6 @@ module PoolParty
 
       # vmrun specific methods
       def self.run_local(cmd, o={:raise_on_error=>false, :verbose=>true})
-        puts "run_local => #{cmd}" if o[:verbose]
         output = `#{cmd}`
         unless $?.success?
           $stderr.puts "FAILED: #{cmd}\n code = #{$?}"
@@ -114,22 +116,10 @@ module PoolParty
         self.class.run_local(cmd, o)
       end
 
-      #FIXME: this should query the network give a mac address, for now, we will mock it  
-      def ip
-        @ip ||= network_addresses.values_at(mac_addresses).pop
-        # result = run_local("arp -a|grep #{mac_addresses}").match(/\((\w+:.*)\)/)
-        # result[1] if result  #TODO  
-      end
-      def mac_addresses
-        @mac_address ||= vmx_data.match(/ethernet\d{1,2}.generatedAddress = "(\w+:.*)"/)[1]
-      end
-      def vmx_data
-        @vmx_data ||= open(vmx_file).read
-      end
       def id(vfile)
         vmx_file(vfile)
       end
-
+      
       ## method's to override default RemoteInstance
       def instance_id
         vmx_file

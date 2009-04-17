@@ -4,17 +4,16 @@ module PoolParty
     class VmwareInstance
       attr_accessor :ip, :mac_address, :vmx_file
       
-      def initialize(opts={})
-        @status = opts[:status] || 'running'
+      def initialize(vmx_file=nil)
         @ip = opts[:ip]
         @vmx_file = opts[:vmx_file]
-        # super
+        dsl_options opts        
       end
       
-      def my_cloud
-        Vmrun.new
-      end
       
+      def status
+        "running"
+      end      
       # Is this instance running?
       def running?
         true
@@ -31,8 +30,20 @@ module PoolParty
       def terminated?
         false
       end
-    end
-    
+      def ip
+        @ip ||= %x[arp -a].select {|a| a if a =~ /#{mac_address.macify}/}.first[/(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})/]
+      end
+      def mac_address
+        @mac_address ||= parse_vmx_file[:"ethernet0.generatedAddress"]
+      end
+      def vmx_data
+        @vmx_data ||= open(vmx_file).read
+      end
+      def parse_vmx_file
+        vmx_data.to_hash
+      end
+      
+    end    
     
   end
 end

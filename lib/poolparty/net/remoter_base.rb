@@ -25,7 +25,7 @@ module PoolParty
     class RemoterBase
       include  ::PoolParty::Remote
       
-      def initialize(prnt = nil)
+      def initialize(prnt = nil, opts={}, &block)
         @parent = prnt
       end
       
@@ -85,7 +85,7 @@ module PoolParty
         500.times do |i|
           if @inst.status =~ /pending/
             sleep(2)
-            @inst = describe_instance(@inst)          
+            @inst = describe_instance(@inst)
           end
         end
         when_instance_is_responding @inst do
@@ -94,7 +94,7 @@ module PoolParty
         end
         @inst
       end
-      def launch_instance!(o={}, &block); self.class.launch_instance!(self.options.merge(o), &block);end
+      def launch_instance!(o={}, &block);self.class.launch_instance!(self.options.merge(o), &block);end
 
       # Called after an instance is launched
       def self.after_launch_instance(instance=nil);end
