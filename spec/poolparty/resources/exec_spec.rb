@@ -17,7 +17,7 @@ describe "exec" do
       @exec.command.should == "/usr/bin/ls -l /var/www"
     end
     it "should have a path" do
-      @exec.path.should == "/usr/bin:/bin:/usr/local/bin:$PATH"
+      @exec.path.should == ["/usr/bin:/bin:/usr/local/bin:$PATH"]
     end
     describe "into PuppetResolver" do
       before(:each) do
@@ -30,7 +30,7 @@ describe "exec" do
         @compiled.should match(/command => "\/usr\/bin\/ls -l \/var\/www"/)
       end
       it "have the path set in the puppet output" do
-        @compiled.should match(/path => "\/usr\/bin:\/bin:\/usr\/local\/bin:\$PATH"/)
+        @compiled.should match(/path => \[ "\/usr\/bin:\/bin:\/usr\/local\/bin:\$PATH" \]/)
       end
     end
   end

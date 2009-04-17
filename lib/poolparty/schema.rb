@@ -40,6 +40,23 @@ module PoolParty
         @hsh.send(sym, *args, &block)
       end
     end
+    
+    def to_cloud(node={})
+      require "ostruct"
+      
+      $pool_specfile = "/etc/poolparty/clouds.rb"
+      
+      remoter_base = PoolParty::Remote.module_eval(options.remote_base.split('::')[-1].camelcase)
+      # TODO: Seriously, make this sexier
+      
+      cld = OpenStruct.new(options)
+      cld.keypair = ::PoolParty::Key.new("/etc/poolparty/#{node[:keypair]}")
+      cld.remoter_base = remoter_base
+      cld.build_and_store_new_config_file = "/etc/poolparty/clouds.json"
+      cld.dependency_resolver = PoolParty.module_eval(options.dependency_resolver.split("::")[-1].camelcase).send(:new)
+      
+      cld
+    end
   end
 end
 # class Hash

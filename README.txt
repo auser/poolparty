@@ -9,9 +9,7 @@ with language such as:
 
 pool :cloud do
  cloud :app do
-  apache do
-   has_virtualhost(:name => "/var/www/sites/poolpartyrb.com")
-  end
+   instances 2..10
  end
 end
 

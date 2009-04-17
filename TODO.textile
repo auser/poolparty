@@ -1,3 +1,4 @@
+# REORDER RESOURCES TO RETAIN ORDER
 # Remove Monitors from cloud.rb
 # Remove Ruby2Ruby dependency
 # Move server binaries to use props_hash
@@ -5,3 +6,8 @@
 # task for "rake clean_pkg && rake gemspec && rake build && rm -rf /tmp/poolparty/ && rm -rf vendor/dependencies/"
 # Add Ohai plugin to expose poolparty data
 # Change all the copying to /tmp/poolparty statements to be handled with zipper
+# Change line in file from a native resource to be a plugin (like git)
+# Add puppet/chef syntax checker
+# Place suitcase and dependencie files in ~/.poolparty/tmp-poolname/ instead of /tmp/
+# Remove vendor/dependencies from the gemspec... grrr
+# XMPP

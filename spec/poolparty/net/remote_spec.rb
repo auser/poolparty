@@ -174,11 +174,6 @@ describe "Remote" do
         @inst.stub!(:instance_id).and_return "12345"
         @tc.stub!(:nonmaster_nonterminated_instances).and_return [@inst]
       end
-      it "should reject the master instance from the list of instances (we should never shut down the master unless shutting down the cloud)" do
-        @master = @tc.list_of_running_instances.select {|a| a.master? }.first
-        @tc.should_not_receive(:terminate_instance!).with(@master).and_return true
-        @tc.request_termination_of_non_master_instance
-      end
       it "should call terminate on an instance" do
         @tc.should_receive(:terminate_instance!).with("12345").and_return true
         @tc.request_termination_of_non_master_instance
@@ -189,7 +184,6 @@ describe "Remote" do
         setup
         @tc.stub!(:copy_ssh_app).and_return true
         @tc.stub!(:prepare_reconfiguration).and_return "full"
-        PoolParty::Provisioner.stub!(:reconfigure_master).and_return true
         @tc.stub!(:wait).and_return true
         @tc.stub!(:nonmaster_nonterminated_instances).and_return response_list_of_instances
         @inst = stub_instance(9, "running")

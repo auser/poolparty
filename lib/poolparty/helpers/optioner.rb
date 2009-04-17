@@ -1,7 +1,7 @@
 require 'optparse' 
 require "poolparty"
 require "poolpartycl"
-require 'rdoc/usage'
+# require 'rdoc/usage'
 require 'ostruct'
 require 'date'
 

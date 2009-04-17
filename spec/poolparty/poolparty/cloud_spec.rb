@@ -100,11 +100,11 @@ describe "Cloud" do
         end
         cloud(:paddy_wack).parent.should == pool(:knick_knack)
       end
-      it "should have services in an hash" do
-        @cloud.services.class.should == Hash
+      it "should have services in an OrderedHash" do
+        @cloud.services.class.should == OrderedHash
       end
-      it "should have no services in the array when there are no services defined" do
-        @cloud.services.size.should == 0
+      it "should have no services (other than the base ones) in the array when there are no services defined" do
+        @cloud.services.size.should == 4
       end
       it "should respond to a options method (from Dslify)" do
         @cloud.respond_to?(:options).should == true
@@ -171,10 +171,9 @@ describe "Cloud" do
               keypair "ney"
               cloud :app do
               end
-            end
+            end            
             clouds[:app]._keypairs.first.stub!(:exists?).and_return true
-            clouds[:app]._keypairs.first.stub!(:full_filepath).and_return "ney"
-            clouds[:app].keypair.full_filepath.should == "ney"
+            clouds[:app]._keypairs.size.should == 2
           end
           it "should default to ~/.ssh/id_rsa if none are defined" do
             File.stub!(:exists?).with("#{ENV["HOME"]}/.ssh/id_rsa").and_return(true)
@@ -195,6 +194,7 @@ describe "Cloud" do
                   hello my lady
                 EOE
               end
+              enable :haproxy
               has_gempackage(:name => "poolparty")
               has_package(:name => "dummy")            
             end
@@ -204,7 +204,7 @@ describe "Cloud" do
             @cloud.respond_to?(:build_manifest).should == true
           end
           it "should make a new 'haproxy' class" do
-            PoolpartyBaseHaproxyClass.should_receive(:new).once
+            @cloud.should_receive(:haproxy)
             @cloud.add_poolparty_base_requirements
           end
           it "should have 3 resources" do            
@@ -213,7 +213,7 @@ describe "Cloud" do
           end
           it "should receive add_poolparty_base_requirements before building the manifest" do
             @cloud.should_receive(:add_poolparty_base_requirements).once
-            @cloud.build_manifest
+            @cloud.after_create
           end
           after(:each) do
             context_stack.pop
@@ -254,17 +254,19 @@ describe "Cloud" do
                 @cloud.services.size.should > 0
               end
               it "should store the class heartbeat" do
-                @cloud.services.map {|k,v| k}.include?(:poolparty_base_heartbeat_class).should == true
+                @cloud.services.keys.include?(:poolparty_base_heartbeat_class).should == true
               end
-              it "should have an array of resources on the heartbeat" do
-                @cloud.services.class.should == Hash
+              it "should have an array of services on the heartbeat" do
+                @cloud.services.class.should == OrderedHash
               end
               describe "resources" do
                 before(:each) do
+                  reset!
                   @cloud8 = cloud :tester do
                     test_service
                   end
-                  @service = clouds[:tester].services.test_service_class
+                  tskey = clouds[:tester].services.keys.first
+                  @service = clouds[:tester].services[tskey].first
                   @files = @service.resource(:file)
                 end
                 it "should have a file resource" do
@@ -294,94 +296,25 @@ describe "Cloud" do
               @manifest.class.should == String
             end
             it "should have a comment of # file in the manifest as described by the has_file" do
-              @manifest.should =~ /file \"\/etc\/httpd\/http.conf\" do/
+              @manifest.should =~ /template \"\/etc\/httpd\/http.conf\" do/
             end
             it "should have the comment of a package in the manifest" do
               @manifest.should =~ /package "dummy" do/
             end
             it "should have the comment for haproxy in the manifest" do
-              @manifest.should =~ /haproxy/            
+              @manifest.should =~ /haproxy/
             end
             it "should include the poolparty gem" do
               pending
             end
           end
-          describe "prepare_for_configuration" do
-            before(:each) do
-              @cloud.stub!(:copy_ssh_key).and_return true
-              @cloud.stub!(:before_configuration_tasks).and_return []
-            end
-            it "should make_base_directory" do
-              @cloud.should_receive(:make_base_directory).at_least(1)
-            end
-            it "should copy_misc_templates" do
-              @cloud.should_receive(:copy_misc_templates).once
-            end
-            describe "copy_custom_templates" do
-              it "should receive copy_custom_templates" do
-                @cloud.should_receive(:copy_custom_templates).once
-              end
-              it "test to see if the directory Dir.pwd/templates exists" do
-                ::File.should_receive(:directory?).with("#{Dir.pwd}/templates").and_return false
-                ::File.stub!(:directory?).and_return true
-                @cloud.copy_custom_templates
-              end
-              it "copy each file to the template directory" do
-                Dir.stub!(:[]).with("#{Dir.pwd}/templates/*").and_return ["pop"]
-                ::File.stub!(:directory?).with("#{Dir.pwd}/templates").and_return true
-                ::File.stub!(:directory?).and_return true
-                @cloud.should_receive(:copy_template_to_storage_directory).with("pop", true).once
-                @cloud.stub!(:copy_template_to_storage_directory).and_return true
-                @cloud.copy_custom_templates
-              end
-            end
-            it "should copy_custom_monitors" do
-              @cloud.should_receive(:copy_custom_monitors).once
-            end
-            it "should call before_configuration_tasks callback" do
-              @cloud.should_receive(:before_configuration_tasks).once
-            end
-            it "should call call write_unique_cookie" do
-              @cloud.should_receive(:write_unique_cookie).once
-            end
-            describe "copy_custom_monitors" do
-              before(:each) do                
-                Default.stub!(:custom_monitor_directories).and_return ["/tmp/monitors/custom_monitor.rb"]
-                Dir.stub!(:[]).with("#{Default.custom_monitor_directories}/*.rb").and_return ["/tmp/monitors/custom_monitor.rb"]
-                @cloud.stub!(:copy_misc_templates).and_return true
-                @cloud.stub!(:copy_file_to_storage_directory).and_return true
-              end
-              it "should call make_directory_in_storage_directory with monitors" do                
-                @cloud.should_receive(:make_directory_in_storage_directory).with("monitors").once
-                @cloud.stub!(:make_directory_in_storage_directory)
-              end
-              it "should copy the monitors into the monitor directory" do
-                @cloud.should_receive(:copy_file_to_storage_directory).with("/tmp/monitors/custom_monitor.rb", "monitors").at_least(1)
-                @cloud.stub!(:copy_file_to_storage_directory).and_return true
-              end
-              after(:each) do
-                @cloud.copy_custom_monitors
-              end
-            end
-            it "should store_keys_in_file" do
-              @cloud.should_receive(:store_keys_in_file).once
-            end
-            it "should call save! on Script" do
-              pending
-            end
-            it "should copy_ssh_key" do
-              @cloud.should_receive(:copy_ssh_key).once
-            end
-            after(:each) do
-              @cloud.prepare_for_configuration
-            end
-          end
+
           describe "building with an existing manifest" do
             before(:each) do
               @file = "/etc/puppet/manifests/nodes/nodes.pp"
               @file.stub!(:read).and_return "nodes generate"
-              ::FileTest.stub!(:file?).with("/etc/puppet/manifests/classes/poolparty.pp").and_return true
-              @cloud.stub!(:open).with("/etc/puppet/manifests/classes/poolparty.pp").and_return @file
+              ::FileTest.stub!(:file?).with("/etc/poolparty/poolparty.pp").and_return true
+              @cloud.stub!(:open).with("/etc/poolparty/poolparty.pp").and_return @file
             end
             it "should not call resources_string_from_resources if the file /etc/puppet/manifests/nodes/nodes.pp exists" do
               @cloud.should_not_receive(:add_poolparty_base_requirements)
@@ -390,40 +323,6 @@ describe "Cloud" do
             it "should build from the existing file" do
               @cloud.build_manifest.should == "nodes generate"
             end
-          end
-        end
-        describe "minimum_runnable_options" do
-          it "should be an array on the cloud" do
-            @cloud.minimum_runnable_options.class.should == Array
-          end
-          ["keypair","minimum_instances","maximum_instances",
-            "expand_when","contract_when","set_master_ip_to"].each do |k|
-            eval <<-EOE
-              it "should have #{k} in the minimum_runnable_options" do
-                @cloud.minimum_runnable_options.include?(:#{k}).should == true
-              end
-            EOE
-          end
-          it "should include the custom_minimum_runnable_options" do
-            @cloud.stub!(:custom_minimum_runnable_options).and_return [:blank]
-            @cloud.minimum_runnable_options.include?(:blank).should == true
-          end
-        end
-        describe "unique_cookie" do
-          it "should have the method generate generate_unique_cookie_string" do
-            @cloud.respond_to?(:generate_unique_cookie_string).should == true
-          end
-          it "should call hexdigest to digest/sha" do
-            Digest::SHA256.should_receive(:hexdigest).with("#{@cloud.keypair.basename}#{@cloud.name}").and_return "blaaaaah"
-            @cloud.generate_unique_cookie_string
-          end
-          it "should generate the same cookie string every time" do
-            older = @cloud.generate_unique_cookie_string
-            old = @cloud.generate_unique_cookie_string
-            new_one = @cloud.generate_unique_cookie_string
-            older.should == old
-            old.should == new_one
-            new_one.should == older
           end
         end
       end

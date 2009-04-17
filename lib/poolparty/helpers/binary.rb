@@ -15,15 +15,18 @@ module PoolParty
     end
   end
   
-  def print_with_nice_printer(header=nil, strs=[])
-    returning NicePrinter.new do |printer|
-      printer.header
-      printer.center(header) if header
-      strs.each {|st| printer << st if st}
-      printer.footer
-    end.print
+  # Helper to print with the nice printer
+  def print_with_nice_printer(header=nil, strs=[], &block)
+    printer = NicePrinter.new
+    printer.header
+    printer.center(header) if header
+    yield(printer)
+    strs.each {|st| printer << st if st}
+    printer.footer
+    printer.print
   end
   
+  # Keep the pool_specfile 
   def pool_specfile
     $pool_specfile
   end
@@ -44,12 +47,14 @@ module PoolParty
       # These are the locations the spec file can be before the cloud
       # aborts because it cannot load the cloud
       def get_existing_spec_location
-        [
-            "#{Default.remote_storage_path}/#{Default.default_specfile_name}", 
-            "#{Default.default_specfile_name}",            
-            "#{Default.base_config_directory}/#{Default.default_specfile_name}",            
-            Dir["#{Dir.pwd}/*/clouds.rb"],
-            ENV["POOL_SPEC"]
+        [ 
+          "#{Dir.pwd}/#{Default.default_specfile_name}",
+          Dir["#{Dir.pwd}/*/#{Default.default_specfile_name}"],
+          "#{Default.remote_storage_path}/#{Default.default_specfile_name}", 
+          "#{Default.default_specfile_name}",            
+          "#{Default.base_config_directory}/#{Default.default_specfile_name}",
+          "#{Default.poolparty_home_path}/#{Default.default_specfile_name}",          
+          ENV["POOL_SPEC"]
         ].flatten.reject {|a| a.nil?}.reject do |f|
           f unless ::File.readable?(f)
         end.first

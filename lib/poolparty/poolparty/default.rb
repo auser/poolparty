@@ -16,6 +16,7 @@ module PoolParty
       :maximum_instances => 5,
       :user => "root", # This should change here
       :base_keypair_path => "#{ENV["HOME"]}/.ec2",
+      :base_ssh_path => "#{ENV["HOME"]}/.ssh",
       :tmp_path => "/tmp/poolparty",
       :poolparty_home_path => "#{ENV["HOME"]}/.poolparty",
       :remote_storage_path => "/var/poolparty",
@@ -30,9 +31,13 @@ module PoolParty
       :vendor_path => "#{::File.dirname(__FILE__)}/../../../vendor",
       :port => "80",
       :forwarding_port => "8080",
+      :monitor_port => 8081,
       :proxy_mode => "http",
       :messenger_client_port => 7050,
+      :butterfly_port => 8642,
       :minimum_runtime  => 3000, #50.minutes in seconds
+      :contract_when => "load < 0.25",
+      :expand_when => "load > 0.9",
       # :agent_pid_file => ::File.readable?("/var/run/poolparty_agent.pid") ? "/var/run/agent.pid" : "#{Dir.pwd}/agent.pid",
       # :agent_port => 8081,
       # EC2 Options
@@ -128,12 +133,12 @@ module PoolParty
             "/var/log/poolparty"
         ].select do |dir|
           dir if viable_directory?(dir)
-        end.first || ::File.join(Dir.pwd, "log")
+        end.first
       end
       # Assume the logs will be at the pool.log location within the 
       # logger_location set above
       def pool_logger_location
-        ::File.join(logger_location, "pool.log")
+        ::File.join(logger_location, "poolparty.log")
       end
       def custom_monitor_directories
         [

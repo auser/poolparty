@@ -17,6 +17,7 @@ end
 response = ec2.describe_instances
 
 public_dns_names = response.reservationSet.item.first.instancesSet.item.collect do |instance|
+  p instance
    instance.dnsName if instance.instanceState.name == 'running'
 end.compact
 

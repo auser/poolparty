@@ -13,6 +13,17 @@ class Hash
     end
   end
   
+  # extracted from activesupport
+  # Returns an array of the values at the specified indices:
+  #
+  #   hash = HashWithIndifferentAccess.new
+  #   hash[:a] = "x"
+  #   hash[:b] = "y"
+  #   hash.values_at("a", "b") # => ["x", "y"]
+  def values_at(*indices)
+    indices.collect {|key| self[key]}
+  end
+  
   #TODO: deprecate
   # def extract!(&block)
   #   o = Hash[*select(&block).flatten]
@@ -45,6 +56,16 @@ class Hash
     MyOpenStruct.new(m)
   end
   def method_missing(sym, *args, &block)
-    has_key?(sym) ? fetch(sym) : super
+    if has_key?(sym)
+      fetch(sym)
+    elsif has_key?(sym.to_s)
+      fetch(sym.to_s)
+    else
+      super
+    end
+  end
+  def next_sorted_key(from)
+    idx = (size - keys.sort.index(from))
+    keys.sort[idx - 1]
   end
 end

@@ -1,0 +1,15 @@
+#!/usr/bin/env ruby
+$:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
+require "poolparty/lite"
+
+status = ARGV.shift || "running" # or pending or terminated
+schema = ::PoolParty.load_cloud_from_json(ARGV.shift)  #TODO: smarter option parser
+
+remoter_base = schema.options.remote_base
+
+instances = Kernel.const_get(remoter_base.camelcase).send :describe_instances, schema.options
+
+print instances.select {|inst| inst.status == status }.join("\t")
+
+# usage:
+# server-list-instances status

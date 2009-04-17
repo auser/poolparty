@@ -28,9 +28,16 @@ module PoolParty
       end
       def loaded(o={}, &block)
       end
+      # Callbacks available to plugins
+      def after_create
+      end
       def before_bootstrap
       end
+      def after_bootstrap
+      end
       def before_configure
+      end
+      def after_configure
       end
       def enable
       end
@@ -47,8 +54,12 @@ module PoolParty
         Provision::BootStrapper.class_commands << cmds
       end
       
+      def configure_commands cmds
+        Provision::DrConfigure.class_commands << cmds
+      end
+      
       def self.inherited(subclass)
-        method_name = subclass.to_s.top_level_class.gsub(/pool_party_/, '').gsub(/_class/, '').downcase.to_sym        
+        method_name = subclass.to_s.top_level_class.gsub(/pool_party_/, '').gsub(/_class/, '').downcase.to_sym
         add_has_and_does_not_have_methods_for(method_name)
       end
       

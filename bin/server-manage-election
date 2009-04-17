@@ -1,0 +1,67 @@
+#!/usr/bin/env ruby
+# Call server-list-active and get the neighborhood ips back
+# then call each of those at the port of butterfly and retain the json
+# From there, mash it up together and call server-handle-election
+# to handle the election process
+
+# Error codes
+# 1 -> clouds.json was not loaded
+# 2 -> server-list-active didn't run
+require "rubygems"
+require 'net/http'
+require 'json'
+require "poolparty/lite"
+
+status = ARGV.shift || "running" # or pending or terminated
+schema = ::PoolParty.load_cloud_from_json(ARGV.shift)  #TODO: smarter option parser
+
+def get_json_stats_from(ip, port)
+  Net::HTTP.start(ip, port) {|http| http.get('/stats.json') }.body rescue "{}"
+end
+ 
+ips = %x[/usr/bin/server-list-active internal_ip].split("\t")
+
+exit(2) unless ips
+
+minimum_instances = schema.options.minimum_instances
+maximum_instances = schema.options.maximum_instances
+
+if ips.size < minimum_instances
+  %x[/usr/bin/server-cloud-elections expand]
+  puts "Cloud is too small, need to expand"
+  exit(0)
+elsif ips.size > maximum_instances
+  %x[/usr/bin/server-cloud-elections contract]
+  puts "Cloud is too big, need to contract"
+  exit(0)
+end
+
+total_json_hash = {}
+ips.each do |ip|
+  node_hsh = JSON.parse(get_json_stats_from(ip, 8642))
+  total_json_hash.merge!(node_hsh) if node_hsh
+end
+
+candidates = {:expand => 0, :contract => 0, :elected_action => nil}
+candidates.each do |action, ballots|
+  total_json_hash.each do |ip, node_hsh|
+    candidates[action]+=1 if node_hsh["nominations"] && node_hsh["nominations"].include?(action.to_s)
+    candidates[:elected_action] = node_hsh["elected_action"]
+  end
+end
+
+puts total_json_hash.inspect
+puts candidates.inspect
+
+# Expand the cloud if 50+% of the votes are for expansion
+# Contract the cloud if 51+% of the votes are for contraction
+@elected_action = candidates[:elected_action] || "none"
+if (candidates[:expand] - candidates[:contract])/total_json_hash.size > 0.5
+  %x[/usr/bin/server-cloud-elections expand] unless @elected_action == "expand"
+  @elected_action = "expand"
+elsif (candidates[:contract] - candidates[:expand])/total_json_hash.size > 0.5
+  %x[/usr/bin/server-cloud-elections contract] unless @elected_action == "contract"
+  @elected_action = "contract"
+end      
+
+puts "Elected action: #{@elected_action}"

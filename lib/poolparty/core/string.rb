@@ -53,8 +53,8 @@ class String
   # Refactor this guy to get the class if the class is defined, and not always create a new one
   # although, it doesn't really matter as ruby will just reopen the class
   def class_constant(superclass=nil, opts={}, &block)
-    symc = ((opts && opts[:preserve]) ? ("#{self.camelcase}Classs") : "PoolParty#{self.camelcase}Classs").classify
-    
+    symc = ((opts && opts[:preserve]) ? ("#{self.camelcase}Class") : "PoolParty#{self.camelcase}Class").classify
+
     kla=<<-EOE
       class #{symc} #{"< #{superclass}" if superclass}
       end
@@ -67,19 +67,50 @@ class String
     klass
   end
   
-  def camel_case
+  def new_resource_class(superclass=nil, opts={}, &block)
+    symc = "::PoolParty::Resources::#{self.camelcase}"
+    kla=<<-EOE
+      class #{symc} < ::PoolParty::Resources::Resource
+      end
+    EOE
+    
+    Kernel.module_eval kla
+    klass = symc.constantize
+    klass.module_eval &block if block
+
+    klass
+  end
+  
+  def camelcase
     gsub(/(^|_|-)(.)/) { $2.upcase }
+  end
+  def camelize
+    camelcase
   end
   
   # "FooBar".snake_case #=> "foo_bar"
    def snake_case
      gsub(/\B[A-Z]+/, '_\&').downcase
    end
+   def underscore
+     snake_case
+   end
    
     # "FooBar".dasherize #=> "foo-bar"
     def dasherize
       gsub(/\B[A-Z]+/, '-\&').downcase
     end
+    
+    def classify
+      self.sub(/.*\./, '').camelcase
+    end
+    
+    #TODO: implement here to drop activesupport
+    # # Form can be either :utc (default) or :local.
+    # def to_time(form = :utc)
+    #   ::Time.send("#{form}_time", *::Date._parse(self, false)(:year, :mon, :mday, :hour, :min, :sec).map { |arg| arg || 0 })
+    # end
+    
     
   # Constantize tries to find a declared constant with the name specified
   # in the string. It raises a NameError when the name is not in CamelCase
@@ -89,11 +120,11 @@ class String
   #   "Module".constantize #=> Module
   #   "Class".constantize #=> Class
   def constantize
-    camel_cased_word = camel_case
+    camelcased_word = camelcase
     begin
-      Object.module_eval(camel_cased_word, __FILE__, __LINE__)
+      Object.module_eval(camelcased_word, __FILE__, __LINE__)
     rescue NameError
-      puts "#{camel_cased_word} is not defined."
+      puts "#{camelcased_word} is not defined."
       nil
     end
   end

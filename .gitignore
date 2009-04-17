@@ -2,9 +2,9 @@
 .DS_Store
 *tmp*
 pkg/*.tgz
+pkg/*.gem
 pkg/poolparty*/*
 .git/
-.gitignore
 log/
 log/*
 test_manifest.pp

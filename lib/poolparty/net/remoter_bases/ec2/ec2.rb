@@ -24,21 +24,21 @@ sudo gem install grempe-amazon-ec2 --source http://gems.github.com
 EOM
 end
   
-  class String
-    def convert_from_ec2_to_ip
-      self.gsub(/.compute-1.amazonaws.com*/, '').gsub(/ec2-/, '').gsub(/-/, '.')
-    end
-    def parse_datetime
-      DateTime.parse( self.chomp ) rescue self
-    end
+class String
+  def convert_from_ec2_to_ip
+    self.gsub(/.compute-1.amazonaws.com*/, '').gsub(/ec2-/, '').gsub(/-/, '.')
   end
+  def parse_datetime
+    DateTime.parse( self.chomp ) rescue self
+  end
+end
   
 module PoolParty    
   module Remote
     class Ec2 < Remote::RemoterBase
 
       def self.launch_new_instance!(o = options)
-        raise "You must pass a keypair to launch an instance, or else you wont be able to login. options = #{o.to_yaml}" if !o[:keypair]
+        raise "You must pass a keypair to launch an instance, or else you wont be able to login. options = #{o.inspect}" if !o[:keypair]
         instance = ec2(o).run_instances(
           :image_id => o[:ami],
           :user_data => o[:user_data],
@@ -48,22 +48,24 @@ module PoolParty
           :availability_zone => o[:availabilty_zone],
           :instance_type => o[:size],
           :group_id => o[:security_group])
+
         begin
-          h = EC2ResponseObject.get_hash_from_response(instance)
+          h = EC2ResponseObject.get_hash_from_response(instance.instancesSet.item.first)
           #h = instance.instancesSet.item.first
         rescue Exception => e
-          h = instance
+          h = EC2ResponseObject.get_hash_from_response(instance) rescue instance
+          # h = instance
         end
         h
       end
       # Terminate an instance by id
-      def self.terminate_instance!(o={})  #MF why allow this command wihtout an instance_idˇ
+      def self.terminate_instance!(o={})  #NOTE: maybe we should not allow this command wihtout an instance_idˇ
         ec2(o).terminate_instances(:instance_id => o[:instance_id])
       end
       # Describe an instance's status
       def self.describe_instance(o={})
         return describe_instances.first if o[:instance_id].nil?
-        describe_instances.detect {|a| a[:name] == o[:instance_id] || a[:ip] == o[:instance_id] }
+        describe_instances.detect {|a| a[:name] == o[:instance_id] || a[:ip] == o[:instance_id] || a[:instance_id] == o[:instance_id] }
       end
       def self.describe_instances(o={})
         id = 0

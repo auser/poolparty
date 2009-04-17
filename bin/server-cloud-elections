@@ -1,0 +1,34 @@
+#!/usr/bin/env ruby
+$:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
+require "poolparty"
+require "poolparty/lite"
+
+o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
+  opts.on('-n cloudname', '--name name', 'Start cloud by this name')    { |c| optioner.cloudname c }
+  opts.on('-i num', '--num i', 'Instance number')    { |i| optioner.inst_num i.to_i }
+end
+
+vote_for = o.unflagged_args.shift || "none"
+
+schema = ::PoolParty.load_cloud_from_json(o.unflagged_args.shift)  #TODO: smarter option parser
+remote_base_name = schema.options.remote_base.split('::')[-1].camelcase
+remoter_base = PoolParty::Remote.module_eval(remote_base_name)
+
+o.loaded_clouds.each do |cld|
+  cld.update_from_schema(schema)
+  
+  case vote_for
+  when "expand"
+    # PoolParty.log << "Launching new instance"
+    cld.send :launch_instance!, schema.options do |node|
+      ::PoolParty::Provision::BootStrapper.new( node[:ip], :cloud => cld )
+      ::PoolParty::Provision::DrConfigure.new( node[:ip], :cloud => cld )
+    end
+  when "contract"
+    last_instance_id = %x[/usr/bin/server-list-active instance_id].split("\t").last
+    remoter_base.terminate_instance! schema.options.merge(:instance_id => last_instance_id)
+  else
+    puts "Unknown action: #{vote_for}"
+  end
+
+end

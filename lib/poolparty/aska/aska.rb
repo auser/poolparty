@@ -5,23 +5,25 @@
 module Aska
   module ClassMethods
     def rules(name=:rules, arr=[], create_vars=true)
-      returning look_up_rules(name) do |rs|
-        arr.each do |line|
-          next unless line
-          rule = Rule.new(line)
-          next unless rule.valid?
-          k = rule.key
-          v = rule.var
-          m = rule.comparison
+      rs = look_up_rules(name)
+      # returning look_up_rules(name) do |rs|
+      arr.each do |line|
+        next unless line
+        rule = Rule.new(line)
+        next unless rule.valid?
+        k = rule.key
+        v = rule.var
+        m = rule.comparison
 
-          create_instance_variable(k, create_vars)
-          rs << {k => [m, v]}
-          rs << {k => [">", "0"]} unless rs.reject {|a| a.to_s == "#{k}>0" }
-        end
-        self.send(:define_method, name) do
-          look_up_rules(name)
-        end        
+        create_instance_variable(k, create_vars)
+        rs << {k => [m, v]}
+        rs << {k => [">", "0"]} unless rs.reject {|a| a.to_s == "#{k}>0" }
       end
+      self.send(:define_method, name) do
+        look_up_rules(name)
+      end
+      rs
+      # end
     end
     def create_instance_variable(k, create_vars=true)
       aska_attr_accessors << k.to_sym unless aska_attr_accessors.include?(k.to_sym)
@@ -63,7 +65,7 @@ module Aska
     end
     def valid_rule?(rule)
       rule.each do |key,value|
-        begin          
+        begin
           return __aska_send_value(key).send(value[0].to_sym, __aska_get_var(value[1]))
         rescue Exception => e
           return false

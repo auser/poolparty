@@ -1,38 +1,33 @@
 #!/usr/bin/env ruby
 $:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
 require "poolparty"
-require "poolpartycl"
+require "poolparty/lite"
 
-available_monitors = PoolParty::Monitors.available_monitors
 o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
-  opts.on('-n name', '--name name', 'Host name')    { |h| optioner.hostname h }
-  opts.on('-l', '--no-shell', 'No shell') {optioner.noshell true}
+  opts.on('-n cloudname', '--name name', 'Start cloud by this name')    { |c| optioner.cloudname c }
+  opts.on('-i num', '--num i', 'Instance number')    { |i| optioner.inst_num i.to_i }
 end
 
-o.loaded_clouds.each do |cloud|
-  
-  with_cloud(cloud) do
+schema = ::PoolParty.load_cloud_from_json
+
+o.loaded_clouds.each do |cld|
+  cld.update_from_schema(schema)
     
-    @nonprovisioned_nodes = list_of_running_instances.map {|a| a.name } - cloud.get_current_nodes
-    # @tp = ThreadPool.new(10)
-    @nonprovisioned_nodes.each do |node|
-      vputs "Provisioning #{node}"
-      next if node == "master"
-      # @tp.process do
-      str = returning Array.new do |s|
-        s << cloud.dependency_resolver_command
-      end.join(";")
-  
-      node_id = node.gsub(/node/, '')
-      
-      cmd = ". /etc/profile && #{str};server-provision -n #{cloud.name} -i #{node_id};#{str}"
-      running_cmd = "ps aux | grep -v grep | grep \"server-provision -n #{cloud.name} -i #{node_id};\""
-      
-      vputs "Executing #{cmd}"
-      running = %x[#{running_cmd}]
-      `#{cmd}` if running.chomp.empty?
+  # If an IP or DNS name is given, bootstrap that node, otherwise, bootstrap all running nodes.
+  nodes = !o.unflagged_args.empty? ?  o.unflagged_args : cld.remote_instances_list.collect {|inst| inst.ip if inst.running? }.compact
+  if nodes.empty?
+    puts "No nodes to bootstrap"
+  else
+    if o.inst_num?
+      ::PoolParty::Provision::BootStrapper.new( nodes[o.inst_num], :cloud => cld )
+      ::PoolParty::Provision::DrConfigure.new( nodes[o.inst_num], :cloud => cld )
+    else
+      nodes.each do |address|
+        puts "bootstrapping: #{address}"
+        ::PoolParty::Provision::BootStrapper.new( address, :cloud => cld )
+        ::PoolParty::Provision::DrConfigure.new( address, :cloud => cld )
+      end
     end
-    # @tp.join
-  end  
-  
+  end
 end
+

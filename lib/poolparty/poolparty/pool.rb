@@ -25,7 +25,7 @@ module PoolParty
 
     class Pool < PoolParty::PoolPartyBaseClass
       include PrettyPrinter
-      include CloudResourcer
+      include CloudResourcer # WHY?!?! TODO: investigate
       include Remote
       
       default_options Default.default_options

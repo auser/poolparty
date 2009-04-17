@@ -111,13 +111,28 @@ module PoolParty
       end
     end
     
-    def handle_print_service(klassname, klasshash, tabs)
+    def handle_print_service(klassname, klassarray, tabs)
       case klassname.to_s
       when "conditional"
-        "#{tf(tabs)}case $#{klasshash[:options][:variable]} {#{klasshash[:services][:control_statements].map do |k,v|"\n#{tf(tabs+1)}#{k} : {#{compile(v.to_properties_hash, tabs+2)}#{tf(tabs+1)}\n#{tf(tabs)}}" end}}"
+        # "#{tf(tabs)}case $#{klasshash[:options][:variable]} {#{klasshash[:services][:control_statements].map do |k,v|"\n#{tf(tabs+1)}#{k} : {#{compile(v.to_properties_hash, tabs+2)}#{tf(tabs+1)}\n#{tf(tabs)}}" end}}"
+        
+        str = ""        
+        klassarray.each do |klasshash|
+          # str << "\n#{tf(tabs+1)}#{compile(hsh,tabs+1)}"
+          str << "#{tf(tabs)}case $#{klasshash[:options][:variable]} {"
+          str << "#{klasshash[:services][:control_statements].map do |k,v|"\n#{tf(tabs+1)}#{k} : {#{compile(v.to_properties_hash, tabs+2)}#{tf(tabs+1)}\n#{tf(tabs)}}" end}"
+        end        
+        str << "#{tf(tabs)}}"
+        
       else
         kname = klassname.to_s.gsub(/pool_party_/, '').gsub(/_class/, '')
-        "\n#{tf(tabs)}class #{kname} {\n#{tf(tabs)}#{compile(klasshash,tabs+1)}#{tf(tabs)}} include #{kname}"
+        str = "\n#{tf(tabs)}# #{kname}\n"
+        str << "#{tf(tabs)}class #{kname} {"
+        klassarray.each do |hsh|
+          str << "\n#{tf(tabs+1)}#{compile(hsh,tabs+1)}"
+        end        
+        str << "#{tf(tabs)}} include #{kname}"
+        
       end
     end
     
@@ -136,7 +151,7 @@ module PoolParty
         else
           type
         end
-        "#{tf(tabs)}#{klasstype} { \"#{res.has_key?(:name) ? res.delete(:name) : res.key }\": #{res.empty? ? "" : "\n#{tf(tabs+1)}#{hash_flush_out(res.reject {|k,v| !permitted_option?(type, k) }).reject {|s| s.nil? }.join(",\n#{tf(tabs+1)}")}"}\n#{tf(tabs)}}"
+        "#{tf(tabs)}#{klasstype} { \"#{res.delete(:name) }\": #{res.empty? ? "" : "\n#{tf(tabs+1)}#{hash_flush_out(res.reject {|k,v| !permitted_option?(type, k) }).reject {|s| s.nil? }.join(",\n#{tf(tabs+1)}")}"}\n#{tf(tabs)}}"
       end
     end
     

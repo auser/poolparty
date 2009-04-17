@@ -1,5 +1,6 @@
 require 'rubygems'
 require 'net/ssh'
+require "socket"
 
 module PoolParty
   module Remote
@@ -26,7 +27,7 @@ module PoolParty
     end
     
     def ssh_options(opts={})
-      o = {"-i" => full_keypair_path,
+      o = {"-i" => keypair.full_filepath,
            "-l" => user,
            "-o" =>"StrictHostKeyChecking=no"
            }.merge(opts)
@@ -48,28 +49,42 @@ module PoolParty
     end
 
     # TODO: make extendable multithreaded version
-    def execute!
+    def execute!(cmds=commands)
       netssh(
-        [commands.compact.join(' && ')], 
+        [cmds.compact.join(' && ')], 
         :host=>target_host, :user=>'root')
       # commands.each {|c| run_remote(c, target_host) }
+    end    
+    
+    def self.ping_port(host, port=22, retry_times=400)
+      connected = false
+      retry_times.times do |i|
+        begin
+          break if connected = TCPSocket.new(host, port).is_a?(TCPSocket)
+        rescue Exception => e
+          sleep(2)
+        end
+      end
+      connected
     end
+    def ping_port(ip, port, retry_times=500);self.class.ping_port(ip, port, retry_times);end
     
     def netssh(cmds=[], opts={})
       user = opts.delete(:user) || user #rescue 'root'
       host = opts.delete(:host) || target_host
-      ssh_options_hash = {:keys => [full_keypair_path],
+      ssh_options_hash = {:keys => [keypair.full_filepath],
                           :auth_methods => 'publickey',
                           :paranoid => false
                            }.merge(opts)
+      
+      # Start the connection
       Net::SSH.start(host, user, ssh_options_hash) do |ssh|  
         cmds.each do |command|
-          puts "running command: #{command}"
-          ssh.exec!(command) do |ch, stream, data| 
-            if stream == :stdou
+          ssh.exec!(command) do |ch, stream, data|
+            if stream == :stdout
              print data
             else
-              $stderr.print "ERROR: #{data}"
+              $stderr.print "#{host} stderr => #{data}"
             end
           end
         end

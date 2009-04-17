@@ -1,19 +1,7 @@
+require "ping"
+
 module PoolParty
   module Remote
-    
-    def launch_instance!(o={})
-      @inst = launch_new_instance!( o )
-      wait "5.seconds"
-      when_no_pending_instances do
-        reset!
-        after_launch_instance(@inst)
-      end
-      @inst
-    end
-    
-    # Called after an instance is launched
-    def after_launch_instance(instance=nil)      
-    end
     
     # A convenience method for waiting until there are no more
     # pending instances and then running the block

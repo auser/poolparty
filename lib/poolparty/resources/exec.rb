@@ -4,7 +4,7 @@ module PoolParty
     class Exec < Resource
       
       default_options({
-        :path => "/usr/bin:/bin:/usr/local/bin:$PATH"
+        :path => ["/usr/bin:/bin:/usr/local/bin:$PATH"]
       })
       
       def present
@@ -16,7 +16,7 @@ module PoolParty
       end
       
       def after_create
-        options[:name] = options[:command] unless options.has_key?(:name)
+        options[:name] = options[:command] unless options.name
       end
 
     end

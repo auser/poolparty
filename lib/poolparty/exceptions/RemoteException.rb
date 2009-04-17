@@ -3,7 +3,7 @@ class RemoteException < Exception
     :method_not_defined => "Method is not defined",
     :invalid_formatting => "Invalid formatting",
     :could_not_install => "Could not install"
-  }
+  } unless const_defined?("EXCEPTION_MESSAGES")
   attr_reader :message
   
   def initialize(type=:method_not_defined, note="")
