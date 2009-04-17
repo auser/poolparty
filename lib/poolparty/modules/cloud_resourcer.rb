@@ -103,10 +103,10 @@ module PoolParty
     
     def update_from_schema(schema)
       keypairs = schema.options.delete(:keypairs).map {|a| PoolParty::Key.new(a.basename) }
-      cld.options.merge! schema.options
-      cld.dsl_options[:keypairs] = keypairs
+      options.merge! schema.options
+      dsl_options[:keypairs] = keypairs
 
-      cld.dsl_options[:dependency_resolver] = schema.options.dependency_resolver.split("::")[-1].gsub(/Resolver/, '').preserved_class_constant("Resolver") rescue PoolParty::Chef
+      dsl_options[:dependency_resolver] = schema.options.dependency_resolver.split("::")[-1].gsub(/Resolver/, '').preserved_class_constant("Resolver") rescue PoolParty::Chef
       
     end
         

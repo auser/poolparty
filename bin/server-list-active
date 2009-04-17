@@ -10,6 +10,7 @@ schema = PoolParty::Schema.new( ::File.read(json_file) )
 
 remoter_base = schema.options.remote_base
 
+# TODO: WTF? Change this
 instances = PoolParty::Remote::Ec2.describe_instances(schema.options)
 inst_array = instances.map {|inst| inst.send list_type.to_sym }
 
