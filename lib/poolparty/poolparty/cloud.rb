@@ -207,13 +207,7 @@ module PoolParty
         poolparty_base_ruby
         poolparty_base_packages
         
-        add_optional_base_packages
-      end
-      
-      # Add optional base packages included with PP
-      def add_optional_base_packages
-        poolparty_base_haproxy      if enabled? :haproxy
-        poolparty_base_tokyo_tyrant if enabled? :tokyo_tyrant
+        add_optional_enabled_services
       end
       
       # TODO: Deprecate

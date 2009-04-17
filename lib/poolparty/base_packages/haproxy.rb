@@ -1,6 +1,6 @@
 module PoolParty
   class Base
-    plugin :poolparty_base_haproxy do
+    plugin :haproxy do
       
       def before_configure
         # We need the haproxy package
@@ -18,7 +18,7 @@ module PoolParty
         # Restart sysklogd after we update the haproxy.log
         has_service(:name => "sysklogd")    
         # Template variables
-        has_variable("haproxy_name", :value => "#{cloud.name}")
+        has_variable("haproxy_name", :value => "#{name}")
         has_variable("listen_ports", :value => [ "8080" ], :namespace => "apache")
         
         has_variable("ports_haproxy", :value => ([(self.respond_to?(:port) ? port : Default.port)].flatten))        

@@ -1,6 +1,6 @@
 module PoolParty
   class Base
-    plugin :poolparty_base_tokyo_tyrant do
+    plugin :tokyo_tyrant do
       
       def enable
         has_package "build-essential"

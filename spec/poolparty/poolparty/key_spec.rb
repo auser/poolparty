@@ -23,8 +23,8 @@ describe "Key" do
   end
   describe "that is not a full filepath name" do
     before(:each) do
-      @keypair = "test_plugins/sshkey_test"
-      Dir.stub!(:pwd).and_return ::File.dirname(__FILE__)
+      @keypair = "sshkey_test"      
+      Dir.stub!(:pwd).and_return "#{::File.dirname(__FILE__)}/test_plugins"
       
       @key = Key.new(@keypair)
     end
@@ -32,8 +32,8 @@ describe "Key" do
       @key.should_receive(:search_in_known_locations).and_return nil
       @key.full_filepath
     end
-    it "return the full filepath when the key exists (checking last possible Dir.pwd)" do      
-      @key.full_filepath.should =~ /test_plugins\/sshkey_test/
+    it "return the full filepath when the key exists (checking last possible Dir.pwd)" do
+      @key.full_filepath.should =~ /sshkey_test/
     end
     it "should return the content of the keyfile when requested" do
       @key.content.should == "-- THIS IS A TEST SSH KEY FILE --\n\n"
