@@ -104,7 +104,7 @@ describe "Cloud" do
         @cloud.services.class.should == OrderedHash
       end
       it "should have no services (other than the base ones) in the array when there are no services defined" do
-        @cloud.services.size.should == 5
+        @cloud.services.size.should == 4
       end
       it "should respond to a options method (from Dslify)" do
         @cloud.respond_to?(:options).should == true
@@ -171,10 +171,9 @@ describe "Cloud" do
               keypair "ney"
               cloud :app do
               end
-            end
+            end            
             clouds[:app]._keypairs.first.stub!(:exists?).and_return true
-            clouds[:app]._keypairs.first.stub!(:full_filepath).and_return "ney"
-            clouds[:app].keypair.full_filepath.should == "ney"
+            clouds[:app]._keypairs.size.should == 2
           end
           it "should default to ~/.ssh/id_rsa if none are defined" do
             File.stub!(:exists?).with("#{ENV["HOME"]}/.ssh/id_rsa").and_return(true)
@@ -195,6 +194,7 @@ describe "Cloud" do
                   hello my lady
                 EOE
               end
+              enable :haproxy
               has_gempackage(:name => "poolparty")
               has_package(:name => "dummy")            
             end
@@ -204,7 +204,7 @@ describe "Cloud" do
             @cloud.respond_to?(:build_manifest).should == true
           end
           it "should make a new 'haproxy' class" do
-            PoolpartyBaseHaproxyClass.should_receive(:new).once
+            @cloud.should_receive(:haproxy)
             @cloud.add_poolparty_base_requirements
           end
           it "should have 3 resources" do            
@@ -302,7 +302,7 @@ describe "Cloud" do
               @manifest.should =~ /package "dummy" do/
             end
             it "should have the comment for haproxy in the manifest" do
-              @manifest.should =~ /haproxy/            
+              @manifest.should =~ /haproxy/
             end
             it "should include the poolparty gem" do
               pending

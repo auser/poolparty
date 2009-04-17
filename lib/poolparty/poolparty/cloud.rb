@@ -106,7 +106,7 @@ module PoolParty
         # this can be overridden in the spec, but ec2 is the default
         using :ec2
         options[:keypair] ||= keypair.basename rescue nil
-        options[:rules] = {:expand => expand_when, :contract => contract_when}
+        options[:rules] = {:expand => dsl_options[:expand_when], :contract => dsl_options[:contract_when]}
         dependency_resolver 'chef'
         enable :haproxy unless dsl_options[:haproxy] == :disabled
       end
