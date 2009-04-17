@@ -55,7 +55,7 @@ module PoolParty
       return true if keypair || master.nil?
     end
     
-    def using(t)
+    def using(t, &block)
       @cloud = self
       if t && self.class.available_bases.include?(t.to_sym)
         unless using_remoter?
@@ -64,8 +64,10 @@ module PoolParty
           klass_string = "#{t}".classify
           klass = "::PoolParty::Remote::#{klass_string}".constantize
           @remote_base = klass.send :new, self
+          @remote_base.instance_eval &block if block
+          
           options[:remote_base] = klass.to_s if respond_to?(:options)
-                    
+          
           remote_instance_klass = "::PoolParty::Remote::#{klass_string}RemoteInstance"
           options[:remote_instance_base] = remote_instance_klass if respond_to?(:options)
           

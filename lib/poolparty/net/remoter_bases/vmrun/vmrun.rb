@@ -23,7 +23,7 @@ module PoolParty
       include Dslify
 
       # FIXME: replace this hash with a real method to determine the ip using arp
-       DEFAULT_NETWORK_ADDRESSES = {'00:0c:29:0d:39:2e'=> '192.168.4.104',
+       DEFAULT_NETWORK_ADDRESSES = {'00:0c:29:55:f1:0f'=> '192.168.4.104',
                                     '00:0c:29:2e:ad:db'=> '172.16.68.130'}
                                           
       default_options(
