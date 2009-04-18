@@ -47,7 +47,10 @@ module PoolParty
         Vmrun.new(parent, o).launch_new_instance!
       end
       def launch_new_instance!
-        VmwareInstance.new(:vmx_file => next_unused_vmx_file, :ip => vmx_hash[next_unused_vmx_file]).launch!
+        VmwareInstance.new( :vmx_file => next_unused_vmx_file, 
+                            :ip => vmx_hash[next_unused_vmx_file], 
+                            :keypair => parent.keypair.basename
+                          ).launch!
       end
       # Terminate an instance by id
       def self.terminate_instance!(o={})
@@ -55,7 +58,10 @@ module PoolParty
       end
       def terminate_instance!(o={})
         dsl_options o
-        VmwareInstance.new(:vmx_file => last_unused_vmx_file, :ip => vmx_hash[last_unused_vmx_file]).terminate!(terminate_options)
+        VmwareInstance.new( :vmx_file => last_unused_vmx_file, 
+                            :ip => vmx_hash[last_unused_vmx_file], 
+                            :keypair => parent.keypair.basename
+                          ).terminate!(terminate_options)
       end
 
       # Describe an instance's status, must pass :vmx_file in the options
@@ -63,21 +69,24 @@ module PoolParty
         vmx_file = o[:vmx_file] || Vmrun.running_instances.first
         Vmrun.new(parent, o).describe_instance(:vmx_file => vmx_file)
       end
-      def describe_instance(o={})
+      def describe_instance(o={})        
         running_instances.select {|inst| inst.vmx_file == o[:vmx_file] }.first
       end
 
       def self.describe_instances(o={})
         Vmrun.new(parent, o).describe_instances
       end
-      def describe_instances
+      def describe_instances(o={})
         running_instances.map {|a| a.to_hash }
       end
       def running_instances(o={})
         output = run_local "#{path_to_binary} list"
         lines = output.split("\n")
         lines.shift
-        lines.map {|vmx_file| VmwareInstance.new(:vmx_file => vmx_file, :ip => vmx_hash[vmx_file]) }
+        lines.map {|vmx_file| VmwareInstance.new( :vmx_file => vmx_file, 
+                                                  :ip => vmx_hash[vmx_file], 
+                                                  :keypair => parent.keypair.basename
+                                                ) }
       end
 
       # After launch callback

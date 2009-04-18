@@ -132,7 +132,6 @@ file_cache_path  "/etc/chef"
       end
       
       def before_bootstrap
-        puts "Called before_bootstrap in chef"
         bootstrap_gems "chef", "ohai"
         bootstrap_commands [
           "mkdir -p /etc/chef/cookbooks /etc/chef/cache"

@@ -2,13 +2,13 @@ module PoolParty
   module Remote
     
     class VmwareInstance
-      attr_reader :ip, :mac_address, :vmx_file
+      attr_reader :ip, :mac_address, :vmx_file, :keypair
       
       def initialize(o={}, prnt=Vmrun.new)
         raise "You must pass a vmx_file" unless o[:vmx_file]
         @vmx_file = o[:vmx_file]
         @ip = o[:ip]
-        @parent = prnt
+        @keypair = o[:keypair]
       end
       
       def to_hash
@@ -17,7 +17,8 @@ module PoolParty
           :mac_addresses => mac_address,
           :ip => ip,
           :instance_id => vmx_file,
-          :internal_ip => ip
+          :internal_ip => ip,
+          :keypair => keypair
         }
       end      
       def status

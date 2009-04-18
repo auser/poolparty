@@ -4,15 +4,15 @@ module PoolParty
     # If you need to overwrite these methods, do so with caution
     # Listing methods
     def list_of_running_instances(list = list_of_nonterminated_instances)
-      list.select {|a| a if a.running? }
+      list
     end
     # Get a list of the pending instances
-    def list_of_pending_instances(list = list_of_nonterminated_instances)
-      list.select {|a| a if a.pending? }
+    def list_of_pending_instances(list = remote_instances_list)
+      list.select_with_hash({:status => "pending"})
     end
     # list of shutting down instances
     def list_of_terminating_instances(list = remote_instances_list)
-      list.reject {|i| true if !i.terminating? }
+      list.select_with_hash({:status => "terminated"})
     end
     # Get the instances that are non-master instances
     def nonmaster_nonterminated_instances(list = list_of_nonterminated_instances)
@@ -20,7 +20,7 @@ module PoolParty
     end
     # list all the nonterminated instances
     def list_of_nonterminated_instances(list = remote_instances_list)
-      list.reject {|i| i.terminating? || i.terminated? }
+      list.select_with_hash({:status => "running"})
     end
     
     # #DEPRECATE We'll stub the ip to be the master ip for ease and accessibility
@@ -46,9 +46,7 @@ module PoolParty
     def remote_instances_list        
       @containing_cloud = self
       n = Neighborhoods.load_default
-      @remote_instances_list ||= (n ? n.instances : list_of_instances(keypair.basename)).collect do |h|
-        self.remote_instance_base.constantize.send :new, h, @containing_cloud
-      end
+      @remote_instances_list ||= (n ? n.instances : list_of_instances(keypair.basename))
     end
 
     # List the instances for the current key pair, regardless of their states
