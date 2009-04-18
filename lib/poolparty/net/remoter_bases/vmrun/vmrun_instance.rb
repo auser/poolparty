@@ -2,15 +2,24 @@ module PoolParty
   module Remote
     
     class VmwareInstance
-      attr_accessor :ip, :mac_address, :vmx_file
+      attr_reader :ip, :mac_address, :vmx_file
       
-      def initialize(vmx_file=nil)
-        @ip = opts[:ip]
-        @vmx_file = opts[:vmx_file]
-        dsl_options opts        
+      def initialize(o={}, prnt=Vmrun.new)
+        raise "You must pass a vmx_file" unless o[:vmx_file]
+        @vmx_file = o[:vmx_file]
+        @ip = o[:ip]
+        @parent = prnt
       end
       
-      
+      def to_hash
+        {
+          :status => status,
+          :mac_addresses => mac_address,
+          :ip => ip,
+          :instance_id => vmx_file,
+          :internal_ip => ip
+        }
+      end      
       def status
         "running"
       end      
@@ -30,17 +39,26 @@ module PoolParty
       def terminated?
         false
       end
-      def ip
-        @ip ||= %x[arp -a].select {|a| a if a =~ /#{mac_address.macify}/}.first[/(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})/]
+      def launch!
+        Vmrun.run_local("#{Vmrun.path_to_binary} start \"#{vmx_file}\"")
+        to_hash
       end
+      def terminate!(o)
+        Vmrun.run_local("#{Vmrun.path_to_binary} stop \"#{vmx_file}\" #{o}")
+      end
+      # Get the ip from the arp -a
+      # def ip
+      #   @ip ||= %x[arp -a].select {|a| a if a =~ /#{mac_address.macify}/}.first[/(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})/]
+      # end
+      # Get the mac address in the vmx_file
       def mac_address
         @mac_address ||= parse_vmx_file[:"ethernet0.generatedAddress"]
       end
-      def vmx_data
-        @vmx_data ||= open(vmx_file).read
-      end
       def parse_vmx_file
         vmx_data.to_hash
+      end
+      def vmx_data
+        @vmx_data ||= open(vmx_file).read
       end
       
     end    

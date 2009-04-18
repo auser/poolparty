@@ -4,11 +4,16 @@ class TestVmRun < Test::Unit::TestCase
   context "registered as remote base" do
     setup do
       reset!
-      $vmx_file = "/Users/alerner/Documents/Virtual Machines.localized/Ubuntu Linux 32bit.vmwarevm/Ubuntu Linux 32bit.vmx"
+      $vmx_keys = {
+        "/Users/alerner/Documents/Virtual Machines.localized/Ubuntu Linux 32bit.vmwarevm/Ubuntu Linux 32bit.vmx" => "192.168.248.128"
+      }
+      $vmx_files = $vmx_keys.keys
+      $ipaddresses = $vmx_keys.values
+      
       @cloud = cloud :test_vm_runner do
         
         using :vmrun do
-          vmx_file $vmx_file
+          vmx_hash $vmx_keys
         end
         
       end      
@@ -21,13 +26,14 @@ class TestVmRun < Test::Unit::TestCase
     end    
     should "start vmware instance" do
       @cloud.launch_instance!
-      assert @cloud.vmrun.describe_instances.include?($vmx_file)
+      assert @cloud.vmrun.describe_instances.first[:instance_id], $vmx_files.first
     end
     should "have the ip and mac address" do
       @cloud.launch_instance!
       
-      id = @cloud.vmrun.describe_instances.first
-      instance = @cloud.vmrun.describe_instance(:vmx_file => id)
+      vmx_file = @cloud.vmrun.describe_instances.first[:instance_id]
+      instance = @cloud.vmrun.describe_instance(:vmx_file => vmx_file)
+
       assert !instance.mac_address.nil?
       assert !instance.ip.nil?
     end    
@@ -37,7 +43,7 @@ class TestVmRun < Test::Unit::TestCase
       assert @cloud.vmrun.describe_instances.empty?
     end
     after :all do
-      PoolParty::Remote::Vmrun.terminate! @cloud.vmrun.options
+      PoolParty::Remote::Vmrun.terminate!
     end
   end
   

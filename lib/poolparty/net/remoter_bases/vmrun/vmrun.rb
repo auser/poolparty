@@ -27,20 +27,19 @@ module PoolParty
         :images_repo_path => ::File.expand_path("/Documents/Virtual_Machines.localized/"),
         :default_cli_options => 'gui',
         :terminate_options => 'soft',
-        :vmx_file => 'need to specify a vmx_file'
+        :vmx_hash => 'need to specify vmx_files to use'
       )
       
       def initialize(parent=nil, opts={}, &block)
         dsl_options opts
-        name = ::File.basename(opts[:vmx_file], '.vmx') if opts[:vmx_file]
         instance_eval &block if block
         super(parent, &block)
       end
       
       #terminate all running instances
       def self.terminate!(o={})
-        Vmrun.describe_instances(o).each do |vmxf|
-           Vmrun.terminate_instance! o.merge(:vmx_file => vmxf)
+        describe_instances(o).each do |vmxf|
+           terminate_instance! o.merge(:vmx_file => vmxf)
         end
       end
 
@@ -48,48 +47,37 @@ module PoolParty
         Vmrun.new(parent, o).launch_new_instance!
       end
       def launch_new_instance!
-        cmd = "#{path_to_binary} start \"#{vmx_file}\""
-        if run_local cmd        
-          describe_instance options.merge({
-            :mac_address => mac_address,
-            :ip => ip
-          })
-        end
+        VmwareInstance.new(:vmx_file => next_unused_vmx_file, :ip => vmx_hash[next_unused_vmx_file]).launch!
       end
-
       # Terminate an instance by id
-      def self.terminate_instance!(o)
-        Vmrun.new(parent, o).terminate_instance!
+      def self.terminate_instance!(o={})
+        new(nil, o).terminate_instance!
       end
       def terminate_instance!(o={})
         dsl_options o
-        run_local("#{path_to_binary} stop \"#{vmx_file}\" #{terminate_options} ")
+        VmwareInstance.new(:vmx_file => last_unused_vmx_file, :ip => vmx_hash[last_unused_vmx_file]).terminate!(terminate_options)
       end
 
       # Describe an instance's status, must pass :vmx_file in the options
-      def self.describe_instance(_vmx_file=nil, o={})
-        vmx_file = _vmx_file || o[:vmx_file] || Vmrun.describe_instances.first
-        Vmrun.new(parent, o.merge(:vmx_file=>_vmx_file) ).describe_instance(_vmx_file)
+      def self.describe_instance(o={})
+        vmx_file = o[:vmx_file] || Vmrun.running_instances.first
+        Vmrun.new(parent, o).describe_instance(:vmx_file => vmx_file)
       end
       def describe_instance(o={})
-        {
-          :status => (run_local("#{path_to_binary} list").grep( ::File.expand_path(vmx_file) ).empty? ? "terminated" : "running"),
-          :mac_addresses => mac_address,
-          :status => "running",
-          :ip => ip,
-          :internal_ip => ip
-          # :keypair => keypair
-        }
+        running_instances.select {|inst| inst.vmx_file == o[:vmx_file] }.first
       end
 
       def self.describe_instances(o={})
         Vmrun.new(parent, o).describe_instances
       end
-      def describe_instances(o={})
+      def describe_instances
+        running_instances.map {|a| a.to_hash }
+      end
+      def running_instances(o={})
         output = run_local "#{path_to_binary} list"
         lines = output.split("\n")
         lines.shift
-        lines.each {|vmx_file| describe_instance(o.merge({:vmx_file => vmx_file})) }
+        lines.map {|vmx_file| VmwareInstance.new(:vmx_file => vmx_file, :ip => vmx_hash[vmx_file]) }
       end
 
       # After launch callback
@@ -102,9 +90,12 @@ module PoolParty
       # This is called before the cloud is contracted
       def before_shutdown
       end
-
+      def self.path_to_binary
+        new(parent).path_to_binary
+      end
       # vmrun specific methods
       def self.run_local(cmd, o={:raise_on_error=>false, :verbose=>true})
+        # puts "Running locally: #{cmd}"
         output = `#{cmd}`
         unless $?.success?
           $stderr.puts "FAILED: #{cmd}\n code = #{$?}"
@@ -115,7 +106,20 @@ module PoolParty
       def run_local(cmd, o={:raise_on_error=>false, :verbose=>true})
         self.class.run_local(cmd, o)
       end
-
+      
+      def next_unused_vmx_file
+        tmp = (vmx_files - running_instances)
+        (tmp.empty? ? vmx_files : tmp).first
+      end
+      
+      def last_unused_vmx_file
+        running_instances.last.vmx_file
+      end
+      
+      def vmx_files
+        vmx_hash.keys
+      end
+      
       def id(vfile)
         vmx_file(vfile)
       end
