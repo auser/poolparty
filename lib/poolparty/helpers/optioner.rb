@@ -137,6 +137,9 @@ module PoolParty
       puts ::PoolParty::Version
     end
     
+    def output_options      
+    end
+    
   end
   
   def extract_cloud_from_options(o)
