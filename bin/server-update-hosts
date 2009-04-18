@@ -13,14 +13,14 @@ o.loaded_clouds.each do |cloud|
     
     new_hosts_listing = returning Array.new do |arr|
       
-      puts list_of_running_instances
+      puts instances_by_status("running")
       
-      list_of_running_instances.each do |ri|
+      instances_by_status("running").each do |ri|
         vputs ri.hosts_file_listing_for(self)
         arr << ri.hosts_file_listing_for(self)
       end
       other_clouds.each do |other|
-        other.list_of_running_instances.each do |ri|
+        other.instances_by_status("running").each do |ri|
           vputs ri.hosts_file_listing_for(self)
           arr << ri.hosts_file_listing_for(self)
         end

@@ -99,6 +99,10 @@ module PoolParty
         end
         plugin_store.each {|a| a.after_create }
         setup_defaults
+        
+        run_in_context do
+          add_optional_enabled_services
+        end
       end
       
       # setup defaults for the cloud
@@ -107,13 +111,13 @@ module PoolParty
         using :ec2
         options[:keypair] ||= keypair.basename rescue nil
         options[:rules] = {:expand => dsl_options[:expand_when], :contract => dsl_options[:contract_when]}
-        dependency_resolver 'chef'
+        dependency_resolver 'chef'        
         enable :haproxy unless dsl_options[:haproxy] == :disabled
       end
       
       # provide list of public ips to get into the cloud
       def ips
-        list_of_running_instances.map {|ri| ri.ip }
+        instances_by_status("running").map {|ri| ri.ip }
       end
       
       # TODO: make this be a random ip, since we should not rely on it being the same each time
@@ -205,9 +209,7 @@ module PoolParty
       def add_poolparty_base_requirements
         poolparty_base_heartbeat
         poolparty_base_ruby
-        poolparty_base_packages
-        
-        add_optional_enabled_services
+        poolparty_base_packages        
       end
       
       # TODO: Deprecate

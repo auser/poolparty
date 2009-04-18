@@ -11,7 +11,7 @@ o.loaded_clouds.each do |cloud|
 
   with_cloud(cloud) do
     vputs header("Expanding cloud #{name}")
-    vputs "#{list_of_running_instances.size} running instances of #{maximum_instances} possible instances"
+    vputs "#{instances_by_status("running").size} running instances of #{maximum_instances} possible instances"
     vputs testing ? "Not expanding (test mode)" : "Expanding the cloud"
     expand_cloud_if_necessary( !testing )
   end

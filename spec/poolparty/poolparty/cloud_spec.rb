@@ -104,7 +104,7 @@ describe "Cloud" do
         @cloud.services.class.should == OrderedHash
       end
       it "should have no services (other than the base ones) in the array when there are no services defined" do
-        @cloud.services.size.should == 4
+        @cloud.services.size.should > 4
       end
       it "should respond to a options method (from Dslify)" do
         @cloud.respond_to?(:options).should == true
@@ -205,7 +205,7 @@ describe "Cloud" do
           end
           it "should make a new 'haproxy' class" do
             @cloud.should_receive(:haproxy)
-            @cloud.add_poolparty_base_requirements
+            @cloud.add_optional_enabled_services
           end
           it "should have 3 resources" do            
             @cloud.add_poolparty_base_requirements

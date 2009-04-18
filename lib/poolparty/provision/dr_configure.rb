@@ -62,6 +62,7 @@ module PoolParty
         'chmod 600 /var/poolparty/dr_configure/clouds.rb',
         'cp -f /var/poolparty/dr_configure/clouds.json /etc/poolparty',
         'cp /var/poolparty/dr_configure/clouds.rb /etc/poolparty',
+        'cp /var/poolparty/dr_configure/neighborhood.json /etc/poolparty',
         'cp /var/poolparty/dr_configure/erlang.cookie /root/.erlang.cookie',
         'ruby /var/poolparty/dr_configure/erlang_cookie_maker',
         "touch /var/poolparty/POOLPARTY.PROGRESS",
@@ -81,7 +82,7 @@ module PoolParty
        # @cloud.write_properties_hash("#{Default.tmp_path}/properties_hash.rb")
        #TODO: move to puppet class
        @cloud.build_and_store_new_config_file("#{Default.tmp_path}/dr_configure/poolparty.pp") 
-       # Neighborhoods.clump(@cloud.remote_instances_list, "#{Default.tmp_path}/neighborhood.json")
+       Neighborhoods.clump(@cloud.instances_by_status("running"), "#{Default.tmp_path}/dr_configure/neighborhood.json")
      end
      
      def write_erlang_cookie

@@ -7,9 +7,9 @@ o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
 end
 
 o.loaded_clouds.each do |cld|
-  if cld.list_of_running_instances.size.zero?
-    puts header("Starting cloud #{cld.name}")
-    puts "#{cld.list_of_running_instances.size} running instances (#{cld.minimum_instances} - #{cld.maximum_instances})"
+  if cld.instances_by_status("running").size.zero?
+    puts header("Starting cloud #{cld.name} (#{cld.keypair})")
+    puts "#{cld.instances_by_status("running").size} running instances (#{cld.minimum_instances} - #{cld.maximum_instances})"
     
     cld.launch_instance! do |node|
       ::PoolParty::Provision::BootStrapper.new(node.ip, :cloud => cld)

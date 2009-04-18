@@ -30,10 +30,10 @@ module PoolParty
         :vmx_hash => 'need to specify vmx_files to use'
       )
       
-      def initialize(parent=nil, opts={}, &block)
+      def initialize(par, opts={}, &block)
         dsl_options opts
         instance_eval &block if block
-        super(parent, &block)
+        super(par, &block)
       end
       
       #terminate all running instances
@@ -44,12 +44,12 @@ module PoolParty
       end
 
       def self.launch_new_instance!(o={})
-        Vmrun.new(parent, o).launch_new_instance!
+        new_instance.launch_new_instance!
       end
       def launch_new_instance!
         VmwareInstance.new( :vmx_file => next_unused_vmx_file, 
                             :ip => vmx_hash[next_unused_vmx_file], 
-                            :keypair => parent.keypair.basename
+                            :keypair => cloud.keypair.basename
                           ).launch!
       end
       # Terminate an instance by id
@@ -67,14 +67,14 @@ module PoolParty
       # Describe an instance's status, must pass :vmx_file in the options
       def self.describe_instance(o={})
         vmx_file = o[:vmx_file] || Vmrun.running_instances.first
-        Vmrun.new(parent, o).describe_instance(:vmx_file => vmx_file)
+        new_instance.describe_instance(:vmx_file => vmx_file)
       end
       def describe_instance(o={})        
         running_instances.select {|inst| inst.vmx_file == o[:vmx_file] }.first
       end
 
       def self.describe_instances(o={})
-        Vmrun.new(parent, o).describe_instances
+        new_instance.describe_instances
       end
       def describe_instances(o={})
         running_instances.map {|a| a.to_hash }
@@ -102,6 +102,12 @@ module PoolParty
       def self.path_to_binary
         new(parent).path_to_binary
       end
+      
+      private
+      def self.new_instance(o={})
+        Vmrun.new((cloud rescue o), o)
+      end
+      
       # vmrun specific methods
       def self.run_local(cmd, o={:raise_on_error=>false, :verbose=>true})
         # puts "Running locally: #{cmd}"

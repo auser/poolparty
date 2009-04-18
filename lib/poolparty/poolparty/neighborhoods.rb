@@ -11,7 +11,7 @@ module PoolParty
       when Array
         json = {:instances => json.map {|entry| disect(entry) }}
       when String
-        json = {:instances => JSON.parse(json).map {|inst| "#{inst["name"]}\t#{inst["ip"]}"}}
+        json = {:instances => JSON.parse(json).map {|inst| "#{inst["instance_id"]}\t#{inst["ip"]}"}}
       end
       @schema = PoolParty::Schema.new(json)
       raise Exception.new("No instances found in the Neighborhoods schema") unless @schema.instances
@@ -29,9 +29,9 @@ module PoolParty
       case line
       when String
         arr = line.split("\t")
-        {:name => arr[0], :ip => arr[1]}
+        {:instance_id => arr[0], :ip => arr[1]}
       when Hash
-        "#{line[:name]}\t#{line[:ip]}"
+        "#{line[:instance_id]}\t#{line[:ip]}"
       else
         line
       end

@@ -12,10 +12,10 @@ o.loaded_clouds.each do |cld|
     "instances #{cld.minimum_instances}..#{cld.maximum_instances}",
     "keypair #{cld.keypair}"
   ] do |printer|
-    if cld.list_of_running_instances.size > 0
+    if cld.instances_by_status("running").size > 0
       printer.empty
       printer.center("Active instances")
-      printer << cld.list_of_running_instances.map{|a| a.ip.strip }.join("\n")
+      printer << cld.instances_by_status("running").map{|a| a.ip.strip }.join("\n")
     end
     if cld.list_of_pending_instances.size > 0
       printer.empty

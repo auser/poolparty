@@ -45,7 +45,7 @@ describe "Remoter" do
   #     @tc.stub!(:maximum_instances).and_return 5
   #     @tc.stub!(:list_of_pending_instances).and_return []
   #     @tc.stub!(:list_of_nonterminated_instances).and_return []
-  #     @tc.stub!(:list_of_running_instances).and_return []
+  #     @tc.stub!(:instances_by_status("running")).and_return []
   #     @tc.stub!(:master).and_return ris.first
   #     @tc.stub!(:after_launched).and_return true
   #     @tc.stub!(:verbose).and_return false
@@ -93,8 +93,8 @@ describe "Remoter" do
         @tc.stub!(:minimum_runtime).and_return 3000        
       end
       it "should not be empty" do
-        @tc.list_of_running_instances.size.should == 2
-        @tc.list_of_running_instances.first.elapsed_runtime.should be > 3000
+        @tc.instances_by_status("running").size.should == 2
+        @tc.instances_by_status("running").first.elapsed_runtime.should be > 3000
         @tc.list_of_nodes_exceeding_minimum_runtime.size.should be > 0
       end
       it "should return a RemoteInstance" do

@@ -24,9 +24,10 @@ module PoolParty
     # Everything remoting-wise is derived from this class
     class RemoterBase
       include  ::PoolParty::Remote
+      attr_reader :cloud
       
       def initialize(prnt = nil, opts={}, &block)
-        @parent = prnt
+        @parent = @cloud = prnt
       end
       
       def method_missing(meth, *args, &block)

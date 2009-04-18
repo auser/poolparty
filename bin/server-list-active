@@ -8,18 +8,21 @@ json_file = ARGV[0] || PoolParty::Default.properties_hash_file
 raise "ERROR: no json_file given" if !json_file
 schema = PoolParty::Schema.new( ::File.read(json_file) )
 
-remoter_base = schema.options.remote_base
+inst_array = PoolParty::Neighborhoods.load_default.instances
+if !inst_array || inst_array.empty?
+  remoter_base = schema.options.remote_base
+  remote_base = remoter_base.top_level_class.constantize(PoolParty::Remote)
 
-# TODO: WTF? Change this
-instances = PoolParty::Remote::Ec2.describe_instances(schema.options)
-inst_array = instances.map {|inst| inst.send list_type.to_sym }
+  instances = remote_base.send :describe_instances, schema.options
+  inst_array = instances.map {|inst| inst.send list_type.to_sym }  
+end
 
 print_array = 
 case list_type
 when "ip"
-  inst_array.select {|a| a =~ /\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/}
+  inst_array.compact.map {|i| i[:ip] }
 when "internal_ip"
-  inst_array.compact.map {|ip| ip.gsub(/ip-/, '').gsub(/\.ec2\.internal/, '').gsub(/-/, '.') }
+  inst_array.compact.map {|i| i[:internal_ip] || i[:ip] }
 else
   inst_array
 end

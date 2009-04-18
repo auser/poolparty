@@ -22,7 +22,6 @@ describe "Neighborhoods" do
   end
   it "should return an instance ip when calling for the first instance" do
     n = Neighborhoods.new(sample_instances_list)
-    n.instances.first.name.should == "master"
     n.instances.first.ip.should == "127.0.0.1"
     n.instances[1].ip.should == "127.0.0.2"
   end
@@ -42,7 +41,7 @@ describe "Neighborhoods" do
     Neighborhoods.clump(sample_instances_list,filepath)
   end
   it "should load from the default properly with the first's instance's ip" do
-    str = "[{\"name\":\"master\",\"launching_time\":\"2009/03/26 01:06:18 -0700\",\"ip\":\"127.0.0.1\"},{\"name\":\"node1\",\"launching_time\":\"2009/03/26 01:06:18 -0700\",\"ip\":\"127.0.0.2\"}]"
+    str = "[{\"instance_id\":\"master\",\"launching_time\":\"2009/03/26 01:06:18 -0700\",\"ip\":\"127.0.0.1\"},{\"instance_id\":\"node1\",\"launching_time\":\"2009/03/26 01:06:18 -0700\",\"ip\":\"127.0.0.2\"}]"
     ::File.should_receive(:file?).with("/etc/poolparty/neighborhood.json").and_return true
     ::File.stub!(:file?).and_return false
     

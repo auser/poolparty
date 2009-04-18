@@ -10,7 +10,7 @@ end
 o.loaded_clouds.each do |cl|
   with_cloud(cl) do
     puts header("Contracting cloud #{name}")
-    puts "#{list_of_running_instances.size} running instances (#{minimum_instances} minimum instances)"
+    puts "#{instances_by_status("running").size} running instances (#{minimum_instances} minimum instances)"
     puts testing ? "Not contracting (test mode)" : "Contracting the cloud if possible"
     contract_cloud_if_necessary( !testing )
   end

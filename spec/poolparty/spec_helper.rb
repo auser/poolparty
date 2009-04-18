@@ -145,7 +145,7 @@ def stub_remoter_for(o)
   EC2::Base.stub!(:new).and_return @ec2
   
   o.class.stub!(:ec2).and_return @ec2 
-  o.stub!(:list_of_running_instances).and_return sample_instances
+  o.stub!(:instances_by_status).and_return sample_instances
   
   o.stub!(:list_of_instances).and_return sample_instances
   @ec2.stub!(:run_instances).and_return true
@@ -178,12 +178,12 @@ def stub_remoting_methods_for(o)
   o.stub!(:can_expand_cloud?).and_return false
 end
 def stub_list_of_instances_for(o)  
-  o.stub!(:list_of_running_instances).once.and_return running_remote_instances
+  o.stub!(:instances_by_status).once.and_return running_remote_instances
   # o.stub!(:describe_instances).and_return response_list_of_instances
 end
 
 def stub_running_remote_instances(o)
-  o.stub!(:list_of_running_instances).and_return(running_remote_instances.map {|h| PoolParty::Remote::RemoteInstance.new(h) })
+  o.stub!(:instances_by_status).and_return(running_remote_instances.map {|h| PoolParty::Remote::RemoteInstance.new(h) })
 end
 
 def response_list_of_instances(arr=[])

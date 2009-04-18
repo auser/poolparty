@@ -119,10 +119,10 @@ class String
   # Examples
   #   "Module".constantize #=> Module
   #   "Class".constantize #=> Class
-  def constantize
+  def constantize(mod=Object)
     camelcased_word = camelcase
     begin
-      Object.module_eval(camelcased_word, __FILE__, __LINE__)
+      mod.module_eval(camelcased_word, __FILE__, __LINE__)
     rescue NameError
       puts "#{camelcased_word} is not defined."
       nil

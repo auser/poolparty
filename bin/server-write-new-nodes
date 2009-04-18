@@ -15,7 +15,7 @@ o.loaded_clouds.each do |cloud|
             
     str = returning Array.new do |arr|
       arr << "node default { include poolparty }"
-      list_of_running_instances.each do |ri| 
+      instances_by_status("running").each do |ri| 
         arr << "node \"#{ri.name}\" inherits default {}"
       end
     end.join("\n")

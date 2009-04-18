@@ -2,13 +2,15 @@ module PoolParty
   module Remote
     
     class VmwareInstance
-      attr_reader :ip, :mac_address, :vmx_file, :keypair
+      attr_reader :ip, :mac_address, :vmx_file, :keypair, :cloud
       
-      def initialize(o={}, prnt=Vmrun.new)
+      def initialize(o={}, cld=nil)
         raise "You must pass a vmx_file" unless o[:vmx_file]
         @vmx_file = o[:vmx_file]
         @ip = o[:ip]
         @keypair = o[:keypair]
+        
+        @cloud = cld
       end
       
       def to_hash

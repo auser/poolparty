@@ -20,7 +20,7 @@ module PoolParty
       if level >= 1
         @np.center "CloudSpeak"
         @np << "All the commands set on your cloud can be called within the console"
-        @np << "list_of_running_instances - get list of running nodes"
+        @np << "instances_by_status('running') - get list of running nodes"
         @np << "list_of_pending_instances - get list of pending nodes"
         @np << "available_monitors - get list of the available monitors on the cloud"
         @np << "  note: all monitors can be called as a method on the cloud"

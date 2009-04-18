@@ -99,9 +99,14 @@ module PoolParty
     
     def handle_print_variables(vars)
       
-      out = ["\npoolparty Mash.new unless attribute?('poolparty')\n\n"]
+      out = ["poolparty Mash.new unless attribute?('poolparty')"]
       vars.each do |varhash|
-        out << "#{varhash[:namespace] || "poolparty"}[:#{varhash[:name]}] = #{to_option_string(varhash[:value])}"
+        if varhash[:namespace]
+          out << ["\n#{varhash[:namespace]} Mash.new unless attribute?('#{varhash[:namespace]}')"]
+          out << "#{varhash[:namespace]}[:#{varhash[:name]}] = #{to_option_string(varhash[:value])}\n"
+        else
+          out << "poolparty[:#{varhash[:name]}] = #{to_option_string(varhash[:value])}"
+        end
       end
       ::File.open("#{base_dir}/attributes/poolparty.rb", "w+") do |f| 
         f << out.join("\n")

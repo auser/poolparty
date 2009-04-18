@@ -10,7 +10,7 @@ end
 
 o.loaded_clouds.each do |cld|
   # If an IP or DNS name is given, bootstrap that node, otherwise, bootstrap all running nodes.
-  nodes = !o.unflagged_args.empty? ?  o.unflagged_args : cld.remote_instances_list.collect {|inst| inst.ip if inst.running? }.compact
+  nodes = !o.unflagged_args.empty? ?  o.unflagged_args : cld.instances_by_status("running").collect {|i|i.ip }.compact
   if nodes.empty?
     puts "No nodes to bootstrap"
   else

@@ -66,7 +66,7 @@ module PoolParty
     # 
     # Are the minimum number of instances running?
     def minimum_number_of_instances_are_running?
-      list_of_running_instances.size >= minimum_instances.to_i
+      instances_by_status("running").size >= minimum_instances.to_i
     end
     # Are the minimum number of instances NOT running?
     def minimum_number_of_instances_are_not_running?
@@ -74,15 +74,15 @@ module PoolParty
     end
     # Can we shutdown an instance?
     def can_shutdown_an_instance?
-      list_of_running_instances.size > minimum_instances.to_i
+      instances_by_status("running").size > minimum_instances.to_i
     end
     # Are too few instances running?
     def are_too_few_instances_running?
-      list_of_running_instances.size < minimum_instances.to_i
+      instances_by_status("running").size < minimum_instances.to_i
     end
     # Are there more instances than allowed?
     def are_too_many_instances_running?
-      list_of_running_instances.size > maximum_instances.to_i
+      instances_by_status("running").size > maximum_instances.to_i
     end
     
     ########
@@ -120,11 +120,11 @@ module PoolParty
     end
     # Are the maximum number of instances not running?
     def maximum_number_of_instances_are_not_running?
-      list_of_running_instances.size < maximum_instances.to_i
+      instances_by_status("running").size < maximum_instances.to_i
     end
     # Are the maximum number of instances running?
     def maximum_number_of_instances_are_running?
-      list_of_running_instances.size >= maximum_instances.to_i
+      instances_by_status("running").size >= maximum_instances.to_i
     end
     # Launch new instance while waiting for the number of pending instances
     #  to be zero before actually launching. This ensures that we only
@@ -170,7 +170,7 @@ module PoolParty
       when_no_pending_instances do
         vputs "Waiting for 10 seconds"
         wait "10.seconds" # Give some time for ssh to startup          
-        @num_instances = list_of_running_instances.size
+        @num_instances = instances_by_status("running").size
         vputs "(@num_instances - (num))..(@num_instances): #{(@num_instances - (num))..(@num_instances)}"
         last_instances = nonmaster_nonterminated_instances[(@num_instances - (num))..(@num_instances)]
         last_instances.each do |inst|
@@ -206,7 +206,7 @@ module PoolParty
       end
     end
     def list_of_nodes_exceeding_minimum_runtime
-      list_of_running_instances.reject{|i| i.elapsed_runtime < minimum_runtime}
+      instances_by_status("running").reject{|i| i.elapsed_runtime < minimum_runtime}
     end
     
     def are_any_nodes_exceeding_minimum_runtime?
@@ -214,7 +214,7 @@ module PoolParty
     end
     # Is there a node that is running with the name master
     def is_master_running?
-      !list_of_running_instances.select {|a| a.name == "master"}.first.nil?
+      !instances_by_status("running").select {|a| a.name == "master"}.first.nil?
     end    
     
   end

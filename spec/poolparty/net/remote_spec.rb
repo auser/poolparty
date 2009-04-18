@@ -81,9 +81,9 @@ describe "Remote" do
          }.should raise_error
     end
     it "should not raise an exception because instances_list is defined" do
-      @hype_cloud.remote_instances_list
+      @hype_cloud.describe_instances
       lambda {
-        @hype_cloud.remote_instances_list
+        @hype_cloud.describe_instances
       }.should_not raise_error
     end
     it "should run hyper" do
