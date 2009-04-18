@@ -44,7 +44,7 @@ module PoolParty
       end
 
       def self.launch_new_instance!(o={})
-        new_instance.launch_new_instance!
+        new_instance(o).launch_new_instance!
       end
       def launch_new_instance!
         VmwareInstance.new( :vmx_file => next_unused_vmx_file, 
@@ -67,14 +67,14 @@ module PoolParty
       # Describe an instance's status, must pass :vmx_file in the options
       def self.describe_instance(o={})
         vmx_file = o[:vmx_file] || Vmrun.running_instances.first
-        new_instance.describe_instance(:vmx_file => vmx_file)
+        new_instance(o).describe_instance(:vmx_file => vmx_file)
       end
       def describe_instance(o={})        
         running_instances.select {|inst| inst.vmx_file == o[:vmx_file] }.first
       end
 
       def self.describe_instances(o={})
-        new_instance.describe_instances
+        new_instance(o).describe_instances
       end
       def describe_instances(o={})
         running_instances.map {|a| a.to_hash }
@@ -118,12 +118,13 @@ module PoolParty
         end
         output
       end
+      
       def run_local(cmd, o={:raise_on_error=>false, :verbose=>true})
         self.class.run_local(cmd, o)
       end
       
       def next_unused_vmx_file
-        tmp = (vmx_files - running_instances)
+        tmp = (vmx_files - running_instances.map {|a| a.vmx_file })
         (tmp.empty? ? vmx_files : tmp).first
       end
       
