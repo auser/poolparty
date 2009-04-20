@@ -108,7 +108,7 @@ module PoolParty
       def setup_defaults
         # this can be overridden in the spec, but ec2 is the default
         using :ec2
-        options[:keypair] ||= keypair.basename rescue nil
+        options[:keypair] ||= keypair rescue nil
         options[:rules] = {:expand => dsl_options[:expand_when], :contract => dsl_options[:contract_when]}
         dependency_resolver 'chef'        
         enable :haproxy unless dsl_options[:haproxy] == :disabled
@@ -197,7 +197,7 @@ module PoolParty
           after_launch_instance).each do |meth|
         module_eval <<-EOE
           def call_#{meth}_callbacks(*args)
-            self.send :#{meth} if respond_to?(:#{meth})
+            self.send :#{meth}, *args if respond_to?(:#{meth})
             plugin_store.each {|a| a.#{meth}(*args) }
           end
         EOE
@@ -210,7 +210,7 @@ module PoolParty
       # all that is necessary in a method called enable
       # which is called when there is no block
       def add_poolparty_base_requirements
-        poolparty_base_heartbeat
+        # poolparty_base_heartbeat
         poolparty_base_ruby
         poolparty_base_packages        
       end

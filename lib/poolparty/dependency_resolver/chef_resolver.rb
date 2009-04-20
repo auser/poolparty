@@ -150,9 +150,13 @@ module PoolParty
     # separate (the key/value pairs)
     def hash_flush_out(hash, pre="", post="")      
       hash.map do |k,v|
-        key = to_chef_key(k)
-        res = to_option_string(v)
-        (key.nil? || res.nil?) ? nil : "#{pre}#{key} #{res}#{post}"
+        if o = handle_actions(k,v)
+          o 
+        else
+          key = to_chef_key(k)
+          res = to_option_string(v)
+          (key.nil? || res.nil?) ? nil : "#{pre}#{key} #{res}#{post}"
+        end
       end
     end
     
@@ -201,6 +205,16 @@ module PoolParty
       end
     end
     
+    # Handle ensures
+    def handle_actions(key,value)
+      case key
+      when :ensures
+        value.nil? ? nil : "action :#{value}"
+      else
+        nil
+      end
+    end
+    
     # Take the keys from the resource hash and turn them into chef-like
     # meaningful keys. This is how helpers are created for chef
     def to_chef_key(key)
@@ -239,6 +253,7 @@ module PoolParty
       when String
         "\"#{obj}\""
       when Array
+        # If we are sending a notifies with a second argument
         if obj[1] && [:immediately, :delayed].include?(obj[1])
           "#{to_option_string(obj[0])}, :#{obj[1]}"
         else

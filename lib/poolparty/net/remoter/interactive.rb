@@ -26,21 +26,17 @@ module PoolParty
     # loaded from /etc/poolparty/neighborhood.json
     # or by the remote_base on keypair
     def list_of_instances
+      return @list_of_instances if @list_of_instances
       @containing_cloud = self
       n = Neighborhoods.load_default
-      @list_of_instances ||= (n ? n.instances : _list_of_instances(keypair.basename))
+      @list_of_instances = (n ? n.instances : _list_of_instances(:keypair => keypair))
     end
 
     private
     # List the instances for the current key pair, regardless of their states
     # If no keypair is passed, select them all
-    def _list_of_instances(keyp=nil)
-      dputs "Calling list_of_instances on #{self}"
-      tmp_key = (keyp ? keyp : nil)
-      
-      @describe_instances ||= remote_base.describe_instances(options).select do |a|
-        a if (tmp_key.nil? || tmp_key.empty? ? true : a[:keypair] == tmp_key)
-      end
+    def _list_of_instances(select={})      
+      @describe_instances ||= remote_base.describe_instances(options).select_with_hash(select)
     end
     
     # If the cloud is starting an instance, it will not be listed in 

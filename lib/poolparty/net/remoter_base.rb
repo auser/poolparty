@@ -85,11 +85,12 @@ module PoolParty
         @inst = launch_new_instance!( o )
         sleep(2)
         
-        @cloud.dputs "#{cloud.name} Launched instance #{@inst[:ip]}"
+        @cloud.dputs "#{@cloud.name} Launched instance #{@inst[:ip]}"
         @cloud.dputs "   waiting for it to respond"        
         500.times do |i|
-          @cloud.dprint "#{i}"
+          @cloud.dprint "."
           if ping_port(@inst[:ip], 22)
+            @cloud.dputs ""
             @cloud.started_instance << @inst
 
             block.call(@inst) if block
@@ -109,7 +110,7 @@ module PoolParty
 
       # Called after an instance is launched
       def self.after_launch_instance(instance=nil)
-        cloud.call_after_launch_instance_callbacks(instance)
+        @cloud.call_after_launch_instance_callbacks(instance)
       end
 
       def self.when_instance_is_responding(inst, &block)

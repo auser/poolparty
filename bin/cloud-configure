@@ -18,7 +18,6 @@ o.loaded_clouds.each do |cld|
     if o.inst_num?
       ::PoolParty::Provision::DrConfigure.new( nodes[o.inst_num], :cloud => cld )
     else
-      puts "Self: #{self}"
       nodes.each do |address|
         puts "Configuring: #{address}"
         ::PoolParty::Provision::DrConfigure.new( address, :cloud => cld )

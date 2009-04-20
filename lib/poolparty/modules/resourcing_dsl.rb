@@ -12,10 +12,10 @@ module PoolParty
         str == :absent ? is_absent : is_present
     end
     def present
-      "present"
+      :install
     end
     def absent
-      "absent"
+      :remove
     end
     # Allows us to send an ensure to ensure the presence of a resource
     def is_present(*args)

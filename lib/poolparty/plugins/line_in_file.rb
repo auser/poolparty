@@ -5,6 +5,7 @@ module PoolParty
       def loaded(opts={}, &block)
         has_exec "line_in_#{file}" do
           command "grep -q \'#{line.safe_quote}\' #{file} || echo \'#{line.safe_quote}\' >> #{file}"
+          not_if "grep -q \'#{line.safe_quote}\' #{file}"
         end
       end
     end

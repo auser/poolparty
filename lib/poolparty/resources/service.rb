@@ -9,11 +9,12 @@ module PoolParty
       })
       
       def present
-        "running"
+        :start
       end
       def absent
-        "stopping"
+        :stop
       end
+      
     end
     
   end

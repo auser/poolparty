@@ -4,7 +4,7 @@ module PoolParty
     class Directory < Resource
       
       def present
-        "directory"
+        :create
       end
       
     end

@@ -3,6 +3,10 @@ module PoolParty
         
     class File < Resource
       
+      def present
+        :create
+      end
+      
       def after_create
         run_render = dsl_options.include?(:render_as) ? dsl_options.delete(:render_as) : false
         
@@ -21,6 +25,10 @@ module PoolParty
           template_opts = (parent ? options.merge(parent.options) : options).merge(:renderer => run_render)
           options.merge!(:content => run_render ? Template.compile_string(cont, template_opts) : cont)
         end
+      end
+      
+      def method_missing m, *a, &block
+        super rescue ::File.send(m, *a, &block)
       end
       
     end

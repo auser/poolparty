@@ -137,7 +137,7 @@ module PoolParty
           'touch /var/poolparty/POOLPARTY.PROGRESS',
           "mkdir -p /root/.ssh",
           "cp /var/poolparty/dependencies/keys/* /root/.ssh/",
-          "chmod 600 /root/.ssh/#{@cloud.keypair.basename}",
+          "chmod 600 /root/.ssh/#{::File.basename(@cloud.keypair.full_filepath)}",
           # "god -c /etc/poolparty/monitor.god",
           "thin -R /etc/poolparty/monitor.ru -p 8642 --daemon --pid /var/run/stats_monitor.pid start 2>/dev/null",
           'echo "bootstrap" >> /var/poolparty/POOLPARTY.PROGRESS']

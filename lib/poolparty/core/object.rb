@@ -79,7 +79,7 @@ class Object
     print m if o.verbose rescue ""
   end
   def dputs(m="", o=self)
-    puts "[DEBUG] -- #{m.inspect}" if debugging?(o) || verbose?(o) rescue ""
+    puts "[DEBUG] -- #{m.inspect}" if debugging?(o) rescue ""
   end
   def dprint(m="", o=self)
     print "#{m}" if debugging?(o) || verbose?(o) rescue ""
@@ -88,7 +88,7 @@ class Object
     o.verbose ? true : ($TESTING ||= false)
   end
   def debugging?(o=self)
-    o.debug ? true : o.verbose ? true : ($DEBUGGING ||= false)
+    o.debug ? true : ($DEBUGGING ||= false)
   end
   def debugging(bool=nil)
     bool.nil? ? $DEBUGGING : $DEBUGGING = bool

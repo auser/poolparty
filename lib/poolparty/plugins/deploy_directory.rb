@@ -30,7 +30,6 @@ module PoolParty
         has_directory("#{::File.dirname(to)}")
         has_exec("unpack-#{::File.basename(to)}-deploy-directory") do
           requires get_directory("#{::File.dirname(to)}")
-          not_if "test -f #{to}"
           command "cp -R /var/poolparty/dr_configure/user_directory/#{name}/* #{to}"
         end
         
