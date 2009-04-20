@@ -39,7 +39,7 @@ module PoolParty
           
           templates o[:templates] if o[:templates]
           
-          # recipe_files << basedir
+          recipe_files << basedir
           # ::Suitcase::Zipper.add(basedir, "chef/cookbooks")
         # TODO: Enable neat syntax from within poolparty
         
