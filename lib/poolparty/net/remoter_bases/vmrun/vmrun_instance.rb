@@ -44,6 +44,7 @@ module PoolParty
       end
       def launch!
         Vmrun.run_local("#{Vmrun.path_to_binary} start \"#{vmx_file}\"")
+        dputs "Launched new vmware instance from vmx: #{vmx_file}"
         to_hash
       end
       def terminate!(o)

@@ -80,20 +80,29 @@ module PoolParty
       
       # TODO: Rename and modularize the @inst.status =~ /pending/ so that it works on all 
       # remoter_bases
-      def self.launch_instance!(o={}, &block)
+      def self.launch_instance!(o={}, &block)        
         @inst = launch_new_instance!( o )
         sleep(2)
+        
+        cloud.dputs "#{cloud.name} Launched instance #{@inst[:ip]}\n\twaiting for it to respond"        
         500.times do |i|
-          if @inst.status =~ /pending/
-            sleep(2)
-            @inst = describe_instance(@inst)
+          cloud.dprint "#{i}"
+          # if @inst.status =~ /pending/
+          #   sleep(2)
+          #   @inst = describe_instance(@inst)
+          # end
+          if ping_port(@inst[:ip], 22)
+            cloud.started_instance << @inst
+
+            block.call(@inst) if block
+            after_launch_instance(@inst)
+            
+            cloud.started_instance = nil
+            return @inst
           end
+          sleep(2)
         end
-        when_instance_is_responding @inst do
-          block.call(@inst) if block
-          after_launch_instance(@inst)
-        end
-        @inst
+        raise "Instance not responding at #{inst.ip}"
       end
       def launch_instance!(o={}, &block);self.class.launch_instance!(self.options.merge(o), &block);end
 

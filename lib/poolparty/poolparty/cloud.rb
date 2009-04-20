@@ -90,7 +90,6 @@ module PoolParty
       # here the base requirements are added as well as an empty chef recipe is called
       # Also, the after_create hook on the plugins used by the cloud are called here
       def after_create
-        dputs "In after create"
         ::FileUtils.mkdir_p("#{Default.tmp_path}/dr_configure")
         run_in_context do
           add_poolparty_base_requirements

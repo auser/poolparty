@@ -63,14 +63,16 @@ module PoolParty
         @target_host = host
         @cloud = opts[:cloud]
                 
-        instance_eval &block if block        
+        instance_eval &block if block
         @cloud.call_before_bootstrap_callbacks if @cloud
         
         default_commands
+        dputs "Starting bootstrapping process on #{host}"
         execute!
-
+        
         @cloud.call_after_bootstrap_callbacks if @cloud
         after_bootstrap
+        dputs "Bootstrapping complete on #{host}"
       end
       
       def self.class_commands

@@ -72,19 +72,29 @@ class Object
   #   meta_undef name rescue ""
   # end
   def vputs(m="", o=self)
-    puts m if o.verbose rescue ""
+    # puts m if o.verbose rescue ""
+    puts "[INFO] -- #{m}" if verbose?
   end
   def vprint(m="", o=self)
     print m if o.verbose rescue ""
   end
   def dputs(m="", o=self)
-    puts "-- #{m}" if $DEBUGGING rescue ""
+    puts "[DEBUG] -- #{m}" if debugging?(o) || verbose?(o) rescue ""
   end
-  def debugging(bool=false)
-    $DEBUGGING = bool
+  def dprint(m="", o=self)
+    print "#{m}" if debugging?(o) || verbose?(o) rescue ""
+  end
+  def verbose?(o=self)
+    o.verbose ? true : ($TESTING ||= false)
+  end
+  def debugging?(o=self)
+    o.debug ? true : o.verbose ? true : ($DEBUGGING ||= false)
+  end
+  def debugging(bool=nil)
+    bool.nil? ? $DEBUGGING : $DEBUGGING = bool
   end
   def testing(bool=$TESTING)
-    bool.nil? ? false : bool
+    bool.nil? ? $TESTING : $TESTING = bool
   end
   alias :debug :debugging
   def unix_hide_string

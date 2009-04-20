@@ -110,7 +110,7 @@ module PoolParty
       
       # vmrun specific methods
       def self.run_local(cmd, o={:raise_on_error=>false, :verbose=>true})
-        # puts "Running locally: #{cmd}"
+        cloud.dputs "Running: #{cmd}"
         output = `#{cmd}`
         unless $?.success?
           $stderr.puts "FAILED: #{cmd}\n code = #{$?}"
