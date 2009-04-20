@@ -39,7 +39,7 @@ module PoolParty
     end
     
     def set_role_for_all_instances(role, name)
-      ips = get_cloud(name).instances_by_status("running").map {|ri| ri.ip }
+      ips = get_cloud(name).nodes(:status => "running").map {|ri| ri.ip }
       ips.each {|ip| send :role, role.to_sym, "#{ip}"}
     end
   end

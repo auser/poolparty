@@ -116,7 +116,7 @@ module PoolParty
       
       # provide list of public ips to get into the cloud
       def ips
-        instances_by_status("running").map {|ri| ri.ip }
+        nodes(:status => "running").map {|ri| ri.ip }
       end
       
       # TODO: make this be a random ip, since we should not rely on it being the same each time
@@ -190,11 +190,13 @@ module PoolParty
       # Callbacks on bootstrap and configuration
       %w( before_bootstrap 
           after_bootstrap 
-          before_configure 
-          after_configure).each do |meth|
+          before_configure
+          after_configure
+          after_launch_instance).each do |meth|
         module_eval <<-EOE
-          def call_#{meth}_callbacks
-            plugin_store.each {|a| a.#{meth} }
+          def call_#{meth}_callbacks(*args)
+            self.send :#{meth} if respond_to?(:#{meth})
+            plugin_store.each {|a| a.#{meth}(*args) }
           end
         EOE
       end

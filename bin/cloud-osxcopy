@@ -9,7 +9,7 @@ end
 
 o.loaded_clouds.each do |cld|
   
-  node = cld.instances_by_status("running").first
+  node = cld.nodes(:status => "running").first
   ip = node.ip
   puts "ip: #{ip}"
   Kernel.system "echo #{ip} | pbcopy"

@@ -79,7 +79,7 @@ class Object
     print m if o.verbose rescue ""
   end
   def dputs(m="", o=self)
-    puts "[DEBUG] -- #{m}" if debugging?(o) || verbose?(o) rescue ""
+    puts "[DEBUG] -- #{m.inspect}" if debugging?(o) || verbose?(o) rescue ""
   end
   def dprint(m="", o=self)
     print "#{m}" if debugging?(o) || verbose?(o) rescue ""

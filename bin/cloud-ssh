@@ -11,7 +11,7 @@ end
 load_pool(o.spec? ? o.spec : Binary.get_existing_spec_location)
 
 @cloud = o.loaded_clouds.first
-nodes = @cloud.instances_by_status("running")
+nodes = @cloud.nodes(:status => "running")
 
 puts nodes.map {|a| a.to_s}.join("\n")
 

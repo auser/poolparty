@@ -13,35 +13,22 @@ module PoolParty
     end
     
     # Select a list of instances based on their status
-    def instances_by_status(status="running")
-      _instances_by_status[status] ||= list_of_instances.select_with_hash(:status => status)
+    def nodes(hsh={})
+      _nodes[hsh] ||= list_of_instances.select_with_hash(hsh)
     end
     
     # Cache the instances_by_status here
-    def _instances_by_status
-      @_instances_by_status ||= {}
+    def _nodes
+      @_nodes ||= {}
     end
     
     # Select the list of instances, either based on the neighborhoods
     # loaded from /etc/poolparty/neighborhood.json
     # or by the remote_base on keypair
-    def list_of_instances        
+    def list_of_instances
       @containing_cloud = self
       n = Neighborhoods.load_default
       @list_of_instances ||= (n ? n.instances : _list_of_instances(keypair.basename))
-    end
-    
-    # The instances that this cloud knows about, meaning their neighborhood 
-    # and the started instance, if need be
-    def all_known_instances
-      instances_by_status("running") + started_instance
-    end
-    
-    # If the cloud is starting an instance, it will not be listed in 
-    # the running instances, so we need to keep track of the instance
-    # that is being started so we can add it to the neighborhood list
-    def started_instance
-      @started_instance ||= []
     end
 
     private
@@ -54,10 +41,23 @@ module PoolParty
         a if (tmp_key.nil? || tmp_key.empty? ? true : a[:keypair] == tmp_key)
       end
     end
+    
+    # The instances that this cloud knows about, meaning their neighborhood 
+    # and the started instance, if need be
+    def all_known_instances
+      nodes(:status => "running") + started_instance
+    end
+    
+    # If the cloud is starting an instance, it will not be listed in 
+    # the running instances, so we need to keep track of the instance
+    # that is being started so we can add it to the neighborhood list
+    def started_instance
+      @started_instance ||= []
+    end
 
     # Reset the cache of descriptions
     def reset_remoter_base!
-      @_instances_by_status = @describe_instances = nil
+      @_nodes = @list_of_instances = @describe_instances = nil
     end
     
   end

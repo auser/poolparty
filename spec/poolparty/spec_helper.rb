@@ -183,7 +183,7 @@ def stub_list_of_instances_for(o)
 end
 
 def stub_running_remote_instances(o)
-  o.stub!(:instances_by_status).and_return(running_remote_instances.map {|h| PoolParty::Remote::RemoteInstance.new(h) })
+  o.stub!(:instances_by_status).and_return(running_remote_instances)
 end
 
 def response_list_of_instances(arr=[])
@@ -217,7 +217,7 @@ def add_stub_instance_to(o, num, status="running")
   stub_remoter_for(o)
 end
 def ris
-  @ris ||= response_list_of_instances.collect {|h| PoolParty::Remote::RemoteInstance.new(h) }
+  @ris ||= response_list_of_instances#.collect {|h| PoolParty::Remote::RemoteInstance.new(h) }
 end
 def remove_stub_instance_from(o, num)
   reset_response!

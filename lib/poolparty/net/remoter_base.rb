@@ -87,10 +87,6 @@ module PoolParty
         cloud.dputs "#{cloud.name} Launched instance #{@inst[:ip]}\n\twaiting for it to respond"        
         500.times do |i|
           cloud.dprint "#{i}"
-          # if @inst.status =~ /pending/
-          #   sleep(2)
-          #   @inst = describe_instance(@inst)
-          # end
           if ping_port(@inst[:ip], 22)
             cloud.started_instance << @inst
 
@@ -104,10 +100,13 @@ module PoolParty
         end
         raise "Instance not responding at #{inst.ip}"
       end
+      
       def launch_instance!(o={}, &block);self.class.launch_instance!(self.options.merge(o), &block);end
 
       # Called after an instance is launched
-      def self.after_launch_instance(instance=nil);end
+      def self.after_launch_instance(instance=nil)
+        cloud.call_after_launch_instance_callbacks(instance)
+      end
 
       def self.when_instance_is_responding(inst, &block)
         if ping_port(inst.ip, 22)

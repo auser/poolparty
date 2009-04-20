@@ -10,7 +10,7 @@ end
 o.loaded_clouds.each do |cld|
 
   vputs header("Expanding cloud #{cld.name}")
-  vputs "#{cld.instances_by_status("running").size} running instances of #{cld.maximum_instances} possible instances"
+  vputs "#{cld.nodes(:status => "running").size} running instances of #{cld.maximum_instances} possible instances"
   vputs testing ? "Not expanding (test mode)" : "Expanding the cloud"
   
   cld.launch_instance! do |node|

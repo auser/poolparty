@@ -38,6 +38,8 @@ module PoolParty
     end
     
     # Set instances with a range or a number
+    # if passed with a hash, call nodes(hash) to return filtered list of 
+    # instances
     def instances(arg)
       case arg
       when Range
@@ -46,6 +48,8 @@ module PoolParty
       when Fixnum
         minimum_instances arg
         maximum_instances arg
+      when Hash
+        nodes(arg)
       else
         raise SpecException.new("Don't know how to handle instances cloud input #{arg}")
       end
