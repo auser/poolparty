@@ -21,9 +21,12 @@ o.loaded_clouds.each do |cld|
   when "expand"
     # PoolParty.log << "Launching new instance"
     cld.send :launch_instance!, schema.options do |node|
+      cld.started_instance << node
       ::PoolParty::Provision::BootStrapper.new( node[:ip], :cloud => cld )
       ::PoolParty::Provision::DrConfigure.new( node[:ip], :cloud => cld )
     end
+    cld.started_instance = nil
+    
   when "contract"
     last_instance_id = %x[/usr/bin/server-list-active instance_id].split("\t").last
     remoter_base.terminate_instance! schema.options.merge(:instance_id => last_instance_id)

@@ -17,6 +17,7 @@ module PoolParty
       _instances_by_status[status] ||= list_of_instances.select_with_hash(:status => status)
     end
     
+    # Cache the instances_by_status here
     def _instances_by_status
       @_instances_by_status ||= {}
     end
@@ -28,6 +29,19 @@ module PoolParty
       @containing_cloud = self
       n = Neighborhoods.load_default
       @list_of_instances ||= (n ? n.instances : _list_of_instances(keypair.basename))
+    end
+    
+    # The instances that this cloud knows about, meaning their neighborhood 
+    # and the started instance, if need be
+    def all_known_instances
+      instances_by_status("running") + started_instance
+    end
+    
+    # If the cloud is starting an instance, it will not be listed in 
+    # the running instances, so we need to keep track of the instance
+    # that is being started so we can add it to the neighborhood list
+    def started_instance
+      @started_instance ||= []
     end
 
     private

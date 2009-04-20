@@ -37,9 +37,13 @@ module Monitors
       if @logfile
         @logfile
       else
-        ::File.file? log_file_path
-        ::FileUtils.mkdir_p ::File.dirname(log_file_path) unless ::File.directory?(::File.dirname(log_file_path))
-        @logfile ||= ::File.open(log_file_path, 'a+')
+        @logfile ||= begin
+          ::File.file? log_file_path
+          ::FileUtils.mkdir_p ::File.dirname(log_file_path) unless ::File.directory?(::File.dirname(log_file_path))
+          ::File.open(log_file_path, 'a+')
+        rescue
+          STDOUT
+        end
       end
     end
     

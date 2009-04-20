@@ -84,7 +84,7 @@ module PoolParty
        @cloud.build_and_store_new_config_file("#{Default.tmp_path}/dr_configure/poolparty.pp") 
        
        Neighborhoods.clump(
-        @cloud.instances_by_status("running"),
+        @cloud.all_known_instances,
         "#{Default.tmp_path}/dr_configure/neighborhood.json")
      end
      
