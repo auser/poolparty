@@ -31,8 +31,8 @@ module PoolParty
       end
       
       def method_missing(meth, *args, &block)
-        if @parent
-          @parent.send meth, *args, &block rescue super
+        if @cloud
+          @cloud.send meth, *args, &block rescue super
         else
           super
         end
@@ -80,20 +80,22 @@ module PoolParty
       
       # TODO: Rename and modularize the @inst.status =~ /pending/ so that it works on all 
       # remoter_bases
-      def self.launch_instance!(o={}, &block)        
+      def self.launch_instance!(o={}, &block)
+        @cloud = o.delete(:cloud) if o[:cloud]
         @inst = launch_new_instance!( o )
         sleep(2)
         
-        cloud.dputs "#{cloud.name} Launched instance #{@inst[:ip]}\n\twaiting for it to respond"        
+        @cloud.dputs "#{cloud.name} Launched instance #{@inst[:ip]}"
+        @cloud.dputs "   waiting for it to respond"        
         500.times do |i|
-          cloud.dprint "#{i}"
+          @cloud.dprint "#{i}"
           if ping_port(@inst[:ip], 22)
-            cloud.started_instance << @inst
+            @cloud.started_instance << @inst
 
             block.call(@inst) if block
             after_launch_instance(@inst)
             
-            cloud.started_instance = nil
+            @cloud.started_instance = nil
             return @inst
           end
           sleep(2)
@@ -101,7 +103,9 @@ module PoolParty
         raise "Instance not responding at #{inst.ip}"
       end
       
-      def launch_instance!(o={}, &block);self.class.launch_instance!(self.options.merge(o), &block);end
+      def launch_instance!(o={}, &block)
+        self.class.launch_instance!(self.options.merge(o.merge(:cloud => self)), &block)
+      end
 
       # Called after an instance is launched
       def self.after_launch_instance(instance=nil)

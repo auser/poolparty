@@ -83,8 +83,9 @@ module PoolParty
        #TODO: move to puppet class
        @cloud.build_and_store_new_config_file("#{Default.tmp_path}/dr_configure/poolparty.pp") 
        
+       dputs "Clumping neighborhoods"
        Neighborhoods.clump(
-        @cloud.all_known_instances,
+        @cloud.nodes + @cloud.started_instance,
         "#{Default.tmp_path}/dr_configure/neighborhood.json")
      end
      

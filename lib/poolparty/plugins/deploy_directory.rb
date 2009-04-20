@@ -14,9 +14,12 @@ module PoolParty
     
     virtual_resource(:deploy_directory) do
       
-      def loaded(opts={}, &block)
-        package_deploy_directory
+      def loaded(opts={}, &block)        
         add_unpack_directory
+      end
+      
+      def before_configure
+        package_deploy_directory
       end
       
       def package_deploy_directory
@@ -33,7 +36,7 @@ module PoolParty
         
         if owner?
           has_exec(:name => "chown-#{name}") do
-            command "chown #{owner} -R #{to}"
+            command "chown #{owner} -R #{to}/#{name}"
           end
         end
         

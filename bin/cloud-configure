@@ -16,11 +16,12 @@ o.loaded_clouds.each do |cld|
     puts "No nodes to configure"
   else
     if o.inst_num?
-      ::PoolParty::Provision::DrConfigure.new( nodes[o.inst_num], :full_keypair_path => cld.keypair.full_filepath,  :cloud => cld )
+      ::PoolParty::Provision::DrConfigure.new( nodes[o.inst_num], :cloud => cld )
     else
+      puts "Self: #{self}"
       nodes.each do |address|
         puts "Configuring: #{address}"
-        ::PoolParty::Provision::DrConfigure.new( address, :full_keypair_path => cld.keypair.full_filepath,  :cloud => cld )
+        ::PoolParty::Provision::DrConfigure.new( address, :cloud => cld )
       end
     end
   end

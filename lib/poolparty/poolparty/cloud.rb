@@ -4,7 +4,7 @@ require File.dirname(__FILE__) + "/resource"
 module PoolParty    
   module Cloud
     # Instantiate a new cloud
-    def cloud(name=:app, &block)
+    def cloud(name, &block)
       clouds[name] ||= Cloud.new(name, &block)
     end
 
@@ -162,9 +162,10 @@ module PoolParty
         @build_manifest ||= build_from_existing_file
         unless @build_manifest          
           props = to_properties_hash
-         
+          
           @build_manifest =  options[:dependency_resolver].send(:compile, props, self)
         end
+        dputs "Finished creating manifest"
         @build_manifest
       end
       
@@ -175,6 +176,7 @@ module PoolParty
       end
       
       # If the pp already exists, then let's not recreate it
+      # TODO: Abstract
       def build_from_existing_file
         ::FileTest.file?("#{Default.base_config_directory}/poolparty.pp") ? open("#{Default.base_config_directory}/poolparty.pp").read : nil
       end

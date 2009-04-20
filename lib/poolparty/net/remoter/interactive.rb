@@ -35,17 +35,12 @@ module PoolParty
     # List the instances for the current key pair, regardless of their states
     # If no keypair is passed, select them all
     def _list_of_instances(keyp=nil)
+      dputs "Calling list_of_instances on #{self}"
       tmp_key = (keyp ? keyp : nil)
       
       @describe_instances ||= remote_base.describe_instances(options).select do |a|
         a if (tmp_key.nil? || tmp_key.empty? ? true : a[:keypair] == tmp_key)
       end
-    end
-    
-    # The instances that this cloud knows about, meaning their neighborhood 
-    # and the started instance, if need be
-    def all_known_instances
-      nodes(:status => "running") + started_instance
     end
     
     # If the cloud is starting an instance, it will not be listed in 
