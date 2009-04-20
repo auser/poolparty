@@ -10,11 +10,11 @@ module PoolParty
       def enable
         has_chef_recipe 'apache2'
         
-        has_package "haproxy" do
-          # stops get_service("apache2")
-        end
-        
         has_service "apache2"
+        
+        has_package "haproxy" do
+          stops get_service("apache2")
+        end        
     
         # Restart sysklogd after we update the haproxy.log
         has_service(:name => "sysklogd")    
