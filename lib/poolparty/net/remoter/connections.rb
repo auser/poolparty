@@ -35,7 +35,8 @@ module PoolParty
     end
   
     def rsync( source_path, destination_path, rsync_opts=['-v -a'] )
-      puts %x{ rsync -e 'ssh #{ssh_options}' #{rsync_opts.join(' ')} #{source_path}  root@#{target_host}:#{destination_path}}
+      dputs "rsync -e 'ssh #{ssh_options}' #{rsync_opts.join(' ')} #{source_path}  root@#{target_host}:#{destination_path}"
+      puts %x{ rsync -e 'ssh #{ssh_options}' #{rsync_opts.join(' ')} #{source_path}  root@#{target_host}:#{destination_path} }
     end
    
     def run_local(commands)

@@ -79,8 +79,8 @@ module PoolParty
       end
       def describe_instances(o={})
         id = 0
-        get_instances_description(options.merge(o)).each_with_index do |h,i|
-          next if h[:keypair] != keypair
+        get_instances_description(options.merge(o).merge(:keypair => keypair)).each_with_index do |h,i|
+          # next if h[:keypair] != ::File.dirname(keypair)
           if h[:status] == "running"
             inst_name = id == 0 ? "master" : "node#{id}"
             id += 1

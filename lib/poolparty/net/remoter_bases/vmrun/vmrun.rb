@@ -49,7 +49,7 @@ module PoolParty
       def launch_new_instance!
         VmwareInstance.new( :vmx_file => next_unused_vmx_file, 
                             :ip => vmx_hash[next_unused_vmx_file], 
-                            :keypair => cloud.keypair
+                            :keypair => @cloud.keypair
                           ).launch!
       end
       # Terminate an instance by id
@@ -60,7 +60,7 @@ module PoolParty
         dsl_options o
         VmwareInstance.new( :vmx_file => last_unused_vmx_file, 
                             :ip => vmx_hash[last_unused_vmx_file], 
-                            :keypair => cloud.keypair
+                            :keypair => @cloud.keypair
                           ).terminate!(terminate_options)
       end
 
@@ -85,7 +85,7 @@ module PoolParty
         lines.shift
         lines.map {|vmx_file| VmwareInstance.new( :vmx_file => vmx_file, 
                                                   :ip => vmx_hash[vmx_file], 
-                                                  :keypair => cloud.keypair
+                                                  :keypair => @cloud.keypair
                                                 ) }
       end
 
