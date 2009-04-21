@@ -9,7 +9,7 @@ require 'rubygems'
 require 'rack'
 require 'json'
 
-Dir[::File.dirname(__FILE__)+"/monitors/*"].each {|m| puts "require #{m}"; require "#{m}"}
+Dir[::File.dirname(__FILE__)+"/monitors/*"].each {|m| require m}
 
 class String
   def camelcase
