@@ -8,8 +8,12 @@ module PoolParty
     def on_change(str=nil)
       str ? dsl_options.merge!(:notify => send_if_method(str)) : dsl_options[:notify]
     end
-    def ensures(str="running")
+    def ensures(str = :present)
+      if [:absent, :present].include?(str) 
         str == :absent ? is_absent : is_present
+      else
+        str
+      end
     end
     def present
       :install

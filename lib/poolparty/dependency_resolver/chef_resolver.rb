@@ -119,13 +119,12 @@ module PoolParty
         ty
       end
     end
-        
-    # TODO: This is brittle, need to find a way to make them reactive, rather than 
-    # separate (the key/value pairs)
-    def hash_flush_out(hash, pre="", post="")      
+
+    # flush out the hash into something meaningful
+    def hash_flush_out(hash, pre="", post="") 
       hash.map do |k,v|
         if o = handle_actions(k,v)
-          o 
+          o
         else
           key = to_chef_key(k)
           res = to_option_string(v)
@@ -141,7 +140,7 @@ module PoolParty
       else
         kname = klassname.to_s.gsub(/pool_party_/, '').gsub(/_class/, '')
         str = "\n#{tf(tabs)}# #{kname}\n"
-        str << "#{tf(tabs+1)}"
+        str << "#{tf(tabs)}"
         klassarray.each do |hsh|
           str << _compile(hsh,tabs+1, klassname)
         end        

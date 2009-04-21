@@ -23,10 +23,12 @@ module PoolParty
     # This class is the base class for all remote types, such as ec2
     # Everything remoting-wise is derived from this class
     class RemoterBase
+      include               Dslify
       include  ::PoolParty::Remote
-      attr_reader :cloud
       
-      def initialize(prnt = nil, opts={}, &block)
+      def initialize(prnt, opts={}, &block)
+        dsl_options opts
+        instance_eval &block if block
         @parent = @cloud = prnt
       end
       
@@ -45,48 +47,63 @@ module PoolParty
       # pieces. Don't forget to overwrite these methods
       # Launch a new instance
       def self.launch_new_instance!(o={})
-        raise RemoteException.new(:method_not_defined, "launch_new_instance!")
+        new(o).launch_new_instance!(o)
       end
       def self.expand(o={});launch_new_instance!(o);end
       def launch_new_instance!(o={})
-        self.class.launch_new_instance!( options.merge(o) )
+        raise RemoteException.new(:method_not_defined, "launch_new_instance!")        
       end
       
       # Terminate an instance by id
       def self.terminate_instance!(o={})
-        raise RemoteException.new(:method_not_defined, "terminate_instance!")
+        new(o).terminate_instance!(o)
       end
       def self.contract(o={});terminate_instance!(o);end      
-      def terminate_instance!(o={})
-        self.class.terminate_instance!(o ? options.merge(o) : options)
+      def terminate_instance!(o={})        
+        raise RemoteException.new(:method_not_defined, "terminate_instance!")
       end
       
       # Describe an instance's status
       def self.describe_instance(o={})
-        raise RemoteException.new(:method_not_defined, "describe_instance")
+        new(o).describe_instance(o) 
       end
       def describe_instance(o={})
-        self.class.describe_instance(o ? options.merge(o) : options)
+        raise RemoteException.new(:method_not_defined, "describe_instance")
       end
       
       # Get instances
       # The instances must have a status associated with them on the hash
       def self.describe_instances(o={})
-        raise RemoteException.new(:method_not_defined, "describe_instances")
+        new(o).describe_instances(o)
       end
-      def describe_instances(o={})
-        self.class.describe_instances(o ? options.merge(o) : options)
+      def describe_instances(o={})        
+        raise RemoteException.new(:method_not_defined, "describe_instances")
       end
       
       # TODO: Rename and modularize the @inst.status =~ /pending/ so that it works on all 
       # remoter_bases
       def self.launch_instance!(o={}, &block)
         @cloud = o.delete(:cloud) if o[:cloud]
-        @inst = launch_new_instance!( o )
+        @keypair = o.delete(:keypair) if o[:keypair]
+        
+        @inst = launch_new_instance!( o.merge(:keypair => @keypair.to_s) )
         sleep(2)
         
+        @cloud.dputs "#{@cloud.name} launched instance checking for ip..."
+        
+        # Wait for 10 minutes for the instance to gain an ip if it doesn't already have one
+        500.times do |i|
+          break if @inst[:ip] =~ /\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/
+          sleep(2)
+          @inst = describe_instance(@inst)
+          @cloud.dprint "."
+        end        
+        @cloud.dputs "Found an ip"
+        
         @cloud.dputs "#{@cloud.name} Launched instance #{@inst[:ip]}"
-        @cloud.dputs "   waiting for it to respond"        
+        @cloud.dputs "   waiting for it to respond"
+        
+        # Try for 10 minutes to pint port 22 
         500.times do |i|
           @cloud.dprint "."
           if ping_port(@inst[:ip], 22)
@@ -109,7 +126,7 @@ module PoolParty
       end
 
       # Called after an instance is launched
-      def self.after_launch_instance(instance=nil)
+      def after_launch_instance(instance=nil)
         @cloud.call_after_launch_instance_callbacks(instance)
       end
 

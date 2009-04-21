@@ -14,7 +14,8 @@ module PoolParty
     
     # Select a list of instances based on their status
     def nodes(hsh={})
-      _nodes[hsh] ||= list_of_instances.select_with_hash(hsh)
+      # _nodes[hsh] ||= 
+      list_of_instances.select_with_hash(hsh)
     end
     
     # Cache the instances_by_status here
@@ -29,13 +30,13 @@ module PoolParty
       return @list_of_instances if @list_of_instances
       @containing_cloud = self
       n = Neighborhoods.load_default
-      @list_of_instances = (n ? n.instances : _list_of_instances(:keypair => keypair))
+      @list_of_instances = (n ? n.instances : _list_of_instances)
     end
 
     private
     # List the instances for the current key pair, regardless of their states
     # If no keypair is passed, select them all
-    def _list_of_instances(select={})      
+    def _list_of_instances(select={})
       @describe_instances ||= remote_base.describe_instances(options).select_with_hash(select)
     end
     
