@@ -130,14 +130,15 @@ module PoolParty
         @cloud.call_after_launch_instance_callbacks(instance)
       end
 
-      def self.when_instance_is_responding(inst, &block)
-        if ping_port(inst.ip, 22)
-          block.call if block
-        else
-          raise "Instance not responding at #{inst.ip}"
-        end
-      end
-      def when_instance_is_responding(inst, &block);self.class.when_instance_is_responding;end
+      #TODO: Remove
+      # def self.when_instance_is_responding(inst, &block)
+      #   if ping_port(inst.ip, 22)
+      #     block.call if block
+      #   else
+      #     raise "Instance not responding at #{inst.ip}"
+      #   end
+      # end
+      # def when_instance_is_responding(inst, &block);self.class.when_instance_is_responding;end
       
       # TODO: BAD FORM, already defined in connections.rb. Fix this, ASAP
       def self.ping_port(host, port=22, retry_times=400)

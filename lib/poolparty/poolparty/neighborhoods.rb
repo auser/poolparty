@@ -4,21 +4,25 @@ module PoolParty
   class Neighborhoods
     attr_reader :schema
     
-    def initialize(json)
-      raise Exception.new("You must pass a string or a hash to Neighborhoods") unless json
-      
-      case json
+    def initialize(data)
+      raise Exception.new("You must pass a string or a hash to Neighborhoods") unless data
+      parsed_data = case data
       when Array
-        json = {:instances => json.map {|entry| disect(entry) }}
+        {:instances => data.map {|entry| disect(entry) }}
       when String
-        json = {:instances => JSON.parse(json).map {|inst| "#{inst["instance_id"]}\t#{inst["ip"]}"}}
+        {:instances => JSON.parse(data)}#.map "#{inst["instance_id"]}\t#{inst["ip"]}"}}
       end
-      @schema = PoolParty::Schema.new(json)
+      @schema = PoolParty::Schema.new(parsed_data)
       raise Exception.new("No instances found in the Neighborhoods schema") unless @schema.instances
     end
     
     def instances
+      # puts "schema isntances #{@schema.instances.class} #{@schema.instances }"
       @instances ||= @schema.instances.map {|line| disect(line) }
+    end
+    
+    def empty?
+      instances.empty?
     end
     
     def [](at)
@@ -30,8 +34,6 @@ module PoolParty
       when String
         arr = line.split("\t")
         {:instance_id => arr[0], :ip => arr[1]}
-      when Hash
-        "#{line[:instance_id]}\t#{line[:ip]}"
       else
         line
       end
@@ -62,7 +64,7 @@ module PoolParty
         filepath = ::File.expand_path("#{dir}/neighborhood.json")
         filepath if ::File.file?(filepath)
       end.first || nil
-      def_file ? new( open(::File.expand_path("#{def_file}/neighborhood.json")).read ) : nil
+      def_file ? new( open(::File.expand_path("#{def_file}/neighborhood.json")).read ) : new('[]')
     end
     
   end

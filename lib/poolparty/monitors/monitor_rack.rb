@@ -23,6 +23,7 @@ module Monitors
     
     def call(env)
       @env = env
+      @data = env['rack.input'].read rescue nil
       @request = Rack::Request.new env
       @response = Rack::Response.new
       begin
@@ -67,11 +68,11 @@ module Monitors
         when 0
           self.respond_to?(verb.to_sym) ? self.send(verb.to_sym) : response.status='404'
         when 1 #/stats
-          klass.send(verb.to_sym) rescue klass.new(env).send(verb.to_sym)
+          klass.send(verb.to_sym, @data) rescue klass.new.send(verb.to_sym, @data)
         when 2 #/stats/load
-          klass.send("#{verb}_#{path[1]}".to_sym) #rescue klass.new(env).send("#{verb}_#{path[1]}".to_sym)
-        else
-          klass.send("#{verb}_#{path[1]}".to_sym, *path[2..-1])
+          klass.send("#{verb}_#{path[1]}".to_sym, @data) #rescue klass.new.send("#{verb}_#{path[1]}".to_sym, @data)
+        # else
+          # klass.send("#{verb}_#{path[1]}".to_sym, env['rack.input'].read, *path[2..-1])
         end
       end
     end

@@ -66,8 +66,8 @@ module PoolParty
 
       # Describe an instance's status, must pass :vmx_file in the options
       def self.describe_instance(o={})
-        vmx_file = o[:vmx_file] || Vmrun.running_instances.first
-        new_instance(o).describe_instance(:vmx_file => vmx_file)
+        # vmx_file = o[:vmx_file] || Vmrun.running_instances.first
+        new_instance(o).describe_instance
       end
       def describe_instance(o={})        
         running_instances.select {|inst| inst.vmx_file == o[:vmx_file] }.first
