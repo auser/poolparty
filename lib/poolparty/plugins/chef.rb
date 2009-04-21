@@ -138,7 +138,6 @@ file_cache_path  "/etc/chef"
         ]
       end
       def before_configure
-        # dputs "Calling before_configure in Chef (dir: #{::File.directory?("/etc/chef")})"
         config
         json
         
