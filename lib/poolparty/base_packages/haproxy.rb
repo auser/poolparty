@@ -9,12 +9,6 @@ module PoolParty
       
       def enable
         has_chef_recipe 'apache2'
-        
-        has_service "apache2"
-        
-        has_package "haproxy" do
-          stops get_service("apache2")
-        end
 
         # Restart sysklogd after we update the haproxy.log
         has_service(:name => "sysklogd")    
@@ -32,17 +26,24 @@ module PoolParty
         has_line_in_file({:line => "SYSLOGD=\"-r\"", :file => "/etc/default/syslogd"})
         has_line_in_file({:line => "local0.* /var/log/haproxy.log", :file => "/etc/syslog.conf"}, {:notify => get_service("sysklogd")})
 
+        
+        has_directory "/var/run/haproxy"
+        has_service "apache2"
+        
+        has_package "haproxy" do
+          stops get_service("apache2")
+        end
+
         has_exec "reloadhaproxy", 
           :command => "/etc/init.d/haproxy reload", 
+          :ensures => "nothing",
           :requires => get_package("haproxy")
         
         # Service is required
         has_service("haproxy", :ensures => "running") do
           stops get_service("apache2"), :immediately
           starts get_service("apache2")
-        end
-        
-        has_directory "/var/run/haproxy"
+        end        
         
         has_file "/etc/haproxy/haproxy.cfg" do
           template "#{::File.dirname(__FILE__)}/../templates/haproxy.conf"
