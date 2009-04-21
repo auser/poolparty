@@ -126,7 +126,7 @@ module PoolParty
       end
 
       # Called after an instance is launched
-      def after_launch_instance(instance=nil)
+      def self.after_launch_instance(instance=nil)
         @cloud.call_after_launch_instance_callbacks(instance)
       end
 

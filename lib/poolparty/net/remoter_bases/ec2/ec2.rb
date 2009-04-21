@@ -79,8 +79,7 @@ module PoolParty
       end
       def describe_instances(o={})
         id = 0
-        get_instances_description(options.merge(o).merge(:keypair => keypair)).each_with_index do |h,i|
-          next if h[:keypair] != ::File.dirname(keypair)
+        get_instances_description(options.merge(o)).each_with_index do |h,i|          
           if h[:status] == "running"
             inst_name = id == 0 ? "master" : "node#{id}"
             id += 1
@@ -94,7 +93,7 @@ module PoolParty
             :index => i,  #TODO MF get the instance id from the aws result instead
             :launching_time => (h[:launching_time])
           })
-        end.sort {|a,b| a[:index] <=> b[:index] }
+        end.compact.sort {|a,b| a[:index] <=> b[:index] }
       end
       
       def self.ec2(o={})
@@ -103,8 +102,9 @@ module PoolParty
                               )
       end
       # Get the ec2 description for the response in a hash format
-      def get_instances_description(o={})
-        EC2ResponseObject.get_descriptions(ec2(o).describe_instances)
+      def get_instances_description(o={})        
+        key_hash = {:keypair => ::File.basename(keypair.is_a?(String) ? keypair : keypair.full_filepath)}
+        EC2ResponseObject.get_descriptions(ec2(o).describe_instances).select_with_hash(key_hash)
       end
       def get_descriptions(o={})
         self.class.get_descriptions(o)
