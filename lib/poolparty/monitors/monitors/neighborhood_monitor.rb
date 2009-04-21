@@ -11,7 +11,7 @@ module Monitors
       @env = env
       @request = Rack::Request.new env
       @response = Rack::Response.new
-      @neighboorhood = ::PoolParty::Neighborhoods.load_default
+      @neighboorhood = ::PoolParty::Neighborhoods.load_default.instances
     end
     
     def get

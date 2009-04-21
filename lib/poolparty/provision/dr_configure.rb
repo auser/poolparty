@@ -85,7 +85,7 @@ module PoolParty
        
        dputs "Clumping neighborhoods"
        Neighborhoods.clump(
-        @cloud.nodes + @cloud.started_instance,
+        @cloud.nodes(:status => "running") + @cloud.started_instance,
         "#{Default.tmp_path}/dr_configure/neighborhood.json")
      end
      
