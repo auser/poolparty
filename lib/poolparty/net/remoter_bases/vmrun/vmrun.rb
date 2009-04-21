@@ -33,8 +33,7 @@ module PoolParty
       def initialize(par, opts={}, &block)
         dsl_options opts
         instance_eval &block if block
-        super(par, &block)
-    
+        super(par, &block)    
       end
       
       #terminate all running instances
