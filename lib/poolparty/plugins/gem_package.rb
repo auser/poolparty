@@ -1,4 +1,10 @@
-module PoolParty    
+module PoolParty
+  
+  # Allows you to specify a gem to be installed
+  # You can optionally pass a :download_url if you want a specific gem or version installed
+  # example:
+  #   has_gem_package :name => 'rubot',  :download_url => 'http://rubyforge.org/frs/download.php/35089/rubot-base-0.0.1.gem'
+  
   class GempackageResource
     
     virtual_resource(:gem_package) do
