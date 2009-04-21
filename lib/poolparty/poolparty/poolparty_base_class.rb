@@ -95,6 +95,7 @@ module PoolParty
         end
         res.after_create
         store_in_local_resources(ty, res)
+        ordered_resources << res
         res
       end
     end
@@ -120,6 +121,10 @@ module PoolParty
     
     def resource(type=:file)
       resources[type.to_sym] ||= []
+    end
+    
+    def ordered_resources
+      @ordered_resources ||= []
     end
     
     def is_plugin?

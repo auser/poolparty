@@ -14,8 +14,8 @@ module PoolParty
         
         has_package "haproxy" do
           stops get_service("apache2")
-        end        
-    
+        end
+
         # Restart sysklogd after we update the haproxy.log
         has_service(:name => "sysklogd")    
         # Template variables
@@ -25,6 +25,7 @@ module PoolParty
         has_variable("ports_haproxy", :value => ([(self.respond_to?(:port) ? port : Default.port)].flatten))        
         has_variable("forwarding_port", :value => (respond_to?(:forwarding_port) ? forwarding_port : Default.forwarding_port))
         has_variable("proxy_mode", :value => (respond_to?(:proxy_mode) ? proxy_mode : Default.proxy_mode))
+        has_variable("haproxy_nodes", :value => (nodes + started_instance).map {|a| a[:ip] }.join("\t"))
     
         # Startup haproxy and enable it
         has_line_in_file(:line => "ENABLED=1", :file => "/etc/default/haproxy")
