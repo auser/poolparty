@@ -19,7 +19,7 @@ module PoolParty
         has_variable("ports_haproxy", :value => ([(self.respond_to?(:port) ? port : Default.port)].flatten))        
         has_variable("forwarding_port", :value => (respond_to?(:forwarding_port) ? forwarding_port : Default.forwarding_port))
         has_variable("proxy_mode", :value => (respond_to?(:proxy_mode) ? proxy_mode : Default.proxy_mode))
-        has_variable("haproxy_nodes", :value => (nodes + started_instance).map {|a| a[:ip] }.join("\t"))
+        has_variable("haproxy_nodes", :value => (nodes + started_instance).map {|a| a[:ip] })
     
         # Startup haproxy and enable it
         has_line_in_file(:line => "ENABLED=1", :file => "/etc/default/haproxy")
@@ -43,7 +43,11 @@ module PoolParty
         has_service("haproxy", :ensures => "running") do
           stops get_service("apache2"), :immediately
           starts get_service("apache2")
-        end        
+        end
+        
+        has_package "apache2" do
+          starts get_service("haproxy")
+        end
         
         has_file "/etc/haproxy/haproxy.cfg" do
           template "#{::File.dirname(__FILE__)}/../templates/haproxy.conf"

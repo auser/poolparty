@@ -15,6 +15,8 @@
       recipes/
       templates/
       attributes/
+  
+  TODO: This class is somewhat all over the place. Slim it down
 =end
 module PoolParty
   
@@ -79,8 +81,8 @@ module PoolParty
         when "chef_recipe"
           "include_recipe #{to_option_string(resource.name)}"
         else          
-          real_type = handle_types(ty)
-          real_name = handle_names(ty, resource)
+          real_type = handle_chef_types(ty)
+          real_name = resource[:name]
           res = before_filter_check_on_hash(resource, real_name)          
           "#{tf(tabs)}#{real_type} \"#{real_name}\" do\n#{tf(tabs+1)}#{hash_flush_out(res).compact.join("\n#{tf(tabs+1)}")}\n#{tf(tabs)}end"
         end
@@ -102,17 +104,8 @@ module PoolParty
       end
       ""
     end
-    
-    def handle_chef_vars(nm, varname)
-      case varname
-      when :enable
-        "action"
-      else
-        "#{nm}[:#{varname}]"
-      end
-    end
-    
-    def handle_types(ty)
+        
+    def handle_chef_types(ty)
       case ty.to_sym
       when :exec
         "execute"
@@ -126,16 +119,7 @@ module PoolParty
         ty
       end
     end
-    
-    def handle_names(ty, res)
-      case ty
-      when :exec
-        res.name
-      else
-        res.name
-      end
-    end
-    
+        
     # TODO: This is brittle, need to find a way to make them reactive, rather than 
     # separate (the key/value pairs)
     def hash_flush_out(hash, pre="", post="")      
@@ -179,6 +163,7 @@ module PoolParty
       end
       # 
       hsh.delete(:require) if hsh.has_key?(:require)
+      hsh.delete(:name) # we don't need the names in the methods
       hsh
     end
     
@@ -239,7 +224,7 @@ module PoolParty
     def to_option_string(obj)
       case obj
       when PoolParty::Resources::Resource
-        "resources(:#{handle_types(obj.class.to_s.top_level_class.downcase.to_sym)} => \"#{obj.name}\")"
+        "resources(:#{handle_chef_types(obj.class.to_s.top_level_class.downcase.to_sym)} => \"#{obj.name}\")"
       when Fixnum
         "#{obj.to_i}"
       when String

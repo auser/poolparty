@@ -170,7 +170,7 @@ module PoolParty
           #{method_name}({:ensures => :present}.merge(handle_option_values(opts).merge(extra)), &block)
         end
         def does_not_have_#{typ}(opts={}, extra={}, &block)
-          #{method_name}({(:ensures => :absent)}.merge(handle_option_values(opts).merge(extra)), &block)
+          #{method_name}({:ensures => :absent}.merge(handle_option_values(opts).merge(extra)), &block)
         end
       EOE
     end
