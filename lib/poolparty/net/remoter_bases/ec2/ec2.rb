@@ -54,7 +54,7 @@ module PoolParty
           :user_data => options[:user_data],
           :minCount => 1,
           :maxCount => options[:num] || 1,
-          :key_name => ::File.basename(keypair),
+          :key_name => ::File.basename(keypair.full_filepath),
           :availability_zone => availabilty_zone,
           :instance_type => options[:size] || Default.size,
           :group_id => security_group)

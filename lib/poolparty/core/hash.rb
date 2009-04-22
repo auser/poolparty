@@ -61,6 +61,11 @@ class Hash
     MyOpenStruct.new(m)
   end
   
+  def next_sorted_key(from)
+    idx = (size - keys.sort.index(from))
+    keys.sort[idx - 1]
+  end
+  
   def method_missing(sym, *args, &block)
     if has_key?(sym)
       fetch(sym)
@@ -69,10 +74,5 @@ class Hash
     else
       super
     end
-  end
-  
-  def next_sorted_key(from)
-    idx = (size - keys.sort.index(from))
-    keys.sort[idx - 1]
   end
 end

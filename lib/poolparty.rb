@@ -100,7 +100,7 @@ else
   end  
 end
 
-Logging.init :debug, :info, :warn, :error, :fatal
+# Logging.init :debug, :info, :warn, :error, :fatal
 
 module PoolParty
   include FileWriter
@@ -146,4 +146,4 @@ module PoolParty
 end
 
 PoolParty.reset!
-puts "duration = #{Time.now-t}" if $DEBUGGING
+dputs "duration = #{Time.now-t}"

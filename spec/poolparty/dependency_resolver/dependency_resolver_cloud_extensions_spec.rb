@@ -71,7 +71,7 @@ describe "Resolution spec" do
       # puts "<pre>#{@cloud.to_properties_hash.to_yaml}</pre>"
     end
     it "should have resources on the cloud as an array of hashes" do      
-      @cloud.to_properties_hash[:resources].class.should == OrderedHash
+      @cloud.to_properties_hash[:resources].class.should == Array
     end
     it "should have services on the cloud as an array of hashes" do
       @cloud.to_properties_hash[:services].class.should == OrderedHash
@@ -109,20 +109,20 @@ describe "Resolution spec" do
     end
     it "should have resources on the cloud as an array of hashes" do
       # puts "<pre>#{cloud(:dog).to_properties_hash.to_yaml}</pre>"
-      @properties[:resources].class.should == OrderedHash
+      @properties[:resources].class.should == Array
     end
     it "contain content in the template's hash" do      
-      @properties[:services][@apache_key].first.resources[:file].first[:content].should == "Hello bob on port 8080"
+      @properties[:services][@apache_key].first.resources.first[:content].should == "Hello bob on port 8080"
     end
     it "should have services" do
       @properties[:services][@apache_key].empty?.should == false
     end
     it "contain the files in a hash" do
       # puts "<pre>#{@properties.to_yaml}</pre>"
-      @properties[:resources][:file].map {|a| a[:name] }.include?("/etc/motd").should == true
+      @properties[:resources].select {|a| a[:name] == "/etc/motd" }.first.nil?.should == false
     end
     it "contain the directory named /var/www" do
-      @properties[:resources][:directory].map {|a| a[:name] }.include?("/var/www").should == true
+      @properties[:resources].select {|a| a[:name] == "/var/www" }.first.nil?.should == false
     end
   end
 end

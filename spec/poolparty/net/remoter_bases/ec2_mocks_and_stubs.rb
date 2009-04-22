@@ -18,7 +18,7 @@ class TestEC2Class < Ec2
 end
 
 class TestEc2RemoteInstance < PoolParty::Remote::Ec2RemoteInstance
-  def initialize(opts, p=TestEC2Class.new)
+  def initialize(opts, p=nil)
     super
   end
 end

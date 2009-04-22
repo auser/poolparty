@@ -14,6 +14,8 @@ module PoolParty
         {:instances => data.map {|entry| disect(entry) }}
       when String
         {:instances => JSON.parse(data)}#.map "#{inst["instance_id"]}\t#{inst["ip"]}"}}
+      when Hash
+        data
       end
       @schema = PoolParty::Schema.new(parsed_data)
       raise Exception.new("No instances found in the Neighborhoods schema") unless @schema.instances

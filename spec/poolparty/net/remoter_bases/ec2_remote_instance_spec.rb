@@ -9,7 +9,8 @@ include PoolParty::Remote
 
 describe "Ec2RemoteInstance" do
   before(:each) do
-    @ec2 = TestEc2RemoteInstance.new( {:name => "node3"}, TestEC2Class.new )
+    @cloud = TestCloud.new :test_remoter_base_cloud
+    @ec2 = TestEc2RemoteInstance.new( {:name => "node3"}, TestEC2Class.new(@cloud) )
     # node3 stubbed as  {:ip=>"192.168.0.3", :keypair=>"fake_keypair", :status=>"pending", :name=>"node3", :launching_time=>Time.now
     @ec2.my_cloud.stub!(:describe_instances).and_return response_list_of_instances
   end
@@ -55,9 +56,7 @@ describe "Remote Instance" do
   describe "configurable" do
     it "should set the options sent in the options, overiding passed option with found instance values" do
       @ec2 = TestEc2RemoteInstance.new(@valid_hash)
-      @ec2.found_at.should_not be_nil
-      @ec2.ip.should_not == "127.0.0.1"
-      @ec2.ip.should == "192.168.0.1"
+      @ec2.ip.should == "127.0.0.1"
     end
     it "should set the options sent by the parent" do
       @obj = Object.new
@@ -89,18 +88,18 @@ describe "Remote Instance" do
       TestEc2RemoteInstance.new(@valid_hash.merge(:status => "running")).running?.should == true
     end
     it "should say it is terminating when the status == shutting down" do
-      TestEc2RemoteInstance.new(@valid_hash.merge(:name => "node4")).terminating?.should == true
+      TestEc2RemoteInstance.new(@valid_hash.merge(:name => "node4", :status => "shutting")).terminating?.should == true
     end
     it "should say it is terminated when the status == terminated" do
-      TestEc2RemoteInstance.new(@valid_hash.merge(:name => "node2")).terminated?.should == true
+      TestEc2RemoteInstance.new(@valid_hash.merge(:status => "terminated")).terminated?.should == true
     end
     it "should not say it is running when it is pending" do
-      TestEc2RemoteInstance.new(@valid_hash.merge(:name => "node3") ).running?.should == false
+      TestEc2RemoteInstance.new(@valid_hash.merge(:status => "pending") ).running?.should == false
     end
   end
   describe "methods" do
     before(:each) do
-      @ec2 = TestEc2RemoteInstance.new(@valid_hash)
+      @ec2 = TestEc2RemoteInstance.new(@valid_hash.merge(:status => "running"))
     end
     it "should give the elapsed time" do
       @ec2.stub!(:launching_time).and_return(30.minutes.ago)
