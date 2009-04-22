@@ -2,12 +2,12 @@
 # access it at /monitor_time/ or /monitor_time/now
 module Monitors
   
-  class Time
-    def self.get
+  class Time < BaseMonitor
+    def get(data=nil)
       Time.now
     end
     
-    def self.get_now
+    def get_now
       Time.now
     end
   end

@@ -1,9 +1,9 @@
 # module PoolParty
   module Monitors
     
-    class Memory
+    class Memory < BaseMonitor
       
-      def self.get
+      def get(data=nil)
         uname = %x[uname]
         case uname.chomp
         when "Darwin"
@@ -15,7 +15,7 @@
       
       private
       
-      def self.darwin_memory_usage
+      def darwin_memory_usage
         str = %x[vm_stat]
         keep_array = []
         array_of_strings = str
@@ -33,7 +33,7 @@
         end
       end
       
-      def self.nix_memory_usage
+      def nix_memory_usage
         str = %x[free -m | grep -i mem]
         begin
           total_memory = str.split[1].to_f

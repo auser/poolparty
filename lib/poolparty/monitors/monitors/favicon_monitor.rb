@@ -3,8 +3,8 @@
 =end
 module Monitors
   
-  class Favicon
-    def self.get
+  class Favicon < BaseMonitor
+    def get(data=nil)
       ''
     end
   end

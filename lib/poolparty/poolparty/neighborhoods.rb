@@ -28,6 +28,15 @@ module PoolParty
       instances.empty?
     end
     
+    def next_node(node_hash)
+      return nil if empty?
+      sort.wrapping_next(node_hash)
+    end
+    
+    def sort
+      instances.sort {|a, b| a.ip <=> b.ip}
+    end
+    
     def [](at)
       instances[at] if at >= 0 && at < instances.size
     end

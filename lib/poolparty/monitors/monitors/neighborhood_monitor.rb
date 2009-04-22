@@ -1,19 +1,24 @@
 require ::File.dirname(__FILE__)+"/../../core/hash.rb"
 require ::File.dirname(__FILE__)+"/../../core/array.rb"
 require "#{::File.dirname(__FILE__)}/../../poolparty/neighborhoods"
+require 'rest_client'
 
 module Monitors
   
-  class Neighborhood
-    attr_reader :stats, :request
-    attr_accessor :response
+  class Neighborhood < BaseMonitor
     
     def get(data=nil)
       neighborhood
     end
     
-    def put(data)
-      @neighborhood = merge_array_of_hashes_with_key(neighborhood, JSON.parse(data), 'ip')
+    def put(data, from=nil)
+      @neighborhood_instances = merge_array_of_hashes_with_key(neighborhood.instances, JSON.parse(data), 'ip')
+      @neighborhood = @neighborhood[:instances] => @neighborhood_instances
+      after_close do
+        if @neighborhood.instances.size>1
+          RestClient.put "#{@neighborhood.instances.rand.ip)}/neighborhood", @neighborhood, :content_type => 'text/x-json'
+        end
+      end
       save
     end
     
@@ -24,8 +29,12 @@ module Monitors
     end
     
     private
+    def myself
+      @myself ||= @neighborhood.instance.select_with_hash('ip'=>@env['REQUEST_IP'])
+    end
+    
     def neighborhood
-      @neighborhood ||= ::PoolParty::Neighborhoods.load_default.instances  #rescue [{"instance_id"=>"/Users/mfM.vmx", "ip"=>"172.16.68.128"}, {"instance_id"=>"/Usvm/Ubuntu64bitVM.vmx", "ip"=>"172.16.68.130"}]
+      @neighborhood ||= ::PoolParty::Neighborhoods.load_default #rescue [{"instance_id"=>"1000", "ip"=>"172.16.68.128"}, {"instance_id"=>"456", "ip"=>"172.16.68.130"}]
     end
     
     def save(filepath='/etc/poolparty/neighborhood.json')

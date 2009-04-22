@@ -5,7 +5,7 @@
 
 module Monitors
   
-  class Stats
+  class Stats < BaseMonitor
     attr_reader :stats, :request
     attr_accessor :response
     
@@ -36,7 +36,7 @@ module Monitors
       log << "#{::Time.now.strftime("%Y-%m-%d-%H-%M")}, #{stats.to_json}\n"
     end
     
-    def get
+    def get(data=nil)
       begin
         if !request.params || request.params.empty?
           default_stats
