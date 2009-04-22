@@ -25,7 +25,7 @@ extra_help_string = <<-EOE
     cloud provision   combines bootstrap and configures an instance or multiple instances
     cloud expand      expands the cloud by a single instance
     cloud contract    contracts the cloud by a single instance
-    cloud show        show the configuration of the current clouds.rb configuration file
+    cloud describe    show the configuration of the current clouds.rb configuration file
     cloud list        show a list of the current instances on the cloud
     cloud ssh         ssh into an instance of the cloud
     cloud terminate   terminate the cloud
