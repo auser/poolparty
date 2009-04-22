@@ -15,7 +15,26 @@ new_args = new_args.reject {|arg| Binary.available_binaries_for("cloud").include
 # Let's make sure if no command is passed in that we show the help message
 new_args.push("-h") unless name
 
-o = PoolParty::Optioner.new(new_args, {:extra_help => "\nCloud actions\n#{Binary.list_binaries_for("cloud")}\n\n", :abstract => true}) do |opts, optioner|  
+# Binary.list_binaries_for("cloud")
+extra_help_string = <<-EOE
+
+  Cloud commands
+    cloud start       starts a single instance in your cloud.
+    cloud bootstrap   bootstraps an instance or multiple instances
+    cloud configure   configures an instance or multiple instances
+    cloud provision   combines bootstrap and configures an instance or multiple instances
+    cloud expand      expands the cloud by a single instance
+    cloud contract    contracts the cloud by a single instance
+    cloud show        show the configuration of the current clouds.rb configuration file
+    cloud list        show a list of the current instances on the cloud
+    cloud ssh         ssh into an instance of the cloud
+    cloud terminate   terminate the cloud
+    
+EOE
+
+o = PoolParty::Optioner.new(new_args, {
+  :extra_help => extra_help_string,
+  :abstract => true}) do |opts, optioner|  
   opts.on('-n cloudname', '--name name', 'Address this cloud')    { |c| optioner.cloudname c }
 end
 
