@@ -8,8 +8,8 @@ module Monitors
     attr_reader :stats, :request
     attr_accessor :response
     
-    def get
-      neighborhood.to_json
+    def get(data=nil)
+      neighborhood
     end
     
     def put(data)

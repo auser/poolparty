@@ -40,7 +40,8 @@ module PoolParty
           :requires => get_package("haproxy")
         
         # Service is required
-        has_service("haproxy", :ensures => "enable") do
+        has_service("haproxy") do
+          action [:start, :enable]
           stops get_service("apache2"), :immediately
           starts get_service("apache2")
         end

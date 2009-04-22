@@ -85,10 +85,10 @@ class Object
     print "#{m}" if debugging?(o) || verbose?(o) rescue ""
   end
   def verbose?(o=self)
-    o.verbose ? true : ($TESTING ||= false)
+    o.respond_to?(:verbose) ? o.verbose : ($TESTING ||= false)
   end
   def debugging?(o=self)
-    o.debug ? true : ($DEBUGGING ||= false)
+    o.respond_to?(:debug) ? o.debug : ($DEBUGGING ||= false)
   end
   def debugging(bool=nil)
     bool.nil? ? $DEBUGGING : $DEBUGGING = bool

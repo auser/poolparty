@@ -1,7 +1,10 @@
+require "#{::File.dirname(__FILE__)}/../modules/pinger"
 require "#{::File.dirname(__FILE__)}/../schema"
 
 module PoolParty
   class Neighborhoods
+    include ::PoolParty::Pinger
+    
     attr_reader :schema
     
     def initialize(data)
@@ -55,16 +58,14 @@ module PoolParty
     end
     
     def self.load_default
-      def_file = [
-        Dir.pwd,
-        Default.base_config_directory,
-        Default.remote_storage_path,
-        Default.poolparty_home_path
-      ].select do |dir|
-        filepath = ::File.expand_path("#{dir}/neighborhood.json")
-        filepath if ::File.file?(filepath)
-      end.first || nil
-      def_file ? new( open(::File.expand_path("#{def_file}/neighborhood.json")).read ) : new('[]')
+      if ::File.file?("/etc/poolparty/neighborhood.json")
+        new( open("/etc/poolparty/neighborhood.json").read )
+      elsif ping_port("127.0.0.1", Default.butterfly_port, 1)# butterfly responding?
+        require "open-uri"
+        new( open("http://127.0.0.1:8642/neighborhood").read )
+      else
+        new("[]")
+      end
     end
     
   end

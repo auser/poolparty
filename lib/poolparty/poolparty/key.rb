@@ -70,8 +70,7 @@ module PoolParty
     
     # Turn the keypair into the a useful json string
     def to_json
-      "{\"basename\":\"#{basename}\",
-       \"full_filepath\": \"/etc/poolparty/#{filename}\"}"
+      "{\"basename\":\"#{basename}\",\"full_filepath\": \"/etc/poolparty/#{filename}\"}"
     end
     
   end

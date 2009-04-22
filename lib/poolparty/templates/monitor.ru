@@ -3,7 +3,7 @@ require 'rubygems'
 require 'rack'
 require 'json'
 require 'thin'
-require "poolparty/monitors"
+require "poolparty/monitors/monitor_rack"
 
 app = Rack::Builder.new do
   use Rack::Reloader, 2

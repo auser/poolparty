@@ -10,7 +10,8 @@ o.loaded_clouds.each do |cld|
   puts "\nFrom #{$pool_specfile}\n"
   print_with_nice_printer "Cloud: #{cld.name}", [
     "instances #{cld.minimum_instances}..#{cld.maximum_instances}",
-    "keypair #{cld.keypair}"
+    "keypair #{cld.keypair}",
+    "remoter #{cld.remote_base.class.to_s.top_level_class}"
   ] do |printer|
     if cld.nodes(:status => "running").size > 0
       printer.empty

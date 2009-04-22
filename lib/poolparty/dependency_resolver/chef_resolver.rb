@@ -237,6 +237,8 @@ module PoolParty
         end        
       when nil
         nil
+      when Symbol
+        ":#{obj}"
       when Hash
         "#{obj.map {|k,v| ":#{k} => #{to_option_string(v)}" unless v == obj }.compact.join(",\n")}"
       else

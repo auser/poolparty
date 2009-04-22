@@ -96,7 +96,7 @@ module PoolParty
         unless recps.empty?
           recps.each do |rcp|
             Dir[::File.expand_path(rcp)].each do |f|
-              ::Suitcase::Zipper.add(f, "chef/cookbooks")
+              (@included_recipes ||= []) << f
             end            
           end
         end
@@ -138,9 +138,12 @@ file_cache_path  "/etc/chef"
         ]
       end
       def before_configure
-        # puts "Calling before_configure in Chef (dir: #{::File.directory?("/etc/chef")})"
         config
         json
+        
+        @included_recipes.each do |f|
+          ::Suitcase::Zipper.add(f, "chef/cookbooks")
+        end
         
         if ::File.directory?("/etc/chef")
           ::Suitcase::Zipper.add("/etc/chef/cookbooks/*", "chef/cookbooks")

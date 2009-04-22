@@ -20,9 +20,9 @@ end
 print_array = 
 case list_type
 when "ip"
-  inst_array.compact.map {|i| i[:ip] }
+  inst_array.compact.map {|i| i.ip }
 when "internal_ip"
-  inst_array.compact.map {|i| i[:internal_ip] || i[:ip] }
+  inst_array.compact.map {|i| i.internal_ip || i.ip }
 else
   inst_array
 end

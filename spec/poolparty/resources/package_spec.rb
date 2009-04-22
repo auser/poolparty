@@ -11,9 +11,6 @@ describe "File" do
     it "have the name in the options" do
       @package.name.should == "apache2"
     end
-    it "should ensure it's present" do
-      @package.ensures.should == "present"
-    end
     describe "into PuppetResolver" do
       before(:each) do
         @compiled = PuppetResolver.new(@tc.to_properties_hash).compile
