@@ -86,9 +86,9 @@ module PoolParty
         # Use the locally built poolparty gem if it is availabl
         if edge_pp_gem = Dir["#{Default.vendor_path}/../pkg/*poolparty*gem"].pop
           puts "using edge poolparty: #{::File.expand_path(edge_pp_gem)}"
-          ::Suitcase::Zipper.add(edge_pp_gem, 'gems')        
+          ::Suitcase::Zipper.add(edge_pp_gem, 'gems')
         else
-          self.class.gem_list << 'auser-poolparty'
+          # self.class.gem_list << 'auser-poolparty'
         end
         # Add the gems to the suitcase
         puts "Adding default gem dependencies"
@@ -96,7 +96,7 @@ module PoolParty
 
         ::Suitcase::Zipper.packages( "http://rubyforge.org/frs/download.php/45905/rubygems-1.3.1.tgz",
                  "#{Default.tmp_path}/trash/dependencies/packages")
-        ::Suitcase::Zipper.add("templates/")
+        # ::Suitcase::Zipper.add("templates/")
         
         ::Suitcase::Zipper.add("#{::File.dirname(__FILE__)}/../templates/monitor.ru", "/etc/poolparty/")
         ::Suitcase::Zipper.add("#{::File.dirname(__FILE__)}/../templates/monitor.god", "/etc/poolparty/")
@@ -104,7 +104,12 @@ module PoolParty
         ::Suitcase::Zipper.add("#{Default.tmp_path}/trash/dependencies/cache", "gems")        
         
         ::Suitcase::Zipper.add("#{::File.join(File.dirname(__FILE__), '..', 'templates', 'gemrc' )}", "etc/poolparty")
+        
+        instances = @cloud.nodes(:status => "running") + [@cloud.started_instance]
+        ::Suitcase::Zipper.add_content_as(instances.flatten.compact.to_json, "neighborhood.json", "/etc/poolparty")
+        
         ::Suitcase::Zipper.build_dir!("#{Default.tmp_path}/dependencies")
+        
         ::Suitcase::Zipper.flush!
         
         # ::FileUtils.rm_rf "#{Default.tmp_path}/trash"

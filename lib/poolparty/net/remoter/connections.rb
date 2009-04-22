@@ -1,9 +1,11 @@
+require "#{::File.dirname(__FILE__)}/../../modules/pinger"
 require 'rubygems'
 require 'net/ssh'
-require "socket"
 
 module PoolParty
   module Remote
+    
+    include ::PoolParty::Pinger
     
     def target_host(dns_or_ip=nil)
       dns_or_ip ? @target_host=dns_or_ip : @target_host
@@ -52,23 +54,10 @@ module PoolParty
     # TODO: make extendable multithreaded version
     def execute!(cmds=commands)
       netssh(
-        [cmds.compact.join(' && ')], 
+        [cmds.compact.join(' && ')],
         :host=>target_host, :user=>'root')
       # commands.each {|c| run_remote(c, target_host) }
-    end    
-    
-    def self.ping_port(host, port=22, retry_times=400)
-      connected = false
-      retry_times.times do |i|
-        begin
-          break if connected = TCPSocket.new(host, port).is_a?(TCPSocket)
-        rescue Exception => e
-          sleep(2)
-        end
-      end
-      connected
     end
-    def ping_port(ip, port, retry_times=500);self.class.ping_port(ip, port, retry_times);end
     
     def netssh(cmds=[], opts={})
       user = opts.delete(:user) || user #rescue 'root'

@@ -13,7 +13,7 @@ o.loaded_clouds.each do |cld|
     puts "#{cld.nodes(:status => "running").size} running instances (#{cld.minimum_instances} - #{cld.maximum_instances})"
     
     cld.launch_instance!(cld.dsl_options) do |node|
-      dputs "Started node at #{node[:ip]}"
+      
       ::PoolParty::Provision::BootStrapper.new(node.ip, :cloud => cld)
       ::PoolParty::Provision::DrConfigure.new(node.ip,  :cloud => cld)
       

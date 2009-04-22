@@ -108,12 +108,11 @@ module PoolParty
           @cloud.dprint "."
           if ping_port(@inst[:ip], 22)
             @cloud.dputs ""
-            @cloud.started_instance << @inst
+            @cloud.started_instance = @inst
 
             block.call(@inst) if block
             after_launch_instance(@inst)
             
-            @cloud.started_instance = nil
             return @inst
           end
           sleep(2)
