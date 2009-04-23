@@ -31,14 +31,6 @@ module PoolParty
       # Callbacks available to plugins
       def after_create
       end
-      def before_bootstrap
-      end
-      def after_bootstrap
-      end
-      def before_configure
-      end
-      def after_configure
-      end
       # Callbacks on bootstrap and configuration
       %w( before_bootstrap 
           after_bootstrap 
@@ -46,6 +38,8 @@ module PoolParty
           after_configure
           after_launch_instance).each do |meth|
         module_eval <<-EOE
+          def #{meth}
+          end
           def call_#{meth}_callbacks(*args)
             plugin_store.each {|a| a.#{meth}(*args) }
             self.send :#{meth}, *args if respond_to?(:#{meth})            

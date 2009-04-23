@@ -10,7 +10,7 @@ module PoolParty
     
     plugin :include_chef_recipe do
       def loaded(opts={}, &block)
-        has_chef_recipe ::File.basename(name)
+        parent.has_chef_recipe ::File.basename(name)
       end
       def before_configure
         ::Suitcase::Zipper.add(name, "chef/cookbooks") if ::File.exist?(name)

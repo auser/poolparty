@@ -197,8 +197,8 @@ module PoolParty
           after_launch_instance).each do |meth|
         module_eval <<-EOE
           def call_#{meth}_callbacks(*args)
-            self.send :#{meth}, *args if respond_to?(:#{meth})
             plugin_store.each {|a| a.call_#{meth}_callbacks(*args) }
+            self.send :#{meth}, *args if respond_to?(:#{meth})            
           end
         EOE
       end

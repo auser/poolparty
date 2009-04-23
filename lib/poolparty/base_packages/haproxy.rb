@@ -6,6 +6,8 @@ module PoolParty
       end
       
       def enable
+        # has_chef_recipe "apache2"
+        
         include_chef_recipe "#{::File.dirname(__FILE__)}/../../../vendor/chef/apache2"
 
         # Restart sysklogd after we update the haproxy.log
