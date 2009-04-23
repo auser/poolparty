@@ -3,12 +3,10 @@ module PoolParty
     plugin :haproxy do
       
       def before_configure
-        # We need the haproxy package
-        ::Suitcase::Zipper.add("#{::File.dirname(__FILE__)}/../../../vendor/chef/apache2", "chef/cookbooks")
       end
       
       def enable
-        has_chef_recipe 'apache2'
+        include_chef_recipe "#{::File.dirname(__FILE__)}/../../../vendor/chef/apache2"
 
         # Restart sysklogd after we update the haproxy.log
         has_service(:name => "sysklogd")    
@@ -27,6 +25,7 @@ module PoolParty
 
         
         has_directory "/var/run/haproxy"
+        has_package "apache2"
         has_service "apache2"
         
         has_package "haproxy" do

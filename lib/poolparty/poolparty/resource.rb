@@ -78,13 +78,15 @@ module PoolParty
         super(opts, &block)
         
         @resource_name = @base_name
-        dsl_options[:name] = resource_name unless dsl_options.has_key?(:name)        
+        dsl_options[:name] = resource_name unless dsl_options.has_key?(:name)
+        
+        loaded(opts, &block)
       end
             
       # Stub, so you can create virtual resources
       # This is called after the resource is initialized
       # with the options given to it in the init-block
-      def loaded(opts={})
+      def loaded(opts={}, &block)
       end
       
       def resource_name

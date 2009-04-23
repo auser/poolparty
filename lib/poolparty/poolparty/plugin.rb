@@ -39,6 +39,20 @@ module PoolParty
       end
       def after_configure
       end
+      # Callbacks on bootstrap and configuration
+      %w( before_bootstrap 
+          after_bootstrap 
+          before_configure
+          after_configure
+          after_launch_instance).each do |meth|
+        module_eval <<-EOE
+          def call_#{meth}_callbacks(*args)
+            self.send :#{meth}, *args if respond_to?(:#{meth})
+            plugin_store.each {|a| a.#{meth}(*args) }
+          end
+        EOE
+      end
+      
       def enable
       end
       def is_plugin?

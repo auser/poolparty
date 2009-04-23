@@ -198,7 +198,7 @@ module PoolParty
         module_eval <<-EOE
           def call_#{meth}_callbacks(*args)
             self.send :#{meth}, *args if respond_to?(:#{meth})
-            plugin_store.each {|a| a.#{meth}(*args) }
+            plugin_store.each {|a| a.call_#{meth}_callbacks(*args) }
           end
         EOE
       end

@@ -3,6 +3,10 @@ module PoolParty
         
     class File < Resource
       
+      def loaded(o={}, &block)
+        parent.has_directory ::File.dirname(name)
+      end
+      
       def present
         :create
       end
