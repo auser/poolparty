@@ -34,6 +34,7 @@ module PoolParty
                           auser-dslify
                           auser-butterfly
                           auser-parenting
+                          adamwiggins-rest-client
                           thin                          
                         )
       end

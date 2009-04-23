@@ -9,6 +9,7 @@ raise "ERROR: no json_file given" if !json_file
 schema = PoolParty::Schema.new( ::File.read(json_file) )
 
 inst_array = PoolParty::Neighborhoods.load_default.instances
+
 if !inst_array || inst_array.empty?
   remoter_base = schema.options.remote_base
   remote_base = remoter_base.top_level_class.constantize(PoolParty::Remote)

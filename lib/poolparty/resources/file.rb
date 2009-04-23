@@ -7,6 +7,10 @@ module PoolParty
         :create
       end
       
+      def absent
+        :delete
+      end
+      
       def after_create
         run_render = dsl_options.include?(:render_as) ? dsl_options.delete(:render_as) : false
         

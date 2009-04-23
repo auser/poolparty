@@ -58,7 +58,11 @@ module PoolParty
     def setup_dev
       return true if keypair || master.nil?
     end
-    
+        
+    # Declare the remoter base
+    # Check to make sure the available_bases is available, otherwise raise
+    # Give access to the cloud the remote_base and instantiate a new
+    # instance of the remote base
     def using(t, &block)
       @cloud = self
       if t && self.class.available_bases.include?(t.to_sym)
@@ -76,12 +80,13 @@ module PoolParty
           instance_eval "def #{t};@remote_base;end"
         end
       else
-        puts "Unknown remote base" 
+        raise "Unknown remote base: #{t}"
       end
     end
     
+    # Are we using a remoter?
     def using_remoter?
-      @remote_base
+      !@remote_base.nil?
     end
     
     # Keypairs
