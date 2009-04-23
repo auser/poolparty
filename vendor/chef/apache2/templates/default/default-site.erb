@@ -1,4 +1,4 @@
-<VirtualHost *:80>
+<VirtualHost *:<%= @node[:apache][:listen_ports].first rescue 80 %>>
         ServerAdmin <%= @node[:apache][:contact] %>
 
         DocumentRoot /var/www/
