@@ -8,7 +8,7 @@ json_file = ARGV[0] || PoolParty::Default.properties_hash_file
 raise "ERROR: no json_file given" if !json_file
 schema = PoolParty::Schema.new( ::File.read(json_file) )
 
-inst_array = PoolParty::Neighborhoods.load_default.instances
+inst_array = PoolParty::Neighborhoods.load_default.instances.instances
 
 if !inst_array || inst_array.empty?
   remoter_base = schema.options.remote_base
