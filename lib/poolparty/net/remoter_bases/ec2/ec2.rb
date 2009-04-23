@@ -47,6 +47,7 @@ module PoolParty
         new(o).launch_new_instance!
       end
       
+      # TODO: Fix the key_name issue
       def launch_new_instance!(o={})
         raise "You must pass a keypair to launch an instance, or else you wont be able to login. options = #{o.inspect}" if !@cloud.keypair
         instance = ec2(o).run_instances(
@@ -54,7 +55,7 @@ module PoolParty
           :user_data => options[:user_data],
           :minCount => 1,
           :maxCount => options[:num] || 1,
-          :key_name => ::File.basename(keypair.full_filepath),
+          :key_name => ::File.basename(keypair.is_a?(String) ? keypair : keypair.full_filepath),
           :availability_zone => availabilty_zone,
           :instance_type => options[:size] || Default.size,
           :group_id => security_group)
