@@ -1,5 +1,6 @@
-# STUB FOR NOW
-# TODO
+=begin rdoc
+  ssh key used to login to remote instances
+=end
 module PoolParty
   class Key
     
