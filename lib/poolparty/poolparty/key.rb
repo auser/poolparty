@@ -58,7 +58,7 @@ module PoolParty
         PoolParty::Default.base_keypair_path,
         PoolParty::Default.base_config_directory,
         PoolParty::Default.base_ssh_path,
-        PoolParty::Default.remote_storage_path,        
+        PoolParty::Default.remote_storage_path,
         Dir.pwd
       ]
     end

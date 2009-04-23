@@ -37,18 +37,6 @@ Erlang
 
 sudo gem install auser-poolparty
 
-== TODO:
-* Update hot reloading of puppet (force-reload?)
-* Add pingback for nodes to master when failure occurs
-* Add become master for the nodes
-* Add hot reload to haproxy while reconfiguring
-* Replace services with Runit
-* Refactor provisioning to use erlang
-* Add queuing of tasks on the messenger
-* Add syntax checker on the manifests
-* Move in collectd support
-* Remove master-slave protocol
-
 == LICENSE:
 
 (The MIT License)
