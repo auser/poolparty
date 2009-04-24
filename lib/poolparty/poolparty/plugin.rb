@@ -7,6 +7,7 @@ module PoolParty
     class Plugin < PoolParty::Service
       include CloudResourcer
       include PoolParty::DependencyResolverCloudExtensions
+      include PoolParty::Callbacks
             
       default_options({})
       
@@ -30,21 +31,6 @@ module PoolParty
       end
       # Callbacks available to plugins
       def after_create
-      end
-      # Callbacks on bootstrap and configuration
-      %w( before_bootstrap 
-          after_bootstrap 
-          before_configure
-          after_configure
-          after_launch_instance).each do |meth|
-        module_eval <<-EOE
-          def #{meth}
-          end
-          def call_#{meth}_callbacks(*args)
-            plugin_store.each {|a| a.#{meth}(*args) }
-            self.send :#{meth}, *args if respond_to?(:#{meth})            
-          end
-        EOE
       end
       
       def enable
