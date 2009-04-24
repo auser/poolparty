@@ -5,7 +5,7 @@
   {
     :options => {},
     :services => [{}],
-    :resources => {}
+    :resources => []
   }
   
   and creates a chef recipe to reflect.

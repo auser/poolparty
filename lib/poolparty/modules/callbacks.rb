@@ -26,7 +26,7 @@ module PoolParty
             end
           EOE
         end
-        # super
+        super rescue nil
       end
     end
     

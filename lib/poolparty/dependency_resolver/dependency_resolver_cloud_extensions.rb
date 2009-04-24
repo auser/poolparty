@@ -23,7 +23,7 @@ module PoolParty
   # Adds the to_properties_hash method on top of resources, the lowest level
   module DependencyResolverResourceExtensions
     def to_properties_hash
-      options.merge(:pp_type => self.class.to_s.top_level_class)
+      {:pp_type => self.class.to_s.top_level_class}.merge!(options)
     end
   end
 end
