@@ -7,6 +7,7 @@ module PoolParty
     class Plugin < PoolParty::Service
       include CloudResourcer
       include PoolParty::DependencyResolverCloudExtensions
+      include PoolParty::Callbacks
             
       default_options({})
       
@@ -31,14 +32,7 @@ module PoolParty
       # Callbacks available to plugins
       def after_create
       end
-      def before_bootstrap
-      end
-      def after_bootstrap
-      end
-      def before_configure
-      end
-      def after_configure
-      end
+      
       def enable
       end
       def is_plugin?

@@ -11,7 +11,7 @@ module PoolParty
     attr_reader :properties_hash, :the_cloud
     
     def initialize(hsh, contxt=nil)
-      raise DependencyResolverException.new('must pass a hash') if hsh.nil? || (!hsh.instance_of?(OrderedHash) && !hsh.instance_of?(Hash))
+      raise DependencyResolverException.new('must pass a hash') if hsh.nil? || !(hsh.instance_of?(OrderedHash) || hsh.instance_of?(Hash))
       @properties_hash = hsh
       @the_cloud = contxt
     end

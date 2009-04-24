@@ -1,3 +1,8 @@
+=begin rdoc
+  Schema
+  
+  Schemas are basically stub clouds without the PoolParty stack
+=end
 module PoolParty
   class Schema
     attr_accessor :hsh

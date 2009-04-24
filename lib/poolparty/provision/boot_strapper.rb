@@ -38,6 +38,7 @@ module PoolParty
                           auser-dslify
                           auser-butterfly
                           auser-parenting
+                          adamwiggins-rest-client
                           thin                          
                         )
       end
@@ -111,7 +112,9 @@ module PoolParty
         ::Suitcase::Zipper.add("#{::File.join(File.dirname(__FILE__), '..', 'templates', 'gemrc' )}", "etc/poolparty")
         
         instances = @cloud.nodes(:status => "running") + [@cloud.started_instance]
-        ::Suitcase::Zipper.add_content_as(instances.flatten.compact.to_json, "neighborhood.json", "/etc/poolparty")
+        ::Suitcase::Zipper.add_content_as(
+          {:instances => instances.flatten.compact}.to_json, 
+          "neighborhood.json", "/etc/poolparty")
         
         ::Suitcase::Zipper.build_dir!("#{Default.tmp_path}/dependencies")
         

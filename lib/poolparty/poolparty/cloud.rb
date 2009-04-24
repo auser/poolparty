@@ -25,7 +25,8 @@ module PoolParty
 
       include CloudResourcer
       include PoolParty::PluginModel
-      include PoolParty::Resources      
+      include PoolParty::Resources
+      include PoolParty::Callbacks
       include PoolParty::DependencyResolverCloudExtensions
       include PrettyPrinter
 
@@ -68,6 +69,10 @@ module PoolParty
         :user => Default.user
       )
       
+      additional_callbacks [
+        "after_launch_instance"
+      ]
+      
       # Freeze the cloud_name so we can't modify it at all, set the plugin_directory
       # call and run instance_eval on the block and then call the after_create callback
       def initialize(name, &block)
@@ -102,6 +107,7 @@ module PoolParty
         run_in_context do
           add_optional_enabled_services
         end
+        super
       end
       
       # setup defaults for the cloud
@@ -187,20 +193,6 @@ module PoolParty
         output = to_properties_hash.to_json
         ::File.open("#{file_path}/#{file_name}", "w") {|f| f.write output }
         true
-      end
-            
-      # Callbacks on bootstrap and configuration
-      %w( before_bootstrap 
-          after_bootstrap 
-          before_configure
-          after_configure
-          after_launch_instance).each do |meth|
-        module_eval <<-EOE
-          def call_#{meth}_callbacks(*args)
-            self.send :#{meth}, *args if respond_to?(:#{meth})
-            plugin_store.each {|a| a.#{meth}(*args) }
-          end
-        EOE
       end
       
       # Add all the poolparty requirements here

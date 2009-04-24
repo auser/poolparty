@@ -5,7 +5,7 @@
   {
     :options => {},
     :services => [{}],
-    :resources => {}
+    :resources => []
   }
   
   and creates a chef recipe to reflect.
@@ -80,7 +80,7 @@ module PoolParty
           handle_print_variable(resource)
         when "chef_recipe"
           "include_recipe #{to_option_string(resource.name)}"
-        else          
+        else
           real_type = handle_chef_types(ty)
           real_name = resource[:name]
           res = before_filter_check_on_hash(resource, real_name)          

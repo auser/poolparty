@@ -102,18 +102,7 @@ module Aska
     end
     
     def look_up_rules(r);self.class.look_up_rules(r);end
-    def are_rules?(r);self.class.are_rules?(r);end
-    
-    # def method_missing(m, *args, &block)
-    #   if self.class.defined_rules.has_key?(m.to_sym)
-    #     self.class.send(:define_method, m) do
-    #       self.class.look_up_rules(m)
-    #     end
-    #     self.send m
-    #   else
-    #     super
-    #   end
-    # end
+    def are_rules?(r);self.class.are_rules?(r);end    
   end
   
   def self.included(receiver)

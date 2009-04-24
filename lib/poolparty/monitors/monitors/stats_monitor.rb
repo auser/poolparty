@@ -33,7 +33,7 @@ module Monitors
         r = Aska::Rule.new(rul)
         rule(name) << r
       end
-      log << "#{::Time.now.strftime("%Y-%m-%d-%H-%M")}, #{stats.to_json}\n"
+      # log << "#{::Time.now.strftime("%Y-%m-%d-%H-%M")}, #{stats.to_json}\n"
     end
     
     def get(data=nil)

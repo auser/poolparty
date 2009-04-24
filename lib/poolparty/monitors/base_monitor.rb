@@ -1,3 +1,9 @@
+=begin rdoc
+  BaseMonitor
+  
+  BaseMonitor adds a basic base monitor with callbacks for the 
+  monitors
+=end
 module Monitors
   class BaseMonitor
     
