@@ -4,6 +4,9 @@ require("#{::File.dirname(__FILE__)}/../../vendor/gems/dslify/lib/dslify") rescu
 require "#{::File.dirname(__FILE__)}/poolparty/default"
 require "#{::File.dirname(__FILE__)}/schema"
 require "#{::File.dirname(__FILE__)}/net/init"
+require "#{::File.dirname(__FILE__)}/core/string"
+require "#{::File.dirname(__FILE__)}/core/hash"
+require "#{::File.dirname(__FILE__)}/poolparty/neighborhoods"
 require "#{::File.dirname(__FILE__)}/exceptions/RemoteException.rb"
 
 module PoolParty

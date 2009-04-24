@@ -34,6 +34,7 @@ module PoolParty
                           auser-dslify
                           auser-butterfly
                           auser-parenting
+                          adamwiggins-rest-client
                           thin                          
                         )
       end
@@ -63,14 +64,16 @@ module PoolParty
         @target_host = host
         @cloud = opts[:cloud]
                 
-        instance_eval &block if block        
+        instance_eval &block if block
         @cloud.call_before_bootstrap_callbacks if @cloud
         
         default_commands
+        dputs "Starting bootstrapping process on #{host}"
         execute!
-
+        
         @cloud.call_after_bootstrap_callbacks if @cloud
         after_bootstrap
+        dputs "Bootstrapping complete on #{host}"
       end
       
       def self.class_commands
@@ -84,9 +87,9 @@ module PoolParty
         # Use the locally built poolparty gem if it is availabl
         if edge_pp_gem = Dir["#{Default.vendor_path}/../pkg/*poolparty*gem"].pop
           puts "using edge poolparty: #{::File.expand_path(edge_pp_gem)}"
-          ::Suitcase::Zipper.add(edge_pp_gem, 'gems')        
+          ::Suitcase::Zipper.add(edge_pp_gem, 'gems')
         else
-          self.class.gem_list << 'auser-poolparty'
+          # self.class.gem_list << 'auser-poolparty'
         end
         # Add the gems to the suitcase
         puts "Adding default gem dependencies"
@@ -94,7 +97,7 @@ module PoolParty
 
         ::Suitcase::Zipper.packages( "http://rubyforge.org/frs/download.php/45905/rubygems-1.3.1.tgz",
                  "#{Default.tmp_path}/trash/dependencies/packages")
-        ::Suitcase::Zipper.add("templates/")
+        # ::Suitcase::Zipper.add("templates/")
         
         ::Suitcase::Zipper.add("#{::File.dirname(__FILE__)}/../templates/monitor.ru", "/etc/poolparty/")
         ::Suitcase::Zipper.add("#{::File.dirname(__FILE__)}/../templates/monitor.god", "/etc/poolparty/")
@@ -102,7 +105,14 @@ module PoolParty
         ::Suitcase::Zipper.add("#{Default.tmp_path}/trash/dependencies/cache", "gems")        
         
         ::Suitcase::Zipper.add("#{::File.join(File.dirname(__FILE__), '..', 'templates', 'gemrc' )}", "etc/poolparty")
+        
+        instances = @cloud.nodes(:status => "running") + [@cloud.started_instance]
+        ::Suitcase::Zipper.add_content_as(
+          {:instances => instances.flatten.compact}.to_json, 
+          "neighborhood.json", "/etc/poolparty")
+        
         ::Suitcase::Zipper.build_dir!("#{Default.tmp_path}/dependencies")
+        
         ::Suitcase::Zipper.flush!
         
         # ::FileUtils.rm_rf "#{Default.tmp_path}/trash"
@@ -121,7 +131,7 @@ module PoolParty
           'cd /var/poolparty/dependencies',
           "cp /var/poolparty/dependencies/etc/poolparty/gemrc /etc/poolparty",          
           "#{installer} update",
-          "#{installer} install -y ruby1.8 ruby1.8-dev libopenssl-ruby1.8 build-essential wget",  #optional, but nice to have
+          "#{installer} install -y ruby ruby1.8-dev libopenssl-ruby1.8 build-essential wget",  #optional, but nice to have
           "tar -zxvf packages/rubygems-1.3.1.tgz",
           "cd rubygems-1.3.1",
           "ruby setup.rb --no-ri --no-rdoc",
@@ -135,7 +145,7 @@ module PoolParty
           'touch /var/poolparty/POOLPARTY.PROGRESS',
           "mkdir -p /root/.ssh",
           "cp /var/poolparty/dependencies/keys/* /root/.ssh/",
-          "chmod 600 /root/.ssh/#{@cloud.keypair.basename}",
+          "chmod 600 /root/.ssh/#{::File.basename(@cloud.keypair.full_filepath)}",
           # "god -c /etc/poolparty/monitor.god",
           "thin -R /etc/poolparty/monitor.ru -p 8642 --daemon --pid /var/run/stats_monitor.pid start 2>/dev/null",
           'echo "bootstrap" >> /var/poolparty/POOLPARTY.PROGRESS']

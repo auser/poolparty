@@ -7,11 +7,11 @@ o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
   opts.on('-n name', '--name name', 'Listing for cloud name')    { |c| optioner.cloudname c }
 end
 
-o.loaded_clouds.each do |cl|
-  with_cloud(cl) do
-    puts header("Contracting cloud #{name}")
-    puts "#{list_of_running_instances.size} running instances (#{minimum_instances} minimum instances)"
-    puts testing ? "Not contracting (test mode)" : "Contracting the cloud if possible"
-    contract_cloud_if_necessary( !testing )
-  end
+o.loaded_clouds.each do |cld|  
+  puts header("Contracting cloud #{cld.name}")
+  puts "#{cld.nodes(:status => "running").size} running instances (#{cld.minimum_instances} minimum instances)"
+  puts testing ? "Not contracting (test mode)" : "Contracting the cloud if possible"
+
+  last_instance_id = cld.nodes(:status => "running").last[:instance_id]
+  cld.remote_base.terminate_instance! cld.options.merge(:instance_id => last_instance_id)
 end

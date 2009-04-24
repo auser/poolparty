@@ -14,10 +14,10 @@ o.loaded_clouds.each do |cld|
   puts header("Listing cloud #{cld.name}")
   
   puts subheader("Active instances")
-  puts cld.list_of_running_instances.map{|a| a.to_s}.join("\n")
+  puts cld.nodes(:status => "running").map{|a| "#{a[:instance_id]}\t#{a[:ip]}" }.join("\n")
     
-  if cld.list_of_pending_instances.size > 0
+  if cld.nodes(:status => "pending").size > 0
     puts subheader("Pending instances")
-    puts cld.list_of_pending_instances.map{|a| a.to_s}.join("\n")
+    puts cld.nodes(:status => "pending").map{|a| "#{a[:instance_id]}\t#{a[:ip]}" }.join("\n")
   end
 end

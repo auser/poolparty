@@ -39,9 +39,9 @@ describe "Ordered Hash" do
     @oh.to_json.should == "{\"var1\":10,\"var2\":2,\"var3\":3,\"var4\":4,\"arr\":[1,2,3]}"
   end
   it "PoolParty Key" do
-      @oh[:keyy] = [Key.new, Key.new('path/to/nowhere')]
+      @oh[:key] = [Key.new, Key.new('path/to/nowhere')]
       expected=<<JSO
- {\"var1\":10,\"var2\":2,\"var3\":3,\"var4\":4,\"keyy\":[{\"basename\":\"id_rsa\",\n       \"full_filepath\": \"/etc/poolparty/id_rsa\"},{\"basename\":\"path/to/nowhere\",\n       \"full_filepath\": \"/etc/poolparty/path/to/nowhere\"}]}
+ {\"var1\":10,\"var2\":2,\"var3\":3,\"var4\":4,\"key\":[{\"basename\":\"id_rsa\",\"full_filepath\": \"/etc/poolparty/id_rsa\"},{\"basename\":\"path/to/nowhere\",\"full_filepath\": \"/etc/poolparty/path/to/nowhere\"}]}
 JSO
       @oh.to_json.should == expected.strip
   end

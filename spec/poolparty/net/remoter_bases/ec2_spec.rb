@@ -4,8 +4,8 @@ require File.dirname(__FILE__) + '/ec2_mocks_and_stubs.rb'
 
 describe "ec2 remote base" do
   before(:each) do
-    setup
-    @tr = TestEC2Class.new    
+    @cloud = TestCloud.new :test_remoter_base_cloud
+    @tr = TestEC2Class.new(@cloud)
     stub_remoter_for(@tr)
     # @tr.stub!(:get_instances_description).and_return response_list_of_instances
   end
@@ -45,7 +45,7 @@ describe "ec2 remote base" do
       @tr.launch_new_instance!      
     end
     it "should use the default security group if none is specified" do
-      @tr.ec2.should_receive(:run_instances).with(hash_including(:group_id => ['default'])).and_return @ret_hash
+      @tr.ec2.should_receive(:run_instances).with(hash_including(:group_id => 'default')).and_return @ret_hash
       @tr.launch_new_instance!      
     end
     it "should get the hash response from EC2ResponseObject" do

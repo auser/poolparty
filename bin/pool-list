@@ -18,7 +18,7 @@ o.loaded_pools.each do |pool|
       with_cloud(cloud) do
         puts header("Listing cloud #{name}")
         puts subheader("Active instances")
-        puts list_of_running_instances.map{|a| a.to_s}.join("\n")
+        puts nodes(:status => "running").map{|a| a.to_s}.join("\n")
         puts ""
         if list_of_pending_instances.size > 0
           puts subheader("Pending instances")

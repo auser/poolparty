@@ -43,18 +43,33 @@ module PoolParty
         if opts.has_key?(:variable)
           vars = opts.delete(:variable)
           out << vars.map do |res, arr|
-            handle_print_resource(res, :variable, arr, tabs)
+            handle_print_resource(res, :variable, tabs)
           end
         end
 
         out << opts.map do |type, arr|
           arr.map do |res|
-            handle_print_resource(res, type, arr, tabs)
+            handle_print_resource(res, type, tabs)
           end
         end
       end
       out.join("\n")
     end
+    
+    def resources_to_string(opts,tabs=0)
+      out = []        
+      out << opts.map do |resource|
+        case ty = resource.delete(:pp_type)
+        when "variable"
+          handle_print_variable(resource[:name], resource[:value], :variable)
+        else
+          real_name = resource[:name]
+          handle_print_resource(resource, ty.to_sym, tabs)
+        end
+      end      
+      out.join("\n")
+    end
+    
     
     def permitted_option?(ty, key)
       true
@@ -74,22 +89,31 @@ module PoolParty
     end
     
     def hash_flush_out(hash, pre="", post="")
-      hash.map do |k,v|
-        key = to_puppet_key(k)
-        res = to_option_string(v)
-        res.empty? ? nil : "#{pre}#{key} => #{res}#{post}"
+      setup_hash_for_output(hash).map do |k,v|
+        hash.empty? ? nil : "#{pre}#{k} => #{v}#{post}"
       end
     end
     
-    def to_puppet_key(key)
-      case key
-      when :ensures
-        "ensure"
-      else
-        "#{key}"        
+    def setup_hash_for_output(hsh)
+      ty = hsh.delete(:klasstype)
+      if hsh.has_key?(:ensures)
+        hsh.delete(:ensures)
+        hsh[:ensure] = case ty.to_s
+        when "directory"
+          "directory"
+        when "symlink"
+          hsh[:source]
+        else
+          "present"
+        end
       end
+      new_hsh ={}
+      hsh.each do |k,v|
+        new_hsh.merge!({k => to_option_string(v)})
+      end
+      new_hsh
     end
-    
+        
     def to_option_string(obj)
       case obj
       when PoolParty::Resources::Resource
@@ -136,10 +160,12 @@ module PoolParty
       end
     end
     
-    def handle_print_resource(res, type, arr, tabs)
-      case type.to_s
-      when "variable"
-        "$#{res[:name]} = #{to_option_string(res[:value])}"
+    def handle_print_variable(name, value, tabs)
+      "$#{name} = #{to_option_string(value)}"
+    end
+    
+    def handle_print_resource(res, type, tabs)
+      case type.to_s        
       when "line_in_file"
         "#{tf(tabs)}exec { \"#{res[:file]}_line_#{tabs}\": \n#{tf(tabs+1)}command => '#{PoolParty::Resources::LineInFile.command(res[:line], res[:file])}',\n#{tf(tabs+1)}path => '/usr/local/bin:$PATH'\n#{tf(tabs)}}"
       else
@@ -151,6 +177,7 @@ module PoolParty
         else
           type
         end
+        res.merge!(:klasstype => type.to_s)
         "#{tf(tabs)}#{klasstype} { \"#{res.delete(:name) }\": #{res.empty? ? "" : "\n#{tf(tabs+1)}#{hash_flush_out(res.reject {|k,v| !permitted_option?(type, k) }).reject {|s| s.nil? }.join(",\n#{tf(tabs+1)}")}"}\n#{tf(tabs)}}"
       end
     end

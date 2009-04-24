@@ -132,6 +132,10 @@ module PoolParty
     
     def process_options
     end
+    
+    def output_options
+      puts ""
+    end
         
     def output_version
       puts ::PoolParty::Version

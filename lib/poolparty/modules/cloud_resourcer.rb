@@ -38,6 +38,8 @@ module PoolParty
     end
     
     # Set instances with a range or a number
+    # if passed with a hash, call nodes(hash) to return filtered list of 
+    # instances
     def instances(arg)
       case arg
       when Range
@@ -46,6 +48,8 @@ module PoolParty
       when Fixnum
         minimum_instances arg
         maximum_instances arg
+      when Hash
+        nodes(arg)
       else
         raise SpecException.new("Don't know how to handle instances cloud input #{arg}")
       end
@@ -54,8 +58,12 @@ module PoolParty
     def setup_dev
       return true if keypair || master.nil?
     end
-    
-    def using(t)
+        
+    # Declare the remoter base
+    # Check to make sure the available_bases is available, otherwise raise
+    # Give access to the cloud the remote_base and instantiate a new
+    # instance of the remote base
+    def using(t, &block)
       @cloud = self
       if t && self.class.available_bases.include?(t.to_sym)
         unless using_remoter?
@@ -63,22 +71,22 @@ module PoolParty
           self.class.send :attr_reader, :parent_cloud
           klass_string = "#{t}".classify
           klass = "::PoolParty::Remote::#{klass_string}".constantize
-          @remote_base = klass.send :new, self
+          
+          @remote_base = klass.send :new, self, &block
+          @remote_base.instance_eval &block if block          
           options[:remote_base] = klass.to_s if respond_to?(:options)
-                    
-          remote_instance_klass = "::PoolParty::Remote::#{klass_string}RemoteInstance"
-          options[:remote_instance_base] = remote_instance_klass if respond_to?(:options)
           
           @parent_cloud = @cloud
-          instance_eval "def #{t};@remote_base;end;"
+          instance_eval "def #{t};@remote_base;end"
         end
       else
-        puts "Unknown remote base" 
+        raise "Unknown remote base: #{t}"
       end
     end
     
+    # Are we using a remoter?
     def using_remoter?
-      @remote_base
+      !@remote_base.nil?
     end
     
     # Keypairs

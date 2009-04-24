@@ -36,18 +36,29 @@ end
 module PoolParty    
   module Remote
     class Ec2 < Remote::RemoterBase
-
+      
+      def initialize(par, opts={}, &block)
+        dsl_options opts
+        instance_eval &block if block
+        super(par, &block)    
+      end
+      
       def self.launch_new_instance!(o = options)
-        raise "You must pass a keypair to launch an instance, or else you wont be able to login. options = #{o.inspect}" if !o[:keypair]
+        new(o).launch_new_instance!
+      end
+      
+      # TODO: Fix the key_name issue
+      def launch_new_instance!(o={})
+        raise "You must pass a keypair to launch an instance, or else you wont be able to login. options = #{o.inspect}" if !@cloud.keypair
         instance = ec2(o).run_instances(
-          :image_id => o[:ami],
-          :user_data => o[:user_data],
+          :image_id => ami,
+          :user_data => options[:user_data],
           :minCount => 1,
-          :maxCount => o[:num],
-          :key_name => o[:keypair],
-          :availability_zone => o[:availabilty_zone],
-          :instance_type => o[:size],
-          :group_id => o[:security_group])
+          :maxCount => options[:num] || 1,
+          :key_name => ::File.basename(keypair.is_a?(String) ? keypair : keypair.full_filepath),
+          :availability_zone => availabilty_zone,
+          :instance_type => options[:size] || Default.size,
+          :group_id => security_group)
 
         begin
           h = EC2ResponseObject.get_hash_from_response(instance.instancesSet.item.first)
@@ -59,17 +70,17 @@ module PoolParty
         h
       end
       # Terminate an instance by id
-      def self.terminate_instance!(o={})  #NOTE: maybe we should not allow this command wihtout an instance_idˇ
+      def terminate_instance!(o={})  #NOTE: maybe we should not allow this command wihtout an instance_idˇ
         ec2(o).terminate_instances(:instance_id => o[:instance_id])
       end
       # Describe an instance's status
-      def self.describe_instance(o={})
+      def describe_instance(o={})
         return describe_instances.first if o[:instance_id].nil?
         describe_instances.detect {|a| a[:name] == o[:instance_id] || a[:ip] == o[:instance_id] || a[:instance_id] == o[:instance_id] }
       end
-      def self.describe_instances(o={})
+      def describe_instances(o={})
         id = 0
-        get_instances_description(o).each_with_index do |h,i|
+        get_instances_description(options.merge(o)).each_with_index do |h,i|          
           if h[:status] == "running"
             inst_name = id == 0 ? "master" : "node#{id}"
             id += 1
@@ -83,7 +94,7 @@ module PoolParty
             :index => i,  #TODO MF get the instance id from the aws result instead
             :launching_time => (h[:launching_time])
           })
-        end.sort {|a,b| a[:index] <=> b[:index] }
+        end.compact.sort {|a,b| a[:index] <=> b[:index] }
       end
       
       def self.ec2(o={})
@@ -92,15 +103,16 @@ module PoolParty
                               )
       end
       # Get the ec2 description for the response in a hash format
-      def self.get_instances_description(o={})
-        EC2ResponseObject.get_descriptions(ec2(o).describe_instances)
+      def get_instances_description(o={})        
+        key_hash = {:keypair => ::File.basename(keypair.is_a?(String) ? keypair : keypair.full_filepath)}
+        EC2ResponseObject.get_descriptions(ec2(o).describe_instances).select_with_hash(key_hash)
       end
       def get_descriptions(o={})
         self.class.get_descriptions(o)
       end
       
       # Class method helpers
-      def self.aws_keys
+      def aws_keys
         unless @access_key && @secret_access_key          
           aws_keys = {}
           aws_keys = YAML::load( File.open('/etc/poolparty/aws_keys.yml') ) rescue 'No aws_keys.yml file.   Will try to use enviornment variables'

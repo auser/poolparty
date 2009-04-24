@@ -1,7 +1,7 @@
 module PoolParty
   module Pool
     
-    def pool(name=:app, &block)
+    def pool(name, &block)
       pools[name] ||= Pool.new(name, &block)
     end
     

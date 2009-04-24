@@ -2,25 +2,20 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe "PuppetResolver" do
   before :all do
+    reset!
     @cloud_reference_hash = {
       :options => {:name => "dog", :keypair => "bob", :users => ["ari", "michael"]},
-      :resources => {
-        :file =>  [
-                    {:name => "/etc/motd", :content => "Welcome to the cloud"},
-                    {:name => "/etc/profile", :content => "profile info"}
-                  ],
-        :directory => [
-                        {:name => "/var/www"}
-                      ]    
-      },
+      :resources => [
+        {:name => "/etc/motd", :content => "Welcome to the cloud", :pp_type => "file"},
+        {:name => "/etc/profile", :content => "profile info", :pp_type => "file"},
+        {:name => "/var/www", :pp_type => "directory"}
+      ],
       :services => {
         :apache => [{
           :options => {:listen => "8080"},
-          :resources => {
-                          :file => [
-                              {:name => "/etc/apache2/apache2.conf", :template => "/absolute/path/to/template", :content => "rendered template string"}
-                            ]
-                        },
+          :resources => [
+            {:name => "/etc/apache2/apache2.conf", :pp_type => "file", :template => "/absolute/path/to/template", :content => "rendered template string"}
+          ],
           :services => {}
         }]
       }
@@ -32,12 +27,13 @@ describe "PuppetResolver" do
     # lambda { PoolParty::PuppetResolver.compile }.should raise_error
   end
   it "accept a hash" do
-    lambda { PoolParty::PuppetResolver.compile({})}.should_not raise_error
+    lambda { PoolParty::PuppetResolver.compile(@cloud_reference_hash)}.should_not raise_error
   end
   
   describe "when passed a valid cloud hash" do
     
     before(:all) do
+      reset!
       @dr = PuppetResolver.new(@cloud_reference_hash)
       @compiled = @dr.compile
     end
@@ -98,7 +94,7 @@ describe "PuppetResolver" do
       end
       @properties = @cloud.to_properties_hash
       
-      # puts "<pre>#{@cloud_reference_hash.to_yaml}\n\n#{@properties.to_yaml}</pre>"
+      # puts "<pre>#{@cloud_reference_hash.to_yaml}\n\n#{@properties}</pre>"
       @dr = PuppetResolver.new(@properties)
       @compiled = @dr.compile
     end

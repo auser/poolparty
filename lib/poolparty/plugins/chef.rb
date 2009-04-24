@@ -8,6 +8,15 @@ module PoolParty
     define_resource :chef_recipe do
     end
     
+    plugin :include_chef_recipe do
+      def loaded(opts={}, &block)
+        parent.has_chef_recipe ::File.basename(name)
+      end
+      def before_configure
+        ::Suitcase::Zipper.add(name, "chef/cookbooks") if ::File.exist?(name)
+      end
+    end
+    
     plugin :chef do
       def before_load(o, &block)
       end
@@ -39,7 +48,7 @@ module PoolParty
           
           templates o[:templates] if o[:templates]
           
-          # recipe_files << basedir
+          recipe_files << basedir
           # ::Suitcase::Zipper.add(basedir, "chef/cookbooks")
         # TODO: Enable neat syntax from within poolparty
         
@@ -96,10 +105,14 @@ module PoolParty
         unless recps.empty?
           recps.each do |rcp|
             Dir[::File.expand_path(rcp)].each do |f|
-              ::Suitcase::Zipper.add(f, "chef/cookbooks")
+              included_recipes << f
             end            
           end
         end
+      end
+      
+      def included_recipes
+        @included_recipes ||= []
       end
       
       def config file=""
@@ -132,16 +145,18 @@ file_cache_path  "/etc/chef"
       end
       
       def before_bootstrap
-        puts "Called before_bootstrap in chef"
         bootstrap_gems "chef", "ohai"
         bootstrap_commands [
           "mkdir -p /etc/chef/cookbooks /etc/chef/cache"
         ]
       end
       def before_configure
-        puts "Calling before_configure in Chef (dir: #{::File.directory?("/etc/chef")})"
         config
         json
+        
+        included_recipes.each do |f|
+          ::Suitcase::Zipper.add(f, "chef/cookbooks")
+        end
         
         if ::File.directory?("/etc/chef")
           ::Suitcase::Zipper.add("/etc/chef/cookbooks/*", "chef/cookbooks")

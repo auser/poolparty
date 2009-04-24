@@ -15,6 +15,8 @@
       recipes/
       templates/
       attributes/
+  
+  TODO: This class is somewhat all over the place. Slim it down
 =end
 module PoolParty
   
@@ -22,9 +24,12 @@ module PoolParty
     
     # Compile and add to the zipper
     def compile(props=@properties_hash, tabs=0, default_namespace="poolparty")      
-      o = _compile(props, tabs, default_namespace)
-      ::Suitcase::Zipper.add(build_base_recipe_directory( default_namespace ), "chef/cookbooks")
-      o
+      base_dir(default_namespace)
+      build_base_recipe_directory( default_namespace )
+      
+      # ::Suitcase::Zipper.add( base_dir, "chef/cookbooks")
+      
+      _compile(props, tabs, default_namespace)
     end
     
     def _compile(props=@properties_hash, tabs=0, default_namespace="poolparty")
@@ -33,28 +38,34 @@ module PoolParty
     end
     
     def comp(cld_name, props, tabs)
-      base_dir cld_name
-      basedir = build_base_recipe_directory( cld_name )
-      # handle_print_variables(props[:options]) if props && props.has_key?(:options)
       
       default_recipe = [ 
         resources_to_string(props[:resources],tabs),
         services_to_string(props[:services],tabs)
       ].join("\n")
-      ::File.open("#{basedir}/recipes/default.rb", "w+") {|f| f << default_recipe }      
+
+      ::File.open("#{base_dir}/recipes/default.rb", "w+") {|f| f << default_recipe }      
       
       default_recipe
     end
     
     def build_base_recipe_directory(nm)
+      dputs "Making new #{base_dir}"
+      ::FileUtils.mkdir_p "#{base_dir}"
+      
       [ "recipes", "templates", "attributes" ].each do |bdir|
-        ::FileUtils.mkdir_p "#{base_dir}/#{bdir}" unless ::File.directory? "#{base_dir}/#{bdir}"
+        ::FileUtils.mkdir_p "#{base_dir}/#{bdir}" #unless ::File.directory? "#{base_dir}/#{bdir}"
       end
+      
+      ::File.open("#{base_dir}/attributes/poolparty.rb", "w") do |f| 
+        f << "poolparty Mash.new unless attribute?('poolparty')\n"
+      end
+      
       base_dir
     end
     
-    def base_dir(nm=nil)
-      @base_dir ||= "#{Default.tmp_path}/trash/chef/cookbooks/#{nm}"
+    def base_dir(nm="poolparty")
+      @base_dir ||= "#{Default.tmp_path}/dr_configure/chef/cookbooks/#{nm}"
     end
     
     def options_to_string(opts,tabs=0)
@@ -62,63 +73,40 @@ module PoolParty
     end
     
     def resources_to_string(opts,tabs=0)
-      out = []
-      if opts
-
-        if opts[:variable] && !opts[:variable].empty?
-          vars = opts.delete(:variable)          
-          handle_print_variables(vars)
+      out = []        
+      out << opts.map do |resource|
+        case ty = resource.delete(:pp_type)
+        when "variable"
+          handle_print_variable(resource)
+        when "chef_recipe"
+          "include_recipe #{to_option_string(resource.name)}"
+        else
+          real_type = handle_chef_types(ty)
+          real_name = resource[:name]
+          res = before_filter_check_on_hash(resource, real_name)          
+          "#{tf(tabs)}#{real_type} \"#{real_name}\" do\n#{tf(tabs+1)}#{hash_flush_out(res).compact.join("\n#{tf(tabs+1)}")}\n#{tf(tabs)}end"
         end
-        
-        if opts[:chef_recipe]
-          opts.delete(:chef_recipe).each do |rcp|
-            out << "include_recipe #{to_option_string(rcp.name)}"
-          end          
-        end
-        
-        if opts.has_key?(:line_in_file)
-          lines = opts.delete(:line_in_file).inject([]) do |sum, l|
-            sum << PoolParty::Resources::Exec.new(:name => l[:name], :command => PoolParty::Resources::LineInFile.command(l[:line], l[:file]) ).to_properties_hash
-          end          
-          if lines && lines.size > 0            
-            opts.has_key?(:exec) ? (opts[:exec] << lines) : opts.merge!(:exec => lines)
-          end
-        end
-        
-        out << opts.map do |type, arr|
-          arr.map do |res|
-            real_type = handle_types(type)
-            real_name = handle_names(type, res)
-            res = before_filter_check_on_hash(res, real_name)
-            "#{tf(tabs)}#{real_type} \"#{real_name}\" do\n#{tf(tabs+1)}#{hash_flush_out(res).compact.join("\n#{tf(tabs+1)}")}\n#{tf(tabs)}end"
-          end
-        end
-      end
+      end      
       out.join("\n")
     end
     
-    def handle_print_variables(vars)
-      
-      out = ["\npoolparty Mash.new unless attribute?('poolparty')\n\n"]
-      vars.each do |varhash|
-        out << "#{varhash[:namespace] || "poolparty"}[:#{varhash[:name]}] = #{to_option_string(varhash[:value])}"
-      end
-      ::File.open("#{base_dir}/attributes/poolparty.rb", "w+") do |f| 
-        f << out.join("\n")
-      end
-    end
-    
-    def handle_chef_vars(nm, varname)
-      case varname
-      when :enable
-        "action"
+    def handle_print_variable(varhash)
+      o = []
+      if varhash[:namespace]
+        o << ["\n#{varhash[:namespace]} Mash.new unless attribute?('#{varhash[:namespace]}')"]
+        o << "#{varhash[:namespace]}[:#{varhash[:name]}] = #{to_option_string(varhash[:value])}\n"
       else
-        "#{nm}[:#{varname}]"
+        o << "poolparty[:#{varhash[:name]}] = #{to_option_string(varhash[:value])}"
       end
+      ::File.open("#{base_dir}/attributes/poolparty.rb", "a+") do |f| 
+        f << o.join("\n")
+        f << "\n"
+      end
+      ""
     end
-    
-    def handle_types(ty)
-      case ty
+        
+    def handle_chef_types(ty)
+      case ty.to_sym
       when :exec
         "execute"
       when :file
@@ -131,23 +119,17 @@ module PoolParty
         ty
       end
     end
-    
-    def handle_names(ty, res)
-      case ty
-      when :exec
-        res.name
-      else
-        res.name
-      end
-    end
-    
-    # TODO: This is brittle, need to find a way to make them reactive, rather than 
-    # separate (the key/value pairs)
-    def hash_flush_out(hash, pre="", post="")      
+
+    # flush out the hash into something meaningful
+    def hash_flush_out(hash, pre="", post="") 
       hash.map do |k,v|
-        key = to_chef_key(k)
-        res = to_option_string(v)
-        (key.nil? || res.nil?) ? nil : "#{pre}#{key} #{res}#{post}"
+        if o = handle_actions(k,v)
+          o
+        else
+          key = to_chef_key(k)
+          res = to_option_string(v)
+          (key.nil? || res.nil?) ? nil : "#{pre}#{key} #{res}#{post}"
+        end
       end
     end
     
@@ -158,7 +140,7 @@ module PoolParty
       else
         kname = klassname.to_s.gsub(/pool_party_/, '').gsub(/_class/, '')
         str = "\n#{tf(tabs)}# #{kname}\n"
-        str << "#{tf(tabs+1)}"
+        str << "#{tf(tabs)}"
         klassarray.each do |hsh|
           str << _compile(hsh,tabs+1, klassname)
         end        
@@ -172,12 +154,15 @@ module PoolParty
       if hsh.has_key?(:content)
         cont = hsh.delete(:content)
         temp_file = "#{base_dir}/templates/default/#{nm}.erb"
+        
         ::FileUtils.mkdir_p(::File.dirname(temp_file)) unless ::File.directory? temp_file
         ::File.open(temp_file, "w+") {|f| f.print cont }
+        
         hsh.merge!({:source => "#{nm}.erb"})
       end
       # 
       hsh.delete(:require) if hsh.has_key?(:require)
+      hsh.delete(:name) # we don't need the names in the methods
       hsh
     end
     
@@ -193,6 +178,16 @@ module PoolParty
           str << handle_print_service(klassname, klasshash, tabs)
         end
         str
+      end
+    end
+    
+    # Handle ensures
+    def handle_actions(key,value)
+      case key
+      when :ensures
+        value.nil? ? nil : "action :#{value}"
+      else
+        nil
       end
     end
     
@@ -228,12 +223,13 @@ module PoolParty
     def to_option_string(obj)
       case obj
       when PoolParty::Resources::Resource
-        "resources(:#{handle_types(obj.class.to_s.top_level_class.downcase.to_sym)} => \"#{obj.name}\")"
+        "resources(:#{handle_chef_types(obj.class.to_s.top_level_class.downcase.to_sym)} => \"#{obj.name}\")"
       when Fixnum
         "#{obj.to_i}"
       when String
         "\"#{obj}\""
       when Array
+        # If we are sending a notifies with a second argument
         if obj[1] && [:immediately, :delayed].include?(obj[1])
           "#{to_option_string(obj[0])}, :#{obj[1]}"
         else
@@ -241,6 +237,8 @@ module PoolParty
         end        
       when nil
         nil
+      when Symbol
+        ":#{obj}"
       when Hash
         "#{obj.map {|k,v| ":#{k} => #{to_option_string(v)}" unless v == obj }.compact.join(",\n")}"
       else

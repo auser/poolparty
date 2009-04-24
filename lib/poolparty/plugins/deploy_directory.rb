@@ -14,9 +14,12 @@ module PoolParty
     
     virtual_resource(:deploy_directory) do
       
-      def loaded(opts={}, &block)
-        package_deploy_directory
+      def loaded(opts={}, &block)        
         add_unpack_directory
+      end
+      
+      def before_configure
+        package_deploy_directory
       end
       
       def package_deploy_directory
@@ -27,13 +30,12 @@ module PoolParty
         has_directory("#{::File.dirname(to)}")
         has_exec("unpack-#{::File.basename(to)}-deploy-directory") do
           requires get_directory("#{::File.dirname(to)}")
-          not_if "test -f #{to}"
           command "cp -R /var/poolparty/dr_configure/user_directory/#{name}/* #{to}"
         end
         
         if owner?
           has_exec(:name => "chown-#{name}") do
-            command "chown #{owner} -R #{to}"
+            command "chown #{owner} -R #{to}/#{name}"
           end
         end
         

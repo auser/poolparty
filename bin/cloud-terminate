@@ -7,14 +7,9 @@ o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
   opts.on('-n name', '--name name', 'Terminate the cloud of this name')    { |c| optioner.cloudname c }
 end
 
-o.loaded_clouds.each do |cloud|
-  
-  with_cloud(cloud) do
-    
-    list_of_running_instances.each do |inst|
-      puts "Shutting down #{inst.instance_id}"
-      terminate_instance!(:instance_id => inst.instance_id)
-    end
-    
-  end    
+o.loaded_clouds.each do |cld|    
+  cld.nodes(:status => "running").each do |inst|
+    puts "Shutting down #{inst.instance_id}"
+    cld.terminate_instance!(:instance_id => inst.instance_id)
+  end   
 end

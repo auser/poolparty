@@ -1,6 +1,6 @@
 require "#{::File.dirname(__FILE__)}/../../test_helper"
 
-class TestHash < Test::Unit::TestCase
+class TestHashClass < Test::Unit::TestCase
   context "hash_get" do
     before do
       @hsh = {
@@ -20,4 +20,15 @@ class TestHash < Test::Unit::TestCase
       assert k, "10.0.0.2"
     end
   end
+  context "test method_missing" do
+    it "should be able to call a key on the hash as a method" do
+      {:first_name => "bob", :last_name => "frank"}.first_name.should == "bob"
+    end
+    it "should not return nil if there is no key set in the hash" do
+      hsh = {:first_name => "bob", :last_name => "frank"}
+      assert_not_nil hsh.dttte
+      lambda {{:first_name => "bob", :last_name => "frank"}.neighbor}.should raise_error
+    end
+  end
+  
 end

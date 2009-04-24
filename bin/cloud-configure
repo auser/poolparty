@@ -11,16 +11,17 @@ o.loaded_clouds.each do |cld|
   # If an IP or DNS name is given, bootstrap that node, otherwise, bootstrap all running nodes.
   # ::FileUtils.rm_rf "#{Default.tmp_path}/" unless o.testing?
   
-  nodes = !o.unflagged_args.empty? ?  o.unflagged_args : cld.remote_instances_list.collect {|inst| inst.ip if inst.running? }.compact
+  nodes = !o.unflagged_args.empty? ?  o.unflagged_args : cld.nodes(:status => "running").collect {|i| i.ip }.sort.compact
   if nodes.empty?
     puts "No nodes to configure"
   else
     if o.inst_num?
-      ::PoolParty::Provision::DrConfigure.new( nodes[o.inst_num], :full_keypair_path => cld.keypair.full_filepath,  :cloud => cld )
+      vputs "Configuring #{nodes[o.inst_num]}"
+      ::PoolParty::Provision::DrConfigure.new( nodes[o.inst_num], :cloud => cld )
     else
       nodes.each do |address|
         puts "Configuring: #{address}"
-        ::PoolParty::Provision::DrConfigure.new( address, :full_keypair_path => cld.keypair.full_filepath,  :cloud => cld )
+        ::PoolParty::Provision::DrConfigure.new( address, :cloud => cld )
       end
     end
   end

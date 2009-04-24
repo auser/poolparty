@@ -8,9 +8,10 @@ module PoolParty
     def to_properties_hash
       oh = OrderedHash.new
       oh[:options] = options.merge(:cloud_name => name)
-      oh[:resources] = resources.keys.inject(OrderedHash.new) do |sum,k|
-        sum.merge(k.to_sym => resources[k].map {|a| a.to_properties_hash } )
-      end
+      oh[:resources] = ordered_resources.map {|a| a.to_properties_hash }
+      # oh[:resources] = resources.keys.inject(OrderedHash.new) do |sum,k|
+      #   sum.merge(k.to_sym => resources[k].map {|a| a.to_properties_hash } )
+      # end
       oh[:services] = services.keys.inject(OrderedHash.new) do |sum,k|
         sum.merge(k.to_sym => services[k].map {|a| a.to_properties_hash } )
       end
@@ -22,7 +23,7 @@ module PoolParty
   # Adds the to_properties_hash method on top of resources, the lowest level
   module DependencyResolverResourceExtensions
     def to_properties_hash
-      options
+      options.merge(:pp_type => self.class.to_s.top_level_class)
     end
   end
 end

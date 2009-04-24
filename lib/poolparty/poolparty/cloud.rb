@@ -4,7 +4,7 @@ require File.dirname(__FILE__) + "/resource"
 module PoolParty    
   module Cloud
     # Instantiate a new cloud
-    def cloud(name=:app, &block)
+    def cloud(name, &block)
       clouds[name] ||= Cloud.new(name, &block)
     end
 
@@ -90,7 +90,6 @@ module PoolParty
       # here the base requirements are added as well as an empty chef recipe is called
       # Also, the after_create hook on the plugins used by the cloud are called here
       def after_create
-        dputs "In after create"
         ::FileUtils.mkdir_p("#{Default.tmp_path}/dr_configure")
         run_in_context do
           add_poolparty_base_requirements
@@ -99,21 +98,25 @@ module PoolParty
         end
         plugin_store.each {|a| a.after_create }
         setup_defaults
+        
+        run_in_context do
+          add_optional_enabled_services
+        end
       end
       
       # setup defaults for the cloud
       def setup_defaults
         # this can be overridden in the spec, but ec2 is the default
         using :ec2
-        options[:keypair] ||= keypair.basename rescue nil
+        options[:keypair] ||= keypair rescue nil
         options[:rules] = {:expand => dsl_options[:expand_when], :contract => dsl_options[:contract_when]}
-        dependency_resolver 'chef'
+        dependency_resolver 'chef'        
         enable :haproxy unless dsl_options[:haproxy] == :disabled
       end
       
       # provide list of public ips to get into the cloud
       def ips
-        list_of_running_instances.map {|ri| ri.ip }
+        nodes(:status => "running").map {|ri| ri.ip }
       end
       
       # TODO: make this be a random ip, since we should not rely on it being the same each time
@@ -159,9 +162,10 @@ module PoolParty
         @build_manifest ||= build_from_existing_file
         unless @build_manifest          
           props = to_properties_hash
-         
+          
           @build_manifest =  options[:dependency_resolver].send(:compile, props, self)
         end
+        dputs "Finished creating manifest"
         @build_manifest
       end
       
@@ -172,6 +176,7 @@ module PoolParty
       end
       
       # If the pp already exists, then let's not recreate it
+      # TODO: Abstract
       def build_from_existing_file
         ::FileTest.file?("#{Default.base_config_directory}/poolparty.pp") ? open("#{Default.base_config_directory}/poolparty.pp").read : nil
       end
@@ -187,11 +192,13 @@ module PoolParty
       # Callbacks on bootstrap and configuration
       %w( before_bootstrap 
           after_bootstrap 
-          before_configure 
-          after_configure).each do |meth|
+          before_configure
+          after_configure
+          after_launch_instance).each do |meth|
         module_eval <<-EOE
-          def call_#{meth}_callbacks
-            plugin_store.each {|a| a.#{meth} }
+          def call_#{meth}_callbacks(*args)
+            plugin_store.each {|a| a.call_#{meth}_callbacks(*args) }
+            self.send :#{meth}, *args if respond_to?(:#{meth})            
           end
         EOE
       end
@@ -203,11 +210,9 @@ module PoolParty
       # all that is necessary in a method called enable
       # which is called when there is no block
       def add_poolparty_base_requirements
-        poolparty_base_heartbeat
+        # poolparty_base_heartbeat
         poolparty_base_ruby
-        poolparty_base_packages
-        
-        add_optional_enabled_services
+        poolparty_base_packages        
       end
       
       # TODO: Deprecate

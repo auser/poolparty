@@ -4,16 +4,17 @@ module PoolParty
     class Service < Resource
       
       default_options({
-        :ensures => "running",
+        :ensures => "enable",
         :enable => true
       })
       
       def present
-        "running"
+        :start
       end
       def absent
-        "stopping"
+        :stop
       end
+      
     end
     
   end

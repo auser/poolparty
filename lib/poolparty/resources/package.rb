@@ -3,8 +3,13 @@ module PoolParty
         
     class Package < Resource
       
-      default_options({
-      })
+      def present
+        :install
+      end
+      
+      def absent
+        :remove
+      end
       
     end
     

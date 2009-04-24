@@ -119,10 +119,10 @@ class String
   # Examples
   #   "Module".constantize #=> Module
   #   "Class".constantize #=> Class
-  def constantize
+  def constantize(mod=Object)
     camelcased_word = camelcase
     begin
-      Object.module_eval(camelcased_word, __FILE__, __LINE__)
+      mod.module_eval(camelcased_word, __FILE__, __LINE__)
     rescue NameError
       puts "#{camelcased_word} is not defined."
       nil
@@ -151,4 +151,30 @@ class String
       arr << self.split(/\n/).collect_with_index(&block)
     end.flatten
   end
+  
+  # Read a new-line separated string and turn 
+  # the string from the form 
+  #   a = "b"
+  #   b = "c"
+  # into a hash
+  #  {:a => "b", :b => "c"}
+  def to_hash
+    split("\n").inject({}) do |sum,line| 
+      if line.include?("=")
+        l = line.split("=").map {|a| a.strip }
+        key = l[0].to_sym
+        value = l[1].gsub(/\"/, '')
+        sum.merge(key => value)
+      else
+        sum
+      end
+    end
+  end
+  
+  # Take a mac address and split it to map to the arp -a response
+  # Just rip off the first 0 if the first char is 0
+  def macify
+    split(":").map {|a| a[0].chr == "0" ? a[1].chr : a}.join(":")
+  end
+  
 end

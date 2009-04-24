@@ -64,13 +64,14 @@ $_poolparty_load_directories = [
   "dependency_resolver/dependency_resolver_cloud_extensions.rb",
   "dependency_resolver/dependency_resolver.rb",
   "poolparty/poolparty_base_class.rb",
+  "poolparty/default.rb",
   "modules",
   "exceptions",
   'poolparty/key.rb',
   "dependency_resolver",
   "aska",
   "config",
-  "monitors",
+  "monitors/monitor_rack",
   "capistrano.rb",
   'provisioners/provisioner_base.rb',
   'provisioners/capistrano/capistrano.rb',
@@ -99,7 +100,7 @@ else
   end  
 end
 
-Logging.init :debug, :info, :warn, :error, :fatal
+# Logging.init :debug, :info, :warn, :error, :fatal
 
 module PoolParty
   include FileWriter
@@ -145,4 +146,4 @@ module PoolParty
 end
 
 PoolParty.reset!
-puts "duration = #{Time.now-t}" if $DEBUGGING
+dputs "duration = #{Time.now-t}"

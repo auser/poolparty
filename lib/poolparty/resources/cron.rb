@@ -7,6 +7,14 @@ module PoolParty
         :command => nil,
         :user => "root"
       })
+      
+      def present
+        :create
+      end
+      
+      def absent
+        :delete
+      end
 
     end
     

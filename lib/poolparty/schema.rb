@@ -1,3 +1,8 @@
+=begin rdoc
+  Schema
+  
+  Schemas are basically stub clouds without the PoolParty stack
+=end
 module PoolParty
   class Schema
     attr_accessor :hsh
@@ -6,6 +11,8 @@ module PoolParty
       case h
       when Hash
         h.each {|k,v| self[k] = v}
+      when Array
+        h.each {|el| self[el['ip']]=el}
       when String        
         JSON.parse(h).each {|k,v| self[k.to_sym] = v}
       end

@@ -1,8 +1,11 @@
-require ::File.dirname(__FILE__)+"/monitor_rack.rb"
+=begin rdoc
+  Stats returns the basic node metrics and checks to see if any actions should be taken based
+  on the default expand and contract rules defined in the clouds.rb file.
+=end
 
 module Monitors
-    
-  class Stats
+  
+  class Stats < BaseMonitor
     attr_reader :stats, :request
     attr_accessor :response
     
@@ -14,36 +17,26 @@ module Monitors
       begin
         @cloud = JSON.parse( open('/etc/poolparty/clouds.json' ).read )
       rescue 
-        @cloud = ::PoolParty::Default.options.merge({"options" => 
-          {"rules" => {"expand" => PoolParty::Default.expand_when, 
-                        "contract" => PoolParty::Default.contract_when
+        @cloud = ::PoolParty::Default.options.merge({"options" =>
+          {"rules" => {"expand"   => PoolParty::Default.expand_when,
+                       "contract" => PoolParty::Default.contract_when
                       }
           }
         })
-      end      
+      end
       # Our cloud.options.rules looks like
       #  {"expand_when" => "load > 0.9", "contract_when" => "load < 0.4"}
-      # We set these as rules on ourselves so we can use aska to parse the rules
-      # So later, we can call vote_rules on ourself and we'll get back Aska::Rule(s)
+      # We set these as rules on ourselves so we can use aska to parse the rules.
+      # Later, we can call vote_rules on ourself and we'll get back Aska::Rule(s)
       # which we'll call valid_rule? for each Rule and return the result
       @cloud["options"]["rules"].each do |name, rul|
         r = Aska::Rule.new(rul)
         rule(name) << r
       end
-      log << "#{Time.now.strftime("%Y-%m-%d-%H-%M")}, #{stats.to_json}\n"
+      # log << "#{::Time.now.strftime("%Y-%m-%d-%H-%M")}, #{stats.to_json}\n"
     end
     
-    def log(log_file_path="/var/log/poolparty/stats_monitor.log")
-      if @logfile
-        @logfile
-      else
-        ::File.file? log_file_path
-        ::FileUtils.mkdir_p ::File.dirname(log_file_path) unless ::File.directory?(::File.dirname(log_file_path))
-        @logfile ||= ::File.open(log_file_path, 'a+')
-      end
-    end
-    
-    def default      
+    def get(data=nil)
       begin
         if !request.params || request.params.empty?
           default_stats
@@ -56,8 +49,8 @@ module Monitors
         "Error: #{e}"
       end
     end
-
-    def put
+    
+    def put(data)
       if d = JSON.parse(request.params)
         hsh = d.reject {|ip, _node| ip == my_ip }
         stats.merge!(hsh)
@@ -67,7 +60,19 @@ module Monitors
       end
     end
     alias :update :put
-
+    
+    protected
+    
+    def log(log_file_path="/var/log/poolparty/stats_monitor.log")
+      if @logfile
+        @logfile
+      else
+        ::File.file? log_file_path
+        ::FileUtils.mkdir_p ::File.dirname(log_file_path) unless ::File.directory?(::File.dirname(log_file_path))
+        @logfile ||= ::File.open(log_file_path, 'a+')
+      end
+    end
+    
     # Handle the elections
     def handle_election
       # Ballots look like:

@@ -37,10 +37,12 @@ describe "Array" do
         @remote_instances_list.select_with_hash( {:status => 'running'}).size.should == 2
         @remote_instances_list.select_with_hash( {:ip => 'not.assigned'}).should == [{:status => 'pending', :ip=>'not.assigned'},]
         @remote_instances_list.select_with_hash( {:bogus => nil}).size.should == 1
-        @remote_instances_list.select_with_hash().size.should == 0
     end
     it "should not raise an error if element does not have key" do
       @remote_instances_list.select_with_hash( {:snot => 'runny'}).size.should == 0
+    end
+    it "should return all the instances if there are no values passed in" do
+      @remote_instances_list.select_with_hash.should == @remote_instances_list
     end
   end
 end

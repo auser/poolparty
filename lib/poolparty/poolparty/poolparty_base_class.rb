@@ -95,6 +95,7 @@ module PoolParty
         end
         res.after_create
         store_in_local_resources(ty, res)
+        ordered_resources << res
         res
       end
     end
@@ -120,6 +121,10 @@ module PoolParty
     
     def resource(type=:file)
       resources[type.to_sym] ||= []
+    end
+    
+    def ordered_resources
+      @ordered_resources ||= []
     end
     
     def is_plugin?
@@ -162,10 +167,10 @@ module PoolParty
       method_name = "__#{typ}"
       PoolParty::PoolPartyBaseClass.module_eval <<-EOE
         def has_#{typ}(opts={}, extra={}, &block)
-          #{method_name}(handle_option_values(opts).merge(extra.merge(:ensures => :present)), &block)
+          #{method_name}({:ensures => :present}.merge(handle_option_values(opts).merge(extra)), &block)
         end
         def does_not_have_#{typ}(opts={}, extra={}, &block)
-          #{method_name}(handle_option_values(opts).merge(extra.merge(:ensures => :absent)), &block)
+          #{method_name}({:ensures => :absent}.merge(handle_option_values(opts).merge(extra)), &block)
         end
       EOE
     end
