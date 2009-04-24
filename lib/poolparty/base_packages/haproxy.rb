@@ -23,14 +23,16 @@ module PoolParty
         has_line_in_file(:line => "ENABLED=1", :file => "/etc/default/haproxy")
         has_line_in_file({:line => "SYSLOGD=\"-r\"", :file => "/etc/default/syslogd"})
         has_line_in_file({:line => "local0.* /var/log/haproxy.log", :file => "/etc/syslog.conf"}, {:notify => get_service("sysklogd")})
-
+        has_file '/var/log/haproxy.log' do
+          content ''
+        end
         
         has_directory "/var/run/haproxy"
         has_package "apache2"
         has_service "apache2"
         
         has_package "haproxy" do
-          stops get_service("apache2")
+          stops get_service("apache2"), :immediately
         end
 
         has_exec "reloadhaproxy", 
@@ -42,14 +44,13 @@ module PoolParty
         has_service("haproxy") do
           action [:start, :enable]
           stops get_service("apache2"), :immediately
-          starts get_service("apache2")
+          starts get_service("apache2"), :immediately
         end
         
         has_file "/etc/haproxy/haproxy.cfg" do
           template "#{::File.dirname(__FILE__)}/../templates/haproxy.conf"
           calls get_exec("reloadhaproxy")
         end
-        
       end
     end
   end
