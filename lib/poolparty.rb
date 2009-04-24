@@ -79,6 +79,7 @@ $_poolparty_load_directories = [
   "extra",
   "net",
   "helpers",
+  "verification",
   "poolparty/resource.rb",
   "poolparty/service.rb",
   "resources",
@@ -110,7 +111,11 @@ module PoolParty
   end
   def reset!
     $pools = $clouds = $plugins = @describe_instances = nil
-  end  
+  end
+  def require_user_directory(dirname=nil)
+    cloud_dir = ::File.dirname $pool_specfile
+    Dir["#{cloud_dir}/#{dirname}/*"].each {|a| require a }
+  end
   class PoolParty
     def initialize(spec)
       reset!
