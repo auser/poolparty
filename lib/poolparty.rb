@@ -112,10 +112,17 @@ module PoolParty
   def reset!
     $pools = $clouds = $plugins = @describe_instances = nil
   end
-  def require_user_directory(dirname=nil)
-    cloud_dir = ::File.dirname $pool_specfile
+  
+  # Require all the files in a directory below the base
+  def require_user_directory(dirname)
+    cloud_dir = ::File.dirname($pool_specfile)
     Dir["#{cloud_dir}/#{dirname}/*"].each {|a| require a }
   end
+  # Add to the suitcase files below the clouds.rb base directory
+  def pack_user_directory(dirname)
+    ::Suitcase::Zipper.add("#{::File.dirname($pool_specfile)}/#{dirname}", "etc")
+  end
+  
   class PoolParty
     def initialize(spec)
       reset!

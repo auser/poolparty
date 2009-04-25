@@ -4,7 +4,7 @@ module PoolParty
     class File < Resource
       
       def loaded(o={}, &block)
-        parent.has_directory ::File.dirname(name)
+        parent.has_directory ::File.dirname(name) if parent
       end
       
       def present

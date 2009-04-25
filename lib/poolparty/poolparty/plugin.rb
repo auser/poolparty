@@ -22,6 +22,9 @@ module PoolParty
         run_in_context do
           loaded @opts, &block
         end
+        
+        setup_callbacks
+        after_create
       end
       
       # Overwrite this method
