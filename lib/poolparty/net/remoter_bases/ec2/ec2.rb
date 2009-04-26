@@ -43,23 +43,27 @@ module PoolParty
         super(par, &block)    
       end
       
-      def self.launch_new_instance!(o = options)
-        new(o).launch_new_instance!
+      # Requires a hash of options
+      def self.launch_new_instance!(o )
+        new(o).launch_new_instance!(o)
       end
       
       # TODO: Fix the key_name issue
-      def launch_new_instance!(o={})
+      # Start a new instance with the given options
+      def launch_new_instance!(o)
         raise "You must pass a keypair to launch an instance, or else you wont be able to login. options = #{o.inspect}" if !@cloud.keypair
-        instance = ec2(o).run_instances(
-          :image_id => ami,
-          :user_data => options[:user_data],
-          :minCount => 1,
-          :maxCount => options[:num] || 1,
-          :key_name => ::File.basename(keypair.is_a?(String) ? keypair : keypair.full_filepath),
-          :availability_zone => availabilty_zone,
-          :instance_type => options[:size] || Default.size,
-          :group_id => security_group)
-
+        o.merge!( :image_id => ami,
+                  :user_data => options[:user_data],
+                  :min_count => 1,
+                  :max_count => options[:num] || 1,
+                  :key_name => ::File.basename(keypair.is_a?(String) ? keypair : keypair.full_filepath),
+                  :availability_zone => availabilty_zone,
+                  :instance_type => options[:size] || Default.size,
+                  :group_id => security_group,
+                  :addressing_type => "public",
+                  :kernel_id => nil
+                )
+        instance = ec2(o).run_instances(o)
         begin
           h = EC2ResponseObject.get_hash_from_response(instance.instancesSet.item.first)
           #h = instance.instancesSet.item.first
@@ -97,11 +101,16 @@ module PoolParty
         end.compact.sort {|a,b| a[:index] <=> b[:index] }
       end
       
+      # EC2 connections
+      def ec2(o={})
+        @ec2 ||= self.class.ec2(o)
+      end
       def self.ec2(o={})
         @ec2 ||= EC2::Base.new( :access_key_id => o[:access_key], 
                                 :secret_access_key => o[:secret_access_key]
                               )
       end
+      
       # Get the ec2 description for the response in a hash format
       def get_instances_description(o={})        
         key_hash = {:keypair => ::File.basename(keypair.is_a?(String) ? keypair : keypair.full_filepath)}
@@ -176,11 +185,6 @@ module PoolParty
       def create_snapshot
         return nil if ebs_volume_id.nil?
         ec2.create_snapshot(:volume_id => ebs_volume_id)
-      end
-    
-      # EC2 connections
-      def ec2(o={})
-        @ec2 ||= self.class.ec2(o)
       end
     
       # These are tasks that run before the configuration runs

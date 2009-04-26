@@ -85,7 +85,6 @@ module PoolParty
       def self.launch_instance!(o={}, &block)
         @cloud = o.delete(:cloud) if o[:cloud]
         @keypair = o.delete(:keypair) if o[:keypair]
-        
         @inst = launch_new_instance!( o.merge(:keypair => @keypair.to_s) )
         sleep(2)
         

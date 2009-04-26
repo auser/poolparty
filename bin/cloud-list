@@ -10,7 +10,6 @@ o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
 end
 
 o.loaded_clouds.each do |cld|
-  
   puts header("Listing cloud #{cld.name}")
   
   puts subheader("Active instances")

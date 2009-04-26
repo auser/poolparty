@@ -1,3 +1,4 @@
+rdoc/*
 .com.apple.timemachine.supported
 .DS_Store
 *tmp*
