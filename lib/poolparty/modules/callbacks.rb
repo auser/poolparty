@@ -8,25 +8,27 @@ module PoolParty
     
     module InstanceMethods
       def defined_callbacks
-        %w(
-            before_bootstrap
-            after_bootstrap
-            before_configure
-            after_configure
-          ) << self.class.additional_callbacks
+        [
+          :before_bootstrap,
+          :after_bootstrap,
+          :before_configure,
+          :after_configure,
+          self.class.additional_callbacks
+        ].flatten
       end
       
       # Callbacks on bootstrap and configuration
-      def after_create
-        defined_callbacks.each do |meth|          
-          self.class.module_eval <<-EOE
-            def call_#{meth}_callbacks(*args)
-              plugin_store.each {|a| a.call_#{meth}_callbacks(*args) } if respond_to?(:plugin_store)
-              self.send :#{meth}, *args if respond_to?(:#{meth})
-            end
-          EOE
+      def setup_callbacks
+        defined_callbacks.each do |meth|
+          unless respond_to?("call_#{meth}_callbacks".to_sym)
+            self.class.module_eval <<-EOE
+              def call_#{meth}_callbacks(*args)
+                plugin_store.each {|a| a.call_#{meth}_callbacks(*args) } if respond_to?(:plugin_store)
+                self.send :#{meth}, *args if respond_to?(:#{meth})
+              end
+            EOE
+          end
         end
-        super rescue nil
       end
     end
     

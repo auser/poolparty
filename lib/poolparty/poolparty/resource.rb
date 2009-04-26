@@ -50,7 +50,7 @@ module PoolParty
             end
             def get_#{lowercase_class_name}(n, opts={}, &block)
               res = get_resource(:#{lowercase_class_name}, n, opts, &block)
-              raise PackageException.new("A required #{lowercase_class_name} \#\{n\} was not found.") unless res
+              raise PackageException.new("Oops. Check that you specified the #{lowercase_class_name} \#\{n\}.") unless res
               res
             end
             public
@@ -81,6 +81,8 @@ module PoolParty
         dsl_options[:name] = resource_name unless dsl_options.has_key?(:name)
         
         loaded(opts, &block)
+        
+        after_create
       end
             
       # Stub, so you can create virtual resources

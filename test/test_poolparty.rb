@@ -1,11 +1,12 @@
 require File.dirname(__FILE__) + '/test_helper.rb'
 
 class TestPoolParty < Test::Unit::TestCase
-
-  def setup
+  context "helpers" do
+    
+    should "include_user_directory" do
+      # FIXUP
+      assert false
+    end
   end
   
-  def test_truth
-    assert true
-  end
 end

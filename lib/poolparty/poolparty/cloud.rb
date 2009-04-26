@@ -107,7 +107,7 @@ module PoolParty
         run_in_context do
           add_optional_enabled_services
         end
-        super
+        setup_callbacks
       end
       
       # setup defaults for the cloud
