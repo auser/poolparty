@@ -1,6 +1,10 @@
+=begin rdoc
+  BootStrapper is contains the basic files that need to be uploaded to a new instance and the first commands that are run to set up a base PoolParty enviornment.  This includes things like ensuring that ruby, rubygems, and poolparty are installed, and then start the monitor.
+=end
+
 require "#{::File.dirname(__FILE__)}/../net/remoter/connections"
 
-#provide a very simple provisioner with as few dependencies as possible
+# Provide a very simple provisioner with as few dependencies as possible
 module PoolParty
   module Provision
  
@@ -71,6 +75,7 @@ module PoolParty
         @class_commands ||= []
       end
         
+      # Collect all the bootstrap files that will be uploaded to the remote instances
       def pack_the_dependencies
         # Add the keypair to the instance... shudder
         ::Suitcase::Zipper.add(keypair, "keys")
@@ -109,6 +114,7 @@ module PoolParty
         # ::FileUtils.rm_rf "#{Default.tmp_path}/trash"
       end
   
+      # The commands to setup a PoolParty enviornment
       def default_commands
         pack_the_dependencies
         ::FileUtils.rm_rf "#{Default.tmp_path}/dependencies/gems/cache"

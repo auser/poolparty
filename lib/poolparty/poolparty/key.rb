@@ -1,5 +1,6 @@
-# STUB FOR NOW
-# TODO
+=begin rdoc
+  ssh key used to login to remote instances
+=end
 module PoolParty
   class Key
     
@@ -58,7 +59,7 @@ module PoolParty
         PoolParty::Default.base_keypair_path,
         PoolParty::Default.base_config_directory,
         PoolParty::Default.base_ssh_path,
-        PoolParty::Default.remote_storage_path,        
+        PoolParty::Default.remote_storage_path,
         Dir.pwd
       ]
     end

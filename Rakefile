@@ -1,4 +1,5 @@
 require 'config/requirements'
+require 'hanna/rdoctask' rescue require("rake/rdoctask")
 require 'config/jeweler' # setup gem configuration
 
 Dir['tasks/**/*.rake'].each { |rake| load rake }
@@ -43,3 +44,12 @@ namespace :gem do
 end
 
 task :release => [:update_timestamp]
+
+
+# Generate documentation
+Rake::RDocTask.new do |rd|
+  rd.main = "Readme.txt"
+  rd.rdoc_files.include("Readme.txt", "lib/**/*.rb")
+  rd.rdoc_dir = "rdoc"
+  # rd.template = "hanaa"
+end
