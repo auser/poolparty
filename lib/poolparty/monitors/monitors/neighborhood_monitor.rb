@@ -34,8 +34,9 @@ module Monitors
     end
     
     def neighborhood
-      @neighborhood ||= {:instances => ::PoolParty::Neighborhoods.load_default.instances,
-        :stats => (::PoolParty::Neighborhoods.load_default.stats rescue Stats.new(@env).get)
+      @neighborhood ||= {        
+        :instances => instances,
+        :stats => stats
       } #rescue [{"instance_id"=>"1000", "ip"=>"172.16.68.128"}, {"instance_id"=>"456", "ip"=>"172.16.68.130"}]
     end
     
@@ -60,6 +61,14 @@ module Monitors
         found ? found : h1
       }
       first_pass + ar2
+    end
+    
+    # HELPERS
+    def instances
+      @instances ||= ::PoolParty::Neighborhoods.load_default.instances.to_hash[:instances]
+    end
+    def stats
+      @stats ||= ::PoolParty::Neighborhoods.load_default.stats rescue Stats.new(@env).get
     end
     
   end

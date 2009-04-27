@@ -23,8 +23,8 @@ module PoolParty
           unless respond_to?("call_#{meth}_callbacks".to_sym)
             self.class.module_eval <<-EOE
               def call_#{meth}_callbacks(*args)
-                plugin_store.each {|a| a.call_#{meth}_callbacks(*args) } if respond_to?(:plugin_store)
-                self.send :#{meth}, *args if respond_to?(:#{meth})
+                plugin_store.each {|a| a.call_#{meth}_callbacks(*args) } if respond_to?(:plugin_store) && plugin_store
+                self.send :#{meth}, *args if self.respond_to?(:#{meth})
               end
             EOE
           end

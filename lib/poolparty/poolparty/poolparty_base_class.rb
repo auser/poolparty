@@ -119,6 +119,11 @@ module PoolParty
       end
     end
     
+    # Store the call and use of plugins into an array
+    def plugin_store
+      @plugin_store ||= []
+    end
+    
     def resource(type=:file)
       resources[type.to_sym] ||= []
     end

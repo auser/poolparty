@@ -126,14 +126,5 @@ module PoolParty
       resources.map {|n,r| r.size}.inject(0){|sum,i| sum+=i}
     end
     
-    def plugin_store
-      @plugin_store ||= []
-    end
-    
-    # TODO: deprecate
-    def realize_plugins!(force=false)
-      plugin_store.each {|plugin| puts "plugin: #{plugin}";plugin.realize!(force) if plugin }
-    end
-    
   end
 end

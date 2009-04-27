@@ -9,30 +9,21 @@ module PoolParty
       
       # List of gems that are default to install
       def self.gem_list
-        @gem_list ||= %w( flexmock
-                          lockfile
-                          logging
-                          ZenTest
+        @gem_list ||= %w( logging
                           rake
                           xml-simple
-                          sexp_processor
                           net-ssh
                           net-sftp
                           net-scp
                           net-ssh-gateway
-                          echoe
                           highline
                           json
-                          capistrano
-                          ParseTree
-                          ruby2ruby
                           activesupport
                           grempe-amazon-ec2
                           RubyInline
                           ohai
                           chef
                           auser-dslify
-                          auser-butterfly
                           auser-parenting
                           adamwiggins-rest-client
                           thin                          
@@ -147,7 +138,8 @@ module PoolParty
           "cp /var/poolparty/dependencies/keys/* /root/.ssh/",
           "chmod 600 /root/.ssh/#{::File.basename(@cloud.keypair.full_filepath)}",
           # "god -c /etc/poolparty/monitor.god",
-          "thin -R /etc/poolparty/monitor.ru -p 8642 --daemon --pid /var/run/stats_monitor.pid start 2>/dev/null",
+          "mkdir -p /var/log/poolparty/",
+          "thin -R /etc/poolparty/monitor.ru -p 8642 --pid /var/run/stats_monitor.pid --daemon -l /var/log/poolparty/monitor.log start 2>/dev/null",
           'echo "bootstrap" >> /var/poolparty/POOLPARTY.PROGRESS']
         commands << self.class.class_commands unless self.class.class_commands.empty?
       end

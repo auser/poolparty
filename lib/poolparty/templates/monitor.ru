@@ -11,7 +11,7 @@ rescue LoadError
 end
 
 app = Rack::Builder.new do
-  use Rack::Reloader, 2
+  # use Rack::Reloader, 2
   use Rack::ShowExceptions
   # use Rack::PostBodyContentTypeParser  #parses json requests to params hash
   run Monitors::MonitorRack.new()
