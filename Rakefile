@@ -1,5 +1,11 @@
 require 'config/requirements'
-require 'hanna/rdoctask' rescue require("rake/rdoctask")
+
+begin
+  require 'hanna/rdoctask'
+rescue Exception => e
+  require "rake/rdoctask"
+end
+
 require 'config/jeweler' # setup gem configuration
 
 Dir['tasks/**/*.rake'].each { |rake| load rake }
