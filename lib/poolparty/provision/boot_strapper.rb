@@ -85,7 +85,8 @@ module PoolParty
           puts "using edge poolparty: #{::File.expand_path(edge_pp_gem)}"
           ::Suitcase::Zipper.add(edge_pp_gem, 'gems')
         else
-          # self.class.gem_list << 'auser-poolparty'
+          vputs "using gem auser-poolparty. use rake build to use edge"
+          self.class.gem_list << 'auser-poolparty'
         end
         # Add the gems to the suitcase
         puts "Adding default gem dependencies"
