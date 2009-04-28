@@ -92,7 +92,7 @@ manifest_file_location = ::File.join(::File.dirname(__FILE__), '../config/manife
 
 if ::File.file?(manifest_file_location)
   ::File.readlines(manifest_file_location).each do |line| 
-    puts "#{::File.expand_path(line)}" if $DEBUGGING
+    dputs "#{::File.expand_path(line)}"
     require "#{line.gsub(/\n/, '')}"
   end
 else
