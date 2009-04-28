@@ -13,6 +13,9 @@ module PoolParty
           :after_bootstrap,
           :before_configure,
           :after_configure,
+          # TODO: Add after_launch_instance and after_terminate_instance
+          # :after_launch_instance,
+          # :after_terminate_instance,
           self.class.additional_callbacks
         ].flatten
       end

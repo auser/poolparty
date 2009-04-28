@@ -13,7 +13,6 @@ module PoolParty
         parent.has_chef_recipe ::File.basename(name)
       end
       def before_configure
-        puts "name: #{name} #{::File.exist?(name)}"
         ::Suitcase::Zipper.add(name, "chef/cookbooks") if ::File.exist?(name)
       end
     end
