@@ -92,7 +92,7 @@ manifest_file_location = ::File.join(::File.dirname(__FILE__), '../config/manife
 
 if ::File.file?(manifest_file_location)
   ::File.readlines(manifest_file_location).each do |line| 
-    puts "#{::File.expand_path(line)}" if $DEBUGGING
+    dputs "#{::File.expand_path(line)}"
     require "#{line.gsub(/\n/, '')}"
   end
 else
@@ -111,16 +111,6 @@ module PoolParty
   end
   def reset!
     $pools = $clouds = $plugins = @describe_instances = nil
-  end
-  
-  # Require all the files in a directory below the base
-  def require_user_directory(dirname)
-    cloud_dir = ::File.dirname($pool_specfile)
-    Dir["#{cloud_dir}/#{dirname}/*"].each {|a| require a }
-  end
-  # Add to the suitcase files below the clouds.rb base directory
-  def pack_user_directory(dirname)
-    ::Suitcase::Zipper.add("#{::File.dirname($pool_specfile)}/#{dirname}", "etc")
   end
   
   class PoolParty

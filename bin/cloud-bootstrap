@@ -3,19 +3,29 @@ $:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
 require "poolparty"
 require "poolparty/provision/boot_strapper"
 
+
 o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
   opts.on('-n cloudname', '--name name', 'Start cloud by this name')    { |c| optioner.cloudname c }
+  opts.on('-i num', '--num i', 'Instance number')    { |i| optioner.inst_num i.to_i }
 end
 
 o.loaded_clouds.each do |cld|
   # If an IP or DNS name is given, bootstrap that node, otherwise, bootstrap all running nodes.
-  nodes = !o.unflagged_args.empty? ?  o.unflagged_args : cld.nodes(:status => "running").map {|i| i.ip }
+  # ::FileUtils.rm_rf "#{Default.tmp_path}/" unless o.testing?
+  
+  nodes = !o.unflagged_args.empty? ?  o.unflagged_args : cld.nodes(:status => "running").collect {|i| i.ip }.sort.compact
   if nodes.empty?
     puts "No nodes to bootstrap"
   else
-    nodes.each do |address|
-      puts "\nBootStrapping: #{address}\n--------------------"
-      ::PoolParty::Provision::BootStrapper.new address, {:full_keypair_path => cld.keypair.full_filepath, :cloud => cld}
+    if o.inst_num?
+      vputs "\nBootStrapping: #{nodes[o.inst_num]}\n--------------------"
+      ::PoolParty::Provision::BootStrapper.new nodes[o.inst_num], :cloud => cld
+    else
+      nodes.each do |address|
+        vputs "\nBootStrapping: #{address}\n--------------------"      
+        ::PoolParty::Provision::BootStrapper.new address, :cloud => cld
+      end
     end
   end
 end
+

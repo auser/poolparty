@@ -24,7 +24,7 @@ module PoolParty
 
       default_options(
         :path_to_binary => 'vmrun',
-        :images_repo_path => ::File.expand_path("/Documents/Virtual_Machines.localized/"),
+        :images_repo_path => ::File.expand_path("~/Documents/Virtual_Machines.localized/"),
         :default_cli_options => 'gui',
         :terminate_options => 'soft',
         :vmx_hash => 'need to specify vmx_files to use'
@@ -46,7 +46,7 @@ module PoolParty
       def self.launch_new_instance!(o={})
         new_instance(o).launch_new_instance!
       end
-      def launch_new_instance!
+      def launch_new_instance!(o={})
         VmwareInstance.new( :vmx_file => next_unused_vmx_file, 
                             :ip => vmx_hash[next_unused_vmx_file], 
                             :keypair => @cloud.keypair
@@ -143,7 +143,6 @@ module PoolParty
       def instance_id
         vmx_file
       end
-
       
     end
   end

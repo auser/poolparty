@@ -1,6 +1,6 @@
 module PoolParty
   class Base
-    plugin :poolparty_base_bind do
+    plugin :bind do
       
       def enable
         

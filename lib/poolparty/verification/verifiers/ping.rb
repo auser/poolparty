@@ -2,7 +2,7 @@ module PoolParty
   module Verifiers
     
     class Ping < VerifierBase
-      include PoolParty::Pinger
+      include ::PoolParty::Pinger
       
       attr_reader :port
       def initialize(port=80)

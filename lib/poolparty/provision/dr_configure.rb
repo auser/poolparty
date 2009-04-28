@@ -80,7 +80,10 @@ module PoolParty
        # @cloud.write_properties_hash("#{Default.tmp_path}/properties_hash.rb")
        #TODO: move to puppet class
        @cloud.build_and_store_new_config_file("#{Default.tmp_path}/dr_configure/poolparty.pp") 
-       @cloud.pack_user_directory "monitors"
+       
+       %w(monitors verifiers plugins).each do |dir|
+        @cloud.pack_user_directory dir
+       end
      end
      
      def write_erlang_cookie

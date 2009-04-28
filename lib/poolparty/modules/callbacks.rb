@@ -13,6 +13,9 @@ module PoolParty
           :after_bootstrap,
           :before_configure,
           :after_configure,
+          # TODO: Add after_launch_instance and after_terminate_instance
+          # :after_launch_instance,
+          # :after_terminate_instance,
           self.class.additional_callbacks
         ].flatten
       end
@@ -23,8 +26,8 @@ module PoolParty
           unless respond_to?("call_#{meth}_callbacks".to_sym)
             self.class.module_eval <<-EOE
               def call_#{meth}_callbacks(*args)
-                plugin_store.each {|a| a.call_#{meth}_callbacks(*args) } if respond_to?(:plugin_store)
-                self.send :#{meth}, *args if respond_to?(:#{meth})
+                plugin_store.each {|a| a.call_#{meth}_callbacks(*args) } if respond_to?(:plugin_store) && plugin_store
+                self.send :#{meth}, *args if self.respond_to?(:#{meth})
               end
             EOE
           end

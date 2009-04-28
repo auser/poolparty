@@ -35,10 +35,12 @@ module PoolParty
   end
   
   require "#{::File.dirname(__FILE__)}/verifier_base.rb"
-  Dir[::File.dirname(__FILE__)+"/verifiers/*"].each {|m| require m }
+  Dir[::File.dirname(__FILE__)+"/verifiers/*"].each {|m| require m }  
   
   class Verify
     def initialize(&block)
+      ::PoolParty.require_user_directory "verifiers"
+      
       instance_eval &block if block
     end
     
