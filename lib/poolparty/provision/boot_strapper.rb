@@ -30,6 +30,7 @@ module PoolParty
                           auser-dslify
                           auser-parenting
                           adamwiggins-rest-client
+                          rack
                           thin                          
                         )
       end
