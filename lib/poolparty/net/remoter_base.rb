@@ -29,7 +29,7 @@ module PoolParty
       attr_reader :cloud
       
       def initialize(prnt, opts={}, &block)
-        dsl_options prnt.options.merge(opts)
+        dsl_options prnt.options.merge(opts) if prnt && prnt.respond_to?(:options)
         instance_eval &block if block
         @cloud = prnt
       end

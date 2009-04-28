@@ -46,7 +46,7 @@ module PoolParty
       def self.launch_new_instance!(o={})
         new_instance(o).launch_new_instance!
       end
-      def launch_new_instance!
+      def launch_new_instance!(o={})
         VmwareInstance.new( :vmx_file => next_unused_vmx_file, 
                             :ip => vmx_hash[next_unused_vmx_file], 
                             :keypair => @cloud.keypair
