@@ -16,6 +16,8 @@ module Monitors
       @neighborhood = {@neighborhood[:instances] => @neighborhood_instances}
       after_close do
         if @neighborhood.instances.size>1
+          # TODO: Add logger here
+          puts "Pinging #{"#{@neighborhood.instances.rand.ip}/neighborhood"}"
           RestClient.put "#{@neighborhood.instances.rand.ip}/neighborhood", @neighborhood, :content_type => 'text/x-json'
         end
       end

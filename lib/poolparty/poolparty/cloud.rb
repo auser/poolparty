@@ -117,7 +117,7 @@ module PoolParty
         options[:keypair] ||= keypair rescue nil
         options[:rules] = {:expand => dsl_options[:expand_when], :contract => dsl_options[:contract_when]}
         dependency_resolver 'chef'        
-        enable :haproxy unless dsl_options[:haproxy] == :disabled
+        # enable :haproxy unless dsl_options[:haproxy] == :disabled
       end
       
       # provide list of public ips to get into the cloud
