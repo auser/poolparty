@@ -23,7 +23,7 @@ module PoolParty
       end
       
       def package_deploy_directory
-        ::Suitcase::Zipper.add("#{from}", "user_directory/")
+        ::Suitcase::Zipper.add("#{::File.expand_path(from)}", "user_directory/")
       end
       
       def add_unpack_directory

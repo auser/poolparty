@@ -73,7 +73,6 @@ module PoolParty
      
      def pack_up_and_ship_off_suitcase
        ::Suitcase::Zipper.build_dir!("#{Default.tmp_path}/dr_configure")
-       
        rsync "#{Default.tmp_path}/dr_configure/", "/var/poolparty/dr_configure/"
      end
      

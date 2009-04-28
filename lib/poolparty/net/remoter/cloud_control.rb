@@ -3,7 +3,17 @@ require "ping"
 module PoolParty
   module Remote
     
-    # TODO: Deprecate
+    # # Are too few instances running?
+    def are_too_few_instances_running?
+      nodes(:status => "running").size < minimum_instances.to_i
+    end
+    # # Are there more instances than allowed?
+    def are_too_many_instances_running?
+      nodes(:status => "running").size > maximum_instances.to_i
+    end
+    
+    
+    # TODO: Deprecate all below here
     # # A convenience method for waiting until there are no more
     # # pending instances and then running the block
     # def when_no_pending_instances(&block)
@@ -77,14 +87,7 @@ module PoolParty
     # def can_shutdown_an_instance?
     #   nodes(:status => "running").size > minimum_instances.to_i
     # end
-    # # Are too few instances running?
-    def are_too_few_instances_running?
-      nodes(:status => "running").size < minimum_instances.to_i
-    end
-    # # Are there more instances than allowed?
-    def are_too_many_instances_running?
-      nodes(:status => "running").size > maximum_instances.to_i
-    end
+
     # 
     # ########
     # # TODO: deprecate methods below here (only if they are deprecate-able)
