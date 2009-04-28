@@ -14,7 +14,8 @@ module PoolParty
        ::PoolParty::Default.default_options.merge({
          :full_keypair_path   => "#{ENV["AWS_KEYPAIR_NAME"]}" || "~/.ssh/id_rsa",
          :installer           => 'apt-get install -y',
-         :dependency_resolver => 'chef'
+         :dependency_resolver => 'chef',
+         :invalid_run_count => 2
        })
      end
      
@@ -30,7 +31,7 @@ module PoolParty
        end
      end
     
-     attr_reader :cloud, :keypair
+     attr_reader :cloud, :keypair, :run_count
      
      def initialize(host, opts={}, &block)
        self.class.defaults.merge(opts).to_instance_variables(self)
@@ -38,11 +39,14 @@ module PoolParty
        @configurator = "::PoolParty::Provision::#{dependency_resolver.capitalize}".constantize
        @cloud = opts[:cloud]
        @keypair = @cloud.keypair
+       @run_count = 0
        
        @cloud.call_before_configure_callbacks if @cloud
        prescribe_configuration
        execute!
      end
+     
+     private
      
      def prescribe_configuration
        ::FileUtils.mkdir_p "#{Default.tmp_path}/dr_configure" unless ::File.directory?("#{Default.tmp_path}/dr_configure")
@@ -56,19 +60,48 @@ module PoolParty
       @configurator.files_to_upload.each {|f| ::FileUtils.cp f, "#{Default.tmp_path}/dr_configure/#{::File.basename(f)}" if ::File.file?(f) }
       
       pack_up_and_ship_off_suitcase
-                  
-      commands << [
-        'chmod 644 /var/poolparty/dr_configure/clouds.json',
-        'chmod 644 /var/poolparty/dr_configure/clouds.rb',
-        'cp /var/poolparty/dr_configure/clouds.json /etc/poolparty',
-        'cp /var/poolparty/dr_configure/clouds.rb /etc/poolparty',
-        'cp /var/poolparty/dr_configure/erlang.cookie /root/.erlang.cookie',
-        'ruby /var/poolparty/dr_configure/erlang_cookie_maker',
-        "touch /var/poolparty/POOLPARTY.PROGRESS",
-        'echo "configure" >> /var/poolparty/POOLPARTY.PROGRESS'
-        ]
-      commands << self.class.class_commands unless self.class.class_commands.empty?
-      commands << @configurator.commands
+      run_commands          
+     end
+     
+     def execute!
+      super
+      add_run_count!
+      begin
+        @cloud.passing?
+        @cloud.vputs "Cloud passed verification"
+      rescue Exception => e
+        if run_count < invalid_run_count
+          @cloud.vputs <<-EOM
+
+          Verification failed: #{e}"
+            Running configure again to try to solve the problem
+
+          EOM
+          execute!
+        else
+          @cloud.vputs <<-EOM
+
+          Verification failed: #{e}"
+            Please check your clouds.rb for any errors
+
+          EOM
+        end        
+      end
+     end
+     
+     def run_commands
+       commands << [
+         'chmod 644 /var/poolparty/dr_configure/clouds.json',
+         'chmod 644 /var/poolparty/dr_configure/clouds.rb',
+         'cp /var/poolparty/dr_configure/clouds.json /etc/poolparty',
+         'cp /var/poolparty/dr_configure/clouds.rb /etc/poolparty',
+         'cp /var/poolparty/dr_configure/erlang.cookie /root/.erlang.cookie',
+         'ruby /var/poolparty/dr_configure/erlang_cookie_maker',
+         "touch /var/poolparty/POOLPARTY.PROGRESS",
+         'echo "configure" >> /var/poolparty/POOLPARTY.PROGRESS'
+         ]
+       commands << self.class.class_commands unless self.class.class_commands.empty?
+       commands << @configurator.commands
      end
      
      def pack_up_and_ship_off_suitcase
@@ -84,6 +117,10 @@ module PoolParty
        %w(monitors verifiers plugins).each do |dir|
         @cloud.pack_user_directory dir
        end
+     end
+     
+     def add_run_count!
+      @run_count += 1
      end
      
      def write_erlang_cookie

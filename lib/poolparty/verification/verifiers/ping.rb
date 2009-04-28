@@ -9,7 +9,7 @@ module PoolParty
         @port = port
       end
       def passing?
-        ping_port(host, port)
+        ping_port(host, port, 3)
       end
     end
     

@@ -49,7 +49,7 @@ module PoolParty
         has_service("haproxy") do
           action [:start, :enable]
           stops get_service("apache2"), :immediately
-          starts get_service("apache2"), :immediately
+          starts get_service("apache2")
         end
         
       end
