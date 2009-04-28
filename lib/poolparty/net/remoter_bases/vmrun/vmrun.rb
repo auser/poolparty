@@ -143,7 +143,6 @@ module PoolParty
       def instance_id
         vmx_file
       end
-
       
     end
   end
