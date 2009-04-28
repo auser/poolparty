@@ -2,6 +2,13 @@
 # Info at http://github.com/guides/tell-git-your-user-name-and-email-address
 
 begin
+class Array
+  def one_of_regex
+    option_list = join "|"
+    Regexp.new "(#{option_list})"
+  end
+end
+
   require 'jeweler'
   Jeweler::Tasks.new do |s|
     s.name = "poolparty"
@@ -16,8 +23,10 @@ begin
     s.authors = ["Ari Lerner"]
     
     s.test_files = Dir["test/**/test_*.rb"]
-    s.files = %w(Rakefile History.txt README.txt PostInstall.txt License.txt VERSION.yml) + 
-              Dir["{config,examples,lib,spec,test,tasks,script,generators,bin,vendor}/**/*"]
+    excludes_regexp = ["vendor/gems", "lib/erlang"].one_of_regex
+
+    s.files = (%w(Rakefile History.txt README.txt PostInstall.txt License.txt VERSION.yml) + 
+              Dir["{config,examples,lib,spec,test,tasks,script,generators,bin,vendor}/**/*"]).delete_if{|f| f =~ excludes_regexp}
     
     s.has_rdoc = true
     s.extra_rdoc_files = ["README.txt", "License.txt", 'History.txt']
