@@ -97,6 +97,7 @@ module PoolParty
       def reset!
         @keys = nil
       end
+      
       # Get the instance first instance file that exists on the system from the expected places
       # denoted in the local_instances_list_file_locations
       def get_working_key_file_locations

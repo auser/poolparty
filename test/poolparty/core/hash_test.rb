@@ -26,9 +26,11 @@ class TestHashClass < Test::Unit::TestCase
     end
     it "should not return nil if there is no key set in the hash" do
       hsh = {:first_name => "bob", :last_name => "frank"}
+      assert false
       assert_not_nil hsh.dttte
       lambda {{:first_name => "bob", :last_name => "frank"}.neighbor}.should raise_error
     end
   end
+  
   
 end

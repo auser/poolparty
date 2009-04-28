@@ -2,6 +2,7 @@ require "rubygems"
 require "json"
 require("#{::File.dirname(__FILE__)}/../../vendor/gems/dslify/lib/dslify") rescue( require 'dslify')
 require "#{::File.dirname(__FILE__)}/poolparty/default"
+require "#{::File.dirname(__FILE__)}/modules/user_helpers"
 require "#{::File.dirname(__FILE__)}/schema"
 require "#{::File.dirname(__FILE__)}/net/init"
 require "#{::File.dirname(__FILE__)}/core/string"
