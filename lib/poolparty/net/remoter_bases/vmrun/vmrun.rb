@@ -24,7 +24,7 @@ module PoolParty
 
       default_options(
         :path_to_binary => 'vmrun',
-        :images_repo_path => ::File.expand_path("/Documents/Virtual_Machines.localized/"),
+        :images_repo_path => ::File.expand_path("~/Documents/Virtual_Machines.localized/"),
         :default_cli_options => 'gui',
         :terminate_options => 'soft',
         :vmx_hash => 'need to specify vmx_files to use'
@@ -37,14 +37,14 @@ module PoolParty
       end
       
       #terminate all running instances
-      def self.terminate!(cld, o={})
-        describe_instances(cld, o).each do |vmxf|
-           terminate_instance! cld, o.merge(:vmx_file => vmxf)
+      def self.terminate!(o={})
+        describe_instances(o).each do |vmxf|
+           terminate_instance! o.merge(:vmx_file => vmxf)
         end
       end
 
-      def self.launch_new_instance!(cld, o={})
-        new_instance(cld, o).launch_new_instance!
+      def self.launch_new_instance!(o={})
+        new_instance(o).launch_new_instance!
       end
       def launch_new_instance!
         VmwareInstance.new( :vmx_file => next_unused_vmx_file, 
@@ -53,8 +53,8 @@ module PoolParty
                           ).launch!
       end
       # Terminate an instance by id
-      def self.terminate_instance!(cld, o={})
-        new(cld, o).terminate_instance!
+      def self.terminate_instance!(o={})
+        new(nil, o).terminate_instance!
       end
       def terminate_instance!(o={})
         dsl_options o
@@ -65,16 +65,16 @@ module PoolParty
       end
 
       # Describe an instance's status, must pass :vmx_file in the options
-      def self.describe_instance(cld, o={})
+      def self.describe_instance(o={})
         # vmx_file = o[:vmx_file] || Vmrun.running_instances.first
-        new_instance(cld, o).describe_instance
+        new_instance(o).describe_instance
       end
       def describe_instance(o={})        
         running_instances.select {|inst| inst.vmx_file == o[:vmx_file] }.first
       end
 
-      def self.describe_instances(cld, o={})
-        new_instance(cld, o).describe_instances
+      def self.describe_instances(o={})
+        new_instance(o).describe_instances
       end
       def describe_instances(o={})
         running_instances.map {|a| a.to_hash }
@@ -104,8 +104,8 @@ module PoolParty
       end
       
       private
-      def self.new_instance(cld, o={})
-        Vmrun.new(cld, o)
+      def self.new_instance(o={})
+        Vmrun.new((cloud rescue o), o)
       end
       
       # vmrun specific methods

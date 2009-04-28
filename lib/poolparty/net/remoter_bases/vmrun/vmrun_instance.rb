@@ -6,7 +6,7 @@ module PoolParty
       
       def initialize(o={}, cld=nil)
         raise "You must pass a vmx_file" unless o[:vmx_file]
-        @vmx_file = o[:vmx_file]
+        @vmx_file = ::File.expand_path(o[:vmx_file])
         @ip = o[:ip]
         @keypair = o[:keypair]
         
