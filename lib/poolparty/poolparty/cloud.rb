@@ -53,7 +53,7 @@ module PoolParty
       # Call the remoter commands on the cloud if they don't exist on the cloud itself
       # This gives the cloud access to the remote_base's methods
       def method_missing(m, *args, &block)
-        remote_base.respond_to?(m) ? remote_base.send(m, *((args || []).unshift(self)), &block) : super
+        remote_base.respond_to?(m) ? remote_base.send(m, *args, &block) : super
       end
       
       # Default set of options. Most take the Default options from the default class
