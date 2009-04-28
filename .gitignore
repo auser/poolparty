@@ -18,3 +18,5 @@ doc/
 config/manifest.pp
 vendor/dependencies/cache
 vendor/dependencies/packages
+.autosession.vim
+tags

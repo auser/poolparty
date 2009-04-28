@@ -80,3 +80,12 @@ namespace :poolparty do
     
   end
 end
+
+namespace :ctags do
+  desc "create ctags"
+  task :create do
+    dir = File.dirname(__FILE__) + "/.."
+    Dir.chdir(dir)
+    sh "time ctags -R --language-force=Ruby -F ./TAGS ."
+  end
+end
