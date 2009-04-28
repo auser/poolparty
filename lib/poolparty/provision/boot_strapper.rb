@@ -24,14 +24,13 @@ module PoolParty
                           json
                           activesupport
                           grempe-amazon-ec2
-                          RubyInline
                           ohai
                           chef
                           auser-dslify
                           auser-parenting
                           adamwiggins-rest-client
                           rack
-                          thin                          
+                          thin
                         )
       end
   
