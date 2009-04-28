@@ -28,6 +28,7 @@ class Rack::Response
 end
 
 Dir[::File.dirname(__FILE__)+"/monitors/*"].each {|m| require m}
+require_user_directory "monitors"
 
 module Monitors
 

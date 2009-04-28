@@ -5,7 +5,7 @@ class TestVmRun < Test::Unit::TestCase
     setup do
       reset!
       $vmx_keys = {
-        "/Users/alerner/Documents/Virtual Machines.localized/Ubuntu Linux 32bit.vmwarevm/Ubuntu Linux 32bit.vmx" => "192.168.248.128"
+        ::File.expand_path("~/Documents/vm/Ubuntu32bitVM.vmwarevm/Ubuntu32bitVM.vmx") => "192.168.248.133"
       }
       $vmx_files = $vmx_keys.keys
       $ipaddresses = $vmx_keys.values
@@ -40,10 +40,10 @@ class TestVmRun < Test::Unit::TestCase
     should "be able to turn off the instance" do
       @cloud.launch_instance!
       @cloud.terminate_instance!
-      assert @cloud.vmrun.describe_instances.empty?
+      assert @cloud.describe_instances.empty?
     end
     after :all do
-      PoolParty::Remote::Vmrun.terminate!
+      PoolParty::Remote::Vmrun.terminate!(@cloud)
     end
   end
   
