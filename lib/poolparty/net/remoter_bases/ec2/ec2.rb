@@ -1,8 +1,7 @@
 =begin rdoc
   EC2 Remoter Base
   
-  This serves as the basis for running PoolParty on Amazon's ec2 cloud
-  cluster. 
+  This serves as the basis for running PoolParty on Amazon's ec2 cloud.
 =end
 require "date"
 require "#{::File.dirname(__FILE__)}/ec2_response_object"
@@ -37,32 +36,25 @@ module PoolParty
   module Remote
     class Ec2 < Remote::RemoterBase
       
-      def initialize(par, opts={}, &block)
-        dsl_options opts
-        instance_eval &block if block
-        super(par, &block)    
-      end
+      default_options({
+        :image_id => 'ami-bf5eb9d6',
+        # :key_name => ::File.basename(keypair.is_a?(String) ? keypair : keypair.full_filepath),
+        :instance_type => 'm1.small', # or 'm1.large', 'm1.xlarge', 'c1.medium', or 'c1.xlarge'
+        :addressing_type => "public",
+        :availabilty_zone => "us-east-1a",
+        :security_group => ["default"]
+        })
       
       # Requires a hash of options
-      def self.launch_new_instance!(o )
-        new(o).launch_new_instance!(o)
+      def self.launch_new_instance!(parent_cloud, o)
+        new(parent_cloud, o).launch_new_instance!
       end
       
       # TODO: Fix the key_name issue
       # Start a new instance with the given options
-      def launch_new_instance!(o)
-        raise "You must pass a keypair to launch an instance, or else you wont be able to login. options = #{o.inspect}" if !@cloud.keypair
-        o.merge!( :image_id => ami,
-                  :user_data => options[:user_data],
-                  :min_count => 1,
-                  :max_count => options[:num] || 1,
-                  :key_name => ::File.basename(keypair.is_a?(String) ? keypair : keypair.full_filepath),
-                  :availability_zone => availabilty_zone,
-                  :instance_type => options[:size] || Default.size,
-                  :group_id => security_group,
-                  :addressing_type => "public",
-                  :kernel_id => nil
-                )
+      def launch_new_instance!(o={})
+        raise "You must pass a keypair to launch an instance, or else you will not be able to login. options = #{o.inspect}" if !cloud.keypair
+        o.merge!( options ).merge!(:key_name=>keypair.basename)
         instance = ec2(o).run_instances(o)
         begin
           h = EC2ResponseObject.get_hash_from_response(instance.instancesSet.item.first)
@@ -74,7 +66,7 @@ module PoolParty
         h
       end
       # Terminate an instance by id
-      def terminate_instance!(o={})  #NOTE: maybe we should not allow this command wihtout an instance_idˇ
+      def terminate_instance!(o={})
         ec2(o).terminate_instances(:instance_id => o[:instance_id])
       end
       # Describe an instance's status
@@ -101,23 +93,32 @@ module PoolParty
         end.compact.sort {|a,b| a[:index] <=> b[:index] }
       end
       
-      # EC2 connections
-      def ec2(o={})
-        @ec2 ||= self.class.ec2(o)
-      end
-      def self.ec2(o={})
+      # ===================================
+      # = Ec2 Specific methods below here =
+      # ===================================
+      
+      # return or create a new base EC2 connection object that will actually connect to ec2
+      def ec2(o)
         @ec2 ||= EC2::Base.new( :access_key_id => o[:access_key], 
                                 :secret_access_key => o[:secret_access_key]
                               )
       end
+      def self.ec2(o)
+        @ec2 ||= self.class.ec2(o)
+      end
       
       # Get the ec2 description for the response in a hash format
-      def get_instances_description(o={})        
+      def get_instances_description(o={})
+        #TODO: only use keypair.full_filepath
         key_hash = {:keypair => ::File.basename(keypair.is_a?(String) ? keypair : keypair.full_filepath)}
         EC2ResponseObject.get_descriptions(ec2(o).describe_instances).select_with_hash(key_hash)
       end
       def get_descriptions(o={})
         self.class.get_descriptions(o)
+      end
+      
+      def keypair
+        cloud.keypair
       end
       
       # Class method helpers
@@ -131,6 +132,7 @@ module PoolParty
         [@access_key, @secret_access_key]
       end
 
+      # TODO: Deprecate for 1.3
       def after_launch_master(inst=nil)
         instance = master
         vputs "Running tasks after launching the master"

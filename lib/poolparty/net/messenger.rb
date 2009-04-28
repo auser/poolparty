@@ -1,3 +1,5 @@
+# TODO: Deprecate this file
+
 =begin rdoc
   The connection to the messenger from poolparty, the client.
   

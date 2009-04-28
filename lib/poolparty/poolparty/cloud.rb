@@ -46,7 +46,7 @@ module PoolParty
       # Redefining methods are not allowed
       def self.method_added sym        
         raise "Exception: #{sym.to_s.capitalize} method has been redefined" if immutable_methods.include?(sym) && !respond_to?(sym)
-      end      
+      end
       
       alias :name :cloud_name
       
