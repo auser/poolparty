@@ -1,23 +1,32 @@
 =begin rdoc
-  The Vmrun remote base calls out to for Remote Bases
+  The Vmrun remote base uses the vmrun command to implement a cloud remoter base.
+  The Vmrun remoter base has been tested with Vmware fusion on the mac.
   
-  By extending this class, you can easily add remoters to 
-  PoolParty. There are 4 methods that the remote base needs to implement
-  in order to be compatible.
+  In order to use the Vmrun remoter base you will need to setup a few things.
+  First, you will need to have the Vmware fusion installed and vmrun command in your path.
+  The default location of the vmrun binary is /Library/Application Support/VMware Fusion/vmrun.
+  You will then of course need a virtual machine installed and available.  
+  Once you have your instance installed and running, you need to setup your ssh keys so that poolparty can ssh into the instance. Get the ip of you instnace with ifconfig inside the running instance.
+  For example:
+    
+    ssh root@172.0.1.129 "mkdir /root/.ssh && chmod 600 /root/.ssh"
+    scp my_key.pub root@172.0.1.129:/root/.ssh/authorized_keys
+    
+  provide a using :vmrun block in your clouds.rb
+  for example:
+    
+    using :vmrun do
+      vmx_hash(::File.expand_path("~/Documents/Virtual\ Machines.localized/Ubuntu-jaunty.vmwarevm/Ubuntu-jaunty.vmx") => '172.16.68.129')
+    end
+   
+   The vmx file fulfills a similar purpose as the ami id in ec2. Note that expand path.  vmrun return fuill paths, so we must provide full paths so things match up later. W
+   Vmrun does not provide a meta server like ec2 has, so you need to list the ip address of your VM.  For this reason it is recommended that you use NAT addressing on your VM to maintain consistent addressing across different physical networks.
   
-  The four methods are:
-    launch_new_instance!
-    terminate_instance(id)
-    describe_instance(id)
-    describe_instances
-  
-  After your remote base is written, make sure to register the base outside the context
-  of the remote base, like so:
-    register_remote_base :remote_base_name
+  Also, note that vmrun does not copy the VM to a new distinct VM on each run, so if you want to be able to start from a known state, you should make a snapshot before using your vm with poolparty.  Then, you can rollback to this initial state if you want to ensure you can repeat a fresh cloud-start.
   
 =end
 
-module PoolParty    
+module PoolParty
   module Remote
     class Vmrun < Remote::RemoterBase
       include Dslify
@@ -79,15 +88,6 @@ module PoolParty
       def describe_instances(o={})
         running_instances.map {|a| a.to_hash }
       end
-      def running_instances(o={})
-        output = run_local "#{path_to_binary} list"
-        lines = output.split("\n")
-        lines.shift
-        lines.map {|vmx_file| VmwareInstance.new( :vmx_file => vmx_file, 
-                                                  :ip => vmx_hash[vmx_file], 
-                                                  :keypair => @cloud.keypair
-                                                ) }
-      end
 
       # After launch callback
       # This is called after a new instance is launched
@@ -106,6 +106,16 @@ module PoolParty
       private
       def self.new_instance(o={})
         Vmrun.new((cloud rescue o), o)
+      end
+      
+      def running_instances(o={})
+        output = run_local "#{path_to_binary} list"
+        lines = output.split("\n")
+        lines.shift
+        lines.map {|vmx_file| VmwareInstance.new( :vmx_file => vmx_file, 
+                                                  :ip => vmx_hash[vmx_file], 
+                                                  :keypair => @cloud.keypair
+                                                ) }
       end
       
       # vmrun specific methods
