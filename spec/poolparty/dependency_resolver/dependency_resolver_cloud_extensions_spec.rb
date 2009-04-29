@@ -111,8 +111,8 @@ describe "Resolution spec" do
       # puts "<pre>#{cloud(:dog).to_properties_hash.to_yaml}</pre>"
       @properties[:resources].class.should == Array
     end
-    it "contain content in the template's hash" do      
-      @properties[:services][@apache_key].first.resources.first[:content].should == "Hello bob on port 8080"
+    it "contain content in the template's hash" do
+      @properties[:services][@apache_key].first.resources.select_with_hash(:pp_type => "file").last[:content].should == "Hello bob on port 8080"
     end
     it "should have services" do
       @properties[:services][@apache_key].empty?.should == false

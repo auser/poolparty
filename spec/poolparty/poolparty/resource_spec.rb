@@ -186,7 +186,7 @@ describe "Resource" do
           @tc.resources.size.should == 2
         end
         it "should say there is one resource on the outer resource" do
-          @dir.resources.size.should == 1
+          @dir.resources.size.should == 2
         end
         it "should contain the file as a resource" do
           @dir.resource(:file)[0].class.should == PoolParty::Resources::File
