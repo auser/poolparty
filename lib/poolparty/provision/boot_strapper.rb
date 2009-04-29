@@ -24,14 +24,13 @@ module PoolParty
                           json
                           activesupport
                           grempe-amazon-ec2
-                          RubyInline
                           ohai
                           chef
                           auser-dslify
                           auser-parenting
                           adamwiggins-rest-client
                           rack
-                          thin                          
+                          thin
                         )
       end
   
@@ -86,6 +85,7 @@ module PoolParty
           puts "using edge poolparty: #{::File.expand_path(edge_pp_gem)}"
           ::Suitcase::Zipper.add(edge_pp_gem, 'gems')
         else
+          vputs "using gem auser-poolparty. use rake build to use edge"
           self.class.gem_list << 'auser-poolparty'
         end
         # Add the gems to the suitcase
