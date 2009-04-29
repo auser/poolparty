@@ -106,9 +106,10 @@ module PoolParty
           if ping_port(@inst[:ip], 22)
             cloud.dputs ""
             cloud.started_instance = @inst
-            block.call(@inst) if block
-            # after_launch_instance(@inst)
+            
             cloud.call_after_launch_instance_callbacks(@inst)
+            block.call(@inst) if block
+            
             return @inst
           end
           sleep(2)
