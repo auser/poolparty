@@ -31,6 +31,7 @@ module PoolParty
           not_if "which easy_install"
         end
         
+        has_gem_package "ezmobius-nanite"
         
       end
             
