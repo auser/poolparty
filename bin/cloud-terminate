@@ -9,7 +9,13 @@ end
 
 o.loaded_clouds.each do |cld|
   cld.nodes(:status => "running").each do |inst|
-    puts "Shutting down #{inst.instance_id}"
-    cld.terminate_instance!(:instance_id => inst.instance_id)
-  end   
+    msg = <<-EOM
+Shutting down #{inst.instance_id}
+Are you sure? (Y/N)
+    EOM
+    
+    if are_you_sure?(msg)
+      cld.terminate_instance!(:instance_id => inst.instance_id)
+    end
+  end
 end
