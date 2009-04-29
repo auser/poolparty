@@ -107,7 +107,8 @@ module PoolParty
             cloud.dputs ""
             cloud.started_instance = @inst
             block.call(@inst) if block
-            after_launch_instance(@inst)
+            # after_launch_instance(@inst)
+            cloud.call_after_launch_instance_callbacks(@inst)
             return @inst
           end
           sleep(2)
@@ -120,8 +121,8 @@ module PoolParty
       end
 
       # Called after an instance is launched
-      def self.after_launch_instance(instance=nil)
-        @cloud.call_after_launch_instance_callbacks(instance)
+      def after_launch_instance(instance=nil)
+        puts "after_launch_instance in remoter_base"
       end
 
       #TODO: Remove

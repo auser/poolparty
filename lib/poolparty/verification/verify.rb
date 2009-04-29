@@ -19,7 +19,8 @@ module PoolParty
         v.verifiers.each {|v| verifiers << v}
       end
       def passing?
-        verifiers.each do |v|
+        reset!
+        verifiers.each do |v|          
           ip = nodes(:status => "running").first.ip rescue "127.0.0.1"
           v.host = ip
           raise "Verification failed at #{v.class}" unless v.passing?

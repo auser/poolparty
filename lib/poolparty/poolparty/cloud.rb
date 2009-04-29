@@ -121,6 +121,10 @@ module PoolParty
         # enable :haproxy unless dsl_options[:haproxy] == :disabled
       end
       
+      def after_launch_instance(inst=nil)
+        remote_base.send :after_launch_instance, inst
+      end
+      
       # provide list of public ips to get into the cloud
       def ips
         nodes(:status => "running").map {|ri| ri.ip }

@@ -102,6 +102,12 @@ module PoolParty
       def self.path_to_binary
         new(parent).path_to_binary
       end
+            
+      def after_launch_instance(inst=nil)
+        if inst
+          dputs "Associate address after launched: #{inst.ip}"
+        end
+      end
       
       private
       def self.new_instance(o={})
