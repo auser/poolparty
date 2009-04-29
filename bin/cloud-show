@@ -1,0 +1,28 @@
+#!/usr/bin/env ruby
+$:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
+require "poolparty"
+
+o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
+  opts.on('-n name', '--name name', 'Listing for cloud name')    { |c| optioner.cloudname c }
+end
+
+o.loaded_clouds.each do |cld|
+  puts "\nFrom #{$pool_specfile}\n"
+  print_with_nice_printer "Cloud: #{cld.name}", [
+    "instances #{cld.minimum_instances}..#{cld.maximum_instances}",
+    "keypair #{cld.keypair}",
+    "using #{cld.remote_base.class.to_s.top_level_class}"
+  ] do |printer|
+    if cld.nodes(:status => "running").size > 0
+      printer.empty
+      printer.center("Active instances")
+      printer << nodes(:status => "running").map{|a| a.ip.strip }.join("\n")
+    end
+    if cld.nodes(:status => "pending").size > 0
+      printer.empty
+      printer.center "Pending instances"
+      printer << cld.nodes(:status => "pending").map{|a| a.to_s}.join("\n")
+    end
+    printer.empty
+  end
+end
