@@ -33,9 +33,9 @@ describe "Plugin" do
       @plugin.enable_php.should == true
     end
     it "should store the plugin in the clouds plugin_store" do
-      clouds[:app_for_plugin].plugin_store[0].class.should == @plugin.class
+      clouds[:app_for_plugin].plugin_store[-2].class.should == @plugin.class
       clouds[:app_for_plugin].apachetest
-      clouds[:app_for_plugin].plugin_store[0].class.should == @plugin.class
+      clouds[:app_for_plugin].plugin_store[-2].class.should == @plugin.class
     end
   end
 end
