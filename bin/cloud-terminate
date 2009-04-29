@@ -15,6 +15,7 @@ Are you sure? (Y/N)
     EOM
     
     if are_you_sure?(msg)
+      puts "Shutting down #{inst.instance_id}"
       cld.terminate_instance!(:instance_id => inst.instance_id)
     end
   end

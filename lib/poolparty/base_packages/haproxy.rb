@@ -33,7 +33,7 @@ module PoolParty
         
         has_package "haproxy" do
           stops get_service("apache2"), :immediately
-          starts get_service("apache2")
+          # starts get_service("apache2")
         end
 
         has_exec "reloadhaproxy", 
