@@ -7,6 +7,8 @@ module PoolParty
   class Chef
     define_resource :chef_recipe do
     end
+    define_resource :chef_library do
+    end
     
     plugin :include_chef_recipe do
       def loaded(opts={}, &block)
@@ -35,7 +37,7 @@ module PoolParty
       def recipe file=nil, o={}, &block        
         if file
           file = ::File.expand_path(file)
-          ::FileUtils.mkdir_p "#{basedir}/recipes" unless ::File.directory? basedir
+          ::FileUtils.mkdir_p "#{basedir}/recipes" unless ::File.directory? "#{basedir}/recipes"
                     
           unless ::File.file?(file)
             tfile = Tempfile.new("main-poolparty-recipe")
@@ -147,7 +149,7 @@ file_cache_path  "/etc/chef"
       def before_bootstrap
         bootstrap_gems "chef", "ohai"
         bootstrap_commands [
-          "mkdir -p /etc/chef/cookbooks /etc/chef/cache"
+          "mkdir -p /etc/chef/cookbooks /etc/chef/cache"          
         ]
       end
       def before_configure

@@ -75,8 +75,8 @@ module PoolParty
       # the options
       # Finally, it uses the parent's options as the lowest priority
       def initialize(opts={}, extra_opts={}, &block)
-        super(opts, &block)
-        
+        super(opts, extra_opts, &block)
+                
         @resource_name = @base_name
         dsl_options[:name] = resource_name unless dsl_options.has_key?(:name)
         

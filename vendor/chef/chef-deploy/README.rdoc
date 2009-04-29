@@ -1,0 +1,24 @@
+== chef-deploy
+
+A gem that provides resources and providers for deploying ruby web apps from chef recipes
+
+
+Uses the same directory layout as capistrano and steals the git remote cached deploy strategy 
+from cap and adapts it to work without cap and under chef
+
+ deploy "/data/#{app}" do
+   repo "git://github.com/engineyard/rack-app.git"
+   branch "HEAD"
+   user "ez"
+   enable_submodules true
+   migrate true
+   migration_command "rake db:migrate"
+   environment "production"
+   shallow_clone true
+   revision '0xbeadbeef'
+   action :deploy # or :rollback
+ end
+
+
+Currently only supports doing the cached git checkout, rsyncing it into place and doing the symlink dance.
+Does not restart servers or have hooks(yet)

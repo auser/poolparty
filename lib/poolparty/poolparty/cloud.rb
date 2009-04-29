@@ -102,7 +102,7 @@ module PoolParty
           chef do
           end
         end
-        plugin_store.each {|a| a.after_create }
+        plugin_store.each {|a| a.call_after_create_callbacks }
         setup_defaults
         
         run_in_context do

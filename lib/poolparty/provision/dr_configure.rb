@@ -95,7 +95,7 @@ module PoolParty
          'chmod 644 /var/poolparty/dr_configure/clouds.rb',
          'cp /var/poolparty/dr_configure/clouds.json /etc/poolparty',
          'cp /var/poolparty/dr_configure/clouds.rb /etc/poolparty',
-         'cp /var/poolparty/dr_configure/erlang.cookie /root/.erlang.cookie',
+         'cp /var/poolparty/dr_configure/erlang.cookie /root/.erlang.cookie',         
          'ruby /var/poolparty/dr_configure/erlang_cookie_maker',
          "touch /var/poolparty/POOLPARTY.PROGRESS",
          'echo "configure" >> /var/poolparty/POOLPARTY.PROGRESS'

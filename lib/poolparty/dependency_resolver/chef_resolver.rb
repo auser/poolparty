@@ -79,7 +79,9 @@ module PoolParty
         when "variable"
           handle_print_variable(resource)
         when "chef_recipe"
-          "include_recipe #{to_option_string(resource.name)}"
+          "#{tf(tabs)}include_recipe #{to_option_string(resource.name)}"
+        when "chef_library"
+          "#{tf(tabs)}require #{to_option_string("/etc/chef/lib/#{resource.name}")}"
         else
           real_type = handle_chef_types(ty)
           real_name = resource[:name]
@@ -115,6 +117,8 @@ module PoolParty
         "link"
       when :line_in_file
         "execute"
+      when :chef_deploy_definition
+        "deploy"
       else
         ty
       end

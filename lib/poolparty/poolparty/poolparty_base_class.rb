@@ -18,20 +18,19 @@ module PoolParty
       @init_block = block
       @base_name = get_name_from_options_and_extra_options(opts, extra_opts)
       
-      opts = (opts.is_a?(Hash) ? extra_opts.merge(opts) : extra_opts).merge(:name => @base_name)
+      o = (opts.is_a?(Hash) ? extra_opts.merge(opts) : extra_opts).merge(:name => @base_name)
       
-      run_in_context(opts, &block)
+      run_in_context(o, &block)
       super(&block)
     end
     
     # Overloading the parent run_in_context
-    def run_in_context(opts={}, &block)
-      if opts
+    def run_in_context(o={}, &block)
+      if o
         context_stack.push self
-        set_vars_from_options(opts)
+        set_vars_from_options(o)
         instance_eval &block if block
         context_stack.pop
-        head
       else
         super
       end
@@ -40,7 +39,7 @@ module PoolParty
     # Add the parent's options to my own and add myself as a service if I am not a resource
     def add_to_parent_if_parent_exists_and_is_a_service      
       if parent && !parent.is_a?(PoolParty::Resources::Resource)
-        dsl_options(parent.dsl_options) if parent.is_a?(PoolParty::Pool::Pool)
+        dsl_options.merge!(parent.dsl_options) if parent.is_a?(PoolParty::Pool::Pool)
         parent.add_service(self) if parent.respond_to?(:add_service) && !is_a_resource?
       end
     end

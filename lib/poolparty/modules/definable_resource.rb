@@ -16,7 +16,7 @@ module PoolParty
     # 
     # For example usage, see lib/poolparty/plugins/line.rb
     def define_resource(name, &block)
-      name.to_s.new_resource_class(PoolParty::Resources::Resource, &block)
+      name.to_s.new_resource_class &block
     end
     
     # Allow us to create virtual resources
