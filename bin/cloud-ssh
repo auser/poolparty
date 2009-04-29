@@ -13,8 +13,6 @@ load_pool(o.spec? ? o.spec : Binary.get_existing_spec_location)
 @cloud = o.loaded_clouds.first
 nodes = @cloud.nodes(:status => "running")
 
-puts nodes.map {|a| a.to_s}.join("\n")
-
 if !nodes.empty?
   n = o.inst_num? ? o.inst_num : 0
   @cloud.ssh_into( nodes[n].ip ) if @cloud

@@ -7,7 +7,7 @@ require "#{::File.dirname(__FILE__)}/../net/remoter/connections"
 # Provide a very simple provisioner with as few dependencies as possible
 module PoolParty
   module Provision
- 
+  
     class BootStrapper
       include ::PoolParty::Remote
       
@@ -33,7 +33,7 @@ module PoolParty
                           thin
                         )
       end
-  
+
       # Default options for the boot_strapper
       @defaults = ::PoolParty::Default.default_options.merge({
         :full_keypair_path   => "#{ENV["AWS_KEYPAIR_NAME"]}" || "~/.ssh/id_rsa",

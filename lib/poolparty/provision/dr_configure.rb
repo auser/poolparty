@@ -10,7 +10,7 @@ module PoolParty
     class DrConfigure
      include ::PoolParty::Remote
      
-     def self.defaults 
+     def self.defaults
        ::PoolParty::Default.default_options.merge({
          :full_keypair_path   => "#{ENV["AWS_KEYPAIR_NAME"]}" || "~/.ssh/id_rsa",
          :installer           => 'apt-get install -y',
@@ -56,7 +56,7 @@ module PoolParty
       end
       
       setup_configurator
-      write_erlang_cookie
+      # write_erlang_cookie
       @configurator.files_to_upload.each {|f| ::FileUtils.cp f, "#{Default.tmp_path}/dr_configure/#{::File.basename(f)}" if ::File.file?(f) }
       
       pack_up_and_ship_off_suitcase
@@ -95,8 +95,6 @@ module PoolParty
          'chmod 644 /var/poolparty/dr_configure/clouds.rb',
          'cp /var/poolparty/dr_configure/clouds.json /etc/poolparty',
          'cp /var/poolparty/dr_configure/clouds.rb /etc/poolparty',
-         'cp /var/poolparty/dr_configure/erlang.cookie /root/.erlang.cookie',
-         'ruby /var/poolparty/dr_configure/erlang_cookie_maker',
          "touch /var/poolparty/POOLPARTY.PROGRESS",
          'echo "configure" >> /var/poolparty/POOLPARTY.PROGRESS'
          ]
@@ -106,13 +104,15 @@ module PoolParty
      
      def pack_up_and_ship_off_suitcase
        ::Suitcase::Zipper.build_dir!("#{Default.tmp_path}/dr_configure")
-       rsync "#{Default.tmp_path}/dr_configure/", "/var/poolparty/dr_configure/"
+       rsync "#{Default.tmp_path}/dr_configure/", "/var/poolparty/dr_configure/", ['-a --stats']
      end
      
+     # Pack up  monitors verifiers plugins directories in the same direcotry as your clouds.rb and send to nodes.
      def setup_configurator
        # @cloud.write_properties_hash("#{Default.tmp_path}/properties_hash.rb")
-       #TODO: move to puppet class
-       @cloud.build_and_store_new_config_file("#{Default.tmp_path}/dr_configure/poolparty.pp") 
+       #TODO: move to puppet class       
+       #TODO: remove or conditionalize this puppet specific task
+       @cloud.build_and_store_new_config_file("#{Default.tmp_path}/dr_configure/poolparty.pp")
        
        %w(monitors verifiers plugins).each do |dir|
         @cloud.pack_user_directory dir
