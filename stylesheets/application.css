@@ -4,7 +4,7 @@ body {
   font-size: 65.5%;
   font-family: Arial;
   background: url(http://fairchild.github.com/poolparty/images/site/mainbg6.png) repeat-x #F7D2A8;
-  color: #646451;
+  color: #171614;
   position: relative; }
   body a {
     text-decoration: none; }
@@ -30,6 +30,58 @@ body {
         float: left;
         margin: 10px 5px;
         padding: 5px 10px; }
+      body #wrapper #content .emphasis {
+        font-style: italic;
+        background: #ffffcc; }
+      body #wrapper #content .features {
+        font-size: 1.2em; }
+      body #wrapper #content .tip-box {
+        float: right;
+        width: 200px;
+        background-color: #F2FBFF;
+        border: 4px solid #72b9eb;
+        padding: 5px 5px;
+        margin-left: 5px; }
+        body #wrapper #content .tip-box .crab-wrapper {
+          height: 1px;
+          position: relative;
+          top: -25px;
+          left: 20px;
+          float: right; }
+      body #wrapper #content .term {
+        border-bottom: 1px solid #eee;
+        padding-bottom: 6px;
+        margin-bottom: 6px; }
+      body #wrapper #content .term-name {
+        font-weight: bold; }
+      body #wrapper #content .term-def {
+        padding-left: 5px; }
+      body #wrapper #content .learning-track li {
+        margin-bottom: 10px; }
+      body #wrapper #content pre code {
+        display: block;
+        background-color: rgb(248, 248, 255) !important;
+        border: 1px solid rgb(222, 222, 222) !important;
+        color: rgb(68, 68, 68) !important;
+        font-size: 90% !important;
+        padding: 0px 0.2em !important;
+        line-height: 1.4em; }
+      body #wrapper #content #intro-wrapper {
+        background-color: #F2FBFF;
+        border: 4px solid #72b9eb;
+        padding: 10px;
+        font-family: georgia, helvetica, arial, sans-serif;
+        font-size: 24px; }
+        body #wrapper #content #intro-wrapper .intro-left {
+          width: 370px;
+          float: left;
+          margin-right: 10px; }
+        body #wrapper #content #intro-wrapper .headline {
+          font-size: 1.5em;
+          font-weight: bold;
+          font-family: helvetica, Arial;
+          margin: 0px;
+          text-align: center; }
     body #wrapper #footer {
       border-top: 1px solid #ccc;
       border-bottom: 1px solid #ccc;

@@ -46,23 +46,80 @@
       <div id='content'>
         <h2>Documentation</h2>
         <p>
-          The official documentation can be found
+          The rdoc can be found
           <a href='http://poolparty.rubyforge.org/rdoc/'>http://poolparty.rubyforge.org/rdoc/</a>
         </p>
         <p>
-          The wiki often has good docs at
+          The wiki contains supplimental information at:
           <a href='http://wiki.github.com/auser/poolparty'>http://wiki.github.com/auser/poolparty</a>
         </p>
-        <h2>References</h2>
+        <a name='learning_track'></a>
+        <h2>Learning PoolParty</h2>
         <p>
-          <ul>
-            <li><a href="docs/resources.html">Resources</a></li>
-            <li><a href="docs/cloud_speak">Cloud Speak</a></li>
+          Just getting started with PoolParty? The following pages are designed to be the first few articles you read when just starting out using PoolParty (PP)
+          <ul class='learning-track'>
+            <li>
+              <a href="language.html">PoolParty terminology:</a>
+              Understanding the language of PoolParty is an important step in being able to deploy clouds. Checkout this page to learn about a few common terms used in PP.
+            </li>
+            <li>
+              <a href="overview.html">PoolParty Overview</a>
+              The purpose, theory, and architecture of PoolParty
+            </li>
+            <li>
+              <a href="provisioning_process.html">Understanding the bootstrap and provisioning process:</a>
+              What happens when I type
+              <tt>cloud-start</tt>
+              ? What is the difference between
+              <tt>cloud-bootstrap</tt>
+              ,
+              <tt>cloud-provision</tt>
+              , and
+              <tt>cloud-configure</tt>
+              ? PP translates these simple commands into a large number of commands that are executed on your nodes. Read this to learn about the bootstrap and provisioning process.
+            </li>
+            <li>
+              <a href="docs/resources.html">Understanding Resources:</a>
+              Resources are the meat and most interesting part of any deployment. This page will help you understand what resources are and how to use them.
+            </li>
+            <li>
+              <a href="docs/chef.html">What is Chef?:</a>
+              Chef is PP's default
+              <a href="language.html#dependency%20resolver">dependency resolver.</a>
+              Your
+              <tt>clouds.rb</tt>
+              is translated by PP into Chef
+              <a href="language.html#recipe">recipes.</a>
+              Chef then uses those recipes to
+              <a href="language.html#provision">provision</a>
+              your
+              <a href="language.html#instance">instances.</a>
+            </li>
+            <li>
+              <a href="docs/cloud_speak.html">Using the <tt>cloud</tt> and <tt>pool</tt> binaries:</a>
+              PP installs a number of intuitive binary commands that allow you to 'speak' to your cloud. This page goes over some of the things you can do with those binaries.
+            </li>
+            <li>
+              <a href="docs/family_jewels.html">The PoolParty family of gems:</a>
+              <tt>suitcase, butterfly, parenting, dslify;</tt>
+              What are all these gems and what do they do? Read on to find out.
+            </li>
           </ul>
         </p>
-        <h3>
+        <h2>Other Documents</h2>
+        <p>
+          <ul class='learning-track'>
+            <li>
+              <a href="why.html">Why use PoolParty?</a>
+            </li>
+            <li>
+              <a href="who.html">Core Team</a>
+            </li>
+          </ul>
+        </p>
+        <h2>
           Thanks
-        </h3>
+        </h2>
         <p>
           Special thanks to
           <ul>

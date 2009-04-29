@@ -1,0 +1,152 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>PoolParty!</title>
+    <link href="stylesheets/application.css" media="all" rel="stylesheet" type="text/css"/><link href="stylesheets/blackboard.css" media="all" rel="stylesheet" type="text/css"/><link href="stylesheets/classes.css" media="all" rel="stylesheet" type="text/css"/><link href="stylesheets/header.css" media="all" rel="stylesheet" type="text/css"/><link href="stylesheets/navmenu.css" media="all" rel="stylesheet" type="text/css"/><link href="stylesheets/sunburst.css" media="all" rel="stylesheet" type="text/css"/>
+  </head>
+  <body>
+    <div id='wrapper'>
+      <div id='masthead'>
+        <h2>AT&T Interactive R&D</h2>
+        <div id='external_links'>
+          <!-- =link (img("attir_and_d_logo.gif"), "http://poolpartyrb.com") -->
+        </div>
+      </div>
+      <div class='spacer clear'>
+        &nbsp;
+      </div>
+      <div id='sidebar'>
+        <h3><a href="index.html"><img alt="Pplogo2" src="images/site/pplogo2.png"/></a></h3>
+        <ul class='left'>
+          <li class='home'>
+            <a href="index.html">Home</a>
+          </li>
+          <li class='docs'>
+            <a href="docs.html">Docs</a>
+          </li>
+          <li class='examples'>
+            <a href="examples.html">Examples</a>
+          </li>
+        </ul>
+        <ul class='left'>
+          <li class='community'>
+            <a href="community.html">Community</a>
+          </li>
+          <li class='tutorials'>
+            <a href="tutorials.html">Tutorials</a>
+          </li>
+          <li class='plugins'>
+            <a href="plugins.html">Plugins</a>
+          </li>
+        </ul>
+      </div>
+      <div class='spacer clear'>
+        &nbsp;
+      </div>
+      <div id='content'>
+        <h1>VMware (Fusion) and PoolParty setup</h1>
+        <p>
+          PoolParty supports VMware as a
+          <a href="language.html#remoter_base">remoter base.</a>
+          This allows one to test
+          <tt>clouds.rb</tt>
+          files without the cost of booting and shutting down cloud
+          <a href="language.html#instance">instances.</a>
+          Currently, this has only been tested on Mac OSX with VMware Fusion. In theory, it should work on any machine with the
+          <tt>vmrun</tt>
+          binary installed.
+          <ol>
+            <li>
+              <p>
+                Download
+                <a href="https://www.vmware.com/tryvmware/?p=fusion">VMware Fusion</a>
+              </p>
+            </li>
+            <li>
+              <p>
+                Download the
+                <a href="http://blogs.vmware.com/teamfusion/2009/04/ubuntu-904-on-vmware-fusion-2.html">Ubuntu VMware image</a>
+                Make sure you can already boot it up and you have internet connectivity
+              </p>
+            </li>
+            <li>
+              <p>
+                You must be able to access the image when the instance boots up.
+                Therefore you need to install your public key and take a snapshot of
+                the image.
+              </p>
+              <p>
+                Add your public key to the list of authorized keys on the root user
+                <strong>on the image</strong>
+              </p>
+              <p>
+                For example:
+                <pre class="blackboard"><span class="line-numbers">   1 </span> scp <span class="Keyword">~</span><span class="String"><span class="String">/</span></span><span class="String">.ssh</span><span class="String"><span class="String">/i</span></span>d_rsa.<span class="Entity">pub</span> root<span class="Variable"><span class="Variable">@</span>local_vmware_ip</span><span class="Constant"><span class="Constant">:</span>/</span>root<span class="Keyword">/</span>.<span class="Entity">ssh</span><span class="Keyword">/</span>authorized_keys</pre>
+              </p>
+              <p>
+                Then
+                <strong>take a snapshot</strong>
+                I call my snapshot
+                <tt>base</tt>
+                <p></p>
+                <img alt="Take snapshot 1" src="images/screenshots/take_snapshot_1.png"/>
+                <p></p>
+                <img alt="Snapshot list" src="images/screenshots/snapshot_list.png"/>
+                <center>
+                  <em>A list of snapshots</em>
+                </center>
+              </p>
+            </li>
+            <li>
+              <p>
+                Make sure
+                <tt>vmrun</tt>
+                is in your
+                <tt>PATH</tt>
+              </p>
+              <p>
+                For example, using VMware Fusion on Mac OSX add the following to your
+                <tt>.profile</tt>
+                <pre class="blackboard"><span class="line-numbers">   1 </span> export <span class="Variable">PATH</span><span class="Keyword">=</span><span class="Variable"><span class="Variable">$</span>PATH</span><span class="Constant"><span class="Constant">:</span>/</span><span class="Variable">Library</span><span class="Keyword">/</span><span class="Variable">Application</span> <span class="Variable">Support</span><span class="Keyword">/</span><span class="Variable">VMware</span> <span class="Variable">Fusion</span></pre>
+              </p>
+            </li>
+            <li>
+              <p>
+                enable vmrun in your
+                <tt>clouds.rb</tt>
+                <p>
+                  <em>
+                    todo: inline block below is ugly
+                  </em>
+                </p>
+                <pre class="blackboard"><span class="line-numbers">   1 </span>   using <span class="Constant"><span class="Constant">:</span>vmrun</span> <span class="Keyword">do</span>
+        <span class="line-numbers">   2 </span>    <span class="Entity">vmx_hash</span>({
+        <span class="line-numbers">   3 </span>     <span class="String"><span class="String">&quot;</span>/Users/alerner/Documents/Virtual Machines.localized/one.vmwarevm/Ubuntu Linux 32bit.vmx<span class="String">&quot;</span></span> =&gt; <span class="String"><span class="String">&quot;</span>192.168.248.128<span class="String">&quot;</span></span>
+        <span class="line-numbers">   4 </span>   })
+        <span class="line-numbers">   5 </span> <span class="Keyword">end</span>
+        </pre>
+              </p>
+            </li>
+            <li>
+              <p>
+                <tt>cloud-start</tt>
+              </p>
+            </li>
+          </ol>
+        </p>
+      </div>
+      <div id='footer'>
+        Copyright 2008 - Ari Lerner & Cloudteam@ATTinteractive
+        <br />
+        <script type='text/javascript'>
+          var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+          document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+        </script>
+        <script type='text/javascript'>
+          var pageTracker = _gat._getTracker("UA-137009-7");
+          pageTracker._trackPageview();
+        </script>
+      </div>
+    </div>
+  </body>
+</html>

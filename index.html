@@ -44,56 +44,80 @@
         &nbsp;
       </div>
       <div id='content'>
-        <p class='intro'>
-          PoolParty makes it easy to use the power of cloud computing to power your application. PoolParty enables you to create web applications running on cloud computing services such as Amazon EC2 with built-in scaling, monitoring, load-balancing and much more.
-        </p>
-        <div class='desc'>
-          <p class='clear'>
-            <a href='http://github.com/auser/poolparty-apache2-plugin/tree/master' name='Apache plugin'><img alt="Tasty syntax 2" src="images/tasty_syntax_2.png"/></a>
-            <a href='http://github.com/auser/poolparty/tree/master/docs/poolparty/base_packages/haproxy.rb' name='Haproxy Packages'><img alt="Tasty syntax 4" src="images/tasty_syntax_4.png"/></a>
-            <a href='http://reductivelabs.com/trac/puppet' name='Puppet base'><img alt="Tasty syntax 3" src="images/tasty_syntax_3.png"/></a>
-            <a href='http://github.com/auser/poolparty/tree/master/docs/poolparty/net/remote_bases/ec2.rb' name='Remoter base'><img alt="Tasty syntax 1" src="images/tasty_syntax_1.png"/></a>
-          </p>
-        </div>
-        <div class='block'>
-          <h3>Simple, easy configuration</h3>
-          <p>A single-file poolspec configuration file allows you to verbosely describes exactly how your cloud should be setup.</p>
-        </div>
-        <div class='block'>
-          <h3>Extensible, extendable and plug and play</h3>
-          <p>PoolParty helps you build your cloud the way you want and gives you the ability to easily extend it to include your own requirements and software.</p>
-        </div>
-        <div class='block'>
-          <h3>Options options and more options!</h3>
-          <p>PoolParty is modularly written so that you can use it how you see fit. It is not tied to any particular service and can easily be extended to support yours.</p>
-        </div>
-        <div class='block'>
-          <h3>Inline integration</h3>
-          <p>PoolParty integrates well with the tools you already know well and work with. No need to change workflow. Simply plug in and go.</p>
-        </div>
-        <div class='left'>
-          <div class='desc'>
-            <p class='development'>
-              PoolParty offers a different style of thinking for system administration... With git-style commands, easy configuration files, generators and more, you have no excuse to not try it out! It's so simple!
+        <div id='intro-wrapper'>
+          <div class='intro-left'>
+            <p class='headline'>
+              Cloud management.
+              <span>Simplified.</span>
             </p>
-            <p>
-              Although PoolParty is developed to be extensible, it picks a few defaults for you so that you don't have to. PoolParty's default dependency resolver is
-              <a href='http://wiki.opscode.com/display/chef/Home'>Chef,</a></a>
-              a state based, declarative configuration management engine. You define recipes of how you want your system to look and then chef makes it so.
-            </p>
-            <p class='extensible'>
-              Built from the ground-up to be highly extensible, PoolParty makes it easy to add features if what you need is not already built in.
+            <p class='intro'>
+              PoolParty is a
+              <span class='emphasis'>cloud management system.</span>
+              PoolParty makes it easy
+              to manage powerful and
+              <span class='emphasis'>complex deployments</span>
+              on
+              <span class='emphasis'>cloud computing</span>
+              services such as Amazon EC2.
             </p>
           </div>
-          <p class='technologies clear'>
-            PoolParty uses
-            <a href='http://haproxy.1wt.eu/'>Haproxy</a>
-            and the
-            <a href='http://www.linux-ha.org/'>Linux High Availability's</a>
-            <a href='http://www.linux-ha.org/Heartbeat'>Heartbeat</a>
-            to manage the load-balancing and failover safety. It's extensible load monitoring system is written in the highly-scalable language erlang to give your instances maximum connectivity to your cloud.
-          </p>
+          <div class='intro-right'>
+            <img alt="Syntax sample 1" src="images/syntax_sample_1.png"/>
+          </div>
         </div>
+        <div class='features'>
+          <h2>Features:</h2>
+          <ul>
+            <li>built-in scaling, self-healing, monitoring, and load-balancing</li>
+            <li>support for VMware, for testing clouds</li>
+            <li>
+              dependency resolution is based on
+              <a href='chefpage'>Chef</a>
+            </li>
+            <li>clear and extensible configuration</li>
+          </ul>
+        </div>
+        <h1>Getting Started</h1>
+        <h2>0. Pre-flight check</h2>
+        <p class='step'>
+          Setup
+          <a href="amazon_ec2_setup.html">Amazon EC2</a>
+          or
+          <a href="vmware_setup.html">VMware (Fusion)</a>
+        </p>
+        <h2>1. Install PoolParty gem</h2>
+        <div class='tip-box'><div class='crab-wrapper'><img src='http://fairchild.github.com/poolparty/images/site/i/examples.png' class='crab'/></div>Interested in developing PoolParty? Checkout
+        <a href='http://wiki.github.com/auser/poolparty/installing'>this page</a>
+        for instructions on development installation</div>
+        <p class='step'>
+          <pre class="blackboard"><span class="line-numbers">   1 </span> gem install <span class="Keyword">-</span><span class="Keyword">-</span>source http<span class="Constant"><span class="Constant">:</span>/</span><span class="Keyword">/</span>gems.<span class="Entity">github</span>.<span class="Entity">com</span> auser<span class="Keyword">-</span>poolparty</pre>
+        </p>
+        <h2>
+          2. Create
+          <tt>clouds.rb</tt>
+        </h2>
+        <p class='step'>
+          The quickest way to be up and running is to clone our skeleton project.
+          <pre class="blackboard"><span class="line-numbers">   1 </span> git clone <span class="Keyword">/</span>path<span class="Keyword">/</span>to<span class="Keyword">/</span>skeleton&#x000A;<span class="line-numbers">   2 </span> cd <span class="Keyword">/</span>path</pre>
+          See
+          <a href='todo'>generator</a>
+          for information on creating a
+          <tt>clouds.rb</tt>
+          from scratch
+        </p>
+        <h2>
+          3. Start your cloud!
+        </h2>
+        <p class='step'>
+          <pre class="blackboard"><span class="line-numbers">   1 </span> cloud<span class="Keyword">-</span>start <span class="Keyword">-</span>d</pre>
+        </p>
+        <h2>
+          What next?
+        </h2>
+        <p>
+          Check out our
+          <a href="docs.html#learning_track">getting-started learning track</a>
+        </p>
       </div>
       <div id='footer'>
         Copyright 2008 - Ari Lerner & Cloudteam@ATTinteractive
