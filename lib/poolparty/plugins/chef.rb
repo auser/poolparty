@@ -34,17 +34,16 @@ module PoolParty
         @basedir ||= "#{Default.tmp_path}/dr_configure/chef/cookbooks/main"
       end
       
-      def recipe file=nil, o={}, &block        
+      def recipe(file=nil, o={}, &block)
         if file
           file = ::File.expand_path(file)
-          ::FileUtils.mkdir_p "#{basedir}/recipes" unless ::File.directory? "#{basedir}/recipes"
+          ::FileUtils.mkdir_p "#{basedir}/recipes"
                     
           unless ::File.file?(file)
             tfile = Tempfile.new("main-poolparty-recipe")
             tfile << file # copy the string into the temp file
             file = tfile.path
           end
-                    
           ::FileUtils.rm "#{basedir}/recipes/default.rb" if ::File.file?("#{basedir}/recipes/default.rb")
           ::File.cp file, "#{basedir}/recipes/default.rb"
           
@@ -74,7 +73,7 @@ module PoolParty
               tfile = Tempfile.new("main-poolparty-recipe")
               tfile << f # copy the string into the temp file
               ::File.cp tfile.path, "#{basedir}/templates/default/#{::File.basename(f)}"
-            end            
+            end
           end
         end
       end
