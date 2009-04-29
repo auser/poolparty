@@ -80,7 +80,7 @@ module PoolParty
         @cloud_name = name
         @cloud_name.freeze
         
-        # plugin_directory "#{pool_specfile ? ::File.dirname(pool_specfile) : Dir.pwd}/plugins"        
+        plugin_directory "#{pool_specfile ? ::File.dirname(pool_specfile) : Dir.pwd}/plugins"        
         before_create
         super
         after_create
@@ -91,8 +91,7 @@ module PoolParty
         @cloud_name ||= @cloud_name ? @cloud_name : (args.empty? ? :default_cloud : args.first)
       end
       
-      def before_create
-        # context_stack.push self        
+      def before_create     
         context_stack.push self
         (parent ? parent : self).add_poolparty_base_requirements
         context_stack.pop

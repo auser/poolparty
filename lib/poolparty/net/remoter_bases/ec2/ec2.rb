@@ -133,7 +133,6 @@ module PoolParty
       end
       
       def after_launch_instance(inst)
-        puts "in after_launch_instance in ec2"
         if inst
           associate_address(inst)
         end
@@ -148,8 +147,11 @@ module PoolParty
           ec2.attach_volume(:volume_id => ebs_volume_id, :instance_id => instance.instance_id, :device => ebs_volume_device) if ebs_volume_id && ebs_volume_mount_point
         end
       end
+      
       # Associate an address with the instance using ec2
-      # DEPRECATE relies on master
+      # Get the next_unused_elastic_ip
+      # and if there is one, associate the instance to the 
+      # public ip
       def associate_address(instance=nil)
         if ip = next_unused_elastic_ip
           vputs "Associating #{instance.instance_id} with #{ip}"
@@ -157,6 +159,13 @@ module PoolParty
         end
       end
       
+      # Get the next usable elastic ip
+      # First, get the list of addresses from ec2 that the client
+      # has access to, then select only the ones that are not associated
+      # with an instance.
+      # If the cloud has set elastic_ips to use, then, using the 
+      # intersection of the unused ips and those, find the first one available
+      # and return that, otherwise, return the first elastic ip available
       def next_unused_elastic_ip
         # [{"instanceId"=>nil, "publicIp"=>"174.129.212.93"}, {"instanceId"=>nil, "publicIp"=>"174.129.212.94"}]
         if addressesSet = ec2(options).describe_addresses["addressesSet"]

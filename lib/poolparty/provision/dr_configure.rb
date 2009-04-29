@@ -67,8 +67,10 @@ module PoolParty
       super
       add_run_count!
       begin
-        @cloud.passing?
-        @cloud.vputs "Cloud passed verification"
+        if @cloud.verifiers.size > 0
+          @cloud.passing?
+          @cloud.vputs "Cloud passed verification"
+        end
       rescue Exception => e
         if run_count < invalid_run_count
           @cloud.vputs <<-EOM

@@ -114,10 +114,6 @@ module PoolParty
   end
   
   class PoolParty
-    def initialize(spec)
-      reset!
-      Script.inflate(spec) if spec
-    end
   end
   
   private

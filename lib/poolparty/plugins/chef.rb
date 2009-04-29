@@ -60,7 +60,7 @@ module PoolParty
         end
       end
       
-      def templates templates=[]
+      def templates(templates=[])
         if templates
           ::FileUtils.mkdir_p "#{basedir}/templates/default/"
           templates.each do |f|

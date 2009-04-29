@@ -44,7 +44,7 @@ module PoolParty
       def self.load_from_file(filename=nil)
         # a = new ::File.basename(filename, ::File.extname(filename))
         File.open(filename, 'r') do |f|
-          instance_eval f.read
+          instance_eval f.read, pool_specfile
         end
         # a
       end

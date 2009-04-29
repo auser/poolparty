@@ -12,7 +12,7 @@ module PoolParty
     include PoolParty::DependencyResolverCloudExtensions
     # attr_accessor :depth
 
-    def initialize(opts={}, extra_opts={}, &block)      
+    def initialize(opts={}, extra_opts={}, &block)
       add_to_parent_if_parent_exists_and_is_a_service
       
       @init_block = block
