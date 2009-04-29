@@ -11,7 +11,6 @@ end
 
 o.loaded_clouds.each do |cld|
   puts header("Listing cloud #{cld.name}")
-  
   puts subheader("Active instances")
   puts cld.nodes(:status => "running").map{|a| "#{a[:instance_id]}\t#{a[:ip]}" }.join("\n")
     

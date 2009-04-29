@@ -23,7 +23,7 @@ module PoolParty
   class ChefResolver< DependencyResolver
     
     # Compile and add to the zipper
-    def compile(props=@properties_hash, tabs=0, default_namespace="poolparty")      
+    def compile(props=@properties_hash, tabs=0, default_namespace="poolparty")
       base_dir(default_namespace)
       build_base_recipe_directory( default_namespace )
       
@@ -44,7 +44,7 @@ module PoolParty
         services_to_string(props[:services],tabs)
       ].join("\n")
 
-      ::File.open("#{base_dir}/recipes/default.rb", "w+") {|f| f << default_recipe }      
+      ::File.open("#{base_dir}/recipes/default.rb", "w+") {|f| f << default_recipe }
       
       default_recipe
     end
