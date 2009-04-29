@@ -80,9 +80,9 @@ module PoolParty
         @cloud_name = name
         @cloud_name.freeze
         
-        plugin_directory "#{pool_specfile ? ::File.dirname(pool_specfile) : Dir.pwd}/plugins"        
+        # plugin_directory "#{pool_specfile ? ::File.dirname(pool_specfile) : Dir.pwd}/plugins"        
+        before_create
         super
-        
         after_create
       end
       
@@ -91,23 +91,29 @@ module PoolParty
         @cloud_name ||= @cloud_name ? @cloud_name : (args.empty? ? :default_cloud : args.first)
       end
       
+      def before_create
+        # context_stack.push self        
+        context_stack.push self
+        (parent ? parent : self).add_poolparty_base_requirements
+        context_stack.pop
+      end
+      
       # Callback
       # called after the cloud has been created, everything has run and is set at this point
       # here the base requirements are added as well as an empty chef recipe is called
       # Also, the after_create hook on the plugins used by the cloud are called here
       def after_create
         ::FileUtils.mkdir_p("#{Default.tmp_path}/dr_configure")
-        run_in_context do
-          add_poolparty_base_requirements
-          chef do
-          end
-        end
-        plugin_store.each {|a| a.call_after_create_callbacks }
-        setup_defaults
         
         run_in_context do
           add_optional_enabled_services
+          chef do
+          end
         end
+        
+        plugin_store.each {|a| a.call_after_create_callbacks }
+        setup_defaults
+        
         setup_callbacks
       end
       

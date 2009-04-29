@@ -98,7 +98,7 @@ module PoolParty
       # ===================================
       
       # return or create a new base EC2 connection object that will actually connect to ec2
-      def ec2(o)
+      def ec2(o={})
         @ec2 ||= EC2::Base.new( :access_key_id => o[:access_key], 
                                 :secret_access_key => o[:secret_access_key]
                               )
@@ -160,7 +160,19 @@ module PoolParty
       def next_unused_elastic_ip
         # [{"instanceId"=>nil, "publicIp"=>"174.129.212.93"}, {"instanceId"=>nil, "publicIp"=>"174.129.212.94"}]
         if addressesSet = ec2(options).describe_addresses["addressesSet"]
-          addressesSet["items"].select {|i| i["instanceId"].nil? }.first["publicIp"]
+          begin
+            empty_addresses = addressesSet["item"].select {|i| i["instanceId"].nil? }
+            ips = empty_addresses.map {|addr| addr["publicIp"]}
+            if cloud.elastic_ips?
+              ips_to_use = cloud.elastic_ips & ips
+              ips_to_use.first
+            else
+              ips.first
+            end
+          rescue Exception => e
+            puts "Error: #{e}"
+            nil
+          end          
         end
       end
 

@@ -2,7 +2,17 @@
 $:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
 require "poolparty"
 
-o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
+extra_help_string = <<-EOE
+
+  Cloud configure
+  
+    Cloud configure will repackage the deployment and send it off to a 
+    remote instance from within the cloud. It then will reconfigure
+    itself and alert the rest of the cloud
+    
+EOE
+
+o = PoolParty::Optioner.new(ARGV, {:extra_help => extra_help_string}) do |opts, optioner|
   opts.on('-n cloudname', '--name name', 'Start cloud by this name')    { |c| optioner.cloudname c }
   opts.on('-i num', '--num i', 'Instance number')    { |i| optioner.inst_num i.to_i }
 end

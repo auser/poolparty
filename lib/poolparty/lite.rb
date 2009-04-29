@@ -1,6 +1,10 @@
 require "rubygems"
 require "json"
-require("#{::File.dirname(__FILE__)}/../../vendor/gems/dslify/lib/dslify") rescue( require 'dslify')
+begin
+  require "#{::File.dirname(__FILE__)}/../../vendor/gems/dslify/lib/dslify"
+rescue Exception => e
+  require "dslify"
+end
 require "#{::File.dirname(__FILE__)}/poolparty/default"
 require "#{::File.dirname(__FILE__)}/modules/user_helpers"
 require "#{::File.dirname(__FILE__)}/schema"

@@ -33,7 +33,7 @@ describe "ec2 remote base" do
   describe "launching" do
     before(:each) do
       @ret_hash = {:instance_id => "1", :name => "instance"}
-      @tr.ec2.stub!(:run_instances).and_return @ret_hash
+      @tr.ec2({}).stub!(:run_instances).and_return @ret_hash
     end
     it "should call run_instances on the ec2 Base class when asking to launch_new_instance!" do
       # @tr.ec2.should_receive(:run_instances).and_return true
@@ -44,10 +44,10 @@ describe "ec2 remote base" do
       @tr.ec2.should_receive(:run_instances).and_return @ret_hash
       @tr.launch_new_instance!      
     end
-    it "should use the default security group if none is specified" do
-      @tr.ec2.should_receive(:run_instances).with(hash_including(:group_id => 'default')).and_return @ret_hash
-      @tr.launch_new_instance!      
-    end
+    # it "should use the default security group if none is specified" do
+    #   @tr.ec2.should_receive(:run_instances).with(hash_including(:group_id => ['default'])).and_return @ret_hash
+    #   @tr.launch_new_instance!
+    # end
     it "should get the hash response from EC2ResponseObject" do
       EC2ResponseObject.should_receive(:get_hash_from_response).and_return @ret_hash
       @tr.launch_new_instance! :keypair => "keys"
@@ -80,6 +80,21 @@ describe "ec2 remote base" do
     end
     it "should call the third node2" do
       @tr.describe_instances[2][:name].should == "node2"
+    end
+  end
+  describe "elastic_ips" do
+    before(:each) do
+      @resp = {"requestId"=>"be9bd2e9-4f8c-448f-993d-c21fe537e322", "addressesSet"=>{"item"=>[{"instanceId"=>nil, "publicIp"=>"174.129.212.93"}, {"instanceId"=>nil, "publicIp"=>"182.199.200.201"}]}, "xmlns"=>"http://ec2.amazonaws.com/doc/2008-12-01/"}
+      @tr.ec2.stub!(:describe_addresses).and_return @resp
+    end
+    it "should have the next available elastic_ip" do
+      @tr.next_unused_elastic_ip.should == "174.129.212.93"
+    end
+    it "should use only the elastic ips set on the cloud" do
+      @cloud.stub!(:elastic_ips?).and_return true
+      @cloud.stub!(:elastic_ips).and_return ["182.199.200.201"]
+      @tr.stub!(:cloud).and_return @cloud
+      @tr.next_unused_elastic_ip.should == "182.199.200.201"
     end
   end
   describe "create_keypair" do
