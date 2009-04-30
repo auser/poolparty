@@ -12,18 +12,18 @@ end
   require 'jeweler'
   Jeweler::Tasks.new do |s|
     s.name = "poolparty"
+    s.description = "PoolParty: The easy, open-source, cross-cloud management solution"
     s.summary = <<-EOM      
       Self-healing, auto-scaling system administration, provisioning
       and maintaining tool that makes cloud computing fun and easy
     EOM
-    s.description = s.summary
     
     s.homepage = "http://poolpartyrb.com"
     s.email = "ari.lerner@citrusbyte.com"
     s.authors = ["Ari Lerner"]
     
     s.test_files = Dir["test/**/test_*.rb"]
-    excludes_regexp = ["vendor/gems", "lib/erlang"].one_of_regex
+    excludes_regexp = ["lib/erlang"].one_of_regex
 
     s.files = (%w(Rakefile History.txt README.txt PostInstall.txt License.txt VERSION.yml) + 
               Dir["{config,examples,lib,spec,test,tasks,script,generators,bin,vendor}/**/*"]).delete_if{|f| f =~ excludes_regexp}
@@ -38,8 +38,8 @@ end
     
     s.add_dependency 'activesupport'
     s.add_dependency 'logging'
-    s.add_dependency 'auser-dslify'
-    s.add_dependency 'auser-parenting'
+    # s.add_dependency 'auser-dslify'
+    # s.add_dependency 'auser-parenting'
     # s.add_dependency 'auser-suitcase'
     # s.add_dependency 'ruby2ruby'  #TODO: remove this after verifying removing doesnt break anything
     s.add_dependency 'grempe-amazon-ec2'

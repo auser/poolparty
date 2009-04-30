@@ -140,7 +140,7 @@ module PoolParty
     end
     
     def method_missing(m,*a,&block)
-      if this_context && this_context != self && this_context.respond_to?(m)# && !self.is_a?(PoolParty::Resources::Resource)
+      if respond_to?(:this_context) && this_context != self && this_context.respond_to?(m)# && !self.is_a?(PoolParty::Resources::Resource)
         this_context.send m, *a, &block      
       else
         # if dsl_options.has_key?(m)

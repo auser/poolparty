@@ -1,3 +1,11 @@
+=begin rdoc
+  Package
+  
+  Usage:
+    has_package "name_of_package"
+  
+  This will install the "name_of_package" package with the package provider (apt, yum, etc)
+=end
 module PoolParty    
   module Resources
         

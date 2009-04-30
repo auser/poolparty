@@ -27,6 +27,7 @@ extra_help_string = <<-EOE
     cloud contract    contracts the cloud by a single instance
     cloud describe    show the configuration of the current clouds.rb configuration file
     cloud list        show a list of the current instances on the cloud
+    cloud show        shows output about the clouds.rb
     cloud ssh         ssh into an instance of the cloud
     cloud terminate   terminate the cloud
     
