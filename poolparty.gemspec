@@ -2,11 +2,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{poolparty}
-  s.version = "1.1.5"
+  s.version = "1.1.6"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Ari Lerner"]
-  s.date = %q{2009-04-29}
+  s.date = %q{2009-04-30}
   s.description = %q{Self-healing, auto-scaling system administration, provisioning and maintaining tool that makes cloud computing fun and easy}
   s.email = %q{ari.lerner@citrusbyte.com}
   s.executables = ["cloud", "cloud-bootstrap", "cloud-configure", "cloud-console", "cloud-contract", "cloud-describe", "cloud-expand", "cloud-handle-load", "cloud-list", "cloud-osxcopy", "cloud-provision", "cloud-rsync", "cloud-setup-dev", "cloud-show", "cloud-spec", "cloud-ssh", "cloud-start", "cloud-terminate", "messenger-get-current-nodes", "server-become-master", "server-build-messenger", "server-butterfly", "server-clean-cert-for", "server-cloud-elections", "server-ensure-provisioning", "server-fire-cmd", "server-get-load", "server-list-active", "server-manage-election", "server-monitor.ru", "server-provision", "server-query-agent", "server-rerun", "server-send-command", "server-show-stats", "server-start-agent", "server-start-client", "server-start-master", "server-start-node", "server-stop-client", "server-stop-master", "server-stop-node", "server-update-hosts", "server-write-new-nodes"]
