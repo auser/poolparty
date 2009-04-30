@@ -1,18 +1,20 @@
-=begin rdoc
-  DeployDirectory
-
-  Deploy directory will rsync a local directory to 
-  each instance of your cloud. 
-  
-  example:
-    has_directory 'name', :from => '/local/path', :to => '/path/on/server/'
-    
-  The above example will place the contents of '/local/path' at '/path/on/server/name'
-=end
 module PoolParty
+=begin  rdoc    
+== Deploy Directory
+
+The deploy directory will copy the source directory from the developer machine (i.e. your laptop) to /tmp/poolparty, and then rsync it to the specified target directory on the cloud nodes.
+
+== Usage
+
+  has_deploy_directory(has_deploy_directory 'bob', 
+                     :from => "~/path/to/my/site", 
+                     :to => "/mnt",
+                     :owner => 'www-data' 
+
+This will place the contents of ~/path/to/my/site from your machine to /mnt/bob on the cloud instances virtual_resource(:deploy_directory)
+
+=end
   class Deploydirectory
-    
-    virtual_resource(:deploy_directory) do
       
       def loaded(opts={}, &block)        
         add_unpack_directory
