@@ -19,6 +19,10 @@ module PoolParty
       $pool_specfile = filename unless $pool_specfile
     end
     
+    def pool_specfile
+      $pool_specfile
+    end
+    
     def reset!
       $pools = $clouds = $plugins = @describe_instances = nil
     end

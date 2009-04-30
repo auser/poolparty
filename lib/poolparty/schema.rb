@@ -66,23 +66,14 @@ module PoolParty
     end
   end
 end
-# class Hash
-#   def [](k=nil)
-#     if self.has_key?(k.to_sym)
-#       fetch(k.to_sym)
-#     elsif self.has_key?(k.to_s)
-#       fetch(k.to_s)
-#     else
-#       nil
-#     end
-#   end
-#   def method_missing(sym, *args, &block)
-#     if has_key?(sym.to_sym)
-#       fetch(sym)
-#     elsif has_key?(sym.to_s)
-#       fetch(sym.to_s)
-#     else
-#       super
-#     end
-#   end  
-# end
+class Hash
+  def method_missing(sym, *args, &block)
+    if has_key?(sym.to_sym)
+      fetch(sym)
+    elsif has_key?(sym.to_s)
+      fetch(sym.to_s)
+    else
+      super
+    end
+  end  
+end
