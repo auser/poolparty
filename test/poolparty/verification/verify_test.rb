@@ -29,7 +29,7 @@ class TestVerification < Test::Unit::TestCase
     setup do
       @vc = TestVerificationClass.new do
         verify do
-          ping 80
+          ping 830
         end
       end
     end
