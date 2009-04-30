@@ -4,6 +4,8 @@ require 'rake/testtask'
 require 'rake/rdoctask'
 
 task :default  => [:spec, :test]
+desc "Update vendor directory and run tests"
+task :ci => ["poolparty:vendor:update", :spec, :test]
 
 Spec::Rake::SpecTask.new(:spec) do |t|
   t.warning = t.rcov = false

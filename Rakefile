@@ -51,7 +51,6 @@ end
 
 task :release => [:update_timestamp]
 
-
 # Generate documentation
 Rake::RDocTask.new do |rd|
   rd.main = "Readme.txt"
