@@ -15,7 +15,7 @@ class TestNeighborhoods < Test::Unit::TestCase
     should "raise an error if there started with nil" do
       lambda {Neighborhoods.new}.should raise_error
     end
-    it "should not raise a fit if there ARE instances defined" do
+    should "should not raise a fit if there ARE instances defined" do
       lambda{Neighborhoods.new({:instances => ["10.0.0.1"]})}.should_not raise_error
     end
   end

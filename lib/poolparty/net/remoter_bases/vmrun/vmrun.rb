@@ -44,13 +44,6 @@ module PoolParty
         instance_eval &block if block
         super(par, &block)    
       end
-      
-      #terminate all running instances
-      def self.terminate!(o={})
-        describe_instances(o).each do |vmxf|
-           terminate_instance! o.merge(:vmx_file => vmxf)
-        end
-      end
 
       def self.launch_new_instance!(o={})
         new_instance(o).launch_new_instance!
@@ -58,7 +51,7 @@ module PoolParty
       def launch_new_instance!(o={})
         VmwareInstance.new( :vmx_file => next_unused_vmx_file, 
                             :ip => vmx_hash[next_unused_vmx_file], 
-                            :keypair => @cloud.keypair
+                            :keypair => cloud.keypair
                           ).launch!
       end
       # Terminate an instance by id
@@ -69,7 +62,7 @@ module PoolParty
         dsl_options o
         VmwareInstance.new( :vmx_file => last_unused_vmx_file, 
                             :ip => vmx_hash[last_unused_vmx_file], 
-                            :keypair => @cloud.keypair
+                            :keypair => cloud.keypair
                           ).terminate!(terminate_options)
       end
 
@@ -120,7 +113,7 @@ module PoolParty
         lines.shift
         lines.map {|vmx_file| VmwareInstance.new( :vmx_file => vmx_file, 
                                                   :ip => vmx_hash[vmx_file], 
-                                                  :keypair => @cloud.keypair
+                                                  :keypair => cloud.keypair
                                                 ) }
       end
       

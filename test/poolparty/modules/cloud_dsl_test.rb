@@ -4,7 +4,8 @@ class TestCloudDsl < Test::Unit::TestCase
   context "enabling and disabling" do
     setup do
       reset!
-      @cloud = cloud :test_cloud_dsl
+      @cloud = cloud :test_cloud_dsl do
+      end
     end    
     should "not have an option set for hyper_drive" do
       @cloud.dsl_options[:hyper_drive].should == nil
@@ -32,7 +33,9 @@ class TestCloudDsl < Test::Unit::TestCase
   context "calling add_optional_enabled_services" do
     setup do
       reset!
-      @cloud = cloud :test_cloud_dsl_2
+      @cloud = cloud :test_cloud_dsl_2 do
+        enable :haproxy
+      end
       @cloud.instance_eval "self.class.send :attr_reader, :brains"
       @cloud.instance_eval "def box;@brains = 'pepper';end"
     end
@@ -47,7 +50,6 @@ class TestCloudDsl < Test::Unit::TestCase
       @cloud.brains.should == nil
     end
     should "call haproxy when adding enabled serivces" do
-      @cloud.enable :haproxy
       @cloud.add_optional_enabled_services
       klasses = @cloud.plugin_store.map {|a| a.class.to_s.split("::")[-1] }
       klasses.include?("HaproxyClass").should == true

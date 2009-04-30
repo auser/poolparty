@@ -15,7 +15,7 @@ class TestCallbacks < Test::Unit::TestCase
   context "methods" do
     setup do
       @tc = CallbacksTestClass.new
-      @tc.after_create
+      @tc.setup_callbacks
     end
 
     should "have the 4 basic callbacks" do

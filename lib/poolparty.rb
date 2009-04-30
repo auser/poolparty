@@ -38,8 +38,7 @@ end
 
 t=Time.now
 ## Load PoolParty
-%w(version).each do |f|
-  require "#{File.dirname(__FILE__)}/poolparty/#{f}"
+module PoolParty
 end
 
 def PoolParty.require_directory(dir)
