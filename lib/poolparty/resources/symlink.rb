@@ -7,6 +7,14 @@ module PoolParty
         super
       end
       
+      def present
+        :create
+      end
+      
+      def absent
+        :delete!
+      end
+      
     end
     
   end
