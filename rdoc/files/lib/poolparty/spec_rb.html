@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>File: spec.rb [RDoc Documentation]</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='file' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>spec.rb</h1>
+        <div class='paths'>
+          lib/poolparty/spec.rb
+        </div>
+        <div class='last-update'>
+          Last Update:
+          <span class='datetime'>Thu Apr 30 14:59:55 -0700 2009</span>
+        </div>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='method-list'>
+            <h2>Methods</h2>
+            <h3>public instance</h3>
+            <ol>
+              <li><a href="#M000002">load_test_cloud</a></li>
+              <li><a href="#M000001">new_test_cloud</a></li>
+            </ol>
+          </div>
+          <div id='section'>
+            <div id='methods'>
+              <h2>Public instance methods</h2>
+              <div class='public-instance method' id='method-M000002'>
+                <a name='M000002'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>load_test_cloud</span>
+                  <span class='arguments'>(name, poolfile=nil)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000002-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000002-source'><span class="ruby-comment cmt"># File lib/poolparty/spec.rb, line 26</span>&#x000A;<span class="ruby-keyword kw">def</span> <span class="ruby-identifier">load_test_cloud</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">poolfile</span>=<span class="ruby-keyword kw">nil</span>)  &#x000A;  <span class="ruby-constant">PoolParty</span><span class="ruby-operator">::</span><span class="ruby-constant">Script</span>.<span class="ruby-identifier">inflate_file</span> <span class="ruby-identifier">poolfile</span>&#x000A;  <span class="ruby-identifier">blk</span> = <span class="ruby-identifier">cloud</span>(<span class="ruby-identifier">name</span>).<span class="ruby-identifier">stored_block</span>.<span class="ruby-identifier">dup</span>&#x000A;  <span class="ruby-constant">PoolParty</span><span class="ruby-operator">::</span><span class="ruby-constant">Pool</span>.<span class="ruby-identifier">reset!</span>&#x000A;  <span class="ruby-identifier">new_test_cloud</span> <span class="ruby-operator">&amp;</span><span class="ruby-identifier">blk</span>&#x000A;<span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000001'>
+                <a name='M000001'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>new_test_cloud</span>
+                  <span class='arguments'>(&amp;block)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000001-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000001-source'><span class="ruby-comment cmt"># File lib/poolparty/spec.rb, line 22</span>&#x000A;<span class="ruby-keyword kw">def</span> <span class="ruby-identifier">new_test_cloud</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)  &#x000A;  <span class="ruby-constant">TestCloudClass</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">:test_cloud</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>

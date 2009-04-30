@@ -8,6 +8,14 @@ body {
   position: relative; }
   body a {
     text-decoration: none; }
+  body #ribbon {
+    margin: 0px; }
+    body #ribbon #ribbon-img {
+      position: absolute;
+      right: 0px;
+      top: 0px;
+      margin: 0px;
+      padding: 0px; }
   body #wrapper {
     margin: 100px auto;
     width: 850px;
@@ -66,10 +74,20 @@ body {
         font-size: 90% !important;
         padding: 0px 0.2em !important;
         line-height: 1.4em; }
+      body #wrapper #content blockquote {
+        margin: 1em 30px;
+        padding: 20px 20px 20px 50px;
+        background: transparent url(http://www.cssnewbie.com/example/styling-blockquotes/quote.gif) no-repeat;
+        background-color: rgb(248, 248, 255);
+        border: 1px solid rgb(222, 222, 222);
+        color: rgb(68, 68, 68);
+        font-size: 1.3em;
+        font-family: georgia, helvetica, arial, sans-serif; }
       body #wrapper #content #intro-wrapper {
         background-color: #F2FBFF;
         border: 4px solid #72b9eb;
         padding: 10px;
+        min-height: 316px;
         font-family: georgia, helvetica, arial, sans-serif;
         font-size: 24px; }
         body #wrapper #content #intro-wrapper .intro-left {
@@ -92,3 +110,57 @@ body {
       width: 100%;
       text-align: center;
       padding: 10px 0 5px 0; }
+  body #pageslide-body-wrap {
+    position: relative; }
+  body #pageslide-slide-wrap {
+    position: fixed;
+    width: 0;
+    top: 0;
+    right: 0;
+    height: 100%;
+    background-color: #000; }
+  body #pageslide-content {
+    top: 0; }
+  body #pageslide-content h2 {
+    color: #C60; }
+  body #pplogo {
+    width: 440px;
+    height: 100px; }
+  body #why-pp {
+    color: white;
+    padding: 5px 5px 0px 7px; }
+    body #why-pp h1 {
+      color: #65FF00;
+      font-size: 28px;
+      display: block;
+      margin: 0px 0px 10px 0px; }
+    body #why-pp a {
+      color: #9933cc;
+      text-decoration: underline; }
+    body #why-pp ul {
+      margin: 0px;
+      padding: 0px;
+      list-style: none; }
+      body #why-pp ul li {
+        margin: 0px;
+        padding: 0px; }
+        body #why-pp ul li p {
+          font-size: 1.2em;
+          margin: 10px 0px 10px 10px; }
+        body #why-pp ul li .bigger {
+          font-family: georgia, helvetica, arial, sans-serif;
+          color: #9933cc;
+          font-size: 20px; }
+          body #why-pp ul li .bigger em {
+            font-style: italic;
+            padding: 1px; }
+    body #why-pp .small {
+      display: block;
+      text-align: center; }
+  body .callout {
+    display: block;
+    text-align: center;
+    background-color: #ccc;
+    border: 4px solid #B5B5B5;
+    padding: 10px 10px;
+    color: #303030; }

@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>File: thread_pool.rb [RDoc Documentation]</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../../../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='file' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>thread_pool.rb</h1>
+        <div class='paths'>
+          lib/poolparty/modules/thread_pool.rb
+        </div>
+        <div class='last-update'>
+          Last Update:
+          <span class='datetime'>Thu Apr 30 14:59:55 -0700 2009</span>
+        </div>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='description'>
+            <p>
+            TODO: Deprecate require &#8216;thread&#8217; begin
+            </p>
+            <pre>require 'fasttread'</pre>
+            <p>
+            rescue LoadError end
+            </p>
+            <p>
+            class ThreadPool
+            </p>
+            <pre>class Worker&#x000A;  def initialize(thread_queue)&#x000A;    @mutex = Mutex.new&#x000A;    @cv = ConditionVariable.new&#x000A;    @queue = thread_queue&#x000A;    @running = true&#x000A;    @thread = Thread.new do&#x000A;      @mutex.synchronize do&#x000A;        while @running&#x000A;          @cv.wait(@mutex)&#x000A;          block = get_block&#x000A;          if block&#x000A;            @mutex.unlock&#x000A;            block.call&#x000A;            @mutex.lock&#x000A;            reset_block&#x000A;          end&#x000A;          @queue &lt;&lt; self&#x000A;        end&#x000A;      end&#x000A;    end&#x000A;  end&#x000A;&#x000A;  def name&#x000A;    @thread.inspect&#x000A;  end&#x000A;&#x000A;  def get_block&#x000A;    @block&#x000A;  end&#x000A;&#x000A;  def set_block(block)&#x000A;    @mutex.synchronize do&#x000A;      raise RuntimeError, &quot;Thread already busy.&quot; if @block&#x000A;      @block = block&#x000A;      # Signal the thread in this class, that there's a job to be done&#x000A;      @cv.signal&#x000A;    end&#x000A;  end&#x000A;&#x000A;  def reset_block&#x000A;    @block = nil&#x000A;  end&#x000A;&#x000A;  def busy?&#x000A;    @mutex.synchronize { !@block.nil? }&#x000A;  end&#x000A;&#x000A;  def stop&#x000A;    @mutex.synchronize do&#x000A;      @running = false&#x000A;      @cv.signal&#x000A;    end&#x000A;    @thread.join&#x000A;  end&#x000A;end&#x000A;&#x000A;attr_accessor :max_size&#x000A;&#x000A;def initialize(max_size = 10)&#x000A;  @max_size = max_size&#x000A;  @queue = Queue.new&#x000A;  @workers = []&#x000A;end&#x000A;&#x000A;def size&#x000A;  @workers.size&#x000A;end&#x000A;&#x000A;def busy?&#x000A;  @queue.size &lt; @workers.size&#x000A;end&#x000A;&#x000A;def shutdown&#x000A;  @workers.each { |w| w.stop }&#x000A;  @workers = []&#x000A;end&#x000A;&#x000A;alias :join :shutdown&#x000A;&#x000A;def process(block=nil,&amp;blk)&#x000A;  block = blk if block_given?&#x000A;  worker = get_worker&#x000A;  worker.set_block(block)&#x000A;end&#x000A;&#x000A;private&#x000A;&#x000A;def get_worker&#x000A;  if !@queue.empty? or @workers.size == @max_size&#x000A;    return @queue.pop&#x000A;  else&#x000A;    worker = Worker.new(@queue)&#x000A;    @workers &lt;&lt; worker&#x000A;    worker&#x000A;  end&#x000A;end</pre>
+            <p>
+            end
+            </p>
+          </div>
+          <div id='section'>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>

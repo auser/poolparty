@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>: PoolParty::GempackageResource [RDoc Documentation]</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='class' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>
+          <span class='type'>Class</span>
+          PoolParty::GempackageResource
+        </h1>
+        <ol class='paths'>
+          <li>
+            <a href="../../files/lib/poolparty/plugins/gem_package_rb.html">lib/poolparty/plugins/gem_package.rb</a>
+          </li>
+        </ol>
+        <div class='parent'>
+          Parent:
+          <strong><a href="../Object.html">Object</a></strong>
+        </div>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='description'>
+            <p>
+            Allows you to specify a gem to be installed You can optionally pass a
+            :download_url if you want a specific gem or version installed example:
+            </p>
+            <pre>has_gem_package :name =&gt; 'rubot',  :download_url =&gt; 'http://rubyforge.org/frs/download.php/35089/rubot-base-0.0.1.gem'</pre>
+          </div>
+          <div id='method-list'>
+            <h2>Methods</h2>
+            <h3>public instance</h3>
+            <ol>
+              <li><a href="#M000735">loaded</a></li>
+            </ol>
+          </div>
+          <div id='section'>
+            <div id='methods'>
+              <h2>Public instance methods</h2>
+              <div class='public-instance method' id='method-M000735'>
+                <a name='M000735'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>loaded</span>
+                  <span class='arguments'>(opts={}, &amp;block)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000735-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000735-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/gem_package.rb, line 12</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">loaded</span>(<span class="ruby-identifier">opts</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">download_url?</span>&#x000A;          <span class="ruby-identifier">has_exec</span>(&#x000A;            <span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;download-#{name}&quot;</span>, &#x000A;            <span class="ruby-identifier">:cwd</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">Default</span>.<span class="ruby-identifier">remote_storage_path</span>, &#x000A;            <span class="ruby-identifier">:command</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;wget #{download_url} -O #{name}.gem&quot;</span>, &#x000A;            <span class="ruby-identifier">:if_not</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;test -f #{Default.remote_storage_path}/#{name}.gem&quot;</span>&#x000A;          )&#x000A;          <span class="ruby-identifier">has_exec</span>(&#x000A;            <span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;install-#{name}-gem&quot;</span>,&#x000A;            <span class="ruby-identifier">:command</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;gem install --no-ri --no-rdoc  #{Default.remote_storage_path}/#{name}.gem&quot;</span>,&#x000A;            <span class="ruby-identifier">:if_not</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;gem list --local #{name} | grep #{name} #{&quot;| grep #{version}&quot; if version?}&quot;</span>,&#x000A;            <span class="ruby-identifier">:requires</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;download-#{name}&quot;</span>&#x000A;          )&#x000A;        <span class="ruby-keyword kw">else</span>&#x000A;          <span class="ruby-identifier">has_exec</span>(&#x000A;            <span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;#{name}&quot;</span>,&#x000A;            <span class="ruby-identifier">:command</span>  =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;gem install --no-ri --no-rdoc #{&quot;--version #{version}&quot; if version?} #{&quot;--source #{source}&quot; if source?} #{name}&quot;</span>,&#x000A;            <span class="ruby-identifier">:if_not</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;gem list --local #{name} | grep #{name} #{&quot;| grep #{version}&quot; if version?}&quot;</span>&#x000A;          )&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>

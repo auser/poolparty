@@ -1,0 +1,105 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>: Monitors::Neighborhood [RDoc Documentation]</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='class' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>
+          <span class='type'>Class</span>
+          Monitors::Neighborhood
+        </h1>
+        <ol class='paths'>
+          <li>
+            <a href="../../files/lib/poolparty/monitors/monitors/neighborhood_monitor_rb.html">lib/poolparty/monitors/monitors/neighborhood_monitor.rb</a>
+          </li>
+        </ol>
+        <div class='parent'>
+          Parent:
+          <strong><a href="BaseMonitor.html">Monitors::BaseMonitor</a></strong>
+        </div>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='method-list'>
+            <h2>Methods</h2>
+            <h3>public instance</h3>
+            <ol>
+              <li><a href="#M000858">get</a></li>
+              <li><a href="#M000860">post</a></li>
+              <li><a href="#M000859">put</a></li>
+            </ol>
+          </div>
+          <div id='section'>
+            <div id='methods'>
+              <h2>Public instance methods</h2>
+              <div class='public-instance method' id='method-M000858'>
+                <a name='M000858'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>get</span>
+                  <span class='arguments'>(data=nil)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000858-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000858-source'><span class="ruby-comment cmt"># File lib/poolparty/monitors/monitors/neighborhood_monitor.rb, line 10</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get</span>(<span class="ruby-identifier">data</span>=<span class="ruby-keyword kw">nil</span>)&#x000A;      <span class="ruby-identifier">neighborhood</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000860'>
+                <a name='M000860'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>post</span>
+                  <span class='arguments'>(data)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000860-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000860-source'><span class="ruby-comment cmt"># File lib/poolparty/monitors/monitors/neighborhood_monitor.rb, line 27</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">post</span>(<span class="ruby-identifier">data</span>)&#x000A;      <span class="ruby-identifier">received</span> = <span class="ruby-constant">JSON</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">data</span>)&#x000A;      <span class="ruby-ivar">@neighborhood</span> = <span class="ruby-constant">JSON</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">data</span>)&#x000A;      <span class="ruby-identifier">save</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000859'>
+                <a name='M000859'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>put</span>
+                  <span class='arguments'>(data, from=nil)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000859-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000859-source'><span class="ruby-comment cmt"># File lib/poolparty/monitors/monitors/neighborhood_monitor.rb, line 14</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">put</span>(<span class="ruby-identifier">data</span>, <span class="ruby-identifier">from</span>=<span class="ruby-keyword kw">nil</span>)&#x000A;      <span class="ruby-ivar">@neighborhood_instances</span> = <span class="ruby-identifier">merge_array_of_hashes_with_key</span>(<span class="ruby-identifier">neighborhood</span>.<span class="ruby-identifier">instances</span>, <span class="ruby-constant">JSON</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">data</span>), <span class="ruby-value str">'ip'</span>)&#x000A;      <span class="ruby-ivar">@neighborhood</span> = {<span class="ruby-ivar">@neighborhood</span>[<span class="ruby-identifier">:instances</span>] =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@neighborhood_instances</span>}&#x000A;      <span class="ruby-identifier">after_close</span> <span class="ruby-keyword kw">do</span>&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@neighborhood</span>.<span class="ruby-identifier">instances</span>.<span class="ruby-identifier">size</span><span class="ruby-operator">&gt;</span><span class="ruby-value">1</span>&#x000A;          <span class="ruby-comment cmt"># TODO: Add logger here</span>&#x000A;          <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Pinging #{&quot;#{@neighborhood.instances.rand.ip}/neighborhood&quot;}&quot;</span>&#x000A;          <span class="ruby-constant">RestClient</span>.<span class="ruby-identifier">put</span> <span class="ruby-node">&quot;#{@neighborhood.instances.rand.ip}/neighborhood&quot;</span>, <span class="ruby-ivar">@neighborhood</span>, <span class="ruby-identifier">:content_type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'text/x-json'</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-identifier">save</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>

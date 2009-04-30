@@ -1,0 +1,140 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>: Spec::Matchers::SpecExtensions::SpecExtensionsBase [RDoc Documentation]</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../../../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='class' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>
+          <span class='type'>Class</span>
+          Spec::Matchers::SpecExtensions::SpecExtensionsBase
+        </h1>
+        <ol class='paths'>
+          <li>
+            <a href="../../../../files/lib/poolparty/spec/matchers/a_spec_extensions_base_rb.html">lib/poolparty/spec/matchers/a_spec_extensions_base.rb</a>
+          </li>
+        </ol>
+        <div class='parent'>
+          Parent:
+          <strong><a href="../../../Object.html">Object</a></strong>
+        </div>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='description'>
+            <p>
+            Mainly extensions, these methods are inherent in all of the matchers and
+            are intended for helping parse the final manifest for spec&#8217;ing
+            purposes.
+            </p>
+          </div>
+          <div id='method-list'>
+            <h2>Methods</h2>
+            <h3>public instance</h3>
+            <ol>
+              <li><a href="#M000770">ensured_as</a></li>
+              <li><a href="#M000772">grab_entry</a></li>
+              <li><a href="#M000771">is_present?</a></li>
+              <li><a href="#M000774">is_valid_resource?</a></li>
+              <li><a href="#M000773">type</a></li>
+            </ol>
+          </div>
+          <div id='section'>
+            <div id='methods'>
+              <h2>Public instance methods</h2>
+              <div class='public-instance method' id='method-M000770'>
+                <a name='M000770'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>ensured_as</span>
+                  <span class='arguments'>(ensured=&quot;present&quot;)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000770-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000770-source'><span class="ruby-comment cmt"># File lib/poolparty/spec/matchers/a_spec_extensions_base.rb, line 7</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">ensured_as</span>(<span class="ruby-identifier">ensured</span>=<span class="ruby-value str">&quot;present&quot;</span>)&#x000A;          <span class="ruby-identifier">str</span> = <span class="ruby-node">&quot;ensure =&gt; '#{ensured}'&quot;</span>&#x000A;          <span class="ruby-operator">!</span><span class="ruby-identifier">grab_entry</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-node">/#{str}/</span>).<span class="ruby-identifier">empty?</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000772'>
+                <a name='M000772'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>grab_entry</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000772-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000772-source'><span class="ruby-comment cmt"># File lib/poolparty/spec/matchers/a_spec_extensions_base.rb, line 14</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">grab_entry</span>&#x000A;          <span class="ruby-ivar">@target</span>.<span class="ruby-identifier">grab_entry_for</span>(<span class="ruby-identifier">type</span>, <span class="ruby-ivar">@expected</span>)&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000771'>
+                <a name='M000771'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>is_present?</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000771-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000771-source'><span class="ruby-comment cmt"># File lib/poolparty/spec/matchers/a_spec_extensions_base.rb, line 11</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">is_present?</span>&#x000A;          <span class="ruby-operator">!</span><span class="ruby-identifier">grab_entry</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">is_valid_resource?</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000774'>
+                <a name='M000774'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>is_valid_resource?</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000774-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000774-source'><span class="ruby-comment cmt"># File lib/poolparty/spec/matchers/a_spec_extensions_base.rb, line 20</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">is_valid_resource?</span>&#x000A;          <span class="ruby-identifier">grab_entry</span>.<span class="ruby-identifier">split</span>(<span class="ruby-regexp re">/\n/</span>).<span class="ruby-identifier">select</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">l</span><span class="ruby-operator">|</span> <span class="ruby-keyword kw">nil</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">l</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp re">/(.*)=&gt;([\n\t ]*),$/</span>) }.<span class="ruby-identifier">empty?</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000773'>
+                <a name='M000773'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>type</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000773-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000773-source'><span class="ruby-comment cmt"># File lib/poolparty/spec/matchers/a_spec_extensions_base.rb, line 17</span>&#x000A;        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">type</span>&#x000A;          <span class="ruby-value str">&quot;file&quot;</span>&#x000A;        <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>

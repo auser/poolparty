@@ -1,0 +1,105 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>: PoolParty::Template [RDoc Documentation]</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='class' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>
+          <span class='type'>Class</span>
+          PoolParty::Template
+        </h1>
+        <ol class='paths'>
+          <li>
+            <a href="../../files/lib/poolparty/poolparty/template_rb.html">lib/poolparty/poolparty/template.rb</a>
+          </li>
+        </ol>
+        <div class='parent'>
+          Parent:
+          <strong><a href="../Object.html">Object</a></strong>
+        </div>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='method-list'>
+            <h2>Methods</h2>
+            <h3>public class</h3>
+            <ol>
+              <li><a href="#M000711">compile_file</a></li>
+              <li><a href="#M000710">compile_string</a></li>
+              <li><a href="#M000712">handle_render</a></li>
+            </ol>
+          </div>
+          <div id='section'>
+            <div id='methods'>
+              <h2>Public class methods</h2>
+              <div class='public-class method' id='method-M000711'>
+                <a name='M000711'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>compile_file</span>
+                  <span class='arguments'>(file, opts={})</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000711-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000711-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/template.rb, line 12</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">compile_file</span>(<span class="ruby-identifier">file</span>, <span class="ruby-identifier">opts</span>={})&#x000A;      <span class="ruby-identifier">content</span> = <span class="ruby-identifier">open</span>(<span class="ruby-identifier">file</span>).<span class="ruby-identifier">read</span>&#x000A;      <span class="ruby-identifier">compile_string</span>(<span class="ruby-identifier">content</span>, <span class="ruby-identifier">opts</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-class method' id='method-M000710'>
+                <a name='M000710'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>compile_string</span>
+                  <span class='arguments'>(string, opts={})</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000710-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000710-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/template.rb, line 7</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">compile_string</span>(<span class="ruby-identifier">string</span>, <span class="ruby-identifier">opts</span>={})&#x000A;      <span class="ruby-identifier">vars</span> = <span class="ruby-constant">OpenStruct</span>.<span class="ruby-identifier">new</span> <span class="ruby-identifier">opts</span>&#x000A;      <span class="ruby-identifier">handle_render</span>(<span class="ruby-identifier">string</span>, <span class="ruby-identifier">vars</span>, (<span class="ruby-identifier">opts</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:render</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">:erb</span>))&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-class method' id='method-M000712'>
+                <a name='M000712'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>handle_render</span>
+                  <span class='arguments'>(string, vars, renderer)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000712-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000712-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/template.rb, line 17</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">handle_render</span>(<span class="ruby-identifier">string</span>, <span class="ruby-identifier">vars</span>, <span class="ruby-identifier">renderer</span>)&#x000A;      <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">renderer</span>&#x000A;      <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:haml</span>&#x000A;        <span class="ruby-keyword kw">nil</span>&#x000A;      <span class="ruby-keyword kw">else</span>&#x000A;        <span class="ruby-constant">ERB</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">string</span>).<span class="ruby-identifier">result</span>(<span class="ruby-identifier">vars</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">:binding</span>))&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>

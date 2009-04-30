@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>PoolParty!</title>
+    <link href="../../stylesheets/application.css" media="all" rel="stylesheet" type="text/css"/><link href="../../stylesheets/blackboard.css" media="all" rel="stylesheet" type="text/css"/><link href="../../stylesheets/classes.css" media="all" rel="stylesheet" type="text/css"/><link href="../../stylesheets/header.css" media="all" rel="stylesheet" type="text/css"/><link href="../../stylesheets/navmenu.css" media="all" rel="stylesheet" type="text/css"/><link href="../../stylesheets/sunburst.css" media="all" rel="stylesheet" type="text/css"/>
+    <script language="javascript" src="../../javascripts/jquery-1.3.2.min.js" type="text/javascript"></script><script language="javascript" src="../../javascripts/jquery.pageslide-0.2.js" type="text/javascript"></script><script language="javascript" src="../../javascripts/poolparty.js" type="text/javascript"></script>
+  </head>
+  <body>
+    <div id='ribbon'>
+      &nbsp;
+      <a href='../../why.html' id='pageslide_anchor' rel='pageslide'>
+        <img alt="Why pp ribbon" border="0" height="150" id="ribbon-img" src="../../images/why_pp_ribbon.gif" width="150"/>
+      </a>
+      &nbsp;
+    </div>
+    <div id='wrapper'>
+      <div id='masthead'>
+        <h2>AT&T Interactive R&D</h2>
+        <div id='external_links'>
+          <!-- =link (img("attir_and_d_logo.gif"), "http://poolpartyrb.com") -->
+        </div>
+      </div>
+      <div class='spacer clear'>
+        &nbsp;
+      </div>
+      <div id='sidebar'>
+        <h3 id='pplogo'><a href="../../index.html"><img alt="Pplogo2" src="../../images/site/pplogo2.png"/></a></h3>
+        <ul class='left'>
+          <li class='docs'>
+            <a href="../../docs/index.html">Docs</a>
+          </li>
+          <li class='examples'>
+            <a href="../../examples.html">Examples</a>
+          </li>
+        </ul>
+        <ul class='left'>
+          <li class='community'>
+            <a href="../../community.html">Community</a>
+          </li>
+          <li class='tutorials'>
+            <a href="../../tutorials.html">Tutorials</a>
+          </li>
+        </ul>
+      </div>
+      <div class='spacer clear'>
+        &nbsp;
+      </div>
+      <div id='content'>
+        <div class='small right'>
+          <a href="/lib/resources.html">Resources</a>
+        </div>
+        <h3>Mount</h3>
+        The mount specifies a mount that is to be mounted on the instances
+        <h3>Usage</h3>
+        <pre class="blackboard"><span class="line-numbers">   1 </span> <span class="Entity">has_mount</span>(<span class="Constant"><span class="Constant">:</span>name</span> =&gt; <span class="String"><span class="String">'</span>...<span class="String">'</span></span>) <span class="Keyword">do</span>&#x000A;<span class="line-numbers">   2 </span> <span class="Comment">	<span class="Comment">#</span> More options. </span>&#x000A;<span class="line-numbers">   3 </span> <span class="Comment">	<span class="Comment">#</span> This block is optional</span>&#x000A;<span class="line-numbers">   4 </span> <span class="Keyword">end</span></pre>
+        <h3>Options</h3>
+        <dd>
+          <dt class='option'><a>name</a><dd>The location of the mount (default: /data)</dd></dt>
+          <dt class='option'><a>device</a><dd>The device location for the mount. This mounts at the directory set by the name</dd></dt>
+          <dt class='option'><a>options</a><dd>The options to be set in the mount file fstab (default: rw,nosuid,noquota)</dd></dt>
+          <dt class='option'><a>fstype</a><dd>The Type of mount (default: xfs)</dd></dt>
+        </dd>
+        <h3>Examples</h3>
+        <pre class="blackboard"><span class="line-numbers">   1 </span> <span class="Entity">has_mount</span>(<span class="Constant"><span class="Constant">:</span>name</span> =&gt; <span class="String"><span class="String">&quot;</span>/data<span class="String">&quot;</span></span>, <span class="Constant"><span class="Constant">:</span>device</span> =&gt; <span class="String"><span class="String">&quot;</span>/dev/sda100<span class="String">&quot;</span></span>)</pre>
+      </div>
+      <div id='footer'>
+        Copyright &copy; 2008-2009 - Ari Lerner and Cloudteam at AT&T Interactive
+        <br />
+      </div>
+    </div>
+  </body>
+</html>

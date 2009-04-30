@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>File: daemonizable.rb [RDoc Documentation]</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../../../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='file' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>daemonizable.rb</h1>
+        <div class='paths'>
+          lib/poolparty/modules/daemonizable.rb
+        </div>
+        <div class='last-update'>
+          Last Update:
+          <span class='datetime'>Thu Apr 30 14:59:55 -0700 2009</span>
+        </div>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='description'>
+            <p>
+            TODO: Diet module <a
+            href="../../../../classes/PoolParty.html">PoolParty</a>
+            </p>
+            <pre>module Daemonizeable&#x000A;&#x000A;  attr_accessor :pid_file&#x000A;&#x000A;  def self.included(base)&#x000A;    base.extend ClassMethods&#x000A;  end&#x000A;&#x000A;  def pid&#x000A;    @pid ||= File.file?(pid_file) ? open(pid_file).read.to_i : nil&#x000A;  end&#x000A;&#x000A;  def pid_file&#x000A;    @pid_file ||= PoolParty::Default.agent_pid_file&#x000A;  end&#x000A;&#x000A;  # Returns +true+ the process identied by +pid+ is running.&#x000A;  def running?&#x000A;    return false unless pid&#x000A;    Process.getpgid(pid) != -1&#x000A;  rescue Errno::ESRCH&#x000A;    false&#x000A;  end&#x000A;&#x000A;  # Turns the current script into a daemon process that detaches from the console.&#x000A;  def daemonize(&amp;block)&#x000A;    raise unless pid_file&#x000A;&#x000A;    remove_stale_pid_file&#x000A;&#x000A;    pwd = Dir.pwd # Current directory is changed during daemonization, so store it&#x000A;&#x000A;    vputs &quot;Daemonizing...&quot;&#x000A;    trap(&quot;CHLD&quot;) {Process.wait(-1, Process::WNOHANG)}&#x000A;    @pid = fork do&#x000A;      Signal.trap('HUP', 'IGNORE') # Don't die upon logout&#x000A;      File.open(&quot;/dev/null&quot;, &quot;r+&quot;) do |devnull|&#x000A;        $stdout.reopen(devnull)&#x000A;        $stderr.reopen(devnull)&#x000A;        $stdin.reopen(devnull) unless @use_stdin&#x000A;      end&#x000A;      block.call if block&#x000A;    end&#x000A;&#x000A;    Dir.chdir(pwd)&#x000A;&#x000A;    write_pid_file&#x000A;&#x000A;    trap('HUP') { restart }&#x000A;    at_exit do&#x000A;      remove_pid_file&#x000A;    end&#x000A;    Process.detach(pid)&#x000A;  end&#x000A;&#x000A;  # Register a proc to be called to restart the server.&#x000A;  def on_restart(&amp;block)&#x000A;    @on_restart = block&#x000A;  end&#x000A;&#x000A;  # Restart the server.&#x000A;  def restart&#x000A;    raise ArgumentError, &quot;Can't restart, no 'on_restart' proc specified&quot; unless @on_restart&#x000A;    stop&#x000A;    remove_pid_file&#x000A;    @on_restart.call&#x000A;    exit!&#x000A;  end&#x000A;&#x000A;  module ClassMethods&#x000A;    # Send a QUIT signal the process which PID is stored in +pid_file+.&#x000A;    # If the process is still running after +timeout+, KILL signal is&#x000A;    # sent.&#x000A;    def kill(pid_file, timeout=60)&#x000A;      if pid = send_signal('QUIT', pid_file)&#x000A;        Timeout.timeout(timeout) do&#x000A;          sleep 0.1 while Process.running?(pid)&#x000A;        end&#x000A;      end&#x000A;    rescue Timeout::Error&#x000A;      print &quot;Timeout! &quot;&#x000A;      send_signal('KILL', pid_file)&#x000A;    rescue Interrupt&#x000A;      send_signal('KILL', pid_file)&#x000A;    ensure&#x000A;      puts pid_file&#x000A;      File.delete(pid_file) if File.exists?(pid_file)&#x000A;    end&#x000A;&#x000A;    # Restart the server by sending HUP signal.&#x000A;    def restart(pid_file)&#x000A;      send_signal('HUP', pid_file)&#x000A;    end&#x000A;&#x000A;    # Send a +signal+ to the process which PID is stored in +pid_file+.&#x000A;    def send_signal(signal, pid_file)&#x000A;      if File.exist?(pid_file) &amp;&amp; pid = open(pid_file).read&#x000A;        pid = pid.to_i&#x000A;        print &quot;Sending #{signal} signal to process #{pid} ... &quot;&#x000A;        Process.kill(signal, pid)&#x000A;        puts&#x000A;        pid&#x000A;      else&#x000A;        puts &quot;Can't stop process, no PID found in #{pid_file}&quot;&#x000A;        nil&#x000A;      end&#x000A;    rescue Errno::ESRCH # No such process&#x000A;      puts &quot;process not found!&quot;&#x000A;      nil&#x000A;    end&#x000A;  end&#x000A;&#x000A;  protected&#x000A;    def remove_pid_file&#x000A;      File.delete(@pid_file) if @pid_file &amp;&amp; File.exists?(@pid_file)&#x000A;    end&#x000A;&#x000A;    def write_pid_file&#x000A;      FileUtils.mkdir_p File.dirname(@pid_file)&#x000A;      open(@pid_file,&quot;w&quot;) { |f| f.write(@pid) }&#x000A;      File.chmod(0644, @pid_file)&#x000A;    end&#x000A;&#x000A;    # If PID file is stale, remove it.&#x000A;    def remove_stale_pid_file&#x000A;      if File.exist?(@pid_file)&#x000A;        if pid &amp;&amp; running?&#x000A;          puts &quot;Pid file exists&quot; and raise&#x000A;        else&#x000A;          remove_pid_file&#x000A;        end&#x000A;      end&#x000A;    end&#x000A;end&#x000A;class Daemonize&#x000A;  include Daemonizeable&#x000A;end</pre>
+            <p>
+            end
+            </p>
+          </div>
+          <div id='section'>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>

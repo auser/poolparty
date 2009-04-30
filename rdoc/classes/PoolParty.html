@@ -1,0 +1,692 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>: PoolParty [RDoc Documentation]</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='class' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>
+          <span class='type'>Module</span>
+          PoolParty
+        </h1>
+        <ol class='paths'>
+          <li>
+            <a href="../files/lib/poolparty/base_packages/haproxy_rb.html">lib/poolparty/base_packages/haproxy.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/base_packages/poolparty_rb.html">lib/poolparty/base_packages/poolparty.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/base_packages/heartbeat_rb.html">lib/poolparty/base_packages/heartbeat.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/base_packages/runit_rb.html">lib/poolparty/base_packages/runit.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/base_packages/ruby_rb.html">lib/poolparty/base_packages/ruby.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/capistrano_rb.html">lib/poolparty/capistrano.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/dependencies_rb.html">lib/poolparty/dependencies.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/dependency_resolver/chef_resolver_rb.html">lib/poolparty/dependency_resolver/chef_resolver.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/dependency_resolver/dependency_resolver_rb.html">lib/poolparty/dependency_resolver/dependency_resolver.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/dependency_resolver/dependency_resolver_cloud_extensions_rb.html">lib/poolparty/dependency_resolver/dependency_resolver_cloud_extensions.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/dependency_resolver/puppet_rb.html">lib/poolparty/dependency_resolver/puppet.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/dependency_resolver/puppet_resolver_rb.html">lib/poolparty/dependency_resolver/puppet_resolver.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/extra/deployments_rb.html">lib/poolparty/extra/deployments.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/helpers/binary_rb.html">lib/poolparty/helpers/binary.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/helpers/console_rb.html">lib/poolparty/helpers/console.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/helpers/display_rb.html">lib/poolparty/helpers/display.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/helpers/hash_printer_rb.html">lib/poolparty/helpers/hash_printer.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/helpers/loading_rb.html">lib/poolparty/helpers/loading.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/helpers/optioner_rb.html">lib/poolparty/helpers/optioner.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/helpers/ruberl_rb.html">lib/poolparty/helpers/ruberl.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/lite_rb.html">lib/poolparty/lite.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/modules/callbacks_rb.html">lib/poolparty/modules/callbacks.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/modules/cloud_dsl_rb.html">lib/poolparty/modules/cloud_dsl.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/modules/cloud_resourcer_rb.html">lib/poolparty/modules/cloud_resourcer.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/modules/definable_resource_rb.html">lib/poolparty/modules/definable_resource.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/modules/file_writer_rb.html">lib/poolparty/modules/file_writer.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/modules/output_rb.html">lib/poolparty/modules/output.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/modules/pinger_rb.html">lib/poolparty/modules/pinger.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/modules/pretty_printer_rb.html">lib/poolparty/modules/pretty_printer.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/modules/resourcing_dsl_rb.html">lib/poolparty/modules/resourcing_dsl.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/modules/safe_instance_rb.html">lib/poolparty/modules/safe_instance.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/modules/user_helpers_rb.html">lib/poolparty/modules/user_helpers.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/net/messenger_rb.html">lib/poolparty/net/messenger.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/net/remote_instance_rb.html">lib/poolparty/net/remote_instance.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/net/remoter/cloud_control_rb.html">lib/poolparty/net/remoter/cloud_control.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/net/remoter/connections_rb.html">lib/poolparty/net/remoter/connections.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/net/remoter/interactive_rb.html">lib/poolparty/net/remoter/interactive.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/net/remoter_base_rb.html">lib/poolparty/net/remoter_base.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/net/remoter_bases/ec2/ec2_rb.html">lib/poolparty/net/remoter_bases/ec2/ec2.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/net/remoter_bases/ec2/ec2_remote_instance_rb.html">lib/poolparty/net/remoter_bases/ec2/ec2_remote_instance.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/net/remoter_bases/vmrun/vmrun_rb.html">lib/poolparty/net/remoter_bases/vmrun/vmrun.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/net/remoter_bases/vmrun/vmrun_instance_rb.html">lib/poolparty/net/remoter_bases/vmrun/vmrun_instance.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/plugins/bind_rb.html">lib/poolparty/plugins/bind.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/plugins/chef_rb.html">lib/poolparty/plugins/chef.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/plugins/chef_deploy_rb.html">lib/poolparty/plugins/chef_deploy.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/plugins/deploy_directory_rb.html">lib/poolparty/plugins/deploy_directory.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/plugins/dynomite_rb.html">lib/poolparty/plugins/dynomite.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/plugins/gem_package_rb.html">lib/poolparty/plugins/gem_package.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/plugins/git_rb.html">lib/poolparty/plugins/git.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/plugins/line_in_file_rb.html">lib/poolparty/plugins/line_in_file.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/plugins/nanite_rb.html">lib/poolparty/plugins/nanite.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/plugins/rsyncmirror_rb.html">lib/poolparty/plugins/rsyncmirror.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/plugins/runit_rb.html">lib/poolparty/plugins/runit.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/plugins/svn_rb.html">lib/poolparty/plugins/svn.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/plugins/tokyo_tyrant_rb.html">lib/poolparty/plugins/tokyo_tyrant.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/poolparty/cloud_rb.html">lib/poolparty/poolparty/cloud.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/poolparty/default_rb.html">lib/poolparty/poolparty/default.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/poolparty/key_rb.html">lib/poolparty/poolparty/key.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/poolparty/neighborhoods_rb.html">lib/poolparty/poolparty/neighborhoods.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/poolparty/plugin_rb.html">lib/poolparty/poolparty/plugin.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/poolparty/plugin_model_rb.html">lib/poolparty/poolparty/plugin_model.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/poolparty/pool_rb.html">lib/poolparty/poolparty/pool.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/poolparty/poolparty_base_class_rb.html">lib/poolparty/poolparty/poolparty_base_class.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/poolparty/resource_rb.html">lib/poolparty/poolparty/resource.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/poolparty/script_rb.html">lib/poolparty/poolparty/script.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/poolparty/service_rb.html">lib/poolparty/poolparty/service.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/poolparty/template_rb.html">lib/poolparty/poolparty/template.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/provision/boot_strapper_rb.html">lib/poolparty/provision/boot_strapper.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/provision/configurations/chef_rb.html">lib/poolparty/provision/configurations/chef.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/provision/configurations/puppet_rb.html">lib/poolparty/provision/configurations/puppet.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/provision/dr_configure_rb.html">lib/poolparty/provision/dr_configure.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/resources/cron_rb.html">lib/poolparty/resources/cron.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/resources/directory_rb.html">lib/poolparty/resources/directory.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/resources/file_rb.html">lib/poolparty/resources/file.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/resources/exec_rb.html">lib/poolparty/resources/exec.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/resources/host_rb.html">lib/poolparty/resources/host.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/resources/mount_rb.html">lib/poolparty/resources/mount.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/resources/package_rb.html">lib/poolparty/resources/package.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/resources/remote_file_rb.html">lib/poolparty/resources/remote_file.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/resources/service_rb.html">lib/poolparty/resources/service.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/resources/sshkey_rb.html">lib/poolparty/resources/sshkey.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/resources/symlink_rb.html">lib/poolparty/resources/symlink.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/resources/user_rb.html">lib/poolparty/resources/user.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/resources/variable_rb.html">lib/poolparty/resources/variable.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/resources_rb.html">lib/poolparty/resources.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/schema_rb.html">lib/poolparty/schema.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/services/conditional_rb.html">lib/poolparty/services/conditional.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/spec/matchers/have_deploydirectory_rb.html">lib/poolparty/spec/matchers/have_deploydirectory.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/verification/verifier_base_rb.html">lib/poolparty/verification/verifier_base.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/verification/verifiers/ping_rb.html">lib/poolparty/verification/verifiers/ping.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/verification/verify_rb.html">lib/poolparty/verification/verify.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty_rb.html">lib/poolparty.rb</a>
+          </li>
+          <li>
+            <a class='show' href='#' onclick='this.parentNode.parentNode.className += " expanded"; this.parentNode.removeChild(this); return false'>show all</a>
+          </li>
+        </ol>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='description'>
+            <pre>Runit beginning&#x000A;NOT IMPLEMENTED YET</pre>
+            <p>
+            # &#8212;
+            </p>
+            <pre>DependencyResolver&#x000A;&#x000A;This acts as the interface between PoolParty's dependency tree&#x000A;and the dependency providers. To add a new DependencyResolver,&#x000A;overload this class with the appropriate calls</pre>
+            <p>
+            # &#8212;
+            </p>
+            <pre>Cloud extensions for the DependencyResolver</pre>
+            <p>
+            # &#8212;
+            </p>
+            <pre>ChefResolver&#x000A;&#x000A;This takes the internal structure&#x000A;{&#x000A;  :options =&gt; {},&#x000A;  :services =&gt; [{}],&#x000A;  :resources =&gt; []&#x000A;}&#x000A;&#x000A;and creates a chef recipe to reflect.&#x000A;&#x000A;/cookbooks/&#x000A;  namespace/&#x000A;    recipes/&#x000A;    templates/&#x000A;    attributes/&#x000A;&#x000A;TODO: This class is somewhat all over the place. Slim it down</pre>
+            <p>
+            # &#8212; # Class: PuppetResolver< <a
+            href="PoolParty/DependencyResolver.html">DependencyResolver</a> # # #
+            &#8212; TODO: Reimplement # &#8212;
+            </p>
+            <pre>The connection to the messenger from poolparty, the client.&#x000A;&#x000A;This class will setup a socket connection to the master's client&#x000A;at the messenger_client_port</pre>
+            <p>
+            # &#8212;
+            </p>
+            <pre>The base for Remote Bases&#x000A;&#x000A;By extending this class, you can easily add remoters to&#x000A;PoolParty. There are 4 methods that the remote base needs to implement&#x000A;in order to be compatible.&#x000A;&#x000A;The four methods are:&#x000A;  launch_new_instance!&#x000A;  terminate_instance(id)&#x000A;  describe_instance(id)&#x000A;  describe_instances&#x000A;&#x000A;After your remote base is written, make sure to register the base outside the context&#x000A;of the remote base, like so:&#x000A;  register_remote_base :remote_base_name</pre>
+            <p>
+            # &#8212;
+            </p>
+            <pre>The Vmrun remote base uses the vmrun command to implement a cloud remoter base.&#x000A;The Vmrun remoter base has been tested with Vmware fusion on the mac.&#x000A;&#x000A;In order to use the Vmrun remoter base you will need to setup a few things.&#x000A;First, you will need to have the Vmware fusion installed and vmrun command in your path.&#x000A;The default location of the vmrun binary is /Library/Application Support/VMware Fusion/vmrun.&#x000A;You will then of course need a virtual machine installed and available.&#x000A;Once you have your instance installed and running, you need to setup your ssh keys so that poolparty can ssh into the instance. Get the ip of you instnace with ifconfig inside the running instance.&#x000A;For example:&#x000A;&#x000A;  ssh root@172.0.1.129 &quot;mkdir /root/.ssh &amp;&amp; chmod 600 /root/.ssh&quot;&#x000A;  scp my_key.pub root@172.0.1.129:/root/.ssh/authorized_keys&#x000A;&#x000A;provide a using :vmrun block in your clouds.rb&#x000A;for example:&#x000A;&#x000A;  using :vmrun do&#x000A;    vmx_hash(::File.expand_path(&quot;~/Documents/Virtual\ Machines.localized/Ubuntu-jaunty.vmwarevm/Ubuntu-jaunty.vmx&quot;) =&gt; '172.16.68.129')&#x000A;  end&#x000A;&#x000A; The vmx file fulfills a similar purpose as the ami id in ec2. Note that expand path.  vmrun return fuill paths, so we must provide full paths so things match up later. W&#x000A; Vmrun does not provide a meta server like ec2 has, so you need to list the ip address of your VM.  For this reason it is recommended that you use NAT addressing on your VM to maintain consistent addressing across different physical networks.&#x000A;&#x000A;Also, note that vmrun does not copy the VM to a new distinct VM on each run, so if you want to be able to start from a known state, you should make a snapshot before using your vm with poolparty.  Then, you can rollback to this initial state if you want to ensure you can repeat a fresh cloud-start.</pre>
+            <p>
+            # &#8212;
+            </p>
+            <pre>Chef deploy (ezmobius http://github.com/ezmobius/chef-deploy/tree/master)&#x000A;&#x000A;deploy &quot;/data/#{app}&quot; do&#x000A;  repo &quot;git://github.com/engineyard/rack-app.git&quot;&#x000A;  branch &quot;HEAD&quot;&#x000A;  user &quot;ez&quot;&#x000A;  enable_submodules true&#x000A;  migrate true&#x000A;  migration_command &quot;rake db:migrate&quot;&#x000A;  environment &quot;production&quot;&#x000A;  shallow_clone true&#x000A;  revision '0xbeadbeef'&#x000A;  action :deploy # or :rollback&#x000A;end</pre>
+            <p>
+            # &#8212; # BIG TODO: Slim the place where the content is gathered from #
+            &#8212;
+            </p>
+            <pre>DeployDirectory&#x000A;&#x000A;Deploy directory will rsync a local directory to&#x000A;each instance of your cloud.&#x000A;&#x000A;example:&#x000A;  has_directory 'name', :from =&gt; '/local/path', :to =&gt; '/path/on/server/'&#x000A;&#x000A;The above example will place the contents of '/local/path' at '/path/on/server/name'</pre>
+            <p>
+            # &#8212;
+            </p>
+            <pre>ssh key used to login to remote instances</pre>
+            <p>
+            # &#8212;
+            </p>
+            <pre>The Container&#x000A;&#x000A;Container holds the various features for the final compilations&#x000A;for each pool.&#x000A;&#x000A;Most of the Resources will not need to create their own</pre>
+            <p>
+            # &#8212; # Provide a very simple provisioner with as few dependencies as
+            possible # &#8212; provide a very simple provisioner with as few
+            dependencies as possible # &#8212;
+            </p>
+            <pre>Schema&#x000A;&#x000A;Schemas are basically stub clouds without the PoolParty stack</pre>
+            <p>
+            # &#8212;
+            </p>
+            <pre>Verification&#x000A;&#x000A;Add a verify block to a clouds.rb</pre>
+            <p>
+            # &#8212; ## Load <a href="PoolParty/PoolParty.html">PoolParty</a> #
+            &#8212; # Logging.init :debug, :info, :warn, :error, :fatal # &#8212; ##
+            Load <a href="PoolParty/PoolParty.html">PoolParty</a> Plugins and package
+            </p>
+          </div>
+          <div id='method-list'>
+            <h2>Methods</h2>
+            <h3>public class</h3>
+            <ol>
+              <li><a href="#M000183">load_cloud_from_json</a></li>
+              <li><a href="#M000189">require_directory</a></li>
+            </ol>
+            <h3>public instance</h3>
+            <ol>
+              <li><a href="#M000188">case_of</a></li>
+              <li><a href="#M000186">context_stack</a></li>
+              <li><a href="#M000181">extract_cloud_from_options</a></li>
+              <li><a href="#M000182">extract_pool_from_options</a></li>
+              <li><a href="#M000178">load_pool</a></li>
+              <li><a href="#M000190">log</a></li>
+              <li><a href="#M000185">pack_user_directory</a></li>
+              <li><a href="#M000180">pool_specfile</a></li>
+              <li><a href="#M000179">print_with_nice_printer</a></li>
+              <li><a href="#M000184">require_user_directory</a></li>
+              <li><a href="#M000191">reset!</a></li>
+              <li><a href="#M000187">working_conditional</a></li>
+            </ol>
+          </div>
+          <div id='context'>
+            <div id='includes'>
+              <h2>Included modules</h2>
+              <ol>
+                <li><a href="PoolParty/FileWriter.html">FileWriter</a></li>
+              </ol>
+            </div>
+          </div>
+          <div id='section'>
+            <div id='class-list'>
+              <h2>Classes and Modules</h2>
+              Module <a href="PoolParty/Binary.html" class="link">PoolParty::Binary</a><br />
+              Module <a href="PoolParty/Callbacks.html" class="link">PoolParty::Callbacks</a><br />
+              Module <a href="PoolParty/Capistrano.html" class="link">PoolParty::Capistrano</a><br />
+              Module <a href="PoolParty/Cloud.html" class="link">PoolParty::Cloud</a><br />
+              Module <a href="PoolParty/CloudDsl.html" class="link">PoolParty::CloudDsl</a><br />
+              Module <a href="PoolParty/CloudResourcer.html" class="link">PoolParty::CloudResourcer</a><br />
+              Module <a href="PoolParty/Console.html" class="link">PoolParty::Console</a><br />
+              Module <a href="PoolParty/DefinableResource.html" class="link">PoolParty::DefinableResource</a><br />
+              Module <a href="PoolParty/DependencyResolutions.html" class="link">PoolParty::DependencyResolutions</a><br />
+              Module <a href="PoolParty/DependencyResolverCloudExtensions.html" class="link">PoolParty::DependencyResolverCloudExtensions</a><br />
+              Module <a href="PoolParty/DependencyResolverResourceExtensions.html" class="link">PoolParty::DependencyResolverResourceExtensions</a><br />
+              Module <a href="PoolParty/Display.html" class="link">PoolParty::Display</a><br />
+              Module <a href="PoolParty/Extra.html" class="link">PoolParty::Extra</a><br />
+              Module <a href="PoolParty/FileWriter.html" class="link">PoolParty::FileWriter</a><br />
+              Module <a href="PoolParty/Loading.html" class="link">PoolParty::Loading</a><br />
+              Module <a href="PoolParty/Messenger.html" class="link">PoolParty::Messenger</a><br />
+              Module <a href="PoolParty/Output.html" class="link">PoolParty::Output</a><br />
+              Module <a href="PoolParty/Pinger.html" class="link">PoolParty::Pinger</a><br />
+              Module <a href="PoolParty/Plugin.html" class="link">PoolParty::Plugin</a><br />
+              Module <a href="PoolParty/PluginModel.html" class="link">PoolParty::PluginModel</a><br />
+              Module <a href="PoolParty/Pool.html" class="link">PoolParty::Pool</a><br />
+              Module <a href="PoolParty/PrettyPrinter.html" class="link">PoolParty::PrettyPrinter</a><br />
+              Module <a href="PoolParty/Provision.html" class="link">PoolParty::Provision</a><br />
+              Module <a href="PoolParty/Remote.html" class="link">PoolParty::Remote</a><br />
+              Module <a href="PoolParty/Resources.html" class="link">PoolParty::Resources</a><br />
+              Module <a href="PoolParty/ResourcingDsl.html" class="link">PoolParty::ResourcingDsl</a><br />
+              Module <a href="PoolParty/Ruberl.html" class="link">PoolParty::Ruberl</a><br />
+              Module <a href="PoolParty/ThreadSafeInstance.html" class="link">PoolParty::ThreadSafeInstance</a><br />
+              Module <a href="PoolParty/Verification.html" class="link">PoolParty::Verification</a><br />
+              Module <a href="PoolParty/Verifiers.html" class="link">PoolParty::Verifiers</a><br />
+              Class <a href="PoolParty/Base.html" class="link">PoolParty::Base</a><br />
+              Class <a href="PoolParty/Chef.html" class="link">PoolParty::Chef</a><br />
+              Class <a href="PoolParty/ChefDeploy.html" class="link">PoolParty::ChefDeploy</a><br />
+              Class <a href="PoolParty/ChefRecipe.html" class="link">PoolParty::ChefRecipe</a><br />
+              Class <a href="PoolParty/ChefResolver.html" class="link">PoolParty::ChefResolver</a><br />
+              Class <a href="PoolParty/Conditional.html" class="link">PoolParty::Conditional</a><br />
+              Class <a href="PoolParty/Default.html" class="link">PoolParty::Default</a><br />
+              Class <a href="PoolParty/Dependencies.html" class="link">PoolParty::Dependencies</a><br />
+              Class <a href="PoolParty/DependencyResolver.html" class="link">PoolParty::DependencyResolver</a><br />
+              Class <a href="PoolParty/Deploydirectory.html" class="link">PoolParty::Deploydirectory</a><br />
+              Class <a href="PoolParty/GempackageResource.html" class="link">PoolParty::GempackageResource</a><br />
+              Class <a href="PoolParty/GitResource.html" class="link">PoolParty::GitResource</a><br />
+              Class <a href="PoolParty/HashPrinter.html" class="link">PoolParty::HashPrinter</a><br />
+              Class <a href="PoolParty/Key.html" class="link">PoolParty::Key</a><br />
+              Class <a href="PoolParty/LineInFile.html" class="link">PoolParty::LineInFile</a><br />
+              Class <a href="PoolParty/Nanite.html" class="link">PoolParty::Nanite</a><br />
+              Class <a href="PoolParty/Neighborhoods.html" class="link">PoolParty::Neighborhoods</a><br />
+              Class <a href="PoolParty/Optioner.html" class="link">PoolParty::Optioner</a><br />
+              Class <a href="PoolParty/PoolParty.html" class="link">PoolParty::PoolParty</a><br />
+              Class <a href="PoolParty/PoolPartyBaseClass.html" class="link">PoolParty::PoolPartyBaseClass</a><br />
+              Class <a href="PoolParty/PuppetResolver.html" class="link">PoolParty::PuppetResolver</a><br />
+              Class <a href="PoolParty/Rsyncmirror.html" class="link">PoolParty::Rsyncmirror</a><br />
+              Class <a href="PoolParty/Runit.html" class="link">PoolParty::Runit</a><br />
+              Class <a href="PoolParty/Schema.html" class="link">PoolParty::Schema</a><br />
+              Class <a href="PoolParty/Script.html" class="link">PoolParty::Script</a><br />
+              Class <a href="PoolParty/Service.html" class="link">PoolParty::Service</a><br />
+              Class <a href="PoolParty/SpecCore.html" class="link">PoolParty::SpecCore</a><br />
+              Class <a href="PoolParty/SvnResource.html" class="link">PoolParty::SvnResource</a><br />
+              Class <a href="PoolParty/Template.html" class="link">PoolParty::Template</a><br />
+              Class <a href="PoolParty/Verify.html" class="link">PoolParty::Verify</a><br />
+            </div>
+            <div id='methods'>
+              <h2>Public class methods</h2>
+              <div class='public-class method' id='method-M000183'>
+                <a name='M000183'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>load_cloud_from_json</span>
+                  <span class='arguments'>(json_file_path=nil)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000183-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000183-source'><span class="ruby-comment cmt"># File lib/poolparty/lite.rb, line 20</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">load_cloud_from_json</span>(<span class="ruby-identifier">json_file_path</span>=<span class="ruby-keyword kw">nil</span>)&#x000A;    <span class="ruby-identifier">json_file</span> = <span class="ruby-identifier">json_file_path</span> <span class="ruby-operator">||</span> <span class="ruby-constant">PoolParty</span><span class="ruby-operator">::</span><span class="ruby-constant">Default</span>.<span class="ruby-identifier">properties_hash_file</span>&#x000A;    <span class="ruby-constant">PoolParty</span><span class="ruby-operator">::</span><span class="ruby-constant">Schema</span>.<span class="ruby-identifier">new</span>( <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">read</span>(<span class="ruby-identifier">json_file</span>) ) <span class="ruby-keyword kw">rescue</span> <span class="ruby-identifier">exit</span> <span class="ruby-value">1</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-class method' id='method-M000189'>
+                <a name='M000189'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>require_directory</span>
+                  <span class='arguments'>(dir)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000189-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000189-source'><span class="ruby-comment cmt"># File lib/poolparty.rb, line 44</span>&#x000A;<span class="ruby-keyword kw">def</span> <span class="ruby-constant">PoolParty</span>.<span class="ruby-identifier">require_directory</span>(<span class="ruby-identifier">dir</span>)&#x000A;  <span class="ruby-keyword kw">if</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">file?</span>(<span class="ruby-identifier">dir</span>)&#x000A;    <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;#{::File.expand_path(dir)}&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">$DEBUGGING</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">$GENERATING_MANIFEST</span>&#x000A;    <span class="ruby-identifier">require</span> <span class="ruby-identifier">dir</span>&#x000A;  <span class="ruby-keyword kw">else</span>&#x000A;    <span class="ruby-constant">Dir</span>[<span class="ruby-node">&quot;#{dir}/*.rb&quot;</span>].<span class="ruby-identifier">sort</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">file</span><span class="ruby-operator">|</span>&#x000A;       <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;#{::File.expand_path(file)}&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">$DEBUGGING</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">$GENERATING_MANIFEST</span>&#x000A;       <span class="ruby-identifier">require</span> <span class="ruby-node">&quot;#{file}&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">file?</span>(<span class="ruby-identifier">file</span>)&#x000A;    <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-constant">Dir</span>[<span class="ruby-node">&quot;#{dir}/*&quot;</span>].<span class="ruby-identifier">sort</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">dir</span><span class="ruby-operator">|</span>&#x000A;      <span class="ruby-identifier">require_directory</span>(<span class="ruby-identifier">dir</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">directory?</span>(<span class="ruby-identifier">dir</span>)&#x000A;    <span class="ruby-keyword kw">end</span>&#x000A;  <span class="ruby-keyword kw">end</span>&#x000A;<span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <h2>Public instance methods</h2>
+              <div class='public-instance method' id='method-M000188'>
+                <a name='M000188'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>case_of</span>
+                  <span class='arguments'>(o, &amp;block)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000188-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000188-source'><span class="ruby-comment cmt"># File lib/poolparty/services/conditional.rb, line 6</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">case_of</span> <span class="ruby-identifier">o</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>&#x000A;    <span class="ruby-identifier">c</span> = <span class="ruby-constant">Conditional</span>.<span class="ruby-identifier">new</span>({<span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;case_of_#{o}&quot;</span>, <span class="ruby-identifier">:attribute</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">o</span>}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;    <span class="ruby-identifier">add_service</span> <span class="ruby-identifier">c</span>&#x000A;    <span class="ruby-identifier">c</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000186'>
+                <a name='M000186'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>context_stack</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000186-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000186-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/poolparty_base_class.rb, line 5</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">context_stack</span>&#x000A;    <span class="ruby-identifier">$context_stack</span> <span class="ruby-operator">||=</span> []&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000181'>
+                <a name='M000181'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>extract_cloud_from_options</span>
+                  <span class='arguments'>(o)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000181-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000181-source'><span class="ruby-comment cmt"># File lib/poolparty/helpers/optioner.rb, line 149</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">extract_cloud_from_options</span>(<span class="ruby-identifier">o</span>)&#x000A;    <span class="ruby-identifier">o</span>.<span class="ruby-identifier">cloudname</span> <span class="ruby-value">? </span>[<span class="ruby-identifier">cloud</span>(<span class="ruby-identifier">o</span>.<span class="ruby-identifier">cloudname</span>.<span class="ruby-identifier">downcase</span>.<span class="ruby-identifier">to_sym</span>)] <span class="ruby-operator">:</span> <span class="ruby-identifier">clouds</span>.<span class="ruby-identifier">collect</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">n</span>,<span class="ruby-identifier">cl</span><span class="ruby-operator">|</span> <span class="ruby-identifier">cl</span>}&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000182'>
+                <a name='M000182'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>extract_pool_from_options</span>
+                  <span class='arguments'>(o)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000182-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000182-source'><span class="ruby-comment cmt"># File lib/poolparty/helpers/optioner.rb, line 153</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">extract_pool_from_options</span>(<span class="ruby-identifier">o</span>)&#x000A;    <span class="ruby-identifier">o</span>.<span class="ruby-identifier">poolname</span> <span class="ruby-value">? </span>[<span class="ruby-identifier">pool</span>(<span class="ruby-identifier">o</span>.<span class="ruby-identifier">poolname</span>.<span class="ruby-identifier">downcase</span>.<span class="ruby-identifier">to_sym</span>)] <span class="ruby-operator">:</span> <span class="ruby-identifier">pools</span>.<span class="ruby-identifier">collect</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">n</span>,<span class="ruby-identifier">pl</span><span class="ruby-operator">|</span> <span class="ruby-identifier">pl</span>}&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000178'>
+                <a name='M000178'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>load_pool</span>
+                  <span class='arguments'>(filename=nil)</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  Load a file that contains a pool into memory
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000178-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000178-source'><span class="ruby-comment cmt"># File lib/poolparty/helpers/binary.rb, line 5</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">load_pool</span>(<span class="ruby-identifier">filename</span>=<span class="ruby-keyword kw">nil</span>)&#x000A;    <span class="ruby-identifier">filename</span> = <span class="ruby-identifier">filename</span> <span class="ruby-operator">||</span> <span class="ruby-constant">Binary</span>.<span class="ruby-identifier">get_existing_spec_location</span>&#x000A;    <span class="ruby-identifier">dputs</span> <span class="ruby-node">&quot;Using spec at #{filename}&quot;</span>&#x000A;    &#x000A;    <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">filename</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">readable?</span>(<span class="ruby-identifier">filename</span>)&#x000A;      <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Please specify your cloud with -s, move it to ./clouds.rb or in your POOL_SPEC environment variable&quot;</span>&#x000A;      <span class="ruby-identifier">exit</span>(<span class="ruby-value">1</span>)&#x000A;    <span class="ruby-keyword kw">else</span>&#x000A;      <span class="ruby-identifier">$pool_specfile</span> = <span class="ruby-identifier">filename</span>&#x000A;      <span class="ruby-constant">PoolParty</span><span class="ruby-operator">::</span><span class="ruby-constant">Pool</span><span class="ruby-operator">::</span><span class="ruby-constant">Pool</span>.<span class="ruby-identifier">load_from_file</span> <span class="ruby-identifier">filename</span>&#x000A;    <span class="ruby-keyword kw">end</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000190'>
+                <a name='M000190'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>log</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000190-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000190-source'><span class="ruby-comment cmt"># File lib/poolparty.rb, line 108</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">log</span>&#x000A;    <span class="ruby-ivar">@logger</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">make_new_logger</span> <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">STDOUT</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000185'>
+                <a name='M000185'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>pack_user_directory</span>
+                  <span class='arguments'>(dirname)</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  Add to the suitcase files below the clouds.rb base directory
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000185-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000185-source'><span class="ruby-comment cmt"># File lib/poolparty/modules/user_helpers.rb, line 13</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">pack_user_directory</span>(<span class="ruby-identifier">dirname</span>)&#x000A;    <span class="ruby-keyword kw">begin</span>&#x000A;      <span class="ruby-operator">::</span><span class="ruby-constant">Suitcase</span><span class="ruby-operator">::</span><span class="ruby-constant">Zipper</span>.<span class="ruby-identifier">add</span>(<span class="ruby-node">&quot;#{::File.dirname($pool_specfile)}/#{dirname}&quot;</span>, <span class="ruby-value str">&quot;etc&quot;</span>)&#x000A;    <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>&#x000A;      <span class="ruby-identifier">vputs</span> <span class="ruby-node">&quot;Error packing user directory #{dirname}: #{e}&quot;</span>&#x000A;    <span class="ruby-keyword kw">end</span>    &#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000180'>
+                <a name='M000180'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>pool_specfile</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  Keep the <a href="PoolParty.html#M000180">pool_specfile</a>
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000180-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000180-source'><span class="ruby-comment cmt"># File lib/poolparty/helpers/binary.rb, line 30</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">pool_specfile</span>&#x000A;    <span class="ruby-identifier">$pool_specfile</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000179'>
+                <a name='M000179'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>print_with_nice_printer</span>
+                  <span class='arguments'>(header=nil, strs=[]) {|printer| ...}</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  Helper to print with the nice printer
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000179-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000179-source'><span class="ruby-comment cmt"># File lib/poolparty/helpers/binary.rb, line 19</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">print_with_nice_printer</span>(<span class="ruby-identifier">header</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">strs</span>=[], <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;    <span class="ruby-identifier">printer</span> = <span class="ruby-constant">NicePrinter</span>.<span class="ruby-identifier">new</span>&#x000A;    <span class="ruby-identifier">printer</span>.<span class="ruby-identifier">header</span>&#x000A;    <span class="ruby-identifier">printer</span>.<span class="ruby-identifier">center</span>(<span class="ruby-identifier">header</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">header</span>&#x000A;    <span class="ruby-keyword kw">yield</span>(<span class="ruby-identifier">printer</span>)&#x000A;    <span class="ruby-identifier">strs</span>.<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">st</span><span class="ruby-operator">|</span> <span class="ruby-identifier">printer</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">st</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">st</span>}&#x000A;    <span class="ruby-identifier">printer</span>.<span class="ruby-identifier">footer</span>&#x000A;    <span class="ruby-identifier">printer</span>.<span class="ruby-identifier">print</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000184'>
+                <a name='M000184'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>require_user_directory</span>
+                  <span class='arguments'>(dirname)</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  Require all the files in a directory below the base
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000184-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000184-source'><span class="ruby-comment cmt"># File lib/poolparty/modules/user_helpers.rb, line 3</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">require_user_directory</span>(<span class="ruby-identifier">dirname</span>)    &#x000A;    <span class="ruby-keyword kw">begin</span>&#x000A;      <span class="ruby-identifier">cloud_dir</span> = <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">dirname</span>(<span class="ruby-identifier">$pool_specfile</span>)&#x000A;      <span class="ruby-constant">Dir</span>[<span class="ruby-node">&quot;#{cloud_dir}/#{dirname}/**&quot;</span>].<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">a</span><span class="ruby-operator">|</span> <span class="ruby-identifier">require</span> <span class="ruby-identifier">a</span> }&#x000A;    <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>&#x000A;      <span class="ruby-identifier">vputs</span> <span class="ruby-node">&quot;Error requiring user directory #{dirname}: #{e}&quot;</span>&#x000A;    <span class="ruby-keyword kw">end</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000191'>
+                <a name='M000191'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>reset!</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000191-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000191-source'><span class="ruby-comment cmt"># File lib/poolparty.rb, line 111</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">reset!</span>&#x000A;    <span class="ruby-identifier">$pools</span> = <span class="ruby-identifier">$clouds</span> = <span class="ruby-identifier">$plugins</span> = <span class="ruby-ivar">@describe_instances</span> = <span class="ruby-keyword kw">nil</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000187'>
+                <a name='M000187'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>working_conditional</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000187-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000187-source'><span class="ruby-comment cmt"># File lib/poolparty/services/conditional.rb, line 2</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">working_conditional</span>&#x000A;    <span class="ruby-ivar">@working_conditional</span> <span class="ruby-operator">||=</span> []&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>

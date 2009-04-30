@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>File: loggable.rb [RDoc Documentation]</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../../../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='file' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>loggable.rb</h1>
+        <div class='paths'>
+          lib/poolparty/poolparty/loggable.rb
+        </div>
+        <div class='last-update'>
+          Last Update:
+          <span class='datetime'>Thu Apr 30 14:59:55 -0700 2009</span>
+        </div>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='description'>
+            <p>
+            todo: Deprecate
+            </p>
+            <pre>=begin rdoc&#x000A;  A logging class to allow us to log to locations&#x000A;=end&#x000A;class Loggable&#x000A;  def initialize&#x000A;    self.class.loggers &lt;&lt; file_logger&#x000A;    file_logger.level = :info&#x000A;  end&#x000A;  def file_logger&#x000A;    @file_logger ||= Logging.logger( Default.pool_logger_location, logging_opts )&#x000A;  end&#x000A;  def stdout_logger&#x000A;    @stdout_logger ||= Logging.logger(STDOUT, logging_opts.merge({:pattern =&gt; &quot;%m\n&quot;}))&#x000A;  end&#x000A;  def logging_opts&#x000A;    {:pattern =&gt; &quot;[%d] %-l : %m\n&quot;,&#x000A;    :date_pattern =&gt; &quot;%Y-%m-%d %H:%M:%S.%s&quot;}&#x000A;  end&#x000A;  %w(info warn debug notice).each do |meth|&#x000A;    define_method(meth.to_sym) do |*args|&#x000A;      self.class.loggers.each {|l| l.send meth.to_sym, args}&#x000A;    end&#x000A;  end&#x000A;  def self.loggers&#x000A;    @loggers ||= []&#x000A;  end&#x000A;end</pre>
+          </div>
+          <div id='section'>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>

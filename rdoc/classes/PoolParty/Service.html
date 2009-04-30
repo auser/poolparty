@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>: PoolParty::Service [RDoc Documentation]</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='class' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>
+          <span class='type'>Class</span>
+          PoolParty::Service
+        </h1>
+        <ol class='paths'>
+          <li>
+            <a href="../../files/lib/poolparty/poolparty/service_rb.html">lib/poolparty/poolparty/service.rb</a>
+          </li>
+        </ol>
+        <div class='parent'>
+          Parent:
+          <strong><a href="PoolPartyBaseClass.html">PoolParty::PoolPartyBaseClass</a></strong>
+        </div>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='method-list'>
+            <h2>Methods</h2>
+            <h3>public class</h3>
+            <ol>
+              <li><a href="#M000738">add_has_and_does_not_have_methods_for</a></li>
+              <li><a href="#M000736">new</a></li>
+            </ol>
+            <h3>public instance</h3>
+            <ol>
+              <li><a href="#M000737">cloud</a></li>
+            </ol>
+          </div>
+          <div id='section'>
+            <div id='methods'>
+              <h2>Public class methods</h2>
+              <div class='public-class method' id='method-M000738'>
+                <a name='M000738'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>add_has_and_does_not_have_methods_for</span>
+                  <span class='arguments'>(typ=:file)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000738-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000738-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/service.rb, line 16</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">add_has_and_does_not_have_methods_for</span>(<span class="ruby-identifier">typ</span>=<span class="ruby-identifier">:file</span>)&#x000A;      <span class="ruby-identifier">lowercase_class_name</span> = <span class="ruby-identifier">typ</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">top_level_class</span>.<span class="ruby-identifier">downcase</span>&#x000A;      &#x000A;      <span class="ruby-identifier">meth</span> = <span class="ruby-value str">&quot;def __\#{lowercase_class_name}(opts={}, &amp;block)\ni = PoolParty::\#{lowercase_class_name.camelcase}Class.new(opts, &amp;block)\nplugin_store &lt;&lt; i if respond_to?(:plugin_store)\ni\nend\nalias :\#{lowercase_class_name} :__\#{lowercase_class_name}\n&quot;</span>&#x000A;      &#x000A;      <span class="ruby-constant">PoolParty</span><span class="ruby-operator">::</span><span class="ruby-constant">PoolPartyBaseClass</span>.<span class="ruby-identifier">module_eval</span> <span class="ruby-identifier">meth</span>&#x000A;      <span class="ruby-constant">PoolParty</span><span class="ruby-operator">::</span><span class="ruby-constant">PoolPartyBaseClass</span>.<span class="ruby-identifier">add_has_and_does_not_have_methods_for</span>(<span class="ruby-identifier">lowercase_class_name</span>.<span class="ruby-identifier">to_sym</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-class method' id='method-M000736'>
+                <a name='M000736'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>new</span>
+                  <span class='arguments'>(o={}, &amp;block)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000736-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000736-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/service.rb, line 5</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">o</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;      <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">o</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <h2>Public instance methods</h2>
+              <div class='public-instance method' id='method-M000737'>
+                <a name='M000737'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>cloud</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000737-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000737-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/service.rb, line 9</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cloud</span>&#x000A;      <span class="ruby-value">2</span>.<span class="ruby-identifier">upto</span>(<span class="ruby-identifier">context_stack</span>.<span class="ruby-identifier">size</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">i</span><span class="ruby-operator">|</span>&#x000A;        <span class="ruby-keyword kw">return</span> <span class="ruby-operator">::</span><span class="ruby-constant">PoolParty</span>.<span class="ruby-identifier">context_stack</span>[<span class="ruby-operator">-</span><span class="ruby-identifier">i</span>] <span class="ruby-keyword kw">if</span> <span class="ruby-operator">::</span><span class="ruby-constant">PoolParty</span>.<span class="ruby-identifier">context_stack</span>[<span class="ruby-operator">-</span><span class="ruby-identifier">i</span>].<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">PoolParty</span><span class="ruby-operator">::</span><span class="ruby-constant">Cloud</span><span class="ruby-operator">::</span><span class="ruby-constant">Cloud</span>)&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">nil</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>

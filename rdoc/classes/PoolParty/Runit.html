@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>: PoolParty::Runit [RDoc Documentation]</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='class' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>
+          <span class='type'>Class</span>
+          PoolParty::Runit
+        </h1>
+        <ol class='paths'>
+          <li>
+            <a href="../../files/lib/poolparty/plugins/runit_rb.html">lib/poolparty/plugins/runit.rb</a>
+          </li>
+        </ol>
+        <div class='parent'>
+          Parent:
+          <strong><a href="../Object.html">Object</a></strong>
+        </div>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='method-list'>
+            <h2>Methods</h2>
+            <h3>public instance</h3>
+            <ol>
+              <li><a href="#M000541">copy_templates_from_templatedir</a></li>
+              <li><a href="#M000540">has_runit_service</a></li>
+            </ol>
+          </div>
+          <div id='section'>
+            <div id='methods'>
+              <h2>Public instance methods</h2>
+              <div class='public-instance method' id='method-M000541'>
+                <a name='M000541'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>copy_templates_from_templatedir</span>
+                  <span class='arguments'>(dir=nil)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000541-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000541-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/runit.rb, line 17</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">copy_templates_from_templatedir</span>(<span class="ruby-identifier">dir</span>=<span class="ruby-keyword kw">nil</span>)&#x000A;        <span class="ruby-identifier">raise</span> <span class="ruby-constant">TemplateNotFound</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value str">&quot;template directory given&quot;</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">dir</span>&#x000A;        <span class="ruby-identifier">raise</span> <span class="ruby-constant">TemplateNotFound</span>.<span class="ruby-identifier">new</span>(<span class="ruby-node">&quot;template directory cannot be found #{dir}&quot;</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">readable?</span>(<span class="ruby-identifier">dir</span>)&#x000A;        <span class="ruby-identifier">copy_directory_into_template_storage_directory</span>(<span class="ruby-identifier">dir</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000540'>
+                <a name='M000540'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>has_runit_service</span>
+                  <span class='arguments'>(name=&quot;runitservice&quot;, downif=&quot;&quot;, templatedir=&quot;&quot;)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000540-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000540-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/runit.rb, line 4</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">has_runit_service</span>(<span class="ruby-identifier">name</span>=<span class="ruby-value str">&quot;runitservice&quot;</span>, <span class="ruby-identifier">downif</span>=<span class="ruby-value str">&quot;&quot;</span>, <span class="ruby-identifier">templatedir</span>=<span class="ruby-value str">&quot;&quot;</span>)&#x000A;        <span class="ruby-identifier">path</span> = <span class="ruby-identifier">copy_templates_from_templatedir</span>(<span class="ruby-identifier">templatedir</span>)&#x000A;        <span class="ruby-identifier">call_custom_function</span> <span class="ruby-value str">&quot;runit_service {\n\&quot;\#{name}\&quot;:\ndirectory =&gt; \&quot;/etc/sv\&quot;,\ndownif =&gt; \&quot;/bin/ps aux | grep -v grep | grep -q \#{downif}\&quot;,\ntemplatedir =&gt; \&quot;\#{path}\&quot;;\n}\n&quot;</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>
