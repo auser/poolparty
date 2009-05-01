@@ -20,12 +20,6 @@ module PoolParty
       def on_init
       end
       
-      # Is this remote instance the master?
-      # DEPRECATE
-      def master?
-        name == "master"
-      end
-      
       # The remote instances is only valid if there is an ip and a name
       def valid?
         (ip.nil? || name.nil?) ? false : true
@@ -77,27 +71,6 @@ module PoolParty
       def self.to_s(hsh)
         new(hsh).to_s
       end
-      
-      #TODO: Diet the next 5 commands
-      def dependency_resolver_command
-        cloud.dependency_resolver_command
-      end
-      
-      #FIXME: deprecate puppet specific commands in this class
-      def puppet_runner_command
-        self.class.send :puppet_runner_command
-      end
-      # Commands for the servers
-      def self.puppet_runner_command
-        ". /etc/profile && puppetrunner"
-      end
-      def self.puppet_master_rerun_command
-        ". /etc/profile && puppetrerun"
-      end
-      def self.puppet_rerun_commad
-        puppet_runner_command
-      end
-      #
       
       def hosts_file_listing_for(cl)
         string = (cl.name == cloud.name) ? "#{name}.#{my_cloud.name}\t#{name}" : "#{name}.#{my_cloud.name}"

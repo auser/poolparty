@@ -7,7 +7,7 @@ module PoolParty
       
       def enable
         # has_chef_recipe "apache2"
-        include_chef_recipe "#{::File.dirname(__FILE__)}/../../../vendor/chef/apache2"
+        # include_chef_recipe "#{::File.dirname(__FILE__)}/../../../vendor/chef/apache2"
 
         # Restart sysklogd after we update the haproxy.log
         has_service(:name => "sysklogd")    
@@ -28,11 +28,11 @@ module PoolParty
         end
         
         has_directory "/var/run/haproxy"
-        has_package "apache2"
-        has_service "apache2"
+        # has_package "apache2"
+        # has_service "apache2"
         
         has_package "haproxy" do
-          stops get_service("apache2"), :immediately
+          # stops get_service("apache2"), :immediately
           # starts get_service("apache2")
         end
 
@@ -49,8 +49,8 @@ module PoolParty
         # Service is required
         has_service("haproxy") do
           action [:start, :enable]
-          stops get_service("apache2"), :immediately
-          starts get_service("apache2")
+          # stops get_service("apache2"), :immediately
+          # starts get_service("apache2")
         end
         
       end

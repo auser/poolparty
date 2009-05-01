@@ -18,9 +18,17 @@ module PoolParty
     end
     
     # Enable a service package
-    def enable(service);dsl_options[service] = :enabled;end
+    def enable(*services)
+      services.each do |service|
+        dsl_options[service] = :enabled
+      end
+    end
     # Disable a service package
-    def disable(service);dsl_options[service] = :disabled;end
+    def disable(*services)
+      services.each do |service|
+        dsl_options[service] = :disabled
+      end
+    end
     
     # Check to see if the package has been enabled
     def enabled?(srv);dsl_options.has_key?(srv) && dsl_options[srv] == :enabled;end

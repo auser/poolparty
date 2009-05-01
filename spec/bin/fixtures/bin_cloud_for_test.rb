@@ -10,10 +10,4 @@ cloud :binary_testing_cloud do
     listen "8080"
     has_file :name => "/etc/apache2/apache2.conf"
   end
-  
-  case_of "hostname" do
-    when_is 'master' do            
-      has_package :name=>'haproxy'
-    end
-  end
 end

@@ -31,7 +31,6 @@ o.loaded_clouds.each do |cloud|
       when nil
         print_with_nice_printer("Starting live specing cloud #{name}")
         puts "TODO:  this isn't implented yet."
-        # hide_output {launch_and_configure_master!}
         print_with_nice_printer("Waiting for cloud to provision")
         
       end

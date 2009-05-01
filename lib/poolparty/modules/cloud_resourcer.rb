@@ -54,10 +54,6 @@ module PoolParty
         raise SpecException.new("Don't know how to handle instances cloud input #{arg}")
       end
     end
-    
-    def setup_dev
-      return true if keypair || master.nil?
-    end
         
     # Declare the remoter base
     # Check to make sure the available_bases is available, otherwise raise

@@ -29,6 +29,14 @@ The symlink resource sets a symlink
         super
       end
       
+      def present
+        :create
+      end
+      
+      def absent
+        :delete!
+      end
+      
     end
     
   end

@@ -76,7 +76,6 @@ class TestBaseClass < PoolParty::PoolPartyBaseClass
 end
 
 def setup
-  PoolParty::Messenger.stub!(:messenger_send!).and_return false  
 end
 
 def new_test_cloud(force_new=false)

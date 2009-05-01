@@ -13,7 +13,7 @@ o.loaded_clouds.each do |cld|
     puts "Your cloud is not running"
   else
     str =<<-EOE
-    Host #{cld.name}-master
+    Host #{cld.name}
       User        #{cld.user}
       Hostname    #{cld.remote_instances_list.first.ip}
       IdentityFile    #{cld.keypair}

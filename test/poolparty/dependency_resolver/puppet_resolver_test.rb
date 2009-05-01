@@ -72,12 +72,6 @@ class TestPuppetResolver < Test::Unit::TestCase
           has_file :name => "/etc/apache2/apache2.conf", :template => "#{::File.dirname(__FILE__)}/../../fixtures/test_template.erb", :friends => "bob"
           has_exec :command => "ls /etc/apache2"
         end
-
-        case_of "hostname" do
-          when_is 'master' do            
-            has_package :name=>'haproxy'
-          end
-        end
       end
       @properties = @cloud.to_properties_hash
 
@@ -91,10 +85,6 @@ class TestPuppetResolver < Test::Unit::TestCase
     end
     should "should include apache class" do
       @compiled.should =~ /class apache \{/
-    end
-    should "should include the case statement" do
-      @compiled.should =~ /case \$hostname \{/
-      @compiled.should =~ /master : \{/
     end
     should "should require the file to have the directory (written as file)" do
       @compiled.should =~ /require => File\[\"\/var\/www\"\]/

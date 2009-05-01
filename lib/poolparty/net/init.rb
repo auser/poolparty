@@ -1,5 +1,5 @@
 # Load the core net libraries.  These are neccessary for any of the remoter_bases to function.
-%w(remote_instance messenger remote_bases remoter_base).each do |file|
+%w(remote_instance remote_bases remoter_base).each do |file|
   require File.join(::File.dirname(__FILE__),file+'.rb')
 end
 

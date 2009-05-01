@@ -2,7 +2,7 @@ require "#{::File.dirname(__FILE__)}/../../test_helper"
 
 module PoolParty
   module Verifiers
-    class Ping < VerifierBase
+    class Ding < VerifierBase
       attr_accessor :port, :checked
       def initialize(port=80)
         @port = port
@@ -29,12 +29,12 @@ class TestVerification < Test::Unit::TestCase
     setup do
       @vc = TestVerificationClass.new do
         verify do
-          ping 80
+          ding 830
         end
       end
     end
     should "have a the ping verifier as a verifiers in the class" do
-      @vc.verifiers.first.class.should == PoolParty::Verifiers::Ping
+      @vc.verifiers.first.class.should == PoolParty::Verifiers::Ding
     end
     should "not explode when calling verify on the verifier" do
       @vc.verifiers.first.checked = true
