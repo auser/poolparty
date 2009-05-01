@@ -45,15 +45,15 @@
             <h2>Methods</h2>
             <h3>public class</h3>
             <ol>
-              <li><a href="#M000457">new</a></li>
+              <li><a href="#M000460">new</a></li>
             </ol>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000458">find_myself</a></li>
-              <li><a href="#M000460">pending?</a></li>
-              <li><a href="#M000459">running?</a></li>
-              <li><a href="#M000462">terminated?</a></li>
-              <li><a href="#M000461">terminating?</a></li>
+              <li><a href="#M000461">find_myself</a></li>
+              <li><a href="#M000463">pending?</a></li>
+              <li><a href="#M000462">running?</a></li>
+              <li><a href="#M000465">terminated?</a></li>
+              <li><a href="#M000464">terminating?</a></li>
             </ol>
           </div>
           <div id='context'>
@@ -89,8 +89,8 @@
             </div>
             <div id='methods'>
               <h2>Public class methods</h2>
-              <div class='public-class method' id='method-M000457'>
-                <a name='M000457'>      </a>
+              <div class='public-class method' id='method-M000460'>
+                <a name='M000460'>      </a>
                 <div class='synopsis'>
                   <span class='name'>new</span>
                   <span class='arguments'>(opts={}, prnt=Ec2.new)</span>
@@ -107,15 +107,15 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000457-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000460-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000457-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remoter_bases/ec2/ec2_remote_instance.rb, line 14</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">opts</span>={}, <span class="ruby-identifier">prnt</span>=<span class="ruby-constant">Ec2</span>.<span class="ruby-identifier">new</span>)&#x000A;        <span class="ruby-ivar">@uniquely_identifiable_by</span> = [<span class="ruby-identifier">:ip</span>, <span class="ruby-identifier">:name</span>, <span class="ruby-identifier">:dns_name</span>, <span class="ruby-identifier">:instance_id</span>]&#x000A;        <span class="ruby-ivar">@original_options</span> = <span class="ruby-identifier">opts</span>&#x000A;        <span class="ruby-ivar">@my_cloud</span> = <span class="ruby-identifier">prnt</span>&#x000A;        <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">opts</span>, <span class="ruby-identifier">prnt</span>)&#x000A;        <span class="ruby-identifier">find_myself</span>(<span class="ruby-ivar">@uniquely_identifiable_by</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">keys</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">prnt</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:describe_instances</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000460-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remoter_bases/ec2/ec2_remote_instance.rb, line 14</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">opts</span>={}, <span class="ruby-identifier">prnt</span>=<span class="ruby-constant">Ec2</span>.<span class="ruby-identifier">new</span>)&#x000A;        <span class="ruby-ivar">@uniquely_identifiable_by</span> = [<span class="ruby-identifier">:ip</span>, <span class="ruby-identifier">:name</span>, <span class="ruby-identifier">:dns_name</span>, <span class="ruby-identifier">:instance_id</span>]&#x000A;        <span class="ruby-ivar">@original_options</span> = <span class="ruby-identifier">opts</span>&#x000A;        <span class="ruby-ivar">@my_cloud</span> = <span class="ruby-identifier">prnt</span>&#x000A;        <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">opts</span>, <span class="ruby-identifier">prnt</span>)&#x000A;        <span class="ruby-identifier">find_myself</span>(<span class="ruby-ivar">@uniquely_identifiable_by</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">keys</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">prnt</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:describe_instances</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000458'>
-                <a name='M000458'>      </a>
+              <div class='public-instance method' id='method-M000461'>
+                <a name='M000461'>      </a>
                 <div class='synopsis'>
                   <span class='name'>find_myself</span>
                   <span class='arguments'>(unique_identifiers = @original_options.keys)</span>
@@ -127,14 +127,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000458-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000461-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000458-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remoter_bases/ec2/ec2_remote_instance.rb, line 23</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">find_myself</span>(<span class="ruby-identifier">unique_identifiers</span> = <span class="ruby-ivar">@original_options</span>.<span class="ruby-identifier">keys</span>)&#x000A;        <span class="ruby-identifier">description_hash</span> = <span class="ruby-ivar">@my_cloud</span>.<span class="ruby-identifier">describe_instances</span>.<span class="ruby-identifier">detect</span> <span class="ruby-keyword kw">do</span><span class="ruby-operator">|</span><span class="ruby-identifier">node</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-identifier">unique_identifiers</span>.<span class="ruby-identifier">detect</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">identifier_key</span><span class="ruby-operator">|</span> <span class="ruby-identifier">node</span>[<span class="ruby-identifier">identifier_key</span>] <span class="ruby-operator">==</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">identifier_key</span>]&#x000A;            }&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">nil</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">description_hash</span>.<span class="ruby-identifier">blank?</span>&#x000A;        <span class="ruby-ivar">@found_at</span> = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>&#x000A;        <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">set_vars_from_options</span>(<span class="ruby-identifier">description_hash</span>)&#x000A;        <span class="ruby-keyword kw">self</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000461-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remoter_bases/ec2/ec2_remote_instance.rb, line 23</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">find_myself</span>(<span class="ruby-identifier">unique_identifiers</span> = <span class="ruby-ivar">@original_options</span>.<span class="ruby-identifier">keys</span>)&#x000A;        <span class="ruby-identifier">description_hash</span> = <span class="ruby-ivar">@my_cloud</span>.<span class="ruby-identifier">describe_instances</span>.<span class="ruby-identifier">detect</span> <span class="ruby-keyword kw">do</span><span class="ruby-operator">|</span><span class="ruby-identifier">node</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-identifier">unique_identifiers</span>.<span class="ruby-identifier">detect</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">identifier_key</span><span class="ruby-operator">|</span> <span class="ruby-identifier">node</span>[<span class="ruby-identifier">identifier_key</span>] <span class="ruby-operator">==</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">identifier_key</span>]&#x000A;            }&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">nil</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">description_hash</span>.<span class="ruby-identifier">blank?</span>&#x000A;        <span class="ruby-ivar">@found_at</span> = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>&#x000A;        <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">set_vars_from_options</span>(<span class="ruby-identifier">description_hash</span>)&#x000A;        <span class="ruby-keyword kw">self</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000460'>
-                <a name='M000460'>      </a>
+              <div class='public-instance method' id='method-M000463'>
+                <a name='M000463'>      </a>
                 <div class='synopsis'>
                   <span class='name'>pending?</span>
                   <span class='arguments'>()</span>
@@ -145,14 +145,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000460-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000463-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000460-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remoter_bases/ec2/ec2_remote_instance.rb, line 39</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">pending?</span>&#x000A;        <span class="ruby-operator">!</span>(<span class="ruby-identifier">status</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/pending/</span>).<span class="ruby-identifier">nil?</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000463-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remoter_bases/ec2/ec2_remote_instance.rb, line 39</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">pending?</span>&#x000A;        <span class="ruby-operator">!</span>(<span class="ruby-identifier">status</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/pending/</span>).<span class="ruby-identifier">nil?</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000459'>
-                <a name='M000459'>      </a>
+              <div class='public-instance method' id='method-M000462'>
+                <a name='M000462'>      </a>
                 <div class='synopsis'>
                   <span class='name'>running?</span>
                   <span class='arguments'>()</span>
@@ -163,14 +163,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000459-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000462-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000459-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remoter_bases/ec2/ec2_remote_instance.rb, line 35</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">running?</span>&#x000A;        <span class="ruby-operator">!</span>(<span class="ruby-identifier">status</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/running/</span>).<span class="ruby-identifier">nil?</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000462-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remoter_bases/ec2/ec2_remote_instance.rb, line 35</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">running?</span>&#x000A;        <span class="ruby-operator">!</span>(<span class="ruby-identifier">status</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/running/</span>).<span class="ruby-identifier">nil?</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000462'>
-                <a name='M000462'>      </a>
+              <div class='public-instance method' id='method-M000465'>
+                <a name='M000465'>      </a>
                 <div class='synopsis'>
                   <span class='name'>terminated?</span>
                   <span class='arguments'>()</span>
@@ -181,14 +181,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000462-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000465-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000462-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remoter_bases/ec2/ec2_remote_instance.rb, line 47</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">terminated?</span>&#x000A;        <span class="ruby-operator">!</span>(<span class="ruby-identifier">status</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/terminated/</span>).<span class="ruby-identifier">nil?</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000465-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remoter_bases/ec2/ec2_remote_instance.rb, line 47</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">terminated?</span>&#x000A;        <span class="ruby-operator">!</span>(<span class="ruby-identifier">status</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/terminated/</span>).<span class="ruby-identifier">nil?</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000461'>
-                <a name='M000461'>      </a>
+              <div class='public-instance method' id='method-M000464'>
+                <a name='M000464'>      </a>
                 <div class='synopsis'>
                   <span class='name'>terminating?</span>
                   <span class='arguments'>()</span>
@@ -199,10 +199,10 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000461-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000464-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000461-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remoter_bases/ec2/ec2_remote_instance.rb, line 43</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">terminating?</span>&#x000A;        <span class="ruby-operator">!</span>(<span class="ruby-identifier">status</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/shutting/</span>).<span class="ruby-identifier">nil?</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000464-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remoter_bases/ec2/ec2_remote_instance.rb, line 43</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">terminating?</span>&#x000A;        <span class="ruby-operator">!</span>(<span class="ruby-identifier">status</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/shutting/</span>).<span class="ruby-identifier">nil?</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>
