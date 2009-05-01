@@ -1,0 +1,30 @@
+#!/usr/bin/env ruby
+$:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
+require "poolparty"
+
+o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
+  opts.on('-n cloudname', '--name name', 'Start cloud by this name')    { |c| optioner.cloudname c }
+  opts.on('-i num', '--num i', 'Instance number')    { |i| optioner.inst_num i.to_i }
+end
+
+o.loaded_clouds.each do |cld|
+
+  begin
+    if cld.verifiers.size > 0
+      cld.passing?
+      cld.vputs "Cloud passed verification"
+    else
+      raise "Your cloud doesn't have any verifiers!"
+      exit 2
+    end
+  rescue Exception => e
+     cld.vputs <<-EOM
+
+      Verification failed: #{e}"
+        Please check your clouds.rb for any errors
+
+      EOM
+  end
+
+end
+
