@@ -18,10 +18,12 @@ provider (apt, yum, etc)
 
 == Options
 
-* <tt>name</tt> The package name. The default provider for your OS will be picked by the <acronym title='The dependency resolver is the describer for the cloud. The default one for PoolParty is puppet'>dependency resolver</acronym>
+* <tt>name</tt> The package name. The default provider for your OS will be picked by the dependency resolver
 
 == Examples
+
   has_package(:name => 'apache2')
+
 =end
     class Package < Resource
 

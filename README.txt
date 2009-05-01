@@ -13,13 +13,6 @@ pool :cloud do
  end
 end
 
-== FEATURES/PROBLEMS:
-
-* Written in Ruby and Erlang
-* Written from the ground up to be extensible with plugins
-* Easy git-style commands to communicate with your clouds
-* Much much more
-
 == SYNOPSIS:
 
 PoolParty is written with the intention of being as application-agnostic as possible. It installs only the basic 
@@ -27,6 +20,16 @@ required software to glue the cloud together on the instances as listed below.
 
 PoolParty is easily configuration. In fact, it makes little assumptions about your development environment and allows 
 several options on how to begin configuring the cloud.
+
+== WHAT NEXT:
+* PoolParty::Resources - learn how to use resources in your <tt>clouds.rb</tt>
+
+== FEATURES/PROBLEMS:
+
+* Written in Ruby and Erlang
+* Written from the ground up to be extensible with plugins
+* Easy git-style commands to communicate with your clouds
+* Much much more
 
 == REQUIREMENTS:
 

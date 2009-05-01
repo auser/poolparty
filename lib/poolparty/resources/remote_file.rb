@@ -23,7 +23,8 @@ The remotefile resource is used to describe a file that is hosted on the master 
 * <tt>source</tt> Used to describe a file that is hosted on the master instance.
 * <tt>template</tt> The file contents are described with the template. The location given must be readable
   
-    To write a file to the template directory, use:
+To write a file to the template directory, use:
+
     copy_template_to_storage_directory(filepath)
 
 == Example
