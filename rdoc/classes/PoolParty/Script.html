@@ -45,11 +45,11 @@
             <h2>Methods</h2>
             <h3>public class</h3>
             <ol>
-              <li><a href="#M000507">for_save_string</a></li>
-              <li><a href="#M000505">inflate</a></li>
-              <li><a href="#M000504">inflate_file</a></li>
-              <li><a href="#M000508">save!</a></li>
-              <li><a href="#M000506">to_ruby</a></li>
+              <li><a href="#M000484">for_save_string</a></li>
+              <li><a href="#M000482">inflate</a></li>
+              <li><a href="#M000481">inflate_file</a></li>
+              <li><a href="#M000485">save!</a></li>
+              <li><a href="#M000483">to_ruby</a></li>
             </ol>
           </div>
           <div id='context'>
@@ -63,69 +63,69 @@
           <div id='section'>
             <div id='methods'>
               <h2>Public class methods</h2>
-              <div class='public-class method' id='method-M000507'>
-                <a name='M000507'>      </a>
+              <div class='public-class method' id='method-M000484'>
+                <a name='M000484'>      </a>
                 <div class='synopsis'>
                   <span class='name'>for_save_string</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000507-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000484-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000507-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/script.rb, line 31</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">for_save_string</span>&#x000A;      <span class="ruby-identifier">out</span> = []&#x000A;      <span class="ruby-identifier">pools</span>.<span class="ruby-identifier">collect</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">n</span>,<span class="ruby-identifier">pl</span><span class="ruby-operator">|</span> <span class="ruby-identifier">pl</span>}.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">pl</span><span class="ruby-operator">|</span>&#x000A;        <span class="ruby-identifier">out</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;pool :#{pl.name} do&quot;</span>&#x000A;        <span class="ruby-identifier">clouds</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">n</span>,<span class="ruby-identifier">cl</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-comment cmt"># grossy-gross</span>&#x000A;          <span class="ruby-identifier">minimum_runnable_options_string</span> = <span class="ruby-identifier">cl</span>.<span class="ruby-identifier">minimum_runnable_options</span>.<span class="ruby-identifier">collect</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">o</span><span class="ruby-operator">|</span>&#x000A;            <span class="ruby-node">&quot;#{o} #{cl.send(o).respec_string}&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">cl</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">o</span>).<span class="ruby-identifier">nil?</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;          <span class="ruby-identifier">out</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;cloud :\#{cl.name} do\n\#{minimum_runnable_options_string.join(\&quot;\\n\&quot;)}\nend\n&quot;</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-identifier">out</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;end&quot;</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-identifier">out</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot;\n&quot;</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000484-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/script.rb, line 31</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">for_save_string</span>&#x000A;      <span class="ruby-identifier">out</span> = []&#x000A;      <span class="ruby-identifier">pools</span>.<span class="ruby-identifier">collect</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">n</span>,<span class="ruby-identifier">pl</span><span class="ruby-operator">|</span> <span class="ruby-identifier">pl</span>}.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">pl</span><span class="ruby-operator">|</span>&#x000A;        <span class="ruby-identifier">out</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;pool :#{pl.name} do&quot;</span>&#x000A;        <span class="ruby-identifier">clouds</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">n</span>,<span class="ruby-identifier">cl</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-comment cmt"># grossy-gross</span>&#x000A;          <span class="ruby-identifier">minimum_runnable_options_string</span> = <span class="ruby-identifier">cl</span>.<span class="ruby-identifier">minimum_runnable_options</span>.<span class="ruby-identifier">collect</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">o</span><span class="ruby-operator">|</span>&#x000A;            <span class="ruby-node">&quot;#{o} #{cl.send(o).respec_string}&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">cl</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">o</span>).<span class="ruby-identifier">nil?</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;          <span class="ruby-identifier">out</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;cloud :\#{cl.name} do\n\#{minimum_runnable_options_string.join(\&quot;\\n\&quot;)}\nend\n&quot;</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-identifier">out</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;end&quot;</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-identifier">out</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot;\n&quot;</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-class method' id='method-M000505'>
-                <a name='M000505'>      </a>
+              <div class='public-class method' id='method-M000482'>
+                <a name='M000482'>      </a>
                 <div class='synopsis'>
                   <span class='name'>inflate</span>
                   <span class='arguments'>(script, file=&quot;__SCRIPT__&quot;)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000505-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000482-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000505-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/script.rb, line 11</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">inflate</span>(<span class="ruby-identifier">script</span>, <span class="ruby-identifier">file</span>=<span class="ruby-value str">&quot;__SCRIPT__&quot;</span>)&#x000A;      <span class="ruby-identifier">module_eval</span> <span class="ruby-identifier">script</span>, <span class="ruby-identifier">file</span>&#x000A;      <span class="ruby-comment cmt"># a = new</span>&#x000A;      <span class="ruby-comment cmt"># a.instance_eval &lt;&lt;-EOM</span>&#x000A;      <span class="ruby-comment cmt">#   def run_child(pa)</span>&#x000A;      <span class="ruby-comment cmt">#     context_stack.push pa</span>&#x000A;      <span class="ruby-comment cmt">#     #{str}</span>&#x000A;      <span class="ruby-comment cmt">#     context_stack.pop</span>&#x000A;      <span class="ruby-comment cmt">#     remove_method(:run_child)</span>&#x000A;      <span class="ruby-comment cmt">#     self</span>&#x000A;      <span class="ruby-comment cmt">#   end</span>&#x000A;      <span class="ruby-comment cmt"># EOM</span>&#x000A;      <span class="ruby-comment cmt"># a.run_child(self)</span>&#x000A;      <span class="ruby-comment cmt"># a</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000482-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/script.rb, line 11</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">inflate</span>(<span class="ruby-identifier">script</span>, <span class="ruby-identifier">file</span>=<span class="ruby-value str">&quot;__SCRIPT__&quot;</span>)&#x000A;      <span class="ruby-identifier">module_eval</span> <span class="ruby-identifier">script</span>, <span class="ruby-identifier">file</span>&#x000A;      <span class="ruby-comment cmt"># a = new</span>&#x000A;      <span class="ruby-comment cmt"># a.instance_eval &lt;&lt;-EOM</span>&#x000A;      <span class="ruby-comment cmt">#   def run_child(pa)</span>&#x000A;      <span class="ruby-comment cmt">#     context_stack.push pa</span>&#x000A;      <span class="ruby-comment cmt">#     #{str}</span>&#x000A;      <span class="ruby-comment cmt">#     context_stack.pop</span>&#x000A;      <span class="ruby-comment cmt">#     remove_method(:run_child)</span>&#x000A;      <span class="ruby-comment cmt">#     self</span>&#x000A;      <span class="ruby-comment cmt">#   end</span>&#x000A;      <span class="ruby-comment cmt"># EOM</span>&#x000A;      <span class="ruby-comment cmt"># a.run_child(self)</span>&#x000A;      <span class="ruby-comment cmt"># a</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-class method' id='method-M000504'>
-                <a name='M000504'>      </a>
+              <div class='public-class method' id='method-M000481'>
+                <a name='M000481'>      </a>
                 <div class='synopsis'>
                   <span class='name'>inflate_file</span>
                   <span class='arguments'>(file)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000504-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000481-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000504-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/script.rb, line 7</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">inflate_file</span>(<span class="ruby-identifier">file</span>)&#x000A;      <span class="ruby-identifier">inflate</span> <span class="ruby-identifier">open</span>(<span class="ruby-identifier">file</span>).<span class="ruby-identifier">read</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">file</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000481-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/script.rb, line 7</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">inflate_file</span>(<span class="ruby-identifier">file</span>)&#x000A;      <span class="ruby-identifier">inflate</span> <span class="ruby-identifier">open</span>(<span class="ruby-identifier">file</span>).<span class="ruby-identifier">read</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">file</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-class method' id='method-M000508'>
-                <a name='M000508'>      </a>
+              <div class='public-class method' id='method-M000485'>
+                <a name='M000485'>      </a>
                 <div class='synopsis'>
                   <span class='name'>save!</span>
                   <span class='arguments'>(to_file=true)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000508-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000485-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000508-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/script.rb, line 52</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">save!</span>(<span class="ruby-identifier">to_file</span>=<span class="ruby-keyword kw">true</span>)&#x000A;      <span class="ruby-identifier">write_to_file_in_storage_directory</span>(<span class="ruby-constant">Default</span>.<span class="ruby-identifier">default_specfile_name</span>, <span class="ruby-identifier">for_save_string</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">to_file</span>&#x000A;      <span class="ruby-identifier">for_save_string</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000485-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/script.rb, line 52</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">save!</span>(<span class="ruby-identifier">to_file</span>=<span class="ruby-keyword kw">true</span>)&#x000A;      <span class="ruby-identifier">write_to_file_in_storage_directory</span>(<span class="ruby-constant">Default</span>.<span class="ruby-identifier">default_specfile_name</span>, <span class="ruby-identifier">for_save_string</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">to_file</span>&#x000A;      <span class="ruby-identifier">for_save_string</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-class method' id='method-M000506'>
-                <a name='M000506'>      </a>
+              <div class='public-class method' id='method-M000483'>
+                <a name='M000483'>      </a>
                 <div class='synopsis'>
                   <span class='name'>to_ruby</span>
                   <span class='arguments'>(opts={},&amp;blk)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000506-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000483-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000506-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/script.rb, line 27</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">to_ruby</span>(<span class="ruby-identifier">opts</span>={},<span class="ruby-operator">&amp;</span><span class="ruby-identifier">blk</span>)&#x000A;      <span class="ruby-identifier">blk</span>.<span class="ruby-identifier">to_ruby</span>(<span class="ruby-identifier">opts</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000483-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/script.rb, line 27</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">to_ruby</span>(<span class="ruby-identifier">opts</span>={},<span class="ruby-operator">&amp;</span><span class="ruby-identifier">blk</span>)&#x000A;      <span class="ruby-identifier">blk</span>.<span class="ruby-identifier">to_ruby</span>(<span class="ruby-identifier">opts</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

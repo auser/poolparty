@@ -46,72 +46,72 @@
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000747">as</a></li>
-              <li><a href="#M000745">callstack</a></li>
-              <li><a href="#M000749">capture_stdout</a></li>
-              <li><a href="#M000744">get_latest_caller</a></li>
-              <li><a href="#M000750">hide_output</a></li>
-              <li><a href="#M000746">wait</a></li>
-              <li><a href="#M000748">with_warnings_suppressed</a></li>
+              <li><a href="#M000724">as</a></li>
+              <li><a href="#M000722">callstack</a></li>
+              <li><a href="#M000726">capture_stdout</a></li>
+              <li><a href="#M000721">get_latest_caller</a></li>
+              <li><a href="#M000727">hide_output</a></li>
+              <li><a href="#M000723">wait</a></li>
+              <li><a href="#M000725">with_warnings_suppressed</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000747'>
-                <a name='M000747'>      </a>
+              <div class='public-instance method' id='method-M000724'>
+                <a name='M000724'>      </a>
                 <div class='synopsis'>
                   <span class='name'>as</span>
                   <span class='arguments'>(klass_or_obj, &amp;block)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000747-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000724-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000747-source'><span class="ruby-comment cmt"># File lib/poolparty/core/kernel.rb, line 27</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">as</span>(<span class="ruby-identifier">klass_or_obj</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;    <span class="ruby-identifier">block</span>.<span class="ruby-identifier">in_context</span>(<span class="ruby-identifier">klass_or_obj</span>).<span class="ruby-identifier">call</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000724-source'><span class="ruby-comment cmt"># File lib/poolparty/core/kernel.rb, line 27</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">as</span>(<span class="ruby-identifier">klass_or_obj</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;    <span class="ruby-identifier">block</span>.<span class="ruby-identifier">in_context</span>(<span class="ruby-identifier">klass_or_obj</span>).<span class="ruby-identifier">call</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000745'>
-                <a name='M000745'>      </a>
+              <div class='public-instance method' id='method-M000722'>
+                <a name='M000722'>      </a>
                 <div class='synopsis'>
                   <span class='name'>callstack</span>
                   <span class='arguments'>( level = 1 )</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000745-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000722-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000745-source'><span class="ruby-comment cmt"># File lib/poolparty/core/kernel.rb, line 11</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">callstack</span>( <span class="ruby-identifier">level</span> = <span class="ruby-value">1</span> )&#x000A;    <span class="ruby-identifier">call_str_array</span> = <span class="ruby-identifier">caller</span>(<span class="ruby-identifier">level</span>)&#x000A;    <span class="ruby-identifier">stack</span> = []&#x000A;    <span class="ruby-identifier">call_str_array</span>.<span class="ruby-identifier">each</span>{ <span class="ruby-operator">|</span><span class="ruby-identifier">call_str</span><span class="ruby-operator">|</span>&#x000A;      <span class="ruby-identifier">file</span>, <span class="ruby-identifier">lineno</span>, <span class="ruby-identifier">method</span> = <span class="ruby-identifier">call_str</span>.<span class="ruby-identifier">split</span>(<span class="ruby-value str">':'</span>)&#x000A;      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">method</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/in `(.*)'/</span> <span class="ruby-keyword kw">then</span>&#x000A;        <span class="ruby-identifier">method</span> = <span class="ruby-identifier">$1</span>.<span class="ruby-identifier">intern</span>()&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-identifier">stack</span> <span class="ruby-operator">&lt;&lt;</span> [<span class="ruby-identifier">file</span>, <span class="ruby-identifier">lineno</span>.<span class="ruby-identifier">to_i</span>, <span class="ruby-identifier">method</span>]&#x000A;    }&#x000A;    <span class="ruby-identifier">stack</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000722-source'><span class="ruby-comment cmt"># File lib/poolparty/core/kernel.rb, line 11</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">callstack</span>( <span class="ruby-identifier">level</span> = <span class="ruby-value">1</span> )&#x000A;    <span class="ruby-identifier">call_str_array</span> = <span class="ruby-identifier">caller</span>(<span class="ruby-identifier">level</span>)&#x000A;    <span class="ruby-identifier">stack</span> = []&#x000A;    <span class="ruby-identifier">call_str_array</span>.<span class="ruby-identifier">each</span>{ <span class="ruby-operator">|</span><span class="ruby-identifier">call_str</span><span class="ruby-operator">|</span>&#x000A;      <span class="ruby-identifier">file</span>, <span class="ruby-identifier">lineno</span>, <span class="ruby-identifier">method</span> = <span class="ruby-identifier">call_str</span>.<span class="ruby-identifier">split</span>(<span class="ruby-value str">':'</span>)&#x000A;      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">method</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/in `(.*)'/</span> <span class="ruby-keyword kw">then</span>&#x000A;        <span class="ruby-identifier">method</span> = <span class="ruby-identifier">$1</span>.<span class="ruby-identifier">intern</span>()&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-identifier">stack</span> <span class="ruby-operator">&lt;&lt;</span> [<span class="ruby-identifier">file</span>, <span class="ruby-identifier">lineno</span>.<span class="ruby-identifier">to_i</span>, <span class="ruby-identifier">method</span>]&#x000A;    }&#x000A;    <span class="ruby-identifier">stack</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000749'>
-                <a name='M000749'>      </a>
+              <div class='public-instance method' id='method-M000726'>
+                <a name='M000726'>      </a>
                 <div class='synopsis'>
                   <span class='name'>capture_stdout</span>
                   <span class='arguments'>(&amp;block)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000749-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000726-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000749-source'><span class="ruby-comment cmt"># File lib/poolparty/core/kernel.rb, line 38</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">capture_stdout</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;     <span class="ruby-identifier">old_stdout</span> = <span class="ruby-identifier">$stdout</span>&#x000A;     <span class="ruby-identifier">out</span> = <span class="ruby-constant">StringIO</span>.<span class="ruby-identifier">new</span>&#x000A;     <span class="ruby-identifier">$stdout</span> = <span class="ruby-identifier">out</span>&#x000A;     <span class="ruby-keyword kw">begin</span>&#x000A;        <span class="ruby-identifier">block</span>.<span class="ruby-identifier">call</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">block</span>&#x000A;     <span class="ruby-keyword kw">ensure</span>&#x000A;        <span class="ruby-identifier">$stdout</span> = <span class="ruby-identifier">old_stdout</span>&#x000A;     <span class="ruby-keyword kw">end</span>&#x000A;     <span class="ruby-identifier">out</span>.<span class="ruby-identifier">string</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000726-source'><span class="ruby-comment cmt"># File lib/poolparty/core/kernel.rb, line 38</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">capture_stdout</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;     <span class="ruby-identifier">old_stdout</span> = <span class="ruby-identifier">$stdout</span>&#x000A;     <span class="ruby-identifier">out</span> = <span class="ruby-constant">StringIO</span>.<span class="ruby-identifier">new</span>&#x000A;     <span class="ruby-identifier">$stdout</span> = <span class="ruby-identifier">out</span>&#x000A;     <span class="ruby-keyword kw">begin</span>&#x000A;        <span class="ruby-identifier">block</span>.<span class="ruby-identifier">call</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">block</span>&#x000A;     <span class="ruby-keyword kw">ensure</span>&#x000A;        <span class="ruby-identifier">$stdout</span> = <span class="ruby-identifier">old_stdout</span>&#x000A;     <span class="ruby-keyword kw">end</span>&#x000A;     <span class="ruby-identifier">out</span>.<span class="ruby-identifier">string</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000744'>
-                <a name='M000744'>      </a>
+              <div class='public-instance method' id='method-M000721'>
+                <a name='M000721'>      </a>
                 <div class='synopsis'>
                   <span class='name'>get_latest_caller</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000744-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000721-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000744-source'><span class="ruby-comment cmt"># File lib/poolparty/core/kernel.rb, line 6</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_latest_caller</span>&#x000A;    <span class="ruby-identifier">returning</span> <span class="ruby-constant">Array</span>.<span class="ruby-identifier">new</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">arr</span><span class="ruby-operator">|</span>&#x000A;      <span class="ruby-identifier">callstack</span>.<span class="ruby-identifier">size</span>.<span class="ruby-identifier">times</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">i</span><span class="ruby-operator">|</span> <span class="ruby-identifier">arr</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">callstack</span>[<span class="ruby-identifier">i</span>][<span class="ruby-value">0</span>] <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">callstack</span>[<span class="ruby-identifier">i</span>][<span class="ruby-value">0</span>] <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/lib\/poolparty/</span> }&#x000A;    <span class="ruby-keyword kw">end</span>.<span class="ruby-identifier">first</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000721-source'><span class="ruby-comment cmt"># File lib/poolparty/core/kernel.rb, line 6</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_latest_caller</span>&#x000A;    <span class="ruby-identifier">returning</span> <span class="ruby-constant">Array</span>.<span class="ruby-identifier">new</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">arr</span><span class="ruby-operator">|</span>&#x000A;      <span class="ruby-identifier">callstack</span>.<span class="ruby-identifier">size</span>.<span class="ruby-identifier">times</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">i</span><span class="ruby-operator">|</span> <span class="ruby-identifier">arr</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">callstack</span>[<span class="ruby-identifier">i</span>][<span class="ruby-value">0</span>] <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">callstack</span>[<span class="ruby-identifier">i</span>][<span class="ruby-value">0</span>] <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/lib\/poolparty/</span> }&#x000A;    <span class="ruby-keyword kw">end</span>.<span class="ruby-identifier">first</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000750'>
-                <a name='M000750'>      </a>
+              <div class='public-instance method' id='method-M000727'>
+                <a name='M000727'>      </a>
                 <div class='synopsis'>
                   <span class='name'>hide_output</span>
                   <span class='arguments'>() {|if block_given?| ...}</span>
@@ -122,14 +122,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000750-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000727-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000750-source'><span class="ruby-comment cmt"># File lib/poolparty/core/kernel.rb, line 51</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">hide_output</span>&#x000A;    <span class="ruby-keyword kw">begin</span>&#x000A;      <span class="ruby-identifier">old_stdout</span> = <span class="ruby-constant">STDOUT</span>.<span class="ruby-identifier">dup</span>&#x000A;      <span class="ruby-identifier">old_stderr</span> = <span class="ruby-constant">STDERR</span>.<span class="ruby-identifier">dup</span>&#x000A;      <span class="ruby-constant">STDOUT</span>.<span class="ruby-identifier">reopen</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>((<span class="ruby-constant">PLATFORM</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/mswin/</span> <span class="ruby-operator">?</span> <span class="ruby-value str">&quot;NUL&quot;</span> <span class="ruby-operator">:</span> <span class="ruby-value str">&quot;/dev/null&quot;</span>), <span class="ruby-value str">'w'</span>))&#x000A;      <span class="ruby-constant">STDERR</span>.<span class="ruby-identifier">reopen</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>((<span class="ruby-constant">PLATFORM</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/mswin/</span> <span class="ruby-operator">?</span> <span class="ruby-value str">&quot;NUL&quot;</span> <span class="ruby-operator">:</span> <span class="ruby-value str">&quot;/dev/null&quot;</span>), <span class="ruby-value str">'w'</span>))&#x000A;      <span class="ruby-keyword kw">yield</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">block_given?</span>&#x000A;    <span class="ruby-keyword kw">ensure</span>&#x000A;      <span class="ruby-constant">STDOUT</span>.<span class="ruby-identifier">flush</span>&#x000A;      <span class="ruby-constant">STDOUT</span>.<span class="ruby-identifier">reopen</span>(<span class="ruby-identifier">old_stdout</span>)&#x000A;      <span class="ruby-constant">STDERR</span>.<span class="ruby-identifier">flush</span>&#x000A;      <span class="ruby-constant">STDERR</span>.<span class="ruby-identifier">reopen</span>(<span class="ruby-identifier">old_stderr</span>)&#x000A;    <span class="ruby-keyword kw">end</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000727-source'><span class="ruby-comment cmt"># File lib/poolparty/core/kernel.rb, line 51</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">hide_output</span>&#x000A;    <span class="ruby-keyword kw">begin</span>&#x000A;      <span class="ruby-identifier">old_stdout</span> = <span class="ruby-constant">STDOUT</span>.<span class="ruby-identifier">dup</span>&#x000A;      <span class="ruby-identifier">old_stderr</span> = <span class="ruby-constant">STDERR</span>.<span class="ruby-identifier">dup</span>&#x000A;      <span class="ruby-constant">STDOUT</span>.<span class="ruby-identifier">reopen</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>((<span class="ruby-constant">PLATFORM</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/mswin/</span> <span class="ruby-operator">?</span> <span class="ruby-value str">&quot;NUL&quot;</span> <span class="ruby-operator">:</span> <span class="ruby-value str">&quot;/dev/null&quot;</span>), <span class="ruby-value str">'w'</span>))&#x000A;      <span class="ruby-constant">STDERR</span>.<span class="ruby-identifier">reopen</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>((<span class="ruby-constant">PLATFORM</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/mswin/</span> <span class="ruby-operator">?</span> <span class="ruby-value str">&quot;NUL&quot;</span> <span class="ruby-operator">:</span> <span class="ruby-value str">&quot;/dev/null&quot;</span>), <span class="ruby-value str">'w'</span>))&#x000A;      <span class="ruby-keyword kw">yield</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">block_given?</span>&#x000A;    <span class="ruby-keyword kw">ensure</span>&#x000A;      <span class="ruby-constant">STDOUT</span>.<span class="ruby-identifier">flush</span>&#x000A;      <span class="ruby-constant">STDOUT</span>.<span class="ruby-identifier">reopen</span>(<span class="ruby-identifier">old_stdout</span>)&#x000A;      <span class="ruby-constant">STDERR</span>.<span class="ruby-identifier">flush</span>&#x000A;      <span class="ruby-constant">STDERR</span>.<span class="ruby-identifier">reopen</span>(<span class="ruby-identifier">old_stderr</span>)&#x000A;    <span class="ruby-keyword kw">end</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000746'>
-                <a name='M000746'>      </a>
+              <div class='public-instance method' id='method-M000723'>
+                <a name='M000723'>      </a>
                 <div class='synopsis'>
                   <span class='name'>wait</span>
                   <span class='arguments'>(time=5)</span>
@@ -140,23 +140,23 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000746-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000723-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000746-source'><span class="ruby-comment cmt"># File lib/poolparty/core/kernel.rb, line 24</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">wait</span>(<span class="ruby-identifier">time</span>=<span class="ruby-value">5</span>)&#x000A;    <span class="ruby-identifier">sleep</span> <span class="ruby-identifier">time</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">String</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">eval</span>(<span class="ruby-identifier">time</span>) <span class="ruby-operator">:</span> <span class="ruby-identifier">time</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000723-source'><span class="ruby-comment cmt"># File lib/poolparty/core/kernel.rb, line 24</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">wait</span>(<span class="ruby-identifier">time</span>=<span class="ruby-value">5</span>)&#x000A;    <span class="ruby-identifier">sleep</span> <span class="ruby-identifier">time</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">String</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">eval</span>(<span class="ruby-identifier">time</span>) <span class="ruby-operator">:</span> <span class="ruby-identifier">time</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000748'>
-                <a name='M000748'>      </a>
+              <div class='public-instance method' id='method-M000725'>
+                <a name='M000725'>      </a>
                 <div class='synopsis'>
                   <span class='name'>with_warnings_suppressed</span>
                   <span class='arguments'>() {|| ...}</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000748-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000725-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000748-source'><span class="ruby-comment cmt"># File lib/poolparty/core/kernel.rb, line 30</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">with_warnings_suppressed</span>&#x000A;    <span class="ruby-identifier">saved_verbosity</span> = <span class="ruby-identifier">$-v</span>&#x000A;    <span class="ruby-identifier">$-v</span> = <span class="ruby-keyword kw">nil</span>&#x000A;    <span class="ruby-keyword kw">yield</span>&#x000A;  <span class="ruby-keyword kw">ensure</span>&#x000A;    <span class="ruby-identifier">$-v</span> = <span class="ruby-identifier">saved_verbosity</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000725-source'><span class="ruby-comment cmt"># File lib/poolparty/core/kernel.rb, line 30</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">with_warnings_suppressed</span>&#x000A;    <span class="ruby-identifier">saved_verbosity</span> = <span class="ruby-identifier">$-v</span>&#x000A;    <span class="ruby-identifier">$-v</span> = <span class="ruby-keyword kw">nil</span>&#x000A;    <span class="ruby-keyword kw">yield</span>&#x000A;  <span class="ruby-keyword kw">ensure</span>&#x000A;    <span class="ruby-identifier">$-v</span> = <span class="ruby-identifier">saved_verbosity</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>
