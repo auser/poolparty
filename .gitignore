@@ -20,3 +20,4 @@ vendor/dependencies/cache
 vendor/dependencies/packages
 .autosession.vim
 tags
+.session
