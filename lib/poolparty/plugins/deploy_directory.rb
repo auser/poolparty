@@ -1,4 +1,5 @@
 module PoolParty
+
 =begin  rdoc    
 == Deploy Directory
 
@@ -14,6 +15,7 @@ The deploy directory will copy the source directory from the developer machine (
 This will place the contents of ~/path/to/my/site from your machine to /mnt/bob on the cloud instances virtual_resource(:deploy_directory)
 
 =end
+
   class Deploydirectory
       
       def loaded(opts={}, &block)        
@@ -42,8 +44,6 @@ This will place the contents of ~/path/to/my/site from your machine to /mnt/bob 
         end
         
       end
-      
-    end
     
   end
 end
