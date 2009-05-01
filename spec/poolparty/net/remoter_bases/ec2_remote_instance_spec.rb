@@ -105,20 +105,10 @@ describe "Remote Instance" do
       @ec2.stub!(:launching_time).and_return(30.minutes.ago)
       @ec2.elapsed_runtime.should be >= 1800
     end
-    it "should be say that it is the master if the name is master" do
-      @ec2.name.should == "master"
-      @ec2.master?.should == true
-    end
     it "should say that it is responding? if responding is not nil" do
       @ec2.running?.should == true
       @ec2.responding?.should == true
       # @ec2.responding.should_not be_nil
-    end
-    it "should have the puppet_runner_command" do
-      @ec2.respond_to?(:puppet_runner_command).should == true
-    end
-    it "should return the puppet_runner_command with puppetd" do
-      @ec2.puppet_runner_command.should =~ /puppetrun/
     end
   end
 end

@@ -74,6 +74,7 @@ module PoolParty
         return describe_instances.first if o[:instance_id].nil?
         describe_instances.detect {|a| a[:name] == o[:instance_id] || a[:ip] == o[:instance_id] || a[:instance_id] == o[:instance_id] }
       end
+      # TODO: Clean up this method and remove hostnames
       def describe_instances(o={})
         id = 0
         get_instances_description(options.merge(o)).each_with_index do |h,i|          
@@ -135,16 +136,6 @@ module PoolParty
       def after_launch_instance(inst)
         if inst
           associate_address(inst)
-        end
-      end
-    
-      # Attach a volume to the instance
-      # DEPRECATE this relies on master.  master will be removed in next major release.  This method will be in ec2_remote_instance instead, or require an instance id
-      def attach_volume(instance=nil)
-        if ebs_volume_id
-          vputs "Attaching volume #{ebs_volume_id} to the master at #{ebs_volume_device}"
-          instance = master        
-          ec2.attach_volume(:volume_id => ebs_volume_id, :instance_id => instance.instance_id, :device => ebs_volume_device) if ebs_volume_id && ebs_volume_mount_point
         end
       end
       

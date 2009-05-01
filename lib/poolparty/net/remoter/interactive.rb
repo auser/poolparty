@@ -1,26 +1,10 @@
 module PoolParty
   module Remote
     
-    # #DEPRECATE We'll stub the ip to be the master ip for ease and accessibility
-    # def ip(i=nil)
-    #   puts "DEPRECATED:  ip will only be callable against a RemoteInstance in the next release."
-    #   i ? options[:ip] = i : (master ? master.ip : options[:ip])
-    # end
-    # #DEPRECATE: get the master instance
-    def master
-      puts "DEPRECATED:  'master' is deprecated and will be removed in the next major release."
-      get_instance_by_number(0)
-    end
-    
     # Select a list of instances based on their status
     def nodes(hsh={})
       # _nodes[hsh] ||= 
       list_of_instances.select_with_hash(hsh)
-    end
-    
-    # Cache the instances_by_status here
-    def _nodes
-      @_nodes ||= {}
     end
     
     # Select the list of instances, either based on the neighborhoods
@@ -34,6 +18,11 @@ module PoolParty
     end
 
     private
+    # Cache the instances_by_status here
+    def _nodes
+      @_nodes ||= {}
+    end
+    
     # List the instances for the current key pair, regardless of their states
     # If no keypair is passed, select them all
     def _list_of_instances(select={})
