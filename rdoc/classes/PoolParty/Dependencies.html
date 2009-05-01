@@ -45,65 +45,65 @@
             <h2>Methods</h2>
             <h3>public class</h3>
             <ol>
-              <li><a href="#M000533">dependencies</a></li>
-              <li><a href="#M000535">gems</a></li>
-              <li><a href="#M000534">package</a></li>
-              <li><a href="#M000536">packages</a></li>
+              <li><a href="#M000534">dependencies</a></li>
+              <li><a href="#M000536">gems</a></li>
+              <li><a href="#M000535">package</a></li>
+              <li><a href="#M000537">packages</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public class methods</h2>
-              <div class='public-class method' id='method-M000533'>
-                <a name='M000533'>      </a>
+              <div class='public-class method' id='method-M000534'>
+                <a name='M000534'>      </a>
                 <div class='synopsis'>
                   <span class='name'>dependencies</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000533-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000533-source'><span class="ruby-comment cmt"># File lib/poolparty/dependencies.rb, line 4</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">dependencies</span>&#x000A;      <span class="ruby-ivar">@dependencies</span> <span class="ruby-operator">||=</span> [<span class="ruby-node">&quot;#{::File.dirname(__FILE__)}/../../vendor/dependencies/cache&quot;</span>]&#x000A;    <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <div class='public-class method' id='method-M000535'>
-                <a name='M000535'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>gems</span>
-                  <span class='arguments'>(gem_list, gem_location)</span>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000535-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000535-source'><span class="ruby-comment cmt"># File lib/poolparty/dependencies.rb, line 22</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">gems</span>(<span class="ruby-identifier">gem_list</span>, <span class="ruby-identifier">gem_location</span>)&#x000A;      <span class="ruby-identifier">require</span> <span class="ruby-value str">'rubygems/dependency_installer'</span>&#x000A;      &#x000A;      <span class="ruby-identifier">cache_dir</span> = <span class="ruby-node">&quot;#{gem_location}/cache&quot;</span>&#x000A;      <span class="ruby-operator">::</span><span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">mkdir_p</span> <span class="ruby-identifier">cache_dir</span> <span class="ruby-keyword kw">rescue</span> <span class="ruby-keyword kw">nil</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">exist?</span> <span class="ruby-identifier">cache_dir</span>&#x000A;&#x000A;      <span class="ruby-identifier">gem_list</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">g</span><span class="ruby-operator">|</span>&#x000A;        <span class="ruby-identifier">di</span> = <span class="ruby-constant">Gem</span><span class="ruby-operator">::</span><span class="ruby-constant">DependencyInstaller</span>.<span class="ruby-identifier">new</span>&#x000A;        <span class="ruby-identifier">spec</span>, <span class="ruby-identifier">url</span> = <span class="ruby-identifier">di</span>.<span class="ruby-identifier">find_spec_by_name_and_version</span>(<span class="ruby-identifier">g</span>).<span class="ruby-identifier">first</span>&#x000A;        <span class="ruby-keyword kw">begin</span>&#x000A;          <span class="ruby-identifier">vputs</span> <span class="ruby-node">&quot;Downloading #{g} from github (#{spec.version} - #{spec.full_name})&quot;</span>&#x000A;          <span class="ruby-constant">Gem</span><span class="ruby-operator">::</span><span class="ruby-constant">RemoteFetcher</span>.<span class="ruby-identifier">fetcher</span>.<span class="ruby-identifier">download</span> <span class="ruby-identifier">spec</span>, <span class="ruby-value str">&quot;http://gems.github.com&quot;</span>, <span class="ruby-identifier">gem_location</span>&#x000A;        <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>&#x000A;          <span class="ruby-identifier">vputs</span> <span class="ruby-node">&quot;Downloading #{g} from rubyforge because #{e}&quot;</span>&#x000A;          <span class="ruby-constant">Gem</span><span class="ruby-operator">::</span><span class="ruby-constant">RemoteFetcher</span>.<span class="ruby-identifier">fetcher</span>.<span class="ruby-identifier">download</span> <span class="ruby-identifier">spec</span>, <span class="ruby-identifier">url</span>, <span class="ruby-identifier">gem_location</span>&#x000A;        <span class="ruby-keyword kw">end</span>        &#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <div class='public-class method' id='method-M000534'>
-                <a name='M000534'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>package</span>
-                  <span class='arguments'>(file)</span>
-                </div>
-                <div class='source'>
                   <a class='source-toggle' href='#' onclick="toggleCode('M000534-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000534-source'><span class="ruby-comment cmt"># File lib/poolparty/dependencies.rb, line 8</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">package</span>(<span class="ruby-identifier">file</span>)&#x000A;      <span class="ruby-operator">::</span><span class="ruby-constant">Tar</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">file</span>, <span class="ruby-constant">File</span><span class="ruby-operator">::</span><span class="ruby-constant">CREAT</span> <span class="ruby-operator">|</span> <span class="ruby-constant">File</span><span class="ruby-operator">::</span><span class="ruby-constant">WRONLY</span>, <span class="ruby-value">0644</span>, <span class="ruby-constant">Tar</span><span class="ruby-operator">::</span><span class="ruby-constant">GNU</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">tar</span><span class="ruby-operator">|</span>&#x000A;        <span class="ruby-identifier">dependencies</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">dep</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-keyword kw">if</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">file?</span> <span class="ruby-identifier">dep</span>&#x000A;            <span class="ruby-identifier">tar</span>.<span class="ruby-identifier">append_file</span>(<span class="ruby-identifier">dep</span>)&#x000A;          <span class="ruby-keyword kw">elsif</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">directory?</span> <span class="ruby-identifier">dep</span>&#x000A;            <span class="ruby-constant">Dir</span>[<span class="ruby-node">&quot;#{dep}/*&quot;</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">file</span><span class="ruby-operator">|</span>&#x000A;              <span class="ruby-identifier">tar</span>.<span class="ruby-identifier">append_file</span>(<span class="ruby-identifier">file</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">file?</span> <span class="ruby-identifier">file</span>&#x000A;            <span class="ruby-keyword kw">end</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span>      &#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000534-source'><span class="ruby-comment cmt"># File lib/poolparty/dependencies.rb, line 4</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">dependencies</span>&#x000A;      <span class="ruby-ivar">@dependencies</span> <span class="ruby-operator">||=</span> [<span class="ruby-node">&quot;#{::File.dirname(__FILE__)}/../../vendor/dependencies/cache&quot;</span>]&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-class method' id='method-M000536'>
                 <a name='M000536'>      </a>
                 <div class='synopsis'>
-                  <span class='name'>packages</span>
-                  <span class='arguments'>(package_list, package_location)</span>
+                  <span class='name'>gems</span>
+                  <span class='arguments'>(gem_list, gem_location)</span>
                 </div>
                 <div class='source'>
                   <a class='source-toggle' href='#' onclick="toggleCode('M000536-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000536-source'><span class="ruby-comment cmt"># File lib/poolparty/dependencies.rb, line 41</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">packages</span>(<span class="ruby-identifier">package_list</span>, <span class="ruby-identifier">package_location</span>)&#x000A;      <span class="ruby-identifier">package_list</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">package</span><span class="ruby-operator">|</span>&#x000A;        <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;downloading #{package} to #{package_location}/#{package.split('/').last}&quot;</span>&#x000A;        <span class="ruby-node">`curl -L #{package} &gt; #{package_location}/#{package.split('/').last}`</span>        &#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000536-source'><span class="ruby-comment cmt"># File lib/poolparty/dependencies.rb, line 22</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">gems</span>(<span class="ruby-identifier">gem_list</span>, <span class="ruby-identifier">gem_location</span>)&#x000A;      <span class="ruby-identifier">require</span> <span class="ruby-value str">'rubygems/dependency_installer'</span>&#x000A;      &#x000A;      <span class="ruby-identifier">cache_dir</span> = <span class="ruby-node">&quot;#{gem_location}/cache&quot;</span>&#x000A;      <span class="ruby-operator">::</span><span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">mkdir_p</span> <span class="ruby-identifier">cache_dir</span> <span class="ruby-keyword kw">rescue</span> <span class="ruby-keyword kw">nil</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">exist?</span> <span class="ruby-identifier">cache_dir</span>&#x000A;&#x000A;      <span class="ruby-identifier">gem_list</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">g</span><span class="ruby-operator">|</span>&#x000A;        <span class="ruby-identifier">di</span> = <span class="ruby-constant">Gem</span><span class="ruby-operator">::</span><span class="ruby-constant">DependencyInstaller</span>.<span class="ruby-identifier">new</span>&#x000A;        <span class="ruby-identifier">spec</span>, <span class="ruby-identifier">url</span> = <span class="ruby-identifier">di</span>.<span class="ruby-identifier">find_spec_by_name_and_version</span>(<span class="ruby-identifier">g</span>).<span class="ruby-identifier">first</span>&#x000A;        <span class="ruby-keyword kw">begin</span>&#x000A;          <span class="ruby-identifier">vputs</span> <span class="ruby-node">&quot;Downloading #{g} from github (#{spec.version} - #{spec.full_name})&quot;</span>&#x000A;          <span class="ruby-constant">Gem</span><span class="ruby-operator">::</span><span class="ruby-constant">RemoteFetcher</span>.<span class="ruby-identifier">fetcher</span>.<span class="ruby-identifier">download</span> <span class="ruby-identifier">spec</span>, <span class="ruby-value str">&quot;http://gems.github.com&quot;</span>, <span class="ruby-identifier">gem_location</span>&#x000A;        <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>&#x000A;          <span class="ruby-identifier">vputs</span> <span class="ruby-node">&quot;Downloading #{g} from rubyforge because #{e}&quot;</span>&#x000A;          <span class="ruby-constant">Gem</span><span class="ruby-operator">::</span><span class="ruby-constant">RemoteFetcher</span>.<span class="ruby-identifier">fetcher</span>.<span class="ruby-identifier">download</span> <span class="ruby-identifier">spec</span>, <span class="ruby-identifier">url</span>, <span class="ruby-identifier">gem_location</span>&#x000A;        <span class="ruby-keyword kw">end</span>        &#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-class method' id='method-M000535'>
+                <a name='M000535'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>package</span>
+                  <span class='arguments'>(file)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000535-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000535-source'><span class="ruby-comment cmt"># File lib/poolparty/dependencies.rb, line 8</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">package</span>(<span class="ruby-identifier">file</span>)&#x000A;      <span class="ruby-operator">::</span><span class="ruby-constant">Tar</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">file</span>, <span class="ruby-constant">File</span><span class="ruby-operator">::</span><span class="ruby-constant">CREAT</span> <span class="ruby-operator">|</span> <span class="ruby-constant">File</span><span class="ruby-operator">::</span><span class="ruby-constant">WRONLY</span>, <span class="ruby-value">0644</span>, <span class="ruby-constant">Tar</span><span class="ruby-operator">::</span><span class="ruby-constant">GNU</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">tar</span><span class="ruby-operator">|</span>&#x000A;        <span class="ruby-identifier">dependencies</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">dep</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-keyword kw">if</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">file?</span> <span class="ruby-identifier">dep</span>&#x000A;            <span class="ruby-identifier">tar</span>.<span class="ruby-identifier">append_file</span>(<span class="ruby-identifier">dep</span>)&#x000A;          <span class="ruby-keyword kw">elsif</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">directory?</span> <span class="ruby-identifier">dep</span>&#x000A;            <span class="ruby-constant">Dir</span>[<span class="ruby-node">&quot;#{dep}/*&quot;</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">file</span><span class="ruby-operator">|</span>&#x000A;              <span class="ruby-identifier">tar</span>.<span class="ruby-identifier">append_file</span>(<span class="ruby-identifier">file</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">file?</span> <span class="ruby-identifier">file</span>&#x000A;            <span class="ruby-keyword kw">end</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span>      &#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-class method' id='method-M000537'>
+                <a name='M000537'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>packages</span>
+                  <span class='arguments'>(package_list, package_location)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000537-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000537-source'><span class="ruby-comment cmt"># File lib/poolparty/dependencies.rb, line 41</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">packages</span>(<span class="ruby-identifier">package_list</span>, <span class="ruby-identifier">package_location</span>)&#x000A;      <span class="ruby-identifier">package_list</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">package</span><span class="ruby-operator">|</span>&#x000A;        <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;downloading #{package} to #{package_location}/#{package.split('/').last}&quot;</span>&#x000A;        <span class="ruby-node">`curl -L #{package} &gt; #{package_location}/#{package.split('/').last}`</span>        &#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

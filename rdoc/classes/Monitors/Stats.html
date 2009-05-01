@@ -45,33 +45,33 @@
             <h2>Methods</h2>
             <h3>public class</h3>
             <ol>
-              <li><a href="#M000697">new</a></li>
+              <li><a href="#M000703">new</a></li>
             </ol>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000698">get</a></li>
-              <li><a href="#M000699">put</a></li>
-              <li><a href="#M000700">update</a></li>
+              <li><a href="#M000704">get</a></li>
+              <li><a href="#M000705">put</a></li>
+              <li><a href="#M000706">update</a></li>
             </ol>
             <h3>protected instance</h3>
             <ol>
-              <li><a href="#M000711">can_contract?</a></li>
-              <li><a href="#M000710">can_expand?</a></li>
-              <li><a href="#M000706">default_stats</a></li>
-              <li><a href="#M000703">elected_action</a></li>
-              <li><a href="#M000702">handle_election</a></li>
-              <li><a href="#M000709">instances</a></li>
-              <li><a href="#M000708">load</a></li>
-              <li><a href="#M000701">log</a></li>
-              <li><a href="#M000713">max_instances</a></li>
-              <li><a href="#M000712">min_instances</a></li>
-              <li><a href="#M000715">my_ip</a></li>
-              <li><a href="#M000714">nominations</a></li>
-              <li><a href="#M000716">ohai</a></li>
-              <li><a href="#M000717">reload_data!</a></li>
-              <li><a href="#M000705">rule</a></li>
-              <li><a href="#M000704">rules</a></li>
-              <li><a href="#M000707">stats</a></li>
+              <li><a href="#M000717">can_contract?</a></li>
+              <li><a href="#M000716">can_expand?</a></li>
+              <li><a href="#M000712">default_stats</a></li>
+              <li><a href="#M000709">elected_action</a></li>
+              <li><a href="#M000708">handle_election</a></li>
+              <li><a href="#M000715">instances</a></li>
+              <li><a href="#M000714">load</a></li>
+              <li><a href="#M000707">log</a></li>
+              <li><a href="#M000719">max_instances</a></li>
+              <li><a href="#M000718">min_instances</a></li>
+              <li><a href="#M000721">my_ip</a></li>
+              <li><a href="#M000720">nominations</a></li>
+              <li><a href="#M000722">ohai</a></li>
+              <li><a href="#M000723">reload_data!</a></li>
+              <li><a href="#M000711">rule</a></li>
+              <li><a href="#M000710">rules</a></li>
+              <li><a href="#M000713">stats</a></li>
             </ol>
           </div>
           <div id='section'>
@@ -99,113 +99,113 @@
             </div>
             <div id='methods'>
               <h2>Public class methods</h2>
-              <div class='public-class method' id='method-M000697'>
-                <a name='M000697'>      </a>
+              <div class='public-class method' id='method-M000703'>
+                <a name='M000703'>      </a>
                 <div class='synopsis'>
                   <span class='name'>new</span>
                   <span class='arguments'>(env, o={})</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000697-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000703-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000697-source'><span class="ruby-comment cmt"># File lib/poolparty/monitors/monitors/stats_monitor.rb, line 12</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">env</span>, <span class="ruby-identifier">o</span>={})&#x000A;      <span class="ruby-ivar">@env</span> = <span class="ruby-identifier">env</span>&#x000A;      <span class="ruby-ivar">@request</span> = <span class="ruby-constant">Rack</span><span class="ruby-operator">::</span><span class="ruby-constant">Request</span>.<span class="ruby-identifier">new</span> <span class="ruby-identifier">env</span>&#x000A;      <span class="ruby-ivar">@response</span> = <span class="ruby-constant">Rack</span><span class="ruby-operator">::</span><span class="ruby-constant">Response</span>.<span class="ruby-identifier">new</span>&#x000A;      &#x000A;      <span class="ruby-keyword kw">begin</span>&#x000A;        <span class="ruby-ivar">@cloud</span> = <span class="ruby-constant">JSON</span>.<span class="ruby-identifier">parse</span>( <span class="ruby-identifier">open</span>(<span class="ruby-value str">'/etc/poolparty/clouds.json'</span> ).<span class="ruby-identifier">read</span> )&#x000A;      <span class="ruby-keyword kw">rescue</span> &#x000A;        <span class="ruby-ivar">@cloud</span> = <span class="ruby-operator">::</span><span class="ruby-constant">PoolParty</span><span class="ruby-operator">::</span><span class="ruby-constant">Default</span>.<span class="ruby-identifier">options</span>.<span class="ruby-identifier">merge</span>({<span class="ruby-value str">&quot;options&quot;</span> =<span class="ruby-operator">&gt;</span>&#x000A;          {<span class="ruby-value str">&quot;rules&quot;</span> =<span class="ruby-operator">&gt;</span> {<span class="ruby-value str">&quot;expand&quot;</span>   =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">PoolParty</span><span class="ruby-operator">::</span><span class="ruby-constant">Default</span>.<span class="ruby-identifier">expand_when</span>,&#x000A;                       <span class="ruby-value str">&quot;contract&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">PoolParty</span><span class="ruby-operator">::</span><span class="ruby-constant">Default</span>.<span class="ruby-identifier">contract_when</span>&#x000A;                      }&#x000A;          }&#x000A;        })&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-comment cmt"># Our cloud.options.rules looks like</span>&#x000A;      <span class="ruby-comment cmt">#  {&quot;expand_when&quot; =&gt; &quot;load &gt; 0.9&quot;, &quot;contract_when&quot; =&gt; &quot;load &lt; 0.4&quot;}</span>&#x000A;      <span class="ruby-comment cmt"># We set these as rules on ourselves so we can use aska to parse the rules.</span>&#x000A;      <span class="ruby-comment cmt"># Later, we can call vote_rules on ourself and we'll get back Aska::Rule(s)</span>&#x000A;      <span class="ruby-comment cmt"># which we'll call valid_rule? for each Rule and return the result</span>&#x000A;      <span class="ruby-ivar">@cloud</span>[<span class="ruby-value str">&quot;options&quot;</span>][<span class="ruby-value str">&quot;rules&quot;</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">name</span>, <span class="ruby-identifier">rul</span><span class="ruby-operator">|</span>&#x000A;        <span class="ruby-identifier">r</span> = <span class="ruby-constant">Aska</span><span class="ruby-operator">::</span><span class="ruby-constant">Rule</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">rul</span>)&#x000A;        <span class="ruby-identifier">rule</span>(<span class="ruby-identifier">name</span>) <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">r</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-comment cmt"># log &lt;&lt; &quot;#{::Time.now.strftime(&quot;%Y-%m-%d-%H-%M&quot;)}, #{stats.to_json}\n&quot;</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000703-source'><span class="ruby-comment cmt"># File lib/poolparty/monitors/monitors/stats_monitor.rb, line 12</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">env</span>, <span class="ruby-identifier">o</span>={})&#x000A;      <span class="ruby-ivar">@env</span> = <span class="ruby-identifier">env</span>&#x000A;      <span class="ruby-ivar">@request</span> = <span class="ruby-constant">Rack</span><span class="ruby-operator">::</span><span class="ruby-constant">Request</span>.<span class="ruby-identifier">new</span> <span class="ruby-identifier">env</span>&#x000A;      <span class="ruby-ivar">@response</span> = <span class="ruby-constant">Rack</span><span class="ruby-operator">::</span><span class="ruby-constant">Response</span>.<span class="ruby-identifier">new</span>&#x000A;      &#x000A;      <span class="ruby-keyword kw">begin</span>&#x000A;        <span class="ruby-ivar">@cloud</span> = <span class="ruby-constant">JSON</span>.<span class="ruby-identifier">parse</span>( <span class="ruby-identifier">open</span>(<span class="ruby-value str">'/etc/poolparty/clouds.json'</span> ).<span class="ruby-identifier">read</span> )&#x000A;      <span class="ruby-keyword kw">rescue</span> &#x000A;        <span class="ruby-ivar">@cloud</span> = <span class="ruby-operator">::</span><span class="ruby-constant">PoolParty</span><span class="ruby-operator">::</span><span class="ruby-constant">Default</span>.<span class="ruby-identifier">options</span>.<span class="ruby-identifier">merge</span>({<span class="ruby-value str">&quot;options&quot;</span> =<span class="ruby-operator">&gt;</span>&#x000A;          {<span class="ruby-value str">&quot;rules&quot;</span> =<span class="ruby-operator">&gt;</span> {<span class="ruby-value str">&quot;expand&quot;</span>   =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">PoolParty</span><span class="ruby-operator">::</span><span class="ruby-constant">Default</span>.<span class="ruby-identifier">expand_when</span>,&#x000A;                       <span class="ruby-value str">&quot;contract&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">PoolParty</span><span class="ruby-operator">::</span><span class="ruby-constant">Default</span>.<span class="ruby-identifier">contract_when</span>&#x000A;                      }&#x000A;          }&#x000A;        })&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-comment cmt"># Our cloud.options.rules looks like</span>&#x000A;      <span class="ruby-comment cmt">#  {&quot;expand_when&quot; =&gt; &quot;load &gt; 0.9&quot;, &quot;contract_when&quot; =&gt; &quot;load &lt; 0.4&quot;}</span>&#x000A;      <span class="ruby-comment cmt"># We set these as rules on ourselves so we can use aska to parse the rules.</span>&#x000A;      <span class="ruby-comment cmt"># Later, we can call vote_rules on ourself and we'll get back Aska::Rule(s)</span>&#x000A;      <span class="ruby-comment cmt"># which we'll call valid_rule? for each Rule and return the result</span>&#x000A;      <span class="ruby-ivar">@cloud</span>[<span class="ruby-value str">&quot;options&quot;</span>][<span class="ruby-value str">&quot;rules&quot;</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">name</span>, <span class="ruby-identifier">rul</span><span class="ruby-operator">|</span>&#x000A;        <span class="ruby-identifier">r</span> = <span class="ruby-constant">Aska</span><span class="ruby-operator">::</span><span class="ruby-constant">Rule</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">rul</span>)&#x000A;        <span class="ruby-identifier">rule</span>(<span class="ruby-identifier">name</span>) <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">r</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-comment cmt"># log &lt;&lt; &quot;#{::Time.now.strftime(&quot;%Y-%m-%d-%H-%M&quot;)}, #{stats.to_json}\n&quot;</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000698'>
-                <a name='M000698'>      </a>
+              <div class='public-instance method' id='method-M000704'>
+                <a name='M000704'>      </a>
                 <div class='synopsis'>
                   <span class='name'>get</span>
                   <span class='arguments'>(data=nil)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000698-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000704-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000698-source'><span class="ruby-comment cmt"># File lib/poolparty/monitors/monitors/stats_monitor.rb, line 39</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get</span>(<span class="ruby-identifier">data</span>=<span class="ruby-keyword kw">nil</span>)&#x000A;      <span class="ruby-keyword kw">begin</span>&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">request</span>.<span class="ruby-identifier">params</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">request</span>.<span class="ruby-identifier">params</span>.<span class="ruby-identifier">empty?</span>&#x000A;          <span class="ruby-identifier">default_stats</span>&#x000A;        <span class="ruby-keyword kw">else</span>&#x000A;          <span class="ruby-identifier">stats</span>[<span class="ruby-identifier">request</span>.<span class="ruby-identifier">params</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">to_sym</span>] <span class="ruby-operator">||=</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">request</span>.<span class="ruby-identifier">params</span>[<span class="ruby-value">0</span>])&#x000A;          <span class="ruby-identifier">stats</span>[<span class="ruby-identifier">request</span>.<span class="ruby-identifier">params</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">to_sym</span>]&#x000A;          <span class="ruby-identifier">stats</span>.<span class="ruby-identifier">to_json</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>&#x000A;        <span class="ruby-node">&quot;Error: #{e}&quot;</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000704-source'><span class="ruby-comment cmt"># File lib/poolparty/monitors/monitors/stats_monitor.rb, line 39</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get</span>(<span class="ruby-identifier">data</span>=<span class="ruby-keyword kw">nil</span>)&#x000A;      <span class="ruby-keyword kw">begin</span>&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">request</span>.<span class="ruby-identifier">params</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">request</span>.<span class="ruby-identifier">params</span>.<span class="ruby-identifier">empty?</span>&#x000A;          <span class="ruby-identifier">default_stats</span>&#x000A;        <span class="ruby-keyword kw">else</span>&#x000A;          <span class="ruby-identifier">stats</span>[<span class="ruby-identifier">request</span>.<span class="ruby-identifier">params</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">to_sym</span>] <span class="ruby-operator">||=</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">request</span>.<span class="ruby-identifier">params</span>[<span class="ruby-value">0</span>])&#x000A;          <span class="ruby-identifier">stats</span>[<span class="ruby-identifier">request</span>.<span class="ruby-identifier">params</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">to_sym</span>]&#x000A;          <span class="ruby-identifier">stats</span>.<span class="ruby-identifier">to_json</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>&#x000A;        <span class="ruby-node">&quot;Error: #{e}&quot;</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000699'>
-                <a name='M000699'>      </a>
+              <div class='public-instance method' id='method-M000705'>
+                <a name='M000705'>      </a>
                 <div class='synopsis'>
                   <span class='name'>put</span>
                   <span class='arguments'>(data)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000699-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000705-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000699-source'><span class="ruby-comment cmt"># File lib/poolparty/monitors/monitors/stats_monitor.rb, line 53</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">put</span>(<span class="ruby-identifier">data</span>)&#x000A;      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">d</span> = <span class="ruby-constant">JSON</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">request</span>.<span class="ruby-identifier">params</span>)&#x000A;        <span class="ruby-identifier">hsh</span> = <span class="ruby-identifier">d</span>.<span class="ruby-identifier">reject</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">ip</span>, <span class="ruby-identifier">_node</span><span class="ruby-operator">|</span> <span class="ruby-identifier">ip</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">my_ip</span> }&#x000A;        <span class="ruby-identifier">stats</span>.<span class="ruby-identifier">merge!</span>(<span class="ruby-identifier">hsh</span>)&#x000A;        <span class="ruby-identifier">handle_election</span>&#x000A;      <span class="ruby-keyword kw">else</span>&#x000A;        <span class="ruby-value str">&quot;boom&quot;</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000705-source'><span class="ruby-comment cmt"># File lib/poolparty/monitors/monitors/stats_monitor.rb, line 53</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">put</span>(<span class="ruby-identifier">data</span>)&#x000A;      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">d</span> = <span class="ruby-constant">JSON</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">request</span>.<span class="ruby-identifier">params</span>)&#x000A;        <span class="ruby-identifier">hsh</span> = <span class="ruby-identifier">d</span>.<span class="ruby-identifier">reject</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">ip</span>, <span class="ruby-identifier">_node</span><span class="ruby-operator">|</span> <span class="ruby-identifier">ip</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">my_ip</span> }&#x000A;        <span class="ruby-identifier">stats</span>.<span class="ruby-identifier">merge!</span>(<span class="ruby-identifier">hsh</span>)&#x000A;        <span class="ruby-identifier">handle_election</span>&#x000A;      <span class="ruby-keyword kw">else</span>&#x000A;        <span class="ruby-value str">&quot;boom&quot;</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000700'>
-                <a name='M000700'>      </a>
+              <div class='public-instance method' id='method-M000706'>
+                <a name='M000706'>      </a>
                 <div class='synopsis'>
                   <span class='name'>update</span>
                   <span class='arguments'>(data)</span>
                 </div>
                 <div class='description'>
                   <p>
-                  Alias for <a href="Stats.html#M000699">put</a>
+                  Alias for <a href="Stats.html#M000705">put</a>
                   </p>
                 </div>
               </div>
               <h2>Protected instance methods</h2>
-              <div class='protected-instance method' id='method-M000711'>
-                <a name='M000711'>      </a>
+              <div class='protected-instance method' id='method-M000717'>
+                <a name='M000717'>      </a>
                 <div class='synopsis'>
                   <span class='name'>can_contract?</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000711-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000717-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000711-source'><span class="ruby-comment cmt"># File lib/poolparty/monitors/monitors/stats_monitor.rb, line 141</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">can_contract?</span>&#x000A;      <span class="ruby-identifier">instances</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-identifier">min_instances</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000717-source'><span class="ruby-comment cmt"># File lib/poolparty/monitors/monitors/stats_monitor.rb, line 141</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">can_contract?</span>&#x000A;      <span class="ruby-identifier">instances</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-identifier">min_instances</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='protected-instance method' id='method-M000710'>
-                <a name='M000710'>      </a>
+              <div class='protected-instance method' id='method-M000716'>
+                <a name='M000716'>      </a>
                 <div class='synopsis'>
                   <span class='name'>can_expand?</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000710-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000716-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000710-source'><span class="ruby-comment cmt"># File lib/poolparty/monitors/monitors/stats_monitor.rb, line 137</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">can_expand?</span>&#x000A;      <span class="ruby-identifier">instances</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&lt;</span> <span class="ruby-identifier">max_instances</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000716-source'><span class="ruby-comment cmt"># File lib/poolparty/monitors/monitors/stats_monitor.rb, line 137</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">can_expand?</span>&#x000A;      <span class="ruby-identifier">instances</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&lt;</span> <span class="ruby-identifier">max_instances</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='protected-instance method' id='method-M000706'>
-                <a name='M000706'>      </a>
+              <div class='protected-instance method' id='method-M000712'>
+                <a name='M000712'>      </a>
                 <div class='synopsis'>
                   <span class='name'>default_stats</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000706-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000712-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000706-source'><span class="ruby-comment cmt"># File lib/poolparty/monitors/monitors/stats_monitor.rb, line 116</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">default_stats</span>&#x000A;      <span class="ruby-node">%w(load nominations)</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">var</span><span class="ruby-operator">|</span>&#x000A;        <span class="ruby-identifier">stats</span>[<span class="ruby-identifier">my_ip</span>][<span class="ruby-identifier">var</span>] <span class="ruby-operator">||=</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">var</span>.<span class="ruby-identifier">to_sym</span>)&#x000A;      <span class="ruby-keyword kw">end</span>      &#x000A;      <span class="ruby-identifier">stats</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000712-source'><span class="ruby-comment cmt"># File lib/poolparty/monitors/monitors/stats_monitor.rb, line 116</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">default_stats</span>&#x000A;      <span class="ruby-node">%w(load nominations)</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">var</span><span class="ruby-operator">|</span>&#x000A;        <span class="ruby-identifier">stats</span>[<span class="ruby-identifier">my_ip</span>][<span class="ruby-identifier">var</span>] <span class="ruby-operator">||=</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">var</span>.<span class="ruby-identifier">to_sym</span>)&#x000A;      <span class="ruby-keyword kw">end</span>      &#x000A;      <span class="ruby-identifier">stats</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='protected-instance method' id='method-M000703'>
-                <a name='M000703'>      </a>
+              <div class='protected-instance method' id='method-M000709'>
+                <a name='M000709'>      </a>
                 <div class='synopsis'>
                   <span class='name'>elected_action</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000703-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000709-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000703-source'><span class="ruby-comment cmt"># File lib/poolparty/monitors/monitors/stats_monitor.rb, line 104</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">elected_action</span>&#x000A;      <span class="ruby-ivar">@elected_action</span> <span class="ruby-operator">||=</span> <span class="ruby-keyword kw">nil</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000709-source'><span class="ruby-comment cmt"># File lib/poolparty/monitors/monitors/stats_monitor.rb, line 104</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">elected_action</span>&#x000A;      <span class="ruby-ivar">@elected_action</span> <span class="ruby-operator">||=</span> <span class="ruby-keyword kw">nil</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='protected-instance method' id='method-M000702'>
-                <a name='M000702'>      </a>
+              <div class='protected-instance method' id='method-M000708'>
+                <a name='M000708'>      </a>
                 <div class='synopsis'>
                   <span class='name'>handle_election</span>
                   <span class='arguments'>()</span>
@@ -216,166 +216,166 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000702-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000702-source'><span class="ruby-comment cmt"># File lib/poolparty/monitors/monitors/stats_monitor.rb, line 77</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">handle_election</span>&#x000A;      <span class="ruby-comment cmt"># Ballots look like:</span>&#x000A;      <span class="ruby-comment cmt"># host =&gt; [&quot;contract&quot;]</span>&#x000A;      <span class="ruby-identifier">candidates</span> = {<span class="ruby-identifier">:expand</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>, <span class="ruby-identifier">:contract</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>}&#x000A;      <span class="ruby-identifier">candidates</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">action</span>, <span class="ruby-identifier">ballots</span><span class="ruby-operator">|</span>&#x000A;        <span class="ruby-identifier">stats</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">ip</span>, <span class="ruby-identifier">node_hsh</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-identifier">candidates</span>[<span class="ruby-identifier">action</span>]<span class="ruby-operator">+=</span><span class="ruby-value">1</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">node_hsh</span>[<span class="ruby-value str">&quot;nominations&quot;</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">node_hsh</span>[<span class="ruby-value str">&quot;nominations&quot;</span>].<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">action</span>.<span class="ruby-identifier">to_s</span>)&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-comment cmt"># TODO: Move?</span>&#x000A;      <span class="ruby-comment cmt"># Expand the cloud if 50+% of the votes are for expansion</span>&#x000A;      <span class="ruby-comment cmt"># Contract the cloud if 51+% of the votes are for contraction</span>&#x000A;      <span class="ruby-keyword kw">if</span> (<span class="ruby-identifier">candidates</span>[<span class="ruby-identifier">:expand</span>] <span class="ruby-operator">-</span> <span class="ruby-identifier">candidates</span>[<span class="ruby-identifier">:contract</span>])<span class="ruby-operator">/</span><span class="ruby-identifier">stats</span>.<span class="ruby-identifier">keys</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span><span class="ruby-value">.5</span>&#x000A;        <span class="ruby-value">%x[/usr/bin/server-cloud-elections expand]</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">elected_action</span> <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;expand&quot;</span>&#x000A;        <span class="ruby-ivar">@elected_action</span> = <span class="ruby-value str">&quot;expand&quot;</span>&#x000A;      <span class="ruby-keyword kw">elsif</span> (<span class="ruby-identifier">candidates</span>[<span class="ruby-identifier">:contract</span>] <span class="ruby-operator">-</span> <span class="ruby-identifier">candidates</span>[<span class="ruby-identifier">:expand</span>])<span class="ruby-operator">/</span><span class="ruby-identifier">stats</span>.<span class="ruby-identifier">keys</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span><span class="ruby-value">.5</span>&#x000A;        <span class="ruby-value">%x[/usr/bin/server-cloud-elections contract]</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">elected_action</span> <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;contract&quot;</span>&#x000A;        <span class="ruby-ivar">@elected_action</span> = <span class="ruby-value str">&quot;contract&quot;</span>&#x000A;      <span class="ruby-keyword kw">end</span>      &#x000A;&#x000A;      <span class="ruby-identifier">reload_data!</span>&#x000A;      <span class="ruby-identifier">stats</span>[<span class="ruby-identifier">my_ip</span>][<span class="ruby-value str">&quot;elected_action&quot;</span>] = <span class="ruby-ivar">@elected_action</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@elected_action</span>&#x000A;      <span class="ruby-identifier">log</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;#{Time.now.strftime(&quot;%Y-%m-%d-%H-%M&quot;)}, #{stats.to_json}\n&quot;</span>&#x000A;      <span class="ruby-identifier">stats</span>.<span class="ruby-identifier">to_json</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <div class='protected-instance method' id='method-M000709'>
-                <a name='M000709'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>instances</span>
-                  <span class='arguments'>()</span>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000709-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000709-source'><span class="ruby-comment cmt"># File lib/poolparty/monitors/monitors/stats_monitor.rb, line 131</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">instances</span>&#x000A;      <span class="ruby-comment cmt"># res = PoolParty::Neighborhoods.load_default.instances</span>&#x000A;      <span class="ruby-identifier">res</span> <span class="ruby-operator">||=</span> <span class="ruby-value">%x[/usr/bin/server-list-active internal_ip]</span>.<span class="ruby-identifier">split</span>(<span class="ruby-value str">&quot;\t&quot;</span>)&#x000A;      <span class="ruby-identifier">res</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <div class='protected-instance method' id='method-M000708'>
-                <a name='M000708'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>load</span>
-                  <span class='arguments'>()</span>
-                </div>
-                <div class='source'>
                   <a class='source-toggle' href='#' onclick="toggleCode('M000708-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000708-source'><span class="ruby-comment cmt"># File lib/poolparty/monitors/monitors/stats_monitor.rb, line 127</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">load</span>&#x000A;      <span class="ruby-value">%x{&quot;uptime&quot;}</span>.<span class="ruby-identifier">split</span>[<span class="ruby-value">-3</span>].<span class="ruby-identifier">to_f</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <div class='protected-instance method' id='method-M000701'>
-                <a name='M000701'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>log</span>
-                  <span class='arguments'>(log_file_path=&quot;/var/log/poolparty/stats_monitor.log&quot;)</span>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000701-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000701-source'><span class="ruby-comment cmt"># File lib/poolparty/monitors/monitors/stats_monitor.rb, line 66</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">log</span>(<span class="ruby-identifier">log_file_path</span>=<span class="ruby-value str">&quot;/var/log/poolparty/stats_monitor.log&quot;</span>)&#x000A;      <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@logfile</span>&#x000A;        <span class="ruby-ivar">@logfile</span>&#x000A;      <span class="ruby-keyword kw">else</span>&#x000A;        <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">file?</span> <span class="ruby-identifier">log_file_path</span>&#x000A;        <span class="ruby-operator">::</span><span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">mkdir_p</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">dirname</span>(<span class="ruby-identifier">log_file_path</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">directory?</span>(<span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">dirname</span>(<span class="ruby-identifier">log_file_path</span>))&#x000A;        <span class="ruby-ivar">@logfile</span> <span class="ruby-operator">||=</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">log_file_path</span>, <span class="ruby-value str">'a+'</span>)&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <div class='protected-instance method' id='method-M000713'>
-                <a name='M000713'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>max_instances</span>
-                  <span class='arguments'>()</span>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000713-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000713-source'><span class="ruby-comment cmt"># File lib/poolparty/monitors/monitors/stats_monitor.rb, line 149</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">max_instances</span>&#x000A;      (<span class="ruby-ivar">@cloud</span>[<span class="ruby-value str">&quot;options&quot;</span>][<span class="ruby-value str">&quot;maximum_instances&quot;</span>] <span class="ruby-operator">||</span> <span class="ruby-constant">PoolParty</span><span class="ruby-operator">::</span><span class="ruby-constant">Default</span>.<span class="ruby-identifier">maximum_instances</span>).<span class="ruby-identifier">to_i</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <div class='protected-instance method' id='method-M000712'>
-                <a name='M000712'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>min_instances</span>
-                  <span class='arguments'>()</span>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000712-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000712-source'><span class="ruby-comment cmt"># File lib/poolparty/monitors/monitors/stats_monitor.rb, line 145</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">min_instances</span>&#x000A;      (<span class="ruby-ivar">@cloud</span>[<span class="ruby-value str">&quot;options&quot;</span>][<span class="ruby-value str">&quot;minimum_instances&quot;</span>] <span class="ruby-operator">||</span> <span class="ruby-constant">PoolParty</span><span class="ruby-operator">::</span><span class="ruby-constant">Default</span>.<span class="ruby-identifier">minimum_instances</span>).<span class="ruby-identifier">to_i</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000708-source'><span class="ruby-comment cmt"># File lib/poolparty/monitors/monitors/stats_monitor.rb, line 77</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">handle_election</span>&#x000A;      <span class="ruby-comment cmt"># Ballots look like:</span>&#x000A;      <span class="ruby-comment cmt"># host =&gt; [&quot;contract&quot;]</span>&#x000A;      <span class="ruby-identifier">candidates</span> = {<span class="ruby-identifier">:expand</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>, <span class="ruby-identifier">:contract</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>}&#x000A;      <span class="ruby-identifier">candidates</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">action</span>, <span class="ruby-identifier">ballots</span><span class="ruby-operator">|</span>&#x000A;        <span class="ruby-identifier">stats</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">ip</span>, <span class="ruby-identifier">node_hsh</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-identifier">candidates</span>[<span class="ruby-identifier">action</span>]<span class="ruby-operator">+=</span><span class="ruby-value">1</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">node_hsh</span>[<span class="ruby-value str">&quot;nominations&quot;</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">node_hsh</span>[<span class="ruby-value str">&quot;nominations&quot;</span>].<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">action</span>.<span class="ruby-identifier">to_s</span>)&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-comment cmt"># TODO: Move?</span>&#x000A;      <span class="ruby-comment cmt"># Expand the cloud if 50+% of the votes are for expansion</span>&#x000A;      <span class="ruby-comment cmt"># Contract the cloud if 51+% of the votes are for contraction</span>&#x000A;      <span class="ruby-keyword kw">if</span> (<span class="ruby-identifier">candidates</span>[<span class="ruby-identifier">:expand</span>] <span class="ruby-operator">-</span> <span class="ruby-identifier">candidates</span>[<span class="ruby-identifier">:contract</span>])<span class="ruby-operator">/</span><span class="ruby-identifier">stats</span>.<span class="ruby-identifier">keys</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span><span class="ruby-value">.5</span>&#x000A;        <span class="ruby-value">%x[/usr/bin/server-cloud-elections expand]</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">elected_action</span> <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;expand&quot;</span>&#x000A;        <span class="ruby-ivar">@elected_action</span> = <span class="ruby-value str">&quot;expand&quot;</span>&#x000A;      <span class="ruby-keyword kw">elsif</span> (<span class="ruby-identifier">candidates</span>[<span class="ruby-identifier">:contract</span>] <span class="ruby-operator">-</span> <span class="ruby-identifier">candidates</span>[<span class="ruby-identifier">:expand</span>])<span class="ruby-operator">/</span><span class="ruby-identifier">stats</span>.<span class="ruby-identifier">keys</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span><span class="ruby-value">.5</span>&#x000A;        <span class="ruby-value">%x[/usr/bin/server-cloud-elections contract]</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">elected_action</span> <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;contract&quot;</span>&#x000A;        <span class="ruby-ivar">@elected_action</span> = <span class="ruby-value str">&quot;contract&quot;</span>&#x000A;      <span class="ruby-keyword kw">end</span>      &#x000A;&#x000A;      <span class="ruby-identifier">reload_data!</span>&#x000A;      <span class="ruby-identifier">stats</span>[<span class="ruby-identifier">my_ip</span>][<span class="ruby-value str">&quot;elected_action&quot;</span>] = <span class="ruby-ivar">@elected_action</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@elected_action</span>&#x000A;      <span class="ruby-identifier">log</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;#{Time.now.strftime(&quot;%Y-%m-%d-%H-%M&quot;)}, #{stats.to_json}\n&quot;</span>&#x000A;      <span class="ruby-identifier">stats</span>.<span class="ruby-identifier">to_json</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='protected-instance method' id='method-M000715'>
                 <a name='M000715'>      </a>
                 <div class='synopsis'>
-                  <span class='name'>my_ip</span>
+                  <span class='name'>instances</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
                   <a class='source-toggle' href='#' onclick="toggleCode('M000715-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000715-source'><span class="ruby-comment cmt"># File lib/poolparty/monitors/monitors/stats_monitor.rb, line 173</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">my_ip</span>&#x000A;      <span class="ruby-ivar">@my_ip</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">ohai</span>[<span class="ruby-value str">&quot;ipaddress&quot;</span>]&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000715-source'><span class="ruby-comment cmt"># File lib/poolparty/monitors/monitors/stats_monitor.rb, line 131</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">instances</span>&#x000A;      <span class="ruby-comment cmt"># res = PoolParty::Neighborhoods.load_default.instances</span>&#x000A;      <span class="ruby-identifier">res</span> <span class="ruby-operator">||=</span> <span class="ruby-value">%x[/usr/bin/server-list-active internal_ip]</span>.<span class="ruby-identifier">split</span>(<span class="ruby-value str">&quot;\t&quot;</span>)&#x000A;      <span class="ruby-identifier">res</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='protected-instance method' id='method-M000714'>
                 <a name='M000714'>      </a>
                 <div class='synopsis'>
-                  <span class='name'>nominations</span>
+                  <span class='name'>load</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
                   <a class='source-toggle' href='#' onclick="toggleCode('M000714-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000714-source'><span class="ruby-comment cmt"># File lib/poolparty/monitors/monitors/stats_monitor.rb, line 153</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">nominations</span>&#x000A;      <span class="ruby-identifier">load</span> = <span class="ruby-identifier">stats</span>[<span class="ruby-identifier">my_ip</span>][<span class="ruby-value str">&quot;load&quot;</span>] <span class="ruby-operator">||=</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">:load</span>)&#x000A;      <span class="ruby-identifier">stats</span>[<span class="ruby-identifier">my_ip</span>][<span class="ruby-value str">&quot;nominations&quot;</span>] <span class="ruby-operator">||=</span> <span class="ruby-identifier">rules</span>.<span class="ruby-identifier">collect</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">k</span>,<span class="ruby-identifier">cld_rules</span><span class="ruby-operator">|</span>&#x000A;        <span class="ruby-identifier">t</span> = <span class="ruby-identifier">cld_rules</span>.<span class="ruby-identifier">collect</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-comment cmt"># If the comparison works</span>&#x000A;          <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">r</span>.<span class="ruby-identifier">key</span>.<span class="ruby-identifier">to_sym</span>).<span class="ruby-identifier">to_f</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">r</span>.<span class="ruby-identifier">comparison</span>, <span class="ruby-identifier">r</span>.<span class="ruby-identifier">var</span>.<span class="ruby-identifier">to_f</span>)&#x000A;            <span class="ruby-comment cmt"># if we are facing an expansion rule</span>&#x000A;            <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">k</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/expand/</span>&#x000A;              <span class="ruby-identifier">k</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">can_expand?</span>&#x000A;            <span class="ruby-comment cmt"># if we are facing a contraction rule</span>&#x000A;            <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">k</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/contract/</span>&#x000A;              <span class="ruby-identifier">k</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">can_contract?</span>&#x000A;            <span class="ruby-keyword kw">else</span>&#x000A;              <span class="ruby-identifier">k</span>&#x000A;            <span class="ruby-keyword kw">end</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span>.<span class="ruby-identifier">compact</span>&#x000A;      <span class="ruby-keyword kw">end</span>.<span class="ruby-identifier">flatten</span>.<span class="ruby-identifier">compact</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <div class='protected-instance method' id='method-M000716'>
-                <a name='M000716'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>ohai</span>
-                  <span class='arguments'>()</span>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000716-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000716-source'><span class="ruby-comment cmt"># File lib/poolparty/monitors/monitors/stats_monitor.rb, line 177</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">ohai</span>&#x000A;      <span class="ruby-ivar">@ohai</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">JSON</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-value">%x[ohai]</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <div class='protected-instance method' id='method-M000717'>
-                <a name='M000717'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>reload_data!</span>
-                  <span class='arguments'>()</span>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000717-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000717-source'><span class="ruby-comment cmt"># File lib/poolparty/monitors/monitors/stats_monitor.rb, line 181</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">reload_data!</span>&#x000A;      <span class="ruby-ivar">@stats</span>[<span class="ruby-identifier">my_ip</span>] = {}&#x000A;      <span class="ruby-identifier">instances</span>.<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">inst</span><span class="ruby-operator">|</span> <span class="ruby-ivar">@stats</span>[<span class="ruby-identifier">inst</span>] = {} }&#x000A;    <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <div class='protected-instance method' id='method-M000705'>
-                <a name='M000705'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>rule</span>
-                  <span class='arguments'>(name)</span>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000705-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000705-source'><span class="ruby-comment cmt"># File lib/poolparty/monitors/monitors/stats_monitor.rb, line 112</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">rule</span>(<span class="ruby-identifier">name</span>)&#x000A;      <span class="ruby-identifier">rules</span>[<span class="ruby-identifier">name</span>] <span class="ruby-operator">||=</span> []&#x000A;    <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <div class='protected-instance method' id='method-M000704'>
-                <a name='M000704'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>rules</span>
-                  <span class='arguments'>()</span>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000704-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000704-source'><span class="ruby-comment cmt"># File lib/poolparty/monitors/monitors/stats_monitor.rb, line 108</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">rules</span>&#x000A;      <span class="ruby-ivar">@rules</span> <span class="ruby-operator">||=</span> {}&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000714-source'><span class="ruby-comment cmt"># File lib/poolparty/monitors/monitors/stats_monitor.rb, line 127</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">load</span>&#x000A;      <span class="ruby-value">%x{&quot;uptime&quot;}</span>.<span class="ruby-identifier">split</span>[<span class="ruby-value">-3</span>].<span class="ruby-identifier">to_f</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='protected-instance method' id='method-M000707'>
                 <a name='M000707'>      </a>
                 <div class='synopsis'>
-                  <span class='name'>stats</span>
-                  <span class='arguments'>()</span>
+                  <span class='name'>log</span>
+                  <span class='arguments'>(log_file_path=&quot;/var/log/poolparty/stats_monitor.log&quot;)</span>
                 </div>
                 <div class='source'>
                   <a class='source-toggle' href='#' onclick="toggleCode('M000707-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000707-source'><span class="ruby-comment cmt"># File lib/poolparty/monitors/monitors/stats_monitor.rb, line 123</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">stats</span>&#x000A;      <span class="ruby-ivar">@stats</span> <span class="ruby-operator">||=</span> {<span class="ruby-identifier">my_ip</span>  =<span class="ruby-operator">&gt;</span> {}}&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000707-source'><span class="ruby-comment cmt"># File lib/poolparty/monitors/monitors/stats_monitor.rb, line 66</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">log</span>(<span class="ruby-identifier">log_file_path</span>=<span class="ruby-value str">&quot;/var/log/poolparty/stats_monitor.log&quot;</span>)&#x000A;      <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@logfile</span>&#x000A;        <span class="ruby-ivar">@logfile</span>&#x000A;      <span class="ruby-keyword kw">else</span>&#x000A;        <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">file?</span> <span class="ruby-identifier">log_file_path</span>&#x000A;        <span class="ruby-operator">::</span><span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">mkdir_p</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">dirname</span>(<span class="ruby-identifier">log_file_path</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">directory?</span>(<span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">dirname</span>(<span class="ruby-identifier">log_file_path</span>))&#x000A;        <span class="ruby-ivar">@logfile</span> <span class="ruby-operator">||=</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">log_file_path</span>, <span class="ruby-value str">'a+'</span>)&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='protected-instance method' id='method-M000719'>
+                <a name='M000719'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>max_instances</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000719-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000719-source'><span class="ruby-comment cmt"># File lib/poolparty/monitors/monitors/stats_monitor.rb, line 149</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">max_instances</span>&#x000A;      (<span class="ruby-ivar">@cloud</span>[<span class="ruby-value str">&quot;options&quot;</span>][<span class="ruby-value str">&quot;maximum_instances&quot;</span>] <span class="ruby-operator">||</span> <span class="ruby-constant">PoolParty</span><span class="ruby-operator">::</span><span class="ruby-constant">Default</span>.<span class="ruby-identifier">maximum_instances</span>).<span class="ruby-identifier">to_i</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='protected-instance method' id='method-M000718'>
+                <a name='M000718'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>min_instances</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000718-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000718-source'><span class="ruby-comment cmt"># File lib/poolparty/monitors/monitors/stats_monitor.rb, line 145</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">min_instances</span>&#x000A;      (<span class="ruby-ivar">@cloud</span>[<span class="ruby-value str">&quot;options&quot;</span>][<span class="ruby-value str">&quot;minimum_instances&quot;</span>] <span class="ruby-operator">||</span> <span class="ruby-constant">PoolParty</span><span class="ruby-operator">::</span><span class="ruby-constant">Default</span>.<span class="ruby-identifier">minimum_instances</span>).<span class="ruby-identifier">to_i</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='protected-instance method' id='method-M000721'>
+                <a name='M000721'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>my_ip</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000721-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000721-source'><span class="ruby-comment cmt"># File lib/poolparty/monitors/monitors/stats_monitor.rb, line 173</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">my_ip</span>&#x000A;      <span class="ruby-ivar">@my_ip</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">ohai</span>[<span class="ruby-value str">&quot;ipaddress&quot;</span>]&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='protected-instance method' id='method-M000720'>
+                <a name='M000720'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>nominations</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000720-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000720-source'><span class="ruby-comment cmt"># File lib/poolparty/monitors/monitors/stats_monitor.rb, line 153</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">nominations</span>&#x000A;      <span class="ruby-identifier">load</span> = <span class="ruby-identifier">stats</span>[<span class="ruby-identifier">my_ip</span>][<span class="ruby-value str">&quot;load&quot;</span>] <span class="ruby-operator">||=</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">:load</span>)&#x000A;      <span class="ruby-identifier">stats</span>[<span class="ruby-identifier">my_ip</span>][<span class="ruby-value str">&quot;nominations&quot;</span>] <span class="ruby-operator">||=</span> <span class="ruby-identifier">rules</span>.<span class="ruby-identifier">collect</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">k</span>,<span class="ruby-identifier">cld_rules</span><span class="ruby-operator">|</span>&#x000A;        <span class="ruby-identifier">t</span> = <span class="ruby-identifier">cld_rules</span>.<span class="ruby-identifier">collect</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-comment cmt"># If the comparison works</span>&#x000A;          <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">r</span>.<span class="ruby-identifier">key</span>.<span class="ruby-identifier">to_sym</span>).<span class="ruby-identifier">to_f</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">r</span>.<span class="ruby-identifier">comparison</span>, <span class="ruby-identifier">r</span>.<span class="ruby-identifier">var</span>.<span class="ruby-identifier">to_f</span>)&#x000A;            <span class="ruby-comment cmt"># if we are facing an expansion rule</span>&#x000A;            <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">k</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/expand/</span>&#x000A;              <span class="ruby-identifier">k</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">can_expand?</span>&#x000A;            <span class="ruby-comment cmt"># if we are facing a contraction rule</span>&#x000A;            <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">k</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/contract/</span>&#x000A;              <span class="ruby-identifier">k</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">can_contract?</span>&#x000A;            <span class="ruby-keyword kw">else</span>&#x000A;              <span class="ruby-identifier">k</span>&#x000A;            <span class="ruby-keyword kw">end</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span>.<span class="ruby-identifier">compact</span>&#x000A;      <span class="ruby-keyword kw">end</span>.<span class="ruby-identifier">flatten</span>.<span class="ruby-identifier">compact</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='protected-instance method' id='method-M000722'>
+                <a name='M000722'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>ohai</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000722-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000722-source'><span class="ruby-comment cmt"># File lib/poolparty/monitors/monitors/stats_monitor.rb, line 177</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">ohai</span>&#x000A;      <span class="ruby-ivar">@ohai</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">JSON</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-value">%x[ohai]</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='protected-instance method' id='method-M000723'>
+                <a name='M000723'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>reload_data!</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000723-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000723-source'><span class="ruby-comment cmt"># File lib/poolparty/monitors/monitors/stats_monitor.rb, line 181</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">reload_data!</span>&#x000A;      <span class="ruby-ivar">@stats</span>[<span class="ruby-identifier">my_ip</span>] = {}&#x000A;      <span class="ruby-identifier">instances</span>.<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">inst</span><span class="ruby-operator">|</span> <span class="ruby-ivar">@stats</span>[<span class="ruby-identifier">inst</span>] = {} }&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='protected-instance method' id='method-M000711'>
+                <a name='M000711'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>rule</span>
+                  <span class='arguments'>(name)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000711-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000711-source'><span class="ruby-comment cmt"># File lib/poolparty/monitors/monitors/stats_monitor.rb, line 112</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">rule</span>(<span class="ruby-identifier">name</span>)&#x000A;      <span class="ruby-identifier">rules</span>[<span class="ruby-identifier">name</span>] <span class="ruby-operator">||=</span> []&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='protected-instance method' id='method-M000710'>
+                <a name='M000710'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>rules</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000710-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000710-source'><span class="ruby-comment cmt"># File lib/poolparty/monitors/monitors/stats_monitor.rb, line 108</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">rules</span>&#x000A;      <span class="ruby-ivar">@rules</span> <span class="ruby-operator">||=</span> {}&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='protected-instance method' id='method-M000713'>
+                <a name='M000713'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>stats</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000713-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000713-source'><span class="ruby-comment cmt"># File lib/poolparty/monitors/monitors/stats_monitor.rb, line 123</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">stats</span>&#x000A;      <span class="ruby-ivar">@stats</span> <span class="ruby-operator">||=</span> {<span class="ruby-identifier">my_ip</span>  =<span class="ruby-operator">&gt;</span> {}}&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

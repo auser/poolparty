@@ -187,8 +187,12 @@
             <br />
           </p>
           <pre><code>
-            todo - put in cmds for keypair generation
+            ec2-add-keypair poolparty-example > ~/.ssh/poolparty-example
+            chmod 600 ~/.ssh/poolparty-example
           </code></pre>
+          (Hint, this means you will add the following directive to your
+          <tt>clouds.rb)</tt>
+          <pre class="blackboard">keypair <span class="String"><span class="String">&quot;</span>poolparty-example<span class="String">&quot;</span></span>&#x000A;</pre>
           <p></p>
           <h3>Ports</h3>
           <div class='tip-box'><div class='crab-wrapper'><img src='http://fairchild.github.com/poolparty/images/site/i/examples.png' class='crab'/></div>Wondering why do you have to open these ports? No idea what a 'security group' is? Checkout the
@@ -274,6 +278,17 @@
           switch, but that gets old fast.
           <p>
             Note, that if you are in the same directory as your clouds.rb file, then PoolParty will assume you are working with that file.
+          </p>
+          <h3>External links</h3>
+          <p>
+            <ul>
+              <li>
+                <a href="http://docs.amazonwebservices.com/AWSEC2/latest/GettingStartedGuide/">AWS Getting Started Guide</a>
+              </li>
+              <li>
+                <a href="http://developer.amazonwebservices.com/connect/kbcategory.jspa?categoryID=84">AWS Documentation</a>
+              </li>
+            </ul>
           </p>
         </div>
       </div>

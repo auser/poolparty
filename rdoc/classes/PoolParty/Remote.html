@@ -71,9 +71,10 @@
               <li><a href="#M000387">are_any_nodes_exceeding_minimum_runtime?</a></li>
               <li><a href="#M000384">are_too_few_instances_running?</a></li>
               <li><a href="#M000385">are_too_many_instances_running?</a></li>
-              <li><a href="#M000396">list_of_instances</a></li>
+              <li><a href="#M000395">commands</a></li>
+              <li><a href="#M000397">list_of_instances</a></li>
               <li><a href="#M000386">list_of_nodes_exceeding_minimum_runtime</a></li>
-              <li><a href="#M000395">nodes</a></li>
+              <li><a href="#M000396">nodes</a></li>
               <li><a href="#M000393">rsync</a></li>
               <li><a href="#M000394">run_local</a></li>
               <li><a href="#M000390">run_remote</a></li>
@@ -152,8 +153,21 @@
                   <pre id='M000385-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remoter/cloud_control.rb, line 11</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">are_too_many_instances_running?</span>&#x000A;      <span class="ruby-identifier">nodes</span>(<span class="ruby-identifier">:status</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;running&quot;</span>).<span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-identifier">maximum_instances</span>.<span class="ruby-identifier">to_i</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000396'>
-                <a name='M000396'>      </a>
+              <div class='public-instance method' id='method-M000395'>
+                <a name='M000395'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>commands</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000395-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000395-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remoter/connections.rb, line 51</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">commands</span>&#x000A;      <span class="ruby-ivar">@commands</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">Array</span>.<span class="ruby-identifier">new</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000397'>
+                <a name='M000397'>      </a>
                 <div class='synopsis'>
                   <span class='name'>list_of_instances</span>
                   <span class='arguments'>()</span>
@@ -165,10 +179,10 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000396-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000397-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000396-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remoter/interactive.rb, line 13</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">list_of_instances</span>&#x000A;      <span class="ruby-keyword kw">return</span> <span class="ruby-ivar">@list_of_instances</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@list_of_instances</span>&#x000A;      <span class="ruby-ivar">@containing_cloud</span> = <span class="ruby-keyword kw">self</span>&#x000A;      <span class="ruby-identifier">n</span> = <span class="ruby-constant">Neighborhoods</span>.<span class="ruby-identifier">load_default</span>&#x000A;      <span class="ruby-ivar">@list_of_instances</span> = (<span class="ruby-identifier">n</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-value">? </span><span class="ruby-identifier">_list_of_instances</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">n</span>.<span class="ruby-identifier">instances</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000397-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remoter/interactive.rb, line 13</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">list_of_instances</span>&#x000A;      <span class="ruby-keyword kw">return</span> <span class="ruby-ivar">@list_of_instances</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@list_of_instances</span>&#x000A;      <span class="ruby-ivar">@containing_cloud</span> = <span class="ruby-keyword kw">self</span>&#x000A;      <span class="ruby-identifier">n</span> = <span class="ruby-constant">Neighborhoods</span>.<span class="ruby-identifier">load_default</span>&#x000A;      <span class="ruby-ivar">@list_of_instances</span> = (<span class="ruby-identifier">n</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-value">? </span><span class="ruby-identifier">_list_of_instances</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">n</span>.<span class="ruby-identifier">instances</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-instance method' id='method-M000386'>
@@ -184,8 +198,8 @@
                   <pre id='M000386-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remoter/cloud_control.rb, line 15</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">list_of_nodes_exceeding_minimum_runtime</span>&#x000A;      <span class="ruby-identifier">nodes</span>(<span class="ruby-identifier">:status</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;running&quot;</span>).<span class="ruby-identifier">reject</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">i</span><span class="ruby-operator">|</span> <span class="ruby-identifier">i</span>.<span class="ruby-identifier">elapsed_runtime</span> <span class="ruby-operator">&lt;</span> <span class="ruby-identifier">minimum_runtime</span>}&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000395'>
-                <a name='M000395'>      </a>
+              <div class='public-instance method' id='method-M000396'>
+                <a name='M000396'>      </a>
                 <div class='synopsis'>
                   <span class='name'>nodes</span>
                   <span class='arguments'>(hsh={})</span>
@@ -196,10 +210,10 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000395-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000396-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000395-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remoter/interactive.rb, line 5</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">nodes</span>(<span class="ruby-identifier">hsh</span>={})&#x000A;      <span class="ruby-comment cmt"># _nodes[hsh] ||= </span>&#x000A;      <span class="ruby-identifier">list_of_instances</span>.<span class="ruby-identifier">select_with_hash</span>(<span class="ruby-identifier">hsh</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000396-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remoter/interactive.rb, line 5</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">nodes</span>(<span class="ruby-identifier">hsh</span>={})&#x000A;      <span class="ruby-comment cmt"># _nodes[hsh] ||= </span>&#x000A;      <span class="ruby-identifier">list_of_instances</span>.<span class="ruby-identifier">select_with_hash</span>(<span class="ruby-identifier">hsh</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-instance method' id='method-M000393'>

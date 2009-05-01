@@ -45,51 +45,51 @@
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000518">before_configure</a></li>
-              <li><a href="#M000517">loaded</a></li>
-              <li><a href="#M000516">present</a></li>
+              <li><a href="#M000519">before_configure</a></li>
+              <li><a href="#M000518">loaded</a></li>
+              <li><a href="#M000517">present</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000518'>
-                <a name='M000518'>      </a>
+              <div class='public-instance method' id='method-M000519'>
+                <a name='M000519'>      </a>
                 <div class='synopsis'>
                   <span class='name'>before_configure</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000518-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000519-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000518-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/chef_deploy.rb, line 46</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">before_configure</span>&#x000A;        <span class="ruby-identifier">configure_commands</span> [&#x000A;          <span class="ruby-value str">&quot;mkdir -p /etc/chef/lib&quot;</span>,&#x000A;          <span class="ruby-value str">&quot;cp -R /var/poolparty/dr_configure/etc/chef/lib /etc/chef&quot;</span>&#x000A;        ]&#x000A;        <span class="ruby-operator">::</span><span class="ruby-constant">Suitcase</span><span class="ruby-operator">::</span><span class="ruby-constant">Zipper</span>.<span class="ruby-identifier">add</span>(<span class="ruby-node">&quot;#{::File.dirname(__FILE__)}/../../../vendor/chef/chef-deploy&quot;</span>, &#x000A;                                <span class="ruby-value str">&quot;etc/chef/lib&quot;</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000519-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/chef_deploy.rb, line 46</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">before_configure</span>&#x000A;        <span class="ruby-identifier">configure_commands</span> [&#x000A;          <span class="ruby-value str">&quot;mkdir -p /etc/chef/lib&quot;</span>,&#x000A;          <span class="ruby-value str">&quot;cp -R /var/poolparty/dr_configure/etc/chef/lib /etc/chef&quot;</span>&#x000A;        ]&#x000A;        <span class="ruby-operator">::</span><span class="ruby-constant">Suitcase</span><span class="ruby-operator">::</span><span class="ruby-constant">Zipper</span>.<span class="ruby-identifier">add</span>(<span class="ruby-node">&quot;#{::File.dirname(__FILE__)}/../../../vendor/chef/chef-deploy&quot;</span>, &#x000A;                                <span class="ruby-value str">&quot;etc/chef/lib&quot;</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000517'>
-                <a name='M000517'>      </a>
+              <div class='public-instance method' id='method-M000518'>
+                <a name='M000518'>      </a>
                 <div class='synopsis'>
                   <span class='name'>loaded</span>
                   <span class='arguments'>(o={})</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000517-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000518-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000517-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/chef_deploy.rb, line 40</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">loaded</span>(<span class="ruby-identifier">o</span>={})&#x000A;        <span class="ruby-identifier">raise</span> <span class="ruby-value str">&quot;You must specify a git repo&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">repo?</span>&#x000A;        <span class="ruby-identifier">has_chef_library</span> <span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;chef-deploy/lib/chef-deploy.rb&quot;</span>        &#x000A;        <span class="ruby-identifier">has_chef_deploy_definition</span>(<span class="ruby-identifier">options</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000518-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/chef_deploy.rb, line 40</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">loaded</span>(<span class="ruby-identifier">o</span>={})&#x000A;        <span class="ruby-identifier">raise</span> <span class="ruby-value str">&quot;You must specify a git repo&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">repo?</span>&#x000A;        <span class="ruby-identifier">has_chef_library</span> <span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;chef-deploy/lib/chef-deploy.rb&quot;</span>        &#x000A;        <span class="ruby-identifier">has_chef_deploy_definition</span>(<span class="ruby-identifier">options</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000516'>
-                <a name='M000516'>      </a>
+              <div class='public-instance method' id='method-M000517'>
+                <a name='M000517'>      </a>
                 <div class='synopsis'>
                   <span class='name'>present</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000516-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000517-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000516-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/chef_deploy.rb, line 33</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">present</span>&#x000A;        <span class="ruby-identifier">:deploy</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000517-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/chef_deploy.rb, line 33</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">present</span>&#x000A;        <span class="ruby-identifier">:deploy</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

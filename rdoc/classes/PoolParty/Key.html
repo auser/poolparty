@@ -45,20 +45,20 @@
             <h2>Methods</h2>
             <h3>public class</h3>
             <ol>
-              <li><a href="#M000669">keypair_paths</a></li>
-              <li><a href="#M000661">new</a></li>
+              <li><a href="#M000675">keypair_paths</a></li>
+              <li><a href="#M000667">new</a></li>
             </ol>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000666">basename</a></li>
-              <li><a href="#M000663">content</a></li>
-              <li><a href="#M000670">each</a></li>
-              <li><a href="#M000662">exists?</a></li>
-              <li><a href="#M000667">filename</a></li>
-              <li><a href="#M000664">full_filepath</a></li>
-              <li><a href="#M000668">search_in_known_locations</a></li>
-              <li><a href="#M000671">to_json</a></li>
-              <li><a href="#M000665">to_s</a></li>
+              <li><a href="#M000672">basename</a></li>
+              <li><a href="#M000669">content</a></li>
+              <li><a href="#M000676">each</a></li>
+              <li><a href="#M000668">exists?</a></li>
+              <li><a href="#M000673">filename</a></li>
+              <li><a href="#M000670">full_filepath</a></li>
+              <li><a href="#M000674">search_in_known_locations</a></li>
+              <li><a href="#M000677">to_json</a></li>
+              <li><a href="#M000671">to_s</a></li>
             </ol>
           </div>
           <div id='section'>
@@ -76,8 +76,8 @@
             </div>
             <div id='methods'>
               <h2>Public class methods</h2>
-              <div class='public-class method' id='method-M000669'>
-                <a name='M000669'>      </a>
+              <div class='public-class method' id='method-M000675'>
+                <a name='M000675'>      </a>
                 <div class='synopsis'>
                   <span class='name'>keypair_paths</span>
                   <span class='arguments'>()</span>
@@ -88,14 +88,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000669-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000675-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000669-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/key.rb, line 55</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">keypair_paths</span>&#x000A;      [ &#x000A;        <span class="ruby-node">&quot;#{ENV[&quot;HOME&quot;]}/.ssh&quot;</span>,&#x000A;        <span class="ruby-node">&quot;#{Default.poolparty_home_path}/keys&quot;</span>,&#x000A;        <span class="ruby-constant">PoolParty</span><span class="ruby-operator">::</span><span class="ruby-constant">Default</span>.<span class="ruby-identifier">base_keypair_path</span>,&#x000A;        <span class="ruby-constant">PoolParty</span><span class="ruby-operator">::</span><span class="ruby-constant">Default</span>.<span class="ruby-identifier">base_config_directory</span>,&#x000A;        <span class="ruby-constant">PoolParty</span><span class="ruby-operator">::</span><span class="ruby-constant">Default</span>.<span class="ruby-identifier">base_ssh_path</span>,&#x000A;        <span class="ruby-constant">PoolParty</span><span class="ruby-operator">::</span><span class="ruby-constant">Default</span>.<span class="ruby-identifier">remote_storage_path</span>,&#x000A;        <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">pwd</span>&#x000A;      ]&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000675-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/key.rb, line 55</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">keypair_paths</span>&#x000A;      [ &#x000A;        <span class="ruby-node">&quot;#{ENV[&quot;HOME&quot;]}/.ssh&quot;</span>,&#x000A;        <span class="ruby-node">&quot;#{Default.poolparty_home_path}/keys&quot;</span>,&#x000A;        <span class="ruby-constant">PoolParty</span><span class="ruby-operator">::</span><span class="ruby-constant">Default</span>.<span class="ruby-identifier">base_keypair_path</span>,&#x000A;        <span class="ruby-constant">PoolParty</span><span class="ruby-operator">::</span><span class="ruby-constant">Default</span>.<span class="ruby-identifier">base_config_directory</span>,&#x000A;        <span class="ruby-constant">PoolParty</span><span class="ruby-operator">::</span><span class="ruby-constant">Default</span>.<span class="ruby-identifier">base_ssh_path</span>,&#x000A;        <span class="ruby-constant">PoolParty</span><span class="ruby-operator">::</span><span class="ruby-constant">Default</span>.<span class="ruby-identifier">remote_storage_path</span>,&#x000A;        <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">pwd</span>&#x000A;      ]&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-class method' id='method-M000661'>
-                <a name='M000661'>      </a>
+              <div class='public-class method' id='method-M000667'>
+                <a name='M000667'>      </a>
                 <div class='synopsis'>
                   <span class='name'>new</span>
                   <span class='arguments'>(fpath=nil)</span>
@@ -106,15 +106,15 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000661-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000667-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000661-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/key.rb, line 10</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">fpath</span>=<span class="ruby-keyword kw">nil</span>)&#x000A;      <span class="ruby-ivar">@filepath</span> = (<span class="ruby-identifier">fpath</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">fpath</span>.<span class="ruby-identifier">empty?</span>) <span class="ruby-operator">?</span> <span class="ruby-value str">&quot;id_rsa&quot;</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">fpath</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000667-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/key.rb, line 10</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">fpath</span>=<span class="ruby-keyword kw">nil</span>)&#x000A;      <span class="ruby-ivar">@filepath</span> = (<span class="ruby-identifier">fpath</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">fpath</span>.<span class="ruby-identifier">empty?</span>) <span class="ruby-operator">?</span> <span class="ruby-value str">&quot;id_rsa&quot;</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">fpath</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000666'>
-                <a name='M000666'>      </a>
+              <div class='public-instance method' id='method-M000672'>
+                <a name='M000672'>      </a>
                 <div class='synopsis'>
                   <span class='name'>basename</span>
                   <span class='arguments'>()</span>
@@ -125,14 +125,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000666-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000672-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000666-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/key.rb, line 32</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">basename</span>&#x000A;      <span class="ruby-ivar">@basename</span> <span class="ruby-operator">||=</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">basename</span>(<span class="ruby-identifier">full_filepath</span>, <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">extname</span>(<span class="ruby-identifier">full_filepath</span>)) <span class="ruby-keyword kw">rescue</span> <span class="ruby-identifier">filepath</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000672-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/key.rb, line 32</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">basename</span>&#x000A;      <span class="ruby-ivar">@basename</span> <span class="ruby-operator">||=</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">basename</span>(<span class="ruby-identifier">full_filepath</span>, <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">extname</span>(<span class="ruby-identifier">full_filepath</span>)) <span class="ruby-keyword kw">rescue</span> <span class="ruby-identifier">filepath</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000663'>
-                <a name='M000663'>      </a>
+              <div class='public-instance method' id='method-M000669'>
+                <a name='M000669'>      </a>
                 <div class='synopsis'>
                   <span class='name'>content</span>
                   <span class='arguments'>()</span>
@@ -143,14 +143,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000663-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000669-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000663-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/key.rb, line 20</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">content</span>&#x000A;      <span class="ruby-ivar">@content</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">exists?</span> <span class="ruby-value">? </span><span class="ruby-identifier">open</span>(<span class="ruby-identifier">full_filepath</span>).<span class="ruby-identifier">read</span> <span class="ruby-operator">:</span> <span class="ruby-keyword kw">nil</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000669-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/key.rb, line 20</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">content</span>&#x000A;      <span class="ruby-ivar">@content</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">exists?</span> <span class="ruby-value">? </span><span class="ruby-identifier">open</span>(<span class="ruby-identifier">full_filepath</span>).<span class="ruby-identifier">read</span> <span class="ruby-operator">:</span> <span class="ruby-keyword kw">nil</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000670'>
-                <a name='M000670'>      </a>
+              <div class='public-instance method' id='method-M000676'>
+                <a name='M000676'>      </a>
                 <div class='synopsis'>
                   <span class='name'>each</span>
                   <span class='arguments'>() {|full_filepath| ...}</span>
@@ -161,33 +161,33 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000670-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000676-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000670-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/key.rb, line 68</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">each</span>&#x000A;      <span class="ruby-keyword kw">yield</span> <span class="ruby-identifier">full_filepath</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000676-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/key.rb, line 68</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">each</span>&#x000A;      <span class="ruby-keyword kw">yield</span> <span class="ruby-identifier">full_filepath</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000662'>
-                <a name='M000662'>      </a>
+              <div class='public-instance method' id='method-M000668'>
+                <a name='M000668'>      </a>
                 <div class='synopsis'>
                   <span class='name'>exists?</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='description'>
                   <p>
-                  If the <a href="Key.html#M000664">full_filepath</a> is nil, then the key
+                  If the <a href="Key.html#M000670">full_filepath</a> is nil, then the key
                   doesn&#8217;t exist
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000662-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000668-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000662-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/key.rb, line 15</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">exists?</span>&#x000A;      <span class="ruby-identifier">full_filepath</span> <span class="ruby-operator">!=</span> <span class="ruby-keyword kw">nil</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000668-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/key.rb, line 15</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">exists?</span>&#x000A;      <span class="ruby-identifier">full_filepath</span> <span class="ruby-operator">!=</span> <span class="ruby-keyword kw">nil</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000667'>
-                <a name='M000667'>      </a>
+              <div class='public-instance method' id='method-M000673'>
+                <a name='M000673'>      </a>
                 <div class='synopsis'>
                   <span class='name'>filename</span>
                   <span class='arguments'>()</span>
@@ -198,34 +198,34 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000667-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000673-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000667-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/key.rb, line 37</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">filename</span>&#x000A;      <span class="ruby-ivar">@filename</span> <span class="ruby-operator">||=</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">basename</span>(<span class="ruby-identifier">full_filepath</span>) <span class="ruby-keyword kw">rescue</span> <span class="ruby-identifier">filepath</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000673-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/key.rb, line 37</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">filename</span>&#x000A;      <span class="ruby-ivar">@filename</span> <span class="ruby-operator">||=</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">basename</span>(<span class="ruby-identifier">full_filepath</span>) <span class="ruby-keyword kw">rescue</span> <span class="ruby-identifier">filepath</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000664'>
-                <a name='M000664'>      </a>
+              <div class='public-instance method' id='method-M000670'>
+                <a name='M000670'>      </a>
                 <div class='synopsis'>
                   <span class='name'>full_filepath</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='description'>
                   <p>
-                  Returns the <a href="Key.html#M000664">full_filepath</a> of the key. If a
+                  Returns the <a href="Key.html#M000670">full_filepath</a> of the key. If a
                   full filepath is passed, we just return the expanded filepath for the
                   keypair, otherwise query where it is against known locations
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000664-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000670-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000664-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/key.rb, line 26</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">full_filepath</span>&#x000A;      <span class="ruby-ivar">@full_filepath</span> <span class="ruby-operator">||=</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">file?</span>(<span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">filepath</span>)) <span class="ruby-operator">?</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">filepath</span>) <span class="ruby-operator">:</span> <span class="ruby-identifier">search_in_known_locations</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000670-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/key.rb, line 26</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">full_filepath</span>&#x000A;      <span class="ruby-ivar">@full_filepath</span> <span class="ruby-operator">||=</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">file?</span>(<span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">filepath</span>)) <span class="ruby-operator">?</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">filepath</span>) <span class="ruby-operator">:</span> <span class="ruby-identifier">search_in_known_locations</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000668'>
-                <a name='M000668'>      </a>
+              <div class='public-instance method' id='method-M000674'>
+                <a name='M000674'>      </a>
                 <div class='synopsis'>
                   <span class='name'>search_in_known_locations</span>
                   <span class='arguments'>()</span>
@@ -238,14 +238,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000668-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000674-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000668-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/key.rb, line 44</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">search_in_known_locations</span>&#x000A;      <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">keypair_paths</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">path</span><span class="ruby-operator">|</span>&#x000A;        <span class="ruby-identifier">full_path</span> = <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>( <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">path</span>), <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">basename</span>(<span class="ruby-identifier">filepath</span>))&#x000A;        <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">full_path</span> <span class="ruby-keyword kw">if</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">exists?</span>(<span class="ruby-identifier">full_path</span>)&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-comment cmt"># raise Exception.new(&quot;We cannot continue without a keypair. Please define a keypair in your clouds.rb&quot;)</span>&#x000A;      <span class="ruby-comment cmt"># TODO: Add raise for keypair</span>&#x000A;      <span class="ruby-keyword kw">nil</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000674-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/key.rb, line 44</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">search_in_known_locations</span>&#x000A;      <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">keypair_paths</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">path</span><span class="ruby-operator">|</span>&#x000A;        <span class="ruby-identifier">full_path</span> = <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>( <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">path</span>), <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">basename</span>(<span class="ruby-identifier">filepath</span>))&#x000A;        <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">full_path</span> <span class="ruby-keyword kw">if</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">exists?</span>(<span class="ruby-identifier">full_path</span>)&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-comment cmt"># raise Exception.new(&quot;We cannot continue without a keypair. Please define a keypair in your clouds.rb&quot;)</span>&#x000A;      <span class="ruby-comment cmt"># TODO: Add raise for keypair</span>&#x000A;      <span class="ruby-keyword kw">nil</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000671'>
-                <a name='M000671'>      </a>
+              <div class='public-instance method' id='method-M000677'>
+                <a name='M000677'>      </a>
                 <div class='synopsis'>
                   <span class='name'>to_json</span>
                   <span class='arguments'>()</span>
@@ -256,21 +256,21 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000671-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000677-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000671-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/key.rb, line 73</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_json</span>&#x000A;      <span class="ruby-node">&quot;{\&quot;basename\&quot;:\&quot;#{basename}\&quot;,\&quot;full_filepath\&quot;: \&quot;/etc/poolparty/#{filename}\&quot;}&quot;</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000677-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/key.rb, line 73</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_json</span>&#x000A;      <span class="ruby-node">&quot;{\&quot;basename\&quot;:\&quot;#{basename}\&quot;,\&quot;full_filepath\&quot;: \&quot;/etc/poolparty/#{filename}\&quot;}&quot;</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000665'>
-                <a name='M000665'>      </a>
+              <div class='public-instance method' id='method-M000671'>
+                <a name='M000671'>      </a>
                 <div class='synopsis'>
                   <span class='name'>to_s</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='description'>
                   <p>
-                  Alias for <a href="Key.html#M000664">full_filepath</a>
+                  Alias for <a href="Key.html#M000670">full_filepath</a>
                   </p>
                 </div>
               </div>

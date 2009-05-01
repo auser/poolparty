@@ -4,3 +4,5 @@
 /pkg/
 .com.apple.timemachine.supported
 /vendor/
+.autosession.vim
+tags

@@ -79,7 +79,7 @@
               </p>
               <p>
                 For example:
-                <pre class="blackboard"><span class="line-numbers">   1 </span> scp <span class="Keyword">~</span><span class="String"><span class="String">/</span></span><span class="String">.ssh</span><span class="String"><span class="String">/i</span></span>d_rsa.<span class="Entity">pub</span> root<span class="Variable"><span class="Variable">@</span>local_vmware_ip</span><span class="Constant"><span class="Constant">:</span>/</span>root<span class="Keyword">/</span>.<span class="Entity">ssh</span><span class="Keyword">/</span>authorized_keys</pre>
+                <pre class="blackboard">scp <span class="Keyword">~</span><span class="String"><span class="String">/</span></span><span class="String">.ssh</span><span class="String"><span class="String">/i</span></span>d_rsa.<span class="Entity">pub</span> root<span class="Variable"><span class="Variable">@</span>local_vmware_ip</span><span class="Constant"><span class="Constant">:</span>/</span>root<span class="Keyword">/</span>.<span class="Entity">ssh</span><span class="Keyword">/</span>authorized_keys&#x000A;</pre>
               </p>
               <p>
                 Then
@@ -105,29 +105,27 @@
               <p>
                 For example, using VMware Fusion on Mac OSX add the following to your
                 <tt>.profile</tt>
-                <pre class="blackboard"><span class="line-numbers">   1 </span> export <span class="Variable">PATH</span><span class="Keyword">=</span><span class="Variable"><span class="Variable">$</span>PATH</span><span class="Constant"><span class="Constant">:</span>/</span><span class="Variable">Library</span><span class="Keyword">/</span><span class="Variable">Application</span> <span class="Variable">Support</span><span class="Keyword">/</span><span class="Variable">VMware</span> <span class="Variable">Fusion</span></pre>
+                <pre class="blackboard"><span class="Storage">export</span> PATH=<span class="Variable"><span class="Variable">$</span>PATH</span>:/Library/Application<span class="Constant">\ </span>Support/VMware<span class="Constant">\ </span>Fusion&#x000A;</pre>
               </p>
             </li>
             <li>
               <p>
                 enable vmrun in your
                 <tt>clouds.rb</tt>
-                <p>
-                  <em>
-                    todo: inline block below is ugly
-                  </em>
-                </p>
-                <pre class="blackboard"><span class="line-numbers">   1 </span>   using <span class="Constant"><span class="Constant">:</span>vmrun</span> <span class="Keyword">do</span>
-        <span class="line-numbers">   2 </span>    <span class="Entity">vmx_hash</span>({
-        <span class="line-numbers">   3 </span>     <span class="String"><span class="String">&quot;</span>/Users/alerner/Documents/Virtual Machines.localized/one.vmwarevm/Ubuntu Linux 32bit.vmx<span class="String">&quot;</span></span> =&gt; <span class="String"><span class="String">&quot;</span>192.168.248.128<span class="String">&quot;</span></span>
-        <span class="line-numbers">   4 </span>   })
-        <span class="line-numbers">   5 </span> <span class="Keyword">end</span>
-        </pre>
+                <p></p>
+                <pre class="blackboard"><span class="Entity">clouds</span>(<span class="Constant"><span class="Constant">:</span>app</span>) <span class="Keyword">do</span>&#x000A;<span class="Comment">  <span class="Comment">#</span> ...</span>&#x000A;  using <span class="Constant"><span class="Constant">:</span>vmrun</span> <span class="Keyword">do</span>&#x000A;    <span class="Entity">vmx_hash</span>({&#x000A;      <span class="String"><span class="String">&quot;</span>/Users/alerner/Documents/Virtual Machines.localized/one.vmwarevm/Ubuntu Linux 32bit.vmx<span class="String">&quot;</span></span> =&gt; <span class="String"><span class="String">&quot;</span>192.168.248.128<span class="String">&quot;</span></span>&#x000A;    })&#x000A;<span class="Comment">  <span class="Comment">#</span> ...</span>&#x000A;  <span class="Keyword">end</span>&#x000A;<span class="Keyword">end</span>&#x000A;</pre>
               </p>
             </li>
             <li>
               <p>
-                <tt>cloud-start</tt>
+                <pre class="blackboard">cloud start <span class="Keyword">-</span>d&#x000A;</pre>
+              </p>
+              <p>
+                Note: if you receive the message
+                <tt>Your cloud is already running.</tt>
+                That is probably because you already have VMware or possibly your image running. In this case simply
+                <tt>cloud provision</tt>
+                to provision your instances.
               </p>
             </li>
           </ol>

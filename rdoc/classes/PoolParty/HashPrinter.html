@@ -45,65 +45,65 @@
             <h2>Methods</h2>
             <h3>public class</h3>
             <ol>
-              <li><a href="#M000496">print_hash</a></li>
-              <li><a href="#M000497">print_tabs</a></li>
-              <li><a href="#M000495">print_to_string</a></li>
-              <li><a href="#M000498">print_value</a></li>
+              <li><a href="#M000497">print_hash</a></li>
+              <li><a href="#M000498">print_tabs</a></li>
+              <li><a href="#M000496">print_to_string</a></li>
+              <li><a href="#M000499">print_value</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public class methods</h2>
-              <div class='public-class method' id='method-M000496'>
-                <a name='M000496'>      </a>
+              <div class='public-class method' id='method-M000497'>
+                <a name='M000497'>      </a>
                 <div class='synopsis'>
                   <span class='name'>print_hash</span>
                   <span class='arguments'>(props={}, tabs=0)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000496-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000496-source'><span class="ruby-comment cmt"># File lib/poolparty/helpers/hash_printer.rb, line 10</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">print_hash</span>(<span class="ruby-identifier">props</span>={}, <span class="ruby-identifier">tabs</span>=<span class="ruby-value">0</span>)&#x000A;      <span class="ruby-identifier">out</span> = []&#x000A;      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">props</span>[<span class="ruby-identifier">:options</span>]&#x000A;        <span class="ruby-identifier">out</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">props</span>[<span class="ruby-identifier">:options</span>].<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-node">&quot;#{print_tabs(tabs)}#{k} =&gt; #{print_value(v)}&quot;</span>}.<span class="ruby-identifier">join</span>(<span class="ruby-node">&quot;#{print_tabs(tabs)}\n&quot;</span>)&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">props</span>[<span class="ruby-identifier">:resources</span>]&#x000A;        <span class="ruby-identifier">props</span>[<span class="ruby-identifier">:resources</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">ty</span>,<span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-identifier">out</span> <span class="ruby-operator">&lt;&lt;</span> [&#x000A;            <span class="ruby-node">&quot;#{print_tabs(tabs)}#{ty.to_s.capitalize}&quot;</span>,&#x000A;            <span class="ruby-identifier">r</span>.<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">h</span><span class="ruby-operator">|</span> <span class="ruby-identifier">h</span>.<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-node">&quot;#{print_tabs(tabs+1)}#{k} =&gt; #{print_value(v)}&quot;</span>}}.<span class="ruby-identifier">join</span>(<span class="ruby-node">&quot;#{print_tabs(tabs+1)}\n&quot;</span>)&#x000A;          ].<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot;\n&quot;</span>)&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">props</span>[<span class="ruby-identifier">:services</span>]&#x000A;        <span class="ruby-identifier">props</span>[<span class="ruby-identifier">:services</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">nm</span>,<span class="ruby-identifier">s</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-identifier">out</span> <span class="ruby-operator">&lt;&lt;</span> [&#x000A;            <span class="ruby-node">&quot;#{print_tabs(tabs)}#{nm.to_s.capitalize}&quot;</span>,&#x000A;            <span class="ruby-identifier">print_hash</span>(<span class="ruby-identifier">s</span>,<span class="ruby-identifier">tabs</span><span class="ruby-operator">+</span><span class="ruby-value">1</span>)&#x000A;          ].<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot;\n&quot;</span>)&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-identifier">out</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot;\n&quot;</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <div class='public-class method' id='method-M000497'>
-                <a name='M000497'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>print_tabs</span>
-                  <span class='arguments'>(tabs=1)</span>
-                </div>
-                <div class='source'>
                   <a class='source-toggle' href='#' onclick="toggleCode('M000497-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000497-source'><span class="ruby-comment cmt"># File lib/poolparty/helpers/hash_printer.rb, line 33</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">print_tabs</span>(<span class="ruby-identifier">tabs</span>=<span class="ruby-value">1</span>)&#x000A;      <span class="ruby-node">&quot;#{&quot;\t&quot;*tabs}&quot;</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <div class='public-class method' id='method-M000495'>
-                <a name='M000495'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>print_to_string</span>
-                  <span class='arguments'>(props={})</span>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000495-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000495-source'><span class="ruby-comment cmt"># File lib/poolparty/helpers/hash_printer.rb, line 3</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">print_to_string</span>(<span class="ruby-identifier">props</span>={})&#x000A;<span class="ruby-value str">&quot;Top Level\n\#{print_hash(props, 1)}\n&quot;</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000497-source'><span class="ruby-comment cmt"># File lib/poolparty/helpers/hash_printer.rb, line 10</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">print_hash</span>(<span class="ruby-identifier">props</span>={}, <span class="ruby-identifier">tabs</span>=<span class="ruby-value">0</span>)&#x000A;      <span class="ruby-identifier">out</span> = []&#x000A;      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">props</span>[<span class="ruby-identifier">:options</span>]&#x000A;        <span class="ruby-identifier">out</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">props</span>[<span class="ruby-identifier">:options</span>].<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-node">&quot;#{print_tabs(tabs)}#{k} =&gt; #{print_value(v)}&quot;</span>}.<span class="ruby-identifier">join</span>(<span class="ruby-node">&quot;#{print_tabs(tabs)}\n&quot;</span>)&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">props</span>[<span class="ruby-identifier">:resources</span>]&#x000A;        <span class="ruby-identifier">props</span>[<span class="ruby-identifier">:resources</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">ty</span>,<span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-identifier">out</span> <span class="ruby-operator">&lt;&lt;</span> [&#x000A;            <span class="ruby-node">&quot;#{print_tabs(tabs)}#{ty.to_s.capitalize}&quot;</span>,&#x000A;            <span class="ruby-identifier">r</span>.<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">h</span><span class="ruby-operator">|</span> <span class="ruby-identifier">h</span>.<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-node">&quot;#{print_tabs(tabs+1)}#{k} =&gt; #{print_value(v)}&quot;</span>}}.<span class="ruby-identifier">join</span>(<span class="ruby-node">&quot;#{print_tabs(tabs+1)}\n&quot;</span>)&#x000A;          ].<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot;\n&quot;</span>)&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">props</span>[<span class="ruby-identifier">:services</span>]&#x000A;        <span class="ruby-identifier">props</span>[<span class="ruby-identifier">:services</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">nm</span>,<span class="ruby-identifier">s</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-identifier">out</span> <span class="ruby-operator">&lt;&lt;</span> [&#x000A;            <span class="ruby-node">&quot;#{print_tabs(tabs)}#{nm.to_s.capitalize}&quot;</span>,&#x000A;            <span class="ruby-identifier">print_hash</span>(<span class="ruby-identifier">s</span>,<span class="ruby-identifier">tabs</span><span class="ruby-operator">+</span><span class="ruby-value">1</span>)&#x000A;          ].<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot;\n&quot;</span>)&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-identifier">out</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot;\n&quot;</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-class method' id='method-M000498'>
                 <a name='M000498'>      </a>
                 <div class='synopsis'>
-                  <span class='name'>print_value</span>
-                  <span class='arguments'>(v)</span>
+                  <span class='name'>print_tabs</span>
+                  <span class='arguments'>(tabs=1)</span>
                 </div>
                 <div class='source'>
                   <a class='source-toggle' href='#' onclick="toggleCode('M000498-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000498-source'><span class="ruby-comment cmt"># File lib/poolparty/helpers/hash_printer.rb, line 36</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">print_value</span>(<span class="ruby-identifier">v</span>)&#x000A;      <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">v</span>&#x000A;      <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Array</span>&#x000A;        <span class="ruby-node">&quot;[#{v.join(&quot;, &quot;)}]&quot;</span>&#x000A;      <span class="ruby-keyword kw">else</span>&#x000A;        <span class="ruby-identifier">v</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000498-source'><span class="ruby-comment cmt"># File lib/poolparty/helpers/hash_printer.rb, line 33</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">print_tabs</span>(<span class="ruby-identifier">tabs</span>=<span class="ruby-value">1</span>)&#x000A;      <span class="ruby-node">&quot;#{&quot;\t&quot;*tabs}&quot;</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-class method' id='method-M000496'>
+                <a name='M000496'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>print_to_string</span>
+                  <span class='arguments'>(props={})</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000496-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000496-source'><span class="ruby-comment cmt"># File lib/poolparty/helpers/hash_printer.rb, line 3</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">print_to_string</span>(<span class="ruby-identifier">props</span>={})&#x000A;<span class="ruby-value str">&quot;Top Level\n\#{print_hash(props, 1)}\n&quot;</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-class method' id='method-M000499'>
+                <a name='M000499'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>print_value</span>
+                  <span class='arguments'>(v)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000499-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000499-source'><span class="ruby-comment cmt"># File lib/poolparty/helpers/hash_printer.rb, line 36</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">print_value</span>(<span class="ruby-identifier">v</span>)&#x000A;      <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">v</span>&#x000A;      <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Array</span>&#x000A;        <span class="ruby-node">&quot;[#{v.join(&quot;, &quot;)}]&quot;</span>&#x000A;      <span class="ruby-keyword kw">else</span>&#x000A;        <span class="ruby-identifier">v</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>
