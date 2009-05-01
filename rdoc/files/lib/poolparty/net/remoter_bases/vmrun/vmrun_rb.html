@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>File: vmrun.rb [RDoc Documentation]</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../../../../../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='file' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>vmrun.rb</h1>
+        <div class='paths'>
+          lib/poolparty/net/remoter_bases/vmrun/vmrun.rb
+        </div>
+        <div class='last-update'>
+          Last Update:
+          <span class='datetime'>Thu Apr 30 18:20:13 -0700 2009</span>
+        </div>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='description'>
+            <p>
+            The Vmrun remote base uses the vmrun command to implement a cloud remoter
+            base. The Vmrun remoter base has been tested with Vmware fusion on the mac.
+            </p>
+            <p>
+            In order to use the Vmrun remoter base you will need to setup a few things.
+            First, you will need to have the Vmware fusion installed and vmrun command
+            in your path. The default location of the vmrun binary is
+            /Library/Application Support/VMware Fusion/vmrun. You will then of course
+            need a virtual machine installed and available. Once you have your instance
+            installed and running, you need to setup your ssh keys so that poolparty
+            can ssh into the instance. Get the ip of you instnace with ifconfig inside
+            the running instance. For example:
+            </p>
+            <pre>ssh root@172.0.1.129 &quot;mkdir /root/.ssh &amp;&amp; chmod 600 /root/.ssh&quot;&#x000A;scp my_key.pub root@172.0.1.129:/root/.ssh/authorized_keys</pre>
+            <p>
+            provide a using :vmrun block in your clouds.rb for example:
+            </p>
+            <pre> using :vmrun do&#x000A;   vmx_hash(::File.expand_path(&quot;~/Documents/Virtual\ Machines.localized/Ubuntu-jaunty.vmwarevm/Ubuntu-jaunty.vmx&quot;) =&gt; '172.16.68.129')&#x000A; end&#x000A;&#x000A;The vmx file fulfills a similar purpose as the ami id in ec2. Note that expand path.  vmrun return fuill paths, so we must provide full paths so things match up later. W&#x000A;Vmrun does not provide a meta server like ec2 has, so you need to list the ip address of your VM.  For this reason it is recommended that you use NAT addressing on your VM to maintain consistent addressing across different physical networks.</pre>
+            <p>
+            Also, note that vmrun does not copy the VM to a new distinct VM on each
+            run, so if you want to be able to start from a known state, you should make
+            a snapshot before using your vm with poolparty. Then, you can rollback to
+            this initial state if you want to ensure you can repeat a fresh
+            cloud-start.
+            </p>
+          </div>
+          <div id='section'>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>

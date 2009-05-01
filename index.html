@@ -1,0 +1,135 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>PoolParty!</title>
+    <link href="stylesheets/application.css" media="all" rel="stylesheet" type="text/css"/><link href="stylesheets/blackboard.css" media="all" rel="stylesheet" type="text/css"/><link href="stylesheets/classes.css" media="all" rel="stylesheet" type="text/css"/><link href="stylesheets/header.css" media="all" rel="stylesheet" type="text/css"/><link href="stylesheets/navmenu.css" media="all" rel="stylesheet" type="text/css"/><link href="stylesheets/sunburst.css" media="all" rel="stylesheet" type="text/css"/>
+    <script language="javascript" src="javascripts/jquery-1.3.2.min.js" type="text/javascript"></script><script language="javascript" src="javascripts/jquery.pageslide-0.2.js" type="text/javascript"></script><script language="javascript" src="javascripts/poolparty.js" type="text/javascript"></script>
+  </head>
+  <body>
+    <div id='ribbon'>
+      &nbsp;
+      <a href='why.html' id='pageslide_anchor' rel='pageslide'>
+        <img alt="Why pp ribbon" border="0" height="150" id="ribbon-img" src="images/why_pp_ribbon.gif" width="150"/>
+      </a>
+      &nbsp;
+    </div>
+    <div id='wrapper'>
+      <div id='masthead'>
+        <h2>AT&T Interactive R&D</h2>
+        <div id='external_links'>
+          <!-- =link (img("attir_and_d_logo.gif"), "http://poolpartyrb.com") -->
+        </div>
+      </div>
+      <div class='spacer clear'>
+        &nbsp;
+      </div>
+      <div id='sidebar'>
+        <h3 id='pplogo'><a href="index.html"><img alt="Pplogo2" src="images/site/pplogo2.png"/></a></h3>
+        <ul class='left'></ul>
+        <ul class='left'>
+          <li class='docs'>
+            <a href="docs/index.html">Docs</a>
+          </li>
+          <li class='examples'>
+            <a href="examples.html">Examples</a>
+          </li>
+          <li class='community'>
+            <a href="community.html">Community</a>
+          </li>
+        </ul>
+      </div>
+      <div class='spacer clear'>
+        &nbsp;
+      </div>
+      <div id='content'>
+        <div id='intro-wrapper'>
+          <div class='intro-left'>
+            <p class='headline'>
+              Cloud management.
+              <span>Simplified.</span>
+            </p>
+            <p class='intro'>
+              PoolParty is a
+              <span class='emphasis'>cloud management system.</span>
+              PoolParty makes it easy
+              to manage powerful and
+              <span class='emphasis'>complex deployments</span>
+              on
+              <span class='emphasis'>cloud computing</span>
+              services such as Amazon EC2.
+            </p>
+          </div>
+          <div class='intro-right'>
+            <img alt="Syntax sample 2" src="images/syntax_sample_2.png"/>
+          </div>
+        </div>
+        <div class='features'>
+          <h2>Features:</h2>
+          <ul>
+            <li>built-in scaling, self-healing, monitoring, and load-balancing</li>
+            <li>support for VMware, for testing clouds</li>
+            <li>
+              dependency resolution is based on
+              <a href='docs/chef.html'>Chef</a>
+            </li>
+            <li>clear and extensible configuration</li>
+          </ul>
+        </div>
+        <h1>Getting Started</h1>
+        <h2>0. Pre-flight check</h2>
+        <p class='step'>
+          Setup
+          <a href="amazon_ec2_setup.html">Amazon EC2</a>
+          or
+          <a href="vmware_setup.html">VMware (Fusion)</a>
+        </p>
+        <h2>1. Install PoolParty gem</h2>
+        <div class='tip-box'><div class='crab-wrapper'><img src='http://fairchild.github.com/poolparty/images/site/i/examples.png' class='crab'/></div>Interested in developing PoolParty? Checkout
+        <a href='http://wiki.github.com/auser/poolparty/installing'>this page</a>
+        for instructions on development installation</div>
+        <p class='step'>
+          <pre class="blackboard"><span class="line-numbers">   1 </span> gem install <span class="Keyword">-</span><span class="Keyword">-</span>source http<span class="Constant"><span class="Constant">:</span>/</span><span class="Keyword">/</span>gems.<span class="Entity">github</span>.<span class="Entity">com</span> auser<span class="Keyword">-</span>poolparty</pre>
+        </p>
+        <h2>
+          2. Create
+          <tt>clouds.rb</tt>
+        </h2>
+        <p class='step'>
+          The quickest way to be up and running is to clone our example project.
+          <pre class="blackboard"><span class="line-numbers">   1 </span> git clone git<span class="Constant"><span class="Constant">:</span>/</span><span class="Keyword">/</span>github.<span class="Entity">com</span><span class="Keyword">/</span>auser<span class="Keyword">/</span>poolparty<span class="Keyword">-</span>examples.<span class="Entity">git</span> <span class="Keyword">/</span>path<span class="Keyword">/</span>to<span class="Keyword">/</span>application</pre>
+          See
+          <a href='docs/cloud_speak.html'>pool-generate</a>
+          for information on creating a
+          <tt>clouds.rb</tt>
+          from scratch
+        </p>
+        <h2>
+          3. Start your cloud!
+        </h2>
+        <p class='step'>
+          <pre class="blackboard"><span class="line-numbers">   1 </span> cloud start <span class="Keyword">-</span>d</pre>
+        </p>
+        <h2>
+          What next?
+        </h2>
+        <p>
+          Check out our
+          <a href="docs.html#learning_track">getting-started guide</a>
+        </p>
+      </div>
+      <div id='footer'>
+        Copyright &copy; 2008-2009 - Ari Lerner and Cloudteam at AT&T Interactive
+        <a href="sitemap.html">sitemap</a>
+        <br />
+        <script type='text/javascript'>
+          var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+          document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+        </script>
+        <script type='text/javascript'>
+          var pageTracker = _gat._getTracker("UA-137009-7");
+          pageTracker._trackPageview();
+        </script>
+      </div>
+    </div>
+  </body>
+</html>

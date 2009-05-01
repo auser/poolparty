@@ -1,0 +1,356 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>: PoolParty::Remote::RemoterBase [RDoc Documentation]</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='class' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>
+          <span class='type'>Class</span>
+          PoolParty::Remote::RemoterBase
+        </h1>
+        <ol class='paths'>
+          <li>
+            <a href="../../../files/lib/poolparty/net/remoter_base_rb.html">lib/poolparty/net/remoter_base.rb</a>
+          </li>
+        </ol>
+        <div class='parent'>
+          Parent:
+          <strong><a href="../../Object.html">Object</a></strong>
+        </div>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='description'>
+            <p>
+            This class is the base class for all remote types, such as ec2 Everything
+            remoting-wise is derived from this class
+            </p>
+          </div>
+          <div id='method-list'>
+            <h2>Methods</h2>
+            <h3>public class</h3>
+            <ol>
+              <li><a href="#M000422">describe_instance</a></li>
+              <li><a href="#M000424">describe_instances</a></li>
+              <li><a href="#M000427">launch_instance!</a></li>
+              <li><a href="#M000418">launch_new_instance!</a></li>
+              <li><a href="#M000417">new</a></li>
+              <li><a href="#M000429">ping_port</a></li>
+              <li><a href="#M000420">terminate_instance!</a></li>
+            </ol>
+            <h3>public instance</h3>
+            <ol>
+              <li><a href="#M000428">after_launch_instance</a></li>
+              <li><a href="#M000430">after_launched</a></li>
+              <li><a href="#M000431">before_shutdown</a></li>
+              <li><a href="#M000423">describe_instance</a></li>
+              <li><a href="#M000425">describe_instances</a></li>
+              <li><a href="#M000426">launch_instance!</a></li>
+              <li><a href="#M000419">launch_new_instance!</a></li>
+              <li><a href="#M000421">terminate_instance!</a></li>
+            </ol>
+          </div>
+          <div id='context'>
+            <div id='includes'>
+              <h2>Included modules</h2>
+              <ol>
+                <li>Dslify</li>
+                <li><a href="../Remote.html">::PoolParty::Remote</a></li>
+              </ol>
+            </div>
+          </div>
+          <div id='section'>
+            <div id='attribute-list'>
+              <h2 class='section-bar'>Attributes</h2>
+              <div class='name-list'>
+                <table>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>cloud</td>
+                    <td class='context-item-value'>[R]</td>
+                    <td class='context-item-desc'></td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            <div id='methods'>
+              <h2>Public class methods</h2>
+              <div class='public-class method' id='method-M000422'>
+                <a name='M000422'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>describe_instance</span>
+                  <span class='arguments'>(cld, o={})</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  Describe an instance&#8217;s status
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000422-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000422-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remoter_base.rb, line 68</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">describe_instance</span>(<span class="ruby-identifier">cld</span>, <span class="ruby-identifier">o</span>={})&#x000A;        <span class="ruby-identifier">new</span>(<span class="ruby-identifier">cld</span>, <span class="ruby-identifier">o</span>).<span class="ruby-identifier">describe_instance</span>(<span class="ruby-identifier">o</span>) &#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-class method' id='method-M000424'>
+                <a name='M000424'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>describe_instances</span>
+                  <span class='arguments'>(cld, o={})</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  Get instances The instances must have a status associated with them on the
+                  hash
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000424-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000424-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remoter_base.rb, line 77</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">describe_instances</span>(<span class="ruby-identifier">cld</span>, <span class="ruby-identifier">o</span>={})&#x000A;        <span class="ruby-identifier">new</span>(<span class="ruby-identifier">cld</span>, <span class="ruby-identifier">o</span>).<span class="ruby-identifier">describe_instances</span>(<span class="ruby-identifier">o</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-class method' id='method-M000427'>
+                <a name='M000427'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>launch_instance!</span>
+                  <span class='arguments'>(cld, o={}, &amp;block)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000427-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000427-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remoter_base.rb, line 120</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">launch_instance!</span>(<span class="ruby-identifier">cld</span>, <span class="ruby-identifier">o</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-identifier">new</span>(<span class="ruby-identifier">cld</span>, <span class="ruby-identifier">o</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>).<span class="ruby-identifier">launch_instance!</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-class method' id='method-M000418'>
+                <a name='M000418'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>launch_new_instance!</span>
+                  <span class='arguments'>(cld, o={})</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  Required methods The next methods are required on all <a
+                  href="RemoteInstance.html">RemoteInstance</a> types If your <a
+                  href="RemoteInstance.html">RemoteInstance</a> type does not overwrite the
+                  following methods An exception will be raised and poolparty will explode
+                  into tiny little pieces. Don&#8217;t forget to overwrite these methods
+                  Launch a new instance
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000418-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000418-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remoter_base.rb, line 52</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">launch_new_instance!</span>(<span class="ruby-identifier">cld</span>, <span class="ruby-identifier">o</span>={})&#x000A;        <span class="ruby-identifier">new</span>(<span class="ruby-identifier">cld</span>, <span class="ruby-identifier">o</span>).<span class="ruby-identifier">launch_new_instance!</span>(<span class="ruby-identifier">o</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-class method' id='method-M000417'>
+                <a name='M000417'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>new</span>
+                  <span class='arguments'>(prnt, opts={}, &amp;block)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000417-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000417-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remoter_base.rb, line 31</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">prnt</span>, <span class="ruby-identifier">opts</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-identifier">dsl_options</span> <span class="ruby-identifier">prnt</span>.<span class="ruby-identifier">options</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">opts</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">prnt</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">prnt</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:options</span>)&#x000A;        <span class="ruby-identifier">instance_eval</span> <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">block</span>&#x000A;        <span class="ruby-ivar">@cloud</span> = <span class="ruby-identifier">prnt</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-class method' id='method-M000429'>
+                <a name='M000429'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>ping_port</span>
+                  <span class='arguments'>(host, port=22, retry_times=400)</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  TODO: BAD FORM, already defined in connections.rb. Fix this, ASAP
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000429-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000429-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remoter_base.rb, line 140</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">ping_port</span>(<span class="ruby-identifier">host</span>, <span class="ruby-identifier">port</span>=<span class="ruby-value">22</span>, <span class="ruby-identifier">retry_times</span>=<span class="ruby-value">400</span>)&#x000A;        <span class="ruby-identifier">connected</span> = <span class="ruby-keyword kw">false</span>&#x000A;        <span class="ruby-identifier">retry_times</span>.<span class="ruby-identifier">times</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">i</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-keyword kw">begin</span>&#x000A;            <span class="ruby-keyword kw">break</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">connected</span> = <span class="ruby-constant">TCPSocket</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">host</span>, <span class="ruby-identifier">port</span>).<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">TCPSocket</span>)&#x000A;          <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>&#x000A;            <span class="ruby-identifier">sleep</span>(<span class="ruby-value">2</span>)&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-identifier">connected</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-class method' id='method-M000420'>
+                <a name='M000420'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>terminate_instance!</span>
+                  <span class='arguments'>(cld, o={})</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  Terminate an instance by id
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000420-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000420-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remoter_base.rb, line 60</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">terminate_instance!</span>(<span class="ruby-identifier">cld</span>, <span class="ruby-identifier">o</span>={})&#x000A;        <span class="ruby-identifier">new</span>(<span class="ruby-identifier">cld</span>, <span class="ruby-identifier">o</span>).<span class="ruby-identifier">terminate_instance!</span>(<span class="ruby-identifier">o</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <h2>Public instance methods</h2>
+              <div class='public-instance method' id='method-M000428'>
+                <a name='M000428'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>after_launch_instance</span>
+                  <span class='arguments'>(instance=nil)</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  Called after an instance is launched
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000428-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000428-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remoter_base.rb, line 125</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">after_launch_instance</span>(<span class="ruby-identifier">instance</span>=<span class="ruby-keyword kw">nil</span>)&#x000A;        <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;after_launch_instance in remoter_base&quot;</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000430'>
+                <a name='M000430'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>after_launched</span>
+                  <span class='arguments'>(force=false)</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  After launch callback This is called after a new instance is launched
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000430-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000430-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remoter_base.rb, line 154</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">after_launched</span>(<span class="ruby-identifier">force</span>=<span class="ruby-keyword kw">false</span>)        &#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000431'>
+                <a name='M000431'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>before_shutdown</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  Before shutdown callback This is called before the cloud is contracted
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000431-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000431-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remoter_base.rb, line 159</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">before_shutdown</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000423'>
+                <a name='M000423'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>describe_instance</span>
+                  <span class='arguments'>(o={})</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000423-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000423-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remoter_base.rb, line 71</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">describe_instance</span>(<span class="ruby-identifier">o</span>={})&#x000A;        <span class="ruby-identifier">raise</span> <span class="ruby-constant">RemoteException</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">:method_not_defined</span>, <span class="ruby-value str">&quot;describe_instance&quot;</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000425'>
+                <a name='M000425'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>describe_instances</span>
+                  <span class='arguments'>(o={})</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000425-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000425-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remoter_base.rb, line 80</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">describe_instances</span>(<span class="ruby-identifier">o</span>={})        &#x000A;        <span class="ruby-identifier">raise</span> <span class="ruby-constant">RemoteException</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">:method_not_defined</span>, <span class="ruby-value str">&quot;describe_instances&quot;</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000426'>
+                <a name='M000426'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>launch_instance!</span>
+                  <span class='arguments'>(o={}, &amp;block)</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  TODO: Rename and modularize the @inst.status =~ /pending/ so that it works
+                  on all remoter_bases
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000426-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000426-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remoter_base.rb, line 86</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">launch_instance!</span>(<span class="ruby-identifier">o</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-ivar">@inst</span> = <span class="ruby-identifier">launch_new_instance!</span>( <span class="ruby-identifier">o</span> )&#x000A;        <span class="ruby-identifier">sleep</span>(<span class="ruby-value">2</span>)&#x000A;        &#x000A;        <span class="ruby-identifier">cloud</span>.<span class="ruby-identifier">dputs</span> <span class="ruby-node">&quot;#{cloud.name} launched instance checking for ip...&quot;</span>&#x000A;        &#x000A;        <span class="ruby-comment cmt"># Wait for 10 minutes for the instance to gain an ip if it doesn't already have one</span>&#x000A;        <span class="ruby-value">500</span>.<span class="ruby-identifier">times</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">i</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-keyword kw">break</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@inst</span>[<span class="ruby-identifier">:ip</span>] <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/</span>&#x000A;          <span class="ruby-identifier">sleep</span>(<span class="ruby-value">2</span>)&#x000A;          <span class="ruby-ivar">@inst</span> = <span class="ruby-identifier">describe_instance</span>(<span class="ruby-ivar">@inst</span>)&#x000A;          <span class="ruby-identifier">cloud</span>.<span class="ruby-identifier">dprint</span> <span class="ruby-value str">&quot;.&quot;</span>&#x000A;        <span class="ruby-keyword kw">end</span>        &#x000A;        <span class="ruby-identifier">cloud</span>.<span class="ruby-identifier">dputs</span> <span class="ruby-value str">&quot;Found an ip&quot;</span>&#x000A;        <span class="ruby-identifier">cloud</span>.<span class="ruby-identifier">dputs</span> <span class="ruby-node">&quot;#{@cloud.name} Launched instance #{@inst[:ip]}&quot;</span>&#x000A;        <span class="ruby-identifier">cloud</span>.<span class="ruby-identifier">dputs</span> <span class="ruby-value str">&quot;   waiting for it to respond&quot;</span>&#x000A;        &#x000A;        <span class="ruby-comment cmt"># Try for 10 minutes to pint port 22 </span>&#x000A;        <span class="ruby-value">500</span>.<span class="ruby-identifier">times</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">i</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-identifier">cloud</span>.<span class="ruby-identifier">dprint</span> <span class="ruby-value str">&quot;.&quot;</span>&#x000A;          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">ping_port</span>(<span class="ruby-ivar">@inst</span>[<span class="ruby-identifier">:ip</span>], <span class="ruby-value">22</span>)&#x000A;            <span class="ruby-identifier">cloud</span>.<span class="ruby-identifier">dputs</span> <span class="ruby-value str">&quot;&quot;</span>&#x000A;            <span class="ruby-identifier">cloud</span>.<span class="ruby-identifier">started_instance</span> = <span class="ruby-ivar">@inst</span>&#x000A;            &#x000A;            <span class="ruby-identifier">cloud</span>.<span class="ruby-identifier">call_after_launch_instance_callbacks</span>(<span class="ruby-ivar">@inst</span>)&#x000A;            <span class="ruby-identifier">block</span>.<span class="ruby-identifier">call</span>(<span class="ruby-ivar">@inst</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">block</span>&#x000A;            &#x000A;            <span class="ruby-keyword kw">return</span> <span class="ruby-ivar">@inst</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;          <span class="ruby-identifier">sleep</span>(<span class="ruby-value">2</span>)&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Instance not responding at #{inst.ip}&quot;</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000419'>
+                <a name='M000419'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>launch_new_instance!</span>
+                  <span class='arguments'>(o={})</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000419-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000419-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remoter_base.rb, line 55</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">launch_new_instance!</span>(<span class="ruby-identifier">o</span>={})&#x000A;        <span class="ruby-identifier">raise</span> <span class="ruby-constant">RemoteException</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">:method_not_defined</span>, <span class="ruby-value str">&quot;launch_new_instance!&quot;</span>)        &#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000421'>
+                <a name='M000421'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>terminate_instance!</span>
+                  <span class='arguments'>(o={})</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000421-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000421-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remoter_base.rb, line 63</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">terminate_instance!</span>(<span class="ruby-identifier">o</span>={})        &#x000A;        <span class="ruby-identifier">raise</span> <span class="ruby-constant">RemoteException</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">:method_not_defined</span>, <span class="ruby-value str">&quot;terminate_instance!&quot;</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>

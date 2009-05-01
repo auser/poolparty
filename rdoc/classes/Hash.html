@@ -1,0 +1,241 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>: Hash [RDoc Documentation]</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='class' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>
+          <span class='type'>Class</span>
+          Hash
+        </h1>
+        <ol class='paths'>
+          <li>
+            <a href="../files/lib/poolparty/core/hash_rb.html">lib/poolparty/core/hash.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/schema_rb.html">lib/poolparty/schema.rb</a>
+          </li>
+          <li>
+            <a class='show' href='#' onclick='this.parentNode.parentNode.className += " expanded"; this.parentNode.removeChild(this); return false'>show all</a>
+          </li>
+        </ol>
+        <div class='parent'>
+          Parent:
+          <strong><a href="Object.html">Object</a></strong>
+        </div>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='description'>
+            <p>
+            <a href="Hash.html">Hash</a> extentions
+            </p>
+          </div>
+          <div id='method-list'>
+            <h2>Methods</h2>
+            <h3>public instance</h3>
+            <ol>
+              <li><a href="#M000033">append</a></li>
+              <li><a href="#M000034">append!</a></li>
+              <li><a href="#M000030">choose</a></li>
+              <li><a href="#M000039">method_missing</a></li>
+              <li><a href="#M000040">method_missing</a></li>
+              <li><a href="#M000038">next_sorted_key</a></li>
+              <li><a href="#M000035">safe_merge</a></li>
+              <li><a href="#M000036">safe_merge!</a></li>
+              <li><a href="#M000031">to_instance_variables</a></li>
+              <li><a href="#M000037">to_os</a></li>
+              <li><a href="#M000032">values_at</a></li>
+            </ol>
+          </div>
+          <div id='section'>
+            <div id='methods'>
+              <h2>Public instance methods</h2>
+              <div class='public-instance method' id='method-M000033'>
+                <a name='M000033'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>append</span>
+                  <span class='arguments'>(other_hash)</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  TODO: deprecate
+                  </p>
+                  <pre>def extract!(&amp;block)&#x000A;  o = Hash[*select(&amp;block).flatten]&#x000A;  o.keys.each {|k| self.delete(k) }&#x000A;  o&#x000A;end</pre>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000033-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000033-source'><span class="ruby-comment cmt"># File lib/poolparty/core/hash.rb, line 34</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">append</span>(<span class="ruby-identifier">other_hash</span>)&#x000A;    <span class="ruby-identifier">returning</span> <span class="ruby-constant">Hash</span>.<span class="ruby-identifier">new</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">h</span><span class="ruby-operator">|</span>&#x000A;      <span class="ruby-identifier">h</span>.<span class="ruby-identifier">merge!</span>(<span class="ruby-keyword kw">self</span>)&#x000A;      <span class="ruby-identifier">other_hash</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span>&#x000A;        <span class="ruby-identifier">h</span>[<span class="ruby-identifier">k</span>] = <span class="ruby-identifier">has_key?</span>(<span class="ruby-identifier">k</span>) <span class="ruby-operator">?</span> [<span class="ruby-keyword kw">self</span>[<span class="ruby-identifier">k</span>], <span class="ruby-identifier">v</span>].<span class="ruby-identifier">flatten</span>.<span class="ruby-identifier">uniq</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">v</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000034'>
+                <a name='M000034'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>append!</span>
+                  <span class='arguments'>(other_hash)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000034-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000034-source'><span class="ruby-comment cmt"># File lib/poolparty/core/hash.rb, line 43</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">append!</span>(<span class="ruby-identifier">other_hash</span>)&#x000A;    <span class="ruby-identifier">other_hash</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span>&#x000A;      <span class="ruby-keyword kw">self</span>[<span class="ruby-identifier">k</span>] = <span class="ruby-identifier">has_key?</span>(<span class="ruby-identifier">k</span>) <span class="ruby-operator">?</span> [<span class="ruby-keyword kw">self</span>[<span class="ruby-identifier">k</span>], <span class="ruby-identifier">v</span>].<span class="ruby-identifier">flatten</span>.<span class="ruby-identifier">uniq</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">v</span>&#x000A;    <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">self</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000030'>
+                <a name='M000030'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>choose</span>
+                  <span class='arguments'>(&amp;block)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000030-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000030-source'><span class="ruby-comment cmt"># File lib/poolparty/core/hash.rb, line 5</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">choose</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;    <span class="ruby-constant">Hash</span>[<span class="ruby-operator">*</span><span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">select</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>).<span class="ruby-identifier">inject</span>([]){<span class="ruby-operator">|</span><span class="ruby-identifier">res</span>,(<span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span>)<span class="ruby-operator">|</span> <span class="ruby-identifier">res</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">k</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">v</span>}]&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000039'>
+                <a name='M000039'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>method_missing</span>
+                  <span class='arguments'>(sym, *args, &amp;block)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000039-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000039-source'><span class="ruby-comment cmt"># File lib/poolparty/core/hash.rb, line 69</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">method_missing</span>(<span class="ruby-identifier">sym</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">has_key?</span>(<span class="ruby-identifier">sym</span>)&#x000A;      <span class="ruby-identifier">fetch</span>(<span class="ruby-identifier">sym</span>)&#x000A;    <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">has_key?</span>(<span class="ruby-identifier">sym</span>.<span class="ruby-identifier">to_s</span>)&#x000A;      <span class="ruby-identifier">fetch</span>(<span class="ruby-identifier">sym</span>.<span class="ruby-identifier">to_s</span>)&#x000A;    <span class="ruby-keyword kw">else</span>&#x000A;      <span class="ruby-keyword kw">super</span>&#x000A;    <span class="ruby-keyword kw">end</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000040'>
+                <a name='M000040'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>method_missing</span>
+                  <span class='arguments'>(sym, *args, &amp;block)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000040-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000040-source'><span class="ruby-comment cmt"># File lib/poolparty/schema.rb, line 70</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">method_missing</span>(<span class="ruby-identifier">sym</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">has_key?</span>(<span class="ruby-identifier">sym</span>.<span class="ruby-identifier">to_sym</span>)&#x000A;      <span class="ruby-identifier">fetch</span>(<span class="ruby-identifier">sym</span>)&#x000A;    <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">has_key?</span>(<span class="ruby-identifier">sym</span>.<span class="ruby-identifier">to_s</span>)&#x000A;      <span class="ruby-identifier">fetch</span>(<span class="ruby-identifier">sym</span>.<span class="ruby-identifier">to_s</span>)&#x000A;    <span class="ruby-keyword kw">else</span>&#x000A;      <span class="ruby-keyword kw">super</span>&#x000A;    <span class="ruby-keyword kw">end</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000038'>
+                <a name='M000038'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>next_sorted_key</span>
+                  <span class='arguments'>(from)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000038-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000038-source'><span class="ruby-comment cmt"># File lib/poolparty/core/hash.rb, line 64</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">next_sorted_key</span>(<span class="ruby-identifier">from</span>)&#x000A;    <span class="ruby-identifier">idx</span> = (<span class="ruby-identifier">size</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">keys</span>.<span class="ruby-identifier">sort</span>.<span class="ruby-identifier">index</span>(<span class="ruby-identifier">from</span>))&#x000A;    <span class="ruby-identifier">keys</span>.<span class="ruby-identifier">sort</span>[<span class="ruby-identifier">idx</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>]&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000035'>
+                <a name='M000035'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>safe_merge</span>
+                  <span class='arguments'>(other_hash)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000035-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000035-source'><span class="ruby-comment cmt"># File lib/poolparty/core/hash.rb, line 50</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">safe_merge</span>(<span class="ruby-identifier">other_hash</span>)&#x000A;    <span class="ruby-identifier">merge</span>(<span class="ruby-identifier">other_hash</span>.<span class="ruby-identifier">delete_if</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">has_key?</span>(<span class="ruby-identifier">k</span>) })&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000036'>
+                <a name='M000036'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>safe_merge!</span>
+                  <span class='arguments'>(other_hash)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000036-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000036-source'><span class="ruby-comment cmt"># File lib/poolparty/core/hash.rb, line 54</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">safe_merge!</span>(<span class="ruby-identifier">other_hash</span>)&#x000A;    <span class="ruby-identifier">merge!</span>(<span class="ruby-identifier">other_hash</span>.<span class="ruby-identifier">delete_if</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">has_key?</span>(<span class="ruby-identifier">k</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">v</span>.<span class="ruby-identifier">nil?</span> })&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000031'>
+                <a name='M000031'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>to_instance_variables</span>
+                  <span class='arguments'>(inst=nil)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000031-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000031-source'><span class="ruby-comment cmt"># File lib/poolparty/core/hash.rb, line 9</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_instance_variables</span>(<span class="ruby-identifier">inst</span>=<span class="ruby-keyword kw">nil</span>)&#x000A;    <span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span>&#x000A;      <span class="ruby-identifier">inst</span>.<span class="ruby-identifier">instance_variable_set</span> <span class="ruby-node">&quot;@#{k}&quot;</span>, <span class="ruby-identifier">v</span>&#x000A;      <span class="ruby-identifier">inst</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">send</span> <span class="ruby-identifier">:attr_reader</span>, <span class="ruby-identifier">k</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">inst</span>&#x000A;    <span class="ruby-keyword kw">end</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000037'>
+                <a name='M000037'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>to_os</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000037-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000037-source'><span class="ruby-comment cmt"># File lib/poolparty/core/hash.rb, line 58</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_os</span>&#x000A;    <span class="ruby-identifier">m</span>={}&#x000A;    <span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">m</span>[<span class="ruby-identifier">k</span>] = <span class="ruby-identifier">v</span>.<span class="ruby-identifier">to_os</span> }&#x000A;    <span class="ruby-constant">MyOpenStruct</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">m</span>)&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000032'>
+                <a name='M000032'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>values_at</span>
+                  <span class='arguments'>(*indices)</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  extracted from activesupport Returns an array of the values at the
+                  specified indices:
+                  </p>
+                  <pre>hash = HashWithIndifferentAccess.new&#x000A;hash[:a] = &quot;x&quot;&#x000A;hash[:b] = &quot;y&quot;&#x000A;hash.values_at(&quot;a&quot;, &quot;b&quot;) # =&gt; [&quot;x&quot;, &quot;y&quot;]</pre>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000032-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000032-source'><span class="ruby-comment cmt"># File lib/poolparty/core/hash.rb, line 23</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">values_at</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">indices</span>)&#x000A;    <span class="ruby-identifier">indices</span>.<span class="ruby-identifier">collect</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">key</span><span class="ruby-operator">|</span> <span class="ruby-keyword kw">self</span>[<span class="ruby-identifier">key</span>]}&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>

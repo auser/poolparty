@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>: PoolParty::Provision::Chef [RDoc Documentation]</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='class' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>
+          <span class='type'>Class</span>
+          PoolParty::Provision::Chef
+        </h1>
+        <ol class='paths'>
+          <li>
+            <a href="../../../files/lib/poolparty/provision/configurations/chef_rb.html">lib/poolparty/provision/configurations/chef.rb</a>
+          </li>
+        </ol>
+        <div class='parent'>
+          Parent:
+          <strong><a href="../../Object.html">Object</a></strong>
+        </div>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='method-list'>
+            <h2>Methods</h2>
+            <h3>public class</h3>
+            <ol>
+              <li><a href="#M000223">commands</a></li>
+              <li><a href="#M000224">files_to_upload</a></li>
+            </ol>
+          </div>
+          <div id='section'>
+            <div id='methods'>
+              <h2>Public class methods</h2>
+              <div class='public-class method' id='method-M000223'>
+                <a name='M000223'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>commands</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000223-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000223-source'><span class="ruby-comment cmt"># File lib/poolparty/provision/configurations/chef.rb, line 5</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">commands</span>&#x000A;        <span class="ruby-identifier">debug_flag</span> = <span class="ruby-value str">&quot;-l debug&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">debugging?</span> &#x000A;        [&#x000A;          <span class="ruby-value str">&quot;mkdir -p /etc/chef/cookbooks /etc/chef/cache&quot;</span>,&#x000A;          <span class="ruby-value str">&quot;cp -R /var/poolparty/dr_configure/chef/cookbooks/* /etc/chef/cookbooks&quot;</span>,&#x000A;          <span class="ruby-value str">&quot;cp /var/poolparty/dr_configure/chef/solo.rb /etc/chef/solo.rb&quot;</span>,&#x000A;          <span class="ruby-value str">&quot;cp /var/poolparty/dr_configure/chef/dna.json /etc/chef/dna.json&quot;</span>,&#x000A;          <span class="ruby-node">&quot;/usr/bin/chef-solo #{debug_flag} -c /etc/chef/solo.rb -j /etc/chef/dna.json&quot;</span>&#x000A;        ]&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-class method' id='method-M000224'>
+                <a name='M000224'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>files_to_upload</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000224-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000224-source'><span class="ruby-comment cmt"># File lib/poolparty/provision/configurations/chef.rb, line 15</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">files_to_upload</span>&#x000A;        [ &#x000A;          <span class="ruby-node">&quot;#{Default.tmp_path}/dr_configure/chef/solo.rb&quot;</span>,&#x000A;          <span class="ruby-node">&quot;#{Default.tmp_path}/dr_configure/chef/dna.json&quot;</span>,&#x000A;          <span class="ruby-node">&quot;#{Default.base_config_directory}/chef/solo.rb&quot;</span>,&#x000A;          <span class="ruby-node">&quot;#{Default.base_config_directory}/chef/dna.json&quot;</span>&#x000A;        ]&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>

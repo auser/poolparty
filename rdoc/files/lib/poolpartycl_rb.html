@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>File: poolpartycl.rb [RDoc Documentation]</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='file' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>poolpartycl.rb</h1>
+        <div class='paths'>
+          lib/poolpartycl.rb
+        </div>
+        <div class='last-update'>
+          Last Update:
+          <span class='datetime'>Thu Apr 30 18:20:13 -0700 2009</span>
+        </div>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='method-list'>
+            <h2>Methods</h2>
+            <h3>public instance</h3>
+            <ol>
+              <li><a href="#M000002">are_you_sure?</a></li>
+              <li><a href="#M000001">help_array</a></li>
+            </ol>
+          </div>
+          <div id='section'>
+            <div id='methods'>
+              <h2>Public instance methods</h2>
+              <div class='public-instance method' id='method-M000002'>
+                <a name='M000002'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>are_you_sure?</span>
+                  <span class='arguments'>(msg)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000002-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000002-source'><span class="ruby-comment cmt"># File lib/poolpartycl.rb, line 9</span>&#x000A;<span class="ruby-keyword kw">def</span> <span class="ruby-identifier">are_you_sure?</span>(<span class="ruby-identifier">msg</span>)&#x000A;  <span class="ruby-identifier">puts</span> <span class="ruby-identifier">msg</span>&#x000A;  <span class="ruby-identifier">resp</span> = <span class="ruby-identifier">gets</span>.<span class="ruby-identifier">strip!</span>&#x000A;&#x000A;  <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">resp</span>&#x000A;  <span class="ruby-keyword kw">when</span> <span class="ruby-value str">&quot;Y&quot;</span>&#x000A;  <span class="ruby-keyword kw">when</span> <span class="ruby-value str">&quot;yes&quot;</span>&#x000A;  <span class="ruby-keyword kw">when</span> <span class="ruby-value str">&quot;y&quot;</span>&#x000A;    <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">true</span>&#x000A;  <span class="ruby-keyword kw">else</span>&#x000A;    <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">false</span>&#x000A;  <span class="ruby-keyword kw">end</span>&#x000A;<span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000001'>
+                <a name='M000001'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>help_array</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000001-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000001-source'><span class="ruby-comment cmt"># File lib/poolpartycl.rb, line 5</span>&#x000A;<span class="ruby-keyword kw">def</span> <span class="ruby-identifier">help_array</span>&#x000A;  [<span class="ruby-value str">&quot;-h&quot;</span>, <span class="ruby-value str">&quot;--help&quot;</span>, <span class="ruby-value str">&quot;-V&quot;</span>, <span class="ruby-value str">&quot;--version&quot;</span>, <span class="ruby-value str">&quot;--debug&quot;</span>, <span class="ruby-value str">&quot;-d&quot;</span>]&#x000A;<span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>

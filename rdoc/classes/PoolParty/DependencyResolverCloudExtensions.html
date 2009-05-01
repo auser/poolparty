@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>: PoolParty::DependencyResolverCloudExtensions [RDoc Documentation]</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='class' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>
+          <span class='type'>Module</span>
+          PoolParty::DependencyResolverCloudExtensions
+        </h1>
+        <ol class='paths'>
+          <li>
+            <a href="../../files/lib/poolparty/dependency_resolver/dependency_resolver_cloud_extensions_rb.html">lib/poolparty/dependency_resolver/dependency_resolver_cloud_extensions.rb</a>
+          </li>
+        </ol>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='description'>
+            <p>
+            Take the cloud dependency tree
+            </p>
+          </div>
+          <div id='method-list'>
+            <h2>Methods</h2>
+            <h3>public instance</h3>
+            <ol>
+              <li><a href="#M000286">to_properties_hash</a></li>
+            </ol>
+          </div>
+          <div id='section'>
+            <div id='methods'>
+              <h2>Public instance methods</h2>
+              <div class='public-instance method' id='method-M000286'>
+                <a name='M000286'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>to_properties_hash</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000286-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000286-source'><span class="ruby-comment cmt"># File lib/poolparty/dependency_resolver/dependency_resolver_cloud_extensions.rb, line 8</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_properties_hash</span>&#x000A;      <span class="ruby-identifier">oh</span> = <span class="ruby-constant">OrderedHash</span>.<span class="ruby-identifier">new</span>&#x000A;      <span class="ruby-identifier">oh</span>[<span class="ruby-identifier">:options</span>] = <span class="ruby-identifier">options</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">:cloud_name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">name</span>)&#x000A;      <span class="ruby-identifier">oh</span>[<span class="ruby-identifier">:resources</span>] = <span class="ruby-identifier">ordered_resources</span>.<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">a</span><span class="ruby-operator">|</span> <span class="ruby-identifier">a</span>.<span class="ruby-identifier">to_properties_hash</span> }&#x000A;      <span class="ruby-comment cmt"># oh[:resources] = resources.keys.inject(OrderedHash.new) do |sum,k|</span>&#x000A;      <span class="ruby-comment cmt">#   sum.merge(k.to_sym =&gt; resources[k].map {|a| a.to_properties_hash } )</span>&#x000A;      <span class="ruby-comment cmt"># end</span>&#x000A;      <span class="ruby-identifier">oh</span>[<span class="ruby-identifier">:services</span>] = <span class="ruby-identifier">services</span>.<span class="ruby-identifier">keys</span>.<span class="ruby-identifier">inject</span>(<span class="ruby-constant">OrderedHash</span>.<span class="ruby-identifier">new</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">sum</span>,<span class="ruby-identifier">k</span><span class="ruby-operator">|</span>&#x000A;        <span class="ruby-identifier">sum</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">k</span>.<span class="ruby-identifier">to_sym</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">services</span>[<span class="ruby-identifier">k</span>].<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">a</span><span class="ruby-operator">|</span> <span class="ruby-identifier">a</span>.<span class="ruby-identifier">to_properties_hash</span> } )&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-identifier">oh</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>

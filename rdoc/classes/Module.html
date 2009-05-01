@@ -1,0 +1,115 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>: Module [RDoc Documentation]</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='class' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>
+          <span class='type'>Class</span>
+          Module
+        </h1>
+        <ol class='paths'>
+          <li>
+            <a href="../files/lib/poolparty/core/module_rb.html">lib/poolparty/core/module.rb</a>
+          </li>
+        </ol>
+        <div class='parent'>
+          Parent:
+          <strong><a href="Object.html">Object</a></strong>
+        </div>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='description'>
+            <p>
+            <a href="Module.html">Module</a> overloads
+            </p>
+          </div>
+          <div id='method-list'>
+            <h2>Methods</h2>
+            <h3>public instance</h3>
+            <ol>
+              <li><a href="#M000074">alias_method_chain</a></li>
+              <li><a href="#M000075">attr_accessor_with_default</a></li>
+              <li><a href="#M000076">instance_variables_from_hash</a></li>
+            </ol>
+          </div>
+          <div id='section'>
+            <div id='methods'>
+              <h2>Public instance methods</h2>
+              <div class='public-instance method' id='method-M000074'>
+                <a name='M000074'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>alias_method_chain</span>
+                  <span class='arguments'>(target, feature) {|aliased_target, punctuation| ...}</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  Gives us <a href="Module.html#M000074">alias_method_chain</a> from rails
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000074-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000074-source'><span class="ruby-comment cmt"># File lib/poolparty/core/module.rb, line 4</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">alias_method_chain</span>(<span class="ruby-identifier">target</span>, <span class="ruby-identifier">feature</span>)&#x000A;    <span class="ruby-identifier">aliased_target</span>, <span class="ruby-identifier">punctuation</span> = <span class="ruby-identifier">target</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">sub</span>(<span class="ruby-regexp re">/([?!=])$/</span>, <span class="ruby-value str">''</span>), <span class="ruby-identifier">$1</span>&#x000A;    <span class="ruby-keyword kw">yield</span>(<span class="ruby-identifier">aliased_target</span>, <span class="ruby-identifier">punctuation</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">block_given?</span>&#x000A;&#x000A;    <span class="ruby-identifier">with_method</span>, <span class="ruby-identifier">without_method</span> = <span class="ruby-node">&quot;#{aliased_target}_with_#{feature}#{punctuation}&quot;</span>, <span class="ruby-node">&quot;#{aliased_target}_without_#{feature}#{punctuation}&quot;</span>&#x000A;&#x000A;    <span class="ruby-identifier">alias_method</span> <span class="ruby-identifier">without_method</span>, <span class="ruby-identifier">target</span>&#x000A;    <span class="ruby-identifier">alias_method</span> <span class="ruby-identifier">target</span>, <span class="ruby-identifier">with_method</span>&#x000A;&#x000A;    <span class="ruby-keyword kw">case</span>&#x000A;      <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">public_method_defined?</span>(<span class="ruby-identifier">without_method</span>)&#x000A;        <span class="ruby-identifier">public</span> <span class="ruby-identifier">target</span>&#x000A;      <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">protected_method_defined?</span>(<span class="ruby-identifier">without_method</span>)&#x000A;        <span class="ruby-identifier">protected</span> <span class="ruby-identifier">target</span>&#x000A;      <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">private_method_defined?</span>(<span class="ruby-identifier">without_method</span>)&#x000A;        <span class="ruby-identifier">private</span> <span class="ruby-identifier">target</span>&#x000A;    <span class="ruby-keyword kw">end</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000075'>
+                <a name='M000075'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>attr_accessor_with_default</span>
+                  <span class='arguments'>( *syms, &amp;block )</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000075-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000075-source'><span class="ruby-comment cmt"># File lib/poolparty/core/module.rb, line 22</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">attr_accessor_with_default</span>( <span class="ruby-operator">*</span><span class="ruby-identifier">syms</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span> )&#x000A;    <span class="ruby-identifier">raise</span> <span class="ruby-value str">'Default value in block required'</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">block</span>&#x000A;    <span class="ruby-identifier">syms</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span> <span class="ruby-identifier">sym</span> <span class="ruby-operator">|</span>&#x000A;      <span class="ruby-identifier">module_eval</span> <span class="ruby-keyword kw">do</span>&#x000A;        <span class="ruby-identifier">attr_writer</span>( <span class="ruby-identifier">sym</span> )&#x000A;        <span class="ruby-identifier">define_method</span>( <span class="ruby-identifier">sym</span> ) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span> <span class="ruby-operator">|</span>&#x000A;          <span class="ruby-keyword kw">class</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-keyword kw">self</span>; <span class="ruby-keyword kw">self</span>; <span class="ruby-keyword kw">end</span>.<span class="ruby-identifier">class_eval</span> <span class="ruby-keyword kw">do</span>&#x000A;            <span class="ruby-identifier">attr_reader</span>( <span class="ruby-identifier">sym</span> )&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;          <span class="ruby-identifier">instance_variables</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-node">&quot;@#{sym}&quot;</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">instance_variable_get</span>( <span class="ruby-node">&quot;@#{sym}&quot;</span> ) <span class="ruby-operator">:</span> <span class="ruby-identifier">instance_variable_set</span>( <span class="ruby-node">&quot;@#{sym}&quot;</span>, <span class="ruby-identifier">block</span>.<span class="ruby-identifier">call</span> )&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">nil</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000076'>
+                <a name='M000076'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>instance_variables_from_hash</span>
+                  <span class='arguments'>(h={})</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000076-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000076-source'><span class="ruby-comment cmt"># File lib/poolparty/core/module.rb, line 37</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">instance_variables_from_hash</span>(<span class="ruby-identifier">h</span>={})&#x000A;    <span class="ruby-identifier">h</span>.<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">instance_eval</span> <span class="ruby-node">&quot;@#{k} = #{v}&quot;</span>}&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>

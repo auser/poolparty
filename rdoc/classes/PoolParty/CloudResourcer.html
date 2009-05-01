@@ -1,0 +1,279 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>: PoolParty::CloudResourcer [RDoc Documentation]</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='class' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>
+          <span class='type'>Module</span>
+          PoolParty::CloudResourcer
+        </h1>
+        <ol class='paths'>
+          <li>
+            <a href="../../files/lib/poolparty/modules/cloud_resourcer_rb.html">lib/poolparty/modules/cloud_resourcer.rb</a>
+          </li>
+        </ol>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='method-list'>
+            <h2>Methods</h2>
+            <h3>public instance</h3>
+            <ol>
+              <li><a href="#M000314">_keypairs</a></li>
+              <li><a href="#M000315">full_keypair_path</a></li>
+              <li><a href="#M000309">instances</a></li>
+              <li><a href="#M000312">keypair</a></li>
+              <li><a href="#M000317">number_of_resources</a></li>
+              <li><a href="#M000305">plugin_directory</a></li>
+              <li><a href="#M000308">run_stored_block</a></li>
+              <li><a href="#M000313">set_keypairs</a></li>
+              <li><a href="#M000306">store_block</a></li>
+              <li><a href="#M000307">stored_block</a></li>
+              <li><a href="#M000316">update_from_schema</a></li>
+              <li><a href="#M000310">using</a></li>
+              <li><a href="#M000311">using_remoter?</a></li>
+            </ol>
+          </div>
+          <div id='section'>
+            <div id='methods'>
+              <h2>Public instance methods</h2>
+              <div class='public-instance method' id='method-M000314'>
+                <a name='M000314'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>_keypairs</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000314-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000314-source'><span class="ruby-comment cmt"># File lib/poolparty/modules/cloud_resourcer.rb, line 100</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">_keypairs</span>&#x000A;      <span class="ruby-identifier">dsl_options</span>[<span class="ruby-identifier">:keypairs</span>] <span class="ruby-operator">||=</span> [<span class="ruby-constant">Key</span>.<span class="ruby-identifier">new</span>]&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000315'>
+                <a name='M000315'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>full_keypair_path</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000315-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000315-source'><span class="ruby-comment cmt"># File lib/poolparty/modules/cloud_resourcer.rb, line 104</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">full_keypair_path</span>&#x000A;      <span class="ruby-ivar">@full_keypair_path</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">keypair</span>.<span class="ruby-identifier">full_filepath</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000309'>
+                <a name='M000309'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>instances</span>
+                  <span class='arguments'>(arg)</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  Set instances with a range or a number if passed with a hash, call
+                  nodes(hash) to return filtered list of instances
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000309-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000309-source'><span class="ruby-comment cmt"># File lib/poolparty/modules/cloud_resourcer.rb, line 43</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">instances</span>(<span class="ruby-identifier">arg</span>)&#x000A;      <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">arg</span>&#x000A;      <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Range</span>&#x000A;        <span class="ruby-identifier">minimum_instances</span> <span class="ruby-identifier">arg</span>.<span class="ruby-identifier">first</span>&#x000A;        <span class="ruby-identifier">maximum_instances</span> <span class="ruby-identifier">arg</span>.<span class="ruby-identifier">last</span>&#x000A;      <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Fixnum</span>&#x000A;        <span class="ruby-identifier">minimum_instances</span> <span class="ruby-identifier">arg</span>&#x000A;        <span class="ruby-identifier">maximum_instances</span> <span class="ruby-identifier">arg</span>&#x000A;      <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Hash</span>&#x000A;        <span class="ruby-identifier">nodes</span>(<span class="ruby-identifier">arg</span>)&#x000A;      <span class="ruby-keyword kw">else</span>&#x000A;        <span class="ruby-identifier">raise</span> <span class="ruby-constant">SpecException</span>.<span class="ruby-identifier">new</span>(<span class="ruby-node">&quot;Don't know how to handle instances cloud input #{arg}&quot;</span>)&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000312'>
+                <a name='M000312'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>keypair</span>
+                  <span class='arguments'>(*args)</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  Keypairs Use the keypair path
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000312-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000312-source'><span class="ruby-comment cmt"># File lib/poolparty/modules/cloud_resourcer.rb, line 90</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">keypair</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)&#x000A;      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">args</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">args</span>.<span class="ruby-identifier">empty?</span>&#x000A;        <span class="ruby-identifier">args</span>.<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">arg</span><span class="ruby-operator">|</span> <span class="ruby-identifier">_keypairs</span>.<span class="ruby-identifier">unshift</span> <span class="ruby-constant">Key</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">arg</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">arg</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">arg</span>.<span class="ruby-identifier">empty?</span> }&#x000A;      <span class="ruby-keyword kw">else</span>&#x000A;        <span class="ruby-ivar">@keypair</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">_keypairs</span>.<span class="ruby-identifier">select</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">key</span><span class="ruby-operator">|</span> <span class="ruby-identifier">key</span>.<span class="ruby-identifier">exists?</span> }.<span class="ruby-identifier">first</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000317'>
+                <a name='M000317'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>number_of_resources</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  TODO: deprecate
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000317-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000317-source'><span class="ruby-comment cmt"># File lib/poolparty/modules/cloud_resourcer.rb, line 118</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">number_of_resources</span>&#x000A;      <span class="ruby-identifier">arr</span> = <span class="ruby-identifier">resources</span>.<span class="ruby-identifier">map</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">n</span>, <span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;        <span class="ruby-identifier">r</span>.<span class="ruby-identifier">size</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-identifier">resources</span>.<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">n</span>,<span class="ruby-identifier">r</span><span class="ruby-operator">|</span> <span class="ruby-identifier">r</span>.<span class="ruby-identifier">size</span>}.<span class="ruby-identifier">inject</span>(<span class="ruby-value">0</span>){<span class="ruby-operator">|</span><span class="ruby-identifier">sum</span>,<span class="ruby-identifier">i</span><span class="ruby-operator">|</span> <span class="ruby-identifier">sum</span><span class="ruby-operator">+=</span><span class="ruby-identifier">i</span>}&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000305'>
+                <a name='M000305'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>plugin_directory</span>
+                  <span class='arguments'>(arr=[])</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000305-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000305-source'><span class="ruby-comment cmt"># File lib/poolparty/modules/cloud_resourcer.rb, line 14</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">plugin_directory</span>(<span class="ruby-identifier">arr</span>=[])&#x000A;      <span class="ruby-identifier">arr</span> = [<span class="ruby-identifier">arr</span>] <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">arr</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">String</span>)&#x000A;      <span class="ruby-identifier">arr</span> <span class="ruby-operator">&lt;&lt;</span> [&#x000A;        <span class="ruby-node">&quot;#{::File.expand_path(Dir.pwd)}/plugins&quot;</span>,&#x000A;        <span class="ruby-node">&quot;#{::File.expand_path(Default.poolparty_home_path)}/plugins&quot;</span>&#x000A;      ]&#x000A;      <span class="ruby-identifier">arr</span>.<span class="ruby-identifier">flatten</span>.<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">arg</span><span class="ruby-operator">|</span>    &#x000A;        <span class="ruby-constant">Dir</span>[<span class="ruby-node">&quot;#{arg}/*/*.rb&quot;</span>].<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span> <span class="ruby-identifier">require</span> <span class="ruby-identifier">f</span> } <span class="ruby-keyword kw">if</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">directory?</span>(<span class="ruby-identifier">arg</span>)&#x000A;      }&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000308'>
+                <a name='M000308'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>run_stored_block</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  This will run the blocks after they are stored if there is a block
+                  associated
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000308-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000308-source'><span class="ruby-comment cmt"># File lib/poolparty/modules/cloud_resourcer.rb, line 36</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">run_stored_block</span>&#x000A;      <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">run_in_context</span> <span class="ruby-ivar">@stored_block</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@stored_block</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000313'>
+                <a name='M000313'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>set_keypairs</span>
+                  <span class='arguments'>(*args)</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  Alias for <a href="CloudResourcer.html#M000312">keypair</a>
+                  </p>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000306'>
+                <a name='M000306'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>store_block</span>
+                  <span class='arguments'>(&amp;block)</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  Store block
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000306-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000306-source'><span class="ruby-comment cmt"># File lib/poolparty/modules/cloud_resourcer.rb, line 26</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_block</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;      <span class="ruby-ivar">@stored_block</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">block</span> <span class="ruby-value">? </span><span class="ruby-identifier">block</span> <span class="ruby-operator">:</span> <span class="ruby-keyword kw">nil</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000307'>
+                <a name='M000307'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>stored_block</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000307-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000307-source'><span class="ruby-comment cmt"># File lib/poolparty/modules/cloud_resourcer.rb, line 30</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">stored_block</span>&#x000A;      <span class="ruby-ivar">@stored_block</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000316'>
+                <a name='M000316'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>update_from_schema</span>
+                  <span class='arguments'>(schema)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000316-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000316-source'><span class="ruby-comment cmt"># File lib/poolparty/modules/cloud_resourcer.rb, line 108</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update_from_schema</span>(<span class="ruby-identifier">schema</span>)&#x000A;      <span class="ruby-identifier">keypairs</span> = <span class="ruby-identifier">schema</span>.<span class="ruby-identifier">options</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:keypairs</span>).<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">a</span><span class="ruby-operator">|</span> <span class="ruby-constant">PoolParty</span><span class="ruby-operator">::</span><span class="ruby-constant">Key</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">a</span>.<span class="ruby-identifier">basename</span>) }&#x000A;      <span class="ruby-identifier">options</span>.<span class="ruby-identifier">merge!</span> <span class="ruby-identifier">schema</span>.<span class="ruby-identifier">options</span>&#x000A;      <span class="ruby-identifier">dsl_options</span>[<span class="ruby-identifier">:keypairs</span>] = <span class="ruby-identifier">keypairs</span>&#x000A;&#x000A;      <span class="ruby-identifier">dsl_options</span>[<span class="ruby-identifier">:dependency_resolver</span>] = <span class="ruby-identifier">schema</span>.<span class="ruby-identifier">options</span>.<span class="ruby-identifier">dependency_resolver</span>.<span class="ruby-identifier">split</span>(<span class="ruby-value str">&quot;::&quot;</span>)[<span class="ruby-value">-1</span>].<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/Resolver/</span>, <span class="ruby-value str">''</span>).<span class="ruby-identifier">preserved_class_constant</span>(<span class="ruby-value str">&quot;Resolver&quot;</span>) <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">PoolParty</span><span class="ruby-operator">::</span><span class="ruby-constant">Chef</span>&#x000A;      &#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000310'>
+                <a name='M000310'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>using</span>
+                  <span class='arguments'>(t, &amp;block)</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  Declare the remoter base Check to make sure the available_bases is
+                  available, otherwise raise Give access to the cloud the remote_base and
+                  instantiate a new instance of the remote base
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000310-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000310-source'><span class="ruby-comment cmt"># File lib/poolparty/modules/cloud_resourcer.rb, line 62</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">using</span>(<span class="ruby-identifier">t</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;      <span class="ruby-ivar">@cloud</span> = <span class="ruby-keyword kw">self</span>&#x000A;      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">t</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">available_bases</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">t</span>.<span class="ruby-identifier">to_sym</span>)&#x000A;        <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">using_remoter?</span>&#x000A;          <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">send</span> <span class="ruby-identifier">:attr_reader</span>, <span class="ruby-identifier">:remote_base</span>&#x000A;          <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">send</span> <span class="ruby-identifier">:attr_reader</span>, <span class="ruby-identifier">:parent_cloud</span>&#x000A;          <span class="ruby-identifier">klass_string</span> = <span class="ruby-node">&quot;#{t}&quot;</span>.<span class="ruby-identifier">classify</span>&#x000A;          <span class="ruby-identifier">klass</span> = <span class="ruby-node">&quot;::PoolParty::Remote::#{klass_string}&quot;</span>.<span class="ruby-identifier">constantize</span>&#x000A;          &#x000A;          <span class="ruby-ivar">@remote_base</span> = <span class="ruby-identifier">klass</span>.<span class="ruby-identifier">send</span> <span class="ruby-identifier">:new</span>, <span class="ruby-keyword kw">self</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>&#x000A;          <span class="ruby-ivar">@remote_base</span>.<span class="ruby-identifier">instance_eval</span> <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">block</span>          &#x000A;          <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:remote_base</span>] = <span class="ruby-identifier">klass</span>.<span class="ruby-identifier">to_s</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:options</span>)&#x000A;          &#x000A;          <span class="ruby-ivar">@parent_cloud</span> = <span class="ruby-ivar">@cloud</span>&#x000A;          <span class="ruby-identifier">instance_eval</span> <span class="ruby-node">&quot;def #{t};@remote_base;end&quot;</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">else</span>&#x000A;        <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Unknown remote base: #{t}&quot;</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000311'>
+                <a name='M000311'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>using_remoter?</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  Are we using a remoter?
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000311-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000311-source'><span class="ruby-comment cmt"># File lib/poolparty/modules/cloud_resourcer.rb, line 84</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">using_remoter?</span>&#x000A;      <span class="ruby-operator">!</span><span class="ruby-ivar">@remote_base</span>.<span class="ruby-identifier">nil?</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>

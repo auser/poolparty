@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>: PoolParty::Nanite [RDoc Documentation]</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='class' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>
+          <span class='type'>Class</span>
+          PoolParty::Nanite
+        </h1>
+        <ol class='paths'>
+          <li>
+            <a href="../../files/lib/poolparty/plugins/nanite_rb.html">lib/poolparty/plugins/nanite.rb</a>
+          </li>
+        </ol>
+        <div class='parent'>
+          Parent:
+          <strong><a href="../Object.html">Object</a></strong>
+        </div>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='method-list'>
+            <h2>Methods</h2>
+            <h3>public instance</h3>
+            <ol>
+              <li><a href="#M000535">loaded</a></li>
+            </ol>
+          </div>
+          <div id='section'>
+            <div id='methods'>
+              <h2>Public instance methods</h2>
+              <div class='public-instance method' id='method-M000535'>
+                <a name='M000535'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>loaded</span>
+                  <span class='arguments'>(o={}, &amp;block)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000535-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000535-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/nanite.rb, line 6</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">loaded</span>(<span class="ruby-identifier">o</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-identifier">has_package</span> <span class="ruby-value str">&quot;erlang&quot;</span>&#x000A;&#x000A;        <span class="ruby-comment cmt"># TODO: change this with has_gem_package</span>&#x000A;        <span class="ruby-identifier">has_exec</span> <span class="ruby-value str">&quot;install nanite rubygem&quot;</span> <span class="ruby-keyword kw">do</span>&#x000A;          <span class="ruby-identifier">command</span> <span class="ruby-value str">&quot;cd ~ &amp;&amp; git clone git://github.com/ezmobius/nanite.git &amp;&amp; cd nanite/ &amp;&amp; rake gem &amp;&amp; gem install pkg/nanite*.gem&quot;</span>&#x000A;          <span class="ruby-identifier">not_if</span> <span class="ruby-value str">&quot;gem list -l | grep nanite&quot;</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;&#x000A;        <span class="ruby-identifier">has_gem_package</span> <span class="ruby-value str">&quot;eventmachine&quot;</span>&#x000A;        <span class="ruby-identifier">has_gem_package</span> <span class="ruby-value str">&quot;amqp&quot;</span>&#x000A;&#x000A;        <span class="ruby-identifier">has_package</span> <span class="ruby-value str">&quot;python&quot;</span>&#x000A;&#x000A;        <span class="ruby-identifier">has_exec</span> <span class="ruby-value str">&quot;install easy_install&quot;</span> <span class="ruby-keyword kw">do</span>&#x000A;          <span class="ruby-identifier">command</span> <span class="ruby-value str">&quot;cd ~ &amp;&amp; wget http://pypi.python.org/packages/2.5/s/setuptools/setuptools-0.6c9-py2.5.egg &amp;&amp; sh setuptools-0.6c9-py2.5.egg&quot;</span>&#x000A;          <span class="ruby-identifier">not_if</span> <span class="ruby-value str">&quot;which easy_install&quot;</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;&#x000A;        <span class="ruby-identifier">has_exec</span> <span class="ruby-value str">&quot;install simplejson&quot;</span> <span class="ruby-keyword kw">do</span>&#x000A;          <span class="ruby-identifier">command</span> <span class="ruby-value str">&quot;cd ~ &amp;&amp; easy_install simplejson&quot;</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;&#x000A;        <span class="ruby-identifier">has_exec</span> <span class="ruby-value str">&quot;install rabbitmq&quot;</span> <span class="ruby-keyword kw">do</span>&#x000A;          <span class="ruby-identifier">command</span> <span class="ruby-value str">&quot;cd ~ &amp;&amp; wget http://www.rabbitmq.com/releases/rabbitmq-server/v1.5.3/rabbitmq-server-1.5.3.tar.gz &amp;&amp; cd /usr/local/lib/erlang/lib &amp;&amp; tar -zxf ~/rabbitmq-server-1.5.3.tar.gz &amp;&amp; cd rabbitmq-server-1.5.3 &amp;&amp; make&quot;</span>&#x000A;          <span class="ruby-identifier">not_if</span> <span class="ruby-value str">&quot;which easy_install&quot;</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;        &#x000A;        <span class="ruby-identifier">has_gem_package</span> <span class="ruby-value str">&quot;ezmobius-nanite&quot;</span>&#x000A;        &#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>

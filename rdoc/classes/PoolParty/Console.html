@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>: PoolParty::Console [RDoc Documentation]</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='class' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>
+          <span class='type'>Module</span>
+          PoolParty::Console
+        </h1>
+        <ol class='paths'>
+          <li>
+            <a href="../../files/lib/poolparty/helpers/console_rb.html">lib/poolparty/helpers/console.rb</a>
+          </li>
+        </ol>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='method-list'>
+            <h2>Methods</h2>
+            <h3>public instance</h3>
+            <ol>
+              <li><a href="#M000280">help</a></li>
+              <li><a href="#M000281">reload!</a></li>
+            </ol>
+          </div>
+          <div id='context'>
+            <div id='includes'>
+              <h2>Included modules</h2>
+              <ol>
+                <li><a href="Display.html">Display</a></li>
+              </ol>
+            </div>
+          </div>
+          <div id='section'>
+            <div id='methods'>
+              <h2>Public instance methods</h2>
+              <div class='public-instance method' id='method-M000280'>
+                <a name='M000280'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>help</span>
+                  <span class='arguments'>(level=0)</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  Print help commands for the console level 0 - Basic help level 1 - Commands
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000280-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000280-source'><span class="ruby-comment cmt"># File lib/poolparty/helpers/console.rb, line 11</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">help</span>(<span class="ruby-identifier">level</span>=<span class="ruby-value">0</span>)&#x000A;      <span class="ruby-ivar">@np</span> = <span class="ruby-constant">NicePrinter</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value">60</span>)&#x000A;      <span class="ruby-ivar">@np</span>.<span class="ruby-identifier">header</span>&#x000A;      <span class="ruby-ivar">@np</span>.<span class="ruby-identifier">center</span> <span class="ruby-value str">&quot;PoolParty console help&quot;</span>      &#x000A;      <span class="ruby-ivar">@np</span>.<span class="ruby-identifier">center</span> <span class="ruby-value str">&quot;Basics&quot;</span>&#x000A;      <span class="ruby-ivar">@np</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;Load your pool with load_pool(filename)&quot;</span>&#x000A;      <span class="ruby-ivar">@np</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;Reference clouds with&quot;</span>&#x000A;      <span class="ruby-ivar">@np</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;c = cloud :cloudname&quot;</span>&#x000A;      <span class="ruby-ivar">@np</span>.<span class="ruby-identifier">empty</span>&#x000A;      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">level</span> <span class="ruby-operator">&gt;=</span> <span class="ruby-value">1</span>&#x000A;        <span class="ruby-ivar">@np</span>.<span class="ruby-identifier">center</span> <span class="ruby-value str">&quot;CloudSpeak&quot;</span>&#x000A;        <span class="ruby-ivar">@np</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;All the commands set on your cloud can be called within the console&quot;</span>&#x000A;        <span class="ruby-ivar">@np</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;instances_by_status('running') - get list of running nodes&quot;</span>&#x000A;        <span class="ruby-ivar">@np</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;list_of_pending_instances - get list of pending nodes&quot;</span>&#x000A;        <span class="ruby-ivar">@np</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;available_monitors - get list of the available monitors on the cloud&quot;</span>&#x000A;        <span class="ruby-ivar">@np</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;  note: all monitors can be called as a method on the cloud&quot;</span>&#x000A;        <span class="ruby-ivar">@np</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;    i.e. CpuMonitor makes the method cpu available on the cloud&quot;</span>&#x000A;        <span class="ruby-ivar">@np</span>.<span class="ruby-identifier">empty</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-ivar">@np</span>.<span class="ruby-identifier">footer</span>&#x000A;      <span class="ruby-ivar">@np</span>.<span class="ruby-identifier">print</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000281'>
+                <a name='M000281'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>reload!</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  Clear all the pools and reload the console Call within console to reset and
+                  reload the entire poolparty base as well
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000281-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000281-source'><span class="ruby-comment cmt"># File lib/poolparty/helpers/console.rb, line 37</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">reload!</span>      &#x000A;      <span class="ruby-identifier">reset!</span>&#x000A;      <span class="ruby-identifier">require</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">dirname</span>(<span class="ruby-keyword kw">__FILE__</span>) <span class="ruby-operator">+</span> <span class="ruby-value str">&quot;/../../../poolparty&quot;</span>&#x000A;      <span class="ruby-identifier">require</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">dirname</span>(<span class="ruby-keyword kw">__FILE__</span>) <span class="ruby-operator">+</span> <span class="ruby-value str">&quot;/../../../poolpartycl&quot;</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>
