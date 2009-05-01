@@ -41,55 +41,81 @@
       </div>
       <div id='content'>
         <div id='text'>
+          <div id='description'>
+            <h2><a href="Exec.html">Exec</a></h2>
+            <p>
+            Ensure a command is run on the instances
+            </p>
+            <h2>Usage</h2>
+            <pre>has_exec(:name =&gt; '...') do&#x000A;  # More options.&#x000A;  # This block is optional&#x000A;end</pre>
+            <h2>Options</h2>
+            <ul>
+            <li><tt>name</tt> The name of your exec. This is optional, but nice for
+            debugging purposes
+            
+            </li>
+            <li><tt>cwd</tt> Current working directory to execute the command (optional)
+            
+            </li>
+            <li><tt>command</tt> This describes the command to run
+            
+            </li>
+            <li><tt>path</tt> The path to run the command with (optional)
+            
+            </li>
+            </ul>
+            <h2>Examples</h2>
+            <pre>has_exec(:name =&gt; 'start messenger', :command =&gt; 'server-start-node', :requires =&gt; get_gempackage('poolparty-latest', :onlyif =&gt; 'ps aux | grep beam | grep master')</pre>
+          </div>
           <div id='method-list'>
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000388">absent</a></li>
-              <li><a href="#M000389">after_create</a></li>
-              <li><a href="#M000387">present</a></li>
+              <li><a href="#M000393">absent</a></li>
+              <li><a href="#M000394">after_create</a></li>
+              <li><a href="#M000392">present</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000388'>
-                <a name='M000388'>      </a>
+              <div class='public-instance method' id='method-M000393'>
+                <a name='M000393'>      </a>
                 <div class='synopsis'>
                   <span class='name'>absent</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000388-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000393-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000388-source'><span class="ruby-comment cmt"># File lib/poolparty/resources/exec.rb, line 14</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">absent</span>&#x000A;        <span class="ruby-keyword kw">nil</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000393-source'><span class="ruby-comment cmt"># File lib/poolparty/resources/exec.rb, line 36</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">absent</span>&#x000A;        <span class="ruby-keyword kw">nil</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000389'>
-                <a name='M000389'>      </a>
+              <div class='public-instance method' id='method-M000394'>
+                <a name='M000394'>      </a>
                 <div class='synopsis'>
                   <span class='name'>after_create</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000389-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000394-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000389-source'><span class="ruby-comment cmt"># File lib/poolparty/resources/exec.rb, line 18</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">after_create</span>&#x000A;        <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:name</span>] = <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:command</span>] <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">options</span>.<span class="ruby-identifier">name</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000394-source'><span class="ruby-comment cmt"># File lib/poolparty/resources/exec.rb, line 40</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">after_create</span>&#x000A;        <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:name</span>] = <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:command</span>] <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">options</span>.<span class="ruby-identifier">name</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000387'>
-                <a name='M000387'>      </a>
+              <div class='public-instance method' id='method-M000392'>
+                <a name='M000392'>      </a>
                 <div class='synopsis'>
                   <span class='name'>present</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000387-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000392-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000387-source'><span class="ruby-comment cmt"># File lib/poolparty/resources/exec.rb, line 10</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">present</span>&#x000A;        <span class="ruby-keyword kw">nil</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000392-source'><span class="ruby-comment cmt"># File lib/poolparty/resources/exec.rb, line 32</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">present</span>&#x000A;        <span class="ruby-keyword kw">nil</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

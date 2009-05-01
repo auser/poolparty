@@ -41,6 +41,33 @@
       </div>
       <div id='content'>
         <div id='text'>
+          <div id='description'>
+            <h2><a href="Mount.html">Mount</a></h2>
+            <p>
+            The mount specifies a mount that is to be mounted on the instances
+            </p>
+            <h2>Usage</h2>
+            <pre>has_mount(:name =&gt; '...') do&#x000A;  # More options.&#x000A;  # This block is optional&#x000A;end</pre>
+            <h2>Options</h2>
+            <ul>
+            <li><tt>name</tt> The location of the mount (default: /data)
+            
+            </li>
+            <li><tt>device</tt> The device location for the mount. This mounts at the
+            directory set by the name
+            
+            </li>
+            <li><tt>options</tt> The options to be set in the mount file fstab (default:
+            rw,nosuid,noquota)
+            
+            </li>
+            <li><tt>fstype</tt> The Type of mount (default: xfs)
+            
+            </li>
+            </ul>
+            <h2>Examples</h2>
+            <pre>has_mount(:name =&gt; &quot;/data&quot;, :device =&gt; &quot;/dev/sda100&quot;)</pre>
+          </div>
           <div id='method-list'>
             <h2>Methods</h2>
             <h3>public instance</h3>
@@ -61,7 +88,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000360-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000360-source'><span class="ruby-comment cmt"># File lib/poolparty/resources/mount.rb, line 14</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">disallowed_options</span>&#x000A;        [<span class="ruby-identifier">:name</span>]&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000360-source'><span class="ruby-comment cmt"># File lib/poolparty/resources/mount.rb, line 38</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">disallowed_options</span>&#x000A;        [<span class="ruby-identifier">:name</span>]&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

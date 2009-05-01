@@ -42,17 +42,23 @@
       <div id='content'>
         <div id='text'>
           <div id='description'>
+            <h2><a href="Package.html">Package</a></h2>
             <p>
-            <a href="Package.html">Package</a>
+            The package resources defines a package that must be present on all of the
+            instances This will install the &#8220;name_of_package&#8220; package with
+            the package provider (apt, yum, etc)
             </p>
-            <p>
-            Usage:
-            </p>
-            <pre>has_package &quot;name_of_package&quot;</pre>
-            <p>
-            This will install the &#8220;name_of_package&#8220; package with the
-            package provider (apt, yum, etc)
-            </p>
+            <h2>Usage</h2>
+            <pre>has_package &quot;name_of_package&quot;&#x000A;has_package(:name =&gt; '...') do&#x000A;  # More options.&#x000A;  # This block is optional&#x000A;end</pre>
+            <h2>Options</h2>
+            <ul>
+            <li><tt>name</tt> The package name. The default provider for your OS will be
+            picked by the dependency resolver
+            
+            </li>
+            </ul>
+            <h2>Examples</h2>
+            <pre>has_package(:name =&gt; 'apache2')</pre>
           </div>
           <div id='method-list'>
             <h2>Methods</h2>
@@ -75,7 +81,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000358-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000358-source'><span class="ruby-comment cmt"># File lib/poolparty/resources/package.rb, line 17</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">absent</span>&#x000A;        <span class="ruby-identifier">:remove</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000358-source'><span class="ruby-comment cmt"># File lib/poolparty/resources/package.rb, line 34</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">absent</span>&#x000A;        <span class="ruby-identifier">:remove</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-instance method' id='method-M000357'>
@@ -88,7 +94,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000357-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000357-source'><span class="ruby-comment cmt"># File lib/poolparty/resources/package.rb, line 13</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">present</span>&#x000A;        <span class="ruby-identifier">:install</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000357-source'><span class="ruby-comment cmt"># File lib/poolparty/resources/package.rb, line 30</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">present</span>&#x000A;        <span class="ruby-identifier">:install</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

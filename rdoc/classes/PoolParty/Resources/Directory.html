@@ -41,6 +41,32 @@
       </div>
       <div id='content'>
         <div id='text'>
+          <div id='description'>
+            <h2><a href="Directory.html">Directory</a></h2>
+            <p>
+            The directory resource is used to describe a directory that should be
+            present on all of the instances.
+            </p>
+            <h2>Usage</h2>
+            <pre>has_directory 'name', :from =&gt; '/local/path', :to =&gt; '/path/on/server/'</pre>
+            <p>
+            The above example will place the contents of &#8216;/local/path&#8217; at
+            &#8216;/path/on/server/name&#8216;
+            </p>
+            <pre>has_directory(:name =&gt; '/etc/apache2')</pre>
+            <h2>Options</h2>
+            <ul>
+            <li><tt>name</tt> Describe the location of the file with the name
+            
+            </li>
+            <li><tt>mode</tt> Describe the mode of the file (default: 644)
+            
+            </li>
+            <li><tt>owner</tt> The owner of the file (default: poolparty user)
+            
+            </li>
+            </ul>
+          </div>
           <div id='method-list'>
             <h2>Methods</h2>
             <h3>public instance</h3>
@@ -61,7 +87,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000359-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000359-source'><span class="ruby-comment cmt"># File lib/poolparty/resources/directory.rb, line 6</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">present</span>&#x000A;        <span class="ruby-identifier">:create</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000359-source'><span class="ruby-comment cmt"># File lib/poolparty/resources/directory.rb, line 29</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">present</span>&#x000A;        <span class="ruby-identifier">:create</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

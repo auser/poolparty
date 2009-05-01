@@ -41,6 +41,22 @@
       </div>
       <div id='content'>
         <div id='text'>
+          <div id='description'>
+            <h2><a href="Service.html">Service</a></h2>
+            <p>
+            The service resource specifies a service that must be running on the nodes
+            </p>
+            <h2>Usage</h2>
+            <pre>has_service(:name =&gt; '...') do&#x000A;  # More options.&#x000A;  # This block is optional&#x000A;end</pre>
+            <h2>Options</h2>
+            <ul>
+            <li><tt>name</tt> Name of the service to be running
+            
+            </li>
+            </ul>
+            <h2>Examples</h2>
+            <pre>has_service(:name =&gt; &quot;apache2&quot;)</pre>
+          </div>
           <div id='method-list'>
             <h2>Methods</h2>
             <h3>public instance</h3>
@@ -62,7 +78,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000386-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000386-source'><span class="ruby-comment cmt"># File lib/poolparty/resources/service.rb, line 14</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">absent</span>&#x000A;        <span class="ruby-identifier">:stop</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000386-source'><span class="ruby-comment cmt"># File lib/poolparty/resources/service.rb, line 34</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">absent</span>&#x000A;        <span class="ruby-identifier">:stop</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-instance method' id='method-M000385'>
@@ -75,7 +91,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000385-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000385-source'><span class="ruby-comment cmt"># File lib/poolparty/resources/service.rb, line 11</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">present</span>&#x000A;        <span class="ruby-identifier">:start</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000385-source'><span class="ruby-comment cmt"># File lib/poolparty/resources/service.rb, line 31</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">present</span>&#x000A;        <span class="ruby-identifier">:start</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

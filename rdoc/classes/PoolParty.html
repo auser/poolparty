@@ -40,10 +40,10 @@
             <a href="../files/lib/poolparty/base_packages/heartbeat_rb.html">lib/poolparty/base_packages/heartbeat.rb</a>
           </li>
           <li class='other'>
-            <a href="../files/lib/poolparty/base_packages/runit_rb.html">lib/poolparty/base_packages/runit.rb</a>
+            <a href="../files/lib/poolparty/base_packages/ruby_rb.html">lib/poolparty/base_packages/ruby.rb</a>
           </li>
           <li class='other'>
-            <a href="../files/lib/poolparty/base_packages/ruby_rb.html">lib/poolparty/base_packages/ruby.rb</a>
+            <a href="../files/lib/poolparty/base_packages/runit_rb.html">lib/poolparty/base_packages/runit.rb</a>
           </li>
           <li class='other'>
             <a href="../files/lib/poolparty/capistrano_rb.html">lib/poolparty/capistrano.rb</a>
@@ -103,10 +103,10 @@
             <a href="../files/lib/poolparty/modules/cloud_resourcer_rb.html">lib/poolparty/modules/cloud_resourcer.rb</a>
           </li>
           <li class='other'>
-            <a href="../files/lib/poolparty/modules/definable_resource_rb.html">lib/poolparty/modules/definable_resource.rb</a>
+            <a href="../files/lib/poolparty/modules/file_writer_rb.html">lib/poolparty/modules/file_writer.rb</a>
           </li>
           <li class='other'>
-            <a href="../files/lib/poolparty/modules/file_writer_rb.html">lib/poolparty/modules/file_writer.rb</a>
+            <a href="../files/lib/poolparty/modules/definable_resource_rb.html">lib/poolparty/modules/definable_resource.rb</a>
           </li>
           <li class='other'>
             <a href="../files/lib/poolparty/modules/output_rb.html">lib/poolparty/modules/output.rb</a>
@@ -181,16 +181,16 @@
             <a href="../files/lib/poolparty/plugins/line_in_file_rb.html">lib/poolparty/plugins/line_in_file.rb</a>
           </li>
           <li class='other'>
-            <a href="../files/lib/poolparty/plugins/nanite_rb.html">lib/poolparty/plugins/nanite.rb</a>
-          </li>
-          <li class='other'>
             <a href="../files/lib/poolparty/plugins/rsyncmirror_rb.html">lib/poolparty/plugins/rsyncmirror.rb</a>
           </li>
           <li class='other'>
-            <a href="../files/lib/poolparty/plugins/runit_rb.html">lib/poolparty/plugins/runit.rb</a>
+            <a href="../files/lib/poolparty/plugins/nanite_rb.html">lib/poolparty/plugins/nanite.rb</a>
           </li>
           <li class='other'>
             <a href="../files/lib/poolparty/plugins/svn_rb.html">lib/poolparty/plugins/svn.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/plugins/runit_rb.html">lib/poolparty/plugins/runit.rb</a>
           </li>
           <li class='other'>
             <a href="../files/lib/poolparty/plugins/tokyo_tyrant_rb.html">lib/poolparty/plugins/tokyo_tyrant.rb</a>
@@ -250,10 +250,10 @@
             <a href="../files/lib/poolparty/resources/directory_rb.html">lib/poolparty/resources/directory.rb</a>
           </li>
           <li class='other'>
-            <a href="../files/lib/poolparty/resources/file_rb.html">lib/poolparty/resources/file.rb</a>
+            <a href="../files/lib/poolparty/resources/exec_rb.html">lib/poolparty/resources/exec.rb</a>
           </li>
           <li class='other'>
-            <a href="../files/lib/poolparty/resources/exec_rb.html">lib/poolparty/resources/exec.rb</a>
+            <a href="../files/lib/poolparty/resources/file_rb.html">lib/poolparty/resources/file.rb</a>
           </li>
           <li class='other'>
             <a href="../files/lib/poolparty/resources/host_rb.html">lib/poolparty/resources/host.rb</a>
@@ -265,22 +265,22 @@
             <a href="../files/lib/poolparty/resources/package_rb.html">lib/poolparty/resources/package.rb</a>
           </li>
           <li class='other'>
-            <a href="../files/lib/poolparty/resources/remote_file_rb.html">lib/poolparty/resources/remote_file.rb</a>
-          </li>
-          <li class='other'>
             <a href="../files/lib/poolparty/resources/service_rb.html">lib/poolparty/resources/service.rb</a>
           </li>
           <li class='other'>
-            <a href="../files/lib/poolparty/resources/sshkey_rb.html">lib/poolparty/resources/sshkey.rb</a>
+            <a href="../files/lib/poolparty/resources/remote_file_rb.html">lib/poolparty/resources/remote_file.rb</a>
           </li>
           <li class='other'>
             <a href="../files/lib/poolparty/resources/symlink_rb.html">lib/poolparty/resources/symlink.rb</a>
           </li>
           <li class='other'>
-            <a href="../files/lib/poolparty/resources/user_rb.html">lib/poolparty/resources/user.rb</a>
+            <a href="../files/lib/poolparty/resources/sshkey_rb.html">lib/poolparty/resources/sshkey.rb</a>
           </li>
           <li class='other'>
             <a href="../files/lib/poolparty/resources/variable_rb.html">lib/poolparty/resources/variable.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../files/lib/poolparty/resources/user_rb.html">lib/poolparty/resources/user.rb</a>
           </li>
           <li class='other'>
             <a href="../files/lib/poolparty/resources_rb.html">lib/poolparty/resources.rb</a>
@@ -322,11 +322,11 @@
             <p>
             # &#8212;
             </p>
-            <pre>Cloud extensions for the DependencyResolver</pre>
+            <pre>ChefResolver&#x000A;&#x000A;This takes the internal structure&#x000A;{&#x000A;  :options =&gt; {},&#x000A;  :services =&gt; [{}],&#x000A;  :resources =&gt; []&#x000A;}&#x000A;&#x000A;and creates a chef recipe to reflect.&#x000A;&#x000A;/cookbooks/&#x000A;  namespace/&#x000A;    recipes/&#x000A;    templates/&#x000A;    attributes/&#x000A;&#x000A;TODO: This class is somewhat all over the place. Slim it down</pre>
             <p>
             # &#8212;
             </p>
-            <pre>ChefResolver&#x000A;&#x000A;This takes the internal structure&#x000A;{&#x000A;  :options =&gt; {},&#x000A;  :services =&gt; [{}],&#x000A;  :resources =&gt; []&#x000A;}&#x000A;&#x000A;and creates a chef recipe to reflect.&#x000A;&#x000A;/cookbooks/&#x000A;  namespace/&#x000A;    recipes/&#x000A;    templates/&#x000A;    attributes/&#x000A;&#x000A;TODO: This class is somewhat all over the place. Slim it down</pre>
+            <pre>Cloud extensions for the DependencyResolver</pre>
             <p>
             # &#8212; # Class: PuppetResolver< <a
             href="PoolParty/DependencyResolver.html">DependencyResolver</a> # # #
@@ -349,10 +349,6 @@
             # &#8212; # BIG TODO: Slim the place where the content is gathered from #
             &#8212;
             </p>
-            <pre>DeployDirectory&#x000A;&#x000A;Deploy directory will rsync a local directory to&#x000A;each instance of your cloud.&#x000A;&#x000A;example:&#x000A;  has_directory 'name', :from =&gt; '/local/path', :to =&gt; '/path/on/server/'&#x000A;&#x000A;The above example will place the contents of '/local/path' at '/path/on/server/name'</pre>
-            <p>
-            # &#8212;
-            </p>
             <pre>ssh key used to login to remote instances</pre>
             <p>
             # &#8212;
@@ -365,12 +361,12 @@
             </p>
             <pre>Schema&#x000A;&#x000A;Schemas are basically stub clouds without the PoolParty stack</pre>
             <p>
-            # &#8212;
+            # &#8212; ## Load <a href="PoolParty/PoolParty.html">PoolParty</a> #
+            &#8212;
             </p>
             <pre>Verification&#x000A;&#x000A;Add a verify block to a clouds.rb</pre>
             <p>
-            # &#8212; ## Load <a href="PoolParty/PoolParty.html">PoolParty</a> #
-            &#8212; # Logging.init :debug, :info, :warn, :error, :fatal # &#8212; ##
+            # &#8212; # Logging.init :debug, :info, :warn, :error, :fatal # &#8212; ##
             Load <a href="PoolParty/PoolParty.html">PoolParty</a> Plugins and package
             </p>
           </div>

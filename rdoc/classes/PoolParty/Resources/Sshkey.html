@@ -41,59 +41,79 @@
       </div>
       <div id='content'>
         <div id='text'>
+          <div id='description'>
+            <h2>Ssh <a href="../Key.html">Key</a></h2>
+            <p>
+            The sshkey resource specifies an ssh key that should be distributed on all
+            the nodes
+            </p>
+            <h2>Usage</h2>
+            <pre>has_sshkey(:key =&gt; '...') do&#x000A;  # More options.&#x000A;  # This block is optional&#x000A;end</pre>
+            <h2>Options</h2>
+            <ul>
+            <li><tt>key</tt> The key content for the ssh key
+            
+            </li>
+            <li><tt>target</tt> The location of the ssh key
+            
+            </li>
+            </ul>
+            <h2>Examples</h2>
+            <pre>has_sshkey(:key =&gt; &quot;ABIGLONGSTRINGOFDIGETS&quot;, :target =&gt; &quot;/root/.ssh/key_file&quot;)</pre>
+          </div>
           <div id='method-list'>
             <h2>Methods</h2>
             <h3>public class</h3>
             <ol>
-              <li><a href="#M000353">new</a></li>
+              <li><a href="#M000352">new</a></li>
             </ol>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000355">enctype</a></li>
-              <li><a href="#M000354">name</a></li>
+              <li><a href="#M000354">enctype</a></li>
+              <li><a href="#M000353">name</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public class methods</h2>
-              <div class='public-class method' id='method-M000353'>
-                <a name='M000353'>      </a>
+              <div class='public-class method' id='method-M000352'>
+                <a name='M000352'>      </a>
                 <div class='synopsis'>
                   <span class='name'>new</span>
                   <span class='arguments'>(opts={}, extra_opts={}, &amp;block)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000353-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000352-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000353-source'><span class="ruby-comment cmt"># File lib/poolparty/resources/sshkey.rb, line 6</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">opts</span>={}, <span class="ruby-identifier">extra_opts</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">opts</span>, <span class="ruby-identifier">extra_opts</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-ivar">@key</span> = <span class="ruby-constant">Key</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">keypath?</span> <span class="ruby-value">? </span><span class="ruby-identifier">keypath</span> <span class="ruby-operator">:</span> <span class="ruby-keyword kw">nil</span>)&#x000A;        <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:key</span>] = <span class="ruby-ivar">@key</span>.<span class="ruby-identifier">content</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000352-source'><span class="ruby-comment cmt"># File lib/poolparty/resources/sshkey.rb, line 28</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">opts</span>={}, <span class="ruby-identifier">extra_opts</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">opts</span>, <span class="ruby-identifier">extra_opts</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-ivar">@key</span> = <span class="ruby-constant">Key</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">keypath?</span> <span class="ruby-value">? </span><span class="ruby-identifier">keypath</span> <span class="ruby-operator">:</span> <span class="ruby-keyword kw">nil</span>)&#x000A;        <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:key</span>] = <span class="ruby-ivar">@key</span>.<span class="ruby-identifier">content</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000355'>
-                <a name='M000355'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>enctype</span>
-                  <span class='arguments'>(i=nil)</span>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000355-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000355-source'><span class="ruby-comment cmt"># File lib/poolparty/resources/sshkey.rb, line 20</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">enctype</span>(<span class="ruby-identifier">i</span>=<span class="ruby-keyword kw">nil</span>)&#x000A;        <span class="ruby-identifier">i</span> <span class="ruby-value">? </span><span class="ruby-identifier">options</span>[<span class="ruby-identifier">:type</span>] = <span class="ruby-identifier">i</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:type</span>]&#x000A;      <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
               <div class='public-instance method' id='method-M000354'>
                 <a name='M000354'>      </a>
                 <div class='synopsis'>
-                  <span class='name'>name</span>
+                  <span class='name'>enctype</span>
                   <span class='arguments'>(i=nil)</span>
                 </div>
                 <div class='source'>
                   <a class='source-toggle' href='#' onclick="toggleCode('M000354-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000354-source'><span class="ruby-comment cmt"># File lib/poolparty/resources/sshkey.rb, line 12</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">name</span>(<span class="ruby-identifier">i</span>=<span class="ruby-keyword kw">nil</span>)&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">i</span>&#x000A;          <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:name</span>] = <span class="ruby-identifier">i</span>&#x000A;        <span class="ruby-keyword kw">else</span>&#x000A;          <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:name</span>] <span class="ruby-operator">?</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:name</span>] <span class="ruby-operator">:</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">basename</span>(<span class="ruby-ivar">@key</span>.<span class="ruby-identifier">full_filepath</span>)&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000354-source'><span class="ruby-comment cmt"># File lib/poolparty/resources/sshkey.rb, line 42</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">enctype</span>(<span class="ruby-identifier">i</span>=<span class="ruby-keyword kw">nil</span>)&#x000A;        <span class="ruby-identifier">i</span> <span class="ruby-value">? </span><span class="ruby-identifier">options</span>[<span class="ruby-identifier">:type</span>] = <span class="ruby-identifier">i</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:type</span>]&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000353'>
+                <a name='M000353'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>name</span>
+                  <span class='arguments'>(i=nil)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000353-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000353-source'><span class="ruby-comment cmt"># File lib/poolparty/resources/sshkey.rb, line 34</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">name</span>(<span class="ruby-identifier">i</span>=<span class="ruby-keyword kw">nil</span>)&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">i</span>&#x000A;          <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:name</span>] = <span class="ruby-identifier">i</span>&#x000A;        <span class="ruby-keyword kw">else</span>&#x000A;          <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:name</span>] <span class="ruby-operator">?</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:name</span>] <span class="ruby-operator">:</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">basename</span>(<span class="ruby-ivar">@key</span>.<span class="ruby-identifier">full_filepath</span>)&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

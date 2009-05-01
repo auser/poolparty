@@ -41,6 +41,44 @@
       </div>
       <div id='content'>
         <div id='text'>
+          <div id='description'>
+            <h2><a href="Cron.html">Cron</a></h2>
+            <p>
+            The cron resource will set cron jobs at the intervals you set
+            </p>
+            <h2>Usage</h2>
+            <pre>has_cron(:name =&gt; '...') do&#x000A;  # More options.&#x000A;  # This block is optional&#x000A;end</pre>
+            <h2>Options</h2>
+            <ul>
+            <li><tt>name</tt> The name of the cronjob
+            
+            </li>
+            <li><tt>user</tt> The users who owns the cronjob
+            
+            </li>
+            <li><tt>command</tt> The cronjob command to run
+            
+            </li>
+            <li><tt>minute</tt> Set the minute of the cronjob
+            
+            </li>
+            <li><tt>hour</tt> Set the hour of the cronjob
+            
+            </li>
+            <li><tt>month</tt> Set the month of the cronjob
+            
+            </li>
+            <li><tt>monthday</tt> Set the day of the month of the cronjob
+            
+            </li>
+            <li><tt>weekday</tt> Set the weekday of the cronjob, in 0-6 format, where 0 is
+            Sunday
+            
+            </li>
+            </ul>
+            <h2>Example</h2>
+            <pre>has_cron(:name =&gt; &quot;report mailer&quot;, :minute =&gt; &quot;5&quot;, :hour =&gt; &quot;0&quot;, :weekday =&gt; 1) do&#x000A;  command &quot;/bin/sh /home/user/email_reports.sh&quot;&#x000A;end</pre>
+          </div>
           <div id='method-list'>
             <h2>Methods</h2>
             <h3>public instance</h3>
@@ -62,7 +100,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000351-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000351-source'><span class="ruby-comment cmt"># File lib/poolparty/resources/cron.rb, line 15</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">absent</span>&#x000A;        <span class="ruby-identifier">:delete</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000351-source'><span class="ruby-comment cmt"># File lib/poolparty/resources/cron.rb, line 44</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">absent</span>&#x000A;        <span class="ruby-identifier">:delete</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-instance method' id='method-M000350'>
@@ -75,7 +113,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000350-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000350-source'><span class="ruby-comment cmt"># File lib/poolparty/resources/cron.rb, line 11</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">present</span>&#x000A;        <span class="ruby-identifier">:create</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000350-source'><span class="ruby-comment cmt"># File lib/poolparty/resources/cron.rb, line 40</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">present</span>&#x000A;        <span class="ruby-identifier">:create</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

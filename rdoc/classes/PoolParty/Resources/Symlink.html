@@ -41,27 +41,46 @@
       </div>
       <div id='content'>
         <div id='text'>
+          <div id='description'>
+            <h2><a href="Symlink.html">Symlink</a></h2>
+            <p>
+            The symlink resource sets a symlink
+            </p>
+            <h2>Usage</h2>
+            <pre>has_symlink(:key =&gt; '...') do&#x000A;  # More options.&#x000A;  # This block is optional&#x000A;end</pre>
+            <h2>Options</h2>
+            <ul>
+            <li><tt>name</tt> The location of the symlink
+            
+            </li>
+            <li><tt>target</tt> The source of the symlink, the existing file or directory
+            
+            </li>
+            </ul>
+            <h2>Examples</h2>
+            <pre>has_symlink(:name =&gt; &quot;/var/www/poolpartyrb.com/public&quot;, :source =&gt; &quot;/var/www/poolpartyrb.com/poolparty-website/site&quot;)</pre>
+          </div>
           <div id='method-list'>
             <h2>Methods</h2>
             <h3>public class</h3>
             <ol>
-              <li><a href="#M000352">new</a></li>
+              <li><a href="#M000355">new</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public class methods</h2>
-              <div class='public-class method' id='method-M000352'>
-                <a name='M000352'>      </a>
+              <div class='public-class method' id='method-M000355'>
+                <a name='M000355'>      </a>
                 <div class='synopsis'>
                   <span class='name'>new</span>
                   <span class='arguments'>(*args, &amp;block)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000352-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000355-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000352-source'><span class="ruby-comment cmt"># File lib/poolparty/resources/symlink.rb, line 6</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span> <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>&#x000A;        <span class="ruby-keyword kw">super</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000355-source'><span class="ruby-comment cmt"># File lib/poolparty/resources/symlink.rb, line 28</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span> <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>&#x000A;        <span class="ruby-keyword kw">super</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

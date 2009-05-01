@@ -41,6 +41,20 @@
       </div>
       <div id='content'>
         <div id='text'>
+          <div id='description'>
+            <h2>Deploy Directory</h2>
+            <p>
+            The deploy directory will copy the source directory from the developer
+            machine (i.e. your laptop) to /tmp/poolparty, and then rsync it to the
+            specified target directory on the cloud nodes.
+            </p>
+            <h2>Usage</h2>
+            <pre>has_deploy_directory(has_deploy_directory 'bob',&#x000A;                   :from =&gt; &quot;~/path/to/my/site&quot;,&#x000A;                   :to =&gt; &quot;/mnt&quot;,&#x000A;                   :owner =&gt; 'www-data'</pre>
+            <p>
+            This will place the contents of ~/path/to/my/site from your machine to
+            /mnt/bob on the cloud instances virtual_resource(:deploy_directory)
+            </p>
+          </div>
           <div id='method-list'>
             <h2>Methods</h2>
             <h3>public instance</h3>
@@ -64,7 +78,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000743-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000743-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/deploy_directory.rb, line 29</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">add_unpack_directory</span>&#x000A;        <span class="ruby-identifier">has_directory</span>(<span class="ruby-node">&quot;#{::File.dirname(to)}&quot;</span>)&#x000A;        <span class="ruby-identifier">has_exec</span>(<span class="ruby-node">&quot;unpack-#{::File.basename(to)}-deploy-directory&quot;</span>) <span class="ruby-keyword kw">do</span>&#x000A;          <span class="ruby-identifier">requires</span> <span class="ruby-identifier">get_directory</span>(<span class="ruby-node">&quot;#{::File.dirname(to)}&quot;</span>)&#x000A;          <span class="ruby-identifier">command</span> <span class="ruby-node">&quot;cp -R /var/poolparty/dr_configure/user_directory/#{name}/* #{to}&quot;</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;        &#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">owner?</span>&#x000A;          <span class="ruby-identifier">has_exec</span>(<span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;chown-#{name}&quot;</span>) <span class="ruby-keyword kw">do</span>&#x000A;            <span class="ruby-identifier">command</span> <span class="ruby-node">&quot;chown #{owner} -R #{to}/#{name}&quot;</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;        &#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000743-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/deploy_directory.rb, line 31</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">add_unpack_directory</span>&#x000A;        <span class="ruby-identifier">has_directory</span>(<span class="ruby-node">&quot;#{::File.dirname(to)}&quot;</span>)&#x000A;        <span class="ruby-identifier">has_exec</span>(<span class="ruby-node">&quot;unpack-#{::File.basename(to)}-deploy-directory&quot;</span>) <span class="ruby-keyword kw">do</span>&#x000A;          <span class="ruby-identifier">requires</span> <span class="ruby-identifier">get_directory</span>(<span class="ruby-node">&quot;#{::File.dirname(to)}&quot;</span>)&#x000A;          <span class="ruby-identifier">command</span> <span class="ruby-node">&quot;cp -R /var/poolparty/dr_configure/user_directory/#{name}/* #{to}&quot;</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;        &#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">owner?</span>&#x000A;          <span class="ruby-identifier">has_exec</span>(<span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;chown-#{name}&quot;</span>) <span class="ruby-keyword kw">do</span>&#x000A;            <span class="ruby-identifier">command</span> <span class="ruby-node">&quot;chown #{owner} -R #{to}/#{name}&quot;</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;        &#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-instance method' id='method-M000741'>
@@ -77,7 +91,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000741-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000741-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/deploy_directory.rb, line 21</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">before_configure</span>&#x000A;        <span class="ruby-identifier">package_deploy_directory</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000741-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/deploy_directory.rb, line 23</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">before_configure</span>&#x000A;        <span class="ruby-identifier">package_deploy_directory</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-instance method' id='method-M000740'>
@@ -90,7 +104,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000740-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000740-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/deploy_directory.rb, line 17</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">loaded</span>(<span class="ruby-identifier">opts</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)        &#x000A;        <span class="ruby-identifier">add_unpack_directory</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000740-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/deploy_directory.rb, line 19</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">loaded</span>(<span class="ruby-identifier">opts</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)        &#x000A;        <span class="ruby-identifier">add_unpack_directory</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-instance method' id='method-M000742'>
@@ -103,7 +117,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000742-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000742-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/deploy_directory.rb, line 25</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">package_deploy_directory</span>&#x000A;        <span class="ruby-operator">::</span><span class="ruby-constant">Suitcase</span><span class="ruby-operator">::</span><span class="ruby-constant">Zipper</span>.<span class="ruby-identifier">add</span>(<span class="ruby-node">&quot;#{::File.expand_path(from)}&quot;</span>, <span class="ruby-value str">&quot;user_directory/&quot;</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000742-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/deploy_directory.rb, line 27</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">package_deploy_directory</span>&#x000A;        <span class="ruby-operator">::</span><span class="ruby-constant">Suitcase</span><span class="ruby-operator">::</span><span class="ruby-constant">Zipper</span>.<span class="ruby-identifier">add</span>(<span class="ruby-node">&quot;#{::File.expand_path(from)}&quot;</span>, <span class="ruby-value str">&quot;user_directory/&quot;</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

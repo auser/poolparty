@@ -41,6 +41,26 @@
       </div>
       <div id='content'>
         <div id='text'>
+          <div id='description'>
+            <h2><a href="Host.html">Host</a></h2>
+            <p>
+            The host parameter sets hosts on the instances. Setting this, every node
+            will have the host.
+            </p>
+            <h2>Usage</h2>
+            <pre>has_host(:name =&gt; '...') do&#x000A;  # More options.&#x000A;  # This block is optional&#x000A;end</pre>
+            <h2>Options</h2>
+            <ul>
+            <li><tt>name</tt>The name of the instance
+            
+            </li>
+            <li><tt>ip</tt> IP address of the instance for the host entry
+            
+            </li>
+            </ul>
+            <h2>Examples</h2>
+            <pre>has_host({:name =&gt; &quot;other_machine&quot;, :ip =&gt; 192.168.0.101 })</pre>
+          </div>
           <div id='method-list'>
             <h2>Methods</h2>
             <h3>public instance</h3>
@@ -61,7 +81,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000384-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000384-source'><span class="ruby-comment cmt"># File lib/poolparty/resources/host.rb, line 9</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">aka</span>(<span class="ruby-identifier">i</span>=<span class="ruby-keyword kw">nil</span>)&#x000A;        <span class="ruby-identifier">i</span> <span class="ruby-value">? </span><span class="ruby-identifier">options</span>[<span class="ruby-identifier">:alias</span>] = <span class="ruby-identifier">i</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:alias</span>]&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000384-source'><span class="ruby-comment cmt"># File lib/poolparty/resources/host.rb, line 30</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">aka</span>(<span class="ruby-identifier">i</span>=<span class="ruby-keyword kw">nil</span>)&#x000A;        <span class="ruby-identifier">i</span> <span class="ruby-value">? </span><span class="ruby-identifier">options</span>[<span class="ruby-identifier">:alias</span>] = <span class="ruby-identifier">i</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:alias</span>]&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>
