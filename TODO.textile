@@ -5,7 +5,7 @@
 # Add puppet/chef syntax checker
 # Place suitcase and dependencies files in ~/.poolparty/tmp-poolname/ instead of /tmp/
 # XMPP
-
+# Add delayed and immediate for plugins (before and after services)
 
 
 == TODO:
