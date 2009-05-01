@@ -211,6 +211,27 @@
             </li>
           </ol>
           <p>
+            If these ports aren't open, your cloud will fail.
+          </p>
+          <pre><code>
+            ec2-authorize -p 22 default
+            ec2-authorize -p 8642 default
+          </code></pre>
+          <p>
+            Sometimes it's nice to ping your machine, but ping doesn't need to be open, so this step is optional:
+            <br />
+          </p>
+          <pre><code>
+            ec2-authorize -P icmp -t -1:-1 default
+          </code></pre>
+          <p>
+            Also, if you plan on using apache, you'll want port 80 to be open:
+            <br />
+          </p>
+          <pre><code>
+            ec2-authorize -p 80 default
+          </code></pre>
+          <p>
             Old ports
             <strong>
               not
@@ -228,21 +249,6 @@
               7050 (cloud management)
             </li>
           </ol>
-          <p>
-            If these ports aren't open, your cloud will fail.
-          </p>
-          <pre><code>
-            ec2-authorize -p 22 default
-            ec2-authorize -p 8642 default
-          </code></pre>
-          <p>
-            Sometimes it's nice to ping your machine, but ping doesn't need to be open, so this step is optional:
-            <br />
-          </p>
-          <pre><code>
-            ec2-authorize -P icmp -t -1:-1 default
-          </code></pre>
-          <p></p>
           <h2>clouds.rb file location</h2>
           <p>
             If you are going to point to one clouds.rb file more often than any other, you can add it as an environment variable as well, like so

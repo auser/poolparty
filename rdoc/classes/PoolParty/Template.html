@@ -45,51 +45,51 @@
             <h2>Methods</h2>
             <h3>public class</h3>
             <ol>
-              <li><a href="#M000654">compile_file</a></li>
-              <li><a href="#M000653">compile_string</a></li>
-              <li><a href="#M000655">handle_render</a></li>
+              <li><a href="#M000673">compile_file</a></li>
+              <li><a href="#M000672">compile_string</a></li>
+              <li><a href="#M000674">handle_render</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public class methods</h2>
-              <div class='public-class method' id='method-M000654'>
-                <a name='M000654'>      </a>
+              <div class='public-class method' id='method-M000673'>
+                <a name='M000673'>      </a>
                 <div class='synopsis'>
                   <span class='name'>compile_file</span>
                   <span class='arguments'>(file, opts={})</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000654-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000673-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000654-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/template.rb, line 12</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">compile_file</span>(<span class="ruby-identifier">file</span>, <span class="ruby-identifier">opts</span>={})&#x000A;      <span class="ruby-identifier">content</span> = <span class="ruby-identifier">open</span>(<span class="ruby-identifier">file</span>).<span class="ruby-identifier">read</span>&#x000A;      <span class="ruby-identifier">compile_string</span>(<span class="ruby-identifier">content</span>, <span class="ruby-identifier">opts</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000673-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/template.rb, line 12</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">compile_file</span>(<span class="ruby-identifier">file</span>, <span class="ruby-identifier">opts</span>={})&#x000A;      <span class="ruby-identifier">content</span> = <span class="ruby-identifier">open</span>(<span class="ruby-identifier">file</span>).<span class="ruby-identifier">read</span>&#x000A;      <span class="ruby-identifier">compile_string</span>(<span class="ruby-identifier">content</span>, <span class="ruby-identifier">opts</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-class method' id='method-M000653'>
-                <a name='M000653'>      </a>
+              <div class='public-class method' id='method-M000672'>
+                <a name='M000672'>      </a>
                 <div class='synopsis'>
                   <span class='name'>compile_string</span>
                   <span class='arguments'>(string, opts={})</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000653-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000672-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000653-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/template.rb, line 7</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">compile_string</span>(<span class="ruby-identifier">string</span>, <span class="ruby-identifier">opts</span>={})&#x000A;      <span class="ruby-identifier">vars</span> = <span class="ruby-constant">OpenStruct</span>.<span class="ruby-identifier">new</span> <span class="ruby-identifier">opts</span>&#x000A;      <span class="ruby-identifier">handle_render</span>(<span class="ruby-identifier">string</span>, <span class="ruby-identifier">vars</span>, (<span class="ruby-identifier">opts</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:render</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">:erb</span>))&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000672-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/template.rb, line 7</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">compile_string</span>(<span class="ruby-identifier">string</span>, <span class="ruby-identifier">opts</span>={})&#x000A;      <span class="ruby-identifier">vars</span> = <span class="ruby-constant">OpenStruct</span>.<span class="ruby-identifier">new</span> <span class="ruby-identifier">opts</span>&#x000A;      <span class="ruby-identifier">handle_render</span>(<span class="ruby-identifier">string</span>, <span class="ruby-identifier">vars</span>, (<span class="ruby-identifier">opts</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:render</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">:erb</span>))&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-class method' id='method-M000655'>
-                <a name='M000655'>      </a>
+              <div class='public-class method' id='method-M000674'>
+                <a name='M000674'>      </a>
                 <div class='synopsis'>
                   <span class='name'>handle_render</span>
                   <span class='arguments'>(string, vars, renderer)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000655-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000674-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000655-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/template.rb, line 17</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">handle_render</span>(<span class="ruby-identifier">string</span>, <span class="ruby-identifier">vars</span>, <span class="ruby-identifier">renderer</span>)&#x000A;      <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">renderer</span>&#x000A;      <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:haml</span>&#x000A;        <span class="ruby-keyword kw">nil</span>&#x000A;      <span class="ruby-keyword kw">else</span>&#x000A;        <span class="ruby-constant">ERB</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">string</span>).<span class="ruby-identifier">result</span>(<span class="ruby-identifier">vars</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">:binding</span>))&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000674-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/template.rb, line 17</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">handle_render</span>(<span class="ruby-identifier">string</span>, <span class="ruby-identifier">vars</span>, <span class="ruby-identifier">renderer</span>)&#x000A;      <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">renderer</span>&#x000A;      <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:haml</span>&#x000A;        <span class="ruby-keyword kw">nil</span>&#x000A;      <span class="ruby-keyword kw">else</span>&#x000A;        <span class="ruby-constant">ERB</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">string</span>).<span class="ruby-identifier">result</span>(<span class="ruby-identifier">vars</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">:binding</span>))&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>
