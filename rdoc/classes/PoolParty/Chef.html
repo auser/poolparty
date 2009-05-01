@@ -45,219 +45,219 @@
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000628">added_recipes</a></li>
-              <li><a href="#M000621">basedir</a></li>
-              <li><a href="#M000629">before_bootstrap</a></li>
-              <li><a href="#M000630">before_configure</a></li>
-              <li><a href="#M000617">before_configure</a></li>
-              <li><a href="#M000618">before_load</a></li>
-              <li><a href="#M000627">config</a></li>
-              <li><a href="#M000625">include_recipes</a></li>
-              <li><a href="#M000626">included_recipes</a></li>
-              <li><a href="#M000624">json</a></li>
-              <li><a href="#M000619">loaded</a></li>
+              <li><a href="#M000625">added_recipes</a></li>
+              <li><a href="#M000618">basedir</a></li>
+              <li><a href="#M000626">before_bootstrap</a></li>
+              <li><a href="#M000627">before_configure</a></li>
+              <li><a href="#M000614">before_configure</a></li>
+              <li><a href="#M000615">before_load</a></li>
+              <li><a href="#M000624">config</a></li>
+              <li><a href="#M000622">include_recipes</a></li>
+              <li><a href="#M000623">included_recipes</a></li>
+              <li><a href="#M000621">json</a></li>
               <li><a href="#M000616">loaded</a></li>
-              <li><a href="#M000622">recipe</a></li>
-              <li><a href="#M000620">recipe_files</a></li>
-              <li><a href="#M000623">templates</a></li>
+              <li><a href="#M000613">loaded</a></li>
+              <li><a href="#M000619">recipe</a></li>
+              <li><a href="#M000617">recipe_files</a></li>
+              <li><a href="#M000620">templates</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000628'>
-                <a name='M000628'>      </a>
+              <div class='public-instance method' id='method-M000625'>
+                <a name='M000625'>      </a>
                 <div class='synopsis'>
                   <span class='name'>added_recipes</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000628-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000625-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000628-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/chef.rb, line 147</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">added_recipes</span>&#x000A;        <span class="ruby-ivar">@added_recipes</span> <span class="ruby-operator">||=</span> []&#x000A;      <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <div class='public-instance method' id='method-M000621'>
-                <a name='M000621'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>basedir</span>
-                  <span class='arguments'>()</span>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000621-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000621-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/chef.rb, line 33</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">basedir</span>&#x000A;        <span class="ruby-ivar">@basedir</span> <span class="ruby-operator">||=</span> <span class="ruby-node">&quot;#{Default.tmp_path}/dr_configure/chef/cookbooks/main&quot;</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <div class='public-instance method' id='method-M000629'>
-                <a name='M000629'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>before_bootstrap</span>
-                  <span class='arguments'>()</span>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000629-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000629-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/chef.rb, line 151</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">before_bootstrap</span>&#x000A;        <span class="ruby-identifier">bootstrap_gems</span> <span class="ruby-value str">&quot;chef&quot;</span>, <span class="ruby-value str">&quot;ohai&quot;</span>&#x000A;        <span class="ruby-identifier">bootstrap_commands</span> [&#x000A;          <span class="ruby-value str">&quot;mkdir -p /etc/chef/cookbooks /etc/chef/cache&quot;</span>          &#x000A;        ]&#x000A;      <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <div class='public-instance method' id='method-M000630'>
-                <a name='M000630'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>before_configure</span>
-                  <span class='arguments'>()</span>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000630-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000630-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/chef.rb, line 157</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">before_configure</span>&#x000A;        <span class="ruby-identifier">config</span>&#x000A;        <span class="ruby-identifier">json</span>&#x000A;        &#x000A;        <span class="ruby-identifier">included_recipes</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-operator">::</span><span class="ruby-constant">Suitcase</span><span class="ruby-operator">::</span><span class="ruby-constant">Zipper</span>.<span class="ruby-identifier">add</span>(<span class="ruby-identifier">f</span>, <span class="ruby-value str">&quot;chef/cookbooks&quot;</span>)&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;        &#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">directory?</span>(<span class="ruby-value str">&quot;/etc/chef&quot;</span>)&#x000A;          <span class="ruby-operator">::</span><span class="ruby-constant">Suitcase</span><span class="ruby-operator">::</span><span class="ruby-constant">Zipper</span>.<span class="ruby-identifier">add</span>(<span class="ruby-value str">&quot;/etc/chef/cookbooks/*&quot;</span>, <span class="ruby-value str">&quot;chef/cookbooks&quot;</span>)&#x000A;          <span class="ruby-operator">::</span><span class="ruby-constant">Suitcase</span><span class="ruby-operator">::</span><span class="ruby-constant">Zipper</span>.<span class="ruby-identifier">add</span>(<span class="ruby-value str">&quot;/etc/chef/dna.json&quot;</span>, <span class="ruby-value str">&quot;chef/json&quot;</span>)&#x000A;          <span class="ruby-operator">::</span><span class="ruby-constant">Suitcase</span><span class="ruby-operator">::</span><span class="ruby-constant">Zipper</span>.<span class="ruby-identifier">add</span>(<span class="ruby-value str">&quot;/etc/chef/solo.rb&quot;</span>, <span class="ruby-value str">&quot;chef/&quot;</span>)&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;        &#x000A;      <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <div class='public-instance method' id='method-M000617'>
-                <a name='M000617'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>before_configure</span>
-                  <span class='arguments'>()</span>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000617-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000617-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/chef.rb, line 17</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">before_configure</span>&#x000A;        <span class="ruby-operator">::</span><span class="ruby-constant">Suitcase</span><span class="ruby-operator">::</span><span class="ruby-constant">Zipper</span>.<span class="ruby-identifier">add</span>(<span class="ruby-identifier">name</span>, <span class="ruby-value str">&quot;chef/cookbooks&quot;</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">exist?</span>(<span class="ruby-identifier">name</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000625-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/chef.rb, line 147</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">added_recipes</span>&#x000A;        <span class="ruby-ivar">@added_recipes</span> <span class="ruby-operator">||=</span> []&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-instance method' id='method-M000618'>
                 <a name='M000618'>      </a>
                 <div class='synopsis'>
-                  <span class='name'>before_load</span>
-                  <span class='arguments'>(o, &amp;block)</span>
+                  <span class='name'>basedir</span>
+                  <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
                   <a class='source-toggle' href='#' onclick="toggleCode('M000618-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000618-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/chef.rb, line 23</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">before_load</span>(<span class="ruby-identifier">o</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <div class='public-instance method' id='method-M000627'>
-                <a name='M000627'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>config</span>
-                  <span class='arguments'>(file=&quot;&quot;)</span>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000627-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000627-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/chef.rb, line 121</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">config</span> <span class="ruby-identifier">file</span>=<span class="ruby-value str">&quot;&quot;</span>&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">file?</span> <span class="ruby-identifier">file</span>&#x000A;          <span class="ruby-operator">::</span><span class="ruby-constant">Suitcase</span><span class="ruby-operator">::</span><span class="ruby-constant">Zipper</span>.<span class="ruby-identifier">add_content_as</span>(<span class="ruby-identifier">open</span>(<span class="ruby-identifier">file</span>).<span class="ruby-identifier">read</span>, <span class="ruby-value str">&quot;solo.rb&quot;</span>, <span class="ruby-value str">&quot;chef&quot;</span>)&#x000A;        <span class="ruby-keyword kw">else</span>&#x000A;          <span class="ruby-identifier">conf_string</span> = <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">file</span>.<span class="ruby-identifier">empty?</span>&#x000A;<span class="ruby-comment cmt"># default config</span>&#x000A;          <span class="ruby-value str">&quot;cookbook_path     \&quot;/etc/chef/cookbooks\&quot;\nnode_path         \&quot;/etc/chef/nodes\&quot;\nlog_level         :info\nfile_store_path  \&quot;/etc/chef\&quot;\nfile_cache_path  \&quot;/etc/chef\&quot;\n&quot;</span>&#x000A;          <span class="ruby-keyword kw">else</span>&#x000A;            <span class="ruby-identifier">open</span>(<span class="ruby-identifier">file</span>).<span class="ruby-identifier">read</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;          <span class="ruby-comment cmt"># ::FileUtils.mkdir_p &quot;#{Default.tmp_path}/trash&quot; unless ::File.directory? &quot;#{Default.tmp_path}/trash&quot;</span>&#x000A;          <span class="ruby-comment cmt"># ::File.open(&quot;#{Default.tmp_path}/trash/solo.rb&quot;, &quot;w+&quot;) do |tf|</span>&#x000A;          <span class="ruby-comment cmt">#   tf &lt;&lt; conf_string</span>&#x000A;          <span class="ruby-comment cmt"># end</span>&#x000A;          <span class="ruby-operator">::</span><span class="ruby-constant">Suitcase</span><span class="ruby-operator">::</span><span class="ruby-constant">Zipper</span>.<span class="ruby-identifier">add_content_as</span>(<span class="ruby-identifier">conf_string</span>, <span class="ruby-value str">&quot;solo.rb&quot;</span>, <span class="ruby-value str">&quot;chef&quot;</span>)&#x000A;          <span class="ruby-comment cmt"># ::Suitcase::Zipper.add(&quot;#{Default.tmp_path}/trash/solo.rb&quot;, &quot;chef&quot;)</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <div class='public-instance method' id='method-M000625'>
-                <a name='M000625'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>include_recipes</span>
-                  <span class='arguments'>(*recps)</span>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000625-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000625-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/chef.rb, line 107</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">include_recipes</span> <span class="ruby-operator">*</span><span class="ruby-identifier">recps</span>&#x000A;        <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">recps</span>.<span class="ruby-identifier">empty?</span>&#x000A;          <span class="ruby-identifier">recps</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">rcp</span><span class="ruby-operator">|</span>&#x000A;            <span class="ruby-constant">Dir</span>[<span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">rcp</span>)].<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>&#x000A;              <span class="ruby-identifier">included_recipes</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">f</span>&#x000A;            <span class="ruby-keyword kw">end</span>            &#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000618-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/chef.rb, line 33</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">basedir</span>&#x000A;        <span class="ruby-ivar">@basedir</span> <span class="ruby-operator">||=</span> <span class="ruby-node">&quot;#{Default.tmp_path}/dr_configure/chef/cookbooks/main&quot;</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-instance method' id='method-M000626'>
                 <a name='M000626'>      </a>
                 <div class='synopsis'>
-                  <span class='name'>included_recipes</span>
+                  <span class='name'>before_bootstrap</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
                   <a class='source-toggle' href='#' onclick="toggleCode('M000626-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000626-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/chef.rb, line 117</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">included_recipes</span>&#x000A;        <span class="ruby-ivar">@included_recipes</span> <span class="ruby-operator">||=</span> []&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000626-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/chef.rb, line 151</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">before_bootstrap</span>&#x000A;        <span class="ruby-identifier">bootstrap_gems</span> <span class="ruby-value str">&quot;chef&quot;</span>, <span class="ruby-value str">&quot;ohai&quot;</span>&#x000A;        <span class="ruby-identifier">bootstrap_commands</span> [&#x000A;          <span class="ruby-value str">&quot;mkdir -p /etc/chef/cookbooks /etc/chef/cache&quot;</span>          &#x000A;        ]&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000627'>
+                <a name='M000627'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>before_configure</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000627-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000627-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/chef.rb, line 157</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">before_configure</span>&#x000A;        <span class="ruby-identifier">config</span>&#x000A;        <span class="ruby-identifier">json</span>&#x000A;        &#x000A;        <span class="ruby-identifier">included_recipes</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-operator">::</span><span class="ruby-constant">Suitcase</span><span class="ruby-operator">::</span><span class="ruby-constant">Zipper</span>.<span class="ruby-identifier">add</span>(<span class="ruby-identifier">f</span>, <span class="ruby-value str">&quot;chef/cookbooks&quot;</span>)&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;        &#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">directory?</span>(<span class="ruby-value str">&quot;/etc/chef&quot;</span>)&#x000A;          <span class="ruby-operator">::</span><span class="ruby-constant">Suitcase</span><span class="ruby-operator">::</span><span class="ruby-constant">Zipper</span>.<span class="ruby-identifier">add</span>(<span class="ruby-value str">&quot;/etc/chef/cookbooks/*&quot;</span>, <span class="ruby-value str">&quot;chef/cookbooks&quot;</span>)&#x000A;          <span class="ruby-operator">::</span><span class="ruby-constant">Suitcase</span><span class="ruby-operator">::</span><span class="ruby-constant">Zipper</span>.<span class="ruby-identifier">add</span>(<span class="ruby-value str">&quot;/etc/chef/dna.json&quot;</span>, <span class="ruby-value str">&quot;chef/json&quot;</span>)&#x000A;          <span class="ruby-operator">::</span><span class="ruby-constant">Suitcase</span><span class="ruby-operator">::</span><span class="ruby-constant">Zipper</span>.<span class="ruby-identifier">add</span>(<span class="ruby-value str">&quot;/etc/chef/solo.rb&quot;</span>, <span class="ruby-value str">&quot;chef/&quot;</span>)&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;        &#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000614'>
+                <a name='M000614'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>before_configure</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000614-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000614-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/chef.rb, line 17</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">before_configure</span>&#x000A;        <span class="ruby-operator">::</span><span class="ruby-constant">Suitcase</span><span class="ruby-operator">::</span><span class="ruby-constant">Zipper</span>.<span class="ruby-identifier">add</span>(<span class="ruby-identifier">name</span>, <span class="ruby-value str">&quot;chef/cookbooks&quot;</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">exist?</span>(<span class="ruby-identifier">name</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000615'>
+                <a name='M000615'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>before_load</span>
+                  <span class='arguments'>(o, &amp;block)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000615-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000615-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/chef.rb, line 23</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">before_load</span>(<span class="ruby-identifier">o</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-instance method' id='method-M000624'>
                 <a name='M000624'>      </a>
                 <div class='synopsis'>
-                  <span class='name'>json</span>
-                  <span class='arguments'>(file=nil, &amp;block)</span>
+                  <span class='name'>config</span>
+                  <span class='arguments'>(file=&quot;&quot;)</span>
                 </div>
                 <div class='source'>
                   <a class='source-toggle' href='#' onclick="toggleCode('M000624-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000624-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/chef.rb, line 82</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">json</span> <span class="ruby-identifier">file</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">file</span>&#x000A;          <span class="ruby-keyword kw">if</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">file?</span> <span class="ruby-identifier">file</span>&#x000A;            <span class="ruby-operator">::</span><span class="ruby-constant">Suitcase</span><span class="ruby-operator">::</span><span class="ruby-constant">Zipper</span>.<span class="ruby-identifier">add_content_as</span>(<span class="ruby-identifier">open</span>(<span class="ruby-identifier">file</span>).<span class="ruby-identifier">read</span>, <span class="ruby-value str">&quot;dna.json&quot;</span>, <span class="ruby-value str">&quot;chef&quot;</span>)&#x000A;          <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">file</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">String</span>)&#x000A;            <span class="ruby-operator">::</span><span class="ruby-constant">Suitcase</span><span class="ruby-operator">::</span><span class="ruby-constant">Zipper</span>.<span class="ruby-identifier">add_content_as</span>(<span class="ruby-identifier">file</span>, <span class="ruby-value str">&quot;dna.json&quot;</span>, <span class="ruby-value str">&quot;chef&quot;</span>)&#x000A;          <span class="ruby-keyword kw">else</span>&#x000A;            <span class="ruby-identifier">raise</span> <span class="ruby-value str">&quot;Your json must either point to a file that exists or a string. Please check your configuration and try again\n&quot;</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">else</span>&#x000A;          <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@recipe</span>&#x000A;            <span class="ruby-ivar">@recipe</span> = <span class="ruby-constant">ChefRecipe</span>.<span class="ruby-identifier">new</span>&#x000A;            <span class="ruby-ivar">@recipe</span>.<span class="ruby-identifier">instance_eval</span> <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">block</span>&#x000A;            <span class="ruby-ivar">@recipe</span>.<span class="ruby-identifier">recipes</span>(<span class="ruby-identifier">recipe_files</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-value">? </span>[<span class="ruby-value str">&quot;poolparty&quot;</span>] <span class="ruby-operator">:</span> [<span class="ruby-value str">&quot;poolparty&quot;</span>, <span class="ruby-value str">&quot;main&quot;</span>])&#x000A;            <span class="ruby-comment cmt"># ::File.open(&quot;#{Default.tmp_path}/dr_configure/dna.json&quot;, &quot;w+&quot;) {|f| f &lt;&lt; @recipe.options.to_json }</span>&#x000A;            <span class="ruby-operator">::</span><span class="ruby-constant">Suitcase</span><span class="ruby-operator">::</span><span class="ruby-constant">Zipper</span>.<span class="ruby-identifier">add_content_as</span>(<span class="ruby-ivar">@recipe</span>.<span class="ruby-identifier">options</span>.<span class="ruby-identifier">to_json</span>, <span class="ruby-value str">&quot;dna.json&quot;</span>, <span class="ruby-value str">&quot;chef&quot;</span>)&#x000A;            &#x000A;            <span class="ruby-identifier">configure_commands</span> [<span class="ruby-value str">&quot;cp -f /var/poolparty/dr_configure/chef/dna.json /etc/chef/dna.json&quot;</span>]&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000624-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/chef.rb, line 121</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">config</span> <span class="ruby-identifier">file</span>=<span class="ruby-value str">&quot;&quot;</span>&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">file?</span> <span class="ruby-identifier">file</span>&#x000A;          <span class="ruby-operator">::</span><span class="ruby-constant">Suitcase</span><span class="ruby-operator">::</span><span class="ruby-constant">Zipper</span>.<span class="ruby-identifier">add_content_as</span>(<span class="ruby-identifier">open</span>(<span class="ruby-identifier">file</span>).<span class="ruby-identifier">read</span>, <span class="ruby-value str">&quot;solo.rb&quot;</span>, <span class="ruby-value str">&quot;chef&quot;</span>)&#x000A;        <span class="ruby-keyword kw">else</span>&#x000A;          <span class="ruby-identifier">conf_string</span> = <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">file</span>.<span class="ruby-identifier">empty?</span>&#x000A;<span class="ruby-comment cmt"># default config</span>&#x000A;          <span class="ruby-value str">&quot;cookbook_path     \&quot;/etc/chef/cookbooks\&quot;\nnode_path         \&quot;/etc/chef/nodes\&quot;\nlog_level         :info\nfile_store_path  \&quot;/etc/chef\&quot;\nfile_cache_path  \&quot;/etc/chef\&quot;\n&quot;</span>&#x000A;          <span class="ruby-keyword kw">else</span>&#x000A;            <span class="ruby-identifier">open</span>(<span class="ruby-identifier">file</span>).<span class="ruby-identifier">read</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;          <span class="ruby-comment cmt"># ::FileUtils.mkdir_p &quot;#{Default.tmp_path}/trash&quot; unless ::File.directory? &quot;#{Default.tmp_path}/trash&quot;</span>&#x000A;          <span class="ruby-comment cmt"># ::File.open(&quot;#{Default.tmp_path}/trash/solo.rb&quot;, &quot;w+&quot;) do |tf|</span>&#x000A;          <span class="ruby-comment cmt">#   tf &lt;&lt; conf_string</span>&#x000A;          <span class="ruby-comment cmt"># end</span>&#x000A;          <span class="ruby-operator">::</span><span class="ruby-constant">Suitcase</span><span class="ruby-operator">::</span><span class="ruby-constant">Zipper</span>.<span class="ruby-identifier">add_content_as</span>(<span class="ruby-identifier">conf_string</span>, <span class="ruby-value str">&quot;solo.rb&quot;</span>, <span class="ruby-value str">&quot;chef&quot;</span>)&#x000A;          <span class="ruby-comment cmt"># ::Suitcase::Zipper.add(&quot;#{Default.tmp_path}/trash/solo.rb&quot;, &quot;chef&quot;)</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000619'>
-                <a name='M000619'>      </a>
+              <div class='public-instance method' id='method-M000622'>
+                <a name='M000622'>      </a>
                 <div class='synopsis'>
-                  <span class='name'>loaded</span>
-                  <span class='arguments'>(o={})</span>
+                  <span class='name'>include_recipes</span>
+                  <span class='arguments'>(*recps)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000619-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000622-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000619-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/chef.rb, line 26</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">loaded</span> <span class="ruby-identifier">o</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000622-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/chef.rb, line 107</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">include_recipes</span> <span class="ruby-operator">*</span><span class="ruby-identifier">recps</span>&#x000A;        <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">recps</span>.<span class="ruby-identifier">empty?</span>&#x000A;          <span class="ruby-identifier">recps</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">rcp</span><span class="ruby-operator">|</span>&#x000A;            <span class="ruby-constant">Dir</span>[<span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">rcp</span>)].<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>&#x000A;              <span class="ruby-identifier">included_recipes</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">f</span>&#x000A;            <span class="ruby-keyword kw">end</span>            &#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000623'>
+                <a name='M000623'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>included_recipes</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000623-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000623-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/chef.rb, line 117</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">included_recipes</span>&#x000A;        <span class="ruby-ivar">@included_recipes</span> <span class="ruby-operator">||=</span> []&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000621'>
+                <a name='M000621'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>json</span>
+                  <span class='arguments'>(file=nil, &amp;block)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000621-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000621-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/chef.rb, line 82</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">json</span> <span class="ruby-identifier">file</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">file</span>&#x000A;          <span class="ruby-keyword kw">if</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">file?</span> <span class="ruby-identifier">file</span>&#x000A;            <span class="ruby-operator">::</span><span class="ruby-constant">Suitcase</span><span class="ruby-operator">::</span><span class="ruby-constant">Zipper</span>.<span class="ruby-identifier">add_content_as</span>(<span class="ruby-identifier">open</span>(<span class="ruby-identifier">file</span>).<span class="ruby-identifier">read</span>, <span class="ruby-value str">&quot;dna.json&quot;</span>, <span class="ruby-value str">&quot;chef&quot;</span>)&#x000A;          <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">file</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">String</span>)&#x000A;            <span class="ruby-operator">::</span><span class="ruby-constant">Suitcase</span><span class="ruby-operator">::</span><span class="ruby-constant">Zipper</span>.<span class="ruby-identifier">add_content_as</span>(<span class="ruby-identifier">file</span>, <span class="ruby-value str">&quot;dna.json&quot;</span>, <span class="ruby-value str">&quot;chef&quot;</span>)&#x000A;          <span class="ruby-keyword kw">else</span>&#x000A;            <span class="ruby-identifier">raise</span> <span class="ruby-value str">&quot;Your json must either point to a file that exists or a string. Please check your configuration and try again\n&quot;</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">else</span>&#x000A;          <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@recipe</span>&#x000A;            <span class="ruby-ivar">@recipe</span> = <span class="ruby-constant">ChefRecipe</span>.<span class="ruby-identifier">new</span>&#x000A;            <span class="ruby-ivar">@recipe</span>.<span class="ruby-identifier">instance_eval</span> <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">block</span>&#x000A;            <span class="ruby-ivar">@recipe</span>.<span class="ruby-identifier">recipes</span>(<span class="ruby-identifier">recipe_files</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-value">? </span>[<span class="ruby-value str">&quot;poolparty&quot;</span>] <span class="ruby-operator">:</span> [<span class="ruby-value str">&quot;poolparty&quot;</span>, <span class="ruby-value str">&quot;main&quot;</span>])&#x000A;            <span class="ruby-comment cmt"># ::File.open(&quot;#{Default.tmp_path}/dr_configure/dna.json&quot;, &quot;w+&quot;) {|f| f &lt;&lt; @recipe.options.to_json }</span>&#x000A;            <span class="ruby-operator">::</span><span class="ruby-constant">Suitcase</span><span class="ruby-operator">::</span><span class="ruby-constant">Zipper</span>.<span class="ruby-identifier">add_content_as</span>(<span class="ruby-ivar">@recipe</span>.<span class="ruby-identifier">options</span>.<span class="ruby-identifier">to_json</span>, <span class="ruby-value str">&quot;dna.json&quot;</span>, <span class="ruby-value str">&quot;chef&quot;</span>)&#x000A;            &#x000A;            <span class="ruby-identifier">configure_commands</span> [<span class="ruby-value str">&quot;cp -f /var/poolparty/dr_configure/chef/dna.json /etc/chef/dna.json&quot;</span>]&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <div class='public-instance method' id='method-M000616'>
                 <a name='M000616'>      </a>
                 <div class='synopsis'>
                   <span class='name'>loaded</span>
-                  <span class='arguments'>(opts={}, &amp;block)</span>
+                  <span class='arguments'>(o={})</span>
                 </div>
                 <div class='source'>
                   <a class='source-toggle' href='#' onclick="toggleCode('M000616-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000616-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/chef.rb, line 14</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">loaded</span>(<span class="ruby-identifier">opts</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-identifier">has_chef_recipe</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">basename</span>(<span class="ruby-identifier">name</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000616-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/chef.rb, line 26</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">loaded</span> <span class="ruby-identifier">o</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000622'>
-                <a name='M000622'>      </a>
+              <div class='public-instance method' id='method-M000613'>
+                <a name='M000613'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>loaded</span>
+                  <span class='arguments'>(opts={}, &amp;block)</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000613-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000613-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/chef.rb, line 14</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">loaded</span>(<span class="ruby-identifier">opts</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-identifier">has_chef_recipe</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">basename</span>(<span class="ruby-identifier">name</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000619'>
+                <a name='M000619'>      </a>
                 <div class='synopsis'>
                   <span class='name'>recipe</span>
                   <span class='arguments'>(file=nil, o={}, &amp;block)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000622-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000619-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000622-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/chef.rb, line 37</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">recipe</span>(<span class="ruby-identifier">file</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">o</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">file</span>&#x000A;          <span class="ruby-identifier">file</span> = <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">file</span>)&#x000A;          <span class="ruby-operator">::</span><span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">mkdir_p</span> <span class="ruby-node">&quot;#{basedir}/recipes&quot;</span>&#x000A;                    &#x000A;          <span class="ruby-keyword kw">unless</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">file?</span>(<span class="ruby-identifier">file</span>)&#x000A;            <span class="ruby-identifier">tfile</span> = <span class="ruby-constant">Tempfile</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value str">&quot;main-poolparty-recipe&quot;</span>)&#x000A;            <span class="ruby-identifier">tfile</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">file</span> <span class="ruby-comment cmt"># copy the string into the temp file</span>&#x000A;            <span class="ruby-identifier">file</span> = <span class="ruby-identifier">tfile</span>.<span class="ruby-identifier">path</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;          <span class="ruby-operator">::</span><span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">rm</span> <span class="ruby-node">&quot;#{basedir}/recipes/default.rb&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">file?</span>(<span class="ruby-node">&quot;#{basedir}/recipes/default.rb&quot;</span>)&#x000A;          <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">cp</span> <span class="ruby-identifier">file</span>, <span class="ruby-node">&quot;#{basedir}/recipes/default.rb&quot;</span>&#x000A;          &#x000A;          <span class="ruby-identifier">templates</span> <span class="ruby-identifier">o</span>[<span class="ruby-identifier">:templates</span>] <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">o</span>[<span class="ruby-identifier">:templates</span>]&#x000A;          &#x000A;          <span class="ruby-identifier">recipe_files</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">basedir</span>&#x000A;          <span class="ruby-comment cmt"># ::Suitcase::Zipper.add(basedir, &quot;chef/cookbooks&quot;)</span>&#x000A;        <span class="ruby-comment cmt"># TODO: Enable neat syntax from within poolparty</span>&#x000A;        &#x000A;        <span class="ruby-keyword kw">else</span>&#x000A;          <span class="ruby-identifier">raise</span> <span class="ruby-value str">&quot;PoolParty currently only supports passing recipes as files. Please specify a file in your chef block and try again\&quot;\n&quot;</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000619-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/chef.rb, line 37</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">recipe</span>(<span class="ruby-identifier">file</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">o</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">file</span>&#x000A;          <span class="ruby-identifier">file</span> = <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">file</span>)&#x000A;          <span class="ruby-operator">::</span><span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">mkdir_p</span> <span class="ruby-node">&quot;#{basedir}/recipes&quot;</span>&#x000A;                    &#x000A;          <span class="ruby-keyword kw">unless</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">file?</span>(<span class="ruby-identifier">file</span>)&#x000A;            <span class="ruby-identifier">tfile</span> = <span class="ruby-constant">Tempfile</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value str">&quot;main-poolparty-recipe&quot;</span>)&#x000A;            <span class="ruby-identifier">tfile</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">file</span> <span class="ruby-comment cmt"># copy the string into the temp file</span>&#x000A;            <span class="ruby-identifier">file</span> = <span class="ruby-identifier">tfile</span>.<span class="ruby-identifier">path</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;          <span class="ruby-operator">::</span><span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">rm</span> <span class="ruby-node">&quot;#{basedir}/recipes/default.rb&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">file?</span>(<span class="ruby-node">&quot;#{basedir}/recipes/default.rb&quot;</span>)&#x000A;          <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">cp</span> <span class="ruby-identifier">file</span>, <span class="ruby-node">&quot;#{basedir}/recipes/default.rb&quot;</span>&#x000A;          &#x000A;          <span class="ruby-identifier">templates</span> <span class="ruby-identifier">o</span>[<span class="ruby-identifier">:templates</span>] <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">o</span>[<span class="ruby-identifier">:templates</span>]&#x000A;          &#x000A;          <span class="ruby-identifier">recipe_files</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">basedir</span>&#x000A;          <span class="ruby-comment cmt"># ::Suitcase::Zipper.add(basedir, &quot;chef/cookbooks&quot;)</span>&#x000A;        <span class="ruby-comment cmt"># TODO: Enable neat syntax from within poolparty</span>&#x000A;        &#x000A;        <span class="ruby-keyword kw">else</span>&#x000A;          <span class="ruby-identifier">raise</span> <span class="ruby-value str">&quot;PoolParty currently only supports passing recipes as files. Please specify a file in your chef block and try again\&quot;\n&quot;</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000620'>
-                <a name='M000620'>      </a>
+              <div class='public-instance method' id='method-M000617'>
+                <a name='M000617'>      </a>
                 <div class='synopsis'>
                   <span class='name'>recipe_files</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000620-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000617-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000620-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/chef.rb, line 29</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">recipe_files</span>&#x000A;        <span class="ruby-ivar">@recipe_files</span> <span class="ruby-operator">||=</span> []&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000617-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/chef.rb, line 29</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">recipe_files</span>&#x000A;        <span class="ruby-ivar">@recipe_files</span> <span class="ruby-operator">||=</span> []&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000623'>
-                <a name='M000623'>      </a>
+              <div class='public-instance method' id='method-M000620'>
+                <a name='M000620'>      </a>
                 <div class='synopsis'>
                   <span class='name'>templates</span>
                   <span class='arguments'>(templates=[])</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000623-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000620-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000623-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/chef.rb, line 64</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">templates</span>(<span class="ruby-identifier">templates</span>=[])&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">templates</span>&#x000A;          <span class="ruby-operator">::</span><span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">mkdir_p</span> <span class="ruby-node">&quot;#{basedir}/templates/default/&quot;</span>&#x000A;          <span class="ruby-identifier">templates</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>&#x000A;            <span class="ruby-identifier">f</span> = <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">f</span>)&#x000A;            <span class="ruby-keyword kw">if</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">file?</span>(<span class="ruby-identifier">f</span>)&#x000A;              <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">cp</span> <span class="ruby-identifier">f</span>, <span class="ruby-node">&quot;#{basedir}/templates/default/#{::File.basename(f)}&quot;</span>&#x000A;            <span class="ruby-keyword kw">elsif</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">directory?</span>(<span class="ruby-identifier">f</span>)&#x000A;              <span class="ruby-constant">Dir</span>[<span class="ruby-node">&quot;#{f}/**&quot;</span>].<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">cp</span> <span class="ruby-identifier">f</span>, <span class="ruby-node">&quot;#{basedir}/templates/default/#{::File.basename(f)}&quot;</span> }&#x000A;            <span class="ruby-keyword kw">else</span>&#x000A;              <span class="ruby-identifier">tfile</span> = <span class="ruby-constant">Tempfile</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value str">&quot;main-poolparty-recipe&quot;</span>)&#x000A;              <span class="ruby-identifier">tfile</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">f</span> <span class="ruby-comment cmt"># copy the string into the temp file</span>&#x000A;              <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">cp</span> <span class="ruby-identifier">tfile</span>.<span class="ruby-identifier">path</span>, <span class="ruby-node">&quot;#{basedir}/templates/default/#{::File.basename(f)}&quot;</span>&#x000A;            <span class="ruby-keyword kw">end</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000620-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/chef.rb, line 64</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">templates</span>(<span class="ruby-identifier">templates</span>=[])&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">templates</span>&#x000A;          <span class="ruby-operator">::</span><span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">mkdir_p</span> <span class="ruby-node">&quot;#{basedir}/templates/default/&quot;</span>&#x000A;          <span class="ruby-identifier">templates</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>&#x000A;            <span class="ruby-identifier">f</span> = <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">f</span>)&#x000A;            <span class="ruby-keyword kw">if</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">file?</span>(<span class="ruby-identifier">f</span>)&#x000A;              <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">cp</span> <span class="ruby-identifier">f</span>, <span class="ruby-node">&quot;#{basedir}/templates/default/#{::File.basename(f)}&quot;</span>&#x000A;            <span class="ruby-keyword kw">elsif</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">directory?</span>(<span class="ruby-identifier">f</span>)&#x000A;              <span class="ruby-constant">Dir</span>[<span class="ruby-node">&quot;#{f}/**&quot;</span>].<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">cp</span> <span class="ruby-identifier">f</span>, <span class="ruby-node">&quot;#{basedir}/templates/default/#{::File.basename(f)}&quot;</span> }&#x000A;            <span class="ruby-keyword kw">else</span>&#x000A;              <span class="ruby-identifier">tfile</span> = <span class="ruby-constant">Tempfile</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value str">&quot;main-poolparty-recipe&quot;</span>)&#x000A;              <span class="ruby-identifier">tfile</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">f</span> <span class="ruby-comment cmt"># copy the string into the temp file</span>&#x000A;              <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">cp</span> <span class="ruby-identifier">tfile</span>.<span class="ruby-identifier">path</span>, <span class="ruby-node">&quot;#{basedir}/templates/default/#{::File.basename(f)}&quot;</span>&#x000A;            <span class="ruby-keyword kw">end</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

@@ -31,7 +31,7 @@
         </div>
         <div class='last-update'>
           Last Update:
-          <span class='datetime'>Thu Apr 30 18:32:35 -0700 2009</span>
+          <span class='datetime'>Thu Apr 30 18:33:51 -0700 2009</span>
         </div>
       </div>
       <div id='content'>
@@ -45,11 +45,11 @@
             <p>
             # &#8212;
             </p>
-            <pre>ChefResolver&#x000A;&#x000A;This takes the internal structure&#x000A;{&#x000A;  :options =&gt; {},&#x000A;  :services =&gt; [{}],&#x000A;  :resources =&gt; []&#x000A;}&#x000A;&#x000A;and creates a chef recipe to reflect.&#x000A;&#x000A;/cookbooks/&#x000A;  namespace/&#x000A;    recipes/&#x000A;    templates/&#x000A;    attributes/&#x000A;&#x000A;TODO: This class is somewhat all over the place. Slim it down</pre>
+            <pre>Cloud extensions for the DependencyResolver</pre>
             <p>
             # &#8212;
             </p>
-            <pre>Cloud extensions for the DependencyResolver</pre>
+            <pre>ChefResolver&#x000A;&#x000A;This takes the internal structure&#x000A;{&#x000A;  :options =&gt; {},&#x000A;  :services =&gt; [{}],&#x000A;  :resources =&gt; []&#x000A;}&#x000A;&#x000A;and creates a chef recipe to reflect.&#x000A;&#x000A;/cookbooks/&#x000A;  namespace/&#x000A;    recipes/&#x000A;    templates/&#x000A;    attributes/&#x000A;&#x000A;TODO: This class is somewhat all over the place. Slim it down</pre>
             <p>
             # &#8212; # Class: PuppetResolver< DependencyResolver # # # &#8212; TODO:
             Reimplement # &#8212;
@@ -60,12 +60,12 @@
             </p>
             <pre>The Vmrun remote base uses the vmrun command to implement a cloud remoter base.&#x000A;The Vmrun remoter base has been tested with Vmware fusion on the mac.&#x000A;&#x000A;In order to use the Vmrun remoter base you will need to setup a few things.&#x000A;First, you will need to have the Vmware fusion installed and vmrun command in your path.&#x000A;The default location of the vmrun binary is /Library/Application Support/VMware Fusion/vmrun.&#x000A;You will then of course need a virtual machine installed and available.&#x000A;Once you have your instance installed and running, you need to setup your ssh keys so that poolparty can ssh into the instance. Get the ip of you instnace with ifconfig inside the running instance.&#x000A;For example:&#x000A;&#x000A;  ssh root@172.0.1.129 &quot;mkdir /root/.ssh &amp;&amp; chmod 600 /root/.ssh&quot;&#x000A;  scp my_key.pub root@172.0.1.129:/root/.ssh/authorized_keys&#x000A;&#x000A;provide a using :vmrun block in your clouds.rb&#x000A;for example:&#x000A;&#x000A;  using :vmrun do&#x000A;    vmx_hash(::File.expand_path(&quot;~/Documents/Virtual\ Machines.localized/Ubuntu-jaunty.vmwarevm/Ubuntu-jaunty.vmx&quot;) =&gt; '172.16.68.129')&#x000A;  end&#x000A;&#x000A; The vmx file fulfills a similar purpose as the ami id in ec2. Note that expand path.  vmrun return fuill paths, so we must provide full paths so things match up later. W&#x000A; Vmrun does not provide a meta server like ec2 has, so you need to list the ip address of your VM.  For this reason it is recommended that you use NAT addressing on your VM to maintain consistent addressing across different physical networks.&#x000A;&#x000A;Also, note that vmrun does not copy the VM to a new distinct VM on each run, so if you want to be able to start from a known state, you should make a snapshot before using your vm with poolparty.  Then, you can rollback to this initial state if you want to ensure you can repeat a fresh cloud-start.</pre>
             <p>
-            # &#8212;
+            # &#8212; # BIG TODO: Slim the place where the content is gathered from #
+            &#8212;
             </p>
             <pre>Chef deploy (ezmobius http://github.com/ezmobius/chef-deploy/tree/master)&#x000A;&#x000A;deploy &quot;/data/#{app}&quot; do&#x000A;  repo &quot;git://github.com/engineyard/rack-app.git&quot;&#x000A;  branch &quot;HEAD&quot;&#x000A;  user &quot;ez&quot;&#x000A;  enable_submodules true&#x000A;  migrate true&#x000A;  migration_command &quot;rake db:migrate&quot;&#x000A;  environment &quot;production&quot;&#x000A;  shallow_clone true&#x000A;  revision '0xbeadbeef'&#x000A;  action :deploy # or :rollback&#x000A;end</pre>
             <p>
-            # &#8212; # BIG TODO: Slim the place where the content is gathered from #
-            &#8212;
+            # &#8212;
             </p>
             <pre>ssh key used to login to remote instances</pre>
             <p>

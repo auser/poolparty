@@ -45,21 +45,21 @@
             <h2>Methods</h2>
             <h3>public class</h3>
             <ol>
-              <li><a href="#M000435">new</a></li>
+              <li><a href="#M000432">new</a></li>
             </ol>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000442">launch!</a></li>
-              <li><a href="#M000444">mac_address</a></li>
-              <li><a href="#M000445">parse_vmx_file</a></li>
-              <li><a href="#M000439">pending?</a></li>
-              <li><a href="#M000438">running?</a></li>
-              <li><a href="#M000437">status</a></li>
-              <li><a href="#M000443">terminate!</a></li>
-              <li><a href="#M000441">terminated?</a></li>
-              <li><a href="#M000440">terminating?</a></li>
-              <li><a href="#M000436">to_hash</a></li>
-              <li><a href="#M000446">vmx_data</a></li>
+              <li><a href="#M000439">launch!</a></li>
+              <li><a href="#M000441">mac_address</a></li>
+              <li><a href="#M000442">parse_vmx_file</a></li>
+              <li><a href="#M000436">pending?</a></li>
+              <li><a href="#M000435">running?</a></li>
+              <li><a href="#M000434">status</a></li>
+              <li><a href="#M000440">terminate!</a></li>
+              <li><a href="#M000438">terminated?</a></li>
+              <li><a href="#M000437">terminating?</a></li>
+              <li><a href="#M000433">to_hash</a></li>
+              <li><a href="#M000443">vmx_data</a></li>
             </ol>
           </div>
           <div id='section'>
@@ -97,35 +97,35 @@
             </div>
             <div id='methods'>
               <h2>Public class methods</h2>
-              <div class='public-class method' id='method-M000435'>
-                <a name='M000435'>      </a>
+              <div class='public-class method' id='method-M000432'>
+                <a name='M000432'>      </a>
                 <div class='synopsis'>
                   <span class='name'>new</span>
                   <span class='arguments'>(o={}, cld=nil)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000435-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000432-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000435-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remoter_bases/vmrun/vmrun_instance.rb, line 7</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">o</span>={}, <span class="ruby-identifier">cld</span>=<span class="ruby-keyword kw">nil</span>)&#x000A;        <span class="ruby-identifier">raise</span> <span class="ruby-value str">&quot;You must pass a vmx_file&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">o</span>[<span class="ruby-identifier">:vmx_file</span>]&#x000A;        <span class="ruby-ivar">@vmx_file</span> = <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">o</span>[<span class="ruby-identifier">:vmx_file</span>])&#x000A;        <span class="ruby-ivar">@ip</span> = <span class="ruby-identifier">o</span>[<span class="ruby-identifier">:ip</span>]&#x000A;        <span class="ruby-ivar">@keypair</span> = <span class="ruby-identifier">o</span>[<span class="ruby-identifier">:keypair</span>]&#x000A;        &#x000A;        <span class="ruby-ivar">@cloud</span> = <span class="ruby-identifier">cld</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000432-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remoter_bases/vmrun/vmrun_instance.rb, line 7</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">o</span>={}, <span class="ruby-identifier">cld</span>=<span class="ruby-keyword kw">nil</span>)&#x000A;        <span class="ruby-identifier">raise</span> <span class="ruby-value str">&quot;You must pass a vmx_file&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">o</span>[<span class="ruby-identifier">:vmx_file</span>]&#x000A;        <span class="ruby-ivar">@vmx_file</span> = <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">o</span>[<span class="ruby-identifier">:vmx_file</span>])&#x000A;        <span class="ruby-ivar">@ip</span> = <span class="ruby-identifier">o</span>[<span class="ruby-identifier">:ip</span>]&#x000A;        <span class="ruby-ivar">@keypair</span> = <span class="ruby-identifier">o</span>[<span class="ruby-identifier">:keypair</span>]&#x000A;        &#x000A;        <span class="ruby-ivar">@cloud</span> = <span class="ruby-identifier">cld</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000442'>
-                <a name='M000442'>      </a>
+              <div class='public-instance method' id='method-M000439'>
+                <a name='M000439'>      </a>
                 <div class='synopsis'>
                   <span class='name'>launch!</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000442-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000439-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000442-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remoter_bases/vmrun/vmrun_instance.rb, line 45</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">launch!</span>&#x000A;        <span class="ruby-constant">Vmrun</span>.<span class="ruby-identifier">run_local</span>(<span class="ruby-node">&quot;#{Vmrun.path_to_binary} start \&quot;#{vmx_file}\&quot;&quot;</span>)&#x000A;        <span class="ruby-identifier">dputs</span> <span class="ruby-node">&quot;Launched new vmware instance from vmx: #{vmx_file}&quot;</span>&#x000A;        <span class="ruby-identifier">to_hash</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000439-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remoter_bases/vmrun/vmrun_instance.rb, line 45</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">launch!</span>&#x000A;        <span class="ruby-constant">Vmrun</span>.<span class="ruby-identifier">run_local</span>(<span class="ruby-node">&quot;#{Vmrun.path_to_binary} start \&quot;#{vmx_file}\&quot;&quot;</span>)&#x000A;        <span class="ruby-identifier">dputs</span> <span class="ruby-node">&quot;Launched new vmware instance from vmx: #{vmx_file}&quot;</span>&#x000A;        <span class="ruby-identifier">to_hash</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000444'>
-                <a name='M000444'>      </a>
+              <div class='public-instance method' id='method-M000441'>
+                <a name='M000441'>      </a>
                 <div class='synopsis'>
                   <span class='name'>mac_address</span>
                   <span class='arguments'>()</span>
@@ -140,27 +140,27 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000444-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000441-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000444-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remoter_bases/vmrun/vmrun_instance.rb, line 58</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">mac_address</span>&#x000A;        <span class="ruby-ivar">@mac_address</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">parse_vmx_file</span>[<span class="ruby-identifier">:&quot;ethernet0.generatedAddress&quot;</span>]&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000441-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remoter_bases/vmrun/vmrun_instance.rb, line 58</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">mac_address</span>&#x000A;        <span class="ruby-ivar">@mac_address</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">parse_vmx_file</span>[<span class="ruby-identifier">:&quot;ethernet0.generatedAddress&quot;</span>]&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000445'>
-                <a name='M000445'>      </a>
+              <div class='public-instance method' id='method-M000442'>
+                <a name='M000442'>      </a>
                 <div class='synopsis'>
                   <span class='name'>parse_vmx_file</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000445-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000442-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000445-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remoter_bases/vmrun/vmrun_instance.rb, line 61</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">parse_vmx_file</span>&#x000A;        <span class="ruby-identifier">vmx_data</span>.<span class="ruby-identifier">to_hash</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000442-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remoter_bases/vmrun/vmrun_instance.rb, line 61</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">parse_vmx_file</span>&#x000A;        <span class="ruby-identifier">vmx_data</span>.<span class="ruby-identifier">to_hash</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000439'>
-                <a name='M000439'>      </a>
+              <div class='public-instance method' id='method-M000436'>
+                <a name='M000436'>      </a>
                 <div class='synopsis'>
                   <span class='name'>pending?</span>
                   <span class='arguments'>()</span>
@@ -171,14 +171,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000439-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000436-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000439-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remoter_bases/vmrun/vmrun_instance.rb, line 34</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">pending?</span>&#x000A;        <span class="ruby-keyword kw">false</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000436-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remoter_bases/vmrun/vmrun_instance.rb, line 34</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">pending?</span>&#x000A;        <span class="ruby-keyword kw">false</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000438'>
-                <a name='M000438'>      </a>
+              <div class='public-instance method' id='method-M000435'>
+                <a name='M000435'>      </a>
                 <div class='synopsis'>
                   <span class='name'>running?</span>
                   <span class='arguments'>()</span>
@@ -189,40 +189,40 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000438-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000435-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000438-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remoter_bases/vmrun/vmrun_instance.rb, line 30</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">running?</span>&#x000A;        <span class="ruby-keyword kw">true</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000435-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remoter_bases/vmrun/vmrun_instance.rb, line 30</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">running?</span>&#x000A;        <span class="ruby-keyword kw">true</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000437'>
-                <a name='M000437'>      </a>
+              <div class='public-instance method' id='method-M000434'>
+                <a name='M000434'>      </a>
                 <div class='synopsis'>
                   <span class='name'>status</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000437-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000434-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000437-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remoter_bases/vmrun/vmrun_instance.rb, line 26</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">status</span>&#x000A;        <span class="ruby-value str">&quot;running&quot;</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000434-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remoter_bases/vmrun/vmrun_instance.rb, line 26</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">status</span>&#x000A;        <span class="ruby-value str">&quot;running&quot;</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000443'>
-                <a name='M000443'>      </a>
+              <div class='public-instance method' id='method-M000440'>
+                <a name='M000440'>      </a>
                 <div class='synopsis'>
                   <span class='name'>terminate!</span>
                   <span class='arguments'>(o)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000443-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000440-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000443-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remoter_bases/vmrun/vmrun_instance.rb, line 50</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">terminate!</span>(<span class="ruby-identifier">o</span>)&#x000A;        <span class="ruby-constant">Vmrun</span>.<span class="ruby-identifier">run_local</span>(<span class="ruby-node">&quot;#{Vmrun.path_to_binary} stop \&quot;#{vmx_file}\&quot; #{o}&quot;</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000440-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remoter_bases/vmrun/vmrun_instance.rb, line 50</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">terminate!</span>(<span class="ruby-identifier">o</span>)&#x000A;        <span class="ruby-constant">Vmrun</span>.<span class="ruby-identifier">run_local</span>(<span class="ruby-node">&quot;#{Vmrun.path_to_binary} stop \&quot;#{vmx_file}\&quot; #{o}&quot;</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000441'>
-                <a name='M000441'>      </a>
+              <div class='public-instance method' id='method-M000438'>
+                <a name='M000438'>      </a>
                 <div class='synopsis'>
                   <span class='name'>terminated?</span>
                   <span class='arguments'>()</span>
@@ -233,14 +233,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000441-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000438-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000441-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remoter_bases/vmrun/vmrun_instance.rb, line 42</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">terminated?</span>&#x000A;        <span class="ruby-keyword kw">false</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000438-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remoter_bases/vmrun/vmrun_instance.rb, line 42</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">terminated?</span>&#x000A;        <span class="ruby-keyword kw">false</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000440'>
-                <a name='M000440'>      </a>
+              <div class='public-instance method' id='method-M000437'>
+                <a name='M000437'>      </a>
                 <div class='synopsis'>
                   <span class='name'>terminating?</span>
                   <span class='arguments'>()</span>
@@ -251,36 +251,36 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000440-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000437-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000440-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remoter_bases/vmrun/vmrun_instance.rb, line 38</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">terminating?</span>&#x000A;        <span class="ruby-keyword kw">false</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000437-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remoter_bases/vmrun/vmrun_instance.rb, line 38</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">terminating?</span>&#x000A;        <span class="ruby-keyword kw">false</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000436'>
-                <a name='M000436'>      </a>
+              <div class='public-instance method' id='method-M000433'>
+                <a name='M000433'>      </a>
                 <div class='synopsis'>
                   <span class='name'>to_hash</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000436-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000433-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000436-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remoter_bases/vmrun/vmrun_instance.rb, line 16</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_hash</span>&#x000A;        {&#x000A;          <span class="ruby-identifier">:status</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">status</span>,&#x000A;          <span class="ruby-identifier">:mac_addresses</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">mac_address</span>,&#x000A;          <span class="ruby-identifier">:ip</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">ip</span>,&#x000A;          <span class="ruby-identifier">:instance_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">vmx_file</span>,&#x000A;          <span class="ruby-identifier">:internal_ip</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">ip</span>,&#x000A;          <span class="ruby-identifier">:keypair</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">keypair</span>&#x000A;        }&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000433-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remoter_bases/vmrun/vmrun_instance.rb, line 16</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_hash</span>&#x000A;        {&#x000A;          <span class="ruby-identifier">:status</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">status</span>,&#x000A;          <span class="ruby-identifier">:mac_addresses</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">mac_address</span>,&#x000A;          <span class="ruby-identifier">:ip</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">ip</span>,&#x000A;          <span class="ruby-identifier">:instance_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">vmx_file</span>,&#x000A;          <span class="ruby-identifier">:internal_ip</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">ip</span>,&#x000A;          <span class="ruby-identifier">:keypair</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">keypair</span>&#x000A;        }&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000446'>
-                <a name='M000446'>      </a>
+              <div class='public-instance method' id='method-M000443'>
+                <a name='M000443'>      </a>
                 <div class='synopsis'>
                   <span class='name'>vmx_data</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000446-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000443-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000446-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remoter_bases/vmrun/vmrun_instance.rb, line 64</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">vmx_data</span>&#x000A;        <span class="ruby-ivar">@vmx_data</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">open</span>(<span class="ruby-identifier">vmx_file</span>).<span class="ruby-identifier">read</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000443-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remoter_bases/vmrun/vmrun_instance.rb, line 64</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">vmx_data</span>&#x000A;        <span class="ruby-ivar">@vmx_data</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">open</span>(<span class="ruby-identifier">vmx_file</span>).<span class="ruby-identifier">read</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

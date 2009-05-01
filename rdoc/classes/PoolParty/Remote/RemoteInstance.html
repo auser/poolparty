@@ -45,23 +45,23 @@
             <h2>Methods</h2>
             <h3>public class</h3>
             <ol>
-              <li><a href="#M000477">hash_from_s</a></li>
-              <li><a href="#M000466">new</a></li>
-              <li><a href="#M000478">to_s</a></li>
+              <li><a href="#M000474">hash_from_s</a></li>
+              <li><a href="#M000463">new</a></li>
+              <li><a href="#M000475">to_s</a></li>
             </ol>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000467">elapsed_runtime</a></li>
-              <li><a href="#M000479">hosts_file_listing_for</a></li>
-              <li><a href="#M000471">load</a></li>
-              <li><a href="#M000468">on_init</a></li>
-              <li><a href="#M000473">pending?</a></li>
-              <li><a href="#M000470">responding?</a></li>
-              <li><a href="#M000472">running?</a></li>
-              <li><a href="#M000475">terminated?</a></li>
-              <li><a href="#M000474">terminating?</a></li>
-              <li><a href="#M000476">to_s</a></li>
-              <li><a href="#M000469">valid?</a></li>
+              <li><a href="#M000464">elapsed_runtime</a></li>
+              <li><a href="#M000476">hosts_file_listing_for</a></li>
+              <li><a href="#M000468">load</a></li>
+              <li><a href="#M000465">on_init</a></li>
+              <li><a href="#M000470">pending?</a></li>
+              <li><a href="#M000467">responding?</a></li>
+              <li><a href="#M000469">running?</a></li>
+              <li><a href="#M000472">terminated?</a></li>
+              <li><a href="#M000471">terminating?</a></li>
+              <li><a href="#M000473">to_s</a></li>
+              <li><a href="#M000466">valid?</a></li>
             </ol>
           </div>
           <div id='context'>
@@ -75,8 +75,8 @@
           <div id='section'>
             <div id='methods'>
               <h2>Public class methods</h2>
-              <div class='public-class method' id='method-M000477'>
-                <a name='M000477'>      </a>
+              <div class='public-class method' id='method-M000474'>
+                <a name='M000474'>      </a>
                 <div class='synopsis'>
                   <span class='name'>hash_from_s</span>
                   <span class='arguments'>(s)</span>
@@ -87,67 +87,67 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000477-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000474-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000477-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remote_instance.rb, line 66</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">hash_from_s</span>(<span class="ruby-identifier">s</span>)&#x000A;        <span class="ruby-identifier">arr</span> = <span class="ruby-identifier">s</span>.<span class="ruby-identifier">split</span>(<span class="ruby-value str">&quot;\t&quot;</span>)&#x000A;        {<span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">arr</span>[<span class="ruby-value">0</span>], <span class="ruby-identifier">:ip</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">arr</span>[<span class="ruby-value">1</span>]}&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000474-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remote_instance.rb, line 66</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">hash_from_s</span>(<span class="ruby-identifier">s</span>)&#x000A;        <span class="ruby-identifier">arr</span> = <span class="ruby-identifier">s</span>.<span class="ruby-identifier">split</span>(<span class="ruby-value str">&quot;\t&quot;</span>)&#x000A;        {<span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">arr</span>[<span class="ruby-value">0</span>], <span class="ruby-identifier">:ip</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">arr</span>[<span class="ruby-value">1</span>]}&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-class method' id='method-M000466'>
-                <a name='M000466'>      </a>
+              <div class='public-class method' id='method-M000463'>
+                <a name='M000463'>      </a>
                 <div class='synopsis'>
                   <span class='name'>new</span>
                   <span class='arguments'>(opts={}, containing_cloud=nil)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000466-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000463-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000466-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remote_instance.rb, line 7</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">opts</span>={}, <span class="ruby-identifier">containing_cloud</span>=<span class="ruby-keyword kw">nil</span>)&#x000A;        <span class="ruby-ivar">@parent</span> = <span class="ruby-identifier">containing_cloud</span>&#x000A;&#x000A;        <span class="ruby-identifier">set_vars_from_options</span>(<span class="ruby-identifier">containing_cloud</span>.<span class="ruby-identifier">options</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">containing_cloud</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">containing_cloud</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:options</span>)&#x000A;        <span class="ruby-identifier">set_vars_from_options</span>(<span class="ruby-identifier">opts</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Hash</span>)&#x000A;        <span class="ruby-identifier">on_init</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000463-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remote_instance.rb, line 7</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">opts</span>={}, <span class="ruby-identifier">containing_cloud</span>=<span class="ruby-keyword kw">nil</span>)&#x000A;        <span class="ruby-ivar">@parent</span> = <span class="ruby-identifier">containing_cloud</span>&#x000A;&#x000A;        <span class="ruby-identifier">set_vars_from_options</span>(<span class="ruby-identifier">containing_cloud</span>.<span class="ruby-identifier">options</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">containing_cloud</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">containing_cloud</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:options</span>)&#x000A;        <span class="ruby-identifier">set_vars_from_options</span>(<span class="ruby-identifier">opts</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Hash</span>)&#x000A;        <span class="ruby-identifier">on_init</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-class method' id='method-M000478'>
-                <a name='M000478'>      </a>
+              <div class='public-class method' id='method-M000475'>
+                <a name='M000475'>      </a>
                 <div class='synopsis'>
                   <span class='name'>to_s</span>
                   <span class='arguments'>(hsh)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000478-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000475-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000478-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remote_instance.rb, line 71</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">to_s</span>(<span class="ruby-identifier">hsh</span>)&#x000A;        <span class="ruby-identifier">new</span>(<span class="ruby-identifier">hsh</span>).<span class="ruby-identifier">to_s</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000475-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remote_instance.rb, line 71</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">to_s</span>(<span class="ruby-identifier">hsh</span>)&#x000A;        <span class="ruby-identifier">new</span>(<span class="ruby-identifier">hsh</span>).<span class="ruby-identifier">to_s</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000467'>
-                <a name='M000467'>      </a>
+              <div class='public-instance method' id='method-M000464'>
+                <a name='M000464'>      </a>
                 <div class='synopsis'>
                   <span class='name'>elapsed_runtime</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000467-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000464-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000467-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remote_instance.rb, line 15</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">elapsed_runtime</span>&#x000A;        <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>.<span class="ruby-identifier">to_i</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">launching_time</span>.<span class="ruby-identifier">to_time</span>.<span class="ruby-identifier">to_i</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000464-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remote_instance.rb, line 15</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">elapsed_runtime</span>&#x000A;        <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>.<span class="ruby-identifier">to_i</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">launching_time</span>.<span class="ruby-identifier">to_time</span>.<span class="ruby-identifier">to_i</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000479'>
-                <a name='M000479'>      </a>
+              <div class='public-instance method' id='method-M000476'>
+                <a name='M000476'>      </a>
                 <div class='synopsis'>
                   <span class='name'>hosts_file_listing_for</span>
                   <span class='arguments'>(cl)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000479-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000476-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000479-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remote_instance.rb, line 75</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">hosts_file_listing_for</span>(<span class="ruby-identifier">cl</span>)&#x000A;        <span class="ruby-identifier">string</span> = (<span class="ruby-identifier">cl</span>.<span class="ruby-identifier">name</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">cloud</span>.<span class="ruby-identifier">name</span>) <span class="ruby-operator">?</span> <span class="ruby-node">&quot;#{name}.#{my_cloud.name}\t#{name}&quot;</span> <span class="ruby-operator">:</span> <span class="ruby-node">&quot;#{name}.#{my_cloud.name}&quot;</span>&#x000A;        <span class="ruby-node">&quot;#{internal_ip}\t#{string}&quot;</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000476-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remote_instance.rb, line 75</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">hosts_file_listing_for</span>(<span class="ruby-identifier">cl</span>)&#x000A;        <span class="ruby-identifier">string</span> = (<span class="ruby-identifier">cl</span>.<span class="ruby-identifier">name</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">cloud</span>.<span class="ruby-identifier">name</span>) <span class="ruby-operator">?</span> <span class="ruby-node">&quot;#{name}.#{my_cloud.name}\t#{name}&quot;</span> <span class="ruby-operator">:</span> <span class="ruby-node">&quot;#{name}.#{my_cloud.name}&quot;</span>&#x000A;        <span class="ruby-node">&quot;#{internal_ip}\t#{string}&quot;</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000471'>
-                <a name='M000471'>      </a>
+              <div class='public-instance method' id='method-M000468'>
+                <a name='M000468'>      </a>
                 <div class='synopsis'>
                   <span class='name'>load</span>
                   <span class='arguments'>()</span>
@@ -159,14 +159,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000471-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000468-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000471-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remote_instance.rb, line 37</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">load</span>&#x000A;        <span class="ruby-identifier">current_load</span> <span class="ruby-operator">||=</span> <span class="ruby-value">0</span><span class="ruby-value">.0</span>  <span class="ruby-comment cmt">#NOTE MF: returning 0.0 seems like a bad idea here.  should return nil if we dont have a real value</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000468-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remote_instance.rb, line 37</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">load</span>&#x000A;        <span class="ruby-identifier">current_load</span> <span class="ruby-operator">||=</span> <span class="ruby-value">0</span><span class="ruby-value">.0</span>  <span class="ruby-comment cmt">#NOTE MF: returning 0.0 seems like a bad idea here.  should return nil if we dont have a real value</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000468'>
-                <a name='M000468'>      </a>
+              <div class='public-instance method' id='method-M000465'>
+                <a name='M000465'>      </a>
                 <div class='synopsis'>
                   <span class='name'>on_init</span>
                   <span class='arguments'>()</span>
@@ -177,14 +177,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000468-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000465-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000468-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remote_instance.rb, line 20</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">on_init</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000465-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remote_instance.rb, line 20</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">on_init</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000473'>
-                <a name='M000473'>      </a>
+              <div class='public-instance method' id='method-M000470'>
+                <a name='M000470'>      </a>
                 <div class='synopsis'>
                   <span class='name'>pending?</span>
                   <span class='arguments'>()</span>
@@ -195,14 +195,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000473-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000470-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000473-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remote_instance.rb, line 47</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">pending?</span>&#x000A;        <span class="ruby-keyword kw">false</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000470-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remote_instance.rb, line 47</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">pending?</span>&#x000A;        <span class="ruby-keyword kw">false</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000470'>
-                <a name='M000470'>      </a>
+              <div class='public-instance method' id='method-M000467'>
+                <a name='M000467'>      </a>
                 <div class='synopsis'>
                   <span class='name'>responding?</span>
                   <span class='arguments'>()</span>
@@ -214,14 +214,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000470-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000467-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000470-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remote_instance.rb, line 29</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">responding?</span>&#x000A;        <span class="ruby-identifier">running?</span>&#x000A;        <span class="ruby-comment cmt"># !responding.nil? #TODO MF this needs to actually ping the node or something similar.  stubbed to running? for now</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000467-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remote_instance.rb, line 29</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">responding?</span>&#x000A;        <span class="ruby-identifier">running?</span>&#x000A;        <span class="ruby-comment cmt"># !responding.nil? #TODO MF this needs to actually ping the node or something similar.  stubbed to running? for now</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000472'>
-                <a name='M000472'>      </a>
+              <div class='public-instance method' id='method-M000469'>
+                <a name='M000469'>      </a>
                 <div class='synopsis'>
                   <span class='name'>running?</span>
                   <span class='arguments'>()</span>
@@ -233,14 +233,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000472-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000469-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000472-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remote_instance.rb, line 43</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">running?</span>&#x000A;        <span class="ruby-keyword kw">true</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000469-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remote_instance.rb, line 43</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">running?</span>&#x000A;        <span class="ruby-keyword kw">true</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000475'>
-                <a name='M000475'>      </a>
+              <div class='public-instance method' id='method-M000472'>
+                <a name='M000472'>      </a>
                 <div class='synopsis'>
                   <span class='name'>terminated?</span>
                   <span class='arguments'>()</span>
@@ -251,14 +251,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000475-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000472-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000475-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remote_instance.rb, line 55</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">terminated?</span>&#x000A;        <span class="ruby-keyword kw">false</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000472-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remote_instance.rb, line 55</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">terminated?</span>&#x000A;        <span class="ruby-keyword kw">false</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000474'>
-                <a name='M000474'>      </a>
+              <div class='public-instance method' id='method-M000471'>
+                <a name='M000471'>      </a>
                 <div class='synopsis'>
                   <span class='name'>terminating?</span>
                   <span class='arguments'>()</span>
@@ -269,14 +269,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000474-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000471-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000474-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remote_instance.rb, line 51</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">terminating?</span>&#x000A;        <span class="ruby-keyword kw">false</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000471-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remote_instance.rb, line 51</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">terminating?</span>&#x000A;        <span class="ruby-keyword kw">false</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000476'>
-                <a name='M000476'>      </a>
+              <div class='public-instance method' id='method-M000473'>
+                <a name='M000473'>      </a>
                 <div class='synopsis'>
                   <span class='name'>to_s</span>
                   <span class='arguments'>()</span>
@@ -288,14 +288,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000476-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000473-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000476-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remote_instance.rb, line 61</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_s</span>&#x000A;        <span class="ruby-node">&quot;#{name}\t#{ip}\t#{instance_id rescue &quot;&quot;}&quot;</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000473-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remote_instance.rb, line 61</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_s</span>&#x000A;        <span class="ruby-node">&quot;#{name}\t#{ip}\t#{instance_id rescue &quot;&quot;}&quot;</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000469'>
-                <a name='M000469'>      </a>
+              <div class='public-instance method' id='method-M000466'>
+                <a name='M000466'>      </a>
                 <div class='synopsis'>
                   <span class='name'>valid?</span>
                   <span class='arguments'>()</span>
@@ -306,10 +306,10 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000469-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000466-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000469-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remote_instance.rb, line 24</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">valid?</span>&#x000A;        (<span class="ruby-identifier">ip</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">name</span>.<span class="ruby-identifier">nil?</span>) <span class="ruby-operator">?</span> <span class="ruby-keyword kw">false</span> <span class="ruby-operator">:</span> <span class="ruby-keyword kw">true</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000466-source'><span class="ruby-comment cmt"># File lib/poolparty/net/remote_instance.rb, line 24</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">valid?</span>&#x000A;        (<span class="ruby-identifier">ip</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">name</span>.<span class="ruby-identifier">nil?</span>) <span class="ruby-operator">?</span> <span class="ruby-keyword kw">false</span> <span class="ruby-operator">:</span> <span class="ruby-keyword kw">true</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

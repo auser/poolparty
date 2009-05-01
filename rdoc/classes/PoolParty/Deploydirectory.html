@@ -59,65 +59,65 @@
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000703">add_unpack_directory</a></li>
-              <li><a href="#M000701">before_configure</a></li>
-              <li><a href="#M000700">loaded</a></li>
-              <li><a href="#M000702">package_deploy_directory</a></li>
+              <li><a href="#M000700">add_unpack_directory</a></li>
+              <li><a href="#M000698">before_configure</a></li>
+              <li><a href="#M000697">loaded</a></li>
+              <li><a href="#M000699">package_deploy_directory</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000703'>
-                <a name='M000703'>      </a>
+              <div class='public-instance method' id='method-M000700'>
+                <a name='M000700'>      </a>
                 <div class='synopsis'>
                   <span class='name'>add_unpack_directory</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000703-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000700-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000703-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/deploy_directory.rb, line 31</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">add_unpack_directory</span>&#x000A;        <span class="ruby-identifier">has_directory</span>(<span class="ruby-node">&quot;#{::File.dirname(to)}&quot;</span>)&#x000A;        <span class="ruby-identifier">has_exec</span>(<span class="ruby-node">&quot;unpack-#{::File.basename(to)}-deploy-directory&quot;</span>) <span class="ruby-keyword kw">do</span>&#x000A;          <span class="ruby-identifier">requires</span> <span class="ruby-identifier">get_directory</span>(<span class="ruby-node">&quot;#{::File.dirname(to)}&quot;</span>)&#x000A;          <span class="ruby-identifier">command</span> <span class="ruby-node">&quot;cp -R /var/poolparty/dr_configure/user_directory/#{name}/* #{to}&quot;</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;        &#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">owner?</span>&#x000A;          <span class="ruby-identifier">has_exec</span>(<span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;chown-#{name}&quot;</span>) <span class="ruby-keyword kw">do</span>&#x000A;            <span class="ruby-identifier">command</span> <span class="ruby-node">&quot;chown #{owner} -R #{to}/#{name}&quot;</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;        &#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000700-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/deploy_directory.rb, line 31</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">add_unpack_directory</span>&#x000A;        <span class="ruby-identifier">has_directory</span>(<span class="ruby-node">&quot;#{::File.dirname(to)}&quot;</span>)&#x000A;        <span class="ruby-identifier">has_exec</span>(<span class="ruby-node">&quot;unpack-#{::File.basename(to)}-deploy-directory&quot;</span>) <span class="ruby-keyword kw">do</span>&#x000A;          <span class="ruby-identifier">requires</span> <span class="ruby-identifier">get_directory</span>(<span class="ruby-node">&quot;#{::File.dirname(to)}&quot;</span>)&#x000A;          <span class="ruby-identifier">command</span> <span class="ruby-node">&quot;cp -R /var/poolparty/dr_configure/user_directory/#{name}/* #{to}&quot;</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;        &#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">owner?</span>&#x000A;          <span class="ruby-identifier">has_exec</span>(<span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;chown-#{name}&quot;</span>) <span class="ruby-keyword kw">do</span>&#x000A;            <span class="ruby-identifier">command</span> <span class="ruby-node">&quot;chown #{owner} -R #{to}/#{name}&quot;</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;        &#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000701'>
-                <a name='M000701'>      </a>
+              <div class='public-instance method' id='method-M000698'>
+                <a name='M000698'>      </a>
                 <div class='synopsis'>
                   <span class='name'>before_configure</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000701-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000698-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000701-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/deploy_directory.rb, line 23</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">before_configure</span>&#x000A;        <span class="ruby-identifier">package_deploy_directory</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000698-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/deploy_directory.rb, line 23</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">before_configure</span>&#x000A;        <span class="ruby-identifier">package_deploy_directory</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000700'>
-                <a name='M000700'>      </a>
+              <div class='public-instance method' id='method-M000697'>
+                <a name='M000697'>      </a>
                 <div class='synopsis'>
                   <span class='name'>loaded</span>
                   <span class='arguments'>(opts={}, &amp;block)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000700-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000697-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000700-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/deploy_directory.rb, line 19</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">loaded</span>(<span class="ruby-identifier">opts</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)        &#x000A;        <span class="ruby-identifier">add_unpack_directory</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000697-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/deploy_directory.rb, line 19</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">loaded</span>(<span class="ruby-identifier">opts</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)        &#x000A;        <span class="ruby-identifier">add_unpack_directory</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000702'>
-                <a name='M000702'>      </a>
+              <div class='public-instance method' id='method-M000699'>
+                <a name='M000699'>      </a>
                 <div class='synopsis'>
                   <span class='name'>package_deploy_directory</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000702-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000699-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000702-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/deploy_directory.rb, line 27</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">package_deploy_directory</span>&#x000A;        <span class="ruby-operator">::</span><span class="ruby-constant">Suitcase</span><span class="ruby-operator">::</span><span class="ruby-constant">Zipper</span>.<span class="ruby-identifier">add</span>(<span class="ruby-node">&quot;#{::File.expand_path(from)}&quot;</span>, <span class="ruby-value str">&quot;user_directory/&quot;</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000699-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/deploy_directory.rb, line 27</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">package_deploy_directory</span>&#x000A;        <span class="ruby-operator">::</span><span class="ruby-constant">Suitcase</span><span class="ruby-operator">::</span><span class="ruby-constant">Zipper</span>.<span class="ruby-identifier">add</span>(<span class="ruby-node">&quot;#{::File.expand_path(from)}&quot;</span>, <span class="ruby-value str">&quot;user_directory/&quot;</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>
