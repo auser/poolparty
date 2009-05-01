@@ -45,34 +45,34 @@
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000566">at</a></li>
-              <li><a href="#M000569">class_type_name</a></li>
-              <li><a href="#M000568">creates_dir</a></li>
-              <li><a href="#M000564">has_svn_repository</a></li>
-              <li><a href="#M000563">loaded</a></li>
-              <li><a href="#M000562">loaded</a></li>
-              <li><a href="#M000565">svn_repos</a></li>
-              <li><a href="#M000567">to</a></li>
+              <li><a href="#M000546">at</a></li>
+              <li><a href="#M000549">class_type_name</a></li>
+              <li><a href="#M000548">creates_dir</a></li>
+              <li><a href="#M000544">has_svn_repository</a></li>
+              <li><a href="#M000543">loaded</a></li>
+              <li><a href="#M000542">loaded</a></li>
+              <li><a href="#M000545">svn_repos</a></li>
+              <li><a href="#M000547">to</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000566'>
-                <a name='M000566'>      </a>
+              <div class='public-instance method' id='method-M000546'>
+                <a name='M000546'>      </a>
                 <div class='synopsis'>
                   <span class='name'>at</span>
                   <span class='arguments'>(dir)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000566-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000546-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000566-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/svn.rb, line 44</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">at</span>(<span class="ruby-identifier">dir</span>)&#x000A;        <span class="ruby-identifier">working_dir</span> <span class="ruby-identifier">dir</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000546-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/svn.rb, line 44</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">at</span>(<span class="ruby-identifier">dir</span>)&#x000A;        <span class="ruby-identifier">working_dir</span> <span class="ruby-identifier">dir</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000569'>
-                <a name='M000569'>      </a>
+              <div class='public-instance method' id='method-M000549'>
+                <a name='M000549'>      </a>
                 <div class='synopsis'>
                   <span class='name'>class_type_name</span>
                   <span class='arguments'>()</span>
@@ -84,88 +84,88 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000569-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000549-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000569-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/svn.rb, line 58</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">class_type_name</span>&#x000A;        <span class="ruby-value str">&quot;exec&quot;</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000549-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/svn.rb, line 58</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">class_type_name</span>&#x000A;        <span class="ruby-value str">&quot;exec&quot;</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000568'>
-                <a name='M000568'>      </a>
+              <div class='public-instance method' id='method-M000548'>
+                <a name='M000548'>      </a>
                 <div class='synopsis'>
                   <span class='name'>creates_dir</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000568-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000548-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000568-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/svn.rb, line 52</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">creates_dir</span>&#x000A;       <span class="ruby-node">&quot;#{::File.join( working_dir, ::File.basename(source, ::File.extname(source)) )}/.svn&quot;</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000548-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/svn.rb, line 52</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">creates_dir</span>&#x000A;       <span class="ruby-node">&quot;#{::File.join( working_dir, ::File.basename(source, ::File.extname(source)) )}/.svn&quot;</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000564'>
-                <a name='M000564'>      </a>
+              <div class='public-instance method' id='method-M000544'>
+                <a name='M000544'>      </a>
                 <div class='synopsis'>
                   <span class='name'>has_svn_repository</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000564-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000544-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000564-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/svn.rb, line 17</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">has_svn_repository</span>&#x000A;        <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;wd #{working_dir}&quot;</span>&#x000A;        <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;cd #{creates_dir}&quot;</span>&#x000A;        <span class="ruby-identifier">has_directory</span>(<span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">dirname</span>(<span class="ruby-identifier">working_dir</span>))&#x000A;        <span class="ruby-identifier">has_directory</span>(<span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;#{working_dir}&quot;</span>, <span class="ruby-identifier">:requires</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">get_directory</span>(<span class="ruby-node">&quot;#{::File.dirname(working_dir)}&quot;</span>))&#x000A;        &#x000A;        <span class="ruby-identifier">has_exec</span>(<span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;svn-#{name}&quot;</span>, <span class="ruby-identifier">:requires</span> =<span class="ruby-operator">&gt;</span> [<span class="ruby-identifier">get_directory</span>(<span class="ruby-node">&quot;#{working_dir}&quot;</span>), <span class="ruby-identifier">get_package</span>(<span class="ruby-value str">&quot;subversion&quot;</span>)] ) <span class="ruby-keyword kw">do</span>&#x000A;          <span class="ruby-identifier">cwd</span> <span class="ruby-identifier">working_dir</span>&#x000A;          <span class="ruby-identifier">svn_cmd</span> = <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">parent</span>.<span class="ruby-identifier">requires_user?</span>&#x000A;            <span class="ruby-node">&quot;svn co #{source} --username #{requires_user} --password #{requires_password}&quot;</span> &#x000A;          <span class="ruby-keyword kw">else</span>&#x000A;            <span class="ruby-node">&quot;svn co #{source}&quot;</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;          <span class="ruby-identifier">command</span> <span class="ruby-identifier">svn_cmd</span>&#x000A;          <span class="ruby-identifier">creates</span> <span class="ruby-identifier">creates_dir</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-identifier">has_exec</span>(<span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;update-#{name}&quot;</span>, <span class="ruby-identifier">:cwd</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">dirname</span>( <span class="ruby-identifier">creates_dir</span> )) <span class="ruby-keyword kw">do</span>&#x000A;          <span class="ruby-identifier">command</span> <span class="ruby-value str">&quot;svn up&quot;</span>&#x000A;          <span class="ruby-comment cmt"># If the parent has after_update_svn set on it, then run it</span>&#x000A;          <span class="ruby-identifier">runs</span> <span class="ruby-identifier">parent</span>.<span class="ruby-identifier">after_update_svn</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">parent</span>.<span class="ruby-identifier">after_update_svn?</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000544-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/svn.rb, line 17</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">has_svn_repository</span>&#x000A;        <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;wd #{working_dir}&quot;</span>&#x000A;        <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;cd #{creates_dir}&quot;</span>&#x000A;        <span class="ruby-identifier">has_directory</span>(<span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">dirname</span>(<span class="ruby-identifier">working_dir</span>))&#x000A;        <span class="ruby-identifier">has_directory</span>(<span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;#{working_dir}&quot;</span>, <span class="ruby-identifier">:requires</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">get_directory</span>(<span class="ruby-node">&quot;#{::File.dirname(working_dir)}&quot;</span>))&#x000A;        &#x000A;        <span class="ruby-identifier">has_exec</span>(<span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;svn-#{name}&quot;</span>, <span class="ruby-identifier">:requires</span> =<span class="ruby-operator">&gt;</span> [<span class="ruby-identifier">get_directory</span>(<span class="ruby-node">&quot;#{working_dir}&quot;</span>), <span class="ruby-identifier">get_package</span>(<span class="ruby-value str">&quot;subversion&quot;</span>)] ) <span class="ruby-keyword kw">do</span>&#x000A;          <span class="ruby-identifier">cwd</span> <span class="ruby-identifier">working_dir</span>&#x000A;          <span class="ruby-identifier">svn_cmd</span> = <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">parent</span>.<span class="ruby-identifier">requires_user?</span>&#x000A;            <span class="ruby-node">&quot;svn co #{source} --username #{requires_user} --password #{requires_password}&quot;</span> &#x000A;          <span class="ruby-keyword kw">else</span>&#x000A;            <span class="ruby-node">&quot;svn co #{source}&quot;</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;          <span class="ruby-identifier">command</span> <span class="ruby-identifier">svn_cmd</span>&#x000A;          <span class="ruby-identifier">creates</span> <span class="ruby-identifier">creates_dir</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-identifier">has_exec</span>(<span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;update-#{name}&quot;</span>, <span class="ruby-identifier">:cwd</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">dirname</span>( <span class="ruby-identifier">creates_dir</span> )) <span class="ruby-keyword kw">do</span>&#x000A;          <span class="ruby-identifier">command</span> <span class="ruby-value str">&quot;svn up&quot;</span>&#x000A;          <span class="ruby-comment cmt"># If the parent has after_update_svn set on it, then run it</span>&#x000A;          <span class="ruby-identifier">runs</span> <span class="ruby-identifier">parent</span>.<span class="ruby-identifier">after_update_svn</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">parent</span>.<span class="ruby-identifier">after_update_svn?</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000563'>
-                <a name='M000563'>      </a>
+              <div class='public-instance method' id='method-M000543'>
+                <a name='M000543'>      </a>
                 <div class='synopsis'>
                   <span class='name'>loaded</span>
                   <span class='arguments'>(opts={}, &amp;block)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000563-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000543-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000563-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/svn.rb, line 12</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">loaded</span>(<span class="ruby-identifier">opts</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-identifier">has_package</span>(<span class="ruby-value str">&quot;subversion&quot;</span>)&#x000A;        <span class="ruby-identifier">has_svn_repository</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000543-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/svn.rb, line 12</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">loaded</span>(<span class="ruby-identifier">opts</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-identifier">has_package</span>(<span class="ruby-value str">&quot;subversion&quot;</span>)&#x000A;        <span class="ruby-identifier">has_svn_repository</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000562'>
-                <a name='M000562'>      </a>
+              <div class='public-instance method' id='method-M000542'>
+                <a name='M000542'>      </a>
                 <div class='synopsis'>
                   <span class='name'>loaded</span>
                   <span class='arguments'>(*args)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000562-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000542-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000562-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/svn.rb, line 5</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">loaded</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)&#x000A;        <span class="ruby-identifier">has_package</span> <span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;subversion&quot;</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000542-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/svn.rb, line 5</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">loaded</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)&#x000A;        <span class="ruby-identifier">has_package</span> <span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;subversion&quot;</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000565'>
-                <a name='M000565'>      </a>
+              <div class='public-instance method' id='method-M000545'>
+                <a name='M000545'>      </a>
                 <div class='synopsis'>
                   <span class='name'>svn_repos</span>
                   <span class='arguments'>(src)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000565-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000545-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000565-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/svn.rb, line 40</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">svn_repos</span>(<span class="ruby-identifier">src</span>)&#x000A;        <span class="ruby-identifier">source</span> <span class="ruby-identifier">src</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000545-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/svn.rb, line 40</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">svn_repos</span>(<span class="ruby-identifier">src</span>)&#x000A;        <span class="ruby-identifier">source</span> <span class="ruby-identifier">src</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000567'>
-                <a name='M000567'>      </a>
+              <div class='public-instance method' id='method-M000547'>
+                <a name='M000547'>      </a>
                 <div class='synopsis'>
                   <span class='name'>to</span>
                   <span class='arguments'>(dir)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000567-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000547-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000567-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/svn.rb, line 48</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to</span>(<span class="ruby-identifier">dir</span>)&#x000A;        <span class="ruby-identifier">at</span>(<span class="ruby-identifier">dir</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000547-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/svn.rb, line 48</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to</span>(<span class="ruby-identifier">dir</span>)&#x000A;        <span class="ruby-identifier">at</span>(<span class="ruby-identifier">dir</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>
