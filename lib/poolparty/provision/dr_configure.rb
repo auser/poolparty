@@ -44,6 +44,7 @@ module PoolParty
        @cloud.call_before_configure_callbacks if @cloud
        prescribe_configuration
        execute!
+       @cloud.call_after_configure_callbacks if @cloud
      end
      
      private
