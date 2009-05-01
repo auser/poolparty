@@ -20,9 +20,11 @@ module PoolParty
       end
       def passing?
         reset!
+        vputs "Starting cloud verification"
         verifiers.each do |v|          
           ip = nodes(:status => "running").first.ip rescue "127.0.0.1"
           v.host = ip
+          vputs "  checking #{v} on #{ip}"
           raise "Verification failed at #{v.class}" unless v.passing?
         end
         return true

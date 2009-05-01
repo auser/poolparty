@@ -11,6 +11,11 @@ module PoolParty
       def passing?
         ping_port(host, port, 3)
       end
+
+      def to_s
+        "<#{self.class.to_s} host:#{host} port:#{port}>"
+      end
+
     end
     
   end
