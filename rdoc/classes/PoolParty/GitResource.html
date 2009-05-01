@@ -45,107 +45,107 @@
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000492">at</a></li>
-              <li><a href="#M000494">creates_dir</a></li>
-              <li><a href="#M000491">git_repos</a></li>
-              <li><a href="#M000490">has_git_repository</a></li>
-              <li><a href="#M000489">loaded</a></li>
-              <li><a href="#M000488">loaded</a></li>
-              <li><a href="#M000493">to</a></li>
+              <li><a href="#M000515">at</a></li>
+              <li><a href="#M000517">creates_dir</a></li>
+              <li><a href="#M000514">git_repos</a></li>
+              <li><a href="#M000513">has_git_repository</a></li>
+              <li><a href="#M000512">loaded</a></li>
+              <li><a href="#M000511">loaded</a></li>
+              <li><a href="#M000516">to</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000492'>
-                <a name='M000492'>      </a>
+              <div class='public-instance method' id='method-M000515'>
+                <a name='M000515'>      </a>
                 <div class='synopsis'>
                   <span class='name'>at</span>
                   <span class='arguments'>(dir)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000492-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000515-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000492-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/git.rb, line 53</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">at</span>(<span class="ruby-identifier">dir</span>)&#x000A;        <span class="ruby-identifier">working_dir</span> <span class="ruby-identifier">dir</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000515-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/git.rb, line 53</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">at</span>(<span class="ruby-identifier">dir</span>)&#x000A;        <span class="ruby-identifier">working_dir</span> <span class="ruby-identifier">dir</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000494'>
-                <a name='M000494'>      </a>
+              <div class='public-instance method' id='method-M000517'>
+                <a name='M000517'>      </a>
                 <div class='synopsis'>
                   <span class='name'>creates_dir</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000494-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000517-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000494-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/git.rb, line 61</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">creates_dir</span>&#x000A;        <span class="ruby-node">&quot;#{::File.join( working_dir, ::File.basename(source, ::File.extname(source)) )}/.git&quot;</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000517-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/git.rb, line 61</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">creates_dir</span>&#x000A;        <span class="ruby-node">&quot;#{::File.join( working_dir, ::File.basename(source, ::File.extname(source)) )}/.git&quot;</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000491'>
-                <a name='M000491'>      </a>
+              <div class='public-instance method' id='method-M000514'>
+                <a name='M000514'>      </a>
                 <div class='synopsis'>
                   <span class='name'>git_repos</span>
                   <span class='arguments'>(src)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000491-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000514-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000491-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/git.rb, line 49</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">git_repos</span>(<span class="ruby-identifier">src</span>)&#x000A;        <span class="ruby-identifier">source</span> <span class="ruby-identifier">src</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000514-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/git.rb, line 49</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">git_repos</span>(<span class="ruby-identifier">src</span>)&#x000A;        <span class="ruby-identifier">source</span> <span class="ruby-identifier">src</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000490'>
-                <a name='M000490'>      </a>
+              <div class='public-instance method' id='method-M000513'>
+                <a name='M000513'>      </a>
                 <div class='synopsis'>
                   <span class='name'>has_git_repository</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000490-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000513-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000490-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/git.rb, line 20</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">has_git_repository</span>&#x000A;        &#x000A;        <span class="ruby-identifier">has_directory</span>(<span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">dirname</span>(<span class="ruby-identifier">working_dir</span>))&#x000A;        <span class="ruby-identifier">has_directory</span>(<span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;#{working_dir}&quot;</span>, <span class="ruby-identifier">:requires</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">get_directory</span>(<span class="ruby-node">&quot;#{::File.dirname(working_dir)}&quot;</span>))&#x000A;        &#x000A;        <span class="ruby-identifier">has_exec</span>(<span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;git-#{name}&quot;</span>, <span class="ruby-identifier">:requires</span> =<span class="ruby-operator">&gt;</span> [<span class="ruby-identifier">get_directory</span>(<span class="ruby-node">&quot;#{working_dir}&quot;</span>), <span class="ruby-identifier">get_package</span>(<span class="ruby-value str">&quot;git-core&quot;</span>)] ) <span class="ruby-keyword kw">do</span>&#x000A;          <span class="ruby-comment cmt"># Cloud, GitRepos, Exec</span>&#x000A;          <span class="ruby-identifier">command</span> <span class="ruby-identifier">parent</span>.<span class="ruby-identifier">requires_user?</span> <span class="ruby-value">? </span><span class="ruby-node">&quot;git clone #{requires_user}@#{source} #{working_dir}&quot;</span> <span class="ruby-operator">:</span> <span class="ruby-node">&quot;cd #{working_dir} &amp;&amp; git clone #{source}&quot;</span>&#x000A;          <span class="ruby-identifier">cwd</span> <span class="ruby-node">&quot;#{working_dir if working_dir}&quot;</span>&#x000A;          <span class="ruby-identifier">creates</span> <span class="ruby-identifier">creates_dir</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-identifier">has_exec</span>(<span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;update-#{name}&quot;</span>, <span class="ruby-identifier">:cwd</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">dirname</span>( <span class="ruby-identifier">creates_dir</span> )) <span class="ruby-keyword kw">do</span>          &#x000A;          <span class="ruby-identifier">command</span> <span class="ruby-value str">&quot;git pull&quot;</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;        &#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">owner?</span>&#x000A;          <span class="ruby-identifier">has_exec</span>(<span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;chown-#{name}&quot;</span>, <span class="ruby-identifier">:cwd</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">dirname</span>( <span class="ruby-identifier">creates_dir</span> )) <span class="ruby-keyword kw">do</span>&#x000A;            <span class="ruby-identifier">command</span> <span class="ruby-node">&quot;chown #{owner} * -R&quot;</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;        &#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">deploy_key?</span>&#x000A;          <span class="ruby-identifier">raise</span> <span class="ruby-constant">Exception</span>.<span class="ruby-identifier">new</span>(<span class="ruby-node">&quot;Cannot find the git deploy key: #{deploy_key}&quot;</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">file?</span>(<span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">deploy_key</span>))&#x000A;          <span class="ruby-operator">::</span><span class="ruby-constant">Suitcase</span><span class="ruby-operator">::</span><span class="ruby-constant">Zipper</span>.<span class="ruby-identifier">add</span>(<span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">deploy_key</span>), <span class="ruby-value str">&quot;keys&quot;</span>)&#x000A;          <span class="ruby-constant">PoolParty</span><span class="ruby-operator">::</span><span class="ruby-constant">Provision</span><span class="ruby-operator">::</span><span class="ruby-constant">DrConfigure</span>.<span class="ruby-identifier">class_commands</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;cp -f /var/poolparty/dr_configure/keys/* ~/.ssh&quot;</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;        &#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000513-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/git.rb, line 20</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">has_git_repository</span>&#x000A;        &#x000A;        <span class="ruby-identifier">has_directory</span>(<span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">dirname</span>(<span class="ruby-identifier">working_dir</span>))&#x000A;        <span class="ruby-identifier">has_directory</span>(<span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;#{working_dir}&quot;</span>, <span class="ruby-identifier">:requires</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">get_directory</span>(<span class="ruby-node">&quot;#{::File.dirname(working_dir)}&quot;</span>))&#x000A;        &#x000A;        <span class="ruby-identifier">has_exec</span>(<span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;git-#{name}&quot;</span>, <span class="ruby-identifier">:requires</span> =<span class="ruby-operator">&gt;</span> [<span class="ruby-identifier">get_directory</span>(<span class="ruby-node">&quot;#{working_dir}&quot;</span>), <span class="ruby-identifier">get_package</span>(<span class="ruby-value str">&quot;git-core&quot;</span>)] ) <span class="ruby-keyword kw">do</span>&#x000A;          <span class="ruby-comment cmt"># Cloud, GitRepos, Exec</span>&#x000A;          <span class="ruby-identifier">command</span> <span class="ruby-identifier">parent</span>.<span class="ruby-identifier">requires_user?</span> <span class="ruby-value">? </span><span class="ruby-node">&quot;git clone #{requires_user}@#{source} #{working_dir}&quot;</span> <span class="ruby-operator">:</span> <span class="ruby-node">&quot;cd #{working_dir} &amp;&amp; git clone #{source}&quot;</span>&#x000A;          <span class="ruby-identifier">cwd</span> <span class="ruby-node">&quot;#{working_dir if working_dir}&quot;</span>&#x000A;          <span class="ruby-identifier">creates</span> <span class="ruby-identifier">creates_dir</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-identifier">has_exec</span>(<span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;update-#{name}&quot;</span>, <span class="ruby-identifier">:cwd</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">dirname</span>( <span class="ruby-identifier">creates_dir</span> )) <span class="ruby-keyword kw">do</span>          &#x000A;          <span class="ruby-identifier">command</span> <span class="ruby-value str">&quot;git pull&quot;</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;        &#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">owner?</span>&#x000A;          <span class="ruby-identifier">has_exec</span>(<span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;chown-#{name}&quot;</span>, <span class="ruby-identifier">:cwd</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">dirname</span>( <span class="ruby-identifier">creates_dir</span> )) <span class="ruby-keyword kw">do</span>&#x000A;            <span class="ruby-identifier">command</span> <span class="ruby-node">&quot;chown #{owner} * -R&quot;</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;        &#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">deploy_key?</span>&#x000A;          <span class="ruby-identifier">raise</span> <span class="ruby-constant">Exception</span>.<span class="ruby-identifier">new</span>(<span class="ruby-node">&quot;Cannot find the git deploy key: #{deploy_key}&quot;</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">file?</span>(<span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">deploy_key</span>))&#x000A;          <span class="ruby-operator">::</span><span class="ruby-constant">Suitcase</span><span class="ruby-operator">::</span><span class="ruby-constant">Zipper</span>.<span class="ruby-identifier">add</span>(<span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">deploy_key</span>), <span class="ruby-value str">&quot;keys&quot;</span>)&#x000A;          <span class="ruby-constant">PoolParty</span><span class="ruby-operator">::</span><span class="ruby-constant">Provision</span><span class="ruby-operator">::</span><span class="ruby-constant">DrConfigure</span>.<span class="ruby-identifier">class_commands</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;cp -f /var/poolparty/dr_configure/keys/* ~/.ssh&quot;</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;        &#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000489'>
-                <a name='M000489'>      </a>
+              <div class='public-instance method' id='method-M000512'>
+                <a name='M000512'>      </a>
                 <div class='synopsis'>
                   <span class='name'>loaded</span>
                   <span class='arguments'>(opts={}, &amp;block)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000489-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000512-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000489-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/git.rb, line 12</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">loaded</span>(<span class="ruby-identifier">opts</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)        &#x000A;        <span class="ruby-identifier">raise</span>(<span class="ruby-constant">Exception</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value str">&quot;You must include a directory for the git repos set by :at&quot;</span>)) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">at?</span>.<span class="ruby-identifier">nil?</span>&#x000A;        <span class="ruby-comment cmt"># opts.has_key?(:at) ? at(opts.delete(:at)) : raise(Exception.new(&quot;You must include a directory for the git repos set by :at&quot;))</span>&#x000A;        <span class="ruby-comment cmt"># opts.has_key?(:source) ? git_repos(opts.delete(:source) || opts[:name]) : raise(Exception.new(&quot;You must include the git source set by :source&quot;))</span>&#x000A;        <span class="ruby-identifier">has_package</span>(<span class="ruby-value str">&quot;git-core&quot;</span>)&#x000A;        <span class="ruby-identifier">has_git_repository</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000512-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/git.rb, line 12</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">loaded</span>(<span class="ruby-identifier">opts</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)        &#x000A;        <span class="ruby-identifier">raise</span>(<span class="ruby-constant">Exception</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value str">&quot;You must include a directory for the git repos set by :at&quot;</span>)) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">at?</span>.<span class="ruby-identifier">nil?</span>&#x000A;        <span class="ruby-comment cmt"># opts.has_key?(:at) ? at(opts.delete(:at)) : raise(Exception.new(&quot;You must include a directory for the git repos set by :at&quot;))</span>&#x000A;        <span class="ruby-comment cmt"># opts.has_key?(:source) ? git_repos(opts.delete(:source) || opts[:name]) : raise(Exception.new(&quot;You must include the git source set by :source&quot;))</span>&#x000A;        <span class="ruby-identifier">has_package</span>(<span class="ruby-value str">&quot;git-core&quot;</span>)&#x000A;        <span class="ruby-identifier">has_git_repository</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000488'>
-                <a name='M000488'>      </a>
+              <div class='public-instance method' id='method-M000511'>
+                <a name='M000511'>      </a>
                 <div class='synopsis'>
                   <span class='name'>loaded</span>
                   <span class='arguments'>(*args)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000488-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000511-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000488-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/git.rb, line 5</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">loaded</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)&#x000A;        <span class="ruby-identifier">has_package</span>(<span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;git-core&quot;</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000511-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/git.rb, line 5</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">loaded</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)&#x000A;        <span class="ruby-identifier">has_package</span>(<span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;git-core&quot;</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000493'>
-                <a name='M000493'>      </a>
+              <div class='public-instance method' id='method-M000516'>
+                <a name='M000516'>      </a>
                 <div class='synopsis'>
                   <span class='name'>to</span>
                   <span class='arguments'>(dir)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000493-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000516-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000493-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/git.rb, line 57</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to</span>(<span class="ruby-identifier">dir</span>)&#x000A;        <span class="ruby-identifier">at</span>(<span class="ruby-identifier">dir</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000516-source'><span class="ruby-comment cmt"># File lib/poolparty/plugins/git.rb, line 57</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to</span>(<span class="ruby-identifier">dir</span>)&#x000A;        <span class="ruby-identifier">at</span>(<span class="ruby-identifier">dir</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

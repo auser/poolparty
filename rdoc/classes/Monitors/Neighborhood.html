@@ -45,51 +45,51 @@
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000692">get</a></li>
-              <li><a href="#M000694">post</a></li>
-              <li><a href="#M000693">put</a></li>
+              <li><a href="#M000715">get</a></li>
+              <li><a href="#M000717">post</a></li>
+              <li><a href="#M000716">put</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000692'>
-                <a name='M000692'>      </a>
+              <div class='public-instance method' id='method-M000715'>
+                <a name='M000715'>      </a>
                 <div class='synopsis'>
                   <span class='name'>get</span>
                   <span class='arguments'>(data=nil)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000692-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000715-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000692-source'><span class="ruby-comment cmt"># File lib/poolparty/monitors/monitors/neighborhood_monitor.rb, line 10</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get</span>(<span class="ruby-identifier">data</span>=<span class="ruby-keyword kw">nil</span>)&#x000A;      <span class="ruby-identifier">neighborhood</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000715-source'><span class="ruby-comment cmt"># File lib/poolparty/monitors/monitors/neighborhood_monitor.rb, line 10</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get</span>(<span class="ruby-identifier">data</span>=<span class="ruby-keyword kw">nil</span>)&#x000A;      <span class="ruby-identifier">neighborhood</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000694'>
-                <a name='M000694'>      </a>
+              <div class='public-instance method' id='method-M000717'>
+                <a name='M000717'>      </a>
                 <div class='synopsis'>
                   <span class='name'>post</span>
                   <span class='arguments'>(data)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000694-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000717-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000694-source'><span class="ruby-comment cmt"># File lib/poolparty/monitors/monitors/neighborhood_monitor.rb, line 27</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">post</span>(<span class="ruby-identifier">data</span>)&#x000A;      <span class="ruby-identifier">received</span> = <span class="ruby-constant">JSON</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">data</span>)&#x000A;      <span class="ruby-ivar">@neighborhood</span> = <span class="ruby-constant">JSON</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">data</span>)&#x000A;      <span class="ruby-identifier">save</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000717-source'><span class="ruby-comment cmt"># File lib/poolparty/monitors/monitors/neighborhood_monitor.rb, line 27</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">post</span>(<span class="ruby-identifier">data</span>)&#x000A;      <span class="ruby-identifier">received</span> = <span class="ruby-constant">JSON</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">data</span>)&#x000A;      <span class="ruby-ivar">@neighborhood</span> = <span class="ruby-constant">JSON</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">data</span>)&#x000A;      <span class="ruby-identifier">save</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000693'>
-                <a name='M000693'>      </a>
+              <div class='public-instance method' id='method-M000716'>
+                <a name='M000716'>      </a>
                 <div class='synopsis'>
                   <span class='name'>put</span>
                   <span class='arguments'>(data, from=nil)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000693-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000716-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000693-source'><span class="ruby-comment cmt"># File lib/poolparty/monitors/monitors/neighborhood_monitor.rb, line 14</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">put</span>(<span class="ruby-identifier">data</span>, <span class="ruby-identifier">from</span>=<span class="ruby-keyword kw">nil</span>)&#x000A;      <span class="ruby-ivar">@neighborhood_instances</span> = <span class="ruby-identifier">merge_array_of_hashes_with_key</span>(<span class="ruby-identifier">neighborhood</span>.<span class="ruby-identifier">instances</span>, <span class="ruby-constant">JSON</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">data</span>), <span class="ruby-value str">'ip'</span>)&#x000A;      <span class="ruby-ivar">@neighborhood</span> = {<span class="ruby-ivar">@neighborhood</span>[<span class="ruby-identifier">:instances</span>] =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@neighborhood_instances</span>}&#x000A;      <span class="ruby-identifier">after_close</span> <span class="ruby-keyword kw">do</span>&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@neighborhood</span>.<span class="ruby-identifier">instances</span>.<span class="ruby-identifier">size</span><span class="ruby-operator">&gt;</span><span class="ruby-value">1</span>&#x000A;          <span class="ruby-comment cmt"># TODO: Add logger here</span>&#x000A;          <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Pinging #{&quot;#{@neighborhood.instances.rand.ip}/neighborhood&quot;}&quot;</span>&#x000A;          <span class="ruby-constant">RestClient</span>.<span class="ruby-identifier">put</span> <span class="ruby-node">&quot;#{@neighborhood.instances.rand.ip}/neighborhood&quot;</span>, <span class="ruby-ivar">@neighborhood</span>, <span class="ruby-identifier">:content_type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'text/x-json'</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-identifier">save</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000716-source'><span class="ruby-comment cmt"># File lib/poolparty/monitors/monitors/neighborhood_monitor.rb, line 14</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">put</span>(<span class="ruby-identifier">data</span>, <span class="ruby-identifier">from</span>=<span class="ruby-keyword kw">nil</span>)&#x000A;      <span class="ruby-ivar">@neighborhood_instances</span> = <span class="ruby-identifier">merge_array_of_hashes_with_key</span>(<span class="ruby-identifier">neighborhood</span>.<span class="ruby-identifier">instances</span>, <span class="ruby-constant">JSON</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">data</span>), <span class="ruby-value str">'ip'</span>)&#x000A;      <span class="ruby-ivar">@neighborhood</span> = {<span class="ruby-ivar">@neighborhood</span>[<span class="ruby-identifier">:instances</span>] =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@neighborhood_instances</span>}&#x000A;      <span class="ruby-identifier">after_close</span> <span class="ruby-keyword kw">do</span>&#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@neighborhood</span>.<span class="ruby-identifier">instances</span>.<span class="ruby-identifier">size</span><span class="ruby-operator">&gt;</span><span class="ruby-value">1</span>&#x000A;          <span class="ruby-comment cmt"># TODO: Add logger here</span>&#x000A;          <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Pinging #{&quot;#{@neighborhood.instances.rand.ip}/neighborhood&quot;}&quot;</span>&#x000A;          <span class="ruby-constant">RestClient</span>.<span class="ruby-identifier">put</span> <span class="ruby-node">&quot;#{@neighborhood.instances.rand.ip}/neighborhood&quot;</span>, <span class="ruby-ivar">@neighborhood</span>, <span class="ruby-identifier">:content_type</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'text/x-json'</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-identifier">save</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

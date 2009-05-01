@@ -41,37 +41,37 @@
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000742">__aska_aska</a></li>
-              <li><a href="#M000741">__aska_get_var</a></li>
-              <li><a href="#M000738">__aska_send_value</a></li>
-              <li><a href="#M000746">are_rules?</a></li>
-              <li><a href="#M000743">attr_accessor?</a></li>
-              <li><a href="#M000745">look_up_rules</a></li>
-              <li><a href="#M000736">rules</a></li>
-              <li><a href="#M000740">rules_values</a></li>
-              <li><a href="#M000744">supported_method?</a></li>
-              <li><a href="#M000739">valid_rule?</a></li>
-              <li><a href="#M000737">valid_rules?</a></li>
+              <li><a href="#M000765">__aska_aska</a></li>
+              <li><a href="#M000764">__aska_get_var</a></li>
+              <li><a href="#M000761">__aska_send_value</a></li>
+              <li><a href="#M000769">are_rules?</a></li>
+              <li><a href="#M000766">attr_accessor?</a></li>
+              <li><a href="#M000768">look_up_rules</a></li>
+              <li><a href="#M000759">rules</a></li>
+              <li><a href="#M000763">rules_values</a></li>
+              <li><a href="#M000767">supported_method?</a></li>
+              <li><a href="#M000762">valid_rule?</a></li>
+              <li><a href="#M000760">valid_rules?</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000742'>
-                <a name='M000742'>      </a>
+              <div class='public-instance method' id='method-M000765'>
+                <a name='M000765'>      </a>
                 <div class='synopsis'>
                   <span class='name'>__aska_aska</span>
                   <span class='arguments'>(name)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000742-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000765-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000742-source'><span class="ruby-comment cmt"># File lib/poolparty/aska/aska.rb, line 94</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">__aska_aska</span>(<span class="ruby-identifier">name</span>)&#x000A;      <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">aska_named</span>(<span class="ruby-identifier">name</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000765-source'><span class="ruby-comment cmt"># File lib/poolparty/aska/aska.rb, line 94</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">__aska_aska</span>(<span class="ruby-identifier">name</span>)&#x000A;      <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">aska_named</span>(<span class="ruby-identifier">name</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000741'>
-                <a name='M000741'>      </a>
+              <div class='public-instance method' id='method-M000764'>
+                <a name='M000764'>      </a>
                 <div class='synopsis'>
                   <span class='name'>__aska_get_var</span>
                   <span class='arguments'>(name)</span>
@@ -83,127 +83,127 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000741-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000764-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000741-source'><span class="ruby-comment cmt"># File lib/poolparty/aska/aska.rb, line 90</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">__aska_get_var</span>(<span class="ruby-identifier">name</span>)&#x000A;      <span class="ruby-comment cmt"># attr_accessor?(name) ? aska(name) : </span>&#x000A;      (<span class="ruby-identifier">supported_method?</span>(<span class="ruby-identifier">name</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">name</span>.<span class="ruby-identifier">to_sym</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">name</span>.<span class="ruby-identifier">to_f</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000764-source'><span class="ruby-comment cmt"># File lib/poolparty/aska/aska.rb, line 90</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">__aska_get_var</span>(<span class="ruby-identifier">name</span>)&#x000A;      <span class="ruby-comment cmt"># attr_accessor?(name) ? aska(name) : </span>&#x000A;      (<span class="ruby-identifier">supported_method?</span>(<span class="ruby-identifier">name</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">name</span>.<span class="ruby-identifier">to_sym</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">name</span>.<span class="ruby-identifier">to_f</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000738'>
-                <a name='M000738'>      </a>
+              <div class='public-instance method' id='method-M000761'>
+                <a name='M000761'>      </a>
                 <div class='synopsis'>
                   <span class='name'>__aska_send_value</span>
                   <span class='arguments'>(m)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000738-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000761-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000738-source'><span class="ruby-comment cmt"># File lib/poolparty/aska/aska.rb, line 59</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">__aska_send_value</span>(<span class="ruby-identifier">m</span>)&#x000A;      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">m</span>.<span class="ruby-identifier">to_sym</span>)&#x000A;        <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">m</span>.<span class="ruby-identifier">to_sym</span>)&#x000A;      <span class="ruby-keyword kw">else</span>&#x000A;        <span class="ruby-identifier">m</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000761-source'><span class="ruby-comment cmt"># File lib/poolparty/aska/aska.rb, line 59</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">__aska_send_value</span>(<span class="ruby-identifier">m</span>)&#x000A;      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">m</span>.<span class="ruby-identifier">to_sym</span>)&#x000A;        <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">m</span>.<span class="ruby-identifier">to_sym</span>)&#x000A;      <span class="ruby-keyword kw">else</span>&#x000A;        <span class="ruby-identifier">m</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000746'>
-                <a name='M000746'>      </a>
+              <div class='public-instance method' id='method-M000769'>
+                <a name='M000769'>      </a>
                 <div class='synopsis'>
                   <span class='name'>are_rules?</span>
                   <span class='arguments'>(r)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000746-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000769-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000746-source'><span class="ruby-comment cmt"># File lib/poolparty/aska/aska.rb, line 105</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">are_rules?</span>(<span class="ruby-identifier">r</span>);<span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">are_rules?</span>(<span class="ruby-identifier">r</span>);<span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000769-source'><span class="ruby-comment cmt"># File lib/poolparty/aska/aska.rb, line 105</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">are_rules?</span>(<span class="ruby-identifier">r</span>);<span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">are_rules?</span>(<span class="ruby-identifier">r</span>);<span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000743'>
-                <a name='M000743'>      </a>
+              <div class='public-instance method' id='method-M000766'>
+                <a name='M000766'>      </a>
                 <div class='synopsis'>
                   <span class='name'>attr_accessor?</span>
                   <span class='arguments'>(name)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000743-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000766-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000743-source'><span class="ruby-comment cmt"># File lib/poolparty/aska/aska.rb, line 97</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">attr_accessor?</span>(<span class="ruby-identifier">name</span>)&#x000A;      <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">aska_attr_accessors</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">name</span>.<span class="ruby-identifier">to_sym</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000766-source'><span class="ruby-comment cmt"># File lib/poolparty/aska/aska.rb, line 97</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">attr_accessor?</span>(<span class="ruby-identifier">name</span>)&#x000A;      <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">aska_attr_accessors</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">name</span>.<span class="ruby-identifier">to_sym</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000745'>
-                <a name='M000745'>      </a>
+              <div class='public-instance method' id='method-M000768'>
+                <a name='M000768'>      </a>
                 <div class='synopsis'>
                   <span class='name'>look_up_rules</span>
                   <span class='arguments'>(r)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000745-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000768-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000745-source'><span class="ruby-comment cmt"># File lib/poolparty/aska/aska.rb, line 104</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">look_up_rules</span>(<span class="ruby-identifier">r</span>);<span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">look_up_rules</span>(<span class="ruby-identifier">r</span>);<span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000768-source'><span class="ruby-comment cmt"># File lib/poolparty/aska/aska.rb, line 104</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">look_up_rules</span>(<span class="ruby-identifier">r</span>);<span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">look_up_rules</span>(<span class="ruby-identifier">r</span>);<span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000736'>
-                <a name='M000736'>      </a>
+              <div class='public-instance method' id='method-M000759'>
+                <a name='M000759'>      </a>
                 <div class='synopsis'>
                   <span class='name'>rules</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000736-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000759-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000736-source'><span class="ruby-comment cmt"># File lib/poolparty/aska/aska.rb, line 53</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">rules</span>&#x000A;      <span class="ruby-ivar">@rules</span> <span class="ruby-operator">||=</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">defined_rules</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000759-source'><span class="ruby-comment cmt"># File lib/poolparty/aska/aska.rb, line 53</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">rules</span>&#x000A;      <span class="ruby-ivar">@rules</span> <span class="ruby-operator">||=</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">defined_rules</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000740'>
-                <a name='M000740'>      </a>
+              <div class='public-instance method' id='method-M000763'>
+                <a name='M000763'>      </a>
                 <div class='synopsis'>
                   <span class='name'>rules_values</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000740-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000763-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000740-source'><span class="ruby-comment cmt"># File lib/poolparty/aska/aska.rb, line 75</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">rules_values</span>&#x000A;      <span class="ruby-identifier">returning</span> <span class="ruby-constant">Array</span>.<span class="ruby-identifier">new</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">arr</span><span class="ruby-operator">|</span>&#x000A;        <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">defined_rules</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">name</span>,<span class="ruby-identifier">rule_array</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-identifier">arr</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;#{name} : #{valid_rules?(name.to_sym)}&quot;</span>&#x000A;          <span class="ruby-identifier">rule_array</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">rule</span><span class="ruby-operator">|</span>&#x000A;            <span class="ruby-identifier">rule</span>.<span class="ruby-identifier">map</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span>&#x000A;              <span class="ruby-identifier">arr</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;  #{k} -&gt; #{__aska_send_value(k)} (#{v[0]} #{v[1]})&quot;</span>&#x000A;            <span class="ruby-keyword kw">end</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot;\n&quot;</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000763-source'><span class="ruby-comment cmt"># File lib/poolparty/aska/aska.rb, line 75</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">rules_values</span>&#x000A;      <span class="ruby-identifier">returning</span> <span class="ruby-constant">Array</span>.<span class="ruby-identifier">new</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">arr</span><span class="ruby-operator">|</span>&#x000A;        <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">defined_rules</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">name</span>,<span class="ruby-identifier">rule_array</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-identifier">arr</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;#{name} : #{valid_rules?(name.to_sym)}&quot;</span>&#x000A;          <span class="ruby-identifier">rule_array</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">rule</span><span class="ruby-operator">|</span>&#x000A;            <span class="ruby-identifier">rule</span>.<span class="ruby-identifier">map</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span>&#x000A;              <span class="ruby-identifier">arr</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;  #{k} -&gt; #{__aska_send_value(k)} (#{v[0]} #{v[1]})&quot;</span>&#x000A;            <span class="ruby-keyword kw">end</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot;\n&quot;</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000744'>
-                <a name='M000744'>      </a>
+              <div class='public-instance method' id='method-M000767'>
+                <a name='M000767'>      </a>
                 <div class='synopsis'>
                   <span class='name'>supported_method?</span>
                   <span class='arguments'>(meth)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000744-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000767-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000744-source'><span class="ruby-comment cmt"># File lib/poolparty/aska/aska.rb, line 100</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">supported_method?</span>(<span class="ruby-identifier">meth</span>)&#x000A;      <span class="ruby-node">%w(&lt; &gt; == =&gt; =&lt;)</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-node">&quot;#{meth}&quot;</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000767-source'><span class="ruby-comment cmt"># File lib/poolparty/aska/aska.rb, line 100</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">supported_method?</span>(<span class="ruby-identifier">meth</span>)&#x000A;      <span class="ruby-node">%w(&lt; &gt; == =&gt; =&lt;)</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-node">&quot;#{meth}&quot;</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000739'>
-                <a name='M000739'>      </a>
+              <div class='public-instance method' id='method-M000762'>
+                <a name='M000762'>      </a>
                 <div class='synopsis'>
                   <span class='name'>valid_rule?</span>
                   <span class='arguments'>(rule)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000739-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000762-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000739-source'><span class="ruby-comment cmt"># File lib/poolparty/aska/aska.rb, line 66</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">valid_rule?</span>(<span class="ruby-identifier">rule</span>)&#x000A;      <span class="ruby-identifier">rule</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">key</span>,<span class="ruby-identifier">value</span><span class="ruby-operator">|</span>&#x000A;        <span class="ruby-keyword kw">begin</span>&#x000A;          <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">__aska_send_value</span>(<span class="ruby-identifier">key</span>).<span class="ruby-identifier">send</span>(<span class="ruby-identifier">value</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">to_sym</span>, <span class="ruby-identifier">__aska_get_var</span>(<span class="ruby-identifier">value</span>[<span class="ruby-value">1</span>]))&#x000A;        <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>&#x000A;          <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">false</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000762-source'><span class="ruby-comment cmt"># File lib/poolparty/aska/aska.rb, line 66</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">valid_rule?</span>(<span class="ruby-identifier">rule</span>)&#x000A;      <span class="ruby-identifier">rule</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">key</span>,<span class="ruby-identifier">value</span><span class="ruby-operator">|</span>&#x000A;        <span class="ruby-keyword kw">begin</span>&#x000A;          <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">__aska_send_value</span>(<span class="ruby-identifier">key</span>).<span class="ruby-identifier">send</span>(<span class="ruby-identifier">value</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">to_sym</span>, <span class="ruby-identifier">__aska_get_var</span>(<span class="ruby-identifier">value</span>[<span class="ruby-value">1</span>]))&#x000A;        <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>&#x000A;          <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">false</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000737'>
-                <a name='M000737'>      </a>
+              <div class='public-instance method' id='method-M000760'>
+                <a name='M000760'>      </a>
                 <div class='synopsis'>
                   <span class='name'>valid_rules?</span>
                   <span class='arguments'>(name=:rules)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000737-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000760-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000737-source'><span class="ruby-comment cmt"># File lib/poolparty/aska/aska.rb, line 56</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">valid_rules?</span>(<span class="ruby-identifier">name</span>=<span class="ruby-identifier">:rules</span>)&#x000A;      <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">look_up_rules</span>(<span class="ruby-identifier">name</span>).<span class="ruby-identifier">reject</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">rule</span><span class="ruby-operator">|</span> <span class="ruby-identifier">valid_rule?</span>(<span class="ruby-identifier">rule</span>) }.<span class="ruby-identifier">empty?</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000760-source'><span class="ruby-comment cmt"># File lib/poolparty/aska/aska.rb, line 56</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">valid_rules?</span>(<span class="ruby-identifier">name</span>=<span class="ruby-identifier">:rules</span>)&#x000A;      <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">look_up_rules</span>(<span class="ruby-identifier">name</span>).<span class="ruby-identifier">reject</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">rule</span><span class="ruby-operator">|</span> <span class="ruby-identifier">valid_rule?</span>(<span class="ruby-identifier">rule</span>) }.<span class="ruby-identifier">empty?</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>
