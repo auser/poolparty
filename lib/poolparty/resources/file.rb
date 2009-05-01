@@ -1,6 +1,33 @@
 module PoolParty    
   module Resources
         
+=begin rdoc rdoc
+== File
+
+The file resource is used to describe a file that should be present on all of the instances.
+
+== Usage
+
+  has_file(:name => '...') do
+    # More options. 
+    # This block is optional
+  end
+
+== Options
+
+* <tt>name</tt> Describe the location of the file with the name
+* <tt>mode</tt> Describe the mode of the file (default: 644)
+* <tt>owner</tt> The owner of the file (default: poolparty user)
+* <tt>content</tt> The contents of the file
+* <tt>source</tt> Used to describe a file that is hosted on the master instance.
+* <tt>template</tt> The file contents are described with the template. The location given must be readable
+  
+    To write a file to the template directory, use:
+    copy_template_to_storage_directory(filepath)
+
+== Example
+  has_file(:name => '/etc/motd', :content => 'Hey and welcome to your node today!')
+=end
     class File < Resource
       
       def loaded(o={}, &block)

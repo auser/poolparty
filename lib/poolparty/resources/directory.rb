@@ -1,7 +1,7 @@
 module PoolParty    
   module Resources
         
-=begin rdoc
+=begin rdoc rdoc
 == Directory
 
 The directory resource is used to describe a directory that should be present
