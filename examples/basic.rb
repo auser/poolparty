@@ -12,6 +12,7 @@ pool :application do
   end
   
   cloud :basic_db do    
+    minimum_instances 19
     ami "ami-1234bc"
     junk_yard_dogs "are bad"
   end
