@@ -23,6 +23,8 @@ o.loaded_clouds.each do |cld|
       Verification failed: #{e}"
         Please check your clouds.rb for any errors
 
+      Exception: #{e.class}: #{e.message}\n\t#{e.backtrace.join("\n\t")}
+
       EOM
   end
 
