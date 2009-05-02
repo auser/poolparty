@@ -1,6 +1,18 @@
 module PoolParty
   module Verifiers
-    
+=begin
+== Ping
+
+Open a TCPSocket and verify you can connect.
+
+== Example:
+
+    verify do
+      ping
+      ping(22)
+    end
+
+=end
     class Ping < VerifierBase
       include ::PoolParty::Pinger
       
