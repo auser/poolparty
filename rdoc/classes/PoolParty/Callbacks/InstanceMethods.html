@@ -41,28 +41,28 @@
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000293">defined_callbacks</a></li>
-              <li><a href="#M000294">setup_callbacks</a></li>
+              <li><a href="#M000300">defined_callbacks</a></li>
+              <li><a href="#M000301">setup_callbacks</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000293'>
-                <a name='M000293'>      </a>
+              <div class='public-instance method' id='method-M000300'>
+                <a name='M000300'>      </a>
                 <div class='synopsis'>
                   <span class='name'>defined_callbacks</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000293-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000300-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000293-source'><span class="ruby-comment cmt"># File lib/poolparty/modules/callbacks.rb, line 10</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">defined_callbacks</span>&#x000A;        [&#x000A;          <span class="ruby-identifier">:before_bootstrap</span>,&#x000A;          <span class="ruby-identifier">:after_bootstrap</span>,&#x000A;          <span class="ruby-identifier">:before_configure</span>,&#x000A;          <span class="ruby-identifier">:after_configure</span>,&#x000A;          <span class="ruby-identifier">:after_create</span>,&#x000A;          <span class="ruby-comment cmt"># TODO: Add after_launch_instance and after_terminate_instance</span>&#x000A;          <span class="ruby-comment cmt"># :after_launch_instance,</span>&#x000A;          <span class="ruby-comment cmt"># :after_terminate_instance,</span>&#x000A;          <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">additional_callbacks</span>&#x000A;        ].<span class="ruby-identifier">flatten</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000300-source'><span class="ruby-comment cmt"># File lib/poolparty/modules/callbacks.rb, line 10</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">defined_callbacks</span>&#x000A;        [&#x000A;          <span class="ruby-identifier">:before_bootstrap</span>,&#x000A;          <span class="ruby-identifier">:after_bootstrap</span>,&#x000A;          <span class="ruby-identifier">:before_configure</span>,&#x000A;          <span class="ruby-identifier">:after_configure</span>,&#x000A;          <span class="ruby-identifier">:after_create</span>,&#x000A;          <span class="ruby-comment cmt"># TODO: Add after_launch_instance and after_terminate_instance</span>&#x000A;          <span class="ruby-comment cmt"># :after_launch_instance,</span>&#x000A;          <span class="ruby-comment cmt"># :after_terminate_instance,</span>&#x000A;          <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">additional_callbacks</span>&#x000A;        ].<span class="ruby-identifier">flatten</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000294'>
-                <a name='M000294'>      </a>
+              <div class='public-instance method' id='method-M000301'>
+                <a name='M000301'>      </a>
                 <div class='synopsis'>
                   <span class='name'>setup_callbacks</span>
                   <span class='arguments'>()</span>
@@ -73,10 +73,10 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000294-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000301-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000294-source'><span class="ruby-comment cmt"># File lib/poolparty/modules/callbacks.rb, line 25</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">setup_callbacks</span>&#x000A;        <span class="ruby-identifier">defined_callbacks</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">meth</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">respond_to?</span>(<span class="ruby-node">&quot;call_#{meth}_callbacks&quot;</span>.<span class="ruby-identifier">to_sym</span>)&#x000A;            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">module_eval</span> <span class="ruby-value str">&quot;def call_\#{meth}_callbacks(*args)\nplugin_store.each {|a| a.call_\#{meth}_callbacks(*args) } if respond_to?(:plugin_store) &amp;&amp; plugin_store\nself.send :\#{meth}, *args if respond_to?(:\#{meth})\nend\n&quot;</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000301-source'><span class="ruby-comment cmt"># File lib/poolparty/modules/callbacks.rb, line 25</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">setup_callbacks</span>&#x000A;        <span class="ruby-identifier">defined_callbacks</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">meth</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">respond_to?</span>(<span class="ruby-node">&quot;call_#{meth}_callbacks&quot;</span>.<span class="ruby-identifier">to_sym</span>)&#x000A;            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">module_eval</span> <span class="ruby-value str">&quot;def call_\#{meth}_callbacks(*args)\nplugin_store.each {|a| a.call_\#{meth}_callbacks(*args) } if respond_to?(:plugin_store) &amp;&amp; plugin_store\nself.send :\#{meth}, *args if respond_to?(:\#{meth})\nend\n&quot;</span>&#x000A;          <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

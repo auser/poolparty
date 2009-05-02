@@ -45,55 +45,55 @@
             <h2>Methods</h2>
             <h3>public class</h3>
             <ol>
-              <li><a href="#M000700">add_has_and_does_not_have_methods_for</a></li>
-              <li><a href="#M000698">new</a></li>
+              <li><a href="#M000708">add_has_and_does_not_have_methods_for</a></li>
+              <li><a href="#M000706">new</a></li>
             </ol>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000699">cloud</a></li>
+              <li><a href="#M000707">cloud</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public class methods</h2>
-              <div class='public-class method' id='method-M000700'>
-                <a name='M000700'>      </a>
+              <div class='public-class method' id='method-M000708'>
+                <a name='M000708'>      </a>
                 <div class='synopsis'>
                   <span class='name'>add_has_and_does_not_have_methods_for</span>
                   <span class='arguments'>(typ=:file)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000700-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000708-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000700-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/service.rb, line 16</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">add_has_and_does_not_have_methods_for</span>(<span class="ruby-identifier">typ</span>=<span class="ruby-identifier">:file</span>)&#x000A;      <span class="ruby-identifier">lowercase_class_name</span> = <span class="ruby-identifier">typ</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">top_level_class</span>.<span class="ruby-identifier">downcase</span>&#x000A;      &#x000A;      <span class="ruby-identifier">meth</span> = <span class="ruby-value str">&quot;def __\#{lowercase_class_name}(opts={}, &amp;block)\ni = PoolParty::\#{lowercase_class_name.camelcase}Class.new(opts, &amp;block)\nplugin_store &lt;&lt; i if respond_to?(:plugin_store)\ni\nend\nalias :\#{lowercase_class_name} :__\#{lowercase_class_name}\n&quot;</span>&#x000A;      &#x000A;      <span class="ruby-constant">PoolParty</span><span class="ruby-operator">::</span><span class="ruby-constant">PoolPartyBaseClass</span>.<span class="ruby-identifier">module_eval</span> <span class="ruby-identifier">meth</span>&#x000A;      <span class="ruby-constant">PoolParty</span><span class="ruby-operator">::</span><span class="ruby-constant">PoolPartyBaseClass</span>.<span class="ruby-identifier">add_has_and_does_not_have_methods_for</span>(<span class="ruby-identifier">lowercase_class_name</span>.<span class="ruby-identifier">to_sym</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000708-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/service.rb, line 16</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">add_has_and_does_not_have_methods_for</span>(<span class="ruby-identifier">typ</span>=<span class="ruby-identifier">:file</span>)&#x000A;      <span class="ruby-identifier">lowercase_class_name</span> = <span class="ruby-identifier">typ</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">top_level_class</span>.<span class="ruby-identifier">downcase</span>&#x000A;      &#x000A;      <span class="ruby-identifier">meth</span> = <span class="ruby-value str">&quot;def __\#{lowercase_class_name}(opts={}, &amp;block)\ni = PoolParty::\#{lowercase_class_name.camelcase}Class.new(opts, &amp;block)\nplugin_store &lt;&lt; i if respond_to?(:plugin_store)\ni\nend\nalias :\#{lowercase_class_name} :__\#{lowercase_class_name}\n&quot;</span>&#x000A;      &#x000A;      <span class="ruby-constant">PoolParty</span><span class="ruby-operator">::</span><span class="ruby-constant">PoolPartyBaseClass</span>.<span class="ruby-identifier">module_eval</span> <span class="ruby-identifier">meth</span>&#x000A;      <span class="ruby-constant">PoolParty</span><span class="ruby-operator">::</span><span class="ruby-constant">PoolPartyBaseClass</span>.<span class="ruby-identifier">add_has_and_does_not_have_methods_for</span>(<span class="ruby-identifier">lowercase_class_name</span>.<span class="ruby-identifier">to_sym</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-class method' id='method-M000698'>
-                <a name='M000698'>      </a>
+              <div class='public-class method' id='method-M000706'>
+                <a name='M000706'>      </a>
                 <div class='synopsis'>
                   <span class='name'>new</span>
                   <span class='arguments'>(o={}, &amp;block)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000698-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000706-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000698-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/service.rb, line 5</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">o</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;      <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">o</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000706-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/service.rb, line 5</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">o</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;      <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">o</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000699'>
-                <a name='M000699'>      </a>
+              <div class='public-instance method' id='method-M000707'>
+                <a name='M000707'>      </a>
                 <div class='synopsis'>
                   <span class='name'>cloud</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000699-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000707-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000699-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/service.rb, line 9</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cloud</span>&#x000A;      <span class="ruby-value">2</span>.<span class="ruby-identifier">upto</span>(<span class="ruby-identifier">context_stack</span>.<span class="ruby-identifier">size</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">i</span><span class="ruby-operator">|</span>&#x000A;        <span class="ruby-keyword kw">return</span> <span class="ruby-operator">::</span><span class="ruby-constant">PoolParty</span>.<span class="ruby-identifier">context_stack</span>[<span class="ruby-operator">-</span><span class="ruby-identifier">i</span>] <span class="ruby-keyword kw">if</span> <span class="ruby-operator">::</span><span class="ruby-constant">PoolParty</span>.<span class="ruby-identifier">context_stack</span>[<span class="ruby-operator">-</span><span class="ruby-identifier">i</span>].<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">PoolParty</span><span class="ruby-operator">::</span><span class="ruby-constant">Cloud</span><span class="ruby-operator">::</span><span class="ruby-constant">Cloud</span>)&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">nil</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000707-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/service.rb, line 9</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cloud</span>&#x000A;      <span class="ruby-value">2</span>.<span class="ruby-identifier">upto</span>(<span class="ruby-identifier">context_stack</span>.<span class="ruby-identifier">size</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">i</span><span class="ruby-operator">|</span>&#x000A;        <span class="ruby-keyword kw">return</span> <span class="ruby-operator">::</span><span class="ruby-constant">PoolParty</span>.<span class="ruby-identifier">context_stack</span>[<span class="ruby-operator">-</span><span class="ruby-identifier">i</span>] <span class="ruby-keyword kw">if</span> <span class="ruby-operator">::</span><span class="ruby-constant">PoolParty</span>.<span class="ruby-identifier">context_stack</span>[<span class="ruby-operator">-</span><span class="ruby-identifier">i</span>].<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">PoolParty</span><span class="ruby-operator">::</span><span class="ruby-constant">Cloud</span><span class="ruby-operator">::</span><span class="ruby-constant">Cloud</span>)&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">nil</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

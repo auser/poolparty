@@ -41,51 +41,51 @@
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000322">passing?</a></li>
-              <li><a href="#M000320">verifiers</a></li>
-              <li><a href="#M000321">verify</a></li>
+              <li><a href="#M000330">passing?</a></li>
+              <li><a href="#M000328">verifiers</a></li>
+              <li><a href="#M000329">verify</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000322'>
-                <a name='M000322'>      </a>
+              <div class='public-instance method' id='method-M000330'>
+                <a name='M000330'>      </a>
                 <div class='synopsis'>
                   <span class='name'>passing?</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000322-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000330-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000322-source'><span class="ruby-comment cmt"># File lib/poolparty/verification/verify.rb, line 21</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">passing?</span>&#x000A;        <span class="ruby-identifier">reset!</span>&#x000A;        <span class="ruby-identifier">verifiers</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span>          &#x000A;          <span class="ruby-identifier">ip</span> = <span class="ruby-identifier">nodes</span>(<span class="ruby-identifier">:status</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;running&quot;</span>).<span class="ruby-identifier">first</span>.<span class="ruby-identifier">ip</span> <span class="ruby-keyword kw">rescue</span> <span class="ruby-value str">&quot;127.0.0.1&quot;</span>&#x000A;          <span class="ruby-identifier">v</span>.<span class="ruby-identifier">host</span> = <span class="ruby-identifier">ip</span>&#x000A;          <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Verification failed at #{v.class}&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">v</span>.<span class="ruby-identifier">passing?</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">true</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000330-source'><span class="ruby-comment cmt"># File lib/poolparty/verification/verify.rb, line 21</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">passing?</span>&#x000A;        <span class="ruby-identifier">reset!</span>&#x000A;        <span class="ruby-identifier">vputs</span> <span class="ruby-value str">&quot;Starting cloud verification&quot;</span>&#x000A;        <span class="ruby-identifier">verifiers</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span>          &#x000A;          <span class="ruby-identifier">ip</span> = <span class="ruby-identifier">nodes</span>(<span class="ruby-identifier">:status</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;running&quot;</span>).<span class="ruby-identifier">first</span>.<span class="ruby-identifier">ip</span> <span class="ruby-keyword kw">rescue</span> <span class="ruby-value str">&quot;127.0.0.1&quot;</span>&#x000A;          <span class="ruby-identifier">v</span>.<span class="ruby-identifier">host</span> = <span class="ruby-identifier">ip</span>&#x000A;          <span class="ruby-identifier">vputs</span> <span class="ruby-node">&quot;  checking #{v} on #{ip}&quot;</span>&#x000A;          <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Verification failed at #{v.class}&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">v</span>.<span class="ruby-identifier">passing?</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;        <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">true</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000320'>
-                <a name='M000320'>      </a>
+              <div class='public-instance method' id='method-M000328'>
+                <a name='M000328'>      </a>
                 <div class='synopsis'>
                   <span class='name'>verifiers</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000320-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000328-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000320-source'><span class="ruby-comment cmt"># File lib/poolparty/verification/verify.rb, line 14</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">verifiers</span>&#x000A;        <span class="ruby-ivar">@verifiers</span> <span class="ruby-operator">||=</span> []&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000328-source'><span class="ruby-comment cmt"># File lib/poolparty/verification/verify.rb, line 14</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">verifiers</span>&#x000A;        <span class="ruby-ivar">@verifiers</span> <span class="ruby-operator">||=</span> []&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000321'>
-                <a name='M000321'>      </a>
+              <div class='public-instance method' id='method-M000329'>
+                <a name='M000329'>      </a>
                 <div class='synopsis'>
                   <span class='name'>verify</span>
                   <span class='arguments'>(&amp;block)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000321-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000329-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000321-source'><span class="ruby-comment cmt"># File lib/poolparty/verification/verify.rb, line 17</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">verify</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-identifier">v</span> = <span class="ruby-constant">Verify</span>.<span class="ruby-identifier">new</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-identifier">v</span>.<span class="ruby-identifier">verifiers</span>.<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">verifiers</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">v</span>}&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000329-source'><span class="ruby-comment cmt"># File lib/poolparty/verification/verify.rb, line 17</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">verify</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-identifier">v</span> = <span class="ruby-constant">Verify</span>.<span class="ruby-identifier">new</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-identifier">v</span>.<span class="ruby-identifier">verifiers</span>.<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">verifiers</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">v</span>}&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

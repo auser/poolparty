@@ -45,15 +45,15 @@
             <h2>Methods</h2>
             <h3>public class</h3>
             <ol>
-              <li><a href="#M000773">new</a></li>
+              <li><a href="#M000781">new</a></li>
             </ol>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000776">comparison</a></li>
-              <li><a href="#M000775">key</a></li>
-              <li><a href="#M000774">valid?</a></li>
-              <li><a href="#M000778">value</a></li>
-              <li><a href="#M000777">var</a></li>
+              <li><a href="#M000784">comparison</a></li>
+              <li><a href="#M000783">key</a></li>
+              <li><a href="#M000782">valid?</a></li>
+              <li><a href="#M000786">value</a></li>
+              <li><a href="#M000785">var</a></li>
             </ol>
           </div>
           <div id='section'>
@@ -71,83 +71,83 @@
             </div>
             <div id='methods'>
               <h2>Public class methods</h2>
-              <div class='public-class method' id='method-M000773'>
-                <a name='M000773'>      </a>
+              <div class='public-class method' id='method-M000781'>
+                <a name='M000781'>      </a>
                 <div class='synopsis'>
                   <span class='name'>new</span>
                   <span class='arguments'>(v)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000773-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000781-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000773-source'><span class="ruby-comment cmt"># File lib/poolparty/aska/aska.rb, line 116</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">v</span>)&#x000A;      <span class="ruby-ivar">@value</span> = <span class="ruby-identifier">v</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000781-source'><span class="ruby-comment cmt"># File lib/poolparty/aska/aska.rb, line 116</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">v</span>)&#x000A;      <span class="ruby-ivar">@value</span> = <span class="ruby-identifier">v</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000776'>
-                <a name='M000776'>      </a>
+              <div class='public-instance method' id='method-M000784'>
+                <a name='M000784'>      </a>
                 <div class='synopsis'>
                   <span class='name'>comparison</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000776-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000784-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000776-source'><span class="ruby-comment cmt"># File lib/poolparty/aska/aska.rb, line 125</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">comparison</span>&#x000A;      <span class="ruby-identifier">value</span>[<span class="ruby-regexp re">/[=\\&lt;&gt;]/</span>, <span class="ruby-value">0</span>].<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/\s+/</span>, <span class="ruby-value str">''</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000784-source'><span class="ruby-comment cmt"># File lib/poolparty/aska/aska.rb, line 125</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">comparison</span>&#x000A;      <span class="ruby-identifier">value</span>[<span class="ruby-regexp re">/[=\\&lt;&gt;]/</span>, <span class="ruby-value">0</span>].<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/\s+/</span>, <span class="ruby-value str">''</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000775'>
-                <a name='M000775'>      </a>
+              <div class='public-instance method' id='method-M000783'>
+                <a name='M000783'>      </a>
                 <div class='synopsis'>
                   <span class='name'>key</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000775-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000783-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000775-source'><span class="ruby-comment cmt"># File lib/poolparty/aska/aska.rb, line 122</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">key</span>&#x000A;      <span class="ruby-identifier">value</span>[<span class="ruby-regexp re">/(.+)[=\\\&lt;\&gt;](.*)/</span>, <span class="ruby-value">1</span>].<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/\s+/</span>, <span class="ruby-value str">''</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000783-source'><span class="ruby-comment cmt"># File lib/poolparty/aska/aska.rb, line 122</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">key</span>&#x000A;      <span class="ruby-identifier">value</span>[<span class="ruby-regexp re">/(.+)[=\\\&lt;\&gt;](.*)/</span>, <span class="ruby-value">1</span>].<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/\s+/</span>, <span class="ruby-value str">''</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000774'>
-                <a name='M000774'>      </a>
+              <div class='public-instance method' id='method-M000782'>
+                <a name='M000782'>      </a>
                 <div class='synopsis'>
                   <span class='name'>valid?</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000774-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000782-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000774-source'><span class="ruby-comment cmt"># File lib/poolparty/aska/aska.rb, line 119</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">valid?</span>&#x000A;      <span class="ruby-identifier">value</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/(.+)[=\\\&lt;\&gt;](.*)/</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000782-source'><span class="ruby-comment cmt"># File lib/poolparty/aska/aska.rb, line 119</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">valid?</span>&#x000A;      <span class="ruby-identifier">value</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/(.+)[=\\\&lt;\&gt;](.*)/</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000778'>
-                <a name='M000778'>      </a>
+              <div class='public-instance method' id='method-M000786'>
+                <a name='M000786'>      </a>
                 <div class='synopsis'>
                   <span class='name'>value</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000778-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000786-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000778-source'><span class="ruby-comment cmt"># File lib/poolparty/aska/aska.rb, line 131</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">value</span>&#x000A;      <span class="ruby-ivar">@value</span> <span class="ruby-operator">||=</span> <span class="ruby-value str">&quot;&quot;</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000786-source'><span class="ruby-comment cmt"># File lib/poolparty/aska/aska.rb, line 131</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">value</span>&#x000A;      <span class="ruby-ivar">@value</span> <span class="ruby-operator">||=</span> <span class="ruby-value str">&quot;&quot;</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000777'>
-                <a name='M000777'>      </a>
+              <div class='public-instance method' id='method-M000785'>
+                <a name='M000785'>      </a>
                 <div class='synopsis'>
                   <span class='name'>var</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000777-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000785-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000777-source'><span class="ruby-comment cmt"># File lib/poolparty/aska/aska.rb, line 128</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">var</span>&#x000A;      <span class="ruby-identifier">value</span>[<span class="ruby-regexp re">/(.+)[=\\&lt;&gt;](.*)/</span>, <span class="ruby-value">2</span>].<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/\s+/</span>, <span class="ruby-value str">''</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000785-source'><span class="ruby-comment cmt"># File lib/poolparty/aska/aska.rb, line 128</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">var</span>&#x000A;      <span class="ruby-identifier">value</span>[<span class="ruby-regexp re">/(.+)[=\\&lt;&gt;](.*)/</span>, <span class="ruby-value">2</span>].<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/\s+/</span>, <span class="ruby-value str">''</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

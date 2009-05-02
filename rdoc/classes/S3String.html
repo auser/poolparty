@@ -41,107 +41,107 @@
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000711">bucket_exists?</a></li>
-              <li><a href="#M000707">bucket_object</a></li>
-              <li><a href="#M000708">bucket_object_exists?</a></li>
-              <li><a href="#M000706">bucket_objects</a></li>
-              <li><a href="#M000712">delete_bucket</a></li>
-              <li><a href="#M000710">delete_bucket_value</a></li>
-              <li><a href="#M000709">store_bucket_value</a></li>
+              <li><a href="#M000719">bucket_exists?</a></li>
+              <li><a href="#M000715">bucket_object</a></li>
+              <li><a href="#M000716">bucket_object_exists?</a></li>
+              <li><a href="#M000714">bucket_objects</a></li>
+              <li><a href="#M000720">delete_bucket</a></li>
+              <li><a href="#M000718">delete_bucket_value</a></li>
+              <li><a href="#M000717">store_bucket_value</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000711'>
-                <a name='M000711'>      </a>
+              <div class='public-instance method' id='method-M000719'>
+                <a name='M000719'>      </a>
                 <div class='synopsis'>
                   <span class='name'>bucket_exists?</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000711-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000719-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000711-source'><span class="ruby-comment cmt"># File lib/poolparty/modules/s3_string.rb, line 17</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">bucket_exists?</span>&#x000A;    <span class="ruby-keyword kw">begin</span>&#x000A;      <span class="ruby-constant">AWS</span><span class="ruby-operator">::</span><span class="ruby-constant">S3</span><span class="ruby-operator">::</span><span class="ruby-constant">Bucket</span>.<span class="ruby-identifier">find</span>(<span class="ruby-keyword kw">self</span>)&#x000A;      <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">true</span>&#x000A;    <span class="ruby-keyword kw">rescue</span>&#x000A;      <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">false</span>&#x000A;    <span class="ruby-keyword kw">end</span>        &#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000719-source'><span class="ruby-comment cmt"># File lib/poolparty/modules/s3_string.rb, line 17</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">bucket_exists?</span>&#x000A;    <span class="ruby-keyword kw">begin</span>&#x000A;      <span class="ruby-constant">AWS</span><span class="ruby-operator">::</span><span class="ruby-constant">S3</span><span class="ruby-operator">::</span><span class="ruby-constant">Bucket</span>.<span class="ruby-identifier">find</span>(<span class="ruby-keyword kw">self</span>)&#x000A;      <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">true</span>&#x000A;    <span class="ruby-keyword kw">rescue</span>&#x000A;      <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">false</span>&#x000A;    <span class="ruby-keyword kw">end</span>        &#x000A;  <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000707'>
-                <a name='M000707'>      </a>
+              <div class='public-instance method' id='method-M000715'>
+                <a name='M000715'>      </a>
                 <div class='synopsis'>
                   <span class='name'>bucket_object</span>
                   <span class='arguments'>(key)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000707-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000715-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000707-source'><span class="ruby-comment cmt"># File lib/poolparty/modules/s3_string.rb, line 5</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">bucket_object</span>(<span class="ruby-identifier">key</span>)&#x000A;    <span class="ruby-constant">AWS</span><span class="ruby-operator">::</span><span class="ruby-constant">S3</span><span class="ruby-operator">::</span><span class="ruby-constant">S3Object</span>.<span class="ruby-identifier">value</span> <span class="ruby-identifier">key</span>, <span class="ruby-keyword kw">self</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">bucket_object_exists?</span>(<span class="ruby-identifier">key</span>)&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000715-source'><span class="ruby-comment cmt"># File lib/poolparty/modules/s3_string.rb, line 5</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">bucket_object</span>(<span class="ruby-identifier">key</span>)&#x000A;    <span class="ruby-constant">AWS</span><span class="ruby-operator">::</span><span class="ruby-constant">S3</span><span class="ruby-operator">::</span><span class="ruby-constant">S3Object</span>.<span class="ruby-identifier">value</span> <span class="ruby-identifier">key</span>, <span class="ruby-keyword kw">self</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">bucket_object_exists?</span>(<span class="ruby-identifier">key</span>)&#x000A;  <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000708'>
-                <a name='M000708'>      </a>
+              <div class='public-instance method' id='method-M000716'>
+                <a name='M000716'>      </a>
                 <div class='synopsis'>
                   <span class='name'>bucket_object_exists?</span>
                   <span class='arguments'>(key)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000708-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000716-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000708-source'><span class="ruby-comment cmt"># File lib/poolparty/modules/s3_string.rb, line 8</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">bucket_object_exists?</span>(<span class="ruby-identifier">key</span>)&#x000A;    <span class="ruby-constant">AWS</span><span class="ruby-operator">::</span><span class="ruby-constant">S3</span><span class="ruby-operator">::</span><span class="ruby-constant">S3Object</span>.<span class="ruby-identifier">exists?</span> <span class="ruby-identifier">key</span>, <span class="ruby-keyword kw">self</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000716-source'><span class="ruby-comment cmt"># File lib/poolparty/modules/s3_string.rb, line 8</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">bucket_object_exists?</span>(<span class="ruby-identifier">key</span>)&#x000A;    <span class="ruby-constant">AWS</span><span class="ruby-operator">::</span><span class="ruby-constant">S3</span><span class="ruby-operator">::</span><span class="ruby-constant">S3Object</span>.<span class="ruby-identifier">exists?</span> <span class="ruby-identifier">key</span>, <span class="ruby-keyword kw">self</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000706'>
-                <a name='M000706'>      </a>
+              <div class='public-instance method' id='method-M000714'>
+                <a name='M000714'>      </a>
                 <div class='synopsis'>
                   <span class='name'>bucket_objects</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000706-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000714-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000706-source'><span class="ruby-comment cmt"># File lib/poolparty/modules/s3_string.rb, line 2</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">bucket_objects</span>&#x000A;    <span class="ruby-constant">AWS</span><span class="ruby-operator">::</span><span class="ruby-constant">S3</span><span class="ruby-operator">::</span><span class="ruby-constant">Bucket</span>.<span class="ruby-identifier">objects</span>(<span class="ruby-keyword kw">self</span>)&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000714-source'><span class="ruby-comment cmt"># File lib/poolparty/modules/s3_string.rb, line 2</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">bucket_objects</span>&#x000A;    <span class="ruby-constant">AWS</span><span class="ruby-operator">::</span><span class="ruby-constant">S3</span><span class="ruby-operator">::</span><span class="ruby-constant">Bucket</span>.<span class="ruby-identifier">objects</span>(<span class="ruby-keyword kw">self</span>)&#x000A;  <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000712'>
-                <a name='M000712'>      </a>
+              <div class='public-instance method' id='method-M000720'>
+                <a name='M000720'>      </a>
                 <div class='synopsis'>
                   <span class='name'>delete_bucket</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000712-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000720-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000712-source'><span class="ruby-comment cmt"># File lib/poolparty/modules/s3_string.rb, line 25</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">delete_bucket</span>&#x000A;    <span class="ruby-constant">AWS</span><span class="ruby-operator">::</span><span class="ruby-constant">S3</span><span class="ruby-operator">::</span><span class="ruby-constant">Bucket</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-keyword kw">self</span>, <span class="ruby-identifier">:force</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">true</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">bucket_exists?</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000720-source'><span class="ruby-comment cmt"># File lib/poolparty/modules/s3_string.rb, line 25</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">delete_bucket</span>&#x000A;    <span class="ruby-constant">AWS</span><span class="ruby-operator">::</span><span class="ruby-constant">S3</span><span class="ruby-operator">::</span><span class="ruby-constant">Bucket</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-keyword kw">self</span>, <span class="ruby-identifier">:force</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">true</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">bucket_exists?</span>&#x000A;  <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000710'>
-                <a name='M000710'>      </a>
+              <div class='public-instance method' id='method-M000718'>
+                <a name='M000718'>      </a>
                 <div class='synopsis'>
                   <span class='name'>delete_bucket_value</span>
                   <span class='arguments'>(key)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000710-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000718-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000710-source'><span class="ruby-comment cmt"># File lib/poolparty/modules/s3_string.rb, line 14</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">delete_bucket_value</span>(<span class="ruby-identifier">key</span>)&#x000A;    <span class="ruby-constant">AWS</span><span class="ruby-operator">::</span><span class="ruby-constant">S3</span><span class="ruby-operator">::</span><span class="ruby-constant">S3Object</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">key</span>, <span class="ruby-keyword kw">self</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">bucket_object_exists?</span>(<span class="ruby-identifier">key</span>)&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000718-source'><span class="ruby-comment cmt"># File lib/poolparty/modules/s3_string.rb, line 14</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">delete_bucket_value</span>(<span class="ruby-identifier">key</span>)&#x000A;    <span class="ruby-constant">AWS</span><span class="ruby-operator">::</span><span class="ruby-constant">S3</span><span class="ruby-operator">::</span><span class="ruby-constant">S3Object</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">key</span>, <span class="ruby-keyword kw">self</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">bucket_object_exists?</span>(<span class="ruby-identifier">key</span>)&#x000A;  <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000709'>
-                <a name='M000709'>      </a>
+              <div class='public-instance method' id='method-M000717'>
+                <a name='M000717'>      </a>
                 <div class='synopsis'>
                   <span class='name'>store_bucket_value</span>
                   <span class='arguments'>(key, data)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000709-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000717-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000709-source'><span class="ruby-comment cmt"># File lib/poolparty/modules/s3_string.rb, line 11</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_bucket_value</span>(<span class="ruby-identifier">key</span>, <span class="ruby-identifier">data</span>)&#x000A;    <span class="ruby-constant">AWS</span><span class="ruby-operator">::</span><span class="ruby-constant">S3</span><span class="ruby-operator">::</span><span class="ruby-constant">S3Object</span>.<span class="ruby-identifier">store</span> <span class="ruby-identifier">key</span>, <span class="ruby-identifier">data</span>, <span class="ruby-keyword kw">self</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">bucket_object_exists?</span>(<span class="ruby-identifier">key</span>)&#x000A;  <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000717-source'><span class="ruby-comment cmt"># File lib/poolparty/modules/s3_string.rb, line 11</span>&#x000A;  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_bucket_value</span>(<span class="ruby-identifier">key</span>, <span class="ruby-identifier">data</span>)&#x000A;    <span class="ruby-constant">AWS</span><span class="ruby-operator">::</span><span class="ruby-constant">S3</span><span class="ruby-operator">::</span><span class="ruby-constant">S3Object</span>.<span class="ruby-identifier">store</span> <span class="ruby-identifier">key</span>, <span class="ruby-identifier">data</span>, <span class="ruby-keyword kw">self</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">bucket_object_exists?</span>(<span class="ruby-identifier">key</span>)&#x000A;  <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

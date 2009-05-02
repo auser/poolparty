@@ -41,44 +41,44 @@
             <h2>Methods</h2>
             <h3>public class</h3>
             <ol>
-              <li><a href="#M000276">available_binaries_for</a></li>
-              <li><a href="#M000277">binary_directory</a></li>
-              <li><a href="#M000279">daemonize</a></li>
-              <li><a href="#M000278">get_existing_spec_location</a></li>
-              <li><a href="#M000275">list_binaries_for</a></li>
+              <li><a href="#M000278">available_binaries_for</a></li>
+              <li><a href="#M000279">binary_directory</a></li>
+              <li><a href="#M000281">daemonize</a></li>
+              <li><a href="#M000280">get_existing_spec_location</a></li>
+              <li><a href="#M000277">list_binaries_for</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public class methods</h2>
-              <div class='public-class method' id='method-M000276'>
-                <a name='M000276'>      </a>
+              <div class='public-class method' id='method-M000278'>
+                <a name='M000278'>      </a>
                 <div class='synopsis'>
                   <span class='name'>available_binaries_for</span>
                   <span class='arguments'>(ty=&quot;pool&quot;)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000276-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000278-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000276-source'><span class="ruby-comment cmt"># File lib/poolparty/helpers/binary.rb, line 41</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">available_binaries_for</span>(<span class="ruby-identifier">ty</span>=<span class="ruby-value str">&quot;pool&quot;</span>)&#x000A;        <span class="ruby-constant">Dir</span>[<span class="ruby-node">&quot;#{binary_directory}/#{ty}-*&quot;</span>].<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">a</span><span class="ruby-operator">|</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">basename</span>(<span class="ruby-identifier">a</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-node">/#{ty}-/</span>, <span class="ruby-value str">''</span>)) }.<span class="ruby-identifier">sort</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000278-source'><span class="ruby-comment cmt"># File lib/poolparty/helpers/binary.rb, line 41</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">available_binaries_for</span>(<span class="ruby-identifier">ty</span>=<span class="ruby-value str">&quot;pool&quot;</span>)&#x000A;        <span class="ruby-constant">Dir</span>[<span class="ruby-node">&quot;#{binary_directory}/#{ty}-*&quot;</span>].<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">a</span><span class="ruby-operator">|</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">basename</span>(<span class="ruby-identifier">a</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-node">/#{ty}-/</span>, <span class="ruby-value str">''</span>)) }.<span class="ruby-identifier">sort</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-class method' id='method-M000277'>
-                <a name='M000277'>      </a>
+              <div class='public-class method' id='method-M000279'>
+                <a name='M000279'>      </a>
                 <div class='synopsis'>
                   <span class='name'>binary_directory</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000277-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000279-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000277-source'><span class="ruby-comment cmt"># File lib/poolparty/helpers/binary.rb, line 44</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">binary_directory</span>&#x000A;        <span class="ruby-node">&quot;#{::File.dirname(__FILE__)}/../../../bin&quot;</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000279-source'><span class="ruby-comment cmt"># File lib/poolparty/helpers/binary.rb, line 44</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">binary_directory</span>&#x000A;        <span class="ruby-node">&quot;#{::File.dirname(__FILE__)}/../../../bin&quot;</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-class method' id='method-M000279'>
-                <a name='M000279'>      </a>
+              <div class='public-class method' id='method-M000281'>
+                <a name='M000281'>      </a>
                 <div class='synopsis'>
                   <span class='name'>daemonize</span>
                   <span class='arguments'>(&amp;block)</span>
@@ -89,14 +89,14 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000279-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000281-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000279-source'><span class="ruby-comment cmt"># File lib/poolparty/helpers/binary.rb, line 63</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">daemonize</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-constant">Daemonize</span>.<span class="ruby-identifier">daemonize</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000281-source'><span class="ruby-comment cmt"># File lib/poolparty/helpers/binary.rb, line 63</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">daemonize</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-constant">Daemonize</span>.<span class="ruby-identifier">daemonize</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-class method' id='method-M000278'>
-                <a name='M000278'>      </a>
+              <div class='public-class method' id='method-M000280'>
+                <a name='M000280'>      </a>
                 <div class='synopsis'>
                   <span class='name'>get_existing_spec_location</span>
                   <span class='arguments'>()</span>
@@ -108,23 +108,23 @@
                   </p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000278-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000280-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000278-source'><span class="ruby-comment cmt"># File lib/poolparty/helpers/binary.rb, line 49</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_existing_spec_location</span>&#x000A;        [ &#x000A;          <span class="ruby-node">&quot;#{Dir.pwd}/#{Default.default_specfile_name}&quot;</span>,&#x000A;          <span class="ruby-constant">Dir</span>[<span class="ruby-node">&quot;#{Dir.pwd}/*/#{Default.default_specfile_name}&quot;</span>],&#x000A;          <span class="ruby-node">&quot;#{Default.remote_storage_path}/#{Default.default_specfile_name}&quot;</span>, &#x000A;          <span class="ruby-node">&quot;#{Default.default_specfile_name}&quot;</span>,            &#x000A;          <span class="ruby-node">&quot;#{Default.base_config_directory}/#{Default.default_specfile_name}&quot;</span>,&#x000A;          <span class="ruby-node">&quot;#{Default.poolparty_home_path}/#{Default.default_specfile_name}&quot;</span>,          &#x000A;          <span class="ruby-constant">ENV</span>[<span class="ruby-value str">&quot;POOL_SPEC&quot;</span>]&#x000A;        ].<span class="ruby-identifier">flatten</span>.<span class="ruby-identifier">reject</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">a</span><span class="ruby-operator">|</span> <span class="ruby-identifier">a</span>.<span class="ruby-identifier">nil?</span>}.<span class="ruby-identifier">reject</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-identifier">f</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">readable?</span>(<span class="ruby-identifier">f</span>)&#x000A;        <span class="ruby-keyword kw">end</span>.<span class="ruby-identifier">first</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000280-source'><span class="ruby-comment cmt"># File lib/poolparty/helpers/binary.rb, line 49</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_existing_spec_location</span>&#x000A;        [ &#x000A;          <span class="ruby-node">&quot;#{Dir.pwd}/#{Default.default_specfile_name}&quot;</span>,&#x000A;          <span class="ruby-constant">Dir</span>[<span class="ruby-node">&quot;#{Dir.pwd}/*/#{Default.default_specfile_name}&quot;</span>],&#x000A;          <span class="ruby-node">&quot;#{Default.remote_storage_path}/#{Default.default_specfile_name}&quot;</span>, &#x000A;          <span class="ruby-node">&quot;#{Default.default_specfile_name}&quot;</span>,            &#x000A;          <span class="ruby-node">&quot;#{Default.base_config_directory}/#{Default.default_specfile_name}&quot;</span>,&#x000A;          <span class="ruby-node">&quot;#{Default.poolparty_home_path}/#{Default.default_specfile_name}&quot;</span>,          &#x000A;          <span class="ruby-constant">ENV</span>[<span class="ruby-value str">&quot;POOL_SPEC&quot;</span>]&#x000A;        ].<span class="ruby-identifier">flatten</span>.<span class="ruby-identifier">reject</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">a</span><span class="ruby-operator">|</span> <span class="ruby-identifier">a</span>.<span class="ruby-identifier">nil?</span>}.<span class="ruby-identifier">reject</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-identifier">f</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">readable?</span>(<span class="ruby-identifier">f</span>)&#x000A;        <span class="ruby-keyword kw">end</span>.<span class="ruby-identifier">first</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-class method' id='method-M000275'>
-                <a name='M000275'>      </a>
+              <div class='public-class method' id='method-M000277'>
+                <a name='M000277'>      </a>
                 <div class='synopsis'>
                   <span class='name'>list_binaries_for</span>
                   <span class='arguments'>(ty=&quot;pool&quot;)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000275-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000277-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000275-source'><span class="ruby-comment cmt"># File lib/poolparty/helpers/binary.rb, line 38</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">list_binaries_for</span>(<span class="ruby-identifier">ty</span>=<span class="ruby-value str">&quot;pool&quot;</span>)&#x000A;        <span class="ruby-identifier">available_binaries_for</span>(<span class="ruby-identifier">ty</span>).<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot;, &quot;</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000277-source'><span class="ruby-comment cmt"># File lib/poolparty/helpers/binary.rb, line 38</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">list_binaries_for</span>(<span class="ruby-identifier">ty</span>=<span class="ruby-value str">&quot;pool&quot;</span>)&#x000A;        <span class="ruby-identifier">available_binaries_for</span>(<span class="ruby-identifier">ty</span>).<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot;, &quot;</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

@@ -83,79 +83,79 @@
             <h2>Methods</h2>
             <h3>public instance</h3>
             <ol>
-              <li><a href="#M000365">absent</a></li>
-              <li><a href="#M000366">after_create</a></li>
-              <li><a href="#M000363">loaded</a></li>
-              <li><a href="#M000367">method_missing</a></li>
-              <li><a href="#M000364">present</a></li>
+              <li><a href="#M000376">absent</a></li>
+              <li><a href="#M000377">after_create</a></li>
+              <li><a href="#M000374">loaded</a></li>
+              <li><a href="#M000378">method_missing</a></li>
+              <li><a href="#M000375">present</a></li>
             </ol>
           </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000365'>
-                <a name='M000365'>      </a>
+              <div class='public-instance method' id='method-M000376'>
+                <a name='M000376'>      </a>
                 <div class='synopsis'>
                   <span class='name'>absent</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000365-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000376-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000365-source'><span class="ruby-comment cmt"># File lib/poolparty/resources/file.rb, line 42</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">absent</span>&#x000A;        <span class="ruby-identifier">:delete</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000376-source'><span class="ruby-comment cmt"># File lib/poolparty/resources/file.rb, line 42</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">absent</span>&#x000A;        <span class="ruby-identifier">:delete</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000366'>
-                <a name='M000366'>      </a>
+              <div class='public-instance method' id='method-M000377'>
+                <a name='M000377'>      </a>
                 <div class='synopsis'>
                   <span class='name'>after_create</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000366-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000377-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000366-source'><span class="ruby-comment cmt"># File lib/poolparty/resources/file.rb, line 46</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">after_create</span>&#x000A;        <span class="ruby-identifier">run_render</span> = <span class="ruby-identifier">dsl_options</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">:render_as</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">dsl_options</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:render_as</span>) <span class="ruby-operator">:</span> <span class="ruby-keyword kw">false</span>&#x000A;        &#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">dsl_options</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">:template</span>)          &#x000A;          <span class="ruby-identifier">filename</span> = <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">dsl_options</span>.<span class="ruby-identifier">template</span>)&#x000A;          <span class="ruby-identifier">dsl_options</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:template</span>)&#x000A;          <span class="ruby-identifier">file</span> = <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">basename</span>( <span class="ruby-identifier">filename</span> )&#x000A;          <span class="ruby-identifier">raise</span> <span class="ruby-constant">TemplateNotFound</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value str">&quot;no template given&quot;</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">file</span>&#x000A;&#x000A;          <span class="ruby-identifier">template_opts</span> = (<span class="ruby-identifier">parent</span> <span class="ruby-value">? </span><span class="ruby-identifier">options</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">parent</span>.<span class="ruby-identifier">options</span>) <span class="ruby-operator">:</span> <span class="ruby-identifier">options</span>)&#x000A;          <span class="ruby-identifier">options</span>.<span class="ruby-identifier">merge!</span>(<span class="ruby-identifier">:content</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">run_render</span> <span class="ruby-value">? </span><span class="ruby-constant">Template</span>.<span class="ruby-identifier">compile_file</span>(<span class="ruby-identifier">filename</span>, <span class="ruby-identifier">template_opts</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">:renderer</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">run_render</span>)).<span class="ruby-identifier">gsub</span>(<span class="ruby-value str">&quot;\&quot;&quot;</span>, <span class="ruby-value str">&quot;\&quot;&quot;</span>) <span class="ruby-operator">:</span> <span class="ruby-identifier">open</span>(<span class="ruby-identifier">filename</span>).<span class="ruby-identifier">read</span>)&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;        &#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">dsl_options</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">:content</span>)&#x000A;          <span class="ruby-identifier">cont</span> = <span class="ruby-identifier">dsl_options</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:content</span>)&#x000A;          <span class="ruby-identifier">template_opts</span> = (<span class="ruby-identifier">parent</span> <span class="ruby-value">? </span><span class="ruby-identifier">options</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">parent</span>.<span class="ruby-identifier">options</span>) <span class="ruby-operator">:</span> <span class="ruby-identifier">options</span>).<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">:renderer</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">run_render</span>)&#x000A;          <span class="ruby-identifier">options</span>.<span class="ruby-identifier">merge!</span>(<span class="ruby-identifier">:content</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">run_render</span> <span class="ruby-value">? </span><span class="ruby-constant">Template</span>.<span class="ruby-identifier">compile_string</span>(<span class="ruby-identifier">cont</span>, <span class="ruby-identifier">template_opts</span>) <span class="ruby-operator">:</span> <span class="ruby-identifier">cont</span>)&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000377-source'><span class="ruby-comment cmt"># File lib/poolparty/resources/file.rb, line 46</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">after_create</span>&#x000A;        <span class="ruby-identifier">run_render</span> = <span class="ruby-identifier">dsl_options</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">:render_as</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">dsl_options</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:render_as</span>) <span class="ruby-operator">:</span> <span class="ruby-keyword kw">false</span>&#x000A;        &#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">dsl_options</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">:template</span>)          &#x000A;          <span class="ruby-identifier">filename</span> = <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">dsl_options</span>.<span class="ruby-identifier">template</span>)&#x000A;          <span class="ruby-identifier">dsl_options</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:template</span>)&#x000A;          <span class="ruby-identifier">file</span> = <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">basename</span>( <span class="ruby-identifier">filename</span> )&#x000A;          <span class="ruby-identifier">raise</span> <span class="ruby-constant">TemplateNotFound</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value str">&quot;no template given&quot;</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">file</span>&#x000A;&#x000A;          <span class="ruby-identifier">template_opts</span> = (<span class="ruby-identifier">parent</span> <span class="ruby-value">? </span><span class="ruby-identifier">options</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">parent</span>.<span class="ruby-identifier">options</span>) <span class="ruby-operator">:</span> <span class="ruby-identifier">options</span>)&#x000A;          <span class="ruby-identifier">options</span>.<span class="ruby-identifier">merge!</span>(<span class="ruby-identifier">:content</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">run_render</span> <span class="ruby-value">? </span><span class="ruby-constant">Template</span>.<span class="ruby-identifier">compile_file</span>(<span class="ruby-identifier">filename</span>, <span class="ruby-identifier">template_opts</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">:renderer</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">run_render</span>)).<span class="ruby-identifier">gsub</span>(<span class="ruby-value str">&quot;\&quot;&quot;</span>, <span class="ruby-value str">&quot;\&quot;&quot;</span>) <span class="ruby-operator">:</span> <span class="ruby-identifier">open</span>(<span class="ruby-identifier">filename</span>).<span class="ruby-identifier">read</span>)&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;        &#x000A;        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">dsl_options</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">:content</span>)&#x000A;          <span class="ruby-identifier">cont</span> = <span class="ruby-identifier">dsl_options</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:content</span>)&#x000A;          <span class="ruby-identifier">template_opts</span> = (<span class="ruby-identifier">parent</span> <span class="ruby-value">? </span><span class="ruby-identifier">options</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">parent</span>.<span class="ruby-identifier">options</span>) <span class="ruby-operator">:</span> <span class="ruby-identifier">options</span>).<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">:renderer</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">run_render</span>)&#x000A;          <span class="ruby-identifier">options</span>.<span class="ruby-identifier">merge!</span>(<span class="ruby-identifier">:content</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">run_render</span> <span class="ruby-value">? </span><span class="ruby-constant">Template</span>.<span class="ruby-identifier">compile_string</span>(<span class="ruby-identifier">cont</span>, <span class="ruby-identifier">template_opts</span>) <span class="ruby-operator">:</span> <span class="ruby-identifier">cont</span>)&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000363'>
-                <a name='M000363'>      </a>
+              <div class='public-instance method' id='method-M000374'>
+                <a name='M000374'>      </a>
                 <div class='synopsis'>
                   <span class='name'>loaded</span>
                   <span class='arguments'>(o={}, &amp;block)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000363-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000374-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000363-source'><span class="ruby-comment cmt"># File lib/poolparty/resources/file.rb, line 34</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">loaded</span>(<span class="ruby-identifier">o</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-identifier">parent</span>.<span class="ruby-identifier">has_directory</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">dirname</span>(<span class="ruby-identifier">name</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">parent</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000374-source'><span class="ruby-comment cmt"># File lib/poolparty/resources/file.rb, line 34</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">loaded</span>(<span class="ruby-identifier">o</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-identifier">parent</span>.<span class="ruby-identifier">has_directory</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">dirname</span>(<span class="ruby-identifier">name</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">parent</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000367'>
-                <a name='M000367'>      </a>
+              <div class='public-instance method' id='method-M000378'>
+                <a name='M000378'>      </a>
                 <div class='synopsis'>
                   <span class='name'>method_missing</span>
                   <span class='arguments'>(m, *a, &amp;block)</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000367-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000378-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000367-source'><span class="ruby-comment cmt"># File lib/poolparty/resources/file.rb, line 66</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">method_missing</span> <span class="ruby-identifier">m</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>&#x000A;        <span class="ruby-keyword kw">super</span> <span class="ruby-keyword kw">rescue</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">m</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000378-source'><span class="ruby-comment cmt"># File lib/poolparty/resources/file.rb, line 66</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">method_missing</span> <span class="ruby-identifier">m</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>&#x000A;        <span class="ruby-keyword kw">super</span> <span class="ruby-keyword kw">rescue</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">m</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
-              <div class='public-instance method' id='method-M000364'>
-                <a name='M000364'>      </a>
+              <div class='public-instance method' id='method-M000375'>
+                <a name='M000375'>      </a>
                 <div class='synopsis'>
                   <span class='name'>present</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000364-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000375-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000364-source'><span class="ruby-comment cmt"># File lib/poolparty/resources/file.rb, line 38</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">present</span>&#x000A;        <span class="ruby-identifier">:create</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000375-source'><span class="ruby-comment cmt"># File lib/poolparty/resources/file.rb, line 38</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">present</span>&#x000A;        <span class="ruby-identifier">:create</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>

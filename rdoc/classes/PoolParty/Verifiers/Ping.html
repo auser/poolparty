@@ -50,6 +50,7 @@
             <h3>public instance</h3>
             <ol>
               <li><a href="#M000288">passing?</a></li>
+              <li><a href="#M000289">to_s</a></li>
             </ol>
           </div>
           <div id='context'>
@@ -85,7 +86,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000287-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000287-source'><span class="ruby-comment cmt"># File lib/poolparty/verification/verifiers/ping.rb, line 8</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">port</span>=<span class="ruby-value">80</span>)&#x000A;        <span class="ruby-ivar">@port</span> = <span class="ruby-identifier">port</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000287-source'><span class="ruby-comment cmt"># File lib/poolparty/verification/verifiers/ping.rb, line 20</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">port</span>=<span class="ruby-value">80</span>)&#x000A;        <span class="ruby-ivar">@port</span> = <span class="ruby-identifier">port</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
               <h2>Public instance methods</h2>
@@ -99,7 +100,20 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('M000288-source'); return false">
                     [show source]
                   </a>
-                  <pre id='M000288-source'><span class="ruby-comment cmt"># File lib/poolparty/verification/verifiers/ping.rb, line 11</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">passing?</span>&#x000A;        <span class="ruby-identifier">ping_port</span>(<span class="ruby-identifier">host</span>, <span class="ruby-identifier">port</span>, <span class="ruby-value">3</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                  <pre id='M000288-source'><span class="ruby-comment cmt"># File lib/poolparty/verification/verifiers/ping.rb, line 23</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">passing?</span>&#x000A;        <span class="ruby-identifier">ping_port</span>(<span class="ruby-identifier">host</span>, <span class="ruby-identifier">port</span>, <span class="ruby-value">3</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+              <div class='public-instance method' id='method-M000289'>
+                <a name='M000289'>      </a>
+                <div class='synopsis'>
+                  <span class='name'>to_s</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('M000289-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='M000289-source'><span class="ruby-comment cmt"># File lib/poolparty/verification/verifiers/ping.rb, line 27</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_s</span>&#x000A;        <span class="ruby-node">&quot;&lt;#{self.class.to_s} host:#{host} port:#{port}&gt;&quot;</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
                 </div>
               </div>
             </div>
