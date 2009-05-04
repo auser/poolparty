@@ -55,6 +55,7 @@ module PoolParty
       lowercase_class_name = subclass.to_s.underscore.downcase || subclass.downcase
       
       (services[lowercase_class_name.to_sym] ||= []) << serv if serv && !serv.empty?
+      ordered_resources << serv
       # services.merge!({lowercase_class_name.to_sym => serv})
     end
     # Container for the services

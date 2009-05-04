@@ -68,7 +68,7 @@ $_poolparty_load_directories = [
   "exceptions",
   'poolparty/key.rb',
   "dependency_resolver",
-  "aska",
+  "aska.rb",
   "config",
   "monitors/monitor_rack",
   "capistrano.rb",
