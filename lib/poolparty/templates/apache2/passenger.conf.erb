@@ -1,0 +1,20 @@
+Listen <%= port %>
+<VirtualHost *:<%= port %>>
+    ServerName <%= virtualhost_name %>
+    DocumentRoot <%= "/var/www/#{virtualhost_name}/public" %>
+</VirtualHost>
+
+<% if ssl_enabled == "true" %>
+Listen 443
+NameVirtualHost *:443
+<VirtualHost *:443>
+    ServerName <%= virtualhost_name %>
+    DocumentRoot /var/www/<%= virtualhost_name -%>/public
+    ErrorLog /var/www/<%= virtualhost_name -%>/log/error_log
+    CustomLog /var/www/<%= virtualhost_name -%>/log/access_log common
+    SSLEngine on
+    SSLOptions +StrictRequire
+    SSLCertificateFile <%= ssl_cert_file %>
+    SSLCertificateKeyFile <%= ssl_private_key_file %>
+</VirtualHost>
+<% end %>

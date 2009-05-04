@@ -1,0 +1,20 @@
+##
+## Server-Pool Size Regulation (MPM specific)
+## 
+
+# worker MPM
+# StartServers: initial number of server processes to start
+# MaxClients: maximum number of simultaneous client connections
+# MinSpareThreads: minimum number of worker threads which are kept spare
+# MaxSpareThreads: maximum number of worker threads which are kept spare
+# ThreadsPerChild: constant number of worker threads in each server process
+# MaxRequestsPerChild: maximum number of requests a server process serves
+<IfModule mpm_worker_module>
+    StartServers          5
+    MaxClients          300
+    MinSpareThreads      25
+    MaxSpareThreads      75 
+    ThreadsPerChild      25
+    MaxRequestsPerChild   0
+</IfModule>
+

@@ -1,0 +1,19 @@
+# create a virtual host which provides statistics
+ExtendedStatus on
+NameVirtualHost <%= 127.0.0.1 %>
+<VirtualHost <%= 127.0.0.1 %>>
+	# hide this a little bit from "normal" accesses
+	# This expects that external users only use the fqdn to access a service
+	ServerName <%= hostname %>
+	<Directory />
+		Order deny,allow
+		Deny from all
+	</Directory>
+	<Location /server-status>
+		SetHandler server-status
+		Order deny,allow
+		Deny from all
+		Allow from <%= 127.0.0.1 %>
+	</Location>
+</VirtualHost>
+

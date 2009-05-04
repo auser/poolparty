@@ -1,0 +1,42 @@
+#
+# LogLevel: Control the number of messages logged to the error_log.
+# Possible values include: debug, info, notice, warn, error, crit,
+# alert, emerg.
+#
+LogLevel warn
+
+#
+# ErrorLog: The location of the error log file.
+# If you do not specify an ErrorLog directive within a <VirtualHost>
+# container, error messages relating to that virtual host will be
+# logged here.  If you *do* define an error logfile for a <VirtualHost>
+# container, that host's errors will be logged there and not here.
+#
+ErrorLog syslog:local7
+
+#
+# The following directives define some format nicknames for use with
+# a CustomLog directive (see below).
+#
+# NOTE: using %a instead of %h seems to save a full DNS lookup for every
+# connection...
+#
+LogFormat "%a %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" combined
+LogFormat "%a %l %u %t \"%r\" %>s %b" common
+LogFormat "%{Referer}i -> %U" referer
+LogFormat "%{User-agent}i" agent
+
+#
+# This will send the access log messages to syslog
+#
+CustomLog "|/usr/bin/logger -p local7.info -t apache" combined
+
+#
+# The BufferedLogs directive causes mod_log_config to store several log 
+# entries in memory and write them together to disk, rather than writing 
+# them after each request. On some systems, this may result in more 
+# efficient disk access and hence higher performance. It may be set only 
+# once for the entire server; it cannot be configured per virtual-host.
+# This directive is experimental and should be used with caution.
+
+BufferedLogs On
