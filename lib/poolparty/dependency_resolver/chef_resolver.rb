@@ -176,6 +176,8 @@ module PoolParty
     
     # Take the keys from the resource hash and turn them into chef-like
     # meaningful keys. This is how helpers are created for chef
+    # 
+    # * <tt>reloads</tt> - todo
     def to_chef_key(key)
       case key
       when :ensures
@@ -203,6 +205,7 @@ module PoolParty
     
     # Resolve the value of the resource hash into a meaningful chef
     # value. Resources are turned into resource strings here
+    #
     def to_option_string(obj)
       case obj
       when PoolParty::Resources::Resource
