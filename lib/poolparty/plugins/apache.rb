@@ -1,16 +1,28 @@
 module PoolParty
   class Base
 
+=begin rdoc
+Install Apache2 and make various helpers accessible.
+
+NOTE: this will not install a virtual host by default, *including* a default
+host. This means apache will not start up unless you specify at least the
+default host. 
+
+=end
+
     plugin :apache do
       def loaded(opts={}, &block)        
-        install
+          has_service("apache2", :requires => get_package("apache2"))
       end
 
       def enable
       end
+
+      def before_load(o={}, &block)
+        install
+      end
             
       def install
-        puts "Calling install in apache"
         installed_as_worker
       end
       
@@ -19,33 +31,25 @@ module PoolParty
       #   enable_passenger
       # end# }}}
       
-      def base_install        
-        unless @base_install
-          has_exec({:name => "restart-apache2", :command => "/etc/init.d/apache2 restart"})
-          has_exec({:name => "reload-apache2", :command => "/etc/init.d/apache2 reload"})
-          has_exec({:name => "force-reload-apache2", :command => "/etc/init.d/apache2 force-reload"})
-
-          configs
-          @base_install = true
-        end
-      end
-
       def installed_as_worker            
         unless @installed_as_worker
           has_package("apache2")
           has_package("apache2-mpm-worker")
-          has_service("apache2") do
-            requires get_package("apache2")
-          end
-
-          # Should clean this up
-          # does_not_have_package(:name => "apache2-mpm-event")
-          # does_not_have_package(:name => "apache2-mpm-perchild")
-          # does_not_have_package(:name => "apache2-mpm-prefork")
 
           base_install
           @installed_as_worker = true
         end            
+      end
+
+      def base_install        
+        unless @base_install
+          has_exec({:name => "restart-apache2", :command => "/etc/init.d/apache2 restart", :action => :nothing})
+          has_exec({:name => "reload-apache2", :command => "/etc/init.d/apache2 reload", :action => :nothing})
+          has_exec({:name => "force-reload-apache2", :command => "/etc/init.d/apache2 force-reload", :action => :nothing})
+
+          configs
+          @base_install = true
+        end
       end
 
       # def enable_passenger# {{{
@@ -115,6 +119,13 @@ module PoolParty
           @configs = true
         end
       end
+
+      def enable_default
+        puts "enabling default"
+        listen 80 # assumes no haproxy
+        site "default-site", :template => File.dirname(__FILE__)/".."/:templates/:apache2/"default-site.conf.erb"
+      end
+
       
       def config(name, temp)
         has_file(:name => "/etc/apache2/conf.d/#{name}.conf") do
@@ -140,12 +151,12 @@ module PoolParty
       end
       
       def install_site(name, opts={})
-        options = opts.merge!(:name => "/etc/apache2/sites-available/#{name}", :ensures => 'present', :alias => "site-#{name}")
+        opts.merge!(:name => "/etc/apache2/sites-available/#{name}")
         has_directory(:name => "/etc/apache2/sites-available")
-        has_file(options)
-        has_exec(:command => "/usr/sbin/a2ensite #{name}", :reloads => get_exec("reload-apache2"), :requires => get_file("site-#{parent.name}")) do
+        has_file(opts)
+        has_exec(:name => "/usr/sbin/a2ensite #{name}", :reloads => get_exec("reload-apache2"), :requires => get_file("/etc/apache2/sites-available/#{name}")) do
           requires get_package("apache2")
-          if_not "/bin/sh -c \"[ -L /etc/apache2/sites-enabled/#{name} ] && [ /etc/apache2/sites-enabled/#{name} -ef /etc/apache2/sites-available/#{name} ]\""
+          if_not "/bin/sh -c '[ -L /etc/apache2/sites-enabled/#{name} ] && [ /etc/apache2/sites-enabled/#{name} -ef /etc/apache2/sites-available/#{name} ]'"
         end
       end
       
