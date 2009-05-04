@@ -176,5 +176,16 @@ class String
   def macify
     split(":").map {|a| a[0].chr == "0" ? a[1].chr : a}.join(":")
   end
+
+  ##
+  # @param o<String> The path component to join with the string.
+  #
+  # @return <String> The original path concatenated with o.
+  #
+  # @example
+  #   "merb"/"core_ext" #=> "merb/core_ext"
+  def /(o)
+    File.join(self, o.to_s)
+  end
   
 end
