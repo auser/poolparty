@@ -66,6 +66,10 @@ To write a file to the template directory, use:
       def method_missing m, *a, &block
         super rescue ::File.send(m, *a, &block)
       end
+
+      # TODO
+      def find_template(template)
+      end
       
     end
     
