@@ -96,6 +96,7 @@ default host.
       
       def configs
         unless @configs
+          listen unless @listen
           has_directory("/etc/apache2")
           has_directory("/etc/apache2/conf.d")
           has_directory("/etc/apache2/site-includes")
@@ -138,6 +139,7 @@ default host.
       
       def listen(port="8080")
         has_variable(:name => "port", :value => port)
+        @listen = true
       end
       
       def site(name, opts={})

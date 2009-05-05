@@ -11,6 +11,12 @@ module PoolParty
 
         # Restart sysklogd after we update the haproxy.log
         has_service(:name => "sysklogd")    
+
+        has_package "haproxy" do
+          # stops get_service("apache2"), :immediately
+          # starts get_service("apache2")
+        end
+
         # Template variables
         has_variable("haproxy_name", :value => "#{cloud.name}")
         has_variable("listen_ports", :value => [ "8080" ], :namespace => "apache")
@@ -31,10 +37,6 @@ module PoolParty
         # has_package "apache2"
         # has_service "apache2"
         
-        has_package "haproxy" do
-          # stops get_service("apache2"), :immediately
-          # starts get_service("apache2")
-        end
 
         has_exec "reloadhaproxy", 
           :command => "/etc/init.d/haproxy reload", 
