@@ -88,17 +88,17 @@
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000697">basename</a>&nbsp;&nbsp;
-      <a href="#M000694">content</a>&nbsp;&nbsp;
-      <a href="#M000701">each</a>&nbsp;&nbsp;
-      <a href="#M000693">exists?</a>&nbsp;&nbsp;
-      <a href="#M000698">filename</a>&nbsp;&nbsp;
-      <a href="#M000695">full_filepath</a>&nbsp;&nbsp;
-      <a href="#M000700">keypair_paths</a>&nbsp;&nbsp;
-      <a href="#M000692">new</a>&nbsp;&nbsp;
-      <a href="#M000699">search_in_known_locations</a>&nbsp;&nbsp;
-      <a href="#M000702">to_json</a>&nbsp;&nbsp;
-      <a href="#M000696">to_s</a>&nbsp;&nbsp;
+      <a href="#M000698">basename</a>&nbsp;&nbsp;
+      <a href="#M000695">content</a>&nbsp;&nbsp;
+      <a href="#M000702">each</a>&nbsp;&nbsp;
+      <a href="#M000694">exists?</a>&nbsp;&nbsp;
+      <a href="#M000699">filename</a>&nbsp;&nbsp;
+      <a href="#M000696">full_filepath</a>&nbsp;&nbsp;
+      <a href="#M000701">keypair_paths</a>&nbsp;&nbsp;
+      <a href="#M000693">new</a>&nbsp;&nbsp;
+      <a href="#M000700">search_in_known_locations</a>&nbsp;&nbsp;
+      <a href="#M000703">to_json</a>&nbsp;&nbsp;
+      <a href="#M000697">to_s</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -133,11 +133,11 @@
     <div id="methods">
       <h3 class="section-bar">Public Class methods</h3>
 
-      <div id="method-M000700" class="method-detail">
-        <a name="M000700"></a>
+      <div id="method-M000701" class="method-detail">
+        <a name="M000701"></a>
 
         <div class="method-heading">
-          <a href="#M000700" class="method-signature">
+          <a href="#M000701" class="method-signature">
           <span class="method-name">keypair_paths</span><span class="method-args">()</span>
           </a>
         </div>
@@ -147,8 +147,8 @@
 <a href="Default.html">Default</a> locations to search for the key
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000700-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000700-source">
+            onclick="toggleCode('M000701-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000701-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/poolparty/key.rb, line 55</span>
     <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">keypair_paths</span>
@@ -167,23 +167,23 @@
         </div>
       </div>
 
-      <div id="method-M000692" class="method-detail">
-        <a name="M000692"></a>
+      <div id="method-M000693" class="method-detail">
+        <a name="M000693"></a>
 
         <div class="method-heading">
-          <a href="#M000692" class="method-signature">
+          <a href="#M000693" class="method-signature">
           <span class="method-name">new</span><span class="method-args">(fpath=nil)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Create a <a href="Key.html#M000692">new</a> key that defaults to id_rsa as
+Create a <a href="Key.html#M000693">new</a> key that defaults to id_rsa as
 the name.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000692-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000692-source">
+            onclick="toggleCode('M000693-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000693-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/poolparty/key.rb, line 10</span>
     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">fpath</span>=<span class="ruby-keyword kw">nil</span>)
@@ -196,11 +196,11 @@ the name.
 
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000697" class="method-detail">
-        <a name="M000697"></a>
+      <div id="method-M000698" class="method-detail">
+        <a name="M000698"></a>
 
         <div class="method-heading">
-          <a href="#M000697" class="method-signature">
+          <a href="#M000698" class="method-signature">
           <span class="method-name">basename</span><span class="method-args">()</span>
           </a>
         </div>
@@ -210,117 +210,12 @@ the name.
 Basename of the keypair
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000697-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000697-source">
+            onclick="toggleCode('M000698-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000698-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/poolparty/key.rb, line 32</span>
     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">basename</span>
       <span class="ruby-ivar">@basename</span> <span class="ruby-operator">||=</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">basename</span>(<span class="ruby-identifier">full_filepath</span>, <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">extname</span>(<span class="ruby-identifier">full_filepath</span>)) <span class="ruby-keyword kw">rescue</span> <span class="ruby-identifier">filepath</span>
-    <span class="ruby-keyword kw">end</span>
-</pre>
-          </div>
-        </div>
-      </div>
-
-      <div id="method-M000694" class="method-detail">
-        <a name="M000694"></a>
-
-        <div class="method-heading">
-          <a href="#M000694" class="method-signature">
-          <span class="method-name">content</span><span class="method-args">()</span>
-          </a>
-        </div>
-      
-        <div class="method-description">
-          <p>
-Read the <a href="Key.html#M000694">content</a> of the key
-</p>
-          <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000694-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000694-source">
-<pre>
-<span class="ruby-comment cmt"># File lib/poolparty/poolparty/key.rb, line 20</span>
-    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">content</span>
-      <span class="ruby-ivar">@content</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">exists?</span> <span class="ruby-value">? </span><span class="ruby-identifier">open</span>(<span class="ruby-identifier">full_filepath</span>).<span class="ruby-identifier">read</span> <span class="ruby-operator">:</span> <span class="ruby-keyword kw">nil</span>
-    <span class="ruby-keyword kw">end</span>
-</pre>
-          </div>
-        </div>
-      </div>
-
-      <div id="method-M000701" class="method-detail">
-        <a name="M000701"></a>
-
-        <div class="method-heading">
-          <a href="#M000701" class="method-signature">
-          <span class="method-name">each</span><span class="method-args">() {|full_filepath| ...}</span>
-          </a>
-        </div>
-      
-        <div class="method-description">
-          <p>
-Support to add the enumerable <a href="Key.html#M000701">each</a> to keys
-</p>
-          <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000701-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000701-source">
-<pre>
-<span class="ruby-comment cmt"># File lib/poolparty/poolparty/key.rb, line 68</span>
-    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">each</span>
-      <span class="ruby-keyword kw">yield</span> <span class="ruby-identifier">full_filepath</span>
-    <span class="ruby-keyword kw">end</span>
-</pre>
-          </div>
-        </div>
-      </div>
-
-      <div id="method-M000693" class="method-detail">
-        <a name="M000693"></a>
-
-        <div class="method-heading">
-          <a href="#M000693" class="method-signature">
-          <span class="method-name">exists?</span><span class="method-args">()</span>
-          </a>
-        </div>
-      
-        <div class="method-description">
-          <p>
-If the <a href="Key.html#M000695">full_filepath</a> is nil, then the key
-doesn&#8216;t exist
-</p>
-          <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000693-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000693-source">
-<pre>
-<span class="ruby-comment cmt"># File lib/poolparty/poolparty/key.rb, line 15</span>
-    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">exists?</span>
-      <span class="ruby-identifier">full_filepath</span> <span class="ruby-operator">!=</span> <span class="ruby-keyword kw">nil</span>
-    <span class="ruby-keyword kw">end</span>
-</pre>
-          </div>
-        </div>
-      </div>
-
-      <div id="method-M000698" class="method-detail">
-        <a name="M000698"></a>
-
-        <div class="method-heading">
-          <a href="#M000698" class="method-signature">
-          <span class="method-name">filename</span><span class="method-args">()</span>
-          </a>
-        </div>
-      
-        <div class="method-description">
-          <p>
-Just the <a href="Key.html#M000698">filename</a> of the keypair
-</p>
-          <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000698-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000698-source">
-<pre>
-<span class="ruby-comment cmt"># File lib/poolparty/poolparty/key.rb, line 37</span>
-    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">filename</span>
-      <span class="ruby-ivar">@filename</span> <span class="ruby-operator">||=</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">basename</span>(<span class="ruby-identifier">full_filepath</span>) <span class="ruby-keyword kw">rescue</span> <span class="ruby-identifier">filepath</span>
     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
@@ -332,23 +227,74 @@ Just the <a href="Key.html#M000698">filename</a> of the keypair
 
         <div class="method-heading">
           <a href="#M000695" class="method-signature">
-          <span class="method-name">full_filepath</span><span class="method-args">()</span>
+          <span class="method-name">content</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Returns the <a href="Key.html#M000695">full_filepath</a> of the key. If a
-full filepath is passed, we just return the expanded filepath for the
-keypair, otherwise query where it is against known locations
+Read the <a href="Key.html#M000695">content</a> of the key
 </p>
           <p><a class="source-toggle" href="#"
             onclick="toggleCode('M000695-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000695-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/poolparty/key.rb, line 26</span>
-    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">full_filepath</span>
-      <span class="ruby-ivar">@full_filepath</span> <span class="ruby-operator">||=</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">file?</span>(<span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">filepath</span>)) <span class="ruby-operator">?</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">filepath</span>) <span class="ruby-operator">:</span> <span class="ruby-identifier">search_in_known_locations</span>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/key.rb, line 20</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">content</span>
+      <span class="ruby-ivar">@content</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">exists?</span> <span class="ruby-value">? </span><span class="ruby-identifier">open</span>(<span class="ruby-identifier">full_filepath</span>).<span class="ruby-identifier">read</span> <span class="ruby-operator">:</span> <span class="ruby-keyword kw">nil</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000702" class="method-detail">
+        <a name="M000702"></a>
+
+        <div class="method-heading">
+          <a href="#M000702" class="method-signature">
+          <span class="method-name">each</span><span class="method-args">() {|full_filepath| ...}</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Support to add the enumerable <a href="Key.html#M000702">each</a> to keys
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000702-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000702-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/key.rb, line 68</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">each</span>
+      <span class="ruby-keyword kw">yield</span> <span class="ruby-identifier">full_filepath</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000694" class="method-detail">
+        <a name="M000694"></a>
+
+        <div class="method-heading">
+          <a href="#M000694" class="method-signature">
+          <span class="method-name">exists?</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+If the <a href="Key.html#M000696">full_filepath</a> is nil, then the key
+doesn&#8216;t exist
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000694-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000694-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/key.rb, line 15</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">exists?</span>
+      <span class="ruby-identifier">full_filepath</span> <span class="ruby-operator">!=</span> <span class="ruby-keyword kw">nil</span>
     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
@@ -360,6 +306,60 @@ keypair, otherwise query where it is against known locations
 
         <div class="method-heading">
           <a href="#M000699" class="method-signature">
+          <span class="method-name">filename</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Just the <a href="Key.html#M000699">filename</a> of the keypair
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000699-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000699-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/key.rb, line 37</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">filename</span>
+      <span class="ruby-ivar">@filename</span> <span class="ruby-operator">||=</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">basename</span>(<span class="ruby-identifier">full_filepath</span>) <span class="ruby-keyword kw">rescue</span> <span class="ruby-identifier">filepath</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000696" class="method-detail">
+        <a name="M000696"></a>
+
+        <div class="method-heading">
+          <a href="#M000696" class="method-signature">
+          <span class="method-name">full_filepath</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Returns the <a href="Key.html#M000696">full_filepath</a> of the key. If a
+full filepath is passed, we just return the expanded filepath for the
+keypair, otherwise query where it is against known locations
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000696-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000696-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/key.rb, line 26</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">full_filepath</span>
+      <span class="ruby-ivar">@full_filepath</span> <span class="ruby-operator">||=</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">file?</span>(<span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">filepath</span>)) <span class="ruby-operator">?</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">filepath</span>) <span class="ruby-operator">:</span> <span class="ruby-identifier">search_in_known_locations</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000700" class="method-detail">
+        <a name="M000700"></a>
+
+        <div class="method-heading">
+          <a href="#M000700" class="method-signature">
           <span class="method-name">search_in_known_locations</span><span class="method-args">()</span>
           </a>
         </div>
@@ -371,8 +371,8 @@ file exists. If it doesn&#8216;t exist in the default locations, then it
 returns nil and assumes we it doesn&#8216;t exist
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000699-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000699-source">
+            onclick="toggleCode('M000700-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000700-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/poolparty/key.rb, line 44</span>
     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">search_in_known_locations</span>
@@ -389,11 +389,11 @@ returns nil and assumes we it doesn&#8216;t exist
         </div>
       </div>
 
-      <div id="method-M000702" class="method-detail">
-        <a name="M000702"></a>
+      <div id="method-M000703" class="method-detail">
+        <a name="M000703"></a>
 
         <div class="method-heading">
-          <a href="#M000702" class="method-signature">
+          <a href="#M000703" class="method-signature">
           <span class="method-name">to_json</span><span class="method-args">()</span>
           </a>
         </div>
@@ -403,8 +403,8 @@ returns nil and assumes we it doesn&#8216;t exist
 Turn the keypair into the a useful json string
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000702-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000702-source">
+            onclick="toggleCode('M000703-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000703-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/poolparty/key.rb, line 73</span>
     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_json</span>
@@ -415,8 +415,8 @@ Turn the keypair into the a useful json string
         </div>
       </div>
 
-      <div id="method-M000696" class="method-detail">
-        <a name="M000696"></a>
+      <div id="method-M000697" class="method-detail">
+        <a name="M000697"></a>
 
         <div class="method-heading">
           <span class="method-name">to_s</span><span class="method-args">()</span>
@@ -424,7 +424,7 @@ Turn the keypair into the a useful json string
       
         <div class="method-description">
           <p>
-Alias for <a href="Key.html#M000695">full_filepath</a>
+Alias for <a href="Key.html#M000696">full_filepath</a>
 </p>
         </div>
       </div>

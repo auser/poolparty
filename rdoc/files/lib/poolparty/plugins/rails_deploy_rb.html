@@ -5,7 +5,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-  <title>File: service.rb</title>
+  <title>File: rails_deploy.rb</title>
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
   <meta http-equiv="Content-Script-Type" content="text/javascript" />
   <link rel="stylesheet" href="../../../.././rdoc-style.css" type="text/css" media="screen" />
@@ -47,16 +47,16 @@
 
 
   <div id="fileHeader">
-    <h1>service.rb</h1>
+    <h1>rails_deploy.rb</h1>
     <table class="header-table">
     <tr class="top-aligned-row">
       <td><strong>Path:</strong></td>
-      <td>lib/poolparty/resources/service.rb
+      <td>lib/poolparty/plugins/rails_deploy.rb
       </td>
     </tr>
     <tr class="top-aligned-row">
       <td><strong>Last Update:</strong></td>
-      <td>Mon May 04 17:50:08 -0700 2009</td>
+      <td>Mon May 04 18:20:29 -0700 2009</td>
     </tr>
     </table>
   </div>
@@ -68,6 +68,26 @@
 
   <div id="contextContent">
 
+    <div id="description">
+      <p>
+Deploy a rails application using chef_deploy
+</p>
+<p>
+Usage:
+</p>
+<pre>
+    has_rails_deploy &quot;app_name&quot; do
+      dir &quot;/var/www&quot;
+      repo &quot;git://github.com/auser/paparazzi.git&quot;
+      user &quot;www-data&quot;
+      database_yml /path/to/database.yml # or a string
+    end
+
+  Sets up the filesystem structure (similar to capistrano deploy) and uses ezra's
+  chef-deploy to deploy the application
+</pre>
+
+    </div>
 
 
    </div>
