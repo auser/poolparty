@@ -100,12 +100,6 @@ describe "Cloud" do
         end
         cloud(:paddy_wack).parent.should == pool(:knick_knack)
       end
-      it "should have services in an OrderedHash" do
-        @cloud.services.class.should == OrderedHash
-      end
-      it "should have no services (other than the base ones) in the array when there are no services defined" do
-        @cloud.services.size.should > 2
-      end
       it "should respond to a options method (from Dslify)" do
         @cloud.respond_to?(:options).should == true
       end
@@ -207,9 +201,9 @@ describe "Cloud" do
             @cloud.should_receive(:haproxy)
             @cloud.add_optional_enabled_services
           end
-          it "should have 3 resources" do            
+          it "should have at least 3 resources" do            
             @cloud.add_poolparty_base_requirements
-            @cloud.services.size.should > 2
+            @cloud.ordered_resources.size.should > 2
           end
           it "should receive add_poolparty_base_requirements before building the manifest" do
             @cloud.should_receive(:add_poolparty_base_requirements).once
@@ -241,23 +235,13 @@ describe "Cloud" do
                 stub_list_from_remote_for(@cloud)
                 @cloud.add_poolparty_base_requirements
               end
-              it "should add resources onto the heartbeat class inside the cloud" do
-                @cloud.services.size.should > 0
-              end
-              it "should store the class heartbeat" do
-                @cloud.services.keys.include?(:poolparty_base_heartbeat_class).should == true
-              end
-              it "should have an array of services on the heartbeat" do
-                @cloud.services.class.should == OrderedHash
-              end
               describe "resources" do
                 before(:each) do
                   reset!
                   @cloud8 = cloud :tester do
                     test_service
                   end
-                  @tskey = clouds[:tester].services.keys.first
-                  @service = clouds[:tester].services[@tskey].first
+                  @service = clouds[:tester].ordered_resources.select {|hsh| hsh.class == TestServiceClass }.first
                   @files = @service.resource(:file)
                 end
                 it "should have a file resource" do

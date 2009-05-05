@@ -42,7 +42,7 @@ describe "Resolution spec" do
     @cloud.keypair "bob"
     @cloud.name "dog"
     
-    (@cloud.services[:apache] ||= []) << @apache
+    (@cloud.resources[:apache] ||= []) << @apache
 
     @cloud_file_motd = DependencyResolverSpecTestResource.new
     @cloud_file_motd.name "/etc/motd"
@@ -97,7 +97,7 @@ describe "Resolution spec" do
       end
       @cloud = clouds[:dog_for_test]
       @properties = @cloud.to_properties_hash
-      @apache_key = @properties[:resources].select {|hsh| hsh[:name] =~ /apache/ }.first      
+      @apache_key = @properties[:resources].select {|hsh| hsh[:name] =~ /apache/ }.first
     end
     
     it "should have the method to_properties_hash on the cloud" do
