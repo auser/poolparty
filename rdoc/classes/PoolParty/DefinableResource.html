@@ -1,137 +1,220 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html lang='en'>
-  <head>
-    <title>: PoolParty::DefinableResource [RDoc Documentation]</title>
-    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
-    <link href='../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
-    <script type='text/javascript'>
-      //<![CDATA[
-        function popupCode(url) {
-          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
-        }
-        
-        function toggleCode(id) {
-          var code = document.getElementById(id)
-        
-          code.style.display = code.style.display != 'block' ? 'block' : 'none'
-          return true
-        }
-        
-        // Make codeblocks hidden by default
-        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
-      //]]>
-    </script>
-  </head>
-  <body class='page'>
-    <div class='class' id='wrapper'>
-      <div class='header'>
-        <h1 class='name'>
-          <span class='type'>Module</span>
-          PoolParty::DefinableResource
-        </h1>
-        <ol class='paths'>
-          <li>
-            <a href="../../files/lib/poolparty/modules/definable_resource_rb.html">lib/poolparty/modules/definable_resource.rb</a>
-          </li>
-        </ol>
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Module: PoolParty::DefinableResource</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+    <div id="classHeader">
+        <table class="header-table">
+        <tr class="top-aligned-row">
+          <td><strong>Module</strong></td>
+          <td class="class-name-in-header">PoolParty::DefinableResource</td>
+        </tr>
+        <tr class="top-aligned-row">
+            <td><strong>In:</strong></td>
+            <td>
+                <a href="../../files/lib/poolparty/modules/definable_resource_rb.html">
+                lib/poolparty/modules/definable_resource.rb
+                </a>
+        <br />
+            </td>
+        </tr>
+
+        </table>
+    </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+
+
+   </div>
+
+    <div id="method-list">
+      <h3 class="section-bar">Methods</h3>
+
+      <div class="name-list">
+      <a href="#M000205">define_resource</a>&nbsp;&nbsp;
+      <a href="#M000206">virtual_resource</a>&nbsp;&nbsp;
       </div>
-      <div id='content'>
-        <div id='text'>
-          <div id='method-list'>
-            <h2>Methods</h2>
-            <h3>public instance</h3>
-            <ol>
-              <li><a href="#M000200">define_resource</a></li>
-              <li><a href="#M000201">virtual_resource</a></li>
-            </ol>
-          </div>
-          <div id='section'>
-            <div id='methods'>
-              <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000200'>
-                <a name='M000200'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>define_resource</span>
-                  <span class='arguments'>(name, &amp;block)</span>
-                </div>
-                <div class='description'>
-                  <p>
-                  Define a new resource that can be called like any other resource Similar to
-                  any other resource (like file or exec) but you define it how you want it to
-                  work Example:
-                  </p>
-                  <p>
-                  <a href="DefinableResource.html#M000200">define_resource</a>(:line_in_file)
-                  do end
-                  </p>
-                  <p>
-                  Within the block, you can define any methods you want to run as part of the
-                  resource
-                  </p>
-                  <p>
-                  One thing to note is that this is NOT like other resources in the sense
-                  that it does not give you any extra methods like the resources do
-                  </p>
-                  <p>
-                  For example usage, see lib/poolparty/plugins/line.rb
-                  </p>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000200-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000200-source'><span class="ruby-comment cmt"># File lib/poolparty/modules/definable_resource.rb, line 18</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">define_resource</span>(<span class="ruby-identifier">name</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;      <span class="ruby-identifier">name</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">new_resource_class</span> <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <div class='public-instance method' id='method-M000201'>
-                <a name='M000201'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>virtual_resource</span>
-                  <span class='arguments'>(name=:virtual_resource, opts={}, &amp;block)</span>
-                </div>
-                <div class='description'>
-                  <p>
-                  Allow us to create virtual resources Generally, in plugins This sets a
-                  virtual resource against the Resource class Example:
-                  </p>
-                  <p>
-                  <a href="DefinableResource.html#M000201">virtual_resource</a>(:virtualhost)
-                  do end
-                  </p>
-                  <p>
-                  This defines a virtualhost as a virtual resource
-                  </p>
-                  <pre>and consequently gives the methods has_virtualhost and does_not_have_virtualhost</pre>
-                  <p>
-                  Note that you can define any resources within the virtual resource within
-                  the definition or the call. Call example: has_virtualhost do
-                  </p>
-                  <pre>name &quot;xnot.org&quot;</pre>
-                  <p>
-                  end
-                  </p>
-                  <p>
-                  Which sets the virtual host&#8217;s name as xnot.org
-                  </p>
-                  <p>
-                  An example is included in the poolparty-apache-plugin
-                  </p>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000201-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000201-source'><span class="ruby-comment cmt"># File lib/poolparty/modules/definable_resource.rb, line 43</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">virtual_resource</span>(<span class="ruby-identifier">name</span>=<span class="ruby-identifier">:virtual_resource</span>, <span class="ruby-identifier">opts</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;      <span class="ruby-identifier">symc</span> = <span class="ruby-node">&quot;#{name}&quot;</span>.<span class="ruby-identifier">top_level_class</span>.<span class="ruby-identifier">camelcase</span>&#x000A;      <span class="ruby-identifier">klass</span> = <span class="ruby-identifier">symc</span>.<span class="ruby-identifier">class_constant</span>(<span class="ruby-constant">PoolParty</span><span class="ruby-operator">::</span><span class="ruby-constant">Plugin</span><span class="ruby-operator">::</span><span class="ruby-constant">Plugin</span>, {<span class="ruby-identifier">:preserve</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">true</span>}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;      &#x000A;      <span class="ruby-constant">PoolParty</span><span class="ruby-operator">::</span><span class="ruby-constant">Service</span>.<span class="ruby-identifier">add_has_and_does_not_have_methods_for</span>(<span class="ruby-identifier">symc</span>)&#x000A;      &#x000A;      <span class="ruby-identifier">klass</span>.<span class="ruby-identifier">module_eval</span> <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">block</span>&#x000A;      <span class="ruby-identifier">klass</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-            </div>
+    </div>
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+
+
+
+
+      
+
+
+    <!-- if method_list -->
+    <div id="methods">
+      <h3 class="section-bar">Public Instance methods</h3>
+
+      <div id="method-M000205" class="method-detail">
+        <a name="M000205"></a>
+
+        <div class="method-heading">
+          <a href="#M000205" class="method-signature">
+          <span class="method-name">define_resource</span><span class="method-args">(name, &amp;block)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Define a new resource that can be called like any other resource Similar to
+any other resource (like file or exec) but you define it how you want it to
+work Example:
+</p>
+<p>
+<a href="DefinableResource.html#M000205">define_resource</a>(:line_in_file)
+do end
+</p>
+<p>
+Within the block, you can define any methods you want to run as part of the
+resource
+</p>
+<p>
+One thing to note is that this is NOT like other resources in the sense
+that it does not give you any extra methods like the resources do
+</p>
+<p>
+For example usage, see lib/poolparty/plugins/line.rb
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000205-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000205-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/modules/definable_resource.rb, line 18</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">define_resource</span>(<span class="ruby-identifier">name</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+      <span class="ruby-identifier">name</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">new_resource_class</span> <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
           </div>
         </div>
       </div>
-      <div id='footer-push'></div>
+
+      <div id="method-M000206" class="method-detail">
+        <a name="M000206"></a>
+
+        <div class="method-heading">
+          <a href="#M000206" class="method-signature">
+          <span class="method-name">virtual_resource</span><span class="method-args">(name=:virtual_resource, opts={}, &amp;block)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Allow us to create virtual resources Generally, in plugins This sets a
+virtual resource against the Resource class Example:
+</p>
+<p>
+<a href="DefinableResource.html#M000206">virtual_resource</a>(:virtualhost)
+do end
+</p>
+<p>
+This defines a virtualhost as a virtual resource
+</p>
+<pre>
+ and consequently gives the methods has_virtualhost and does_not_have_virtualhost
+</pre>
+<p>
+Note that you can define any resources within the virtual resource within
+the definition or the call. Call example: has_virtualhost do
+</p>
+<pre>
+ name &quot;xnot.org&quot;
+</pre>
+<p>
+end
+</p>
+<p>
+Which sets the virtual host&#8216;s name as xnot.org
+</p>
+<p>
+An example is included in the poolparty-apache-plugin
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000206-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000206-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/modules/definable_resource.rb, line 43</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">virtual_resource</span>(<span class="ruby-identifier">name</span>=<span class="ruby-identifier">:virtual_resource</span>, <span class="ruby-identifier">opts</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+      <span class="ruby-identifier">symc</span> = <span class="ruby-node">&quot;#{name}&quot;</span>.<span class="ruby-identifier">top_level_class</span>.<span class="ruby-identifier">camelcase</span>
+      <span class="ruby-identifier">klass</span> = <span class="ruby-identifier">symc</span>.<span class="ruby-identifier">class_constant</span>(<span class="ruby-constant">PoolParty</span><span class="ruby-operator">::</span><span class="ruby-constant">Plugin</span><span class="ruby-operator">::</span><span class="ruby-constant">Plugin</span>, {<span class="ruby-identifier">:preserve</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">true</span>}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+      
+      <span class="ruby-constant">PoolParty</span><span class="ruby-operator">::</span><span class="ruby-constant">Service</span>.<span class="ruby-identifier">add_has_and_does_not_have_methods_for</span>(<span class="ruby-identifier">symc</span>)
+      
+      <span class="ruby-identifier">klass</span>.<span class="ruby-identifier">module_eval</span> <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">block</span>
+      <span class="ruby-identifier">klass</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+
     </div>
-    <div id='footer'>
-      <a href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
-    </div>
-  </body>
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
 </html>

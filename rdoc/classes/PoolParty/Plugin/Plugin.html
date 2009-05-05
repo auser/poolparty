@@ -1,241 +1,416 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html lang='en'>
-  <head>
-    <title>: PoolParty::Plugin::Plugin [RDoc Documentation]</title>
-    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
-    <link href='../../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
-    <script type='text/javascript'>
-      //<![CDATA[
-        function popupCode(url) {
-          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
-        }
-        
-        function toggleCode(id) {
-          var code = document.getElementById(id)
-        
-          code.style.display = code.style.display != 'block' ? 'block' : 'none'
-          return true
-        }
-        
-        // Make codeblocks hidden by default
-        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
-      //]]>
-    </script>
-  </head>
-  <body class='page'>
-    <div class='class' id='wrapper'>
-      <div class='header'>
-        <h1 class='name'>
-          <span class='type'>Class</span>
-          PoolParty::Plugin::Plugin
-        </h1>
-        <ol class='paths'>
-          <li>
-            <a href="../../../files/lib/poolparty/poolparty/plugin_rb.html">lib/poolparty/poolparty/plugin.rb</a>
-          </li>
-        </ol>
-        <div class='parent'>
-          Parent:
-          <strong><a href="../Service.html">PoolParty::Service</a></strong>
-        </div>
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Class: PoolParty::Plugin::Plugin</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+    <div id="classHeader">
+        <table class="header-table">
+        <tr class="top-aligned-row">
+          <td><strong>Class</strong></td>
+          <td class="class-name-in-header">PoolParty::Plugin::Plugin</td>
+        </tr>
+        <tr class="top-aligned-row">
+            <td><strong>In:</strong></td>
+            <td>
+                <a href="../../../files/lib/poolparty/poolparty/plugin_rb.html">
+                lib/poolparty/poolparty/plugin.rb
+                </a>
+        <br />
+            </td>
+        </tr>
+
+        <tr class="top-aligned-row">
+            <td><strong>Parent:</strong></td>
+            <td>
+                <a href="../Service.html">
+                PoolParty::Service
+               </a>
+            </td>
+        </tr>
+        </table>
+    </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+
+
+   </div>
+
+    <div id="method-list">
+      <h3 class="section-bar">Methods</h3>
+
+      <div class="name-list">
+      <a href="#M000304">after_create</a>&nbsp;&nbsp;
+      <a href="#M000302">before_load</a>&nbsp;&nbsp;
+      <a href="#M000309">bootstrap_commands</a>&nbsp;&nbsp;
+      <a href="#M000308">bootstrap_gems</a>&nbsp;&nbsp;
+      <a href="#M000307">cloud</a>&nbsp;&nbsp;
+      <a href="#M000310">configure_commands</a>&nbsp;&nbsp;
+      <a href="#M000305">enable</a>&nbsp;&nbsp;
+      <a href="#M000311">inherited</a>&nbsp;&nbsp;
+      <a href="#M000306">is_plugin?</a>&nbsp;&nbsp;
+      <a href="#M000303">loaded</a>&nbsp;&nbsp;
+      <a href="#M000301">new</a>&nbsp;&nbsp;
       </div>
-      <div id='content'>
-        <div id='text'>
-          <div id='method-list'>
-            <h2>Methods</h2>
-            <h3>public class</h3>
-            <ol>
-              <li><a href="#M000312">inherited</a></li>
-              <li><a href="#M000302">new</a></li>
-            </ol>
-            <h3>public instance</h3>
-            <ol>
-              <li><a href="#M000305">after_create</a></li>
-              <li><a href="#M000303">before_load</a></li>
-              <li><a href="#M000310">bootstrap_commands</a></li>
-              <li><a href="#M000309">bootstrap_gems</a></li>
-              <li><a href="#M000308">cloud</a></li>
-              <li><a href="#M000311">configure_commands</a></li>
-              <li><a href="#M000306">enable</a></li>
-              <li><a href="#M000307">is_plugin?</a></li>
-              <li><a href="#M000304">loaded</a></li>
-            </ol>
-          </div>
-          <div id='context'>
-            <div id='includes'>
-              <h2>Included modules</h2>
-              <ol>
-                <li><a href="../CloudResourcer.html">CloudResourcer</a></li>
-                <li><a href="../DependencyResolverCloudExtensions.html">PoolParty::DependencyResolverCloudExtensions</a></li>
-                <li><a href="../Callbacks.html">PoolParty::Callbacks</a></li>
-              </ol>
-            </div>
-          </div>
-          <div id='section'>
-            <div id='methods'>
-              <h2>Public class methods</h2>
-              <div class='public-class method' id='method-M000312'>
-                <a name='M000312'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>inherited</span>
-                  <span class='arguments'>(subclass)</span>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000312-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000312-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/plugin.rb, line 59</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">inherited</span>(<span class="ruby-identifier">subclass</span>)&#x000A;        <span class="ruby-identifier">method_name</span> = <span class="ruby-identifier">subclass</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">top_level_class</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/pool_party_/</span>, <span class="ruby-value str">''</span>).<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/_class/</span>, <span class="ruby-value str">''</span>).<span class="ruby-identifier">downcase</span>.<span class="ruby-identifier">to_sym</span>&#x000A;        <span class="ruby-identifier">add_has_and_does_not_have_methods_for</span>(<span class="ruby-identifier">method_name</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <div class='public-class method' id='method-M000302'>
-                <a name='M000302'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>new</span>
-                  <span class='arguments'>(opts={}, prnt=nil, &amp;block)</span>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000302-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000302-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/plugin.rb, line 12</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">opts</span>={}, <span class="ruby-identifier">prnt</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-identifier">setup_callbacks</span>&#x000A;        <span class="ruby-identifier">before_load</span>(<span class="ruby-identifier">opts</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        &#x000A;        <span class="ruby-identifier">block</span> = <span class="ruby-constant">Proc</span>.<span class="ruby-identifier">new</span> {<span class="ruby-identifier">enable</span>} <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">block</span>&#x000A;        &#x000A;        <span class="ruby-ivar">@opts</span> = (<span class="ruby-identifier">opts</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Hash</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">opts</span> <span class="ruby-operator">:</span> {<span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">opts</span>})&#x000A;        <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">opts</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        &#x000A;        <span class="ruby-identifier">run_in_context</span> <span class="ruby-keyword kw">do</span>&#x000A;          <span class="ruby-identifier">loaded</span> <span class="ruby-ivar">@opts</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;                &#x000A;        <span class="ruby-identifier">after_create</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000305'>
-                <a name='M000305'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>after_create</span>
-                  <span class='arguments'>()</span>
-                </div>
-                <div class='description'>
-                  <p>
-                  <a href="../Callbacks.html">Callbacks</a> available to plugins
-                  </p>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000305-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000305-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/plugin.rb, line 34</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">after_create</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <div class='public-instance method' id='method-M000303'>
-                <a name='M000303'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>before_load</span>
-                  <span class='arguments'>(o={}, &amp;block)</span>
-                </div>
-                <div class='description'>
-                  <p>
-                  Overwrite this method
-                  </p>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000303-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000303-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/plugin.rb, line 29</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">before_load</span>(<span class="ruby-identifier">o</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)        &#x000A;      <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <div class='public-instance method' id='method-M000310'>
-                <a name='M000310'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>bootstrap_commands</span>
-                  <span class='arguments'>(cmds)</span>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000310-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000310-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/plugin.rb, line 51</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">bootstrap_commands</span> <span class="ruby-identifier">cmds</span>&#x000A;        <span class="ruby-constant">Provision</span><span class="ruby-operator">::</span><span class="ruby-constant">BootStrapper</span>.<span class="ruby-identifier">class_commands</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">cmds</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <div class='public-instance method' id='method-M000309'>
-                <a name='M000309'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>bootstrap_gems</span>
-                  <span class='arguments'>(*gems)</span>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000309-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000309-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/plugin.rb, line 45</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">bootstrap_gems</span> <span class="ruby-operator">*</span><span class="ruby-identifier">gems</span>&#x000A;        <span class="ruby-identifier">gems</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">g</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-constant">Provision</span><span class="ruby-operator">::</span><span class="ruby-constant">BootStrapper</span>.<span class="ruby-identifier">gem_list</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">g</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-constant">Provision</span><span class="ruby-operator">::</span><span class="ruby-constant">BootStrapper</span>.<span class="ruby-identifier">gem_list</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">g</span>)&#x000A;        <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <div class='public-instance method' id='method-M000308'>
-                <a name='M000308'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>cloud</span>
-                  <span class='arguments'>()</span>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000308-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000308-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/plugin.rb, line 42</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cloud</span>&#x000A;        <span class="ruby-ivar">@parent</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <div class='public-instance method' id='method-M000311'>
-                <a name='M000311'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>configure_commands</span>
-                  <span class='arguments'>(cmds)</span>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000311-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000311-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/plugin.rb, line 55</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">configure_commands</span> <span class="ruby-identifier">cmds</span>&#x000A;        <span class="ruby-constant">Provision</span><span class="ruby-operator">::</span><span class="ruby-constant">DrConfigure</span>.<span class="ruby-identifier">class_commands</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">cmds</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <div class='public-instance method' id='method-M000306'>
-                <a name='M000306'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>enable</span>
-                  <span class='arguments'>()</span>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000306-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000306-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/plugin.rb, line 37</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">enable</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <div class='public-instance method' id='method-M000307'>
-                <a name='M000307'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>is_plugin?</span>
-                  <span class='arguments'>()</span>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000307-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000307-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/plugin.rb, line 39</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">is_plugin?</span>&#x000A;        <span class="ruby-keyword kw">true</span>&#x000A;      <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <div class='public-instance method' id='method-M000304'>
-                <a name='M000304'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>loaded</span>
-                  <span class='arguments'>(o={}, &amp;block)</span>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000304-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000304-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/plugin.rb, line 31</span>&#x000A;      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">loaded</span>(<span class="ruby-identifier">o</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;      <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-            </div>
+    </div>
+
+  </div>
+
+
+    <!-- if includes -->
+    <div id="includes">
+      <h3 class="section-bar">Included Modules</h3>
+
+      <div id="includes-list">
+        <span class="include-name"><a href="../CloudResourcer.html">CloudResourcer</a></span>
+        <span class="include-name"><a href="../DependencyResolverCloudExtensions.html">PoolParty::DependencyResolverCloudExtensions</a></span>
+        <span class="include-name"><a href="../Callbacks.html">PoolParty::Callbacks</a></span>
+      </div>
+    </div>
+
+    <div id="section">
+
+
+
+
+
+      
+
+
+    <!-- if method_list -->
+    <div id="methods">
+      <h3 class="section-bar">Public Class methods</h3>
+
+      <div id="method-M000311" class="method-detail">
+        <a name="M000311"></a>
+
+        <div class="method-heading">
+          <a href="#M000311" class="method-signature">
+          <span class="method-name">inherited</span><span class="method-args">(subclass)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000311-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000311-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/plugin.rb, line 60</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">inherited</span>(<span class="ruby-identifier">subclass</span>)
+        <span class="ruby-identifier">method_name</span> = <span class="ruby-identifier">subclass</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">top_level_class</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/pool_party_/</span>, <span class="ruby-value str">''</span>).<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/_class/</span>, <span class="ruby-value str">''</span>).<span class="ruby-identifier">downcase</span>.<span class="ruby-identifier">to_sym</span>
+        <span class="ruby-identifier">add_has_and_does_not_have_methods_for</span>(<span class="ruby-identifier">method_name</span>)
+      <span class="ruby-keyword kw">end</span>
+</pre>
           </div>
         </div>
       </div>
-      <div id='footer-push'></div>
+
+      <div id="method-M000301" class="method-detail">
+        <a name="M000301"></a>
+
+        <div class="method-heading">
+          <a href="#M000301" class="method-signature">
+          <span class="method-name">new</span><span class="method-args">(opts={}, prnt=nil, &amp;block)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000301-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000301-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/plugin.rb, line 12</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">opts</span>={}, <span class="ruby-identifier">prnt</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+        <span class="ruby-identifier">setup_callbacks</span>
+        <span class="ruby-identifier">before_load</span>(<span class="ruby-identifier">opts</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+        
+        <span class="ruby-identifier">block</span> = <span class="ruby-constant">Proc</span>.<span class="ruby-identifier">new</span> {<span class="ruby-identifier">enable</span>} <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">block</span>
+        
+        <span class="ruby-ivar">@opts</span> = (<span class="ruby-identifier">opts</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Hash</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">opts</span> <span class="ruby-operator">:</span> {<span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">opts</span>})
+        <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">opts</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+        
+        <span class="ruby-identifier">run_in_context</span> <span class="ruby-keyword kw">do</span>
+          <span class="ruby-identifier">loaded</span> <span class="ruby-ivar">@opts</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>
+        <span class="ruby-keyword kw">end</span>
+                
+        <span class="ruby-identifier">after_create</span>
+      <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="section-bar">Public Instance methods</h3>
+
+      <div id="method-M000304" class="method-detail">
+        <a name="M000304"></a>
+
+        <div class="method-heading">
+          <a href="#M000304" class="method-signature">
+          <span class="method-name">after_create</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+<a href="../Callbacks.html">Callbacks</a> available to plugins
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000304-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000304-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/plugin.rb, line 34</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">after_create</span>
+      <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000302" class="method-detail">
+        <a name="M000302"></a>
+
+        <div class="method-heading">
+          <a href="#M000302" class="method-signature">
+          <span class="method-name">before_load</span><span class="method-args">(o={}, &amp;block)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Overwrite this method
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000302-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000302-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/plugin.rb, line 29</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">before_load</span>(<span class="ruby-identifier">o</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)        
+      <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000309" class="method-detail">
+        <a name="M000309"></a>
+
+        <div class="method-heading">
+          <a href="#M000309" class="method-signature">
+          <span class="method-name">bootstrap_commands</span><span class="method-args">(cmds)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000309-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000309-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/plugin.rb, line 52</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">bootstrap_commands</span> <span class="ruby-identifier">cmds</span>
+        <span class="ruby-constant">Provision</span><span class="ruby-operator">::</span><span class="ruby-constant">BootStrapper</span>.<span class="ruby-identifier">class_commands</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">cmds</span>
+      <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000308" class="method-detail">
+        <a name="M000308"></a>
+
+        <div class="method-heading">
+          <a href="#M000308" class="method-signature">
+          <span class="method-name">bootstrap_gems</span><span class="method-args">(*gems)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000308-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000308-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/plugin.rb, line 46</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">bootstrap_gems</span> <span class="ruby-operator">*</span><span class="ruby-identifier">gems</span>
+        <span class="ruby-identifier">gems</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">g</span><span class="ruby-operator">|</span>
+          <span class="ruby-constant">Provision</span><span class="ruby-operator">::</span><span class="ruby-constant">BootStrapper</span>.<span class="ruby-identifier">gem_list</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">g</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-constant">Provision</span><span class="ruby-operator">::</span><span class="ruby-constant">BootStrapper</span>.<span class="ruby-identifier">gem_list</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">g</span>)
+        <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000307" class="method-detail">
+        <a name="M000307"></a>
+
+        <div class="method-heading">
+          <a href="#M000307" class="method-signature">
+          <span class="method-name">cloud</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000307-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000307-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/plugin.rb, line 42</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cloud</span>
+        <span class="ruby-ivar">@parent</span>
+      <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000310" class="method-detail">
+        <a name="M000310"></a>
+
+        <div class="method-heading">
+          <a href="#M000310" class="method-signature">
+          <span class="method-name">configure_commands</span><span class="method-args">(cmds)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000310-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000310-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/plugin.rb, line 56</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">configure_commands</span> <span class="ruby-identifier">cmds</span>
+        <span class="ruby-constant">Provision</span><span class="ruby-operator">::</span><span class="ruby-constant">DrConfigure</span>.<span class="ruby-identifier">class_commands</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">cmds</span>
+      <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000305" class="method-detail">
+        <a name="M000305"></a>
+
+        <div class="method-heading">
+          <a href="#M000305" class="method-signature">
+          <span class="method-name">enable</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000305-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000305-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/plugin.rb, line 37</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">enable</span>
+      <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000306" class="method-detail">
+        <a name="M000306"></a>
+
+        <div class="method-heading">
+          <a href="#M000306" class="method-signature">
+          <span class="method-name">is_plugin?</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000306-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000306-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/plugin.rb, line 39</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">is_plugin?</span>
+        <span class="ruby-keyword kw">true</span>
+      <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000303" class="method-detail">
+        <a name="M000303"></a>
+
+        <div class="method-heading">
+          <a href="#M000303" class="method-signature">
+          <span class="method-name">loaded</span><span class="method-args">(o={}, &amp;block)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000303-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000303-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/plugin.rb, line 31</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">loaded</span>(<span class="ruby-identifier">o</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+      <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+
     </div>
-    <div id='footer'>
-      <a href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
-    </div>
-  </body>
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
 </html>

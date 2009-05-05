@@ -1,293 +1,477 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html lang='en'>
-  <head>
-    <title>: PoolParty::Neighborhoods [RDoc Documentation]</title>
-    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
-    <link href='../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
-    <script type='text/javascript'>
-      //<![CDATA[
-        function popupCode(url) {
-          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
-        }
-        
-        function toggleCode(id) {
-          var code = document.getElementById(id)
-        
-          code.style.display = code.style.display != 'block' ? 'block' : 'none'
-          return true
-        }
-        
-        // Make codeblocks hidden by default
-        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
-      //]]>
-    </script>
-  </head>
-  <body class='page'>
-    <div class='class' id='wrapper'>
-      <div class='header'>
-        <h1 class='name'>
-          <span class='type'>Class</span>
-          PoolParty::Neighborhoods
-        </h1>
-        <ol class='paths'>
-          <li>
-            <a href="../../files/lib/poolparty/poolparty/neighborhoods_rb.html">lib/poolparty/poolparty/neighborhoods.rb</a>
-          </li>
-        </ol>
-        <div class='parent'>
-          Parent:
-          <strong><a href="../Object.html">Object</a></strong>
-        </div>
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Class: PoolParty::Neighborhoods</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+    <div id="classHeader">
+        <table class="header-table">
+        <tr class="top-aligned-row">
+          <td><strong>Class</strong></td>
+          <td class="class-name-in-header">PoolParty::Neighborhoods</td>
+        </tr>
+        <tr class="top-aligned-row">
+            <td><strong>In:</strong></td>
+            <td>
+                <a href="../../files/lib/poolparty/poolparty/neighborhoods_rb.html">
+                lib/poolparty/poolparty/neighborhoods.rb
+                </a>
+        <br />
+            </td>
+        </tr>
+
+        <tr class="top-aligned-row">
+            <td><strong>Parent:</strong></td>
+            <td>
+                <a href="../Object.html">
+                Object
+               </a>
+            </td>
+        </tr>
+        </table>
+    </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+
+
+   </div>
+
+    <div id="method-list">
+      <h3 class="section-bar">Methods</h3>
+
+      <div class="name-list">
+      <a href="#M000686">[]</a>&nbsp;&nbsp;
+      <a href="#M000689">clump</a>&nbsp;&nbsp;
+      <a href="#M000690">clump</a>&nbsp;&nbsp;
+      <a href="#M000687">disect</a>&nbsp;&nbsp;
+      <a href="#M000688">each</a>&nbsp;&nbsp;
+      <a href="#M000683">empty?</a>&nbsp;&nbsp;
+      <a href="#M000682">instances</a>&nbsp;&nbsp;
+      <a href="#M000691">load_default</a>&nbsp;&nbsp;
+      <a href="#M000681">new</a>&nbsp;&nbsp;
+      <a href="#M000684">next_node</a>&nbsp;&nbsp;
+      <a href="#M000685">sort</a>&nbsp;&nbsp;
       </div>
-      <div id='content'>
-        <div id='text'>
-          <div id='method-list'>
-            <h2>Methods</h2>
-            <h3>public class</h3>
-            <ol>
-              <li><a href="#M000692">clump</a></li>
-              <li><a href="#M000693">load_default</a></li>
-              <li><a href="#M000683">new</a></li>
-            </ol>
-            <h3>public instance</h3>
-            <ol>
-              <li><a href="#M000688">[]</a></li>
-              <li><a href="#M000691">clump</a></li>
-              <li><a href="#M000689">disect</a></li>
-              <li><a href="#M000690">each</a></li>
-              <li><a href="#M000685">empty?</a></li>
-              <li><a href="#M000684">instances</a></li>
-              <li><a href="#M000686">next_node</a></li>
-              <li><a href="#M000687">sort</a></li>
-            </ol>
-          </div>
-          <div id='context'>
-            <div id='includes'>
-              <h2>Included modules</h2>
-              <ol>
-                <li><a href="Pinger.html">::PoolParty::Pinger</a></li>
-              </ol>
-            </div>
-          </div>
-          <div id='section'>
-            <div id='attribute-list'>
-              <h2 class='section-bar'>Attributes</h2>
-              <div class='name-list'>
-                <table>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>schema</td>
-                    <td class='context-item-value'>[R]</td>
-                    <td class='context-item-desc'></td>
-                  </tr>
-                </table>
-              </div>
-            </div>
-            <div id='methods'>
-              <h2>Public class methods</h2>
-              <div class='public-class method' id='method-M000692'>
-                <a name='M000692'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>clump</span>
-                  <span class='arguments'>(json, filepath=nil)</span>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000692-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000692-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/neighborhoods.rb, line 79</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">clump</span>(<span class="ruby-identifier">json</span>, <span class="ruby-identifier">filepath</span>=<span class="ruby-keyword kw">nil</span>)&#x000A;      <span class="ruby-identifier">new</span>(<span class="ruby-identifier">json</span>).<span class="ruby-identifier">clump</span>(<span class="ruby-identifier">filepath</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <div class='public-class method' id='method-M000693'>
-                <a name='M000693'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>load_default</span>
-                  <span class='arguments'>()</span>
-                </div>
-                <div class='description'>
-                  <p>
-                  Load the default neighborhood.json file If the neighborhood.json file
-                  exists in
-                  </p>
-                  <pre>/etc/poolparty/neighborhood.json</pre>
-                  <p>
-                  then load the neighborhood from the file, otherwise if there is a butterfly
-                  server running locally, query it for the current neighborhood. Finally,
-                  return an empty set of instances
-                  </p>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000693-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000693-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/neighborhoods.rb, line 90</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">load_default</span>&#x000A;      <span class="ruby-keyword kw">if</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">file?</span>(<span class="ruby-value str">&quot;/etc/poolparty/neighborhood.json&quot;</span>)&#x000A;        <span class="ruby-identifier">new</span>( <span class="ruby-identifier">open</span>(<span class="ruby-value str">&quot;/etc/poolparty/neighborhood.json&quot;</span>).<span class="ruby-identifier">read</span> )&#x000A;      <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">ping_port</span>(<span class="ruby-value str">&quot;127.0.0.1&quot;</span>, <span class="ruby-constant">Default</span>.<span class="ruby-identifier">butterfly_port</span>, <span class="ruby-value">1</span>)<span class="ruby-comment cmt"># butterfly responding?</span>&#x000A;        <span class="ruby-identifier">require</span> <span class="ruby-value str">&quot;open-uri&quot;</span>&#x000A;        <span class="ruby-identifier">new</span>( <span class="ruby-identifier">open</span>(<span class="ruby-value str">&quot;http://127.0.0.1:8642/neighborhood&quot;</span>).<span class="ruby-identifier">read</span> )&#x000A;      <span class="ruby-keyword kw">else</span>&#x000A;        <span class="ruby-identifier">new</span>(<span class="ruby-value str">&quot;[]&quot;</span>)&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <div class='public-class method' id='method-M000683'>
-                <a name='M000683'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>new</span>
-                  <span class='arguments'>(data)</span>
-                </div>
-                <div class='description'>
-                  <p>
-                  Create a neighborhood from a string, array or hash given.
-                  </p>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000683-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000683-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/neighborhoods.rb, line 17</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">data</span>)&#x000A;      <span class="ruby-identifier">raise</span> <span class="ruby-constant">Exception</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value str">&quot;You must pass a string or a hash to Neighborhoods&quot;</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">data</span>&#x000A;      <span class="ruby-identifier">parsed_data</span> = <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">data</span>&#x000A;      <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Array</span>&#x000A;        {<span class="ruby-identifier">:instances</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">data</span>.<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">entry</span><span class="ruby-operator">|</span> <span class="ruby-identifier">disect</span>(<span class="ruby-identifier">entry</span>) }}&#x000A;      <span class="ruby-keyword kw">when</span> <span class="ruby-constant">String</span>&#x000A;        {<span class="ruby-identifier">:instances</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">JSON</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">data</span>)}<span class="ruby-comment cmt">#.map &quot;#{inst[&quot;instance_id&quot;]}\t#{inst[&quot;ip&quot;]}&quot;}}</span>&#x000A;      <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Hash</span>&#x000A;        <span class="ruby-identifier">data</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;      <span class="ruby-ivar">@schema</span> = <span class="ruby-constant">PoolParty</span><span class="ruby-operator">::</span><span class="ruby-constant">Schema</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">parsed_data</span>)&#x000A;      <span class="ruby-identifier">raise</span> <span class="ruby-constant">Exception</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value str">&quot;No instances found in the Neighborhoods schema&quot;</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@schema</span>.<span class="ruby-identifier">instances</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <h2>Public instance methods</h2>
-              <div class='public-instance method' id='method-M000688'>
-                <a name='M000688'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>[]</span>
-                  <span class='arguments'>(at)</span>
-                </div>
-                <div class='description'>
-                  <p>
-                  Get the instances at the specific index of the neighborhood
-                  </p>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000688-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000688-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/neighborhoods.rb, line 53</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-operator">[]</span>(<span class="ruby-identifier">at</span>)&#x000A;      <span class="ruby-identifier">instances</span>[<span class="ruby-identifier">at</span>] <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">at</span> <span class="ruby-operator">&gt;=</span> <span class="ruby-value">0</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">at</span> <span class="ruby-operator">&lt;</span> <span class="ruby-identifier">instances</span>.<span class="ruby-identifier">size</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <div class='public-instance method' id='method-M000691'>
-                <a name='M000691'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>clump</span>
-                  <span class='arguments'>(filepath=nil)</span>
-                </div>
-                <div class='description'>
-                  <p>
-                  TODO: Make this into something useful
-                  </p>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000691-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000691-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/neighborhoods.rb, line 73</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">clump</span>(<span class="ruby-identifier">filepath</span>=<span class="ruby-keyword kw">nil</span>)&#x000A;      <span class="ruby-identifier">out</span> = <span class="ruby-identifier">instances</span>.<span class="ruby-identifier">to_json</span>&#x000A;      <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">filepath</span>, <span class="ruby-value str">&quot;w&quot;</span>) {<span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span> <span class="ruby-identifier">f</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">out</span> } <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">filepath</span>&#x000A;      <span class="ruby-identifier">out</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <div class='public-instance method' id='method-M000689'>
-                <a name='M000689'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>disect</span>
-                  <span class='arguments'>(line)</span>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000689-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000689-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/neighborhoods.rb, line 57</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">disect</span>(<span class="ruby-identifier">line</span>)&#x000A;      <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">line</span>&#x000A;      <span class="ruby-keyword kw">when</span> <span class="ruby-constant">String</span>&#x000A;        <span class="ruby-identifier">arr</span> = <span class="ruby-identifier">line</span>.<span class="ruby-identifier">split</span>(<span class="ruby-value str">&quot;\t&quot;</span>)&#x000A;        {<span class="ruby-identifier">:instance_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">arr</span>[<span class="ruby-value">0</span>], <span class="ruby-identifier">:ip</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">arr</span>[<span class="ruby-value">1</span>]}&#x000A;      <span class="ruby-keyword kw">else</span>&#x000A;        <span class="ruby-identifier">line</span>&#x000A;      <span class="ruby-keyword kw">end</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <div class='public-instance method' id='method-M000690'>
-                <a name='M000690'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>each</span>
-                  <span class='arguments'>(&amp;block)</span>
-                </div>
-                <div class='description'>
-                  <p>
-                  Run through an enumeration of the instances
-                  </p>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000690-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000690-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/neighborhoods.rb, line 68</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">each</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;      <span class="ruby-identifier">instances</span>.<span class="ruby-identifier">each</span> <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <div class='public-instance method' id='method-M000685'>
-                <a name='M000685'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>empty?</span>
-                  <span class='arguments'>()</span>
-                </div>
-                <div class='description'>
-                  <p>
-                  Returns empty if the neighborhood has no instances
-                  </p>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000685-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000685-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/neighborhoods.rb, line 37</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">empty?</span>&#x000A;      <span class="ruby-identifier">instances</span>.<span class="ruby-identifier">empty?</span>&#x000A;    <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <div class='public-instance method' id='method-M000684'>
-                <a name='M000684'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>instances</span>
-                  <span class='arguments'>()</span>
-                </div>
-                <div class='description'>
-                  <p>
-                  Get the known instances from the neighborhood.json file on the server
-                  </p>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000684-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000684-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/neighborhoods.rb, line 32</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">instances</span>&#x000A;      <span class="ruby-ivar">@instances</span> <span class="ruby-operator">||=</span> <span class="ruby-ivar">@schema</span>.<span class="ruby-identifier">to_hash</span>[<span class="ruby-identifier">:instances</span>] <span class="ruby-keyword kw">rescue</span> <span class="ruby-ivar">@schema</span>.<span class="ruby-identifier">instances</span>.<span class="ruby-identifier">collect</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">line</span><span class="ruby-operator">|</span> <span class="ruby-identifier">disect</span>(<span class="ruby-identifier">line</span>) }&#x000A;    <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <div class='public-instance method' id='method-M000686'>
-                <a name='M000686'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>next_node</span>
-                  <span class='arguments'>(node_hash)</span>
-                </div>
-                <div class='description'>
-                  <p>
-                  Get the next node in the hash
-                  </p>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000686-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000686-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/neighborhoods.rb, line 42</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">next_node</span>(<span class="ruby-identifier">node_hash</span>)&#x000A;      <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">nil</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">empty?</span>&#x000A;      <span class="ruby-identifier">sort</span>.<span class="ruby-identifier">wrapping_next</span>(<span class="ruby-identifier">node_hash</span>)&#x000A;    <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-              <div class='public-instance method' id='method-M000687'>
-                <a name='M000687'>      </a>
-                <div class='synopsis'>
-                  <span class='name'>sort</span>
-                  <span class='arguments'>()</span>
-                </div>
-                <div class='description'>
-                  <p>
-                  Sort the instances by ip string, a very basic sort
-                  </p>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('M000687-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='M000687-source'><span class="ruby-comment cmt"># File lib/poolparty/poolparty/neighborhoods.rb, line 48</span>&#x000A;    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">sort</span>&#x000A;      <span class="ruby-identifier">instances</span>.<span class="ruby-identifier">sort</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span><span class="ruby-operator">|</span> <span class="ruby-identifier">a</span>.<span class="ruby-identifier">ip</span> <span class="ruby-operator">&lt;=&gt;</span> <span class="ruby-identifier">b</span>.<span class="ruby-identifier">ip</span>}&#x000A;    <span class="ruby-keyword kw">end</span></pre>
-                </div>
-              </div>
-            </div>
+    </div>
+
+  </div>
+
+
+    <!-- if includes -->
+    <div id="includes">
+      <h3 class="section-bar">Included Modules</h3>
+
+      <div id="includes-list">
+        <span class="include-name"><a href="Pinger.html">::PoolParty::Pinger</a></span>
+      </div>
+    </div>
+
+    <div id="section">
+
+
+
+
+
+    <div id="attribute-list">
+      <h3 class="section-bar">Attributes</h3>
+
+      <div class="name-list">
+        <table>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">schema</td>
+          <td class="context-item-value">&nbsp;[R]&nbsp;</td>
+          <td class="context-item-desc"></td>
+        </tr>
+        </table>
+      </div>
+    </div>
+      
+
+
+    <!-- if method_list -->
+    <div id="methods">
+      <h3 class="section-bar">Public Class methods</h3>
+
+      <div id="method-M000690" class="method-detail">
+        <a name="M000690"></a>
+
+        <div class="method-heading">
+          <a href="#M000690" class="method-signature">
+          <span class="method-name">clump</span><span class="method-args">(json, filepath=nil)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000690-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000690-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/neighborhoods.rb, line 79</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">clump</span>(<span class="ruby-identifier">json</span>, <span class="ruby-identifier">filepath</span>=<span class="ruby-keyword kw">nil</span>)
+      <span class="ruby-identifier">new</span>(<span class="ruby-identifier">json</span>).<span class="ruby-identifier">clump</span>(<span class="ruby-identifier">filepath</span>)
+    <span class="ruby-keyword kw">end</span>
+</pre>
           </div>
         </div>
       </div>
-      <div id='footer-push'></div>
+
+      <div id="method-M000691" class="method-detail">
+        <a name="M000691"></a>
+
+        <div class="method-heading">
+          <a href="#M000691" class="method-signature">
+          <span class="method-name">load_default</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Load the default neighborhood.json file If the neighborhood.json file
+exists in
+</p>
+<pre>
+  /etc/poolparty/neighborhood.json
+</pre>
+<p>
+then load the neighborhood from the file, otherwise if there is a butterfly
+server running locally, query it for the current neighborhood. Finally,
+return an empty set of <a href="Neighborhoods.html#M000682">instances</a>
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000691-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000691-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/neighborhoods.rb, line 90</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">load_default</span>
+      <span class="ruby-keyword kw">if</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">file?</span>(<span class="ruby-value str">&quot;/etc/poolparty/neighborhood.json&quot;</span>)
+        <span class="ruby-identifier">new</span>( <span class="ruby-identifier">open</span>(<span class="ruby-value str">&quot;/etc/poolparty/neighborhood.json&quot;</span>).<span class="ruby-identifier">read</span> )
+      <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">ping_port</span>(<span class="ruby-value str">&quot;127.0.0.1&quot;</span>, <span class="ruby-constant">Default</span>.<span class="ruby-identifier">butterfly_port</span>, <span class="ruby-value">1</span>)<span class="ruby-comment cmt"># butterfly responding?</span>
+        <span class="ruby-identifier">require</span> <span class="ruby-value str">&quot;open-uri&quot;</span>
+        <span class="ruby-identifier">new</span>( <span class="ruby-identifier">open</span>(<span class="ruby-value str">&quot;http://127.0.0.1:8642/neighborhood&quot;</span>).<span class="ruby-identifier">read</span> )
+      <span class="ruby-keyword kw">else</span>
+        <span class="ruby-identifier">new</span>(<span class="ruby-value str">&quot;[]&quot;</span>)
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000681" class="method-detail">
+        <a name="M000681"></a>
+
+        <div class="method-heading">
+          <a href="#M000681" class="method-signature">
+          <span class="method-name">new</span><span class="method-args">(data)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Create a neighborhood from a string, array or hash given.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000681-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000681-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/neighborhoods.rb, line 17</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">data</span>)
+      <span class="ruby-identifier">raise</span> <span class="ruby-constant">Exception</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value str">&quot;You must pass a string or a hash to Neighborhoods&quot;</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">data</span>
+      <span class="ruby-identifier">parsed_data</span> = <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">data</span>
+      <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Array</span>
+        {<span class="ruby-identifier">:instances</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">data</span>.<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">entry</span><span class="ruby-operator">|</span> <span class="ruby-identifier">disect</span>(<span class="ruby-identifier">entry</span>) }}
+      <span class="ruby-keyword kw">when</span> <span class="ruby-constant">String</span>
+        {<span class="ruby-identifier">:instances</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">JSON</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">data</span>)}<span class="ruby-comment cmt">#.map &quot;#{inst[&quot;instance_id&quot;]}\t#{inst[&quot;ip&quot;]}&quot;}}</span>
+      <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Hash</span>
+        <span class="ruby-identifier">data</span>
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-ivar">@schema</span> = <span class="ruby-constant">PoolParty</span><span class="ruby-operator">::</span><span class="ruby-constant">Schema</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">parsed_data</span>)
+      <span class="ruby-identifier">raise</span> <span class="ruby-constant">Exception</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value str">&quot;No instances found in the Neighborhoods schema&quot;</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@schema</span>.<span class="ruby-identifier">instances</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="section-bar">Public Instance methods</h3>
+
+      <div id="method-M000686" class="method-detail">
+        <a name="M000686"></a>
+
+        <div class="method-heading">
+          <a href="#M000686" class="method-signature">
+          <span class="method-name">[]</span><span class="method-args">(at)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Get the <a href="Neighborhoods.html#M000682">instances</a> at the specific
+index of the neighborhood
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000686-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000686-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/neighborhoods.rb, line 53</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-operator">[]</span>(<span class="ruby-identifier">at</span>)
+      <span class="ruby-identifier">instances</span>[<span class="ruby-identifier">at</span>] <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">at</span> <span class="ruby-operator">&gt;=</span> <span class="ruby-value">0</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">at</span> <span class="ruby-operator">&lt;</span> <span class="ruby-identifier">instances</span>.<span class="ruby-identifier">size</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000689" class="method-detail">
+        <a name="M000689"></a>
+
+        <div class="method-heading">
+          <a href="#M000689" class="method-signature">
+          <span class="method-name">clump</span><span class="method-args">(filepath=nil)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+TODO: Make this into something useful
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000689-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000689-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/neighborhoods.rb, line 73</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">clump</span>(<span class="ruby-identifier">filepath</span>=<span class="ruby-keyword kw">nil</span>)
+      <span class="ruby-identifier">out</span> = <span class="ruby-identifier">instances</span>.<span class="ruby-identifier">to_json</span>
+      <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">filepath</span>, <span class="ruby-value str">&quot;w&quot;</span>) {<span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span> <span class="ruby-identifier">f</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">out</span> } <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">filepath</span>
+      <span class="ruby-identifier">out</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000687" class="method-detail">
+        <a name="M000687"></a>
+
+        <div class="method-heading">
+          <a href="#M000687" class="method-signature">
+          <span class="method-name">disect</span><span class="method-args">(line)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000687-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000687-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/neighborhoods.rb, line 57</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">disect</span>(<span class="ruby-identifier">line</span>)
+      <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">line</span>
+      <span class="ruby-keyword kw">when</span> <span class="ruby-constant">String</span>
+        <span class="ruby-identifier">arr</span> = <span class="ruby-identifier">line</span>.<span class="ruby-identifier">split</span>(<span class="ruby-value str">&quot;\t&quot;</span>)
+        {<span class="ruby-identifier">:instance_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">arr</span>[<span class="ruby-value">0</span>], <span class="ruby-identifier">:ip</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">arr</span>[<span class="ruby-value">1</span>]}
+      <span class="ruby-keyword kw">else</span>
+        <span class="ruby-identifier">line</span>
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000688" class="method-detail">
+        <a name="M000688"></a>
+
+        <div class="method-heading">
+          <a href="#M000688" class="method-signature">
+          <span class="method-name">each</span><span class="method-args">(&amp;block)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Run through an enumeration of the <a
+href="Neighborhoods.html#M000682">instances</a>
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000688-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000688-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/neighborhoods.rb, line 68</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">each</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+      <span class="ruby-identifier">instances</span>.<span class="ruby-identifier">each</span> <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000683" class="method-detail">
+        <a name="M000683"></a>
+
+        <div class="method-heading">
+          <a href="#M000683" class="method-signature">
+          <span class="method-name">empty?</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Returns empty if the neighborhood has no <a
+href="Neighborhoods.html#M000682">instances</a>
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000683-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000683-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/neighborhoods.rb, line 37</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">empty?</span>
+      <span class="ruby-identifier">instances</span>.<span class="ruby-identifier">empty?</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000682" class="method-detail">
+        <a name="M000682"></a>
+
+        <div class="method-heading">
+          <a href="#M000682" class="method-signature">
+          <span class="method-name">instances</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Get the known <a href="Neighborhoods.html#M000682">instances</a> from the
+neighborhood.json file on the server
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000682-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000682-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/neighborhoods.rb, line 32</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">instances</span>
+      <span class="ruby-ivar">@instances</span> <span class="ruby-operator">||=</span> <span class="ruby-ivar">@schema</span>.<span class="ruby-identifier">to_hash</span>[<span class="ruby-identifier">:instances</span>] <span class="ruby-keyword kw">rescue</span> <span class="ruby-ivar">@schema</span>.<span class="ruby-identifier">instances</span>.<span class="ruby-identifier">collect</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">line</span><span class="ruby-operator">|</span> <span class="ruby-identifier">disect</span>(<span class="ruby-identifier">line</span>) }
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000684" class="method-detail">
+        <a name="M000684"></a>
+
+        <div class="method-heading">
+          <a href="#M000684" class="method-signature">
+          <span class="method-name">next_node</span><span class="method-args">(node_hash)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Get the next node in the hash
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000684-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000684-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/neighborhoods.rb, line 42</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">next_node</span>(<span class="ruby-identifier">node_hash</span>)
+      <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">nil</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">empty?</span>
+      <span class="ruby-identifier">sort</span>.<span class="ruby-identifier">wrapping_next</span>(<span class="ruby-identifier">node_hash</span>)
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000685" class="method-detail">
+        <a name="M000685"></a>
+
+        <div class="method-heading">
+          <a href="#M000685" class="method-signature">
+          <span class="method-name">sort</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Sort the <a href="Neighborhoods.html#M000682">instances</a> by ip string, a
+very basic <a href="Neighborhoods.html#M000685">sort</a>
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000685-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000685-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/neighborhoods.rb, line 48</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">sort</span>
+      <span class="ruby-identifier">instances</span>.<span class="ruby-identifier">sort</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span><span class="ruby-operator">|</span> <span class="ruby-identifier">a</span>.<span class="ruby-identifier">ip</span> <span class="ruby-operator">&lt;=&gt;</span> <span class="ruby-identifier">b</span>.<span class="ruby-identifier">ip</span>}
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+
     </div>
-    <div id='footer'>
-      <a href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
-    </div>
-  </body>
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
 </html>

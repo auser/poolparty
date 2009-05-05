@@ -1,62 +1,126 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html lang='en'>
-  <head>
-    <title>File: chef_deploy.rb [RDoc Documentation]</title>
-    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
-    <link href='../../../../rdoc-style.css' media='screen' rel='stylesheet' type='text/css'>
-    <script type='text/javascript'>
-      //<![CDATA[
-        function popupCode(url) {
-          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
-        }
-        
-        function toggleCode(id) {
-          var code = document.getElementById(id)
-        
-          code.style.display = code.style.display != 'block' ? 'block' : 'none'
-          return true
-        }
-        
-        // Make codeblocks hidden by default
-        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
-      //]]>
-    </script>
-  </head>
-  <body class='page'>
-    <div class='file' id='wrapper'>
-      <div class='header'>
-        <h1 class='name'>chef_deploy.rb</h1>
-        <div class='paths'>
-          lib/poolparty/plugins/chef_deploy.rb
-        </div>
-        <div class='last-update'>
-          Last Update:
-          <span class='datetime'>Fri May 01 15:09:12 -0700 2009</span>
-        </div>
-      </div>
-      <div id='content'>
-        <div id='text'>
-          <div id='description'>
-            <p>
-            Chef deploy (ezmobius <a
-            href="http://github.com/ezmobius/chef-deploy/tree/master">github.com/ezmobius/chef-deploy/tree/master</a>)
-            </p>
-            <p>
-            deploy &#8220;/data/#{app}&#8221; do
-            </p>
-            <pre>repo &quot;git://github.com/engineyard/rack-app.git&quot;&#x000A;branch &quot;HEAD&quot;&#x000A;user &quot;ez&quot;&#x000A;enable_submodules true&#x000A;migrate true&#x000A;migration_command &quot;rake db:migrate&quot;&#x000A;environment &quot;production&quot;&#x000A;shallow_clone true&#x000A;revision '0xbeadbeef'&#x000A;action :deploy # or :rollback</pre>
-            <p>
-            end
-            </p>
-          </div>
-          <div id='section'>
-          </div>
-        </div>
-      </div>
-      <div id='footer-push'></div>
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>File: chef_deploy.rb</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href="../../../.././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+  <div id="fileHeader">
+    <h1>chef_deploy.rb</h1>
+    <table class="header-table">
+    <tr class="top-aligned-row">
+      <td><strong>Path:</strong></td>
+      <td>lib/poolparty/plugins/chef_deploy.rb
+      </td>
+    </tr>
+    <tr class="top-aligned-row">
+      <td><strong>Last Update:</strong></td>
+      <td>Mon May 04 17:44:45 -0700 2009</td>
+    </tr>
+    </table>
+  </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+    <div id="description">
+      <p>
+Chef deploy (ezmobius <a
+href="http://github.com/ezmobius/chef-deploy/tree/master">github.com/ezmobius/chef-deploy/tree/master</a>)
+</p>
+<p>
+deploy &quot;/data/#{app}&quot; do
+</p>
+<pre>
+  repo &quot;git://github.com/engineyard/rack-app.git&quot;
+  branch &quot;HEAD&quot;
+  user &quot;ez&quot;
+  enable_submodules true
+  migrate true
+  migration_command &quot;rake db:migrate&quot;
+  environment &quot;production&quot;
+  shallow_clone true
+  revision '0xbeadbeef'
+  action :deploy # or :rollback
+</pre>
+<p>
+end
+</p>
+
     </div>
-    <div id='footer'>
-      <a href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
-    </div>
-  </body>
+
+
+   </div>
+
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+
+
+
+
+      
+
+
+    <!-- if method_list -->
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
 </html>
