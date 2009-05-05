@@ -21,3 +21,4 @@ vendor/dependencies/packages
 .autosession.vim
 tags
 .session
+clouds.rb

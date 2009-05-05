@@ -22,11 +22,7 @@ module PoolParty
     end
     
     def compile(props=@properties_hash, tabs=0)
-      [ 
-        # options_to_string(props[:options],tabs),
-        resources_to_string(props[:resources],tabs),
-        services_to_string(props[:services],tabs)
-      ].join("\n")
+      resources_to_string(props[:resources],tabs)
     end
     
     def options_to_string(opts,tabs=0)
@@ -62,6 +58,8 @@ module PoolParty
         case ty = resource.delete(:pp_type)
         when "variable"
           handle_print_variable(resource[:name], resource[:value], :variable)
+        when "plugin"
+          handle_print_service(resource.delete(:name), resource, tabs)
         else
           real_name = resource[:name]
           handle_print_resource(resource, ty.to_sym, tabs)
@@ -78,14 +76,6 @@ module PoolParty
       # else
       #   true
       # end
-    end
-    
-    def services_to_string(opts,tabs=0)
-      if opts
-        opts.map do |klassname, klasshash|
-          handle_print_service(klassname, klasshash, tabs)
-        end
-      end
     end
     
     def hash_flush_out(hash, pre="", post="")
@@ -135,28 +125,26 @@ module PoolParty
       end
     end
     
-    def handle_print_service(klassname, klassarray, tabs)
+    def handle_print_service(klassname, plugin, tabs)
       case klassname.to_s
       when "conditional"
         # "#{tf(tabs)}case $#{klasshash[:options][:variable]} {#{klasshash[:services][:control_statements].map do |k,v|"\n#{tf(tabs+1)}#{k} : {#{compile(v.to_properties_hash, tabs+2)}#{tf(tabs+1)}\n#{tf(tabs)}}" end}}"
-        
-        str = ""        
-        klassarray.each do |klasshash|
-          # str << "\n#{tf(tabs+1)}#{compile(hsh,tabs+1)}"
-          str << "#{tf(tabs)}case $#{klasshash[:options][:variable]} {"
-          str << "#{klasshash[:services][:control_statements].map do |k,v|"\n#{tf(tabs+1)}#{k} : {#{compile(v.to_properties_hash, tabs+2)}#{tf(tabs+1)}\n#{tf(tabs)}}" end}"
-        end        
-        str << "#{tf(tabs)}}"
+        # 
+        # str = ""        
+        # plugin.each do |klasshash|
+        #   # str << "\n#{tf(tabs+1)}#{compile(hsh,tabs+1)}"
+        #   str << "#{tf(tabs)}case $#{klasshash[:options][:variable]} {"
+        #   str << "#{klasshash[:services][:control_statements].map do |k,v|"\n#{tf(tabs+1)}#{k} : {#{compile(v.to_properties_hash, tabs+2)}#{tf(tabs+1)}\n#{tf(tabs)}}" end}"
+        # end        
+        # str << "#{tf(tabs)}}"
+        # deprecated conditional
         
       else
         kname = klassname.to_s.gsub(/pool_party_/, '').gsub(/_class/, '')
         str = "\n#{tf(tabs)}# #{kname}\n"
         str << "#{tf(tabs)}class #{kname} {"
-        klassarray.each do |hsh|
-          str << "\n#{tf(tabs+1)}#{compile(hsh,tabs+1)}"
-        end        
-        str << "#{tf(tabs)}} include #{kname}"
-        
+        str << "\n#{tf(tabs+1)}#{compile(plugin,tabs+1)}"
+        str << "#{tf(tabs)}} include #{kname}"        
       end
     end
     

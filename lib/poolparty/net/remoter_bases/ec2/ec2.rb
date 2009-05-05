@@ -105,7 +105,9 @@ module PoolParty
                               )
       end
       def self.ec2(o)
-        @ec2 ||= self.class.ec2(o)
+        @ec2 ||= EC2::Base.new( :access_key_id => o[:access_key], 
+                                :secret_access_key => o[:secret_access_key]
+                              )
       end
       
       # Get the ec2 description for the response in a hash format

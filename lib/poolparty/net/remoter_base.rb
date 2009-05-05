@@ -33,6 +33,11 @@ module PoolParty
         instance_eval &block if block
         @cloud = prnt
       end
+      
+      def self.inherited(arg)
+        base_name = "#{arg}".downcase.top_level_class.to_sym
+        (remote_bases << base_name) unless remote_bases.include?(base_name)
+      end
 
       
       # def method_missing(meth, *args, &block)

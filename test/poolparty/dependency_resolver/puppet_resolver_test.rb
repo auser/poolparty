@@ -14,18 +14,12 @@ class TestPuppetResolver < Test::Unit::TestCase
         :resources => [
           {:name => "/etc/motd", :content => "Welcome to the cloud", :pp_type => "file"},
           {:name => "/etc/profile", :content => "profile info", :pp_type => "file"},
-          {:name => "/var/www", :pp_type => "directory"}
+          {:name => "/var/www", :pp_type => "directory"},
+          {:name => "apache_class", :pp_type => "plugin", :resources => [
+            {:name => "/etc/apache2/apache2.conf", :pp_type => "file", :template => "/absolute/path/to/template", :content => "rendered template string"}
+          ]}
         ],
-        :services => {
-          :apache => [{
-            :options => {:listen => "8080"},
-            :resources => [
-              {:name => "/etc/apache2/apache2.conf", :pp_type => "file", :template => "/absolute/path/to/template", :content => "rendered template string"}
-            ],
-            :services => {}
-          }]
-        }
-      } 
+      }
     end
 
     should "throw an exception if not given a hash" do

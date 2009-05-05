@@ -42,6 +42,7 @@ module PoolParty
       def cloud
         @parent
       end
+      
       def bootstrap_gems *gems
         gems.each do |g|
           Provision::BootStrapper.gem_list << g unless Provision::BootStrapper.gem_list.include?(g)

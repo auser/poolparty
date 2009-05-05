@@ -39,11 +39,7 @@ module PoolParty
     
     def comp(cld_name, props, tabs)
       
-      default_recipe = [ 
-        resources_to_string(props[:resources],tabs),
-        services_to_string(props[:services],tabs)
-      ].join("\n")
-
+      default_recipe = resources_to_string(props[:resources],tabs)
       ::File.open("#{base_dir}/recipes/default.rb", "w+") {|f| f << default_recipe }
       
       default_recipe
@@ -73,7 +69,7 @@ module PoolParty
     end
     
     def resources_to_string(opts,tabs=0)
-      out = []        
+      out = []
       out << opts.map do |resource|
         case ty = resource.delete(:pp_type)
         when "variable"
@@ -82,6 +78,8 @@ module PoolParty
           "#{tf(tabs)}include_recipe #{to_option_string(resource.name)}"
         when "chef_library"
           "#{tf(tabs)}require #{to_option_string("/etc/chef/lib/#{resource.name}")}"
+        when "plugin"
+          handle_print_service(resource, tabs)
         else
           real_type = handle_chef_types(ty)
           real_name = resource[:name]
@@ -89,7 +87,7 @@ module PoolParty
           "#{tf(tabs)}#{real_type} \"#{real_name}\" do\n#{tf(tabs+1)}#{hash_flush_out(res).compact.join("\n#{tf(tabs+1)}")}\n#{tf(tabs)}end"
         end
       end      
-      out.join("\n")
+      out.compact.join("\n")
     end
     
     def handle_print_variable(varhash)
@@ -104,7 +102,7 @@ module PoolParty
         f << o.join("\n")
         f << "\n"
       end
-      ""
+      nil
     end
         
     def handle_chef_types(ty)
@@ -137,19 +135,15 @@ module PoolParty
       end
     end
     
-    def handle_print_service(klassname, klassarray, tabs)
-      case klassname
-      when nil
-        nil
-      else
-        kname = klassname.to_s.gsub(/pool_party_/, '').gsub(/_class/, '')
+    def handle_print_service(plugin, tabs)
+      if plugin && plugin.has_key?(:resources) && !plugin[:resources].empty?
+        kname = plugin.delete(:name).to_s.gsub(/pool_party_/, '').gsub(/_class/, '')
         str = "\n#{tf(tabs)}# #{kname}\n"
         str << "#{tf(tabs)}"
-        klassarray.each do |hsh|
-          str << _compile(hsh,tabs+1, klassname)
-        end        
+        str << _compile(plugin,tabs+1, kname)
         str << "#{tf(tabs)}"
       end
+      str
     end
     
     # Check if the hash has content and that the content exists here. This is used
@@ -168,21 +162,6 @@ module PoolParty
       hsh.delete(:require) if hsh.has_key?(:require)
       hsh.delete(:name) # we don't need the names in the methods
       hsh
-    end
-    
-    # Turn the services into strings using the handle_print_service method
-    # Here we can strip out non-meaningful chef services
-    def services_to_string(opts,tabs=0)
-      if opts
-        str = ""
-        [:control_statements, :conditional].each do |k|
-          opts.delete(k)
-        end
-        opts.map do |klassname, klasshash|
-          str << handle_print_service(klassname, klasshash, tabs)
-        end
-        str
-      end
     end
     
     # Handle ensures

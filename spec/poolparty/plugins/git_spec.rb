@@ -8,12 +8,13 @@ describe "Remote Instance" do
     before(:each) do
       reset!
       @tc = cloud :test_git_class_cloud do
+        has_file "/var/www/bino"
         has_git_repos :at => "/var/www/", :name => "gitrepos.git", :source => "git://git/repos/source.git", :requires_user => "finger"
       end
-      @compiled = PuppetResolver.new(@tc.to_properties_hash).compile
+      @compiled = ChefResolver.new(@tc.to_properties_hash).compile
     end
     it "should be a string" do
-      @compiled.should =~ /exec/
+      @compiled.should =~ /execute/
     end
     it "should included the flushed out options" do
       @compiled.should =~ /finger@git:/
@@ -33,7 +34,7 @@ describe "Remote Instance" do
         end
       end
       it "should have the path set within the resource" do
-        PuppetResolver.new(@tc.to_properties_hash).compile.should =~ /exec \{ \"git-gittr/
+        ChefResolver.new(@tc.to_properties_hash).compile.should =~ /execute \"git-gittr/
       end
     end
   end
