@@ -179,7 +179,7 @@ end
 Right now, vmrun, the remoter base needs an explicitly set ip. Log into your vm and type ifconfig. Copy and paste that here.
           EOV
           ask_with_help :message => "Now, what's the ip of your vm?",
-                        :validate => /\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/,
+                        :validate => /\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}|h|H/,
                         :help => ip_help do |i|
            
            ask_with_help :message => "Finally, make sure you get your key on the vm. You can use this command: \n\tscp ~/.ssh/id_rsa.pub root@#{i}:/root/.ssh/authorized_keys.\n\nPress enter when you're ready" do |qqqq|
