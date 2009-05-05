@@ -103,7 +103,7 @@ default host.
           has_file(:name => "/etc/apache2/apache2.conf") do
             mode 644
             requires get_directory("/etc/apache2/conf.d")
-            template File.dirname(__FILE__)/".."/"templates"/"apache2"/"apache2.conf"
+            template "apache2"/"apache2.conf"
           end
           does_not_have_file(:name => "/etc/apache2/ports.conf")
 
@@ -113,9 +113,9 @@ default host.
           end
 
           # Base config
-          config("base", ::File.join(File.dirname(__FILE__), "../templates/apache2", "base.conf.erb"))
-          config("mime", ::File.join(File.dirname(__FILE__), "../templates/apache2/", "mime-minimal.conf.erb"))
-          config("browser_fixes", ::File.join(File.dirname(__FILE__), "../templates/apache2", "browser_fixes.conf.erb"))
+          config("base", "apache2"/"base.conf.erb")
+          config("mime", "apache2"/"mime-minimal.conf.erb")
+          config("browser_fixes", "apache2"/"browser_fixes.conf.erb")
 
           present_apache_module("mime", "rewrite")
         # end
@@ -125,7 +125,7 @@ default host.
 
       def enable_default
         listen 80 # assumes no haproxy
-        site "default-site", :template => File.dirname(__FILE__)/".."/:templates/:apache2/"default-site.conf.erb"
+        site "default-site", :template => :apache2/"default-site.conf.erb"
       end
 
       
@@ -321,7 +321,7 @@ eof
         has_package(:name => "libapache2-mod-php5")
         present_apache_module("php5")
           has_file({:name => "/etc/php5/apache2/php.ini",
-                  :template => File.dirname(__FILE__) + "/../templates/apache2/php.ini.erb",
+                  :template => "apache2/php.ini.erb",
                   :mode => 755,
                   :requires => get_package("libapache2-mod-php5"),
                   :calls => get_exec("reload-apache2")})
