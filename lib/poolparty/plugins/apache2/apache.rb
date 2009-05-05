@@ -317,14 +317,17 @@ eof
     # end
     virtual_resource(:enable_php5) do
       def loaded(opts={}, parent=self)
+      end
+
+      def before_load(o={})
         has_package(:name => "php5")
         has_package(:name => "libapache2-mod-php5")
         present_apache_module("php5")
-          has_file({:name => "/etc/php5/apache2/php.ini",
-                  :template => "apache2/php.ini.erb",
-                  :mode => 755,
-                  :requires => get_package("libapache2-mod-php5"),
-                  :calls => get_exec("reload-apache2")})
+        has_file({:name => "/etc/php5/apache2/php.ini",
+                :template => "apache2/php.ini.erb",
+                :mode => 755,
+                :requires => get_package("libapache2-mod-php5"),
+                :calls => get_exec("reload-apache2")})
       end
 
       def extras(*names)
