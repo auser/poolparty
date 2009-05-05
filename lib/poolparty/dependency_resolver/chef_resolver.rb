@@ -94,9 +94,9 @@ module PoolParty
       o = []
       if varhash[:namespace]
         o << ["\n#{varhash[:namespace]} Mash.new unless attribute?('#{varhash[:namespace]}')"]
-        o << "#{varhash[:namespace]}[:#{varhash[:name]}] = #{to_option_string(varhash[:value])}\n"
+        o << "#{varhash[:namespace]}['#{varhash[:name]}'] = #{to_option_string(varhash[:value])}\n"
       else
-        o << "poolparty[:#{varhash[:name]}] = #{to_option_string(varhash[:value])}"
+        o << "poolparty['#{varhash[:name]}'] = #{to_option_string(varhash[:value])}"
       end
       ::File.open("#{base_dir}/attributes/poolparty.rb", "a+") do |f| 
         f << o.join("\n")
