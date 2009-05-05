@@ -74,11 +74,11 @@ module PoolParty
       # 
       # Returns +nil+ if the file cannot be found.
       def search_in_known_locations(filepath)
-        return filepath if File.exists?(filepath) # return the file if its an absolute path
+        return filepath if ::File.exists?(filepath) # return the file if its an absolute path
         self.class.searchable_paths.each do |path|
           self.class.searchable_paths_dirs.each do |dir|
-            full_path = File.expand_path(path / dir / filepath)
-            return full_path if File.exists?(full_path)
+            full_path = ::File.expand_path(path / dir / filepath)
+            return full_path if ::File.exists?(full_path)
           end
         end
         nil

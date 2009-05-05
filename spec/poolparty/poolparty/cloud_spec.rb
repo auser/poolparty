@@ -170,7 +170,8 @@ describe "Cloud" do
             clouds[:app]._keypairs.size.should == 2
           end
           it "should default to ~/.ssh/id_rsa if none are defined" do
-            File.stub!(:exists?).with("#{ENV["HOME"]}/.ssh/id_rsa").and_return(true)
+            ::File.stub!(:exists?).and_return(false)
+            ::File.stub!(:exists?).with(File.expand_path("#{ENV["HOME"]}/.ssh/id_rsa")).and_return(true)
             pool :pool do
               cloud :app do
               end
