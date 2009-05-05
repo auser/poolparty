@@ -233,20 +233,6 @@ eof
       end
     end
 
-    # Templates
-    def virtual_host_template(opts={})
-      File.dirname(__FILE__)/".."/:templates/:apache2/"virtual_host.conf.erb"
-    end
-
-    def virtual_host_variables(n, opts={})
-      has_variable(:name => "#{n}_port", :value => opts[:port] || get_variable("port"))
-      has_variable(:name => "#{n}_virtual_host_server_name", :value => n)
-      has_variable(:name => "#{n}_virtual_host_document_root", :value => "/var/www/#{n}")
-    end
-
-
-    
-
   end
   
 #   virtual_resource(:passengersite) do    # {{{
