@@ -29,6 +29,7 @@ module PoolParty
       :default_specfile_name => "clouds.rb",
       :properties_hash_filename => "clouds.json",
       :vendor_path => "#{::File.dirname(__FILE__)}/../../../vendor",
+      :poolparty_src_path => "#{::File.dirname(__FILE__)}/../../..",
       :port => "80",
       :forwarding_port => "8080",
       :monitor_port => 8081,

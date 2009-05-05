@@ -30,6 +30,7 @@ To write a file to the template directory, use:
   has_file(:name => '/etc/motd', :content => 'Hey and welcome to your node today!')
 =end
     class File < Resource
+      has_searchable_paths(:dir => "templates")
       
       def loaded(o={}, &block)
         parent.has_directory ::File.dirname(name) if parent
@@ -47,8 +48,7 @@ To write a file to the template directory, use:
         run_render = dsl_options.include?(:render_as) ? dsl_options.delete(:render_as) : false
         
         if dsl_options.include?(:template)          
-          filename = ::File.expand_path(dsl_options.template)
-          dsl_options.delete(:template)
+          filename = find_file(dsl_options.delete(:template))
           file = ::File.basename( filename )
           raise TemplateNotFound.new("no template given") unless file
 
@@ -67,10 +67,6 @@ To write a file to the template directory, use:
         super rescue ::File.send(m, *a, &block)
       end
 
-      # TODO
-      def find_template(template)
-      end
-      
     end
     
   end

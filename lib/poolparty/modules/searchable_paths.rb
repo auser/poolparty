@@ -1,6 +1,10 @@
 module PoolParty
   # Abstracts out the searchable path for a resource such as a
   # template file, key, or clouds.rb
+  #
+  # NOTE: this is currently _only_ implemented on templates
+  # (PoolParty::Resources::File) and not yet working on clouds.rb or key files.
+  # These will eventually be refactored to use this class.
   module SearchablePaths
     def self.included(mod)
       mod.extend(ClassMethods)
@@ -47,6 +51,8 @@ module PoolParty
           Dir.pwd,
           PoolParty::Default.poolparty_home_path,
           PoolParty::Default.base_keypair_path,
+          PoolParty::Default.poolparty_src_path,
+          PoolParty::Default.poolparty_src_path/:lib/:poolparty,
           PoolParty::Default.base_config_directory,
           PoolParty::Default.remote_storage_path
         ]
@@ -61,13 +67,17 @@ module PoolParty
 
     module InstanceMethods
 
-      # Search for the file in path locations with the entire filepath
-      # if the file exists. If it doesn't exist in the default locations, 
-      # then it returns nil and assumes we it doesn't exist
+      # Searches for +filepath+ in the <tt>searchable_paths</tt> iff +filepath+
+      # doesn't exist. e.g. +filepath+ is interpreted *first* as an absolute
+      # path, if +filepath+ doesn't exist verbatim then it looks for the file
+      # in the searchable_paths.
+      # 
+      # Returns +nil+ if the file cannot be found.
       def search_in_known_locations(filepath)
+        return filepath if File.exists?(filepath) # return the file if its an absolute path
         self.class.searchable_paths.each do |path|
           self.class.searchable_paths_dirs.each do |dir|
-            full_path = File.expand_path(path) / dir / File.basename(filepath)
+            full_path = File.expand_path(path / dir / filepath)
             return full_path if File.exists?(full_path)
           end
         end
