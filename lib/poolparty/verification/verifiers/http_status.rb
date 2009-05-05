@@ -33,7 +33,7 @@ Verify the HTTP response code from a particular url
 
       def passing?
         http = Net::HTTP.new(@uri.host)
-        response = http.request_get(@uri.path)
+        response = http.request_get(@uri.path && !@uri.path.empty? ? @uri.path : "/")
 
         return case true
                when status.kind_of?(Numeric)
