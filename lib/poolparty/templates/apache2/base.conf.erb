@@ -164,4 +164,5 @@ LogFormat "%{User-agent}i" agent
 
 DocumentRoot /var/www
 
-NameVirtualHost *
+Listen <%= @node[:poolparty][:port] %>
+NameVirtualHost *:<%= @node[:poolparty][:port] %>

@@ -12,10 +12,11 @@ default host.
 
     plugin :apache do
       def loaded(opts={}, &block)        
-          has_service("apache2", :requires => get_package("apache2"))
+        has_service("apache2", :requires => get_package("apache2"))
       end
 
       def enable
+        enable_default
       end
 
       def before_load(o={}, &block)
@@ -76,6 +77,7 @@ default host.
       #   end
       # end
       # }}}
+
       # def enable_ssl# {{{
       #   unless @enable_ssl
       #     has_package("apache2.2-common")
@@ -121,7 +123,6 @@ default host.
       end
 
       def enable_default
-        puts "enabling default"
         listen 80 # assumes no haproxy
         site "default-site", :template => File.dirname(__FILE__)/".."/:templates/:apache2/"default-site.conf.erb"
       end
@@ -184,11 +185,6 @@ default host.
         end
       end
       
-      # Templates
-      def virtual_host_template(name, opts={})
-        template ::File.join(File.dirname(__FILE__), "templates/webserver", "virtual_host.conf.erb")
-      end
-      
     end
 
   virtual_resource(:virtualhost) do
@@ -198,10 +194,15 @@ default host.
     end
         
     def virtual_host_entry(file)
+      @virtual_host_entry = true
       if ::File.file?(file)
-        has_file(options.merge({:name => "/etc/apache2/sites-available/#{name}", :ensures => 'present', :alias => "#{name}", :template => file, :requires => get_package("apache2")}))
+        has_file(options.merge({:name => "/etc/apache2/sites-available/#{name}", 
+                                :template => file, 
+                                :requires => get_package("apache2")}))
       else
-        has_file(options.merge({:content => file, :name => "/etc/apache2/sites-available/#{name}", :ensures => 'present', :alias => "#{name}", :requires => get_package("apache2")}))
+        has_file(options.merge({:content => file, 
+                                :name => "/etc/apache2/sites-available/#{name}", 
+                                :requires => get_package("apache2")}))
       end
     end
     
@@ -211,12 +212,41 @@ default host.
       has_directory(:name => "/var/www/#{name}/logs", :owner => "www-data")
 
       has_variable(:name => "sitename", :value => "#{name}")
+
+      unless @virtual_host_entry
+        # virtual_host_variables(name, opts)
+        # virtual_host_entry(virtual_host_template)
+        virtual_host_entry <<-eof
+<VirtualHost *:#{port}> 
+ServerName     #{name}
+DocumentRoot   /var/www/#{name}
+</VirtualHost>
+eof
+      end
       
-      has_exec(:name => "insert-site-#{name}", :command => "/usr/sbin/a2ensite #{name}", :reloads => get_exec("reload-apache2"), :requires => get_file("/etc/apache2/sites-available/#{name}")) do
+      has_exec(:name => "insert-site-#{name}", 
+               :command => "/usr/sbin/a2ensite #{name}", 
+               :reloads => get_exec("reload-apache2"), 
+               :requires => get_file("/etc/apache2/sites-available/#{name}")) do
         requires get_package("apache2")
-        if_not "/bin/sh -c \"[ -L /etc/apache2/sites-enabled/#{parent.name} ] && [ /etc/apache2/sites-enabled/#{parent.name} -ef /etc/apache2/sites-available/#{parent.name} ]\""
+        if_not "/bin/sh -c '[ -L /etc/apache2/sites-enabled/#{parent.name} ] && [ /etc/apache2/sites-enabled/#{parent.name} -ef /etc/apache2/sites-available/#{parent.name} ]'"
       end
     end
+
+    # Templates
+    def virtual_host_template(opts={})
+      File.dirname(__FILE__)/".."/:templates/:apache2/"virtual_host.conf.erb"
+    end
+
+    def virtual_host_variables(n, opts={})
+      has_variable(:name => "#{n}_port", :value => opts[:port] || get_variable("port"))
+      has_variable(:name => "#{n}_virtual_host_server_name", :value => n)
+      has_variable(:name => "#{n}_virtual_host_document_root", :value => "/var/www/#{n}")
+    end
+
+
+    
+
   end
   
 #   virtual_resource(:passengersite) do    # {{{

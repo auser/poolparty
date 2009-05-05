@@ -1,5 +1,4 @@
-# Listen <%= @node[:poolparty][:port] %>
-<VirtualHost *>
+<VirtualHost *:<%= @node[:poolparty][:port] %>>
 	ServerAdmin webmaster@localhost
 
 	DocumentRoot /var/www
