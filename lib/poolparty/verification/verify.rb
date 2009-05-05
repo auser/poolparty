@@ -16,6 +16,9 @@ module PoolParty
       end
       def verify(&block)
         v = Verify.new(&block)
+        # ugly, todo fix
+        ip = nodes(:status => "running").first.ip rescue "127.0.0.1"
+        v.host = ip
         v.verifiers.each {|v| verifiers << v}
       end
       def passing?
@@ -41,6 +44,7 @@ module PoolParty
   Dir[::File.dirname(__FILE__)+"/verifiers/*"].each {|m| require m }  
   
   class Verify
+    attr_accessor :host
     def initialize(&block)
       ::PoolParty.require_user_directory "verifiers"
       
