@@ -63,15 +63,15 @@ default host.
       #     has_exec(:name => "install_passenger_script", 
       #       :command => "/usr/bin/ruby #{Base.remote_storage_path}/install_passenger.rb", 
       #       :if_not => "test -f /etc/apache2/conf.d/passenger.conf && test -s /etc/apache2/conf.d/passenger.conf",
-      #       :reloads => get_service("apache2")
+      #       :calls => get_service("apache2")
       #       )
 
-      #     has_file(:name => "#{Base.remote_storage_path}/install_passenger.rb", :reloads => get_exec("install_passenger_script")) do
+      #     has_file(:name => "#{Base.remote_storage_path}/install_passenger.rb", :calls => get_exec("install_passenger_script")) do
       #       template File.dirname(__FILE__)/".."/"templates"/"apache2"/"install_passenger.rb"
       #       template "install_passenger.rb" # todo
       #     end
 
-      #     has_gempackage(:name => "passenger", :reloads => get_exec("install_passenger_script"))
+      #     has_gempackage(:name => "passenger", :calls => get_exec("install_passenger_script"))
           
       #     @enable_passenger = true
       #   end
@@ -87,7 +87,7 @@ default host.
       #     has_exec(:command => "a2enmod ssl") do
       #       requires [ get_package("openssl") ]
       #       if_not "/usr/bin/test -L /etc/apache2/mods-enabled/ssl.load"
-      #       reloads get_exec("restart-apache2")
+      #       calls get_exec("restart-apache2")
       #     end
       #     @enable_ssl = true
       #   end
@@ -108,7 +108,7 @@ default host.
 
           has_exec(:command => "/usr/sbin/a2dissite default") do
             only_if "/usr/bin/test -L /etc/apache2/sites-enabled/000-default"
-            reloads get_exec("reload-apache2")
+            calls get_exec("reload-apache2")
           end
 
           # Base config
@@ -144,7 +144,7 @@ default host.
         when "present", "installed"
           install_site(name, opts)
         when "absent"
-          has_exec(:command => "/usr/sbin/a2dissite #{name}", :reloads => get_exec("reload-apache2")) do
+          has_exec(:command => "/usr/sbin/a2dissite #{name}", :calls => get_exec("reload-apache2")) do
           requires get_package("apache2")
             only_if "/bin/sh -c \"[ -L /etc/apache2/sites-enabled/#{name} ] && [ /etc/apache2/sites-enabled/#{name} -ef /etc/apache2/sites-available/#{name}]\""
           end
@@ -155,7 +155,7 @@ default host.
         opts.merge!(:name => "/etc/apache2/sites-available/#{name}")
         has_directory(:name => "/etc/apache2/sites-available")
         has_file(opts)
-        has_exec(:name => "/usr/sbin/a2ensite #{name}", :reloads => get_exec("reload-apache2"), :requires => get_file("/etc/apache2/sites-available/#{name}")) do
+        has_exec(:name => "/usr/sbin/a2ensite #{name}", :calls => get_exec("reload-apache2"), :requires => get_file("/etc/apache2/sites-available/#{name}")) do
           requires get_package("apache2")
           if_not "/bin/sh -c '[ -L /etc/apache2/sites-enabled/#{name} ] && [ /etc/apache2/sites-enabled/#{name} -ef /etc/apache2/sites-available/#{name} ]'"
         end
@@ -170,7 +170,7 @@ default host.
           has_exec(:name => "mod-#{name}", :command => "/usr/sbin/a2enmod #{name}") do
             requires get_package("apache2")
             if_not "/bin/sh -c \'[ -L /etc/apache2/mods-enabled/#{name}.load ] && [ /etc/apache2/mods-enabled/#{name}.load -ef /etc/apache2/mods-available/#{name}.load ]\'"
-            reloads get_exec("force-reload-apache2")            
+            calls get_exec("force-reload-apache2")            
           end
         end
       end
@@ -180,7 +180,7 @@ default host.
           has_exec({:name => "no-mod-#{name}"}, :command => "/usr/sbin/a2dismod #{name}") do
             requires get_package("apache2")
             if_not "/bin/sh -c \'[ -L /etc/apache2/mods-enabled/#{name}.load ] && [ /etc/apache2/mods-enabled/#{name}.load -ef /etc/apache2/mods-available/#{name}.load ]\'"
-    				reloads get_exec("force-reload-apache2")
+    				calls get_exec("force-reload-apache2")
           end
         end
       end
@@ -214,8 +214,6 @@ default host.
       has_variable(:name => "sitename", :value => "#{name}")
 
       unless @virtual_host_entry
-        # virtual_host_variables(name, opts)
-        # virtual_host_entry(virtual_host_template)
         virtual_host_entry <<-eof
 <VirtualHost *:#{port}> 
 ServerName     #{name}
@@ -226,7 +224,7 @@ eof
       
       has_exec(:name => "insert-site-#{name}", 
                :command => "/usr/sbin/a2ensite #{name}", 
-               :reloads => get_exec("reload-apache2"), 
+               :calls => get_exec("reload-apache2"), 
                :requires => get_file("/etc/apache2/sites-available/#{name}")) do
         requires get_package("apache2")
         if_not "/bin/sh -c '[ -L /etc/apache2/sites-enabled/#{parent.name} ] && [ /etc/apache2/sites-enabled/#{parent.name} -ef /etc/apache2/sites-available/#{parent.name} ]'"
@@ -255,7 +253,7 @@ eof
       
 #       has_variable(:name => "sitename", :value => "#{name}")      
       
-#       has_exec(:command => "/usr/sbin/a2ensite #{name}", :reloads => 'Exec["reload-apache2"]', :requires => get_file("/etc/apache2/sites-available/#{name}")) do
+#       has_exec(:command => "/usr/sbin/a2ensite #{name}", :calls => 'Exec["reload-apache2"]', :requires => get_file("/etc/apache2/sites-available/#{name}")) do
 #         if_not "/bin/sh -c \"[ -L /etc/apache2/sites-enabled/#{name} ] && [ /etc/apache2/sites-enabled/#{name} -ef /etc/apache2/sites-available/#{name} ]\""
 #       end
 #     end
@@ -285,7 +283,7 @@ eof
 #         template File.dirname(__FILE__), "/../templates/webserver", "passenger.conf.erb"
 #       end
       
-#       has_exec(:command => "/usr/sbin/a2ensite #{name}", :reloads => 'Exec["reload-apache2"]', :requires => get_file("/etc/apache2/sites-available/#{name}")) do
+#       has_exec(:command => "/usr/sbin/a2ensite #{name}", :calls => 'Exec["reload-apache2"]', :requires => get_file("/etc/apache2/sites-available/#{name}")) do
 #         if_not "/bin/sh -c \"[ -L /etc/apache2/sites-enabled/#{@parent.name} ] && [ /etc/apache2/sites-enabled/#{@parent.name} -ef /etc/apache2/sites-available/#{@parent.name} ]\""
 #       end
 #     end
@@ -325,7 +323,7 @@ eof
                 :template => File.dirname(__FILE__) + "/../templates/apache2/php.ini.erb",
                 :mode => 755,
                 :requires => get_package("libapache2-mod-php5"),
-                :reloads => get_exec("reload-apache2")})
+                :calls => get_exec("reload-apache2")})
     end
 
     def extras(*names)
