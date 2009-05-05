@@ -7,5 +7,4 @@ end
 Dir["#{::File.dirname(__FILE__)}/remoter_bases/*/*.rb"].each do |base| 
   name = File.join(::File.basename(base, ::File.extname(base)))
   require base
-  register_remote_base name
 end
