@@ -21,6 +21,7 @@ describe "File" do
     end
     describe "template" do
       before(:each) do
+        ::File.stub!(:basename).and_return "template"
         @file = "<%= friends %> <%= runner %>"
         @file.stub!(:read).and_return @file
         Template.stub!(:open).and_return @file

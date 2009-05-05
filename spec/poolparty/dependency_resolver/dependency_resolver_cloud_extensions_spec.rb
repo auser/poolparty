@@ -77,6 +77,7 @@ describe "Resolution spec" do
   describe "defined cloud" do
     before(:each) do
       reset!
+      ::File.stub!(:basename).and_return "template"
       @file = "Hello <%= friends %> on port <%= listen %>"
       @file.stub!(:read).and_return @file
       Template.stub!(:open).and_return @file
