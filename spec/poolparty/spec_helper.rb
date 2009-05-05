@@ -31,13 +31,6 @@ require File.dirname(__FILE__)+'/net/remoter_bases/ec2_mocks_and_stubs.rb'
 # Append this directory - which contains a mock key named id_rsa - to the list of searchable locations 
 class PoolParty::Key
   has_searchable_paths(:dirs => ["/", "keys"], :prepend_paths => [File.dirname(__FILE__), "#{ENV["HOME"]}/.ssh"])
-  # class << self
-  #   alias :keypair_paths_without_spec_dir :keypair_paths unless method_defined?(:keypair_paths_without_spec_dir)
-  #   def keypair_paths
-  #     [keypair_paths_without_spec_dir, File.dirname(__FILE__)].flatten
-  #   end
-  # end
-  
 end
 
 class TestRemoterClass < ::PoolParty::Remote::Ec2
