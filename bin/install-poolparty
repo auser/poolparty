@@ -162,7 +162,7 @@ end
 Vmware uses a vmwarevm file to keep information about the vmware instance. To find the vmwarevm file, 
 navigate to vmware and find the vm you'd like to use. Find this in finder and paste that here.
         EOV
-        default_vmrun_file = Dir["#{::File.expand_path("~")}/Documents/Virtual\ Machines/*.vmwarevm"].first rescue nil
+        default_vmrun_file = Dir["#{::File.expand_path("~")}/Documents/Virtual\ Machines.localized/*.vmwarevm"].first rescue nil
         vmrun_file = <<-EOE
 Awesome. What's the path to your vmwarevm file?
 #{

@@ -43,11 +43,9 @@ end
 
 def PoolParty.require_directory(dir)
   if ::File.file?(dir)
-    puts "#{::File.expand_path(dir)}" if $DEBUGGING || $GENERATING_MANIFEST
     require dir
   else
     Dir["#{dir}/*.rb"].sort.each do |file|
-       puts "#{::File.expand_path(file)}" if $DEBUGGING || $GENERATING_MANIFEST
        require "#{file}" if ::File.file?(file)
     end
     Dir["#{dir}/*"].sort.each do |dir|

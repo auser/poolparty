@@ -34,7 +34,7 @@ To write a file to the template directory, use:
       
       dsl_methods :owner, :content, :source, :template, :render_as      
       default_options(
-        :mode => 755
+        :mode => "644"
       )
       
       def loaded(o={}, &block)

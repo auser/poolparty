@@ -30,7 +30,7 @@ The above example will place the contents of '/local/path' at '/path/on/server/n
       
       default_options({
         :recursive => true,
-        :mode => 755
+        :mode => "0644"
       })
       
       def present

@@ -12,6 +12,8 @@ default host.
 =end
 
     plugin :apache do
+      dsl_methods :passenger_version
+      
       def loaded(opts={}, &block)        
         has_service("apache2", :requires => get_package("apache2"))
       end
@@ -78,8 +80,8 @@ default host.
         unless @passenger_configs
           has_variable "gems_path", :value => lambda { "`gem env gemdir`.chomp!" }
           has_variable "ruby_path", :value => lambda { "`which ruby`.chomp!" }
-
-          passenger_version "2.2.2" unless defined?(passenger_version)
+          
+          passenger_version ||= "2.2.2"
 
           has_variable("passenger_version",     :value => passenger_version)
           has_variable("passenger_root_path",   :value => "\#{poolparty[:gems_path]}/gems/passenger-#{passenger_version}")
@@ -276,7 +278,7 @@ eof
     ServerName #{name}
     DocumentRoot #{site_directory}/public
     RailsEnv production
-    ErrorLog #{site_directory}}/log/error_log
+    ErrorLog #{site_directory}/log/error_log
     CustomLog #{site_directory}/log/access_log common
 </VirtualHost>
       EOE

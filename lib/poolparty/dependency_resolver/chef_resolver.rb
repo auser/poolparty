@@ -213,7 +213,14 @@ module PoolParty
       when Fixnum
         "#{obj.to_i}"
       when String
-        "\"#{obj}\""
+        case obj
+        when /^\d{4}$/
+          "#{obj}"
+        when /^\d{3}$/
+          "0#{obj}"
+        else
+          "\"#{obj}\""
+        end
       when Proc
         obj.call # eh
       when Array
