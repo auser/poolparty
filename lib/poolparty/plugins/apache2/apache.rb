@@ -61,14 +61,16 @@ default host.
           has_package     "apache2-prefork-dev"
           has_gem_package "fastthread"
           has_gem_package "passenger"
+          passenger_configs
+
           has_exec(:name => "install_passenger_script", 
             :command => 'echo -en \"\\\\n\\\\n\\\\n\\\\n\" | passenger-install-apache2-module',
             :if_not => "test -f /etc/apache2/conf.d/passenger.conf && test -s /etc/apache2/conf.d/passenger.conf",
+            :creates => lambda { "node[:poolparty][:passenger_module_path]" },
             :calls => get_exec("restart-apache2")
             )
           
           @enable_passenger = true
-          passenger_configs
         end
       end
 
@@ -259,16 +261,23 @@ eof
   end
   
   virtual_resource(:passengersite) do    # {{{
+
+    default_options(
+      :dir => "/var/www",
+      :appended_path => nil
+    )
+
     def loaded(opts={}, prnt=nil)
       enable_passenger
       port "80" unless port
+      appended_path "current" if opts[:with_deployment_directories]
       passenger_entry <<-EOE
 <VirtualHost *:#{port}>
     ServerName #{name}
-    DocumentRoot /var/www/#{name}/public
+    DocumentRoot #{site_directory}/public
     RailsEnv production
-    ErrorLog /var/www/#{name}/log/error_log
-    CustomLog /var/www/#{name}/log/access_log common
+    ErrorLog #{site_directory}}/log/error_log
+    CustomLog #{site_directory}/log/access_log common
 </VirtualHost>
       EOE
       
@@ -284,6 +293,10 @@ eof
       else
         has_file({:content => file, :name => "/etc/apache2/sites-available/#{name}" })
       end
+    end
+
+    def site_directory
+      "#{dir}/#{name}%s" % [appended_path ? "/" + appended_path : ""]
     end
   end
   
