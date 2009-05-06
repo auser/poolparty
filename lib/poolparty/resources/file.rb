@@ -32,13 +32,9 @@ To write a file to the template directory, use:
     class File < Resource
       has_searchable_paths(:dir => "templates")
       
+      dsl_methods :owner, :content, :source, :template, :render_as      
       default_options(
-        :mode => 755,
-        :owner => nil,
-        :content => nil,
-        :source => nil,
-        :template => nil,
-        :render_as => nil
+        :mode => 755
       )
       
       def loaded(o={}, &block)
@@ -72,9 +68,9 @@ To write a file to the template directory, use:
         end
       end
       
-      def method_missing m, *a, &block
-        super rescue ::File.send(m, *a, &block)
-      end
+      # def method_missing m, *a, &block
+      #   super rescue ::File.send(m, *a, &block)
+      # end
       
       def variable(k,v)
         dsl_option(k,v)

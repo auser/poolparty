@@ -25,9 +25,7 @@ The symlink resource sets a symlink
 =end
     class Symlink < Resource
       
-      def initialize *args, &block
-        super
-      end
+      dsl_methods :source
       
       def present
         :create

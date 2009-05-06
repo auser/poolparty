@@ -3,10 +3,9 @@ module PoolParty
         
     class User < Resource      
       
+      dsl_methods :password, :home
       default_options({
-        :shell => "/bin/sh",
-        :password => nil,
-        :home => nil,
+        :shell => "/bin/sh"
       })
       
     end

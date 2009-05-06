@@ -17,17 +17,14 @@ module PoolParty
     
     plugin :rails_deploy do
       
+      dsl_methods :shared, :database_yml, :repo, :user, :user_dir
+      
       default_options(
         :dir => "/var/www",
         :owner => "www-data",
-        :user => nil,
         :group => "root",
-        :user_dir => nil,
         :install_sqlite => false,
-        :migration_command => "rake db:migrate",
-        :shared => nil,
-        :database_yml => nil,
-        :repo => nil
+        :migration_command => "rake db:migrate"
       )
       
       def loaded(o={}, &block)

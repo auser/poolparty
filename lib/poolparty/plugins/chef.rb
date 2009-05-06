@@ -3,6 +3,7 @@ require "tempfile"
 module PoolParty
   class ChefRecipe
     include Dslify
+    dsl_methods :recipes
   end
   class Chef
     define_resource :chef_recipe do

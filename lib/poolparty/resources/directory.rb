@@ -26,10 +26,11 @@ The above example will place the contents of '/local/path' at '/path/on/server/n
 
     class Directory < Resource
       
+      dsl_methods :owner
+      
       default_options({
         :recursive => true,
-        :mode => 755,
-        :owner => nil
+        :mode => 755
       })
       
       def present

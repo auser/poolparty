@@ -25,11 +25,9 @@ Ensure a command is run on the instances
     
     class Exec < Resource
       
+      dsl_methods :cwd, :creates, :command
       default_options({
-        :path => ["/usr/bin:/bin:/usr/local/bin:$PATH"],
-        :cwd => nil,
-        :creates => nil,
-        :command => nil
+        :path => ["/usr/bin:/bin:/usr/local/bin:$PATH"]
       })
       
       def present
