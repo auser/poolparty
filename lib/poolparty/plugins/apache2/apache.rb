@@ -49,35 +49,57 @@ default host.
         end
       end
 
-      # def install_passenger# {{{
-      #   base_install
-      #   enable_passenger
-      # end# }}}
+      def install_passenger# {{{
+        install 
+        enable_passenger
+      end# }}}
 
-      # def enable_passenger# {{{
-      #   unless @enable_passenger
-      #     installed_as_worker
-      #     has_package(:name => "build-essential")
-      #     has_package(:name => "apache2-prefork-dev")
-      #     has_gempackage(:name => "fastthread")
-
-      #     has_exec(:name => "install_passenger_script", 
-      #       :command => "/usr/bin/ruby #{Base.remote_storage_path}/install_passenger.rb", 
-      #       :if_not => "test -f /etc/apache2/conf.d/passenger.conf && test -s /etc/apache2/conf.d/passenger.conf",
-      #       :calls => get_service("apache2")
-      #       )
-
-      #     has_file(:name => "#{Base.remote_storage_path}/install_passenger.rb", :calls => get_exec("install_passenger_script")) do
-      #       template File.dirname(__FILE__)/".."/"templates"/"apache2"/"install_passenger.rb"
-      #       template "install_passenger.rb" # todo
-      #     end
-
-      #     has_gempackage(:name => "passenger", :calls => get_exec("install_passenger_script"))
+      def enable_passenger
+        unless @enable_passenger
+          installed_as_worker
+          has_package     "build-essential"
+          has_package     "apache2-prefork-dev"
+          has_gem_package "fastthread"
+          has_gem_package "passenger"
+          has_exec(:name => "install_passenger_script", 
+            :command => 'echo -en \"\\\\n\\\\n\\\\n\\\\n\" | passenger-install-apache2-module',
+            :if_not => "test -f /etc/apache2/conf.d/passenger.conf && test -s /etc/apache2/conf.d/passenger.conf",
+            :calls => get_exec("restart-apache2")
+            )
           
-      #     @enable_passenger = true
-      #   end
-      # end
-      # }}}
+          @enable_passenger = true
+          passenger_configs
+        end
+      end
+
+      def passenger_configs
+        unless @passenger_configs
+          has_variable "gems_path", :value => lambda { "`gem env gemdir`.chomp!" }
+          has_variable "ruby_path", :value => lambda { "`which ruby`.chomp!" }
+
+          passenger_version "2.2.2" unless defined?(passenger_version)
+
+          has_variable("passenger_version",     :value => passenger_version)
+          has_variable("passenger_root_path",   :value => "\#{poolparty[:gems_path]}/gems/passenger-#{passenger_version}")
+          has_variable("passenger_module_path", :value => "\#{poolparty[:passenger_root_path]}/ext/apache2/mod_passenger.so")
+
+          has_file(:name => "/etc/apache2/mods-available/passenger.load") do
+            content <<-eof
+              LoadModule passenger_module <%= @node[:poolparty][:passenger_module_path] %>
+            eof
+          end
+
+          has_file(:name => "/etc/apache2/mods-available/passenger.conf") do
+            content <<-eof
+              PassengerRoot <%= @node[:poolparty][:passenger_root_path] %>
+              PassengerRuby <%= @node[:poolparty][:ruby_path] %>
+            eof
+          end
+
+          present_apache_module(:passenger)
+          @passenger_configs = true
+        end
+      end
 
       # def enable_ssl# {{{
       #   unless @enable_ssl
@@ -137,7 +159,7 @@ default host.
         end
       end
       
-      def listen(port="8080")
+      def listen(port="80")
         has_variable(:name => "port", :value => port)
         @listen = true
       end
@@ -157,8 +179,8 @@ default host.
       def install_site(name, opts={})
         opts.merge!(:name => "/etc/apache2/sites-available/#{name}")
         has_directory(:name => "/etc/apache2/sites-available")
-        has_file(opts)
-        has_exec(:name => "/usr/sbin/a2ensite #{name}", :calls => get_exec("reload-apache2"), :requires => get_file("/etc/apache2/sites-available/#{name}")) do
+        has_file(opts) unless opts[:no_file]
+        has_exec(:name => "/usr/sbin/a2ensite #{name}", :calls => get_exec("reload-apache2")) do
           requires get_package("apache2")
           if_not "/bin/sh -c '[ -L /etc/apache2/sites-enabled/#{name} ] && [ /etc/apache2/sites-enabled/#{name} -ef /etc/apache2/sites-available/#{name} ]'"
         end
@@ -191,7 +213,7 @@ default host.
     end
 
   virtual_resource(:virtualhost) do
-    def listen(port="8080")
+    def listen(port="80")
       has_variable(:name => "port", :value => port)
       port port
     end
@@ -236,40 +258,36 @@ eof
 
   end
   
-#   virtual_resource(:passengersite) do    # {{{
-#     def loaded(opts={}, parent=self)
-#       enable_passenger
-#       passenger_entry <<-EOE
-# Listen #{port ? port : "8080"}
-# <VirtualHost *>
-#     ServerName #{name}
-#     DocumentRoot #{docroot || "/var/www/#{name}"}/public
-#     RailsEnv production
-#     ErrorLog #{docroot || "/var/www/#{name}"}/log/error_log
-#     CustomLog #{docroot || "/var/www/#{name}"}/log/access_log common
-# </VirtualHost>
-#       EOE
+  virtual_resource(:passengersite) do    # {{{
+    def loaded(opts={}, prnt=nil)
+      enable_passenger
+      port "80" unless port
+      passenger_entry <<-EOE
+<VirtualHost *:#{port}>
+    ServerName #{name}
+    DocumentRoot /var/www/#{name}/public
+    RailsEnv production
+    ErrorLog /var/www/#{name}/log/error_log
+    CustomLog /var/www/#{name}/log/access_log common
+</VirtualHost>
+      EOE
       
-#       has_directory(:name => "/var/www")
-#       has_directory(:name => "/var/www/#{name}")
-#       has_directory(:name => "/var/www/#{name}/log", :requires => get_directory("/var/www/#{name}/"))
-      
-#       has_variable(:name => "sitename", :value => "#{name}")      
-      
-#       has_exec(:command => "/usr/sbin/a2ensite #{name}", :calls => 'Exec["reload-apache2"]', :requires => get_file("/etc/apache2/sites-available/#{name}")) do
-#         if_not "/bin/sh -c \"[ -L /etc/apache2/sites-enabled/#{name} ] && [ /etc/apache2/sites-enabled/#{name} -ef /etc/apache2/sites-available/#{name} ]\""
-#       end
-#     end
-#     def passenger_entry(file)
-#       if ::File.file?(file)
-#         has_file({:name => "/etc/apache2/sites-available/#{name}", :ensures => 'present', :alias => "#{name}", :template => file, :requires => get_package("apache2")})
-#       else
-#         has_file({:content => file, :name => "/etc/apache2/sites-available/#{name}", :ensures => 'present', :alias => "#{name}", :content => file, :requires => get_package("apache2")})
-#       end
-#     end
-#   end
+      has_directory(:name => "/var/www")
+      has_directory(:name => "/var/www/#{name}")
+      has_directory(:name => "/var/www/#{name}/log")
+      parent.install_site(name, :no_file => true) # we already created the file with #passenger_entry
+    end
+
+    def passenger_entry(file)
+      if ::File.file?(file)
+        has_file({:name => "/etc/apache2/sites-available/#{name}", :template => file})
+      else
+        has_file({:content => file, :name => "/etc/apache2/sites-available/#{name}" })
+      end
+    end
+  end
   
-#   virtual_resource(:passengersite_with_ssl) do
+#   virtual_resource(:passengersite_with_ssl) do# {{{
 #     def loaded(opts={}, parent=self)
 #       enable_passenger
 
