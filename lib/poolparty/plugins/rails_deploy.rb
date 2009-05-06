@@ -57,7 +57,7 @@ module PoolParty
       def create_directory_tree
         has_directory dir
         has_directory release_directory
-        has_directory "#{shared_directory}", :owner => owner, :mode => "0755"
+        has_directory "#{shared_directory}", :owner => owner
         
         %w(config pids log system).each do |d|
           has_directory "#{shared_directory}/#{d}", :owner => owner
@@ -66,7 +66,6 @@ module PoolParty
       def setup_database_yml
         has_file "#{shared_directory}/config/database.yml", :owner => owner do
           content ::File.file?(database_yml) ? open(database_yml).read : database_yml
-          mode "0644"
         end
       end
       def call_deploy
