@@ -20,9 +20,14 @@ module PoolParty
       default_options(
         :dir => "/var/www",
         :owner => "www-data",
+        :user => nil,
         :group => "root",
         :user_dir => nil,
-        :install_sqlite => false
+        :install_sqlite => false,
+        :migration_command => "rake db:migrate",
+        :shared => nil,
+        :database_yml => nil,
+        :repo => nil
       )
       
       def loaded(o={}, &block)
@@ -49,8 +54,8 @@ module PoolParty
         has_gem_package "sqlite3-ruby"
       end
       def add_user(o)
-        has_user o[:user] do
-          comment "Rails Deploy user #{o[:user]}"
+        has_user user do
+          comment "Rails Deploy user #{user}"
           home user_dir || "/var/www"
           shell "/sbin/nologin"
           password "x"

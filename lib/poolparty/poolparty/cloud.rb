@@ -80,6 +80,8 @@ module PoolParty
         @cloud_name = name
         @cloud_name.freeze
         
+        setup_callbacks
+        
         plugin_directory "#{pool_specfile ? ::File.dirname(pool_specfile) : Dir.pwd}/plugins"        
         before_create
         super
@@ -112,8 +114,6 @@ module PoolParty
         
         plugin_store.each {|a| a.call_after_create_callbacks }
         setup_defaults
-        
-        setup_callbacks
       end
       
       # setup defaults for the cloud
