@@ -122,8 +122,7 @@ module PoolParty
         using :ec2
         options[:keypair] ||= keypair rescue nil
         options[:rules] = {:expand => dsl_options[:expand_when], :contract => dsl_options[:contract_when]}
-        dependency_resolver 'chef'        
-        # enable :haproxy unless dsl_options[:haproxy] == :disabled
+        set_dependency_resolver 'chef'        
       end
       
       def after_launch_instance(inst=nil)

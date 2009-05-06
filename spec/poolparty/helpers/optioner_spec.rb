@@ -11,7 +11,7 @@ describe "Option Parser" do
       @op.options.class.should == Hash
     end
     it "should have the verbose option set to false by default" do
-      @op.verbose.should == false
+      @op.verbose?.should == false
     end
     it "should call a method called on it that is not defined on the options if they exist" do
       @op.dsl_options.should_receive(:[]).with(:verbose).at_least(1).and_return true

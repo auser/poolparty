@@ -6,15 +6,13 @@ pool :application do
   cloud :basic_app do
     
     minimum_instances 12
-    ami "ami-abc123"
-    junk_yard_dogs "pains"
+    image_id "ami-abc123"
     has_file :name => "/etc/init.d/motd", :content => "Welcome to your PoolParty instance"
   end
   
   cloud :basic_db do    
     minimum_instances 19
-    ami "ami-1234bc"
-    junk_yard_dogs "are bad"
+    image_id "ami-1234bc"
   end
 
 end

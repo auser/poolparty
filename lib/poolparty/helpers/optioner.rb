@@ -106,7 +106,7 @@ module PoolParty
       @opts.parse(@arguments.dup)
       
       process_options
-      output_options if verbose
+      output_options if verbose? && verbose
       
       if @load_pools
         self.loaded_pool load_pool( spec? ? spec : Binary.get_existing_spec_location)

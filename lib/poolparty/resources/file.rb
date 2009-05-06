@@ -37,7 +37,8 @@ To write a file to the template directory, use:
         :owner => nil,
         :content => nil,
         :source => nil,
-        :template => nil
+        :template => nil,
+        :render_as => nil
       )
       
       def loaded(o={}, &block)
@@ -73,6 +74,10 @@ To write a file to the template directory, use:
       
       def method_missing m, *a, &block
         super rescue ::File.send(m, *a, &block)
+      end
+      
+      def variable(k,v)
+        dsl_option(k,v)
       end
 
     end

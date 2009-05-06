@@ -46,15 +46,11 @@ describe "Pool" do
       before(:each) do
         reset!
         @pool = Pool.new :test do
-          nick_nack "nails"
-          rocky_shores "ranger"
+          expand_when "nails"
         end
       end
       it "should set the plugin_directory to nails" do
-        @pool.nick_nack.should == "nails"
-      end
-      it "should set the rocky_shores to ranger" do
-        @pool.rocky_shores.should == "ranger"
+        @pool.expand_when.should == "nails"
       end
       describe "range for min/max instances" do
         it "should be able to respond to instances" do

@@ -16,7 +16,7 @@ pool :application do
       owner "www-data"
     end
     
-    has_git_repos "paparazzi" do
+    has_git_repo "paparazzi" do
       source "git://github.com/auser/paparazzi.git"
       at "/var/www"
     end

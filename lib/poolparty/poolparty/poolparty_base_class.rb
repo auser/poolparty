@@ -11,6 +11,11 @@ module PoolParty
     
     include PoolParty::DependencyResolverCloudExtensions
     # attr_accessor :depth
+    
+    default_options(
+      :verbose => false,
+      :debug => false
+    )
 
     def initialize(opts={}, extra_opts={}, &block)
       add_to_parent_if_parent_exists_and_is_a_service
@@ -33,6 +38,14 @@ module PoolParty
         context_stack.pop
       else
         super
+      end
+    end
+    
+    def run_with_callbacks(o, &block)
+      run_in_context(o) do
+        before_load(o, &block)
+        yield if block_given?
+        loaded(o, &block)
       end
     end
     
@@ -140,7 +153,7 @@ module PoolParty
     def method_missing(m,*a,&block)
       if respond_to?(:this_context) && this_context != self && this_context.respond_to?(m)# && !self.is_a?(PoolParty::Resources::Resource)
         this_context.send m, *a, &block      
-      else          
+      else
         super
       end
     end

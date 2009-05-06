@@ -18,7 +18,7 @@ describe "Ec2RemoteInstance" do
     lambda {TestEc2RemoteInstance.new()}.should raise_error
   end
   it "should have the name set in the options" do
-    @ec2.respond_to?(:name).should == false
+    @ec2.respond_to?(:name).should == true
     @ec2.options.keys.include?(:name).should == true
     @ec2.name.should == 'node3'
   end

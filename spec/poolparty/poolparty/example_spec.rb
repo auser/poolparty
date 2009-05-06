@@ -31,10 +31,6 @@ describe "basic" do
     clouds[:basic_app].minimum_instances.should == 12
     pools[:application].minimum_instances.should ==3
   end
-  it "should set ambiguous methods on the cloud" do
-    clouds[:basic_app].junk_yard_dogs.should == "pains"
-    clouds[:basic_db].junk_yard_dogs.should == "are bad"
-  end
   it "should set the parent to the pool" do
     clouds[:basic_app].parent.should == pools[:application]
     clouds[:basic_db].parent.should == pools[:application]

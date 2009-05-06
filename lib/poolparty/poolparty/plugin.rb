@@ -14,27 +14,20 @@ module PoolParty
       )
       
       def initialize(opts={}, extra_opts={}, prnt=nil, &block)        
-        @base_name = get_name_from_options_and_extra_options(opts, extra_opts)
-        @opts = (opts.is_a?(Hash) ? extra_opts.merge(opts) : extra_opts).merge(:name => @base_name)
-        
         setup_callbacks
         
-        puts "#{@opts.inspect} before run_in_context before_load" if self.class.to_s.top_level_class =~ /git/
-        
         run_in_context do
-          before_load(@opts, &block)
+          before_load(opts, &block)
         end
         
         block = Proc.new {enable} unless block        
         
-        super(@opts, &block)
-        
-        puts "#{@opts.inspect} after run_in_context before loaded" if self.class.to_s.top_level_class =~ /git/
+        super(opts, &block)
         
         run_in_context do
-          loaded @opts, &block
+          loaded opts, &block
         end
-                
+        
         after_create
       end
       

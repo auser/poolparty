@@ -74,8 +74,9 @@ module PoolParty
       
       default_options(
         :name => nil,
+        :action => nil,
         :not_if => nil,
-        :if_not => nil,
+        :if_not => nil,        
         :only_if => nil,
         :calls => nil
       )
@@ -106,11 +107,7 @@ module PoolParty
       def resource_name
         @resource_name ||= nil
       end
-      
-      def name(*args)
-        resource_name
-      end
-      
+            
       # After create callback
       def after_create
       end

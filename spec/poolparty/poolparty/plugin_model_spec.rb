@@ -5,7 +5,6 @@ describe "Plugin" do
   before(:each) do    
     @c = cloud :test_plugin_model_cloud do
       apachetest do                
-        enable_php
         site("heady", {
           :document_root => "/root"
         })

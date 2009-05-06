@@ -69,8 +69,9 @@ module PoolParty
           klass = "::PoolParty::Remote::#{klass_string}".constantize
           
           @remote_base = klass.send :new, self, &block
-          @remote_base.instance_eval &block if block          
-          options[:remote_base] = klass.to_s if respond_to?(:options)
+          @remote_base.instance_eval &block if block
+          dsl_option(:remote_base, @remote_base) if respond_to?(:options)
+          self.class.default_options.merge!(remote_base.class.default_options)
           
           @parent_cloud = @cloud
           instance_eval "def #{t};@remote_base;end"

@@ -37,7 +37,9 @@ module PoolParty
       :butterfly_port => 8642,
       :minimum_runtime  => 3000, #50.minutes in seconds
       :contract_when => "load < 0.25",
-      :expand_when => "load > 0.9"
+      :expand_when => "load > 0.9",
+      :access_key => nil,
+      :secret_access_key => nil
     )
     
     def options

@@ -42,7 +42,7 @@ module PoolParty
         :instance_type => 'm1.small', # or 'm1.large', 'm1.xlarge', 'c1.medium', or 'c1.xlarge'
         :addressing_type => "public",
         :availabilty_zone => "us-east-1a",
-        :security_group => ["default"]
+        :security_group => ["default"],
         })
       
       # Requires a hash of options

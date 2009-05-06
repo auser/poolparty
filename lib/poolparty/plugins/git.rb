@@ -11,14 +11,13 @@ module PoolParty
       default_options(
         :dir => nil,
         :owner => nil,
-        :creates_dir => nil
+        :requires_user => nil
       )
-      
+            
       def loaded(opts={}, &block)
         raise(StandardError.new("You must include a directory for the git repos set by to")) unless dir?
         # opts.has_key?(:at) ? at(opts.delete(:at)) : raise(Exception.new("You must include a directory for the git repos set by :at"))
         # opts.has_key?(:source) ? git_repos(opts.delete(:source) || opts[:name]) : raise(Exception.new("You must include the git source set by :source"))
-        puts "name in loaded git_repos: #{name}"
         has_package("git-core")
         has_git_repository
       end
@@ -28,17 +27,18 @@ module PoolParty
         has_directory(::File.dirname(dir))
         has_directory(:name => "#{dir}", :requires => get_directory("#{::File.dirname(dir)}"))
         
-        has_exec(:name => "git-#{name}", :requires => [get_directory("#{dir}"), get_package("git-core")], :creates => creates_dir ) do
+        has_exec(:name => "git-#{name}", :creates => creates_dir ) do
           # Cloud, GitRepos, Exec
-          command parent.requires_user? ? "git clone #{requires_user}@#{name} #{dir}" : "cd #{dir} && git clone #{name}"
+          command(requires_user? ? "git clone #{requires_user}@#{repos} #{dir}" : "cd #{dir} && git clone #{repos}")
           cwd "#{dir if dir}"          
+          requires [get_directory("#{dir}"), get_package("git-core")]
         end
-        has_exec(:name => "update-#{name}", :cwd => ::File.dirname( creates_dir )) do          
-          command "git pull"
+        has_exec(:name => "update-#{name}") do
+          command "cd #{::File.dirname( creates_dir )} && git pull"
         end
         
         if owner?
-          has_exec(:name => "chown-#{name}", :cwd => ::File.dirname( creates_dir )) do
+          has_exec(:name => "chown-#{name}", :cwd => ::File.dirname( creates_dir )) do            
             command "chown #{owner} * -R"
           end
         end
@@ -51,12 +51,15 @@ module PoolParty
         
       end
       
-      def to(dir)
+      def to(dir)        
         dsl_option :dir, dir
       end
       
+      def repos(r=nil)
+        name
+      end
+      
       def creates_dir
-        puts "name in creates_dir: #{name}"
         "#{::File.join( dir, ::File.basename(name, ::File.extname(name)) )}/.git"
       end
       

@@ -18,6 +18,10 @@ Ensures that the line given is in the file
   class LineInFile
     
     plugin :line_in_file do
+      default_options(
+        :file => nil,
+        :line => ""
+      )
       def loaded(opts={}, &block)
         has_exec "line_in_#{file}" do
           command "grep -q \'#{line.safe_quote}\' #{file} || echo \'#{line.safe_quote}\' >> #{file}"

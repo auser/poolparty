@@ -27,7 +27,9 @@ The above example will place the contents of '/local/path' at '/path/on/server/n
     class Directory < Resource
       
       default_options({
-        :recursive => true
+        :recursive => true,
+        :mode => 755,
+        :owner => nil
       })
       
       def present

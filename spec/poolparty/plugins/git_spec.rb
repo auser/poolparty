@@ -9,7 +9,7 @@ describe "Remote Instance" do
       reset!
       @tc = cloud :test_git_class_cloud do
         has_file "/var/www/bino"
-        has_git_repo "git://git/repos/source.git", :to => "finger"
+        has_git_repo "git://git/repos/source.git", :to => "/var/www/source", :requires_user => "finger"
       end
       @compiled = ChefResolver.new(@tc.to_properties_hash).compile
     end
@@ -31,7 +31,7 @@ describe "Remote Instance" do
         end
       end
       it "should have the path set within the resource" do
-        ChefResolver.new(@tc.to_properties_hash).compile.should =~ /execute \"git-gittr/
+        ChefResolver.new(@tc.to_properties_hash).compile.should =~ /execute \"git-git:\/\/source\.git/
       end
     end
   end

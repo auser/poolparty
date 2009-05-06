@@ -4,6 +4,13 @@ module PoolParty
     class RemoteInstance
       include Dslify
       
+      default_options(
+        :name => nil,
+        :ip => nil,
+        :internal_ip => nil,
+        :status => nil
+      )
+      
       def initialize(opts={}, containing_cloud=nil)
         @parent = containing_cloud
 
