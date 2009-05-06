@@ -214,6 +214,8 @@ module PoolParty
         "#{obj.to_i}"
       when String
         "\"#{obj}\""
+      when Proc
+        obj.call # eh
       when Array
         # If we are sending a notifies with a second argument
         if obj[1] && [:immediately, :delayed].include?(obj[1])
