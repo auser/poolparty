@@ -26,7 +26,10 @@ Ensure a command is run on the instances
     class Exec < Resource
       
       default_options({
-        :path => ["/usr/bin:/bin:/usr/local/bin:$PATH"]
+        :path => ["/usr/bin:/bin:/usr/local/bin:$PATH"],
+        :cwd => nil,
+        :creates => nil,
+        :command => nil
       })
       
       def present

@@ -32,6 +32,14 @@ To write a file to the template directory, use:
     class File < Resource
       has_searchable_paths(:dir => "templates")
       
+      default_options(
+        :mode => 755,
+        :owner => nil,
+        :content => nil,
+        :source => nil,
+        :template => nil
+      )
+      
       def loaded(o={}, &block)
         parent.has_directory ::File.dirname(name) if parent
       end
@@ -47,7 +55,7 @@ To write a file to the template directory, use:
       def after_create
         run_render = dsl_options.include?(:render_as) ? dsl_options.delete(:render_as) : false
         
-        if dsl_options.include?(:template)          
+        if dsl_options[:template]
           filename = find_file(dsl_options.delete(:template))
           file = ::File.basename( filename )
           raise TemplateNotFound.new("no template given") unless file

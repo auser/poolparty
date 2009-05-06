@@ -43,8 +43,8 @@ describe "Option Parser" do
   
   it "should be able to take a block and set some options on the block" do
     PoolParty::Optioner.new(["-w"], {:abstract => false, :load_pools => false}) do |opts, optioner|
-      opts.on('-w', '--wee')    { optioner.wee "wee" }
-      opts.on('-t t', '--teatime tea')    { optioner.tea "time" }
+      opts.on('-w', '--wee')    { optioner.wee = "wee" }
+      opts.on('-t t', '--teatime tea')    { optioner.tea = "time" }
     end.wee.should == "wee"
   end
 end

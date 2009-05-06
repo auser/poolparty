@@ -72,6 +72,14 @@ module PoolParty
         @available_resources ||= []
       end
       
+      default_options(
+        :name => nil,
+        :not_if => nil,
+        :if_not => nil,
+        :only_if => nil,
+        :calls => nil
+      )
+      
       # This is set in order of descending precedence
       # The options are overwritten from the bottom up
       # and the resource will use those as the values
@@ -105,6 +113,10 @@ module PoolParty
       
       # After create callback
       def after_create
+      end
+      def before_load(o={}, &block)
+      end
+      def after_load(o={}, &block)
       end
       
       # We don't want to inherit the services on a resource, as resources

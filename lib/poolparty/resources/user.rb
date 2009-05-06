@@ -4,7 +4,9 @@ module PoolParty
     class User < Resource      
       
       default_options({
-        :shell => "/bin/sh"
+        :shell => "/bin/sh",
+        :password => nil,
+        :home => nil,
       })
       
     end

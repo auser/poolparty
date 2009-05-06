@@ -47,7 +47,7 @@ describe "Object" do
         @b = Class.new
         
         with_options({:nick => "name", :b => @b}, @a) do
-          b.dude "totally"
+          b.dude = "totally"
         end
         
       end

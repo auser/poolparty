@@ -7,7 +7,7 @@ module PoolParty
   end
   
   class PoolPartyBaseClass
-    include Dslify, Parenting
+    include Parenting, Dslify
     
     include PoolParty::DependencyResolverCloudExtensions
     # attr_accessor :depth
@@ -46,7 +46,7 @@ module PoolParty
     
     # Try to extract the name from the options
     def get_name_from_options_and_extra_options(opts={}, extra_opts={})
-      opts.is_a?(Hash) ? (opts.has_key?(:name) ? opts.delete(:name) : nil) : dsl_options[:name] = opts
+      opts.is_a?(Hash) ? (opts.has_key?(:name) ? opts[:name] : nil) : dsl_options[:name] = opts
     end
     
     # Add to the services pool for the manifest listing
@@ -140,18 +140,8 @@ module PoolParty
     def method_missing(m,*a,&block)
       if respond_to?(:this_context) && this_context != self && this_context.respond_to?(m)# && !self.is_a?(PoolParty::Resources::Resource)
         this_context.send m, *a, &block      
-      else
-        # if dsl_options.has_key?(m)
-        #          dsl_options[m]
-        #        elsif parent && parent.respond_to?(:dsl_options) && parent.dsl_options.has_key?(m)
-        #          parent.dsl_options[m]
-        #        elsif self.class.default_options.has_key?(m)
-        #          self.class.default_options[m]
-        #        elsif parent && parent.respond_to?(:dsl_options) && parent.default_options.has_key?(m)
-        #          parent.default_options[m]
-        #        else
-          super
-        # end
+      else          
+        super
       end
     end
     
