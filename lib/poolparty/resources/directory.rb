@@ -26,6 +26,10 @@ The above example will place the contents of '/local/path' at '/path/on/server/n
 
     class Directory < Resource
       
+      default_options({
+        :recursive => true
+      })
+      
       def present
         :create
       end
