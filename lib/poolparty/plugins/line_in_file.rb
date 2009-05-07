@@ -18,6 +18,7 @@ Ensures that the line given is in the file
   class LineInFile
     
     plugin :line_in_file do
+      dsl_methods :file, :line
       default_options(
         :file => nil,
         :line => ""
