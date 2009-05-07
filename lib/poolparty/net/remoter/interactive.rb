@@ -14,7 +14,7 @@ module PoolParty
       return @list_of_instances if @list_of_instances
       @containing_cloud = self
       n = Neighborhoods.load_default
-      @list_of_instances = (n.empty? ? _list_of_instances : n.instances)
+      @list_of_instances = (n.instances.empty? ? _list_of_instances : n.instances)
     end
 
     private

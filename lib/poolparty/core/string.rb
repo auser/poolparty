@@ -46,6 +46,9 @@ class String
     self.gsub(/['"]/, '\\\"')
     # self.gsub(/["']/, "\\\"")
   end
+  def path_quote
+    self.safe_quote.gsub(/[ ]/, '\ ')
+  end
   def nice_runnable(quite=true)
     self.split(/ && /).join("\n")
   end

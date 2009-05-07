@@ -16,7 +16,7 @@ o.loaded_clouds.each do |cld|
     if cld.nodes(:status => "running").size > 0
       printer.empty
       printer.center("Active instances")
-      printer << nodes(:status => "running").map{|a| a.ip.strip }.join("\n")
+      printer << cld.nodes(:status => "running").map{|a| a.ip.strip rescue nil }.compact.join("\n")
     end
     if cld.nodes(:status => "pending").size > 0
       printer.empty

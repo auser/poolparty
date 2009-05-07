@@ -211,7 +211,12 @@ module PoolParty
       when PoolParty::Resources::Resource
         "resources(:#{handle_chef_types(obj.class.to_s.top_level_class.downcase.to_sym)} => \"#{obj.name}\")"
       when Fixnum
-        "#{obj.to_i}"
+        case obj
+        when /^\d{3}$/
+          "0#{obj.to_i}"
+        else
+          "#{obj.to_i}"
+        end        
       when String
         case obj
         when /^\d{4}$/
