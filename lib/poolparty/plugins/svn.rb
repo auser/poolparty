@@ -9,7 +9,7 @@ module PoolParty
     
     virtual_resource :svn_repos do
       
-      dsl_options :creates, :command, :cwd, :source, :working_dir, :at
+      dsl_methods :creates, :command, :cwd, :source, :working_dir, :at
       
       def loaded(opts={}, &block)
         has_package("subversion")

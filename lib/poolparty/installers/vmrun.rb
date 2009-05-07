@@ -6,22 +6,42 @@ module PoolParty
         [
           :get_vmrun_file, :get_vm_ip, :get_key,
           :add_vmware_fusion_to_path, :start_vmrun_instance,
-          :scp_key, :test_login, :fix_eth0
+          :wait_for_connection, :scp_key, :test_login, :fix_eth0,
+          :shutdown_vmrun_instance
         ]
       end
       
       private
       
       def get_vmrun_file
+        if !default_vmrun_files.empty?
+          show_menu_for_vmrun_files
+        else
+          ask_for_vmrun_path
+        end
+      end
+      
+      def show_menu_for_vmrun_files
+        say "We found the following vmware files in the default vmware directory.\nChoose one of these to use as your vmrun file or select other"
+        choose do |menu|
+          menu.prompt = "Vmware file > "
+          [default_vmrun_files, :other].flatten.each do |base|
+            menu.choice base do 
+              
+              @vmrun_file = base == :other ? ask_for_vmrun_path : base
+            end
+          end
+        end
+      end
+      
+      def ask_for_vmrun_path
         vmrun_file_help =<<-EOV
 Vmware uses a vmwarevm file to keep information about the vmware instance. To find the vmwarevm file, 
 navigate to vmware and find the vm you'd like to use. Find this in finder and paste that here.
         EOV
-                
+
         vmrun_file = <<-EOE
-Awesome. What's the path to your vmwarevm file?#{if default_vmrun_file
- "\nIs this it: #{default_vmrun_file}? (Press enter to accept default)" 
-end}
+Awesome. What's the path to your vmwarevm file?
         EOE
         ask_with_help :message => vmrun_file, :help => vmrun_file_help do |t|
           @vmrun_file = default_vmrun_file if t.nil? || t.empty?
@@ -51,6 +71,12 @@ at ~/.ssh/id_rsa.pub. If this is true, then just press enter. Otherwise, enter t
         end
       end
       
+      def wait_for_connection
+        ping_port_and(@ip, 22) do
+          puts "Instance available for connection"
+        end
+      end
+      
       def scp_key
         colored_say "Sending key to vmware instance..."
         o = %x{scp #{@key} root@#{@ip}:~/.ssh/authorized_keys}
@@ -77,6 +103,12 @@ at ~/.ssh/id_rsa.pub. If this is true, then just press enter. Otherwise, enter t
         %x{#{command}}
       end
       
+      def shutdown_vmrun_instance
+        vmrun_path = `which vmrun`.chomp!
+        command = "#{vmrun_path.path_quote} stop #{@vmrun_file.path_quote}"
+        %x{#{command}}
+      end
+      
       def closing_message
         vmx_file = Dir["#{@vmrun_file}/*.vmx"].first
           clds =<<-EOC
@@ -99,12 +131,12 @@ end
         super
       end
       
-      def default_vmrun_file
-        @default_vmrun_file ||= find_default_vmrun_file rescue nil
+      def default_vmrun_files
+        @default_vmrun_files ||= find_default_vmrun_files rescue nil
       end
       
-      def find_default_vmrun_file
-        Dir["#{::File.expand_path("~")}/Documents/Virtual\ Machines.localized/*.vmwarevm"].first
+      def find_default_vmrun_files
+        Dir["#{::File.expand_path("~")}/Documents/Virtual\ Machines.localized/*.vmwarevm"]
       end
       
     end

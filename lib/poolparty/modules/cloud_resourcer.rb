@@ -61,8 +61,8 @@ module PoolParty
     # instance of the remote base
     def using(t, &block)
       @cloud = self
-      if t && self.class.available_bases.include?(t.to_sym)
-        unless using_remoter?
+      if self.class.available_bases.include?(t.to_sym)
+        if !using_remoter? || @default_using != t.to_sym
           self.class.send :attr_reader, :remote_base
           self.class.send :attr_reader, :parent_cloud
           klass_string = "#{t}".classify
@@ -82,17 +82,13 @@ module PoolParty
     end
     
     def default_using
+      @default_using = :default_ec2
       using :ec2
-      @remote_base_soft = true
-    end
-    
-    def remote_base_soft
-      @remote_base_soft ||= false
     end
     
     # Are we using a remoter?
     def using_remoter?
-      !@remote_base.nil? || remote_base_soft
+      !@remote_base.nil?
     end
     
     # Keypairs

@@ -14,12 +14,8 @@ choose do |menu|
       
       say "Great, we'll be using #{base}"
       
-      begin
-        klass = "::PoolParty::Installers::#{base.to_s.capitalize}".constantize
-        klass.send :new
-      rescue Exception => e
-        say("Not sure what remoter_base you mean. Please choose from the menu. Error: #{e}")
-      end
+      klass = "::PoolParty::Installers::#{base.to_s.capitalize}".constantize
+      klass.send :new
     end
   end
   
