@@ -96,6 +96,8 @@ module PoolParty
       def before_create     
         context_stack.push self
         (parent ? parent : self).add_poolparty_base_requirements
+        # this can be overridden in the spec, but ec2 is the default
+        default_using
         context_stack.pop
       end
       
@@ -117,12 +119,10 @@ module PoolParty
       end
       
       # setup defaults for the cloud
-      def setup_defaults
-        # this can be overridden in the spec, but ec2 is the default
-        using :ec2
+      def setup_defaults        
         options[:keypair] ||= keypair rescue nil
         options[:rules] = {:expand => dsl_options[:expand_when], :contract => dsl_options[:contract_when]}
-        set_dependency_resolver 'chef'        
+        set_dependency_resolver 'chef'
       end
       
       def after_launch_instance(inst=nil)

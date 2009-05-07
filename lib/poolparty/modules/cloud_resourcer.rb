@@ -81,9 +81,18 @@ module PoolParty
       end
     end
     
+    def default_using
+      using :ec2
+      @remote_base_soft = true
+    end
+    
+    def remote_base_soft
+      @remote_base_soft ||= false
+    end
+    
     # Are we using a remoter?
     def using_remoter?
-      !@remote_base.nil?
+      !@remote_base.nil? || remote_base_soft
     end
     
     # Keypairs

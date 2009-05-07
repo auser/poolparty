@@ -25,6 +25,7 @@ The sshkey resource specifies an ssh key that should be distributed on all the n
     
     class Sshkey < Resource
       
+      dsl_methods :key
       def initialize(opts={}, extra_opts={}, &block)
         super(opts, extra_opts, &block)
         @key = Key.new(keypath? ? keypath : nil)
