@@ -93,12 +93,14 @@ module PoolParty
         @cloud_name ||= @cloud_name ? @cloud_name : (args.empty? ? :default_cloud : args.first)
       end
       
-      def before_create     
-        context_stack.push self
-        (parent ? parent : self).add_poolparty_base_requirements
-        # this can be overridden in the spec, but ec2 is the default
-        default_using
-        context_stack.pop
+      def before_create
+        using Default.remoter_base
+        # context_stack.push self
+        # TODO: PUT BACK IN
+        # (parent ? parent : self).
+        add_poolparty_base_requirements
+        # this can be overridden in the spec, but ec2 is the default        
+        # context_stack.pop
       end
       
       # Callback

@@ -32,13 +32,18 @@ To write a file to the template directory, use:
     class File < Resource
       has_searchable_paths(:dir => "templates")
       
-      dsl_methods :owner, :content, :source, :template, :render_as      
+      dsl_methods :name,            # The name, the full path of the file
+                  :owner,           # String that describes the owner of the file
+                  :content,         # A string that describes the content of the file
+                  :template,        # The file that describes the content of the file
+                  :render_as        # Render the content (Erb)
+                  
       default_options(
-        :mode => "644"
+        :mode => "644"              # A string indicating the mode of the file
       )
       
       def loaded(o={}, &block)
-        parent.has_directory ::File.dirname(name) if parent
+        has_directory ::File.dirname(name)
       end
       
       def present

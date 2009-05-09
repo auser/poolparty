@@ -4,7 +4,7 @@ require "poolparty"
 require "poolpartycl"
 
 o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
-  optioner.options( :num => 0 )
+  optioner.options.merge!( :num => 0 )
   opts.on('-n name', '--name name', 'Listing for cloud name')    { |c| optioner.cloudname c }
   opts.on('-i num', '--id num', 'Instance num to ssh (default: 0)')    { |i| optioner.inst_num i.to_i }
 end

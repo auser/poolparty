@@ -8,11 +8,7 @@ module PoolParty
     end
     
     plugin :git_repo do
-      default_options(
-        :dir => nil,
-        :owner => nil,
-        :requires_user => nil
-      )
+      dsl_methods :name, :dir, :owner, :requires_user
             
       def loaded(opts={}, &block)
         raise(StandardError.new("You must include a directory for the git repos set by to")) unless dir?
@@ -51,8 +47,8 @@ module PoolParty
         
       end
       
-      def to(dir)        
-        dsl_option :dir, dir
+      def to(d)
+        dir d
       end
       
       def repos(r=nil)

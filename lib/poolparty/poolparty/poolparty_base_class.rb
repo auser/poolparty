@@ -1,5 +1,12 @@
+$:.unshift(::File.dirname(__FILE__))
+$:.unshift("#{::File.dirname(__FILE__)}/../../../vendor/gems/*")
+$:.unshift("#{::File.dirname(__FILE__)}/../../../vendor/gems/dslify/lib")
+$:.unshift("#{::File.dirname(__FILE__)}/../../../vendor/gems/parenting/lib")
+
+require "default"
 require "dslify"
 require "parenting"
+
 module PoolParty
   
   def context_stack
@@ -11,6 +18,7 @@ module PoolParty
     
     include PoolParty::DependencyResolverCloudExtensions
     # attr_accessor :depth
+    forwards_to ::PoolParty::Default.new
     
     default_options(
       :verbose => false,
@@ -25,8 +33,8 @@ module PoolParty
       
       o = (opts.is_a?(Hash) ? extra_opts.merge(opts) : extra_opts).merge(:name => @base_name)
       
-      run_in_context(o, &block)
-      super(&block)
+      run_in_context(o, &block) if block
+      super(o, &block)
     end
     
     # Overloading the parent run_in_context
@@ -150,14 +158,6 @@ module PoolParty
       false
     end
     
-    def method_missing(m,*a,&block)
-      if respond_to?(:this_context) && this_context != self && this_context.respond_to?(m)# && !self.is_a?(PoolParty::Resources::Resource)
-        this_context.send m, *a, &block      
-      else
-        super
-      end
-    end
-    
     # Adds two methods to the module
     # Adds the method type:
     #   has_
@@ -170,7 +170,7 @@ module PoolParty
     # TODO: Refactor nicely to include other types that don't accept ensure
     def self.add_has_and_does_not_have_methods_for(typ=:file)
       method_name = "__#{typ}"
-      PoolParty::PoolPartyBaseClass.module_eval <<-EOE
+      ev=<<-EOE
         def has_#{typ}(opts={}, extra={}, &block)
           #{method_name}({:ensures => :present}.merge(handle_option_values(opts).merge(extra)), &block)
         end
@@ -178,6 +178,7 @@ module PoolParty
           #{method_name}({:ensures => :absent}.merge(handle_option_values(opts).merge(extra)), &block)
         end
       EOE
+      PoolParty::PoolPartyBaseClass.module_eval ev, ($pool_specfile || "")
     end
     
     def handle_option_values(o)

@@ -20,7 +20,6 @@ Ensures that the line given is in the file
     plugin :line_in_file do
       dsl_methods :file, :line
       default_options(
-        :file => nil,
         :line => ""
       )
       def loaded(opts={}, &block)

@@ -28,8 +28,10 @@ module PoolParty
       
       attr_reader :cloud
       
+      dsl_methods :keypair
+      
       def initialize(prnt, opts={}, &block)
-        dsl_options prnt.options.merge(opts) if prnt && prnt.respond_to?(:options)
+        set_vars_from_options prnt.dsl_options.merge(opts) if prnt && prnt.respond_to?(:dsl_options)
         instance_eval &block if block
         @cloud = prnt
       end

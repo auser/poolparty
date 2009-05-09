@@ -11,10 +11,13 @@ module PoolParty
     
     attr_accessor :loaded_pool, :loaded_clouds, :loaded_pools
     
+    dsl_methods :spec,
+                :num,
+                :cloudname,
+                :poolname
+                
     default_options( :verbose => false, 
-                     :quiet => false, 
-                     :cloudname => false, 
-                     :poolname => false)
+                     :quiet => false)
     
     def initialize(args=[], opts={}, &block)
       boolean_args << opts[:boolean_args] if opts.has_key?(:boolean_args)
@@ -77,8 +80,8 @@ module PoolParty
     end
     
     def parse_options(&blk)
-      self.spec = nil
-      self.num = nil
+      self.spec nil
+      self.num nil
       
       progname = $0.include?("-") ? "#{::File.basename($0[/(\w+)-/, 1])} #{::File.basename($0[/-(.*)/, 1])}" : ::File.basename($0)
       @opts = OptionParser.new
@@ -118,10 +121,10 @@ module PoolParty
         reject_junk_options!
         raise CloudNotFoundException.new("Please specify your cloud with -s, move it to ./clouds.rb or in your POOL_SPEC environment variable") unless loaded_clouds && !loaded_clouds.empty?
         loaded_pools.each do |pl|
-          pl.options(self.options)
+          pl.dsl_options.merge!(self.options)
         end
         loaded_clouds.each do |cl|
-          cl.options(self.options)
+          cl.dsl_options.merge!(self.options)
         end
       end
     end

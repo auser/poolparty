@@ -38,7 +38,7 @@ describe "Cloud" do
         @cloud1.using_remoter?.should_not == nil
       end
       it "should say the remoter_base is ec2 (by default)" do
-        @cloud1.remote_base.class.should == Kernel::Ec2
+        @cloud1.remote_base.class.should == ::PoolParty::Remote::Ec2
       end
     end
     it "should return the cloud if the cloud key is already in the clouds list" do

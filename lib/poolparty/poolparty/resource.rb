@@ -72,14 +72,7 @@ module PoolParty
         @available_resources ||= []
       end
       
-      default_options(
-        :name => nil,
-        :action => nil,
-        :not_if => nil,
-        :if_not => nil,        
-        :only_if => nil,
-        :calls => nil
-      )
+      dsl_methods :action, :not_if, :if_not, :only_if, :calls
       
       # This is set in order of descending precedence
       # The options are overwritten from the bottom up
@@ -89,10 +82,11 @@ module PoolParty
       # Finally, it uses the parent's options as the lowest priority
       def initialize(opts={}, extra_opts={}, &block)
         super(opts, extra_opts, &block)
-                
-        @resource_name = @base_name
-        dsl_options[:name] = resource_name unless dsl_options.has_key?(:name)
         
+        @resource_name = @base_name
+        dsl_option(:name,@resource_name) #unless dsl_options.has_key?(:name)
+        
+        # p [:name, name, self.class, self.dsl_options] # methods.sort.join(", ")
         loaded(opts, &block)
         
         after_create
@@ -137,33 +131,6 @@ module PoolParty
       # This way we can subclass resources without worry
       def class_type_name
         self.class.to_s.top_level_class.underscore.downcase
-      end
-      def self.custom_function(str)
-        custom_functions << str
-      end
-      def self.custom_functions
-        @custom_functions ||= []
-      end
-      def custom_function(str)
-        self.class.custom_functions << str
-      end
-            
-      def self.custom_functions_to_string(pre="")
-        returning Array.new do |output|
-          PoolParty::Resources.available_custom_resources.each do |resource|
-            resource.custom_functions.each do |func|
-              output << "#{pre*2}#{func}"
-            end
-          end
-        end.join("\n")
-      end
-      # Some things in puppet aren't allowed, so let's override them here
-      def disallowed_options
-        []
-      end
-
-      def key
-        name
       end
       # def virtual_resource?
       #   false

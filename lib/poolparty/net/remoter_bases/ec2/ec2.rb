@@ -119,11 +119,7 @@ module PoolParty
       def get_descriptions(o={})
         self.class.get_descriptions(o)
       end
-      
-      def keypair
-        cloud.keypair
-      end
-      
+            
       # Class method helpers
       def aws_keys
         unless @access_key && @secret_access_key          

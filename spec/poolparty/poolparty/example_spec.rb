@@ -41,7 +41,7 @@ describe "basic" do
     clouds[:basic_db]._keypairs.select{|a| a.filepath.match(/auser/)}
   end
   it "cloud should know what remoter base it is using" do
-    clouds[:basic_db].remote_base.class.should == PoolParty::Remote::Ec2
+    clouds[:basic_db].remote_base.class.should == PoolParty::Remote::Vmrun
   end
   it "cloud should have methods from the remoter base available" do
     clouds[:basic_db].remote_base.should_receive(:describe_instances).and_return({})

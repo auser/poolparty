@@ -54,6 +54,10 @@ module PoolParty
         raise SpecException.new("Don't know how to handle instances cloud input #{arg}")
       end
     end
+    
+    def remote_base_klass
+      @remote_base_klass ||= ::PoolParty::Remote::Ec2
+    end
         
     # Declare the remoter base
     # Check to make sure the available_bases is available, otherwise raise
@@ -62,28 +66,24 @@ module PoolParty
     def using(t, &block)
       @cloud = self
       if self.class.available_bases.include?(t.to_sym)
-        if !using_remoter? || @default_using != t.to_sym
+        # unless using_remoter?
           self.class.send :attr_reader, :remote_base
           self.class.send :attr_reader, :parent_cloud
           klass_string = "#{t}".classify
-          klass = "::PoolParty::Remote::#{klass_string}".constantize
+          @remote_base_klass = "::PoolParty::Remote::#{klass_string}".constantize
           
-          @remote_base = klass.send :new, self, &block
+          # TODO: Move to after_setup
+          @remote_base = remote_base_klass.send :new, self, &block
           @remote_base.instance_eval &block if block
-          dsl_option(:remote_base, @remote_base) if respond_to?(:options)
-          self.class.default_options.merge!(remote_base.class.default_options)
+          # dsl_option(:remote_base, @remote_base) if respond_to?(:options)
+          self.class.default_options.merge!(@remote_base.class.default_options)
           
           @parent_cloud = @cloud
           instance_eval "def #{t};@remote_base;end"
-        end
+        # end
       else
         raise "Unknown remote base: #{t}"
       end
-    end
-    
-    def default_using
-      @default_using = :default_ec2
-      using :ec2
     end
     
     # Are we using a remoter?

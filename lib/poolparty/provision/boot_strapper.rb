@@ -13,6 +13,8 @@ module PoolParty
       
       # List of gems that are default to install
       def self.gem_list
+        # auser-dslify
+        # auser-parenting
         @gem_list ||= %w( logging
                           rake
                           xml-simple
@@ -26,8 +28,6 @@ module PoolParty
                           grempe-amazon-ec2
                           ohai
                           chef
-                          auser-dslify
-                          auser-parenting
                           adamwiggins-rest-client
                           rack
                           thin
