@@ -2,6 +2,8 @@
 $:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
 require "poolparty"
 require "poolpartycl"
+#!/usr/bin/env ruby
+require 'git-style-binary/command'
 
 # name = ARGV.select {|arg| arg if Binary.available_binaries_for("cloud").include?(arg) }.first
 name = ARGV.shift if Binary.available_binaries_for("cloud").include?(ARGV.first)
