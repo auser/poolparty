@@ -39,7 +39,7 @@ Ensure a command is run on the instances
       end
       
       def after_create
-        dsl_options[:name] = dsl_options[:command] unless dsl_options.name
+        dsl_options[:name] = dsl_options[:command] unless dsl_options[:name]
       end
 
     end

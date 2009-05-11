@@ -14,12 +14,12 @@ module PoolParty
   end
   
   class PoolPartyBaseClass
+    attr_reader :init_opts
+    
     include Parenting, Dslify
     
     include PoolParty::DependencyResolverCloudExtensions
-    # attr_accessor :depth
-    forwards_to ::PoolParty::Default.new
-    
+    # attr_accessor :depth    
     default_options(
       :verbose => false,
       :debug => false
@@ -31,22 +31,18 @@ module PoolParty
       @init_block = block
       @base_name = get_name_from_options_and_extra_options(opts, extra_opts)
       
-      o = (opts.is_a?(Hash) ? extra_opts.merge(opts) : extra_opts).merge(:name => @base_name)
+      @init_opts = (opts.is_a?(Hash) ? extra_opts.merge(opts) : extra_opts.merge(:name => @base_name))
       
-      run_in_context(o, &block) if block
-      super(o, &block)
+      run_in_context(init_opts, &block)
+      super(init_opts, &block)
     end
     
     # Overloading the parent run_in_context
     def run_in_context(o={}, &block)
-      if o
-        context_stack.push self
-        set_vars_from_options(o)
-        instance_eval &block if block
-        context_stack.pop
-      else
-        super
-      end
+      context_stack.push self        
+      set_vars_from_options(o)
+      instance_eval &block if block
+      context_stack.pop
     end
     
     def run_with_callbacks(o, &block)

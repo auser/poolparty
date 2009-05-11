@@ -59,7 +59,7 @@ module PoolParty
       
       # Default set of options. Most take the Default options from the default class
       default_options(
-        :expand_when => Default.expand_when,
+        Default.default_options.merge({:expand_when => Default.expand_when,
         :contract_when => Default.contract_when,
         :minimum_instances => 2,
         :maximum_instances => 5,
@@ -67,7 +67,7 @@ module PoolParty
         :secret_access_key => Default.secret_access_key,
         :ec2_dir => ENV["EC2_HOME"],
         :minimum_runtime => Default.minimum_runtime,
-        :user => Default.user
+        :user => Default.user})
       )
       
       additional_callbacks [

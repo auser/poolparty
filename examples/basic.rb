@@ -8,7 +8,7 @@ pool :application do
     minimum_instances 12
     puts "after = #{minimum_instances}"
     image_id "ami-abc123"
-    has_file :name => "/etc/init.d/motd", :content => "Welcome to your PoolParty instance"
+    has_file :name => "/etc/motd", :content => "Welcome to your PoolParty instance"
   end
   
   cloud :basic_db do

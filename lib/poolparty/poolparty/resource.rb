@@ -72,7 +72,11 @@ module PoolParty
         @available_resources ||= []
       end
       
-      dsl_methods :action, :not_if, :if_not, :only_if, :calls
+      dsl_methods :action, 
+                  :not_if, 
+                  :if_not, 
+                  :only_if, 
+                  :calls
       
       # This is set in order of descending precedence
       # The options are overwritten from the bottom up
@@ -84,10 +88,10 @@ module PoolParty
         super(opts, extra_opts, &block)
         
         @resource_name = @base_name
-        dsl_option(:name,@resource_name) #unless dsl_options.has_key?(:name)
+        # dsl_options[:name] = @init_opts[:name] unless dsl_options.has_key?(:name) && dsl_options[:name]
         
-        # p [:name, name, self.class, self.dsl_options] # methods.sort.join(", ")
-        loaded(opts, &block)
+        # p [:name, name, dsl_options, init_opts] # methods.sort.join(", ")
+        loaded(init_opts, &block)
         
         after_create
       end
