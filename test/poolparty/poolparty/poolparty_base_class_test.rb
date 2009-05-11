@@ -12,7 +12,7 @@ class TestBaseClassTest < Test::Unit::TestCase
       end
     end
     should "should add a service when a service is called" do
-      @tbc.ordered_resources.size.should == 1
+      @tbc.ordered_resources.size.should > 1
     end
   end
   context "context_stack" do

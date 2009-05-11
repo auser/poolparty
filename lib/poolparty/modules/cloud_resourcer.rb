@@ -75,7 +75,8 @@ module PoolParty
           # TODO: Move to after_setup
           @remote_base = remote_base_klass.send :new, self, &block
           @remote_base.instance_eval &block if block
-          # dsl_option(:remote_base, @remote_base) if respond_to?(:options)
+          dsl_option(:remote_base, @remote_base) if respond_to?(:options)
+          
           self.class.default_options.merge!(@remote_base.class.default_options)
           
           @parent_cloud = @cloud
@@ -95,7 +96,7 @@ module PoolParty
     # Use the keypair path
     def keypair(*args)
       if args && !args.empty?
-        args.each {|arg| _keypairs.unshift Key.new(arg) unless arg.nil? || arg.empty? }
+        args.each {|arg| _keypairs.unshift Key.new(arg) unless arg.nil? || arg.empty? || _keypair_filepaths.include?(arg) }
       else
         @keypair ||= _keypairs.select {|key| key.exists? }.first
       end
@@ -106,7 +107,15 @@ module PoolParty
     def _keypairs
       dsl_options[:keypairs] ||= [Key.new]
     end
+    def keypairs(*a)
+      dsl_options[:keypairs]
+    end
     
+    # Collect the filepaths of the already loaded keypairs
+    def _keypair_filepaths
+      _keypairs.map {|a| a.filepath }
+    end
+        
     def full_keypair_path
       @full_keypair_path ||= keypair.full_filepath
     end

@@ -28,7 +28,7 @@ module PoolParty
       
       attr_reader :cloud
       
-      dsl_methods :keypair
+      dsl_methods :keypair          # Name of the keypair we'll be using
       
       def initialize(prnt, opts={}, &block)
         set_vars_from_options prnt.dsl_options.merge(opts) if prnt && prnt.respond_to?(:dsl_options)

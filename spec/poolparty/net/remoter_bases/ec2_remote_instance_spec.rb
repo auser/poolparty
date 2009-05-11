@@ -2,20 +2,15 @@ require File.join(File.dirname(__FILE__), '../../spec_helper')
 require File.dirname(__FILE__) + '/ec2_mocks_and_stubs.rb'
 
 include PoolParty::Remote
-# include Aska
-
-# require File.dirname(__FILE__) + '/ec2_mocks_and_stubs.rb'
 
 
 describe "Ec2RemoteInstance" do
   before(:each) do
     @cloud = TestCloud.new :test_remoter_base_cloud
-    @ec2 = TestEc2RemoteInstance.new( {:name => "node3"}, TestEC2Class.new(@cloud) )
+    @tec2 = TestEC2Class.new(@cloud)
+    @ec2 = TestEc2RemoteInstance.new( {:name => "node3"},  @tec2)
     # node3 stubbed as  {:ip=>"192.168.0.3", :keypair=>"fake_keypair", :status=>"pending", :name=>"node3", :launching_time=>Time.now
     @ec2.my_cloud.stub!(:describe_instances).and_return response_list_of_instances
-  end
-  it "should require options" do
-    lambda {TestEc2RemoteInstance.new()}.should raise_error
   end
   it "should have the name set in the options" do
     @ec2.respond_to?(:name).should == true
@@ -25,7 +20,7 @@ describe "Ec2RemoteInstance" do
   it "should have access to parent cloud options" do
     @ec2.my_cloud.class.should ==  TestEC2Class
     @ec2.my_cloud.should respond_to(:describe_instances)
-    @ec2.my_cloud.size.should == 'small'    
+    @ec2.my_cloud.instance_type.should == 'm1.small'
   end
   it "should have instance description hash mapped to methods" do
     # puts  "<ol>"
@@ -36,9 +31,6 @@ describe "Ec2RemoteInstance" do
     @ec2.ip.should == '192.168.0.3'
     @ec2.launching_time.should_not be_nil
     @ec2.valid?.should be_true
-  end
-  it "should not be the master" do
-    @ec2.master?.should_not be_true
   end
 end
 

@@ -8,15 +8,18 @@ end
 class DependencyResolverSpecTestResource
   include Dslify
   include PoolParty::DependencyResolverResourceExtensions
+  
+  dsl_methods :name, :template, :content
 end
 
 # plugins, base_packages
 class DependencyResolverSpecTestService < DependencyResolverCloudExtensionsSpecBase
-  
+  dsl_methods :listen
 end
 
 # clouds, duh
 class DependencyResolverSpecTestCloud < DependencyResolverCloudExtensionsSpecBase
+  dsl_methods :keypair, :name
 end
 
 class JunkClassForDefiningPlugin

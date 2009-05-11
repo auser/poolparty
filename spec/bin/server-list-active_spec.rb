@@ -18,7 +18,7 @@ describe "Server list active binary" do
       @pool_hash.options.name.should == :binary_testing_cloud
     end
     it "should have the remoter base available" do
-      @pool_hash.options.remote_base.nil?.should == false  
+      @pool_hash.options[:remote_base].nil?.should == false  
     end
   end
 end

@@ -67,6 +67,9 @@ class TestCloud < TestClass
 end
 
 class TestBaseClass < PoolParty::PoolPartyBaseClass
+  def name
+    "box"
+  end
 end
 
 def setup

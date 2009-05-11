@@ -36,7 +36,7 @@ To write a file to the template directory, use:
                   :owner,           # String that describes the owner of the file
                   :content,         # A string that describes the content of the file
                   :template,        # The file that describes the content of the file
-                  :render_as        # Render the content (Erb)
+                  :render_as        # Render the content (Erb) (default: Erb)
                   
       default_options(
         :mode => "644"              # A string indicating the mode of the file

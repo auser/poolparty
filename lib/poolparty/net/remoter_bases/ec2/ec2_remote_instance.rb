@@ -11,7 +11,7 @@ module PoolParty
       # The parent clouds describe_instances list will be searched for the first one matching any of this instance's provided unique identifiers.
       # If an instance is found, this instance's properties will be set to the properties provided
       # If the found instance has properties of the same key as the provided options, the found instance's values will override the passed in options
-      def initialize(opts={}, prnt=Ec2.new)
+      def initialize(opts={}, prnt=nil)
         @uniquely_identifiable_by = [:ip, :name, :dns_name, :instance_id]
         @original_options = opts
         @my_cloud = prnt

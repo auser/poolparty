@@ -26,7 +26,15 @@ describe "Object" do
   end
   describe "with_options" do
     before(:each) do
-      @obj = Class.new
+      class TestObjClass
+        include Dslify
+        dsl_methods :b
+        
+        def initialize(o={})
+          set_vars_from_options o
+        end
+      end
+      @obj = TestObjClass.new
     end
     it "should respond to with_options" do
       @obj.respond_to?(:with_options).should == true
@@ -41,10 +49,8 @@ describe "Object" do
     
     describe "running" do
       before(:each) do
-        Class.stub!(:default_options).and_return({})
-        Class.send :include, Dslify
-        @a = Class.new        
-        @b = Class.new
+        @a = TestObjClass.new        
+        @b = TestObjClass.new :dude => nil
         
         with_options({:nick => "name", :b => @b}, @a) do
           b.dude = "totally"

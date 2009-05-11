@@ -36,6 +36,9 @@ module PoolParty
   module Remote
     class Ec2 < Remote::RemoterBase
       
+      dsl_methods :elastic_ips,         # An array of the elastic ips
+                  :ebs_volume_id        # The volume id of an ebs volume
+      
       default_options({
         :image_id => 'ami-bf5eb9d6',
         # :key_name => ::File.basename(keypair.is_a?(String) ? keypair : keypair.full_filepath),
