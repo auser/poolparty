@@ -1,17 +1,17 @@
-#!/usr/bin/env ruby
-$:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
-require "poolparty"
-require "poolpartycl"
-
-o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
-  opts.on('-n name', '--name name', 'Copy an ip from this cloud to the clipboard')    { |c| optioner.cloudname c }
-end
-
-o.loaded_clouds.each do |cld|
-  
-  node = cld.nodes(:status => "running").first
-  ip = node.ip
-  puts "ip: #{ip}"
-  Kernel.system "echo #{ip} | pbcopy"
-  
-end
+# #!/usr/bin/env ruby
+# $:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
+# require "poolparty"
+# require "poolpartycl"
+# 
+# o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
+#   opts.on('-n name', '--name name', 'Copy an ip from this cloud to the clipboard')    { |c| optioner.cloudname c }
+# end
+# 
+# o.loaded_clouds.each do |cld|
+#   
+#   node = cld.nodes(:status => "running").first
+#   ip = node.ip
+#   puts "ip: #{ip}"
+#   Kernel.system "echo #{ip} | pbcopy"
+#   
+# end

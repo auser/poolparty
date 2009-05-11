@@ -1,26 +1,26 @@
-#!/usr/bin/env ruby
-$:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
-require "poolparty"
-require "poolpartycl"
-
-o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
-  opts.on('-n name', '--name name', 'Expand the cloud on this name')    { |c| optioner.cloudname c }
-end
-
-o.loaded_clouds.each do |cld|
-
-  vputs header("Expanding cloud #{cld.name}")
-  vputs "#{cld.nodes(:status => "running").size} running instances of #{cld.maximum_instances} possible instances"
-  vputs testing ? "Not expanding (test mode)" : "Expanding the cloud"
-  
-  cld.launch_instance! do |node|
-    ::PoolParty::Provision::BootStrapper.new(node.ip, :cloud => cld)
-    ::PoolParty::Provision::DrConfigure.new(node.ip,  :cloud => cld)
-    
-    puts <<-EOM
-      Your cloud has expanded. The new ip is #{node.ip}
-    EOM
-  end
-  
-  
-end
+# #!/usr/bin/env ruby
+# $:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
+# require "poolparty"
+# require "poolpartycl"
+# 
+# o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
+#   opts.on('-n name', '--name name', 'Expand the cloud on this name')    { |c| optioner.cloudname c }
+# end
+# 
+# o.loaded_clouds.each do |cld|
+# 
+#   vputs header("Expanding cloud #{cld.name}")
+#   vputs "#{cld.nodes(:status => "running").size} running instances of #{cld.maximum_instances} possible instances"
+#   vputs testing ? "Not expanding (test mode)" : "Expanding the cloud"
+#   
+#   cld.launch_instance! do |node|
+#     ::PoolParty::Provision::BootStrapper.new(node.ip, :cloud => cld)
+#     ::PoolParty::Provision::DrConfigure.new(node.ip,  :cloud => cld)
+#     
+#     puts <<-EOM
+#       Your cloud has expanded. The new ip is #{node.ip}
+#     EOM
+#   end
+#   
+#   
+# end

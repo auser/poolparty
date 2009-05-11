@@ -1,25 +1,25 @@
-#!/usr/bin/env ruby
-$:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
-require "poolparty"
-require "poolpartycl"
-
-o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
-  opts.on('-n name', '--name name', 'Setup development environment for cloud named')    { |c| optioner.cloudname c }
-end
-  
-o.loaded_clouds.each do |cld|
-  
-  if cld.remote_instances_list.empty?
-    puts "Your cloud is not running"
-  else
-    str =<<-EOE
-    Host #{cld.name}
-      User        #{cld.user}
-      Hostname    #{cld.remote_instances_list.first.ip}
-      IdentityFile    #{cld.keypair}
-    EOE
-  
-    puts "Enter the following in your .ssh/config file"
-    puts str
-  end
-end
+# #!/usr/bin/env ruby
+# $:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
+# require "poolparty"
+# require "poolpartycl"
+# 
+# o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
+#   opts.on('-n name', '--name name', 'Setup development environment for cloud named')    { |c| optioner.cloudname c }
+# end
+#   
+# o.loaded_clouds.each do |cld|
+#   
+#   if cld.remote_instances_list.empty?
+#     puts "Your cloud is not running"
+#   else
+#     str =<<-EOE
+#     Host #{cld.name}
+#       User        #{cld.user}
+#       Hostname    #{cld.remote_instances_list.first.ip}
+#       IdentityFile    #{cld.keypair}
+#     EOE
+#   
+#     puts "Enter the following in your .ssh/config file"
+#     puts str
+#   end
+# end

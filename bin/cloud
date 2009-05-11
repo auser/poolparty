@@ -1,54 +1,33 @@
 #!/usr/bin/env ruby
-$:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
+$:.unshift(File.dirname(__FILE__) + "/../lib")
 require "poolparty"
-require "poolpartycl"
-#!/usr/bin/env ruby
+# require "poolpartycl"
 require 'git-style-binary/command'
 
-# name = ARGV.select {|arg| arg if Binary.available_binaries_for("cloud").include?(arg) }.first
-name = ARGV.shift if Binary.available_binaries_for("cloud").include?(ARGV.first)
-# If the options include -h and they don't include a valid command, then we can just pass the 
-# original options back, but if they do contain a binary, we don't want -h getting through to 
-# these options, so we'll strip it if it's included
-DUP_ARG = ARGV.dup
-new_args = DUP_ARG.map {|arg| DUP_ARG.delete(arg) unless help_array.include?(arg) || Binary.available_binaries_for("cloud").include?(arg) }
-new_args = new_args.reject {|arg| Binary.available_binaries_for("cloud").include?(arg) }.empty? ? ARGV : (name ? (help_array.each {|arg| DUP_ARG.delete(arg)}; DUP_ARG) : DUP_ARG)
+GitStyleBinary.primary do
+  @theme = :short
+  
+  version "PoolParty cloud command"  
+  banner <<-EOS
+Usage: #{$0} #{all_options_string} COMMAND [ARGS]
 
-# Let's make sure if no command is passed in that we show the help message
-new_args.push("-h") unless name
+The cloud subcommands commands are:
+\#{GitStyleBinary.pretty_known_subcommands.join("\n   ")}
 
-# Binary.list_binaries_for("cloud")
-extra_help_string = <<-EOE
+See 'wordpress help COMMAND' for more information on a specific command.
+EOS
+  
+  opt :debug, "Debug the output", :type => :boolean, :default => false
+  opt :spec, "Set the pool spec file", :type => String
+  opt :testing, "Set testing mode on", :type => :boolean, :default => false
+  opt :cloud_name, "Name of the working cloud", :type => String, :default => nil
 
-  Cloud commands
-    cloud start       starts a single instance in your cloud.
-    cloud bootstrap   bootstraps an instance or multiple instances
-    cloud configure   configures an instance or multiple instances
-    cloud provision   combines bootstrap and configures an instance or multiple instances
-    cloud expand      expands the cloud by a single instance
-    cloud contract    contracts the cloud by a single instance
-    cloud describe    show the configuration of the current clouds.rb configuration file
-    cloud list        show a list of the current instances on the cloud
-    cloud show        shows output about the clouds.rb
-    cloud ssh         ssh into an instance of the cloud
-    cloud terminate   terminate the cloud
-    
-EOE
-
-o = PoolParty::Optioner.new(new_args, {
-  :extra_help => extra_help_string,
-  :abstract => true}) do |opts, optioner|  
-  opts.on('-n cloudname', '--name name', 'Address this cloud')    { |c| optioner.cloudname c }
-end
-
-program_name = "#{File.basename($0)}-#{name}"
-program_location = File.join(Binary.binary_directory, program_name)
-
-command_line = "#{program_location}"
-
-# Run it from the command-line first
-if Binary.available_binaries_for("cloud").include?(name)
-  system command_line, *new_args
-else
-  puts "Unknown poolparty binary: #{name}"
+  before_run do |command|
+    @loaded_pool = load_pool( command[:spec] ? command[:spec] : Binary.get_existing_spec_location)
+    @loaded_clouds = command[:cloud_name] ? clouds[command[:cloud_name].to_sym] : clouds
+  end
+  
+  run do |command|
+    puts "Primary Options: #{command.opts.inspect}"
+  end
 end

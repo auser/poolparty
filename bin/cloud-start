@@ -1,30 +1,30 @@
-#!/usr/bin/env ruby
-$:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
-require "poolparty"
-
-o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
-  opts.on('-n cloudname', '--name name', 'Start cloud by this name')    { |c| optioner.cloudname c }
-end
-
-o.loaded_clouds.each do |cld|
-
-  if cld.nodes(:status => "running").size.zero?
-    puts header("Starting cloud #{cld.name} (#{cld.keypair})")
-    puts "#{cld.nodes(:status => "running").size} running instances (#{cld.minimum_instances} - #{cld.maximum_instances})"
-    
-    cld.launch_instance!(cld.dsl_options) do |node|
-      
-      ::PoolParty::Provision::BootStrapper.new(node.ip, :cloud => cld)
-      ::PoolParty::Provision::DrConfigure.new(node.ip,  :cloud => cld)
-      
-      puts <<-EOM
-        Your cloud has started. Your ip is #{node.ip}
-      EOM
-    end
-  
-  else
-    puts <<-EOE
-      Your cloud is already running.
-    EOE
-  end
-end
+# #!/usr/bin/env ruby
+# $:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
+# require "poolparty"
+# 
+# o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
+#   opts.on('-n cloudname', '--name name', 'Start cloud by this name')    { |c| optioner.cloudname c }
+# end
+# 
+# o.loaded_clouds.each do |cld|
+# 
+#   if cld.nodes(:status => "running").size.zero?
+#     puts header("Starting cloud #{cld.name} (#{cld.keypair})")
+#     puts "#{cld.nodes(:status => "running").size} running instances (#{cld.minimum_instances} - #{cld.maximum_instances})"
+#     
+#     cld.launch_instance!(cld.dsl_options) do |node|
+#       
+#       ::PoolParty::Provision::BootStrapper.new(node.ip, :cloud => cld)
+#       ::PoolParty::Provision::DrConfigure.new(node.ip,  :cloud => cld)
+#       
+#       puts <<-EOM
+#         Your cloud has started. Your ip is #{node.ip}
+#       EOM
+#     end
+#   
+#   else
+#     puts <<-EOE
+#       Your cloud is already running.
+#     EOE
+#   end
+# end

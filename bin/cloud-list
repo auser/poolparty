@@ -1,21 +1,37 @@
 #!/usr/bin/env ruby
-$:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
+$:.unshift(File.dirname(__FILE__) + "/../lib")
 require "poolparty"
+# require "poolpartycl"
+require 'git-style-binary/command'
 
-o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
-  opts.on('-f [remote|local]', '--from [remote|local]', 'Remote or local (default: local)')    { |o| optioner.location o }
-  opts.on('-r', '--remote', 'Remote listing')    { optioner.location "remote" }
-  opts.on('-l', '--local', 'Local listing')    { optioner.location "local" }
-  opts.on('-n name', '--name name', 'Listing for cloud name')    { |c| optioner.cloudname c }
-end
+GitStyleBinary.primary do
+  @theme = :short
+  
+  version "PoolParty cloud command"  
+  banner <<-EOS
+Usage: #{$0} #{all_options_string} COMMAND [ARGS]
 
-o.loaded_clouds.each do |cld|
-  puts header("Listing cloud #{cld.name}")
-  puts subheader("Active instances")
-  puts cld.nodes(:status => "running").map{|a| "#{a[:instance_id]}\t#{a[:ip]}" }.join("\n")
+The cloud subcommands commands are:
+\#{GitStyleBinary.pretty_known_subcommands.join("\n   ")}
+
+See 'wordpress help COMMAND' for more information on a specific command.
+EOS
+
+  short_desc "List the clouds"
+
+  run do |command|
+    p @loaded_clouds
     
-  if cld.nodes(:status => "pending").size > 0
-    puts subheader("Pending instances")
-    puts cld.nodes(:status => "pending").map{|a| "#{a[:instance_id]}\t#{a[:ip]}" }.join("\n")
+    @loaded_clouds.each do |cld|
+      puts header("Listing cloud #{cld.name}")
+      puts subheader("Active instances")
+      puts cld.nodes(:status => "running").map{|a| "#{a[:instance_id]}\t#{a[:ip]}" }.join("\n")
+
+      if cld.nodes(:status => "pending").size > 0
+        puts subheader("Pending instances")
+        puts cld.nodes(:status => "pending").map{|a| "#{a[:instance_id]}\t#{a[:ip]}" }.join("\n")
+      end
+    end
+    
   end
 end
