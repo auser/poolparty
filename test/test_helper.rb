@@ -6,4 +6,6 @@ require "shoulda"
 # require "mocha"
 
 require File.dirname(__FILE__) + '/../lib/poolparty'
+require 'git-style-binary/command'
+
 GitStyleBinary.run = true
