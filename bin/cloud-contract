@@ -1,17 +1,29 @@
-# #!/usr/bin/env ruby
-# $:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
-# require "poolparty"
+#!/usr/bin/env ruby
+$:.unshift(File.dirname(__FILE__) + "/../lib")
+require "poolparty"
 # require "poolpartycl"
-# 
-# o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
-#   opts.on('-n name', '--name name', 'Listing for cloud name')    { |c| optioner.cloudname c }
-# end
-# 
-# o.loaded_clouds.each do |cld|  
-#   puts header("Contracting cloud #{cld.name}")
-#   puts "#{cld.nodes(:status => "running").size} running instances (#{cld.minimum_instances} minimum instances)"
-#   puts testing ? "Not contracting (test mode)" : "Contracting the cloud if possible"
-# 
-#   last_instance_id = cld.nodes(:status => "running").last[:instance_id]
-#   cld.remote_base.terminate_instance! cld.options.merge(:instance_id => last_instance_id)
-# end
+require 'git-style-binary/command'
+
+GitStyleBinary.command do  
+  version "PoolParty cloud command"  
+  banner <<-EOS
+Usage: #{$0} #{all_options_string} COMMAND [ARGS]
+
+  List the clouds and their nodes
+EOS
+
+  short_desc "List the clouds"
+
+  run do |command|    
+    @loaded_clouds.each do |cld|
+
+      puts header("Contracting cloud #{cld.name}")
+      puts "#{cld.nodes(:status => "running").size} running instances (#{cld.minimum_instances} minimum instances)"
+      puts testing ? "Not contracting (test mode)" : "Contracting the cloud if possible"
+    
+      last_instance_id = cld.nodes(:status => "running").last[:instance_id]
+      cld.remote_base.terminate_instance! cld.options.merge(:instance_id => last_instance_id)
+
+    end    
+  end
+end

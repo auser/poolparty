@@ -27,7 +27,8 @@ EOS
         else
           if command[:inst_num]
             vputs "\nConfiguring: #{nodes[o.inst_num]}\n--------------------"
-            ::PoolParty::Provision::DrConfigure.new cld.nodes[ command[:inst_num] ], :cloud => cld
+            address = cld.nodes[ command[:inst_num] ]
+            ::PoolParty::Provision::DrConfigure.new( address[:ip], :cloud => cld )
           else
             cld.nodes.each do |address|
               cld.vputs "\nConfiguring: #{address[:ip]}\n--------------------"      

@@ -16,6 +16,7 @@ EOS
 
   run do |command|    
     @loaded_clouds.each do |cld|
+      
       puts header("Listing cloud #{cld.name}")
       puts subheader("Active instances")
       puts cld.nodes(:status => "running").map{|a| "#{a[:instance_id]}\t#{a[:ip]}" }.join("\n")
@@ -24,7 +25,7 @@ EOS
         puts subheader("Pending instances")
         puts cld.nodes(:status => "pending").map{|a| "#{a[:instance_id]}\t#{a[:ip]}" }.join("\n")
       end
-    end
-    
+      
+    end    
   end
 end

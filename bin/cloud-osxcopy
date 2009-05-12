@@ -15,3 +15,35 @@
 #   Kernel.system "echo #{ip} | pbcopy"
 #   
 # end
+
+#!/usr/bin/env ruby
+$:.unshift(File.dirname(__FILE__) + "/../lib")
+require "poolparty"
+# require "poolpartycl"
+require 'git-style-binary/command'
+
+GitStyleBinary.command do  
+  version "PoolParty cloud command"  
+  banner <<-EOS
+Usage: #{$0} #{all_options_string} COMMAND [ARGS]
+
+  List the clouds and their nodes
+EOS
+
+  short_desc "List the clouds"
+
+  run do |command|    
+    @loaded_clouds.each do |cld|
+      
+      puts header("Listing cloud #{cld.name}")
+      puts subheader("Active instances")
+      puts cld.nodes(:status => "running").map{|a| "#{a[:instance_id]}\t#{a[:ip]}" }.join("\n")
+
+      if cld.nodes(:status => "pending").size > 0
+        puts subheader("Pending instances")
+        puts cld.nodes(:status => "pending").map{|a| "#{a[:instance_id]}\t#{a[:ip]}" }.join("\n")
+      end
+      
+    end    
+  end
+end
