@@ -22,6 +22,7 @@ module PoolParty
     
     class Cloud < PoolParty::PoolPartyBaseClass
       attr_reader :templates, :cloud_name, :remote_base
+      attr_accessor :started_instance
 
       include CloudResourcer
       include PoolParty::PluginModel
@@ -54,7 +55,8 @@ module PoolParty
         :secret_access_key => Default.secret_access_key,
         :ec2_dir => ENV["EC2_HOME"],
         :minimum_runtime => Default.minimum_runtime,
-        :user => Default.user
+        :user => Default.user,
+        :using_remoter_base => Default.remoter_base
       )
       
       additional_callbacks [
@@ -85,7 +87,7 @@ module PoolParty
         # context_stack.push self
         # TODO: PUT BACK IN
         # (parent ? parent : self).
-        add_poolparty_base_requirements
+        # add_poolparty_base_requirements
         # this can be overridden in the spec, but ec2 is the default        
         # context_stack.pop
       end
@@ -109,10 +111,17 @@ module PoolParty
       
       # setup defaults for the cloud
       def setup_defaults
-        options[:rules] = {:expand => dsl_options[:expand_when], :contract => dsl_options[:contract_when]}
-        options[:keypair] = keypair
+        options[:keypair_name] = keypair.basename
+        options[:keypair_path] = keypair.full_filepath
+        
+        options[:rules] = {:expand => dsl_options[:expand_when], :contract => dsl_options[:contract_when]}        
         
         set_dependency_resolver 'chef'
+        if using_remoter_base.size > 1
+          _using using_remoter_base[0], &using_remoter_base[1]
+        else
+          _using using_remoter_base[0]
+        end        
       end
       
       def after_launch_instance(inst=nil)
@@ -165,7 +174,7 @@ module PoolParty
       def build_manifest
         vputs "Building manifest"
         @build_manifest ||= build_from_existing_file
-        unless @build_manifest          
+        unless @build_manifest
           props = to_properties_hash
           
           @build_manifest =  options[:dependency_resolver].send(:compile, props, self)

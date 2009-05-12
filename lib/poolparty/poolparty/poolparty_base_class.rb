@@ -31,11 +31,11 @@ module PoolParty
       @init_opts = (opts.is_a?(Hash) ? extra_opts.merge(opts) : extra_opts.merge(:name => @base_name))
       
       run_in_context(init_opts, &block)
-      super(init_opts, &block)
+      # super(init_opts, &block)
     end
     
     # Overloading the parent run_in_context
-    def run_in_context(o={}, &block)
+    def run_in_context(o={}, &block)      
       context_stack.push self        
       set_vars_from_options(o)
       instance_eval &block if block
@@ -90,7 +90,7 @@ module PoolParty
     # A word about stores, the global store stores the entire list of stored
     # resources. The local resource store is available on all clouds and plugins
     # which stores the instance variable's local resources. 
-    def add_resource(ty, opts={}, extra_opts={}, &block)    
+    def add_resource(ty, opts={}, extra_opts={}, &block)       
       temp_name = get_name_from_options_and_extra_options(opts, extra_opts)
       
       if res = get_resource(ty, temp_name, opts)        

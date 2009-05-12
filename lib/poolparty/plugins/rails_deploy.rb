@@ -59,12 +59,12 @@ module PoolParty
         end
       end
       def create_directory_tree
-        has_directory dir
-        has_directory release_directory
-        has_directory "#{shared_directory}", :owner => owner
+        has_directory dir, :mode => "0755", :owner => owner
+        has_directory release_directory, :mode => "0755", :owner => owner
+        has_directory "#{shared_directory}", :owner => owner, :mode => "0755"
         
         %w(config pids log system).each do |d|
-          has_directory "#{shared_directory}/#{d}", :owner => owner
+          has_directory "#{shared_directory}/#{d}", :owner => owner, :mode => "0755"
         end
       end
       def setup_database_yml
@@ -81,7 +81,7 @@ module PoolParty
         if shared?
           shared.each do |sh|
             
-            has_directory "#{shared_directory}/#{::File.dirname(sh)}", :owner => owner
+            has_directory "#{shared_directory}/#{::File.dirname(sh)}", :owner => owner, :mode => "0755"
             
             has_exec "Create rails-deploy-#{name}-#{sh}", 
               :command => "cp #{current_directory}/#{sh} #{shared_directory}/#{sh} && chown -R #{owner} #{shared_directory}/#{sh}",

@@ -1,43 +1,42 @@
-# #!/usr/bin/env ruby
-# $:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
-# require "poolparty"
-# 
-# extra_help_string = <<-EOE
-# 
-#   Cloud configure
-#   
-#     Cloud configure will repackage the deployment and send it off to a 
-#     remote instance from within the cloud. It then will reconfigure
-#     itself and alert the rest of the cloud
-#     
-# EOE
-# 
-# o = PoolParty::Optioner.new(ARGV, {:extra_help => extra_help_string}) do |opts, optioner|
-#   opts.on('-n cloudname', '--name name', 'Start cloud by this name')    { |c| optioner.cloudname c }
-#   opts.on('-i num', '--num i', 'Instance number')    { |i| optioner.inst_num i.to_i }
-# end
-# 
-# o.loaded_clouds.each do |cld|
-#   # If an IP or DNS name is given, bootstrap that node, otherwise, bootstrap all running nodes.
-#   # ::FileUtils.rm_rf "#{Default.tmp_path}/" unless o.testing?
-#   
-#   if cld.nodes(:status => "running").size < 1
-#     puts header("No instances running")
-#   else
-#     nodes = !o.unflagged_args.empty? ?  o.unflagged_args : cld.nodes(:status => "running").collect {|i| i.ip }.sort.compact
-#     if nodes.empty?
-#       puts "No nodes to configure"
-#     else
-#       if o.inst_num?
-#         vputs "Configuring #{nodes[o.inst_num]}"
-#         ::PoolParty::Provision::DrConfigure.new( nodes[o.inst_num], :cloud => cld )
-#       else
-#         nodes.each do |address|
-#           puts "Configuring: #{address}"
-#           ::PoolParty::Provision::DrConfigure.new( address, :cloud => cld )
-#         end
-#       end
-#     end
-#   end
-# end
-# 
+#!/usr/bin/env ruby
+$:.unshift(File.dirname(__FILE__) + "/../lib")
+require "poolparty"
+# require "poolpartycl"
+require 'git-style-binary/command'
+
+GitStyleBinary.command do  
+  version "PoolParty cloud command"  
+  banner <<-EOS
+Usage: #{$0} #{all_options_string} COMMAND [ARGS]
+
+  Configure a cloud instance
+EOS
+
+  short_desc "Configure a cloud instance"
+  
+  opt :inst_num, "The number of the instance to run bootstrap on", :type => :int
+
+  run do |command|    
+    
+    @loaded_clouds.each do |cld|
+        
+        # If an IP or DNS name is given, bootstrap that node, otherwise, bootstrap all running nodes.
+        # ::FileUtils.rm_rf "#{Default.tmp_path}/" unless o.testing?
+        if cld.nodes.empty?
+          puts "No nodes to bootstrap"
+        else
+          if command[:inst_num]
+            vputs "\nConfiguring: #{nodes[o.inst_num]}\n--------------------"
+            ::PoolParty::Provision::DrConfigure.new cld.nodes[ command[:inst_num] ], :cloud => cld
+          else
+            cld.nodes.each do |address|
+              cld.vputs "\nConfiguring: #{address[:ip]}\n--------------------"      
+              ::PoolParty::Provision::DrConfigure.new address[:ip], :cloud => cld
+            end
+          end
+        end
+      
+    end
+    
+  end
+end

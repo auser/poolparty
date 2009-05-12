@@ -63,7 +63,10 @@ module PoolParty
     # Check to make sure the available_bases is available, otherwise raise
     # Give access to the cloud the remote_base and instantiate a new
     # instance of the remote base
-    def using(t, &block)
+    def using(name, &block)
+      dsl_options[:using_remoter_base] = [name, block]
+    end
+    def _using(t, &block)
       @cloud = self
       if self.class.available_bases.include?(t.to_sym)
         # unless using_remoter?
@@ -103,6 +106,7 @@ module PoolParty
     end
     
     alias :set_keypairs :keypair
+    alias :key :keypair
     
     def _keypairs
       dsl_options[:keypairs] ||= [Key.new]
