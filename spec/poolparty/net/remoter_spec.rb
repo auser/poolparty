@@ -5,7 +5,7 @@ describe "Remoter" do
     setup
     @cloud = cloud :app do;end
     @tc = TestClass.new
-    @tc.parent = @cloud
+    # @tc.parent = @cloud
     @sample_instances_list = [{:ip => "192.168.0.1", :name => "master"}, {:ip => "192.168.0.2", :name => "node1"}]
   end
   describe "ssh_string" do

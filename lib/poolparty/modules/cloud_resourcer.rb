@@ -73,7 +73,7 @@ module PoolParty
           @remote_base_klass = "::PoolParty::Remote::#{klass_string}".constantize
           
           # TODO: Move to after_setup
-          @remote_base = remote_base_klass.send :new, self, &block
+          @remote_base = remote_base_klass.send :new, dsl_options, &block
           @remote_base.instance_eval &block if block
           dsl_option(:remote_base, @remote_base) if respond_to?(:options)
           
@@ -98,7 +98,7 @@ module PoolParty
       if args && !args.empty?
         args.each {|arg| _keypairs.unshift Key.new(arg) unless arg.nil? || arg.empty? || _keypair_filepaths.include?(arg) }
       else
-        @keypair ||= _keypairs.select {|key| key.exists? }.first
+        dsl_options[:keypair] ||= _keypairs.select {|key| key.exists? }.first
       end
     end
     

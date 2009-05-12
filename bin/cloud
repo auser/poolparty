@@ -14,7 +14,7 @@ Usage: #{$0} #{all_options_string} COMMAND [ARGS]
 The cloud subcommands commands are:
 \#{GitStyleBinary.pretty_known_subcommands.join("\n   ")}
 
-See 'wordpress help COMMAND' for more information on a specific command.
+See 'cloud help COMMAND' for more information on a specific command.
 EOS
   
   opt :debug, "Debug the output", :type => :boolean, :default => false
@@ -24,7 +24,7 @@ EOS
 
   before_run do |command|
     @loaded_pool = load_pool( command[:spec] ? command[:spec] : Binary.get_existing_spec_location)
-    @loaded_clouds = command[:cloud_name] ? clouds[command[:cloud_name].to_sym] : clouds
+    @loaded_clouds = command[:cloud_name] ? clouds[command[:cloud_name].to_sym] : clouds.map {|k,c| c }
   end
   
   run do |command|

@@ -26,14 +26,11 @@ module PoolParty
       include               Dslify
       include  ::PoolParty::Remote
       
-      attr_reader :cloud
+      dsl_methods :cloud                # The cloud this remoter_base is a part of
       
-      dsl_methods :keypair          # Name of the keypair we'll be using
-      
-      def initialize(prnt, opts={}, &block)
-        set_vars_from_options prnt.dsl_options.merge(opts) if prnt && prnt.respond_to?(:dsl_options)
+      def initialize(opts={}, &block)
+        set_vars_from_options opts
         instance_eval &block if block
-        @cloud = prnt
       end
       
       def self.inherited(arg)
@@ -56,24 +53,24 @@ module PoolParty
       # An exception will be raised and poolparty will explode into tiny little 
       # pieces. Don't forget to overwrite these methods
       # Launch a new instance
-      def self.launch_new_instance!(cld, o={})
-        new(cld, o).launch_new_instance!(o)
+      def self.launch_new_instance!(o={})
+        new(o).launch_new_instance!(o)
       end
       def launch_new_instance!(o={})
         raise RemoteException.new(:method_not_defined, "launch_new_instance!")        
       end
       
       # Terminate an instance by id
-      def self.terminate_instance!(cld, o={})
-        new(cld, o).terminate_instance!(o)
+      def self.terminate_instance!(o={})
+        new(o).terminate_instance!(o)
       end
       def terminate_instance!(o={})        
         raise RemoteException.new(:method_not_defined, "terminate_instance!")
       end
       
       # Describe an instance's status
-      def self.describe_instance(cld, o={})
-        new(cld, o).describe_instance(o) 
+      def self.describe_instance(o={})
+        new(o).describe_instance(o) 
       end
       def describe_instance(o={})
         raise RemoteException.new(:method_not_defined, "describe_instance")
@@ -81,8 +78,8 @@ module PoolParty
       
       # Get instances
       # The instances must have a status associated with them on the hash
-      def self.describe_instances(cld, o={})
-        new(cld, o).describe_instances(o)
+      def self.describe_instances(o={})
+        new(o).describe_instances(o)
       end
       def describe_instances(o={})        
         raise RemoteException.new(:method_not_defined, "describe_instances")
@@ -124,8 +121,8 @@ module PoolParty
         raise "Instance not responding at #{inst.ip}"
       end
       
-      def self.launch_instance!(cld, o={}, &block)
-        new(cld, o, &block).launch_instance!
+      def self.launch_instance!(o={}, &block)
+        new(o, &block).launch_instance!
       end
 
       # Called after an instance is launched

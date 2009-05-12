@@ -36,8 +36,8 @@ module PoolParty
   module Remote
     class Ec2 < Remote::RemoterBase
       
-      dsl_methods :elastic_ips,         # An array of the elastic ips
-                  :ebs_volume_id        # The volume id of an ebs volume
+      dsl_methods :elastic_ips,           # An array of the elastic ips
+                  :ebs_volume_id         # The volume id of an ebs volume
       
       default_options({
         :image_id => 'ami-bf5eb9d6',
@@ -45,18 +45,18 @@ module PoolParty
         :instance_type => 'm1.small', # or 'm1.large', 'm1.xlarge', 'c1.medium', or 'c1.xlarge'
         :addressing_type => "public",
         :availabilty_zone => "us-east-1a",
-        :security_group => ["default"],
+        :security_group => ["default"]
         })
       
       # Requires a hash of options
-      def self.launch_new_instance!(parent_cloud, o)
-        new(parent_cloud, o).launch_new_instance!
+      def self.launch_new_instance!(o)
+        new(o).launch_new_instance!
       end
       
       # TODO: Fix the key_name issue
       # Start a new instance with the given options
       def launch_new_instance!(o={})
-        raise "You must pass a keypair to launch an instance, or else you will not be able to login. options = #{o.inspect}" if !cloud.keypair
+        raise "You must pass a keypair to launch an instance, or else you will not be able to login. options = #{o.inspect}" if !keypair
         o.merge!( options ).merge!(:key_name=>keypair.basename)
         instance = ec2(o).run_instances(o)
         begin
@@ -164,8 +164,8 @@ module PoolParty
           begin
             empty_addresses = addressesSet["item"].select {|i| i["instanceId"].nil? }
             ips = empty_addresses.map {|addr| addr["publicIp"]}
-            if cloud.elastic_ips?
-              ips_to_use = cloud.elastic_ips & ips
+            if elastic_ips?
+              ips_to_use = elastic_ips & ips
               ips_to_use.first
             else
               ips.first

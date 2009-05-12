@@ -4,24 +4,19 @@ require "poolparty"
 # require "poolpartycl"
 require 'git-style-binary/command'
 
-GitStyleBinary.primary do
+GitStyleBinary.command do
   @theme = :short
   
   version "PoolParty cloud command"  
   banner <<-EOS
 Usage: #{$0} #{all_options_string} COMMAND [ARGS]
 
-The cloud subcommands commands are:
-\#{GitStyleBinary.pretty_known_subcommands.join("\n   ")}
-
-See 'wordpress help COMMAND' for more information on a specific command.
+  List the clouds and their nodes
 EOS
 
   short_desc "List the clouds"
 
-  run do |command|
-    p @loaded_clouds
-    
+  run do |command|    
     @loaded_clouds.each do |cld|
       puts header("Listing cloud #{cld.name}")
       puts subheader("Active instances")

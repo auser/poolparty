@@ -260,7 +260,7 @@ describe "Cloud" do
               str = "master 192.168.0.1
               node1 192.168.0.2"
               @sample_instances_list = [{:ip => "192.168.0.1", :name => "master"}, {:ip => "192.168.0.2", :name => "node1"}]
-              @ris = @sample_instances_list.map {|h| PoolParty::Remote::RemoteInstance.new(h, @cloud) }
+              @ris = @sample_instances_list.map {|h| PoolParty::Remote::RemoteInstance.new(h) }
               
               stub_remoter_for(@cloud)
               

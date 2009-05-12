@@ -35,19 +35,6 @@ module PoolParty
       include PoolParty::CloudDsl
       include PoolParty::Verification
       # include PoolParty::Monitors
-
-      def verbose
-        true
-      end
-      
-      def self.immutable_methods
-        [:name]
-      end
-      
-      # Redefining methods are not allowed
-      def self.method_added sym        
-        raise "Exception: #{sym.to_s.capitalize} method has been redefined" if immutable_methods.include?(sym) && !respond_to?(sym)
-      end
       
       alias :name :cloud_name
       
@@ -121,8 +108,8 @@ module PoolParty
       end
       
       # setup defaults for the cloud
-      def setup_defaults        
-        options[:keypair] ||= keypair rescue nil
+      def setup_defaults
+        options[:keypair] ||= keypair
         options[:rules] = {:expand => dsl_options[:expand_when], :contract => dsl_options[:contract_when]}
         set_dependency_resolver 'chef'
       end

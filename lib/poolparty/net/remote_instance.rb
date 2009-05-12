@@ -4,17 +4,12 @@ module PoolParty
     class RemoteInstance
       include Dslify
       
-      default_options(
-        :name => nil,
-        :ip => nil,
-        :internal_ip => nil,
-        :status => nil
-      )
+      dsl_methods :name,        # Name of the remote instance (internal usage)
+                  :ip,          # Ip of the remote instance
+                  :internal_ip, # Internal ip of the remote instance
+                  :status       # Status of the remote instance
       
-      def initialize(opts={}, containing_cloud=nil)
-        @parent = containing_cloud
-
-        set_vars_from_options(containing_cloud.options) if containing_cloud && containing_cloud.respond_to?(:options)
+      def initialize(opts={})
         set_vars_from_options(opts) if opts.is_a?(Hash)
         on_init
       end
