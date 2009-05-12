@@ -21,13 +21,17 @@ EOS
         vputs "#{cld.nodes(:status => "running").size} running instances of #{cld.maximum_instances} possible instances"
         vputs testing ? "Not expanding (test mode)" : "Expanding the cloud"
         
-        cld.launch_instance! do |node|
-          ::PoolParty::Provision::BootStrapper.new(node.ip, :cloud => cld)
-          ::PoolParty::Provision::DrConfigure.new(node.ip,  :cloud => cld)
-          
-          puts <<-EOM
-            Your cloud has expanded. The new ip is #{node.ip}
-          EOM
+        if cld.maximum_instances > cld.nodes(:status => "running").size
+          cld.launch_instance!(:cloud_name => cld.name) do |node|
+            ::PoolParty::Provision::BootStrapper.new(node.ip, :cloud => cld)
+            ::PoolParty::Provision::DrConfigure.new(node.ip,  :cloud => cld)
+
+            puts <<-EOM
+              Your cloud has expanded. The new ip is #{node.ip}
+            EOM
+          end          
+        else
+          puts "The cloud #{cld.name} has too many instances already (#{cld.nodes(:status => "running").size})"
         end
 
     end    

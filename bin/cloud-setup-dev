@@ -17,13 +17,13 @@ EOS
   run do |command|    
     @loaded_clouds.each do |cld|
       
-        if cld.remote_instances_list.empty?
+        if cld.nodes(:status => "running").empty?
           puts "Your cloud is not running"
         else
           str =<<-EOE
           Host #{cld.name}
             User        #{cld.user}
-            Hostname    #{cld.remote_instances_list.first.ip}
+            Hostname    #{cld.nodes(:status => "running").first.ip}
             IdentityFile    #{cld.keypair}
           EOE
         

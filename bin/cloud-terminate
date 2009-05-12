@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 $:.unshift(File.dirname(__FILE__) + "/../lib")
 require "poolparty"
-# require "poolpartycl"
+require "poolpartycl"
 require 'git-style-binary/command'
 
 GitStyleBinary.command do  
@@ -22,8 +22,8 @@ EOS
     Shutting down #{inst.instance_id}
     Are you sure? (Y/N)
         EOM
-    
-        if o.yes?
+        o = are_you_sure? msg
+        if o
           puts "Shutting down #{inst.instance_id}"
           cld.terminate_instance!(:instance_id => inst.instance_id)
         else

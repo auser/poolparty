@@ -13,13 +13,14 @@ Usage: #{$0} #{all_options_string} COMMAND [ARGS]
 EOS
 
   short_desc "List the clouds"
-
+  opt :inst_num, "The number of the instance to run bootstrap on", :type => :int
+  
   run do |command|    
     @cloud = @loaded_clouds.first
     nodes = @cloud.nodes(:status => "running")
     
     if !nodes.empty?
-      n = o.inst_num? ? o.inst_num : 0
+      n = command[:inst_num] ? command[:inst_num].to_i : 0
       @cloud.ssh_into( nodes[n].ip ) if @cloud
     else
       puts "No running instances can be found"

@@ -88,7 +88,6 @@ module PoolParty
       # TODO: Rename and modularize the @inst.status =~ /pending/ so that it works on all 
       # remoter_bases
       def launch_instance!(o={}, &block)
-        p o
         @cloud = clouds[o[:cloud_name]]
         @inst = launch_new_instance!( options.merge(o) )
         sleep(2)

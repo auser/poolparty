@@ -1,21 +1,3 @@
-# #!/usr/bin/env ruby
-# $:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
-# require "poolparty"
-# require "poolpartycl"
-# 
-# o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
-#   opts.on('-n name', '--name name', 'Copy an ip from this cloud to the clipboard')    { |c| optioner.cloudname c }
-# end
-# 
-# o.loaded_clouds.each do |cld|
-#   
-#   node = cld.nodes(:status => "running").first
-#   ip = node.ip
-#   puts "ip: #{ip}"
-#   Kernel.system "echo #{ip} | pbcopy"
-#   
-# end
-
 #!/usr/bin/env ruby
 $:.unshift(File.dirname(__FILE__) + "/../lib")
 require "poolparty"
@@ -35,14 +17,10 @@ EOS
   run do |command|    
     @loaded_clouds.each do |cld|
       
-      puts header("Listing cloud #{cld.name}")
-      puts subheader("Active instances")
-      puts cld.nodes(:status => "running").map{|a| "#{a[:instance_id]}\t#{a[:ip]}" }.join("\n")
-
-      if cld.nodes(:status => "pending").size > 0
-        puts subheader("Pending instances")
-        puts cld.nodes(:status => "pending").map{|a| "#{a[:instance_id]}\t#{a[:ip]}" }.join("\n")
-      end
+      node = cld.nodes(:status => "running").first
+      ip = node.ip
+      puts "ip: #{ip}"
+      Kernel.system "echo #{ip} | pbcopy"
       
     end    
   end

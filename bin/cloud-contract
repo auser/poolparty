@@ -20,9 +20,13 @@ EOS
       puts header("Contracting cloud #{cld.name}")
       puts "#{cld.nodes(:status => "running").size} running instances (#{cld.minimum_instances} minimum instances)"
       puts testing ? "Not contracting (test mode)" : "Contracting the cloud if possible"
-    
-      last_instance_id = cld.nodes(:status => "running").last[:instance_id]
-      cld.remote_base.terminate_instance! cld.options.merge(:instance_id => last_instance_id)
+      
+      if cld.minimum_instances < cld.nodes(:status => "running").size
+        last_instance_id = cld.nodes(:status => "running").last[:instance_id]
+        cld.remote_base.terminate_instance! cld.options.merge(:instance_id => last_instance_id)
+      else
+        puts "The cloud #{cld.name} is running minimum instances (#{cld.nodes(:status => "running").size})"
+      end
 
     end    
   end
