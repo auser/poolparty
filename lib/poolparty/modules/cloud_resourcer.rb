@@ -63,7 +63,10 @@ module PoolParty
     # Check to make sure the available_bases is available, otherwise raise
     # Give access to the cloud the remote_base and instantiate a new
     # instance of the remote base
-    def using(t, &block)
+    def using(name, &block)
+      dsl_options[:using_remoter_base] = [name, block]
+    end
+    def _using(t, &block)
       @cloud = self
       if self.class.available_bases.include?(t.to_sym)
         # unless using_remoter?
@@ -73,7 +76,7 @@ module PoolParty
           @remote_base_klass = "::PoolParty::Remote::#{klass_string}".constantize
           
           # TODO: Move to after_setup
-          @remote_base = remote_base_klass.send :new, self, &block
+          @remote_base = remote_base_klass.send :new, dsl_options, &block
           @remote_base.instance_eval &block if block
           dsl_option(:remote_base, @remote_base) if respond_to?(:options)
           
@@ -98,11 +101,12 @@ module PoolParty
       if args && !args.empty?
         args.each {|arg| _keypairs.unshift Key.new(arg) unless arg.nil? || arg.empty? || _keypair_filepaths.include?(arg) }
       else
-        @keypair ||= _keypairs.select {|key| key.exists? }.first
+        dsl_options[:keypair] ||= _keypairs.select {|key| key.exists? }.first
       end
     end
     
     alias :set_keypairs :keypair
+    alias :key :keypair
     
     def _keypairs
       dsl_options[:keypairs] ||= [Key.new]

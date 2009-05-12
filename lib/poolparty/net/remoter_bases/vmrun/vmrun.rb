@@ -39,10 +39,10 @@ module PoolParty
         :vmx_hash => 'need to specify vmx_files to use'
       )
       
-      def initialize(par, opts={}, &block)
+      def initialize(opts={}, &block)
         set_vars_from_options opts
         instance_eval &block if block
-        super(par, &block)    
+        super(opts, &block)    
       end
 
       def self.launch_new_instance!(o={})
@@ -51,7 +51,7 @@ module PoolParty
       def launch_new_instance!(o={})
         VmwareInstance.new( :vmx_file => next_unused_vmx_file, 
                             :ip => vmx_hash[next_unused_vmx_file], 
-                            :keypair => cloud.keypair
+                            :keypair => keypair
                           ).launch!
       end
       # Terminate an instance by id
@@ -62,7 +62,7 @@ module PoolParty
         dsl_options o
         VmwareInstance.new( :vmx_file => last_unused_vmx_file, 
                             :ip => vmx_hash[last_unused_vmx_file], 
-                            :keypair => cloud.keypair
+                            :keypair => keypair
                           ).terminate!(terminate_options)
       end
 
@@ -93,7 +93,7 @@ module PoolParty
       def before_shutdown
       end
       def self.path_to_binary
-        new(parent).path_to_binary
+        new({}).path_to_binary
       end
             
       def after_launch_instance(inst=nil)
@@ -104,7 +104,7 @@ module PoolParty
       
       private
       def self.new_instance(o={})
-        Vmrun.new((cloud rescue o), o)
+        Vmrun.new((cloud rescue options), o)
       end
       
       def running_instances(o={})
@@ -113,7 +113,7 @@ module PoolParty
         lines.shift
         lines.map {|vmx_file| VmwareInstance.new( :vmx_file => vmx_file, 
                                                   :ip => vmx_hash[vmx_file], 
-                                                  :keypair => cloud.keypair
+                                                  :keypair => keypair
                                                 ) }
       end
       

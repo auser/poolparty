@@ -14,7 +14,7 @@ default host.
     plugin :apache do
       dsl_methods :passenger_version
       
-      def loaded(opts={}, &block)        
+      def loaded(opts={}, &block)
         has_service("apache2", :requires => get_package("apache2"))
       end
 
@@ -128,11 +128,11 @@ default host.
           has_directory("/etc/apache2/site-includes")
 
           has_file(:name => "/etc/apache2/apache2.conf") do
-            mode 644
+            mode 0644
             requires get_directory("/etc/apache2/conf.d")
             template "apache2"/"apache2.conf"
           end
-          does_not_have_file(:name => "/etc/apache2/ports.conf")
+          # does_not_have_file(:name => "/etc/apache2/ports.conf")
 
           has_exec(:command => "/usr/sbin/a2dissite default") do
             only_if "/usr/bin/test -L /etc/apache2/sites-enabled/000-default"
@@ -283,9 +283,9 @@ eof
 </VirtualHost>
       EOE
       
-      has_directory(:name => "/var/www")
-      has_directory(:name => "/var/www/#{name}")
-      has_directory(:name => "/var/www/#{name}/log")
+      # has_directory(:name => "/var/www")
+      # has_directory(:name => "/var/www/#{name}")
+      # has_directory(:name => "/var/www/#{name}/log")
       parent.install_site(name, :no_file => true) # we already created the file with #passenger_entry
     end
 

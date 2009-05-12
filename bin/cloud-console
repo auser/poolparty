@@ -7,6 +7,7 @@ libs =  " -r irb/completion"
 # libs << " -r #{File.dirname(__FILE__) + '/../lib/console_lib/console_logger.rb'}"
 libs <<  " -r #{File.dirname(__FILE__) + '/../lib/poolparty.rb'}"
 libs <<  " -r #{File.dirname(__FILE__) + '/../lib/poolpartycl.rb'}"
+libs <<  " -r #{$pool_spec}}"
 puts "Loading PoolParty console..."
 
 exec "#{irb} #{libs} --simple-prompt"

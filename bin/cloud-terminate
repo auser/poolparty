@@ -1,28 +1,39 @@
 #!/usr/bin/env ruby
-$:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
+$:.unshift(File.dirname(__FILE__) + "/../lib")
 require "poolparty"
 require "poolpartycl"
+require 'git-style-binary/command'
 
-o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
-  opts.on('-n name', '--name name', 'Terminate the cloud of this name')    { |c| optioner.cloudname c }
-  opts.on('-y', '--yes', 'Terminate the cloud without prompt')    { optioner.yes true }
-end
+GitStyleBinary.command do  
+  version "PoolParty cloud command"  
+  banner <<-EOS
+Usage: #{$0} #{all_options_string} COMMAND [ARGS]
 
-o.loaded_clouds.each do |cld|
-  cld.nodes(:status => "running").each do |inst|
-    msg = <<-EOM
-Shutting down #{inst.instance_id}
-Are you sure? (Y/N)
-    EOM
-    
-    if o.yes?
-      puts "Shutting down #{inst.instance_id}"
-      cld.terminate_instance!(:instance_id => inst.instance_id)
-    else
-      if are_you_sure?(msg)
-        puts "Shutting down #{inst.instance_id}"
-        cld.terminate_instance!(:instance_id => inst.instance_id)
+  List the clouds and their nodes
+EOS
+
+  short_desc "List the clouds"
+
+  run do |command|    
+    @loaded_clouds.each do |cld|
+      
+      cld.nodes(:status => "running").each do |inst|
+        msg = <<-EOM
+    Shutting down #{inst.instance_id}
+    Are you sure? (Y/N)
+        EOM
+        o = are_you_sure? msg
+        if o
+          puts "Shutting down #{inst.instance_id}"
+          cld.terminate_instance!(:instance_id => inst.instance_id)
+        else
+          if are_you_sure?(msg)
+            puts "Shutting down #{inst.instance_id}"
+            cld.terminate_instance!(:instance_id => inst.instance_id)
+          end
+        end
       end
-    end
+      
+    end    
   end
 end

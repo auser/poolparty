@@ -8,7 +8,7 @@ end
 
 def are_you_sure?(msg)
   puts msg
-  resp = gets.strip!
+  resp = STDIN.gets.chomp
 
   case resp
   when "Y"

@@ -26,7 +26,6 @@ The service resource specifies a service that must be running on the nodes
       dsl_methods :name       # Name of the service
       
       default_options({
-        :ensures => "enable",
         :enable => true
       })
       

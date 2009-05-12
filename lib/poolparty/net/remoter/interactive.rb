@@ -3,7 +3,6 @@ module PoolParty
     
     # Select a list of instances based on their status
     def nodes(hsh={})
-      # _nodes[hsh] ||= 
       list_of_instances.select_with_hash(hsh)
     end
     

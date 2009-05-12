@@ -1,17 +1,27 @@
 #!/usr/bin/env ruby
-$:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
+$:.unshift(File.dirname(__FILE__) + "/../lib")
 require "poolparty"
-require "poolpartycl"
+# require "poolpartycl"
+require 'git-style-binary/command'
 
-o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
-  opts.on('-n name', '--name name', 'Copy an ip from this cloud to the clipboard')    { |c| optioner.cloudname c }
-end
+GitStyleBinary.command do  
+  version "PoolParty cloud command"  
+  banner <<-EOS
+Usage: #{$0} #{all_options_string} COMMAND [ARGS]
 
-o.loaded_clouds.each do |cld|
-  
-  node = cld.nodes(:status => "running").first
-  ip = node.ip
-  puts "ip: #{ip}"
-  Kernel.system "echo #{ip} | pbcopy"
-  
+  List the clouds and their nodes
+EOS
+
+  short_desc "List the clouds"
+
+  run do |command|    
+    @loaded_clouds.each do |cld|
+      
+      node = cld.nodes(:status => "running").first
+      ip = node.ip
+      puts "ip: #{ip}"
+      Kernel.system "echo #{ip} | pbcopy"
+      
+    end    
+  end
 end
