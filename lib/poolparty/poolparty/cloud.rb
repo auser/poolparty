@@ -108,7 +108,7 @@ module PoolParty
         # context_stack.push self
         # TODO: PUT BACK IN
         # (parent ? parent : self).
-        # add_poolparty_base_requirements
+        add_poolparty_base_requirements
         # this can be overridden in the spec, but ec2 is the default        
         # context_stack.pop
       end

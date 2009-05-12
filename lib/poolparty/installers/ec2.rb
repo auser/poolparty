@@ -5,6 +5,7 @@ module PoolParty
       def commands
         [
           :get_access_key, :get_secret_access_key, :show_cert_message,
+          # :get_ec2_api_tools,
           :get_keypair, :write_clouds_rb
         ]
       end
@@ -62,6 +63,13 @@ From there, you can download the cert-*.pem and the pk-*.pem files.
                       :help => cert_help_str do |t|
           @cert = true
         end
+      end
+      
+      def get_ec2_api_tools
+        url = "http://developer.amazonwebservices.com/connect/entry.jspa?externalID=351&categoryID=88"
+        download_url = "http://www.amazon.com/gp/redirect.html/ref=aws_rc_ec2tools?location=http://s3.amazonaws.com/ec2-downloads/ec2-api-tools.zip&token=A80325AA4DAB186C80828ED5138633E3F49160D9"
+        require 'open-uri'
+        ::File.open("ec2-commandline-tools.zip", "w") {|f| f << open(download_url).read }
       end
       
       def get_keypair
