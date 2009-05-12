@@ -175,6 +175,10 @@
                 lib/poolparty/modules/safe_instance.rb
                 </a>
         <br />
+                <a href="../files/lib/poolparty/modules/searchable_paths_rb.html">
+                lib/poolparty/modules/searchable_paths.rb
+                </a>
+        <br />
                 <a href="../files/lib/poolparty/modules/user_helpers_rb.html">
                 lib/poolparty/modules/user_helpers.rb
                 </a>
@@ -215,8 +219,8 @@
                 lib/poolparty/net/remoter_bases/vmrun/vmrun_instance.rb
                 </a>
         <br />
-                <a href="../files/lib/poolparty/plugins/apache2_rb.html">
-                lib/poolparty/plugins/apache2.rb
+                <a href="../files/lib/poolparty/plugins/apache2/apache_rb.html">
+                lib/poolparty/plugins/apache2/apache.rb
                 </a>
         <br />
                 <a href="../files/lib/poolparty/plugins/bind_rb.html">
@@ -245,10 +249,6 @@
         <br />
                 <a href="../files/lib/poolparty/plugins/line_in_file_rb.html">
                 lib/poolparty/plugins/line_in_file.rb
-                </a>
-        <br />
-                <a href="../files/lib/poolparty/plugins/nanite_rb.html">
-                lib/poolparty/plugins/nanite.rb
                 </a>
         <br />
                 <a href="../files/lib/poolparty/plugins/rails_deploy_rb.html">
@@ -343,6 +343,10 @@
                 lib/poolparty/resources/file.rb
                 </a>
         <br />
+                <a href="../files/lib/poolparty/resources/group_rb.html">
+                lib/poolparty/resources/group.rb
+                </a>
+        <br />
                 <a href="../files/lib/poolparty/resources/host_rb.html">
                 lib/poolparty/resources/host.rb
                 </a>
@@ -391,6 +395,14 @@
                 lib/poolparty/verification/verifier_base.rb
                 </a>
         <br />
+                <a href="../files/lib/poolparty/verification/verifiers/http_match_rb.html">
+                lib/poolparty/verification/verifiers/http_match.rb
+                </a>
+        <br />
+                <a href="../files/lib/poolparty/verification/verifiers/http_status_rb.html">
+                lib/poolparty/verification/verifiers/http_status.rb
+                </a>
+        <br />
                 <a href="../files/lib/poolparty/verification/verifiers/ping_rb.html">
                 lib/poolparty/verification/verifiers/ping.rb
                 </a>
@@ -430,18 +442,18 @@ Load <a href="PoolParty.html">PoolParty</a> Plugins and package
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000181">context_stack</a>&nbsp;&nbsp;
-      <a href="#M000176">extract_cloud_from_options</a>&nbsp;&nbsp;
-      <a href="#M000177">extract_pool_from_options</a>&nbsp;&nbsp;
-      <a href="#M000178">load_cloud_from_json</a>&nbsp;&nbsp;
-      <a href="#M000173">load_pool</a>&nbsp;&nbsp;
-      <a href="#M000183">log</a>&nbsp;&nbsp;
-      <a href="#M000180">pack_user_directory</a>&nbsp;&nbsp;
-      <a href="#M000175">pool_specfile</a>&nbsp;&nbsp;
-      <a href="#M000174">print_with_nice_printer</a>&nbsp;&nbsp;
-      <a href="#M000182">require_directory</a>&nbsp;&nbsp;
-      <a href="#M000179">require_user_directory</a>&nbsp;&nbsp;
-      <a href="#M000184">reset!</a>&nbsp;&nbsp;
+      <a href="#M000183">context_stack</a>&nbsp;&nbsp;
+      <a href="#M000178">extract_cloud_from_options</a>&nbsp;&nbsp;
+      <a href="#M000179">extract_pool_from_options</a>&nbsp;&nbsp;
+      <a href="#M000180">load_cloud_from_json</a>&nbsp;&nbsp;
+      <a href="#M000175">load_pool</a>&nbsp;&nbsp;
+      <a href="#M000185">log</a>&nbsp;&nbsp;
+      <a href="#M000182">pack_user_directory</a>&nbsp;&nbsp;
+      <a href="#M000177">pool_specfile</a>&nbsp;&nbsp;
+      <a href="#M000176">print_with_nice_printer</a>&nbsp;&nbsp;
+      <a href="#M000184">require_directory</a>&nbsp;&nbsp;
+      <a href="#M000181">require_user_directory</a>&nbsp;&nbsp;
+      <a href="#M000186">reset!</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -487,6 +499,7 @@ Module <a href="PoolParty/Remote.html" class="link">PoolParty::Remote</a><br />
 Module <a href="PoolParty/Resources.html" class="link">PoolParty::Resources</a><br />
 Module <a href="PoolParty/ResourcingDsl.html" class="link">PoolParty::ResourcingDsl</a><br />
 Module <a href="PoolParty/Ruberl.html" class="link">PoolParty::Ruberl</a><br />
+Module <a href="PoolParty/SearchablePaths.html" class="link">PoolParty::SearchablePaths</a><br />
 Module <a href="PoolParty/ThreadSafeInstance.html" class="link">PoolParty::ThreadSafeInstance</a><br />
 Module <a href="PoolParty/Verification.html" class="link">PoolParty::Verification</a><br />
 Module <a href="PoolParty/Verifiers.html" class="link">PoolParty::Verifiers</a><br />
@@ -504,7 +517,6 @@ Class <a href="PoolParty/GitResource.html" class="link">PoolParty::GitResource</
 Class <a href="PoolParty/HashPrinter.html" class="link">PoolParty::HashPrinter</a><br />
 Class <a href="PoolParty/Key.html" class="link">PoolParty::Key</a><br />
 Class <a href="PoolParty/LineInFile.html" class="link">PoolParty::LineInFile</a><br />
-Class <a href="PoolParty/Nanite.html" class="link">PoolParty::Nanite</a><br />
 Class <a href="PoolParty/Neighborhoods.html" class="link">PoolParty::Neighborhoods</a><br />
 Class <a href="PoolParty/Optioner.html" class="link">PoolParty::Optioner</a><br />
 Class <a href="PoolParty/PoolParty.html" class="link">PoolParty::PoolParty</a><br />
@@ -531,19 +543,19 @@ Class <a href="PoolParty/Verify.html" class="link">PoolParty::Verify</a><br />
     <div id="methods">
       <h3 class="section-bar">Public Class methods</h3>
 
-      <div id="method-M000178" class="method-detail">
-        <a name="M000178"></a>
+      <div id="method-M000180" class="method-detail">
+        <a name="M000180"></a>
 
         <div class="method-heading">
-          <a href="#M000178" class="method-signature">
+          <a href="#M000180" class="method-signature">
           <span class="method-name">load_cloud_from_json</span><span class="method-args">(json_file_path=nil)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000178-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000178-source">
+            onclick="toggleCode('M000180-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000180-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/lite.rb, line 20</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">load_cloud_from_json</span>(<span class="ruby-identifier">json_file_path</span>=<span class="ruby-keyword kw">nil</span>)
@@ -555,19 +567,19 @@ Class <a href="PoolParty/Verify.html" class="link">PoolParty::Verify</a><br />
         </div>
       </div>
 
-      <div id="method-M000182" class="method-detail">
-        <a name="M000182"></a>
+      <div id="method-M000184" class="method-detail">
+        <a name="M000184"></a>
 
         <div class="method-heading">
-          <a href="#M000182" class="method-signature">
+          <a href="#M000184" class="method-signature">
           <span class="method-name">require_directory</span><span class="method-args">(dir)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000182-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000182-source">
+            onclick="toggleCode('M000184-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000184-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty.rb, line 44</span>
 <span class="ruby-keyword kw">def</span> <span class="ruby-constant">PoolParty</span>.<span class="ruby-identifier">require_directory</span>(<span class="ruby-identifier">dir</span>)
@@ -591,19 +603,19 @@ Class <a href="PoolParty/Verify.html" class="link">PoolParty::Verify</a><br />
 
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000181" class="method-detail">
-        <a name="M000181"></a>
+      <div id="method-M000183" class="method-detail">
+        <a name="M000183"></a>
 
         <div class="method-heading">
-          <a href="#M000181" class="method-signature">
+          <a href="#M000183" class="method-signature">
           <span class="method-name">context_stack</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000181-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000181-source">
+            onclick="toggleCode('M000183-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000183-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/poolparty/poolparty_base_class.rb, line 5</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">context_stack</span>
@@ -614,19 +626,19 @@ Class <a href="PoolParty/Verify.html" class="link">PoolParty::Verify</a><br />
         </div>
       </div>
 
-      <div id="method-M000176" class="method-detail">
-        <a name="M000176"></a>
+      <div id="method-M000178" class="method-detail">
+        <a name="M000178"></a>
 
         <div class="method-heading">
-          <a href="#M000176" class="method-signature">
+          <a href="#M000178" class="method-signature">
           <span class="method-name">extract_cloud_from_options</span><span class="method-args">(o)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000176-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000176-source">
+            onclick="toggleCode('M000178-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000178-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/helpers/optioner.rb, line 149</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">extract_cloud_from_options</span>(<span class="ruby-identifier">o</span>)
@@ -637,19 +649,19 @@ Class <a href="PoolParty/Verify.html" class="link">PoolParty::Verify</a><br />
         </div>
       </div>
 
-      <div id="method-M000177" class="method-detail">
-        <a name="M000177"></a>
+      <div id="method-M000179" class="method-detail">
+        <a name="M000179"></a>
 
         <div class="method-heading">
-          <a href="#M000177" class="method-signature">
+          <a href="#M000179" class="method-signature">
           <span class="method-name">extract_pool_from_options</span><span class="method-args">(o)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000177-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000177-source">
+            onclick="toggleCode('M000179-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000179-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/helpers/optioner.rb, line 153</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">extract_pool_from_options</span>(<span class="ruby-identifier">o</span>)
@@ -660,11 +672,11 @@ Class <a href="PoolParty/Verify.html" class="link">PoolParty::Verify</a><br />
         </div>
       </div>
 
-      <div id="method-M000173" class="method-detail">
-        <a name="M000173"></a>
+      <div id="method-M000175" class="method-detail">
+        <a name="M000175"></a>
 
         <div class="method-heading">
-          <a href="#M000173" class="method-signature">
+          <a href="#M000175" class="method-signature">
           <span class="method-name">load_pool</span><span class="method-args">(filename=nil)</span>
           </a>
         </div>
@@ -674,8 +686,8 @@ Class <a href="PoolParty/Verify.html" class="link">PoolParty::Verify</a><br />
 Load a file that contains a pool into memory
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000173-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000173-source">
+            onclick="toggleCode('M000175-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000175-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/helpers/binary.rb, line 5</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">load_pool</span>(<span class="ruby-identifier">filename</span>=<span class="ruby-keyword kw">nil</span>)
@@ -695,19 +707,19 @@ Load a file that contains a pool into memory
         </div>
       </div>
 
-      <div id="method-M000183" class="method-detail">
-        <a name="M000183"></a>
+      <div id="method-M000185" class="method-detail">
+        <a name="M000185"></a>
 
         <div class="method-heading">
-          <a href="#M000183" class="method-signature">
+          <a href="#M000185" class="method-signature">
           <span class="method-name">log</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000183-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000183-source">
+            onclick="toggleCode('M000185-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000185-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty.rb, line 108</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">log</span>
@@ -718,11 +730,11 @@ Load a file that contains a pool into memory
         </div>
       </div>
 
-      <div id="method-M000180" class="method-detail">
-        <a name="M000180"></a>
+      <div id="method-M000182" class="method-detail">
+        <a name="M000182"></a>
 
         <div class="method-heading">
-          <a href="#M000180" class="method-signature">
+          <a href="#M000182" class="method-signature">
           <span class="method-name">pack_user_directory</span><span class="method-args">(dirname)</span>
           </a>
         </div>
@@ -732,8 +744,8 @@ Load a file that contains a pool into memory
 Add to the suitcase files below the clouds.rb base directory
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000180-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000180-source">
+            onclick="toggleCode('M000182-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000182-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/modules/user_helpers.rb, line 13</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">pack_user_directory</span>(<span class="ruby-identifier">dirname</span>)
@@ -748,22 +760,22 @@ Add to the suitcase files below the clouds.rb base directory
         </div>
       </div>
 
-      <div id="method-M000175" class="method-detail">
-        <a name="M000175"></a>
+      <div id="method-M000177" class="method-detail">
+        <a name="M000177"></a>
 
         <div class="method-heading">
-          <a href="#M000175" class="method-signature">
+          <a href="#M000177" class="method-signature">
           <span class="method-name">pool_specfile</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Keep the <a href="PoolParty.html#M000175">pool_specfile</a>
+Keep the <a href="PoolParty.html#M000177">pool_specfile</a>
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000175-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000175-source">
+            onclick="toggleCode('M000177-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000177-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/helpers/binary.rb, line 30</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">pool_specfile</span>
@@ -774,11 +786,11 @@ Keep the <a href="PoolParty.html#M000175">pool_specfile</a>
         </div>
       </div>
 
-      <div id="method-M000174" class="method-detail">
-        <a name="M000174"></a>
+      <div id="method-M000176" class="method-detail">
+        <a name="M000176"></a>
 
         <div class="method-heading">
-          <a href="#M000174" class="method-signature">
+          <a href="#M000176" class="method-signature">
           <span class="method-name">print_with_nice_printer</span><span class="method-args">(header=nil, strs=[]) {|printer| ...}</span>
           </a>
         </div>
@@ -788,8 +800,8 @@ Keep the <a href="PoolParty.html#M000175">pool_specfile</a>
 Helper to print with the nice printer
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000174-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000174-source">
+            onclick="toggleCode('M000176-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000176-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/helpers/binary.rb, line 19</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">print_with_nice_printer</span>(<span class="ruby-identifier">header</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">strs</span>=[], <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
@@ -806,11 +818,11 @@ Helper to print with the nice printer
         </div>
       </div>
 
-      <div id="method-M000179" class="method-detail">
-        <a name="M000179"></a>
+      <div id="method-M000181" class="method-detail">
+        <a name="M000181"></a>
 
         <div class="method-heading">
-          <a href="#M000179" class="method-signature">
+          <a href="#M000181" class="method-signature">
           <span class="method-name">require_user_directory</span><span class="method-args">(dirname)</span>
           </a>
         </div>
@@ -820,8 +832,8 @@ Helper to print with the nice printer
 Require all the files in a directory below the base
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000179-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000179-source">
+            onclick="toggleCode('M000181-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000181-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/modules/user_helpers.rb, line 3</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">require_user_directory</span>(<span class="ruby-identifier">dirname</span>)    
@@ -837,19 +849,19 @@ Require all the files in a directory below the base
         </div>
       </div>
 
-      <div id="method-M000184" class="method-detail">
-        <a name="M000184"></a>
+      <div id="method-M000186" class="method-detail">
+        <a name="M000186"></a>
 
         <div class="method-heading">
-          <a href="#M000184" class="method-signature">
+          <a href="#M000186" class="method-signature">
           <span class="method-name">reset!</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000184-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000184-source">
+            onclick="toggleCode('M000186-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000186-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty.rb, line 111</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">reset!</span>

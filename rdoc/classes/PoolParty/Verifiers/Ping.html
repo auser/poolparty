@@ -88,9 +88,9 @@
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000292">new</a>&nbsp;&nbsp;
-      <a href="#M000293">passing?</a>&nbsp;&nbsp;
-      <a href="#M000294">to_s</a>&nbsp;&nbsp;
+      <a href="#M000302">new</a>&nbsp;&nbsp;
+      <a href="#M000303">passing?</a>&nbsp;&nbsp;
+      <a href="#M000304">to_s</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -132,21 +132,21 @@
     <div id="methods">
       <h3 class="section-bar">Public Class methods</h3>
 
-      <div id="method-M000292" class="method-detail">
-        <a name="M000292"></a>
+      <div id="method-M000302" class="method-detail">
+        <a name="M000302"></a>
 
         <div class="method-heading">
-          <a href="#M000292" class="method-signature">
+          <a href="#M000302" class="method-signature">
           <span class="method-name">new</span><span class="method-args">(port=80)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000292-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000292-source">
+            onclick="toggleCode('M000302-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000302-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/verification/verifiers/ping.rb, line 8</span>
+<span class="ruby-comment cmt"># File lib/poolparty/verification/verifiers/ping.rb, line 20</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">port</span>=<span class="ruby-value">80</span>)
         <span class="ruby-ivar">@port</span> = <span class="ruby-identifier">port</span>
       <span class="ruby-keyword kw">end</span>
@@ -157,21 +157,21 @@
 
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000293" class="method-detail">
-        <a name="M000293"></a>
+      <div id="method-M000303" class="method-detail">
+        <a name="M000303"></a>
 
         <div class="method-heading">
-          <a href="#M000293" class="method-signature">
+          <a href="#M000303" class="method-signature">
           <span class="method-name">passing?</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000293-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000293-source">
+            onclick="toggleCode('M000303-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000303-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/verification/verifiers/ping.rb, line 11</span>
+<span class="ruby-comment cmt"># File lib/poolparty/verification/verifiers/ping.rb, line 23</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">passing?</span>
         <span class="ruby-identifier">ping_port</span>(<span class="ruby-identifier">host</span>, <span class="ruby-identifier">port</span>, <span class="ruby-value">3</span>)
       <span class="ruby-keyword kw">end</span>
@@ -180,21 +180,21 @@
         </div>
       </div>
 
-      <div id="method-M000294" class="method-detail">
-        <a name="M000294"></a>
+      <div id="method-M000304" class="method-detail">
+        <a name="M000304"></a>
 
         <div class="method-heading">
-          <a href="#M000294" class="method-signature">
+          <a href="#M000304" class="method-signature">
           <span class="method-name">to_s</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000294-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000294-source">
+            onclick="toggleCode('M000304-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000304-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/verification/verifiers/ping.rb, line 15</span>
+<span class="ruby-comment cmt"># File lib/poolparty/verification/verifiers/ping.rb, line 27</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_s</span>
         <span class="ruby-node">&quot;&lt;#{self.class.to_s} host:#{host} port:#{port}&gt;&quot;</span>
       <span class="ruby-keyword kw">end</span>

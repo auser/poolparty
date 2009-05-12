@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Module: PoolParty::SearchablePaths::ClassMethods</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+    <div id="classHeader">
+        <table class="header-table">
+        <tr class="top-aligned-row">
+          <td><strong>Module</strong></td>
+          <td class="class-name-in-header">PoolParty::SearchablePaths::ClassMethods</td>
+        </tr>
+        <tr class="top-aligned-row">
+            <td><strong>In:</strong></td>
+            <td>
+                <a href="../../../files/lib/poolparty/modules/searchable_paths_rb.html">
+                lib/poolparty/modules/searchable_paths.rb
+                </a>
+        <br />
+            </td>
+        </tr>
+
+        </table>
+    </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+
+
+   </div>
+
+    <div id="method-list">
+      <h3 class="section-bar">Methods</h3>
+
+      <div class="name-list">
+      <a href="#M000218">has_searchable_paths</a>&nbsp;&nbsp;
+      </div>
+    </div>
+
+  </div>
+
+
+    <!-- if includes -->
+    <div id="includes">
+      <h3 class="section-bar">Included Modules</h3>
+
+      <div id="includes-list">
+        <span class="include-name"><a href="InstanceMethods.html">PoolParty::SearchablePaths::InstanceMethods</a></span>
+      </div>
+    </div>
+
+    <div id="section">
+
+
+
+
+
+      
+
+
+    <!-- if method_list -->
+    <div id="methods">
+      <h3 class="section-bar">Public Instance methods</h3>
+
+      <div id="method-M000218" class="method-detail">
+        <a name="M000218"></a>
+
+        <div class="method-heading">
+          <a href="#M000218" class="method-signature">
+          <span class="method-name">has_searchable_paths</span><span class="method-args">(opts={})</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Specify that a particular class has methods for searchable paths.
+</p>
+<p>
+Options:
+</p>
+<ul>
+<li><tt>:dirs</tt>: array of directories to look in <b>under</b> the search
+paths. (default: <tt>[&quot;/&quot;]</tt>)
+
+</li>
+<li><tt>:dir</tt>: set the directory to look in <b>under</b> the search paths.
+Use either dir or dirs, not both. (default: +/+)
+
+</li>
+<li><tt>:paths</tt>: overwrite all default paths and set the paths to this
+array exactly
+
+</li>
+<li><tt>:append_paths</tt>: append these paths to any existing paths
+
+</li>
+<li><tt>:prepend_paths</tt>: prepend these paths to any existing paths
+
+</li>
+</ul>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000218-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000218-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/modules/searchable_paths.rb, line 22</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">has_searchable_paths</span>(<span class="ruby-identifier">opts</span>={})
+        <span class="ruby-identifier">class_eval</span> <span class="ruby-keyword kw">do</span>
+          <span class="ruby-identifier">extend</span> <span class="ruby-constant">PoolParty</span><span class="ruby-operator">::</span><span class="ruby-constant">SearchablePaths</span><span class="ruby-operator">::</span><span class="ruby-constant">SingletonMethods</span>
+
+          <span class="ruby-ivar">@searchable_paths_dirs</span> = [<span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:dir</span>]] <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:dir</span>]
+          <span class="ruby-ivar">@searchable_paths_dirs</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:dirs</span>]  <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:dirs</span>]
+          <span class="ruby-ivar">@paths_override</span>        = <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:paths</span>] <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:paths</span>]
+          <span class="ruby-ivar">@paths_prepend</span>         = <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:prepend_paths</span>] <span class="ruby-operator">||</span> []
+          <span class="ruby-ivar">@paths_append</span>          = <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:append_paths</span>]  <span class="ruby-operator">||</span> []
+        <span class="ruby-keyword kw">end</span>
+        <span class="ruby-identifier">include</span> <span class="ruby-constant">PoolParty</span><span class="ruby-operator">::</span><span class="ruby-constant">SearchablePaths</span><span class="ruby-operator">::</span><span class="ruby-constant">InstanceMethods</span>
+      <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>

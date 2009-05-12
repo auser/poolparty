@@ -88,6 +88,7 @@
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
+      <a href="#M000035">/</a>&nbsp;&nbsp;
       <a href="#M000034">&lt;=&gt;</a>&nbsp;&nbsp;
       <a href="#M000033">sanitize</a>&nbsp;&nbsp;
       <a href="#M000032">to_string</a>&nbsp;&nbsp;
@@ -111,6 +112,44 @@
     <!-- if method_list -->
     <div id="methods">
       <h3 class="section-bar">Public Instance methods</h3>
+
+      <div id="method-M000035" class="method-detail">
+        <a name="M000035"></a>
+
+        <div class="method-heading">
+          <a href="#M000035" class="method-signature">
+          <span class="method-name">/</span><span class="method-args">(o)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+@param o&lt;<a href="String.html">String</a>, <a
+href="Symbol.html">Symbol</a>&gt; The path component to join with the
+string.
+</p>
+<p>
+@return &lt;<a href="String.html">String</a>&gt; The original path
+concatenated with o.
+</p>
+<p>
+@example
+</p>
+<pre>
+  :merb/&quot;core_ext&quot; #=&gt; &quot;merb/core_ext&quot;
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000035-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000035-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/core/symbol.rb, line 24</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-operator">/</span>(<span class="ruby-identifier">o</span>)
+    <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">to_s</span>, <span class="ruby-identifier">o</span>.<span class="ruby-identifier">to_s</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
 
       <div id="method-M000034" class="method-detail">
         <a name="M000034"></a>

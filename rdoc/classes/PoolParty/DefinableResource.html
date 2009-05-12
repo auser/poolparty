@@ -80,8 +80,8 @@
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000205">define_resource</a>&nbsp;&nbsp;
-      <a href="#M000206">virtual_resource</a>&nbsp;&nbsp;
+      <a href="#M000207">define_resource</a>&nbsp;&nbsp;
+      <a href="#M000208">virtual_resource</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -103,11 +103,11 @@
     <div id="methods">
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000205" class="method-detail">
-        <a name="M000205"></a>
+      <div id="method-M000207" class="method-detail">
+        <a name="M000207"></a>
 
         <div class="method-heading">
-          <a href="#M000205" class="method-signature">
+          <a href="#M000207" class="method-signature">
           <span class="method-name">define_resource</span><span class="method-args">(name, &amp;block)</span>
           </a>
         </div>
@@ -119,7 +119,7 @@ any other resource (like file or exec) but you define it how you want it to
 work Example:
 </p>
 <p>
-<a href="DefinableResource.html#M000205">define_resource</a>(:line_in_file)
+<a href="DefinableResource.html#M000207">define_resource</a>(:line_in_file)
 do end
 </p>
 <p>
@@ -134,8 +134,8 @@ that it does not give you any extra methods like the resources do
 For example usage, see lib/poolparty/plugins/line.rb
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000205-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000205-source">
+            onclick="toggleCode('M000207-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000207-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/modules/definable_resource.rb, line 18</span>
     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">define_resource</span>(<span class="ruby-identifier">name</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
@@ -146,11 +146,11 @@ For example usage, see lib/poolparty/plugins/line.rb
         </div>
       </div>
 
-      <div id="method-M000206" class="method-detail">
-        <a name="M000206"></a>
+      <div id="method-M000208" class="method-detail">
+        <a name="M000208"></a>
 
         <div class="method-heading">
-          <a href="#M000206" class="method-signature">
+          <a href="#M000208" class="method-signature">
           <span class="method-name">virtual_resource</span><span class="method-args">(name=:virtual_resource, opts={}, &amp;block)</span>
           </a>
         </div>
@@ -161,7 +161,7 @@ Allow us to create virtual resources Generally, in plugins This sets a
 virtual resource against the Resource class Example:
 </p>
 <p>
-<a href="DefinableResource.html#M000206">virtual_resource</a>(:virtualhost)
+<a href="DefinableResource.html#M000208">virtual_resource</a>(:virtualhost)
 do end
 </p>
 <p>
@@ -187,8 +187,8 @@ Which sets the virtual host&#8216;s name as xnot.org
 An example is included in the poolparty-apache-plugin
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000206-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000206-source">
+            onclick="toggleCode('M000208-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000208-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/modules/definable_resource.rb, line 43</span>
     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">virtual_resource</span>(<span class="ruby-identifier">name</span>=<span class="ruby-identifier">:virtual_resource</span>, <span class="ruby-identifier">opts</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)

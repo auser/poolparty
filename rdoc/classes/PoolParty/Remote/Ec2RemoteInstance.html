@@ -88,12 +88,12 @@
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000466">find_myself</a>&nbsp;&nbsp;
-      <a href="#M000465">new</a>&nbsp;&nbsp;
-      <a href="#M000468">pending?</a>&nbsp;&nbsp;
-      <a href="#M000467">running?</a>&nbsp;&nbsp;
-      <a href="#M000470">terminated?</a>&nbsp;&nbsp;
-      <a href="#M000469">terminating?</a>&nbsp;&nbsp;
+      <a href="#M000484">find_myself</a>&nbsp;&nbsp;
+      <a href="#M000483">new</a>&nbsp;&nbsp;
+      <a href="#M000486">pending?</a>&nbsp;&nbsp;
+      <a href="#M000485">running?</a>&nbsp;&nbsp;
+      <a href="#M000488">terminated?</a>&nbsp;&nbsp;
+      <a href="#M000487">terminating?</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -145,18 +145,18 @@
     <div id="methods">
       <h3 class="section-bar">Public Class methods</h3>
 
-      <div id="method-M000465" class="method-detail">
-        <a name="M000465"></a>
+      <div id="method-M000483" class="method-detail">
+        <a name="M000483"></a>
 
         <div class="method-heading">
-          <a href="#M000465" class="method-signature">
+          <a href="#M000483" class="method-signature">
           <span class="method-name">new</span><span class="method-args">(opts={}, prnt=Ec2.new)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-A <a href="Ec2RemoteInstance.html#M000465">new</a> instance will be created
+A <a href="Ec2RemoteInstance.html#M000483">new</a> instance will be created
 from the passed in hash. This hash of passed in values will be converted to
 methods on this instance. The parent clouds describe_instances list will be
 searched for the first one matching any of this instance&#8216;s provided
@@ -166,8 +166,8 @@ properties of the same key as the provided options, the found
 instance&#8216;s values will override the passed in options
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000465-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000465-source">
+            onclick="toggleCode('M000483-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000483-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/net/remoter_bases/ec2/ec2_remote_instance.rb, line 14</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">opts</span>={}, <span class="ruby-identifier">prnt</span>=<span class="ruby-constant">Ec2</span>.<span class="ruby-identifier">new</span>)
@@ -184,11 +184,11 @@ instance&#8216;s values will override the passed in options
 
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000466" class="method-detail">
-        <a name="M000466"></a>
+      <div id="method-M000484" class="method-detail">
+        <a name="M000484"></a>
 
         <div class="method-heading">
-          <a href="#M000466" class="method-signature">
+          <a href="#M000484" class="method-signature">
           <span class="method-name">find_myself</span><span class="method-args">(unique_identifiers = @original_options.keys)</span>
           </a>
         </div>
@@ -199,8 +199,8 @@ Search the clouds describe_instances list for the first match on one of
 this nodes unique identifiers
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000466-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000466-source">
+            onclick="toggleCode('M000484-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000484-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/net/remoter_bases/ec2/ec2_remote_instance.rb, line 23</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">find_myself</span>(<span class="ruby-identifier">unique_identifiers</span> = <span class="ruby-ivar">@original_options</span>.<span class="ruby-identifier">keys</span>)
@@ -218,22 +218,22 @@ this nodes unique identifiers
         </div>
       </div>
 
-      <div id="method-M000468" class="method-detail">
-        <a name="M000468"></a>
+      <div id="method-M000486" class="method-detail">
+        <a name="M000486"></a>
 
         <div class="method-heading">
-          <a href="#M000468" class="method-signature">
+          <a href="#M000486" class="method-signature">
           <span class="method-name">pending?</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Is this instance <a href="Ec2RemoteInstance.html#M000468">pending?</a>
+Is this instance <a href="Ec2RemoteInstance.html#M000486">pending?</a>
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000468-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000468-source">
+            onclick="toggleCode('M000486-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000486-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/net/remoter_bases/ec2/ec2_remote_instance.rb, line 39</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">pending?</span>
@@ -244,22 +244,22 @@ Is this instance <a href="Ec2RemoteInstance.html#M000468">pending?</a>
         </div>
       </div>
 
-      <div id="method-M000467" class="method-detail">
-        <a name="M000467"></a>
+      <div id="method-M000485" class="method-detail">
+        <a name="M000485"></a>
 
         <div class="method-heading">
-          <a href="#M000467" class="method-signature">
+          <a href="#M000485" class="method-signature">
           <span class="method-name">running?</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Is this instance <a href="Ec2RemoteInstance.html#M000467">running?</a>
+Is this instance <a href="Ec2RemoteInstance.html#M000485">running?</a>
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000467-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000467-source">
+            onclick="toggleCode('M000485-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000485-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/net/remoter_bases/ec2/ec2_remote_instance.rb, line 35</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">running?</span>
@@ -270,11 +270,11 @@ Is this instance <a href="Ec2RemoteInstance.html#M000467">running?</a>
         </div>
       </div>
 
-      <div id="method-M000470" class="method-detail">
-        <a name="M000470"></a>
+      <div id="method-M000488" class="method-detail">
+        <a name="M000488"></a>
 
         <div class="method-heading">
-          <a href="#M000470" class="method-signature">
+          <a href="#M000488" class="method-signature">
           <span class="method-name">terminated?</span><span class="method-args">()</span>
           </a>
         </div>
@@ -282,11 +282,11 @@ Is this instance <a href="Ec2RemoteInstance.html#M000467">running?</a>
         <div class="method-description">
           <p>
 Has this instance been <a
-href="Ec2RemoteInstance.html#M000470">terminated?</a>
+href="Ec2RemoteInstance.html#M000488">terminated?</a>
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000470-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000470-source">
+            onclick="toggleCode('M000488-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000488-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/net/remoter_bases/ec2/ec2_remote_instance.rb, line 47</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">terminated?</span>
@@ -297,22 +297,22 @@ href="Ec2RemoteInstance.html#M000470">terminated?</a>
         </div>
       </div>
 
-      <div id="method-M000469" class="method-detail">
-        <a name="M000469"></a>
+      <div id="method-M000487" class="method-detail">
+        <a name="M000487"></a>
 
         <div class="method-heading">
-          <a href="#M000469" class="method-signature">
+          <a href="#M000487" class="method-signature">
           <span class="method-name">terminating?</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Is this instance <a href="Ec2RemoteInstance.html#M000469">terminating?</a>
+Is this instance <a href="Ec2RemoteInstance.html#M000487">terminating?</a>
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000469-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000469-source">
+            onclick="toggleCode('M000487-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000487-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/net/remoter_bases/ec2/ec2_remote_instance.rb, line 43</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">terminating?</span>

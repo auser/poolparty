@@ -88,27 +88,27 @@
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000601">access_key</a>&nbsp;&nbsp;
-      <a href="#M000617">custom_modules_directories</a>&nbsp;&nbsp;
-      <a href="#M000616">custom_monitor_directories</a>&nbsp;&nbsp;
-      <a href="#M000610">get_working_key_file_locations</a>&nbsp;&nbsp;
-      <a href="#M000611">key_file_locations</a>&nbsp;&nbsp;
-      <a href="#M000602">load_access_keys_from_environment_var</a>&nbsp;&nbsp;
-      <a href="#M000606">load_keys_from_file</a>&nbsp;&nbsp;
-      <a href="#M000604">load_secret_access_keys_from_environment_var</a>&nbsp;&nbsp;
-      <a href="#M000614">logger_location</a>&nbsp;&nbsp;
-      <a href="#M000599">method_missing</a>&nbsp;&nbsp;
-      <a href="#M000600">options</a>&nbsp;&nbsp;
-      <a href="#M000598">options</a>&nbsp;&nbsp;
-      <a href="#M000615">pool_logger_location</a>&nbsp;&nbsp;
-      <a href="#M000612">properties_hash_file</a>&nbsp;&nbsp;
-      <a href="#M000605">read_keyfile</a>&nbsp;&nbsp;
-      <a href="#M000609">reset!</a>&nbsp;&nbsp;
-      <a href="#M000603">secret_access_key</a>&nbsp;&nbsp;
-      <a href="#M000613">storage_directory</a>&nbsp;&nbsp;
-      <a href="#M000607">store_keys_in_file</a>&nbsp;&nbsp;
-      <a href="#M000608">store_keys_in_file_for</a>&nbsp;&nbsp;
-      <a href="#M000618">viable_directory?</a>&nbsp;&nbsp;
+      <a href="#M000618">access_key</a>&nbsp;&nbsp;
+      <a href="#M000634">custom_modules_directories</a>&nbsp;&nbsp;
+      <a href="#M000633">custom_monitor_directories</a>&nbsp;&nbsp;
+      <a href="#M000627">get_working_key_file_locations</a>&nbsp;&nbsp;
+      <a href="#M000628">key_file_locations</a>&nbsp;&nbsp;
+      <a href="#M000619">load_access_keys_from_environment_var</a>&nbsp;&nbsp;
+      <a href="#M000623">load_keys_from_file</a>&nbsp;&nbsp;
+      <a href="#M000621">load_secret_access_keys_from_environment_var</a>&nbsp;&nbsp;
+      <a href="#M000631">logger_location</a>&nbsp;&nbsp;
+      <a href="#M000616">method_missing</a>&nbsp;&nbsp;
+      <a href="#M000617">options</a>&nbsp;&nbsp;
+      <a href="#M000615">options</a>&nbsp;&nbsp;
+      <a href="#M000632">pool_logger_location</a>&nbsp;&nbsp;
+      <a href="#M000629">properties_hash_file</a>&nbsp;&nbsp;
+      <a href="#M000622">read_keyfile</a>&nbsp;&nbsp;
+      <a href="#M000626">reset!</a>&nbsp;&nbsp;
+      <a href="#M000620">secret_access_key</a>&nbsp;&nbsp;
+      <a href="#M000630">storage_directory</a>&nbsp;&nbsp;
+      <a href="#M000624">store_keys_in_file</a>&nbsp;&nbsp;
+      <a href="#M000625">store_keys_in_file_for</a>&nbsp;&nbsp;
+      <a href="#M000635">viable_directory?</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -137,24 +137,24 @@
     <div id="methods">
       <h3 class="section-bar">Public Class methods</h3>
 
-      <div id="method-M000601" class="method-detail">
-        <a name="M000601"></a>
+      <div id="method-M000618" class="method-detail">
+        <a name="M000618"></a>
 
         <div class="method-heading">
-          <a href="#M000601" class="method-signature">
+          <a href="#M000618" class="method-signature">
           <span class="method-name">access_key</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Get the <a href="Default.html#M000601">access_key</a>
+Get the <a href="Default.html#M000618">access_key</a>
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000601-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000601-source">
+            onclick="toggleCode('M000618-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000618-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/poolparty/default.rb, line 55</span>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/default.rb, line 56</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">access_key</span>
         <span class="ruby-ivar">@access_key</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">load_access_keys_from_environment_var</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">load_keys_from_file</span>[<span class="ruby-identifier">:access_key</span>]
       <span class="ruby-keyword kw">end</span>
@@ -163,21 +163,21 @@ Get the <a href="Default.html#M000601">access_key</a>
         </div>
       </div>
 
-      <div id="method-M000617" class="method-detail">
-        <a name="M000617"></a>
+      <div id="method-M000634" class="method-detail">
+        <a name="M000634"></a>
 
         <div class="method-heading">
-          <a href="#M000617" class="method-signature">
+          <a href="#M000634" class="method-signature">
           <span class="method-name">custom_modules_directories</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000617-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000617-source">
+            onclick="toggleCode('M000634-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000634-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/poolparty/default.rb, line 142</span>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/default.rb, line 143</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">custom_modules_directories</span>
         [
           <span class="ruby-value str">&quot;/var/poolparty/modules&quot;</span>,
@@ -190,21 +190,21 @@ Get the <a href="Default.html#M000601">access_key</a>
         </div>
       </div>
 
-      <div id="method-M000616" class="method-detail">
-        <a name="M000616"></a>
+      <div id="method-M000633" class="method-detail">
+        <a name="M000633"></a>
 
         <div class="method-heading">
-          <a href="#M000616" class="method-signature">
+          <a href="#M000633" class="method-signature">
           <span class="method-name">custom_monitor_directories</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000616-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000616-source">
+            onclick="toggleCode('M000633-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000633-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/poolparty/default.rb, line 134</span>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/default.rb, line 135</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">custom_monitor_directories</span>
         [
           <span class="ruby-value str">&quot;/var/poolparty/monitors&quot;</span>,
@@ -217,11 +217,11 @@ Get the <a href="Default.html#M000601">access_key</a>
         </div>
       </div>
 
-      <div id="method-M000610" class="method-detail">
-        <a name="M000610"></a>
+      <div id="method-M000627" class="method-detail">
+        <a name="M000627"></a>
 
         <div class="method-heading">
-          <a href="#M000610" class="method-signature">
+          <a href="#M000627" class="method-signature">
           <span class="method-name">get_working_key_file_locations</span><span class="method-args">()</span>
           </a>
         </div>
@@ -232,10 +232,10 @@ Get the instance first instance file that exists on the system from the
 expected places denoted in the local_instances_list_file_locations
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000610-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000610-source">
+            onclick="toggleCode('M000627-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000627-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/poolparty/default.rb, line 93</span>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/default.rb, line 94</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_working_key_file_locations</span>
         <span class="ruby-identifier">key_file_locations</span>.<span class="ruby-identifier">reject</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span> <span class="ruby-identifier">f</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">file?</span>(<span class="ruby-identifier">f</span>) }.<span class="ruby-identifier">first</span>
       <span class="ruby-keyword kw">end</span>
@@ -244,11 +244,11 @@ expected places denoted in the local_instances_list_file_locations
         </div>
       </div>
 
-      <div id="method-M000611" class="method-detail">
-        <a name="M000611"></a>
+      <div id="method-M000628" class="method-detail">
+        <a name="M000628"></a>
 
         <div class="method-heading">
-          <a href="#M000611" class="method-signature">
+          <a href="#M000628" class="method-signature">
           <span class="method-name">key_file_locations</span><span class="method-args">()</span>
           </a>
         </div>
@@ -258,10 +258,10 @@ expected places denoted in the local_instances_list_file_locations
 Expected places for the instances.list to be located at on the machine
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000611-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000611-source">
+            onclick="toggleCode('M000628-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000628-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/poolparty/default.rb, line 97</span>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/default.rb, line 98</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">key_file_locations</span>
         [
           <span class="ruby-value str">&quot;.ppkeys&quot;</span>,
@@ -276,21 +276,21 @@ Expected places for the instances.list to be located at on the machine
         </div>
       </div>
 
-      <div id="method-M000602" class="method-detail">
-        <a name="M000602"></a>
+      <div id="method-M000619" class="method-detail">
+        <a name="M000619"></a>
 
         <div class="method-heading">
-          <a href="#M000602" class="method-signature">
+          <a href="#M000619" class="method-signature">
           <span class="method-name">load_access_keys_from_environment_var</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000602-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000602-source">
+            onclick="toggleCode('M000619-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000619-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/poolparty/default.rb, line 58</span>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/default.rb, line 59</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">load_access_keys_from_environment_var</span>
         [ <span class="ruby-constant">ENV</span>[<span class="ruby-value str">&quot;AWS_ACCESS_KEY&quot;</span>], <span class="ruby-constant">ENV</span>[<span class="ruby-value str">&quot;AWS_ACCESS_KEY_ID&quot;</span>]].<span class="ruby-identifier">reject</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">a</span><span class="ruby-operator">|</span> <span class="ruby-identifier">a</span>.<span class="ruby-identifier">nil?</span> }.<span class="ruby-identifier">first</span>
       <span class="ruby-keyword kw">end</span>
@@ -299,21 +299,21 @@ Expected places for the instances.list to be located at on the machine
         </div>
       </div>
 
-      <div id="method-M000606" class="method-detail">
-        <a name="M000606"></a>
+      <div id="method-M000623" class="method-detail">
+        <a name="M000623"></a>
 
         <div class="method-heading">
-          <a href="#M000606" class="method-signature">
+          <a href="#M000623" class="method-signature">
           <span class="method-name">load_keys_from_file</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000606-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000606-source">
+            onclick="toggleCode('M000623-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000623-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/poolparty/default.rb, line 70</span>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/default.rb, line 71</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">load_keys_from_file</span>
         <span class="ruby-ivar">@keys</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">get_working_key_file_locations</span> <span class="ruby-value">? </span><span class="ruby-constant">YAML</span><span class="ruby-operator">::</span><span class="ruby-identifier">load</span>( <span class="ruby-identifier">read_keyfile</span> ) <span class="ruby-operator">:</span> {}
       <span class="ruby-keyword kw">end</span>
@@ -322,21 +322,21 @@ Expected places for the instances.list to be located at on the machine
         </div>
       </div>
 
-      <div id="method-M000604" class="method-detail">
-        <a name="M000604"></a>
+      <div id="method-M000621" class="method-detail">
+        <a name="M000621"></a>
 
         <div class="method-heading">
-          <a href="#M000604" class="method-signature">
+          <a href="#M000621" class="method-signature">
           <span class="method-name">load_secret_access_keys_from_environment_var</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000604-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000604-source">
+            onclick="toggleCode('M000621-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000621-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/poolparty/default.rb, line 64</span>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/default.rb, line 65</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">load_secret_access_keys_from_environment_var</span>
         [ <span class="ruby-constant">ENV</span>[<span class="ruby-value str">&quot;AWS_SECRET_ACCESS_KEY&quot;</span>] ].<span class="ruby-identifier">reject</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">a</span><span class="ruby-operator">|</span> <span class="ruby-identifier">a</span>.<span class="ruby-identifier">nil?</span> }.<span class="ruby-identifier">first</span>
       <span class="ruby-keyword kw">end</span>
@@ -345,21 +345,21 @@ Expected places for the instances.list to be located at on the machine
         </div>
       </div>
 
-      <div id="method-M000614" class="method-detail">
-        <a name="M000614"></a>
+      <div id="method-M000631" class="method-detail">
+        <a name="M000631"></a>
 
         <div class="method-heading">
-          <a href="#M000614" class="method-signature">
+          <a href="#M000631" class="method-signature">
           <span class="method-name">logger_location</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000614-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000614-source">
+            onclick="toggleCode('M000631-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000631-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/poolparty/default.rb, line 122</span>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/default.rb, line 123</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">logger_location</span>
         [
             <span class="ruby-value str">&quot;/var/log/poolparty&quot;</span>
@@ -372,21 +372,21 @@ Expected places for the instances.list to be located at on the machine
         </div>
       </div>
 
-      <div id="method-M000599" class="method-detail">
-        <a name="M000599"></a>
+      <div id="method-M000616" class="method-detail">
+        <a name="M000616"></a>
 
         <div class="method-heading">
-          <a href="#M000599" class="method-signature">
+          <a href="#M000616" class="method-signature">
           <span class="method-name">method_missing</span><span class="method-args">(m,*a,&amp;block)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000599-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000599-source">
+            onclick="toggleCode('M000616-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000616-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/poolparty/default.rb, line 48</span>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/default.rb, line 49</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">method_missing</span>(<span class="ruby-identifier">m</span>,<span class="ruby-operator">*</span><span class="ruby-identifier">a</span>,<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
         <span class="ruby-identifier">default_options</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">m</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">default_options</span>[<span class="ruby-identifier">m</span>] <span class="ruby-operator">:</span> <span class="ruby-keyword kw">super</span>
       <span class="ruby-keyword kw">end</span>
@@ -395,21 +395,21 @@ Expected places for the instances.list to be located at on the machine
         </div>
       </div>
 
-      <div id="method-M000600" class="method-detail">
-        <a name="M000600"></a>
+      <div id="method-M000617" class="method-detail">
+        <a name="M000617"></a>
 
         <div class="method-heading">
-          <a href="#M000600" class="method-signature">
+          <a href="#M000617" class="method-signature">
           <span class="method-name">options</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000600-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000600-source">
+            onclick="toggleCode('M000617-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000617-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/poolparty/default.rb, line 51</span>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/default.rb, line 52</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">options</span>
         <span class="ruby-identifier">default_options</span>
       <span class="ruby-keyword kw">end</span>
@@ -418,11 +418,11 @@ Expected places for the instances.list to be located at on the machine
         </div>
       </div>
 
-      <div id="method-M000615" class="method-detail">
-        <a name="M000615"></a>
+      <div id="method-M000632" class="method-detail">
+        <a name="M000632"></a>
 
         <div class="method-heading">
-          <a href="#M000615" class="method-signature">
+          <a href="#M000632" class="method-signature">
           <span class="method-name">pool_logger_location</span><span class="method-args">()</span>
           </a>
         </div>
@@ -430,13 +430,13 @@ Expected places for the instances.list to be located at on the machine
         <div class="method-description">
           <p>
 Assume the logs will be at the pool.log location within the <a
-href="Default.html#M000614">logger_location</a> set above
+href="Default.html#M000631">logger_location</a> set above
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000615-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000615-source">
+            onclick="toggleCode('M000632-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000632-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/poolparty/default.rb, line 131</span>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/default.rb, line 132</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">pool_logger_location</span>
         <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">logger_location</span>, <span class="ruby-value str">&quot;poolparty.log&quot;</span>)
       <span class="ruby-keyword kw">end</span>
@@ -445,21 +445,21 @@ href="Default.html#M000614">logger_location</a> set above
         </div>
       </div>
 
-      <div id="method-M000612" class="method-detail">
-        <a name="M000612"></a>
+      <div id="method-M000629" class="method-detail">
+        <a name="M000629"></a>
 
         <div class="method-heading">
-          <a href="#M000612" class="method-signature">
+          <a href="#M000629" class="method-signature">
           <span class="method-name">properties_hash_file</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000612-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000612-source">
+            onclick="toggleCode('M000629-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000629-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/poolparty/default.rb, line 106</span>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/default.rb, line 107</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">properties_hash_file</span>
         [
           <span class="ruby-constant">Default</span>.<span class="ruby-identifier">base_config_directory</span>,
@@ -474,21 +474,21 @@ href="Default.html#M000614">logger_location</a> set above
         </div>
       </div>
 
-      <div id="method-M000605" class="method-detail">
-        <a name="M000605"></a>
+      <div id="method-M000622" class="method-detail">
+        <a name="M000622"></a>
 
         <div class="method-heading">
-          <a href="#M000605" class="method-signature">
+          <a href="#M000622" class="method-signature">
           <span class="method-name">read_keyfile</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000605-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000605-source">
+            onclick="toggleCode('M000622-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000622-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/poolparty/default.rb, line 67</span>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/default.rb, line 68</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">read_keyfile</span>
         <span class="ruby-identifier">open</span>(<span class="ruby-identifier">get_working_key_file_locations</span>).<span class="ruby-identifier">read</span>
       <span class="ruby-keyword kw">end</span>
@@ -497,21 +497,21 @@ href="Default.html#M000614">logger_location</a> set above
         </div>
       </div>
 
-      <div id="method-M000609" class="method-detail">
-        <a name="M000609"></a>
+      <div id="method-M000626" class="method-detail">
+        <a name="M000626"></a>
 
         <div class="method-heading">
-          <a href="#M000609" class="method-signature">
+          <a href="#M000626" class="method-signature">
           <span class="method-name">reset!</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000609-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000609-source">
+            onclick="toggleCode('M000626-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000626-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/poolparty/default.rb, line 87</span>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/default.rb, line 88</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">reset!</span>
         <span class="ruby-ivar">@keys</span> = <span class="ruby-keyword kw">nil</span>
       <span class="ruby-keyword kw">end</span>
@@ -520,21 +520,21 @@ href="Default.html#M000614">logger_location</a> set above
         </div>
       </div>
 
-      <div id="method-M000603" class="method-detail">
-        <a name="M000603"></a>
+      <div id="method-M000620" class="method-detail">
+        <a name="M000620"></a>
 
         <div class="method-heading">
-          <a href="#M000603" class="method-signature">
+          <a href="#M000620" class="method-signature">
           <span class="method-name">secret_access_key</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000603-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000603-source">
+            onclick="toggleCode('M000620-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000620-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/poolparty/default.rb, line 61</span>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/default.rb, line 62</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">secret_access_key</span>
         <span class="ruby-ivar">@secret_access_key</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">load_secret_access_keys_from_environment_var</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">load_keys_from_file</span>[<span class="ruby-identifier">:secret_access_key</span>]
       <span class="ruby-keyword kw">end</span>
@@ -543,21 +543,21 @@ href="Default.html#M000614">logger_location</a> set above
         </div>
       </div>
 
-      <div id="method-M000613" class="method-detail">
-        <a name="M000613"></a>
+      <div id="method-M000630" class="method-detail">
+        <a name="M000630"></a>
 
         <div class="method-heading">
-          <a href="#M000613" class="method-signature">
+          <a href="#M000630" class="method-signature">
           <span class="method-name">storage_directory</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000613-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000613-source">
+            onclick="toggleCode('M000630-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000630-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/poolparty/default.rb, line 115</span>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/default.rb, line 116</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">storage_directory</span>
         [
             <span class="ruby-value str">&quot;/var/poolparty&quot;</span>
@@ -570,11 +570,11 @@ href="Default.html#M000614">logger_location</a> set above
         </div>
       </div>
 
-      <div id="method-M000607" class="method-detail">
-        <a name="M000607"></a>
+      <div id="method-M000624" class="method-detail">
+        <a name="M000624"></a>
 
         <div class="method-heading">
-          <a href="#M000607" class="method-signature">
+          <a href="#M000624" class="method-signature">
           <span class="method-name">store_keys_in_file</span><span class="method-args">()</span>
           </a>
         </div>
@@ -585,10 +585,10 @@ Store the keys in a yaml format to give the master access So that the
 master has access to the files
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000607-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000607-source">
+            onclick="toggleCode('M000624-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000624-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/poolparty/default.rb, line 75</span>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/default.rb, line 76</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_keys_in_file</span>
         <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">access_key</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">secret_access_key</span>.<span class="ruby-identifier">nil?</span>
           <span class="ruby-identifier">write_to_file</span>( <span class="ruby-identifier">key_file_locations</span>.<span class="ruby-identifier">first</span>, <span class="ruby-constant">YAML</span><span class="ruby-operator">::</span><span class="ruby-identifier">dump</span>({<span class="ruby-identifier">:access_key</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">access_key</span>, <span class="ruby-identifier">:secret_access_key</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">secret_access_key</span>}))        
@@ -599,21 +599,21 @@ master has access to the files
         </div>
       </div>
 
-      <div id="method-M000608" class="method-detail">
-        <a name="M000608"></a>
+      <div id="method-M000625" class="method-detail">
+        <a name="M000625"></a>
 
         <div class="method-heading">
-          <a href="#M000608" class="method-signature">
+          <a href="#M000625" class="method-signature">
           <span class="method-name">store_keys_in_file_for</span><span class="method-args">(obj=nil)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000608-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000608-source">
+            onclick="toggleCode('M000625-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000625-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/poolparty/default.rb, line 80</span>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/default.rb, line 81</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store_keys_in_file_for</span>(<span class="ruby-identifier">obj</span>=<span class="ruby-keyword kw">nil</span>)
         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">obj</span>
           <span class="ruby-ivar">@access_key</span> = <span class="ruby-identifier">obj</span>.<span class="ruby-identifier">access_key</span>
@@ -626,11 +626,11 @@ master has access to the files
         </div>
       </div>
 
-      <div id="method-M000618" class="method-detail">
-        <a name="M000618"></a>
+      <div id="method-M000635" class="method-detail">
+        <a name="M000635"></a>
 
         <div class="method-heading">
-          <a href="#M000618" class="method-signature">
+          <a href="#M000635" class="method-signature">
           <span class="method-name">viable_directory?</span><span class="method-args">(dir)</span>
           </a>
         </div>
@@ -641,10 +641,10 @@ Only return true if the directory we are reading is both readable and
 exists
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000618-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000618-source">
+            onclick="toggleCode('M000635-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000635-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/poolparty/default.rb, line 151</span>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/default.rb, line 152</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">viable_directory?</span>(<span class="ruby-identifier">dir</span>)
         <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">directory?</span>(<span class="ruby-identifier">dir</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">readable?</span>(<span class="ruby-identifier">dir</span>)
       <span class="ruby-keyword kw">end</span>
@@ -655,21 +655,21 @@ exists
 
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000598" class="method-detail">
-        <a name="M000598"></a>
+      <div id="method-M000615" class="method-detail">
+        <a name="M000615"></a>
 
         <div class="method-heading">
-          <a href="#M000598" class="method-signature">
+          <a href="#M000615" class="method-signature">
           <span class="method-name">options</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000598-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000598-source">
+            onclick="toggleCode('M000615-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000615-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/poolparty/default.rb, line 42</span>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/default.rb, line 43</span>
     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">options</span>
       <span class="ruby-identifier">default_options</span>
     <span class="ruby-keyword kw">end</span>

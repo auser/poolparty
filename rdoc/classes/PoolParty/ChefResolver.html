@@ -88,21 +88,21 @@
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000528">_compile</a>&nbsp;&nbsp;
-      <a href="#M000531">base_dir</a>&nbsp;&nbsp;
-      <a href="#M000538">before_filter_check_on_hash</a>&nbsp;&nbsp;
-      <a href="#M000530">build_base_recipe_directory</a>&nbsp;&nbsp;
-      <a href="#M000529">comp</a>&nbsp;&nbsp;
-      <a href="#M000527">compile</a>&nbsp;&nbsp;
-      <a href="#M000539">handle_actions</a>&nbsp;&nbsp;
-      <a href="#M000535">handle_chef_types</a>&nbsp;&nbsp;
-      <a href="#M000537">handle_print_service</a>&nbsp;&nbsp;
-      <a href="#M000534">handle_print_variable</a>&nbsp;&nbsp;
-      <a href="#M000536">hash_flush_out</a>&nbsp;&nbsp;
-      <a href="#M000532">options_to_string</a>&nbsp;&nbsp;
-      <a href="#M000533">resources_to_string</a>&nbsp;&nbsp;
-      <a href="#M000540">to_chef_key</a>&nbsp;&nbsp;
-      <a href="#M000541">to_option_string</a>&nbsp;&nbsp;
+      <a href="#M000546">_compile</a>&nbsp;&nbsp;
+      <a href="#M000549">base_dir</a>&nbsp;&nbsp;
+      <a href="#M000556">before_filter_check_on_hash</a>&nbsp;&nbsp;
+      <a href="#M000548">build_base_recipe_directory</a>&nbsp;&nbsp;
+      <a href="#M000547">comp</a>&nbsp;&nbsp;
+      <a href="#M000545">compile</a>&nbsp;&nbsp;
+      <a href="#M000557">handle_actions</a>&nbsp;&nbsp;
+      <a href="#M000553">handle_chef_types</a>&nbsp;&nbsp;
+      <a href="#M000555">handle_print_service</a>&nbsp;&nbsp;
+      <a href="#M000552">handle_print_variable</a>&nbsp;&nbsp;
+      <a href="#M000554">hash_flush_out</a>&nbsp;&nbsp;
+      <a href="#M000550">options_to_string</a>&nbsp;&nbsp;
+      <a href="#M000551">resources_to_string</a>&nbsp;&nbsp;
+      <a href="#M000558">to_chef_key</a>&nbsp;&nbsp;
+      <a href="#M000559">to_option_string</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -124,19 +124,19 @@
     <div id="methods">
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000528" class="method-detail">
-        <a name="M000528"></a>
+      <div id="method-M000546" class="method-detail">
+        <a name="M000546"></a>
 
         <div class="method-heading">
-          <a href="#M000528" class="method-signature">
+          <a href="#M000546" class="method-signature">
           <span class="method-name">_compile</span><span class="method-args">(props=@properties_hash, tabs=0, default_namespace=&quot;poolparty&quot;)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000528-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000528-source">
+            onclick="toggleCode('M000546-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000546-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/dependency_resolver/chef_resolver.rb, line 35</span>
     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">_compile</span>(<span class="ruby-identifier">props</span>=<span class="ruby-ivar">@properties_hash</span>, <span class="ruby-identifier">tabs</span>=<span class="ruby-value">0</span>, <span class="ruby-identifier">default_namespace</span>=<span class="ruby-value str">&quot;poolparty&quot;</span>)
@@ -148,19 +148,19 @@
         </div>
       </div>
 
-      <div id="method-M000531" class="method-detail">
-        <a name="M000531"></a>
+      <div id="method-M000549" class="method-detail">
+        <a name="M000549"></a>
 
         <div class="method-heading">
-          <a href="#M000531" class="method-signature">
+          <a href="#M000549" class="method-signature">
           <span class="method-name">base_dir</span><span class="method-args">(nm=&quot;poolparty&quot;)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000531-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000531-source">
+            onclick="toggleCode('M000549-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000549-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/dependency_resolver/chef_resolver.rb, line 63</span>
     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">base_dir</span>(<span class="ruby-identifier">nm</span>=<span class="ruby-value str">&quot;poolparty&quot;</span>)
@@ -171,11 +171,11 @@
         </div>
       </div>
 
-      <div id="method-M000538" class="method-detail">
-        <a name="M000538"></a>
+      <div id="method-M000556" class="method-detail">
+        <a name="M000556"></a>
 
         <div class="method-heading">
-          <a href="#M000538" class="method-signature">
+          <a href="#M000556" class="method-signature">
           <span class="method-name">before_filter_check_on_hash</span><span class="method-args">(hsh, nm)</span>
           </a>
         </div>
@@ -186,8 +186,8 @@ Check if the hash has content and that the content exists here. This is
 used to provide a check
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000538-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000538-source">
+            onclick="toggleCode('M000556-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000556-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/dependency_resolver/chef_resolver.rb, line 151</span>
     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">before_filter_check_on_hash</span>(<span class="ruby-identifier">hsh</span>, <span class="ruby-identifier">nm</span>)
@@ -210,19 +210,19 @@ used to provide a check
         </div>
       </div>
 
-      <div id="method-M000530" class="method-detail">
-        <a name="M000530"></a>
+      <div id="method-M000548" class="method-detail">
+        <a name="M000548"></a>
 
         <div class="method-heading">
-          <a href="#M000530" class="method-signature">
+          <a href="#M000548" class="method-signature">
           <span class="method-name">build_base_recipe_directory</span><span class="method-args">(nm)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000530-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000530-source">
+            onclick="toggleCode('M000548-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000548-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/dependency_resolver/chef_resolver.rb, line 48</span>
     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">build_base_recipe_directory</span>(<span class="ruby-identifier">nm</span>)
@@ -244,19 +244,19 @@ used to provide a check
         </div>
       </div>
 
-      <div id="method-M000529" class="method-detail">
-        <a name="M000529"></a>
+      <div id="method-M000547" class="method-detail">
+        <a name="M000547"></a>
 
         <div class="method-heading">
-          <a href="#M000529" class="method-signature">
+          <a href="#M000547" class="method-signature">
           <span class="method-name">comp</span><span class="method-args">(cld_name, props, tabs)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000529-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000529-source">
+            onclick="toggleCode('M000547-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000547-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/dependency_resolver/chef_resolver.rb, line 40</span>
     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">comp</span>(<span class="ruby-identifier">cld_name</span>, <span class="ruby-identifier">props</span>, <span class="ruby-identifier">tabs</span>)
@@ -271,11 +271,11 @@ used to provide a check
         </div>
       </div>
 
-      <div id="method-M000527" class="method-detail">
-        <a name="M000527"></a>
+      <div id="method-M000545" class="method-detail">
+        <a name="M000545"></a>
 
         <div class="method-heading">
-          <a href="#M000527" class="method-signature">
+          <a href="#M000545" class="method-signature">
           <span class="method-name">compile</span><span class="method-args">(props=@properties_hash, tabs=0, default_namespace=&quot;poolparty&quot;)</span>
           </a>
         </div>
@@ -285,8 +285,8 @@ used to provide a check
 Compile and add to the zipper
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000527-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000527-source">
+            onclick="toggleCode('M000545-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000545-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/dependency_resolver/chef_resolver.rb, line 26</span>
     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">compile</span>(<span class="ruby-identifier">props</span>=<span class="ruby-ivar">@properties_hash</span>, <span class="ruby-identifier">tabs</span>=<span class="ruby-value">0</span>, <span class="ruby-identifier">default_namespace</span>=<span class="ruby-value str">&quot;poolparty&quot;</span>)
@@ -302,11 +302,11 @@ Compile and add to the zipper
         </div>
       </div>
 
-      <div id="method-M000539" class="method-detail">
-        <a name="M000539"></a>
+      <div id="method-M000557" class="method-detail">
+        <a name="M000557"></a>
 
         <div class="method-heading">
-          <a href="#M000539" class="method-signature">
+          <a href="#M000557" class="method-signature">
           <span class="method-name">handle_actions</span><span class="method-args">(key,value)</span>
           </a>
         </div>
@@ -316,8 +316,8 @@ Compile and add to the zipper
 Handle ensures
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000539-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000539-source">
+            onclick="toggleCode('M000557-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000557-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/dependency_resolver/chef_resolver.rb, line 168</span>
     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">handle_actions</span>(<span class="ruby-identifier">key</span>,<span class="ruby-identifier">value</span>)
@@ -333,19 +333,19 @@ Handle ensures
         </div>
       </div>
 
-      <div id="method-M000535" class="method-detail">
-        <a name="M000535"></a>
+      <div id="method-M000553" class="method-detail">
+        <a name="M000553"></a>
 
         <div class="method-heading">
-          <a href="#M000535" class="method-signature">
+          <a href="#M000553" class="method-signature">
           <span class="method-name">handle_chef_types</span><span class="method-args">(ty)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000535-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000535-source">
+            onclick="toggleCode('M000553-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000553-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/dependency_resolver/chef_resolver.rb, line 108</span>
     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">handle_chef_types</span>(<span class="ruby-identifier">ty</span>)
@@ -369,19 +369,19 @@ Handle ensures
         </div>
       </div>
 
-      <div id="method-M000537" class="method-detail">
-        <a name="M000537"></a>
+      <div id="method-M000555" class="method-detail">
+        <a name="M000555"></a>
 
         <div class="method-heading">
-          <a href="#M000537" class="method-signature">
+          <a href="#M000555" class="method-signature">
           <span class="method-name">handle_print_service</span><span class="method-args">(plugin, tabs)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000537-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000537-source">
+            onclick="toggleCode('M000555-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000555-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/dependency_resolver/chef_resolver.rb, line 138</span>
     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">handle_print_service</span>(<span class="ruby-identifier">plugin</span>, <span class="ruby-identifier">tabs</span>)
@@ -399,28 +399,28 @@ Handle ensures
         </div>
       </div>
 
-      <div id="method-M000534" class="method-detail">
-        <a name="M000534"></a>
+      <div id="method-M000552" class="method-detail">
+        <a name="M000552"></a>
 
         <div class="method-heading">
-          <a href="#M000534" class="method-signature">
+          <a href="#M000552" class="method-signature">
           <span class="method-name">handle_print_variable</span><span class="method-args">(varhash)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000534-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000534-source">
+            onclick="toggleCode('M000552-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000552-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/dependency_resolver/chef_resolver.rb, line 93</span>
     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">handle_print_variable</span>(<span class="ruby-identifier">varhash</span>)
       <span class="ruby-identifier">o</span> = []
       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">varhash</span>[<span class="ruby-identifier">:namespace</span>]
         <span class="ruby-identifier">o</span> <span class="ruby-operator">&lt;&lt;</span> [<span class="ruby-node">&quot;\n#{varhash[:namespace]} Mash.new unless attribute?('#{varhash[:namespace]}')&quot;</span>]
-        <span class="ruby-identifier">o</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;#{varhash[:namespace]}[:#{varhash[:name]}] = #{to_option_string(varhash[:value])}\n&quot;</span>
+        <span class="ruby-identifier">o</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;#{varhash[:namespace]}['#{varhash[:name]}'] = #{to_option_string(varhash[:value])}\n&quot;</span>
       <span class="ruby-keyword kw">else</span>
-        <span class="ruby-identifier">o</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;poolparty[:#{varhash[:name]}] = #{to_option_string(varhash[:value])}&quot;</span>
+        <span class="ruby-identifier">o</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;poolparty['#{varhash[:name]}'] = #{to_option_string(varhash[:value])}&quot;</span>
       <span class="ruby-keyword kw">end</span>
       <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-node">&quot;#{base_dir}/attributes/poolparty.rb&quot;</span>, <span class="ruby-value str">&quot;a+&quot;</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span> 
         <span class="ruby-identifier">f</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">o</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot;\n&quot;</span>)
@@ -433,11 +433,11 @@ Handle ensures
         </div>
       </div>
 
-      <div id="method-M000536" class="method-detail">
-        <a name="M000536"></a>
+      <div id="method-M000554" class="method-detail">
+        <a name="M000554"></a>
 
         <div class="method-heading">
-          <a href="#M000536" class="method-signature">
+          <a href="#M000554" class="method-signature">
           <span class="method-name">hash_flush_out</span><span class="method-args">(hash, pre=&quot;&quot;, post=&quot;&quot;)</span>
           </a>
         </div>
@@ -447,8 +447,8 @@ Handle ensures
 flush out the hash into something meaningful
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000536-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000536-source">
+            onclick="toggleCode('M000554-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000554-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/dependency_resolver/chef_resolver.rb, line 126</span>
     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">hash_flush_out</span>(<span class="ruby-identifier">hash</span>, <span class="ruby-identifier">pre</span>=<span class="ruby-value str">&quot;&quot;</span>, <span class="ruby-identifier">post</span>=<span class="ruby-value str">&quot;&quot;</span>) 
@@ -467,19 +467,19 @@ flush out the hash into something meaningful
         </div>
       </div>
 
-      <div id="method-M000532" class="method-detail">
-        <a name="M000532"></a>
+      <div id="method-M000550" class="method-detail">
+        <a name="M000550"></a>
 
         <div class="method-heading">
-          <a href="#M000532" class="method-signature">
+          <a href="#M000550" class="method-signature">
           <span class="method-name">options_to_string</span><span class="method-args">(opts,tabs=0)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000532-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000532-source">
+            onclick="toggleCode('M000550-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000550-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/dependency_resolver/chef_resolver.rb, line 67</span>
     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">options_to_string</span>(<span class="ruby-identifier">opts</span>,<span class="ruby-identifier">tabs</span>=<span class="ruby-value">0</span>)
@@ -490,19 +490,19 @@ flush out the hash into something meaningful
         </div>
       </div>
 
-      <div id="method-M000533" class="method-detail">
-        <a name="M000533"></a>
+      <div id="method-M000551" class="method-detail">
+        <a name="M000551"></a>
 
         <div class="method-heading">
-          <a href="#M000533" class="method-signature">
+          <a href="#M000551" class="method-signature">
           <span class="method-name">resources_to_string</span><span class="method-args">(opts,tabs=0)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000533-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000533-source">
+            onclick="toggleCode('M000551-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000551-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/dependency_resolver/chef_resolver.rb, line 71</span>
     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">resources_to_string</span>(<span class="ruby-identifier">opts</span>,<span class="ruby-identifier">tabs</span>=<span class="ruby-value">0</span>)
@@ -531,11 +531,11 @@ flush out the hash into something meaningful
         </div>
       </div>
 
-      <div id="method-M000540" class="method-detail">
-        <a name="M000540"></a>
+      <div id="method-M000558" class="method-detail">
+        <a name="M000558"></a>
 
         <div class="method-heading">
-          <a href="#M000540" class="method-signature">
+          <a href="#M000558" class="method-signature">
           <span class="method-name">to_chef_key</span><span class="method-args">(key)</span>
           </a>
         </div>
@@ -545,11 +545,16 @@ flush out the hash into something meaningful
 Take the keys from the resource hash and turn them into chef-like
 meaningful keys. This is how helpers are created for chef
 </p>
+<ul>
+<li><tt>reloads</tt> - todo
+
+</li>
+</ul>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000540-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000540-source">
+            onclick="toggleCode('M000558-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000558-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/dependency_resolver/chef_resolver.rb, line 179</span>
+<span class="ruby-comment cmt"># File lib/poolparty/dependency_resolver/chef_resolver.rb, line 181</span>
     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_chef_key</span>(<span class="ruby-identifier">key</span>)
       <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">key</span>
       <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:ensures</span>
@@ -579,11 +584,11 @@ meaningful keys. This is how helpers are created for chef
         </div>
       </div>
 
-      <div id="method-M000541" class="method-detail">
-        <a name="M000541"></a>
+      <div id="method-M000559" class="method-detail">
+        <a name="M000559"></a>
 
         <div class="method-heading">
-          <a href="#M000541" class="method-signature">
+          <a href="#M000559" class="method-signature">
           <span class="method-name">to_option_string</span><span class="method-args">(obj)</span>
           </a>
         </div>
@@ -594,10 +599,10 @@ Resolve the value of the resource hash into a meaningful chef value. <a
 href="Resources.html">Resources</a> are turned into resource strings here
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000541-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000541-source">
+            onclick="toggleCode('M000559-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000559-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/dependency_resolver/chef_resolver.rb, line 206</span>
+<span class="ruby-comment cmt"># File lib/poolparty/dependency_resolver/chef_resolver.rb, line 209</span>
     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_option_string</span>(<span class="ruby-identifier">obj</span>)
       <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">obj</span>
       <span class="ruby-keyword kw">when</span> <span class="ruby-constant">PoolParty</span><span class="ruby-operator">::</span><span class="ruby-constant">Resources</span><span class="ruby-operator">::</span><span class="ruby-constant">Resource</span>

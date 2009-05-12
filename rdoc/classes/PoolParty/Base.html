@@ -75,8 +75,8 @@
                 lib/poolparty/base_packages/runit.rb
                 </a>
         <br />
-                <a href="../../files/lib/poolparty/plugins/apache2_rb.html">
-                lib/poolparty/plugins/apache2.rb
+                <a href="../../files/lib/poolparty/plugins/apache2/apache_rb.html">
+                lib/poolparty/plugins/apache2/apache.rb
                 </a>
         <br />
                 <a href="../../files/lib/poolparty/plugins/bind_rb.html">
@@ -112,22 +112,38 @@
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000644">before_configure</a>&nbsp;&nbsp;
-      <a href="#M000656">chef_apache2_recipe_root</a>&nbsp;&nbsp;
-      <a href="#M000647">enable</a>&nbsp;&nbsp;
-      <a href="#M000646">enable</a>&nbsp;&nbsp;
-      <a href="#M000648">enable</a>&nbsp;&nbsp;
-      <a href="#M000645">enable</a>&nbsp;&nbsp;
-      <a href="#M000653">enable</a>&nbsp;&nbsp;
-      <a href="#M000659">enable</a>&nbsp;&nbsp;
-      <a href="#M000651">enable_irb</a>&nbsp;&nbsp;
-      <a href="#M000652">enable_rdoc</a>&nbsp;&nbsp;
-      <a href="#M000650">enable_ri</a>&nbsp;&nbsp;
-      <a href="#M000658">extras</a>&nbsp;&nbsp;
-      <a href="#M000649">install_base_packages</a>&nbsp;&nbsp;
-      <a href="#M000657">loaded</a>&nbsp;&nbsp;
-      <a href="#M000654">loaded</a>&nbsp;&nbsp;
-      <a href="#M000655">present_apache_module</a>&nbsp;&nbsp;
+      <a href="#M000692">absent_apache_module</a>&nbsp;&nbsp;
+      <a href="#M000683">base_install</a>&nbsp;&nbsp;
+      <a href="#M000668">before_configure</a>&nbsp;&nbsp;
+      <a href="#M000697">before_load</a>&nbsp;&nbsp;
+      <a href="#M000680">before_load</a>&nbsp;&nbsp;
+      <a href="#M000686">config</a>&nbsp;&nbsp;
+      <a href="#M000684">configs</a>&nbsp;&nbsp;
+      <a href="#M000699">enable</a>&nbsp;&nbsp;
+      <a href="#M000669">enable</a>&nbsp;&nbsp;
+      <a href="#M000677">enable</a>&nbsp;&nbsp;
+      <a href="#M000670">enable</a>&nbsp;&nbsp;
+      <a href="#M000671">enable</a>&nbsp;&nbsp;
+      <a href="#M000672">enable</a>&nbsp;&nbsp;
+      <a href="#M000679">enable</a>&nbsp;&nbsp;
+      <a href="#M000685">enable_default</a>&nbsp;&nbsp;
+      <a href="#M000675">enable_irb</a>&nbsp;&nbsp;
+      <a href="#M000676">enable_rdoc</a>&nbsp;&nbsp;
+      <a href="#M000674">enable_ri</a>&nbsp;&nbsp;
+      <a href="#M000698">extras</a>&nbsp;&nbsp;
+      <a href="#M000681">install</a>&nbsp;&nbsp;
+      <a href="#M000673">install_base_packages</a>&nbsp;&nbsp;
+      <a href="#M000689">install_site</a>&nbsp;&nbsp;
+      <a href="#M000682">installed_as_worker</a>&nbsp;&nbsp;
+      <a href="#M000693">listen</a>&nbsp;&nbsp;
+      <a href="#M000687">listen</a>&nbsp;&nbsp;
+      <a href="#M000678">loaded</a>&nbsp;&nbsp;
+      <a href="#M000695">loaded</a>&nbsp;&nbsp;
+      <a href="#M000696">loaded</a>&nbsp;&nbsp;
+      <a href="#M000691">present_apache_module</a>&nbsp;&nbsp;
+      <a href="#M000688">site</a>&nbsp;&nbsp;
+      <a href="#M000690">site_include</a>&nbsp;&nbsp;
+      <a href="#M000694">virtual_host_entry</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -149,19 +165,78 @@
     <div id="methods">
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000644" class="method-detail">
-        <a name="M000644"></a>
+      <div id="method-M000692" class="method-detail">
+        <a name="M000692"></a>
 
         <div class="method-heading">
-          <a href="#M000644" class="method-signature">
+          <a href="#M000692" class="method-signature">
+          <span class="method-name">absent_apache_module</span><span class="method-args">(*names)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000692-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000692-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/plugins/apache2/apache.rb, line 181</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">absent_apache_module</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">names</span>)
+        <span class="ruby-identifier">names</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">name</span><span class="ruby-operator">|</span>
+          <span class="ruby-identifier">has_exec</span>({<span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;no-mod-#{name}&quot;</span>}, <span class="ruby-identifier">:command</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;/usr/sbin/a2dismod #{name}&quot;</span>) <span class="ruby-keyword kw">do</span>
+            <span class="ruby-identifier">requires</span> <span class="ruby-identifier">get_package</span>(<span class="ruby-value str">&quot;apache2&quot;</span>)
+            <span class="ruby-identifier">if_not</span> <span class="ruby-node">&quot;/bin/sh -c \'[ -L /etc/apache2/mods-enabled/#{name}.load ] &amp;&amp; [ /etc/apache2/mods-enabled/#{name}.load -ef /etc/apache2/mods-available/#{name}.load ]\'&quot;</span>
+                                <span class="ruby-identifier">calls</span> <span class="ruby-identifier">get_exec</span>(<span class="ruby-value str">&quot;force-reload-apache2&quot;</span>)
+          <span class="ruby-keyword kw">end</span>
+        <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000683" class="method-detail">
+        <a name="M000683"></a>
+
+        <div class="method-heading">
+          <a href="#M000683" class="method-signature">
+          <span class="method-name">base_install</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000683-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000683-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/plugins/apache2/apache.rb, line 41</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">base_install</span>        
+        <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@base_install</span>
+          <span class="ruby-identifier">has_exec</span>({<span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;restart-apache2&quot;</span>, <span class="ruby-identifier">:command</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;/etc/init.d/apache2 restart&quot;</span>, <span class="ruby-identifier">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">:nothing</span>})
+          <span class="ruby-identifier">has_exec</span>({<span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;reload-apache2&quot;</span>, <span class="ruby-identifier">:command</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;/etc/init.d/apache2 reload&quot;</span>, <span class="ruby-identifier">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">:nothing</span>})
+          <span class="ruby-identifier">has_exec</span>({<span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;force-reload-apache2&quot;</span>, <span class="ruby-identifier">:command</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;/etc/init.d/apache2 force-reload&quot;</span>, <span class="ruby-identifier">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">:nothing</span>})
+
+          <span class="ruby-identifier">configs</span>
+          <span class="ruby-ivar">@base_install</span> = <span class="ruby-keyword kw">true</span>
+        <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000668" class="method-detail">
+        <a name="M000668"></a>
+
+        <div class="method-heading">
+          <a href="#M000668" class="method-signature">
           <span class="method-name">before_configure</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000644-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000644-source">
+            onclick="toggleCode('M000668-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000668-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/base_packages/haproxy.rb, line 5</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">before_configure</span>
@@ -171,48 +246,78 @@
         </div>
       </div>
 
-      <div id="method-M000656" class="method-detail">
-        <a name="M000656"></a>
+      <div id="method-M000697" class="method-detail">
+        <a name="M000697"></a>
 
         <div class="method-heading">
-          <a href="#M000656" class="method-signature">
-          <span class="method-name">chef_apache2_recipe_root</span><span class="method-args">()</span>
+          <a href="#M000697" class="method-signature">
+          <span class="method-name">before_load</span><span class="method-args">(o={})</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000656-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000656-source">
+            onclick="toggleCode('M000697-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000697-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/plugins/apache2.rb, line 17</span>
-      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">chef_apache2_recipe_root</span>
-        <span class="ruby-node">&quot;#{::File.dirname(__FILE__)}/../../../vendor/chef/apache2&quot;</span>
+<span class="ruby-comment cmt"># File lib/poolparty/plugins/apache2/apache.rb, line 325</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">before_load</span>(<span class="ruby-identifier">o</span>={})
+        <span class="ruby-identifier">has_package</span>(<span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;php5&quot;</span>)
+        <span class="ruby-identifier">has_package</span>(<span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;libapache2-mod-php5&quot;</span>)
+        <span class="ruby-identifier">present_apache_module</span>(<span class="ruby-value str">&quot;php5&quot;</span>)
+        <span class="ruby-identifier">has_file</span>({<span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;/etc/php5/apache2/php.ini&quot;</span>,
+                <span class="ruby-identifier">:template</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;apache2/php.ini.erb&quot;</span>,
+                <span class="ruby-identifier">:mode</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">755</span>,
+                <span class="ruby-identifier">:requires</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">get_package</span>(<span class="ruby-value str">&quot;libapache2-mod-php5&quot;</span>),
+                <span class="ruby-identifier">:calls</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">get_exec</span>(<span class="ruby-value str">&quot;reload-apache2&quot;</span>)})
       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000647" class="method-detail">
-        <a name="M000647"></a>
+      <div id="method-M000680" class="method-detail">
+        <a name="M000680"></a>
 
         <div class="method-heading">
-          <a href="#M000647" class="method-signature">
-          <span class="method-name">enable</span><span class="method-args">()</span>
+          <a href="#M000680" class="method-signature">
+          <span class="method-name">before_load</span><span class="method-args">(o={}, &amp;block)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000647-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000647-source">
+            onclick="toggleCode('M000680-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000680-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/base_packages/poolparty.rb, line 5</span>
-      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">enable</span>        
-        <span class="ruby-identifier">has_cron</span> <span class="ruby-value str">&quot;/usr/bin/server-manage-election&quot;</span> <span class="ruby-keyword kw">do</span>
-          <span class="ruby-identifier">minute</span> <span class="ruby-value str">&quot;0,5,10,15,20,25,30,35,40,45,50,55&quot;</span>
-          <span class="ruby-identifier">command</span> <span class="ruby-value str">&quot;/usr/bin/server-manage-election&quot;</span>
+<span class="ruby-comment cmt"># File lib/poolparty/plugins/apache2/apache.rb, line 23</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">before_load</span>(<span class="ruby-identifier">o</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+        <span class="ruby-identifier">install</span>
+      <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000686" class="method-detail">
+        <a name="M000686"></a>
+
+        <div class="method-heading">
+          <a href="#M000686" class="method-signature">
+          <span class="method-name">config</span><span class="method-args">(name, temp)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000686-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000686-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/plugins/apache2/apache.rb, line 133</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">config</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">temp</span>)
+        <span class="ruby-identifier">has_file</span>(<span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;/etc/apache2/conf.d/#{name}.conf&quot;</span>) <span class="ruby-keyword kw">do</span>
+          <span class="ruby-identifier">template</span> <span class="ruby-identifier">temp</span>
+          <span class="ruby-identifier">calls</span> <span class="ruby-identifier">get_exec</span>(<span class="ruby-value str">&quot;reload-apache2&quot;</span>)
         <span class="ruby-keyword kw">end</span>
       <span class="ruby-keyword kw">end</span>
 </pre>
@@ -220,70 +325,103 @@
         </div>
       </div>
 
-      <div id="method-M000646" class="method-detail">
-        <a name="M000646"></a>
+      <div id="method-M000684" class="method-detail">
+        <a name="M000684"></a>
 
         <div class="method-heading">
-          <a href="#M000646" class="method-signature">
-          <span class="method-name">enable</span><span class="method-args">()</span>
+          <a href="#M000684" class="method-signature">
+          <span class="method-name">configs</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
+          <pre>
+    has_exec(:command =&gt; &quot;a2enmod ssl&quot;) do
+      requires [ get_package(&quot;openssl&quot;) ]
+      if_not &quot;/usr/bin/test -L /etc/apache2/mods-enabled/ssl.load&quot;
+      calls get_exec(&quot;restart-apache2&quot;)
+    end
+    @enable_ssl = true
+  end
+</pre>
+<p>
+end# }}}
+</p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000646-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000646-source">
+            onclick="toggleCode('M000684-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000684-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/base_packages/heartbeat.rb, line 5</span>
-      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">enable</span>        
+<span class="ruby-comment cmt"># File lib/poolparty/plugins/apache2/apache.rb, line 97</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">configs</span>
+        <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@configs</span>
+          <span class="ruby-identifier">listen</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@listen</span>
+          <span class="ruby-identifier">has_directory</span>(<span class="ruby-value str">&quot;/etc/apache2&quot;</span>)
+          <span class="ruby-identifier">has_directory</span>(<span class="ruby-value str">&quot;/etc/apache2/conf.d&quot;</span>)
+          <span class="ruby-identifier">has_directory</span>(<span class="ruby-value str">&quot;/etc/apache2/site-includes&quot;</span>)
 
-        <span class="ruby-identifier">has_package</span>({<span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;heartbeat-2&quot;</span>})
-        <span class="ruby-identifier">has_package</span>({<span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;heartbeat-2-dev&quot;</span>})
-        
-        <span class="ruby-identifier">has_service</span>(<span class="ruby-value str">&quot;heartbeat&quot;</span>)
-          
+          <span class="ruby-identifier">has_file</span>(<span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;/etc/apache2/apache2.conf&quot;</span>) <span class="ruby-keyword kw">do</span>
+            <span class="ruby-identifier">mode</span> <span class="ruby-value">644</span>
+            <span class="ruby-identifier">requires</span> <span class="ruby-identifier">get_directory</span>(<span class="ruby-value str">&quot;/etc/apache2/conf.d&quot;</span>)
+            <span class="ruby-identifier">template</span> <span class="ruby-value str">&quot;apache2&quot;</span><span class="ruby-operator">/</span><span class="ruby-value str">&quot;apache2.conf&quot;</span>
+          <span class="ruby-keyword kw">end</span>
+          <span class="ruby-identifier">does_not_have_file</span>(<span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;/etc/apache2/ports.conf&quot;</span>)
+
+          <span class="ruby-identifier">has_exec</span>(<span class="ruby-identifier">:command</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;/usr/sbin/a2dissite default&quot;</span>) <span class="ruby-keyword kw">do</span>
+            <span class="ruby-identifier">only_if</span> <span class="ruby-value str">&quot;/usr/bin/test -L /etc/apache2/sites-enabled/000-default&quot;</span>
+            <span class="ruby-identifier">calls</span> <span class="ruby-identifier">get_exec</span>(<span class="ruby-value str">&quot;reload-apache2&quot;</span>)
+          <span class="ruby-keyword kw">end</span>
+
+          <span class="ruby-comment cmt"># Base config</span>
+          <span class="ruby-identifier">config</span>(<span class="ruby-value str">&quot;base&quot;</span>, <span class="ruby-value str">&quot;apache2&quot;</span><span class="ruby-operator">/</span><span class="ruby-value str">&quot;base.conf.erb&quot;</span>)
+          <span class="ruby-identifier">config</span>(<span class="ruby-value str">&quot;mime&quot;</span>, <span class="ruby-value str">&quot;apache2&quot;</span><span class="ruby-operator">/</span><span class="ruby-value str">&quot;mime-minimal.conf.erb&quot;</span>)
+          <span class="ruby-identifier">config</span>(<span class="ruby-value str">&quot;browser_fixes&quot;</span>, <span class="ruby-value str">&quot;apache2&quot;</span><span class="ruby-operator">/</span><span class="ruby-value str">&quot;browser_fixes.conf.erb&quot;</span>)
+
+          <span class="ruby-identifier">present_apache_module</span>(<span class="ruby-value str">&quot;mime&quot;</span>, <span class="ruby-value str">&quot;rewrite&quot;</span>)
+        <span class="ruby-comment cmt"># end</span>
+          <span class="ruby-ivar">@configs</span> = <span class="ruby-keyword kw">true</span>
+        <span class="ruby-keyword kw">end</span>
       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000648" class="method-detail">
-        <a name="M000648"></a>
+      <div id="method-M000699" class="method-detail">
+        <a name="M000699"></a>
 
         <div class="method-heading">
-          <a href="#M000648" class="method-signature">
+          <a href="#M000699" class="method-signature">
           <span class="method-name">enable</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000648-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000648-source">
+            onclick="toggleCode('M000699-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000699-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/base_packages/ruby.rb, line 5</span>
+<span class="ruby-comment cmt"># File lib/poolparty/plugins/bind.rb, line 5</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">enable</span>
-        <span class="ruby-identifier">install_base_packages</span>
+        
       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000645" class="method-detail">
-        <a name="M000645"></a>
+      <div id="method-M000669" class="method-detail">
+        <a name="M000669"></a>
 
         <div class="method-heading">
-          <a href="#M000645" class="method-signature">
+          <a href="#M000669" class="method-signature">
           <span class="method-name">enable</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000645-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000645-source">
+            onclick="toggleCode('M000669-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000669-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/base_packages/haproxy.rb, line 8</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">enable</span>
@@ -292,6 +430,12 @@
 
         <span class="ruby-comment cmt"># Restart sysklogd after we update the haproxy.log</span>
         <span class="ruby-identifier">has_service</span>(<span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;sysklogd&quot;</span>)    
+
+        <span class="ruby-identifier">has_package</span> <span class="ruby-value str">&quot;haproxy&quot;</span> <span class="ruby-keyword kw">do</span>
+          <span class="ruby-comment cmt"># stops get_service(&quot;apache2&quot;), :immediately</span>
+          <span class="ruby-comment cmt"># starts get_service(&quot;apache2&quot;)</span>
+        <span class="ruby-keyword kw">end</span>
+
         <span class="ruby-comment cmt"># Template variables</span>
         <span class="ruby-identifier">has_variable</span>(<span class="ruby-value str">&quot;haproxy_name&quot;</span>, <span class="ruby-identifier">:value</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;#{cloud.name}&quot;</span>)
         <span class="ruby-identifier">has_variable</span>(<span class="ruby-value str">&quot;listen_ports&quot;</span>, <span class="ruby-identifier">:value</span> =<span class="ruby-operator">&gt;</span> [ <span class="ruby-value str">&quot;8080&quot;</span> ], <span class="ruby-identifier">:namespace</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;apache&quot;</span>)
@@ -312,10 +456,6 @@
         <span class="ruby-comment cmt"># has_package &quot;apache2&quot;</span>
         <span class="ruby-comment cmt"># has_service &quot;apache2&quot;</span>
         
-        <span class="ruby-identifier">has_package</span> <span class="ruby-value str">&quot;haproxy&quot;</span> <span class="ruby-keyword kw">do</span>
-          <span class="ruby-comment cmt"># stops get_service(&quot;apache2&quot;), :immediately</span>
-          <span class="ruby-comment cmt"># starts get_service(&quot;apache2&quot;)</span>
-        <span class="ruby-keyword kw">end</span>
 
         <span class="ruby-identifier">has_exec</span> <span class="ruby-value str">&quot;reloadhaproxy&quot;</span>, 
           <span class="ruby-identifier">:command</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;/etc/init.d/haproxy reload&quot;</span>, 
@@ -340,19 +480,19 @@
         </div>
       </div>
 
-      <div id="method-M000653" class="method-detail">
-        <a name="M000653"></a>
+      <div id="method-M000677" class="method-detail">
+        <a name="M000677"></a>
 
         <div class="method-heading">
-          <a href="#M000653" class="method-signature">
+          <a href="#M000677" class="method-signature">
           <span class="method-name">enable</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000653-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000653-source">
+            onclick="toggleCode('M000677-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000677-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/base_packages/runit.rb, line 9</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">enable</span>
@@ -369,42 +509,143 @@
         </div>
       </div>
 
-      <div id="method-M000659" class="method-detail">
-        <a name="M000659"></a>
+      <div id="method-M000670" class="method-detail">
+        <a name="M000670"></a>
 
         <div class="method-heading">
-          <a href="#M000659" class="method-signature">
+          <a href="#M000670" class="method-signature">
           <span class="method-name">enable</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000659-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000659-source">
+            onclick="toggleCode('M000670-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000670-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/plugins/bind.rb, line 5</span>
-      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">enable</span>
+<span class="ruby-comment cmt"># File lib/poolparty/base_packages/heartbeat.rb, line 5</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">enable</span>        
+
+        <span class="ruby-identifier">has_package</span>({<span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;heartbeat-2&quot;</span>})
+        <span class="ruby-identifier">has_package</span>({<span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;heartbeat-2-dev&quot;</span>})
         
+        <span class="ruby-identifier">has_service</span>(<span class="ruby-value str">&quot;heartbeat&quot;</span>)
+          
       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000651" class="method-detail">
-        <a name="M000651"></a>
+      <div id="method-M000671" class="method-detail">
+        <a name="M000671"></a>
 
         <div class="method-heading">
-          <a href="#M000651" class="method-signature">
+          <a href="#M000671" class="method-signature">
+          <span class="method-name">enable</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000671-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000671-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/base_packages/poolparty.rb, line 5</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">enable</span>        
+        <span class="ruby-identifier">has_cron</span> <span class="ruby-value str">&quot;/usr/bin/server-manage-election&quot;</span> <span class="ruby-keyword kw">do</span>
+          <span class="ruby-identifier">minute</span> <span class="ruby-value str">&quot;0,5,10,15,20,25,30,35,40,45,50,55&quot;</span>
+          <span class="ruby-identifier">command</span> <span class="ruby-value str">&quot;/usr/bin/server-manage-election&quot;</span>
+        <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000672" class="method-detail">
+        <a name="M000672"></a>
+
+        <div class="method-heading">
+          <a href="#M000672" class="method-signature">
+          <span class="method-name">enable</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000672-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000672-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/base_packages/ruby.rb, line 5</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">enable</span>
+        <span class="ruby-identifier">install_base_packages</span>
+      <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000679" class="method-detail">
+        <a name="M000679"></a>
+
+        <div class="method-heading">
+          <a href="#M000679" class="method-signature">
+          <span class="method-name">enable</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000679-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000679-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/plugins/apache2/apache.rb, line 19</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">enable</span>
+        <span class="ruby-identifier">enable_default</span>
+      <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000685" class="method-detail">
+        <a name="M000685"></a>
+
+        <div class="method-heading">
+          <a href="#M000685" class="method-signature">
+          <span class="method-name">enable_default</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000685-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000685-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/plugins/apache2/apache.rb, line 127</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">enable_default</span>
+        <span class="ruby-identifier">listen</span> <span class="ruby-value">80</span> <span class="ruby-comment cmt"># assumes no haproxy</span>
+        <span class="ruby-identifier">site</span> <span class="ruby-value str">&quot;default-site&quot;</span>, <span class="ruby-identifier">:template</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">:apache2</span><span class="ruby-operator">/</span><span class="ruby-value str">&quot;default-site.conf.erb&quot;</span>
+      <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000675" class="method-detail">
+        <a name="M000675"></a>
+
+        <div class="method-heading">
+          <a href="#M000675" class="method-signature">
           <span class="method-name">enable_irb</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000651-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000651-source">
+            onclick="toggleCode('M000675-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000675-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/base_packages/ruby.rb, line 32</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">enable_irb</span>
@@ -415,19 +656,19 @@
         </div>
       </div>
 
-      <div id="method-M000652" class="method-detail">
-        <a name="M000652"></a>
+      <div id="method-M000676" class="method-detail">
+        <a name="M000676"></a>
 
         <div class="method-heading">
-          <a href="#M000652" class="method-signature">
+          <a href="#M000676" class="method-signature">
           <span class="method-name">enable_rdoc</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000652-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000652-source">
+            onclick="toggleCode('M000676-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000676-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/base_packages/ruby.rb, line 36</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">enable_rdoc</span>
@@ -438,19 +679,19 @@
         </div>
       </div>
 
-      <div id="method-M000650" class="method-detail">
-        <a name="M000650"></a>
+      <div id="method-M000674" class="method-detail">
+        <a name="M000674"></a>
 
         <div class="method-heading">
-          <a href="#M000650" class="method-signature">
+          <a href="#M000674" class="method-signature">
           <span class="method-name">enable_ri</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000650-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000650-source">
+            onclick="toggleCode('M000674-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000674-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/base_packages/ruby.rb, line 28</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">enable_ri</span>
@@ -461,25 +702,24 @@
         </div>
       </div>
 
-      <div id="method-M000658" class="method-detail">
-        <a name="M000658"></a>
+      <div id="method-M000698" class="method-detail">
+        <a name="M000698"></a>
 
         <div class="method-heading">
-          <a href="#M000658" class="method-signature">
+          <a href="#M000698" class="method-signature">
           <span class="method-name">extras</span><span class="method-args">(*names)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000658-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000658-source">
+            onclick="toggleCode('M000698-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000698-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/plugins/apache2.rb, line 41</span>
+<span class="ruby-comment cmt"># File lib/poolparty/plugins/apache2/apache.rb, line 336</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">extras</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">names</span>)
         <span class="ruby-identifier">names</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">name</span><span class="ruby-operator">|</span>
-          <span class="ruby-comment cmt"># has_package(:name =&gt; &quot;php5-#{name}&quot;, :requires =&gt; get_package(&quot;php5&quot;))</span>
-          <span class="ruby-identifier">has_package</span>(<span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;php5-#{name}&quot;</span>)
+         <span class="ruby-identifier">has_package</span>(<span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;php5-#{name}&quot;</span>, <span class="ruby-identifier">:requires</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">get_package</span>(<span class="ruby-value str">&quot;php5&quot;</span>))
         <span class="ruby-keyword kw">end</span>
       <span class="ruby-keyword kw">end</span>
 </pre>
@@ -487,19 +727,42 @@
         </div>
       </div>
 
-      <div id="method-M000649" class="method-detail">
-        <a name="M000649"></a>
+      <div id="method-M000681" class="method-detail">
+        <a name="M000681"></a>
 
         <div class="method-heading">
-          <a href="#M000649" class="method-signature">
+          <a href="#M000681" class="method-signature">
+          <span class="method-name">install</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000681-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000681-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/plugins/apache2/apache.rb, line 27</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">install</span>
+        <span class="ruby-identifier">installed_as_worker</span>
+      <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000673" class="method-detail">
+        <a name="M000673"></a>
+
+        <div class="method-heading">
+          <a href="#M000673" class="method-signature">
           <span class="method-name">install_base_packages</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000649-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000649-source">
+            onclick="toggleCode('M000673-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000673-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/base_packages/ruby.rb, line 9</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">install_base_packages</span>
@@ -525,83 +788,306 @@
         </div>
       </div>
 
-      <div id="method-M000657" class="method-detail">
-        <a name="M000657"></a>
+      <div id="method-M000689" class="method-detail">
+        <a name="M000689"></a>
 
         <div class="method-heading">
-          <a href="#M000657" class="method-signature">
+          <a href="#M000689" class="method-signature">
+          <span class="method-name">install_site</span><span class="method-args">(name, opts={})</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000689-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000689-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/plugins/apache2/apache.rb, line 157</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">install_site</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">opts</span>={})
+        <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">merge!</span>(<span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;/etc/apache2/sites-available/#{name}&quot;</span>)
+        <span class="ruby-identifier">has_directory</span>(<span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;/etc/apache2/sites-available&quot;</span>)
+        <span class="ruby-identifier">has_file</span>(<span class="ruby-identifier">opts</span>)
+        <span class="ruby-identifier">has_exec</span>(<span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;/usr/sbin/a2ensite #{name}&quot;</span>, <span class="ruby-identifier">:calls</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">get_exec</span>(<span class="ruby-value str">&quot;reload-apache2&quot;</span>), <span class="ruby-identifier">:requires</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">get_file</span>(<span class="ruby-node">&quot;/etc/apache2/sites-available/#{name}&quot;</span>)) <span class="ruby-keyword kw">do</span>
+          <span class="ruby-identifier">requires</span> <span class="ruby-identifier">get_package</span>(<span class="ruby-value str">&quot;apache2&quot;</span>)
+          <span class="ruby-identifier">if_not</span> <span class="ruby-node">&quot;/bin/sh -c '[ -L /etc/apache2/sites-enabled/#{name} ] &amp;&amp; [ /etc/apache2/sites-enabled/#{name} -ef /etc/apache2/sites-available/#{name} ]'&quot;</span>
+        <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000682" class="method-detail">
+        <a name="M000682"></a>
+
+        <div class="method-heading">
+          <a href="#M000682" class="method-signature">
+          <span class="method-name">installed_as_worker</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000682-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000682-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/plugins/apache2/apache.rb, line 31</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">installed_as_worker</span>            
+        <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@installed_as_worker</span>
+          <span class="ruby-identifier">has_package</span>(<span class="ruby-value str">&quot;apache2&quot;</span>)
+          <span class="ruby-identifier">has_package</span>(<span class="ruby-value str">&quot;apache2-mpm-worker&quot;</span>)
+
+          <span class="ruby-identifier">base_install</span>
+          <span class="ruby-ivar">@installed_as_worker</span> = <span class="ruby-keyword kw">true</span>
+        <span class="ruby-keyword kw">end</span>            
+      <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000693" class="method-detail">
+        <a name="M000693"></a>
+
+        <div class="method-heading">
+          <a href="#M000693" class="method-signature">
+          <span class="method-name">listen</span><span class="method-args">(port=&quot;8080&quot;)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000693-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000693-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/plugins/apache2/apache.rb, line 194</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">listen</span>(<span class="ruby-identifier">port</span>=<span class="ruby-value str">&quot;8080&quot;</span>)
+      <span class="ruby-identifier">has_variable</span>(<span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;port&quot;</span>, <span class="ruby-identifier">:value</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">port</span>)
+      <span class="ruby-identifier">port</span> <span class="ruby-identifier">port</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000687" class="method-detail">
+        <a name="M000687"></a>
+
+        <div class="method-heading">
+          <a href="#M000687" class="method-signature">
+          <span class="method-name">listen</span><span class="method-args">(port=&quot;8080&quot;)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000687-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000687-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/plugins/apache2/apache.rb, line 140</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">listen</span>(<span class="ruby-identifier">port</span>=<span class="ruby-value str">&quot;8080&quot;</span>)
+        <span class="ruby-identifier">has_variable</span>(<span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;port&quot;</span>, <span class="ruby-identifier">:value</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">port</span>)
+        <span class="ruby-ivar">@listen</span> = <span class="ruby-keyword kw">true</span>
+      <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000678" class="method-detail">
+        <a name="M000678"></a>
+
+        <div class="method-heading">
+          <a href="#M000678" class="method-signature">
+          <span class="method-name">loaded</span><span class="method-args">(opts={}, &amp;block)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000678-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000678-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/plugins/apache2/apache.rb, line 15</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">loaded</span>(<span class="ruby-identifier">opts</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)        
+        <span class="ruby-identifier">has_service</span>(<span class="ruby-value str">&quot;apache2&quot;</span>, <span class="ruby-identifier">:requires</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">get_package</span>(<span class="ruby-value str">&quot;apache2&quot;</span>))
+      <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000695" class="method-detail">
+        <a name="M000695"></a>
+
+        <div class="method-heading">
+          <a href="#M000695" class="method-signature">
           <span class="method-name">loaded</span><span class="method-args">(opts={}, parent=self)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000657-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000657-source">
+            onclick="toggleCode('M000695-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000695-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/plugins/apache2.rb, line 30</span>
-      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">loaded</span>(<span class="ruby-identifier">opts</span>={}, <span class="ruby-identifier">parent</span>=<span class="ruby-keyword kw">self</span>)
-        <span class="ruby-identifier">has_package</span>(<span class="ruby-value str">&quot;php5&quot;</span>)
-        <span class="ruby-identifier">has_package</span>(<span class="ruby-value str">&quot;libapache2-mod-php5&quot;</span>)
-        <span class="ruby-identifier">present_apache_module</span>(<span class="ruby-value str">&quot;php5&quot;</span>)
-        <span class="ruby-identifier">has_file</span>({<span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;/etc/php5/apache2/php.ini&quot;</span>,
-                <span class="ruby-identifier">:template</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">dirname</span>(<span class="ruby-keyword kw">__FILE__</span>) <span class="ruby-operator">+</span> <span class="ruby-value str">&quot;/../templates/php.ini.erb&quot;</span>,
-                <span class="ruby-identifier">:mode</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">755</span>,
-                <span class="ruby-identifier">:requires</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">get_package</span>(<span class="ruby-value str">&quot;libapache2-mod-php5&quot;</span>)})
-                <span class="ruby-comment cmt"># :notify =&gt; get_exec(&quot;reload-apache2&quot;)})</span>
+<span class="ruby-comment cmt"># File lib/poolparty/plugins/apache2/apache.rb, line 212</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">loaded</span>(<span class="ruby-identifier">opts</span>={}, <span class="ruby-identifier">parent</span>=<span class="ruby-keyword kw">self</span>)
+      <span class="ruby-identifier">has_directory</span>(<span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;/var/www&quot;</span>)
+      <span class="ruby-identifier">has_directory</span>(<span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;/var/www/#{name}&quot;</span>)
+      <span class="ruby-identifier">has_directory</span>(<span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;/var/www/#{name}/logs&quot;</span>, <span class="ruby-identifier">:owner</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;www-data&quot;</span>)
+
+      <span class="ruby-identifier">has_variable</span>(<span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;sitename&quot;</span>, <span class="ruby-identifier">:value</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;#{name}&quot;</span>)
+
+      <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@virtual_host_entry</span>
+        <span class="ruby-identifier">virtual_host_entry</span> <span class="ruby-value str">&quot;&lt;VirtualHost *:\#{port}&gt;\nServerName     \#{name}\nDocumentRoot   /var/www/\#{name}\n&lt;/VirtualHost&gt;\n&quot;</span>
       <span class="ruby-keyword kw">end</span>
+      
+      <span class="ruby-identifier">has_exec</span>(<span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;insert-site-#{name}&quot;</span>, 
+               <span class="ruby-identifier">:command</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;/usr/sbin/a2ensite #{name}&quot;</span>, 
+               <span class="ruby-identifier">:calls</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">get_exec</span>(<span class="ruby-value str">&quot;reload-apache2&quot;</span>), 
+               <span class="ruby-identifier">:requires</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">get_file</span>(<span class="ruby-node">&quot;/etc/apache2/sites-available/#{name}&quot;</span>)) <span class="ruby-keyword kw">do</span>
+        <span class="ruby-identifier">requires</span> <span class="ruby-identifier">get_package</span>(<span class="ruby-value str">&quot;apache2&quot;</span>)
+        <span class="ruby-identifier">if_not</span> <span class="ruby-node">&quot;/bin/sh -c '[ -L /etc/apache2/sites-enabled/#{parent.name} ] &amp;&amp; [ /etc/apache2/sites-enabled/#{parent.name} -ef /etc/apache2/sites-available/#{parent.name} ]'&quot;</span>
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000654" class="method-detail">
-        <a name="M000654"></a>
+      <div id="method-M000696" class="method-detail">
+        <a name="M000696"></a>
 
         <div class="method-heading">
-          <a href="#M000654" class="method-signature">
-          <span class="method-name">loaded</span><span class="method-args">(o={}, &amp;block)</span>
+          <a href="#M000696" class="method-signature">
+          <span class="method-name">loaded</span><span class="method-args">(opts={}, parent=self)</span>
           </a>
         </div>
       
         <div class="method-description">
-          <p>
-Called after the plugin is <a href="Base.html#M000654">loaded</a> entirely,
-all the options are set, etc.
-</p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000654-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000654-source">
+            onclick="toggleCode('M000696-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000696-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/plugins/apache2.rb, line 6</span>
-      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">loaded</span>(<span class="ruby-identifier">o</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
-        <span class="ruby-identifier">include_chef_recipe</span> <span class="ruby-identifier">chef_apache2_recipe_root</span> <span class="ruby-comment cmt"># We want to include the chef apache2 recipe to use it</span>
+<span class="ruby-comment cmt"># File lib/poolparty/plugins/apache2/apache.rb, line 322</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">loaded</span>(<span class="ruby-identifier">opts</span>={}, <span class="ruby-identifier">parent</span>=<span class="ruby-keyword kw">self</span>)
       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000655" class="method-detail">
-        <a name="M000655"></a>
+      <div id="method-M000691" class="method-detail">
+        <a name="M000691"></a>
 
         <div class="method-heading">
-          <a href="#M000655" class="method-signature">
+          <a href="#M000691" class="method-signature">
           <span class="method-name">present_apache_module</span><span class="method-args">(*names)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000655-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000655-source">
+            onclick="toggleCode('M000691-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000691-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/plugins/apache2.rb, line 10</span>
+<span class="ruby-comment cmt"># File lib/poolparty/plugins/apache2/apache.rb, line 171</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">present_apache_module</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">names</span>)
         <span class="ruby-identifier">names</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">name</span><span class="ruby-operator">|</span>
-          <span class="ruby-identifier">has_chef_recipe</span> <span class="ruby-value str">&quot;apache2::mod_&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">name</span>
+          <span class="ruby-identifier">has_exec</span>(<span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;mod-#{name}&quot;</span>, <span class="ruby-identifier">:command</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;/usr/sbin/a2enmod #{name}&quot;</span>) <span class="ruby-keyword kw">do</span>
+            <span class="ruby-identifier">requires</span> <span class="ruby-identifier">get_package</span>(<span class="ruby-value str">&quot;apache2&quot;</span>)
+            <span class="ruby-identifier">if_not</span> <span class="ruby-node">&quot;/bin/sh -c \'[ -L /etc/apache2/mods-enabled/#{name}.load ] &amp;&amp; [ /etc/apache2/mods-enabled/#{name}.load -ef /etc/apache2/mods-available/#{name}.load ]\'&quot;</span>
+            <span class="ruby-identifier">calls</span> <span class="ruby-identifier">get_exec</span>(<span class="ruby-value str">&quot;force-reload-apache2&quot;</span>)            
+          <span class="ruby-keyword kw">end</span>
         <span class="ruby-keyword kw">end</span>
       <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000688" class="method-detail">
+        <a name="M000688"></a>
+
+        <div class="method-heading">
+          <a href="#M000688" class="method-signature">
+          <span class="method-name">site</span><span class="method-args">(name, opts={})</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000688-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000688-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/plugins/apache2/apache.rb, line 145</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">site</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">opts</span>={})
+        <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:ensure</span>] <span class="ruby-operator">||</span> <span class="ruby-value str">&quot;present&quot;</span>
+        <span class="ruby-keyword kw">when</span> <span class="ruby-value str">&quot;present&quot;</span>, <span class="ruby-value str">&quot;installed&quot;</span>
+          <span class="ruby-identifier">install_site</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">opts</span>)
+        <span class="ruby-keyword kw">when</span> <span class="ruby-value str">&quot;absent&quot;</span>
+          <span class="ruby-identifier">has_exec</span>(<span class="ruby-identifier">:command</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;/usr/sbin/a2dissite #{name}&quot;</span>, <span class="ruby-identifier">:calls</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">get_exec</span>(<span class="ruby-value str">&quot;reload-apache2&quot;</span>)) <span class="ruby-keyword kw">do</span>
+          <span class="ruby-identifier">requires</span> <span class="ruby-identifier">get_package</span>(<span class="ruby-value str">&quot;apache2&quot;</span>)
+            <span class="ruby-identifier">only_if</span> <span class="ruby-node">&quot;/bin/sh -c \&quot;[ -L /etc/apache2/sites-enabled/#{name} ] &amp;&amp; [ /etc/apache2/sites-enabled/#{name} -ef /etc/apache2/sites-available/#{name}]\&quot;&quot;</span>
+          <span class="ruby-keyword kw">end</span>
+        <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000690" class="method-detail">
+        <a name="M000690"></a>
+
+        <div class="method-heading">
+          <a href="#M000690" class="method-signature">
+          <span class="method-name">site_include</span><span class="method-args">(name, content, ensureer=&quot;present&quot;)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000690-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000690-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/plugins/apache2/apache.rb, line 167</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">site_include</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">content</span>, <span class="ruby-identifier">ensureer</span>=<span class="ruby-value str">&quot;present&quot;</span>)
+        <span class="ruby-identifier">has_file</span>(<span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;/etc/apache2/site-includes/#{name}.inc&quot;</span>, <span class="ruby-identifier">:ensures</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">ensureer</span>, <span class="ruby-identifier">:content</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">content</span>, <span class="ruby-identifier">:requires</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">get_file</span>(<span class="ruby-value str">&quot;/etc/apache2/site-includes&quot;</span>))
+      <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000694" class="method-detail">
+        <a name="M000694"></a>
+
+        <div class="method-heading">
+          <a href="#M000694" class="method-signature">
+          <span class="method-name">virtual_host_entry</span><span class="method-args">(file)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000694-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000694-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/plugins/apache2/apache.rb, line 199</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">virtual_host_entry</span>(<span class="ruby-identifier">file</span>)
+      <span class="ruby-ivar">@virtual_host_entry</span> = <span class="ruby-keyword kw">true</span>
+      <span class="ruby-keyword kw">if</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">file?</span>(<span class="ruby-identifier">file</span>)
+        <span class="ruby-identifier">has_file</span>(<span class="ruby-identifier">options</span>.<span class="ruby-identifier">merge</span>({<span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;/etc/apache2/sites-available/#{name}&quot;</span>, 
+                                <span class="ruby-identifier">:template</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">file</span>, 
+                                <span class="ruby-identifier">:requires</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">get_package</span>(<span class="ruby-value str">&quot;apache2&quot;</span>)}))
+      <span class="ruby-keyword kw">else</span>
+        <span class="ruby-identifier">has_file</span>(<span class="ruby-identifier">options</span>.<span class="ruby-identifier">merge</span>({<span class="ruby-identifier">:content</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">file</span>, 
+                                <span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;/etc/apache2/sites-available/#{name}&quot;</span>, 
+                                <span class="ruby-identifier">:requires</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">get_package</span>(<span class="ruby-value str">&quot;apache2&quot;</span>)}))
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>

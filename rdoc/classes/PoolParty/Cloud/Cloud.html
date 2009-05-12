@@ -88,27 +88,27 @@
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000258">add_poolparty_base_requirements</a>&nbsp;&nbsp;
-      <a href="#M000247">after_create</a>&nbsp;&nbsp;
-      <a href="#M000249">after_launch_instance</a>&nbsp;&nbsp;
-      <a href="#M000246">before_create</a>&nbsp;&nbsp;
-      <a href="#M000252">build_and_store_new_config_file</a>&nbsp;&nbsp;
-      <a href="#M000256">build_from_existing_file</a>&nbsp;&nbsp;
-      <a href="#M000254">build_manifest</a>&nbsp;&nbsp;
-      <a href="#M000253">copy_custom_monitors</a>&nbsp;&nbsp;
-      <a href="#M000241">immutable_methods</a>&nbsp;&nbsp;
-      <a href="#M000251">ip</a>&nbsp;&nbsp;
-      <a href="#M000250">ips</a>&nbsp;&nbsp;
-      <a href="#M000242">method_added</a>&nbsp;&nbsp;
-      <a href="#M000243">method_missing</a>&nbsp;&nbsp;
-      <a href="#M000245">name</a>&nbsp;&nbsp;
-      <a href="#M000244">new</a>&nbsp;&nbsp;
-      <a href="#M000259">other_clouds</a>&nbsp;&nbsp;
-      <a href="#M000255">rebuild_manifest</a>&nbsp;&nbsp;
-      <a href="#M000260">reset!</a>&nbsp;&nbsp;
-      <a href="#M000248">setup_defaults</a>&nbsp;&nbsp;
-      <a href="#M000240">verbose</a>&nbsp;&nbsp;
-      <a href="#M000257">write_properties_hash</a>&nbsp;&nbsp;
+      <a href="#M000268">add_poolparty_base_requirements</a>&nbsp;&nbsp;
+      <a href="#M000257">after_create</a>&nbsp;&nbsp;
+      <a href="#M000259">after_launch_instance</a>&nbsp;&nbsp;
+      <a href="#M000256">before_create</a>&nbsp;&nbsp;
+      <a href="#M000262">build_and_store_new_config_file</a>&nbsp;&nbsp;
+      <a href="#M000266">build_from_existing_file</a>&nbsp;&nbsp;
+      <a href="#M000264">build_manifest</a>&nbsp;&nbsp;
+      <a href="#M000263">copy_custom_monitors</a>&nbsp;&nbsp;
+      <a href="#M000251">immutable_methods</a>&nbsp;&nbsp;
+      <a href="#M000261">ip</a>&nbsp;&nbsp;
+      <a href="#M000260">ips</a>&nbsp;&nbsp;
+      <a href="#M000252">method_added</a>&nbsp;&nbsp;
+      <a href="#M000253">method_missing</a>&nbsp;&nbsp;
+      <a href="#M000255">name</a>&nbsp;&nbsp;
+      <a href="#M000254">new</a>&nbsp;&nbsp;
+      <a href="#M000269">other_clouds</a>&nbsp;&nbsp;
+      <a href="#M000265">rebuild_manifest</a>&nbsp;&nbsp;
+      <a href="#M000270">reset!</a>&nbsp;&nbsp;
+      <a href="#M000258">setup_defaults</a>&nbsp;&nbsp;
+      <a href="#M000250">verbose</a>&nbsp;&nbsp;
+      <a href="#M000267">write_properties_hash</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -181,19 +181,19 @@
     <div id="methods">
       <h3 class="section-bar">Public Class methods</h3>
 
-      <div id="method-M000241" class="method-detail">
-        <a name="M000241"></a>
+      <div id="method-M000251" class="method-detail">
+        <a name="M000251"></a>
 
         <div class="method-heading">
-          <a href="#M000241" class="method-signature">
+          <a href="#M000251" class="method-signature">
           <span class="method-name">immutable_methods</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000241-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000241-source">
+            onclick="toggleCode('M000251-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000251-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/poolparty/cloud.rb, line 43</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">immutable_methods</span>
@@ -204,11 +204,11 @@
         </div>
       </div>
 
-      <div id="method-M000242" class="method-detail">
-        <a name="M000242"></a>
+      <div id="method-M000252" class="method-detail">
+        <a name="M000252"></a>
 
         <div class="method-heading">
-          <a href="#M000242" class="method-signature">
+          <a href="#M000252" class="method-signature">
           <span class="method-name">method_added</span><span class="method-args">(sym)</span>
           </a>
         </div>
@@ -218,8 +218,8 @@
 Redefining methods are not allowed
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000242-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000242-source">
+            onclick="toggleCode('M000252-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000252-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/poolparty/cloud.rb, line 48</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">method_added</span> <span class="ruby-identifier">sym</span>        
@@ -230,11 +230,11 @@ Redefining methods are not allowed
         </div>
       </div>
 
-      <div id="method-M000244" class="method-detail">
-        <a name="M000244"></a>
+      <div id="method-M000254" class="method-detail">
+        <a name="M000254"></a>
 
         <div class="method-heading">
-          <a href="#M000244" class="method-signature">
+          <a href="#M000254" class="method-signature">
           <span class="method-name">new</span><span class="method-args">(name, &amp;block)</span>
           </a>
         </div>
@@ -243,11 +243,11 @@ Redefining methods are not allowed
           <p>
 Freeze the cloud_name so we can&#8216;t modify it at all, set the
 plugin_directory call and run instance_eval on the block and then call the
-<a href="Cloud.html#M000247">after_create</a> callback
+<a href="Cloud.html#M000257">after_create</a> callback
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000244-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000244-source">
+            onclick="toggleCode('M000254-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000254-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/poolparty/cloud.rb, line 79</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">name</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
@@ -266,11 +266,11 @@ plugin_directory call and run instance_eval on the block and then call the
 
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000258" class="method-detail">
-        <a name="M000258"></a>
+      <div id="method-M000268" class="method-detail">
+        <a name="M000268"></a>
 
         <div class="method-heading">
-          <a href="#M000258" class="method-signature">
+          <a href="#M000268" class="method-signature">
           <span class="method-name">add_poolparty_base_requirements</span><span class="method-args">()</span>
           </a>
         </div>
@@ -283,8 +283,8 @@ there is no block associated. This is because we have written all that is
 necessary in a method called enable which is called when there is no block
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000258-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000258-source">
+            onclick="toggleCode('M000268-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000268-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/poolparty/cloud.rb, line 214</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">add_poolparty_base_requirements</span>
@@ -297,11 +297,11 @@ necessary in a method called enable which is called when there is no block
         </div>
       </div>
 
-      <div id="method-M000247" class="method-detail">
-        <a name="M000247"></a>
+      <div id="method-M000257" class="method-detail">
+        <a name="M000257"></a>
 
         <div class="method-heading">
-          <a href="#M000247" class="method-signature">
+          <a href="#M000257" class="method-signature">
           <span class="method-name">after_create</span><span class="method-args">()</span>
           </a>
         </div>
@@ -311,12 +311,12 @@ necessary in a method called enable which is called when there is no block
 Callback called after the cloud has been created, everything has run and is
 set at this point here the base requirements are added as well as an empty
 chef recipe is called Also, the <a
-href="Cloud.html#M000247">after_create</a> hook on the plugins used by the
+href="Cloud.html#M000257">after_create</a> hook on the plugins used by the
 cloud are called here
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000247-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000247-source">
+            onclick="toggleCode('M000257-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000257-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/poolparty/cloud.rb, line 104</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">after_create</span>
@@ -338,19 +338,19 @@ cloud are called here
         </div>
       </div>
 
-      <div id="method-M000249" class="method-detail">
-        <a name="M000249"></a>
+      <div id="method-M000259" class="method-detail">
+        <a name="M000259"></a>
 
         <div class="method-heading">
-          <a href="#M000249" class="method-signature">
+          <a href="#M000259" class="method-signature">
           <span class="method-name">after_launch_instance</span><span class="method-args">(inst=nil)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000249-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000249-source">
+            onclick="toggleCode('M000259-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000259-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/poolparty/cloud.rb, line 129</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">after_launch_instance</span>(<span class="ruby-identifier">inst</span>=<span class="ruby-keyword kw">nil</span>)
@@ -361,19 +361,19 @@ cloud are called here
         </div>
       </div>
 
-      <div id="method-M000246" class="method-detail">
-        <a name="M000246"></a>
+      <div id="method-M000256" class="method-detail">
+        <a name="M000256"></a>
 
         <div class="method-heading">
-          <a href="#M000246" class="method-signature">
+          <a href="#M000256" class="method-signature">
           <span class="method-name">before_create</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000246-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000246-source">
+            onclick="toggleCode('M000256-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000256-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/poolparty/cloud.rb, line 94</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">before_create</span>     
@@ -386,18 +386,18 @@ cloud are called here
         </div>
       </div>
 
-      <div id="method-M000252" class="method-detail">
-        <a name="M000252"></a>
+      <div id="method-M000262" class="method-detail">
+        <a name="M000262"></a>
 
         <div class="method-heading">
-          <a href="#M000252" class="method-signature">
+          <a href="#M000262" class="method-signature">
           <span class="method-name">build_and_store_new_config_file</span><span class="method-args">(filepath=nil, force=false)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Build the <a href="Cloud.html#M000244">new</a> poolparty manifest Wrapping
+Build the <a href="Cloud.html#M000254">new</a> poolparty manifest Wrapping
 all of these requirements into the one poolparty class.
 </p>
 <p>
@@ -405,8 +405,8 @@ TODO: Consider the benefits of moving all the manifest classes to separate
 files and keeping the containing references in the include
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000252-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000252-source">
+            onclick="toggleCode('M000262-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000262-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/poolparty/cloud.rb, line 150</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">build_and_store_new_config_file</span>(<span class="ruby-identifier">filepath</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">force</span>=<span class="ruby-keyword kw">false</span>)
@@ -423,11 +423,11 @@ files and keeping the containing references in the include
         </div>
       </div>
 
-      <div id="method-M000256" class="method-detail">
-        <a name="M000256"></a>
+      <div id="method-M000266" class="method-detail">
+        <a name="M000266"></a>
 
         <div class="method-heading">
-          <a href="#M000256" class="method-signature">
+          <a href="#M000266" class="method-signature">
           <span class="method-name">build_from_existing_file</span><span class="method-args">()</span>
           </a>
         </div>
@@ -437,8 +437,8 @@ files and keeping the containing references in the include
 If the pp already exists, then let&#8216;s not recreate it TODO: Abstract
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000256-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000256-source">
+            onclick="toggleCode('M000266-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000266-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/poolparty/cloud.rb, line 196</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">build_from_existing_file</span>
@@ -449,11 +449,11 @@ If the pp already exists, then let&#8216;s not recreate it TODO: Abstract
         </div>
       </div>
 
-      <div id="method-M000254" class="method-detail">
-        <a name="M000254"></a>
+      <div id="method-M000264" class="method-detail">
+        <a name="M000264"></a>
 
         <div class="method-heading">
-          <a href="#M000254" class="method-signature">
+          <a href="#M000264" class="method-signature">
           <span class="method-name">build_manifest</span><span class="method-args">()</span>
           </a>
         </div>
@@ -466,8 +466,8 @@ FIXME MOVE TO DEPENDECY RESOL
  Configuration files
 </pre>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000254-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000254-source">
+            onclick="toggleCode('M000264-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000264-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/poolparty/cloud.rb, line 176</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">build_manifest</span>
@@ -486,11 +486,11 @@ FIXME MOVE TO DEPENDECY RESOL
         </div>
       </div>
 
-      <div id="method-M000253" class="method-detail">
-        <a name="M000253"></a>
+      <div id="method-M000263" class="method-detail">
+        <a name="M000263"></a>
 
         <div class="method-heading">
-          <a href="#M000253" class="method-signature">
+          <a href="#M000263" class="method-signature">
           <span class="method-name">copy_custom_monitors</span><span class="method-args">()</span>
           </a>
         </div>
@@ -505,8 +505,8 @@ the monitors directory for any custom monitors that are in known locations,
 these are included
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000253-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000253-source">
+            onclick="toggleCode('M000263-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000263-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/poolparty/cloud.rb, line 166</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">copy_custom_monitors</span>
@@ -521,23 +521,23 @@ these are included
         </div>
       </div>
 
-      <div id="method-M000251" class="method-detail">
-        <a name="M000251"></a>
+      <div id="method-M000261" class="method-detail">
+        <a name="M000261"></a>
 
         <div class="method-heading">
-          <a href="#M000251" class="method-signature">
+          <a href="#M000261" class="method-signature">
           <span class="method-name">ip</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-TODO: make this be a random <a href="Cloud.html#M000251">ip</a>, since we
+TODO: make this be a random <a href="Cloud.html#M000261">ip</a>, since we
 should not rely on it being the same each time
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000251-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000251-source">
+            onclick="toggleCode('M000261-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000261-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/poolparty/cloud.rb, line 139</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">ip</span>
@@ -548,23 +548,23 @@ should not rely on it being the same each time
         </div>
       </div>
 
-      <div id="method-M000250" class="method-detail">
-        <a name="M000250"></a>
+      <div id="method-M000260" class="method-detail">
+        <a name="M000260"></a>
 
         <div class="method-heading">
-          <a href="#M000250" class="method-signature">
+          <a href="#M000260" class="method-signature">
           <span class="method-name">ips</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-provide list of public <a href="Cloud.html#M000250">ips</a> to get into the
+provide list of public <a href="Cloud.html#M000260">ips</a> to get into the
 cloud
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000250-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000250-source">
+            onclick="toggleCode('M000260-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000260-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/poolparty/cloud.rb, line 134</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">ips</span>
@@ -575,11 +575,11 @@ cloud
         </div>
       </div>
 
-      <div id="method-M000243" class="method-detail">
-        <a name="M000243"></a>
+      <div id="method-M000253" class="method-detail">
+        <a name="M000253"></a>
 
         <div class="method-heading">
-          <a href="#M000243" class="method-signature">
+          <a href="#M000253" class="method-signature">
           <span class="method-name">method_missing</span><span class="method-args">(m, *args, &amp;block)</span>
           </a>
         </div>
@@ -590,8 +590,8 @@ Call the remoter commands on the cloud if they don&#8216;t exist on the
 cloud itself This gives the cloud access to the remote_base&#8216;s methods
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000243-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000243-source">
+            onclick="toggleCode('M000253-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000253-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/poolparty/cloud.rb, line 56</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">method_missing</span>(<span class="ruby-identifier">m</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
@@ -602,22 +602,22 @@ cloud itself This gives the cloud access to the remote_base&#8216;s methods
         </div>
       </div>
 
-      <div id="method-M000245" class="method-detail">
-        <a name="M000245"></a>
+      <div id="method-M000255" class="method-detail">
+        <a name="M000255"></a>
 
         <div class="method-heading">
-          <a href="#M000245" class="method-signature">
+          <a href="#M000255" class="method-signature">
           <span class="method-name">name</span><span class="method-args">(*args)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Fetch the <a href="Cloud.html#M000245">name</a> of the cloud
+Fetch the <a href="Cloud.html#M000255">name</a> of the cloud
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000245-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000245-source">
+            onclick="toggleCode('M000255-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000255-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/poolparty/cloud.rb, line 90</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">name</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
@@ -628,11 +628,11 @@ Fetch the <a href="Cloud.html#M000245">name</a> of the cloud
         </div>
       </div>
 
-      <div id="method-M000259" class="method-detail">
-        <a name="M000259"></a>
+      <div id="method-M000269" class="method-detail">
+        <a name="M000269"></a>
 
         <div class="method-heading">
-          <a href="#M000259" class="method-signature">
+          <a href="#M000269" class="method-signature">
           <span class="method-name">other_clouds</span><span class="method-args">()</span>
           </a>
         </div>
@@ -642,8 +642,8 @@ Fetch the <a href="Cloud.html#M000245">name</a> of the cloud
 TODO: Deprecate
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000259-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000259-source">
+            onclick="toggleCode('M000269-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000269-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/poolparty/cloud.rb, line 221</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">other_clouds</span>
@@ -658,11 +658,11 @@ TODO: Deprecate
         </div>
       </div>
 
-      <div id="method-M000255" class="method-detail">
-        <a name="M000255"></a>
+      <div id="method-M000265" class="method-detail">
+        <a name="M000265"></a>
 
         <div class="method-heading">
-          <a href="#M000255" class="method-signature">
+          <a href="#M000265" class="method-signature">
           <span class="method-name">rebuild_manifest</span><span class="method-args">()</span>
           </a>
         </div>
@@ -672,8 +672,8 @@ TODO: Deprecate
 Force rebuilding of the manifest
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000255-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000255-source">
+            onclick="toggleCode('M000265-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000265-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/poolparty/cloud.rb, line 189</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">rebuild_manifest</span>
@@ -685,11 +685,11 @@ Force rebuilding of the manifest
         </div>
       </div>
 
-      <div id="method-M000260" class="method-detail">
-        <a name="M000260"></a>
+      <div id="method-M000270" class="method-detail">
+        <a name="M000270"></a>
 
         <div class="method-heading">
-          <a href="#M000260" class="method-signature">
+          <a href="#M000270" class="method-signature">
           <span class="method-name">reset!</span><span class="method-args">()</span>
           </a>
         </div>
@@ -699,8 +699,8 @@ Force rebuilding of the manifest
 Reset the entire cloud
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000260-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000260-source">
+            onclick="toggleCode('M000270-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000270-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/poolparty/cloud.rb, line 230</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">reset!</span>
@@ -712,11 +712,11 @@ Reset the entire cloud
         </div>
       </div>
 
-      <div id="method-M000248" class="method-detail">
-        <a name="M000248"></a>
+      <div id="method-M000258" class="method-detail">
+        <a name="M000258"></a>
 
         <div class="method-heading">
-          <a href="#M000248" class="method-signature">
+          <a href="#M000258" class="method-signature">
           <span class="method-name">setup_defaults</span><span class="method-args">()</span>
           </a>
         </div>
@@ -726,8 +726,8 @@ Reset the entire cloud
 setup defaults for the cloud
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000248-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000248-source">
+            onclick="toggleCode('M000258-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000258-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/poolparty/cloud.rb, line 120</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">setup_defaults</span>
@@ -743,11 +743,11 @@ setup defaults for the cloud
         </div>
       </div>
 
-      <div id="method-M000240" class="method-detail">
-        <a name="M000240"></a>
+      <div id="method-M000250" class="method-detail">
+        <a name="M000250"></a>
 
         <div class="method-heading">
-          <a href="#M000240" class="method-signature">
+          <a href="#M000250" class="method-signature">
           <span class="method-name">verbose</span><span class="method-args">()</span>
           </a>
         </div>
@@ -757,8 +757,8 @@ setup defaults for the cloud
 include <a href="../../Monitors.html">PoolParty::Monitors</a>
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000240-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000240-source">
+            onclick="toggleCode('M000250-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000250-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/poolparty/cloud.rb, line 39</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">verbose</span>
@@ -769,19 +769,19 @@ include <a href="../../Monitors.html">PoolParty::Monitors</a>
         </div>
       </div>
 
-      <div id="method-M000257" class="method-detail">
-        <a name="M000257"></a>
+      <div id="method-M000267" class="method-detail">
+        <a name="M000267"></a>
 
         <div class="method-heading">
-          <a href="#M000257" class="method-signature">
+          <a href="#M000267" class="method-signature">
           <span class="method-name">write_properties_hash</span><span class="method-args">(filename=::File.join(Default.tmp_path, Default.properties_hash_filename) )</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000257-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000257-source">
+            onclick="toggleCode('M000267-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000267-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/poolparty/cloud.rb, line 200</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">write_properties_hash</span>(<span class="ruby-identifier">filename</span>=<span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-constant">Default</span>.<span class="ruby-identifier">tmp_path</span>, <span class="ruby-constant">Default</span>.<span class="ruby-identifier">properties_hash_filename</span>) )

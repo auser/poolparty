@@ -88,29 +88,29 @@
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000350">after_create</a>&nbsp;&nbsp;
-      <a href="#M000345">available_resources</a>&nbsp;&nbsp;
-      <a href="#M000365">class_name_sym</a>&nbsp;&nbsp;
-      <a href="#M000355">class_type_name</a>&nbsp;&nbsp;
-      <a href="#M000352">cloud</a>&nbsp;&nbsp;
-      <a href="#M000358">custom_function</a>&nbsp;&nbsp;
-      <a href="#M000356">custom_function</a>&nbsp;&nbsp;
-      <a href="#M000357">custom_functions</a>&nbsp;&nbsp;
-      <a href="#M000359">custom_functions_to_string</a>&nbsp;&nbsp;
-      <a href="#M000360">disallowed_options</a>&nbsp;&nbsp;
-      <a href="#M000353">duplicatable?</a>&nbsp;&nbsp;
-      <a href="#M000366">get_modified_options</a>&nbsp;&nbsp;
-      <a href="#M000344">inherited</a>&nbsp;&nbsp;
-      <a href="#M000363">is_a_resource?</a>&nbsp;&nbsp;
-      <a href="#M000362">is_in_plugin?</a>&nbsp;&nbsp;
-      <a href="#M000361">key</a>&nbsp;&nbsp;
-      <a href="#M000347">loaded</a>&nbsp;&nbsp;
-      <a href="#M000364">method_missing</a>&nbsp;&nbsp;
-      <a href="#M000349">name</a>&nbsp;&nbsp;
-      <a href="#M000346">new</a>&nbsp;&nbsp;
-      <a href="#M000354">resource?</a>&nbsp;&nbsp;
-      <a href="#M000348">resource_name</a>&nbsp;&nbsp;
-      <a href="#M000351">services</a>&nbsp;&nbsp;
+      <a href="#M000368">after_create</a>&nbsp;&nbsp;
+      <a href="#M000363">available_resources</a>&nbsp;&nbsp;
+      <a href="#M000383">class_name_sym</a>&nbsp;&nbsp;
+      <a href="#M000373">class_type_name</a>&nbsp;&nbsp;
+      <a href="#M000370">cloud</a>&nbsp;&nbsp;
+      <a href="#M000376">custom_function</a>&nbsp;&nbsp;
+      <a href="#M000374">custom_function</a>&nbsp;&nbsp;
+      <a href="#M000375">custom_functions</a>&nbsp;&nbsp;
+      <a href="#M000377">custom_functions_to_string</a>&nbsp;&nbsp;
+      <a href="#M000378">disallowed_options</a>&nbsp;&nbsp;
+      <a href="#M000371">duplicatable?</a>&nbsp;&nbsp;
+      <a href="#M000384">get_modified_options</a>&nbsp;&nbsp;
+      <a href="#M000362">inherited</a>&nbsp;&nbsp;
+      <a href="#M000381">is_a_resource?</a>&nbsp;&nbsp;
+      <a href="#M000380">is_in_plugin?</a>&nbsp;&nbsp;
+      <a href="#M000379">key</a>&nbsp;&nbsp;
+      <a href="#M000365">loaded</a>&nbsp;&nbsp;
+      <a href="#M000382">method_missing</a>&nbsp;&nbsp;
+      <a href="#M000367">name</a>&nbsp;&nbsp;
+      <a href="#M000364">new</a>&nbsp;&nbsp;
+      <a href="#M000372">resource?</a>&nbsp;&nbsp;
+      <a href="#M000366">resource_name</a>&nbsp;&nbsp;
+      <a href="#M000369">services</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -124,6 +124,7 @@
       <div id="includes-list">
         <span class="include-name"><a href="../DependencyResolverResourceExtensions.html">PoolParty::DependencyResolverResourceExtensions</a></span>
         <span class="include-name"><a href="../ResourcingDsl.html">PoolParty::ResourcingDsl</a></span>
+        <span class="include-name"><a href="../SearchablePaths.html">SearchablePaths</a></span>
       </div>
     </div>
 
@@ -158,11 +159,11 @@
     <div id="methods">
       <h3 class="section-bar">Public Class methods</h3>
 
-      <div id="method-M000345" class="method-detail">
-        <a name="M000345"></a>
+      <div id="method-M000363" class="method-detail">
+        <a name="M000363"></a>
 
         <div class="method-heading">
-          <a href="#M000345" class="method-signature">
+          <a href="#M000363" class="method-signature">
           <span class="method-name">available_resources</span><span class="method-args">()</span>
           </a>
         </div>
@@ -173,10 +174,10 @@ Keep track of the resources that are available. This way we can show some
 pretty output later and ensure that we are only calling available resources
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000345-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000345-source">
+            onclick="toggleCode('M000363-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000363-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/poolparty/resource.rb, line 68</span>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/resource.rb, line 72</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">available_resources</span>
         <span class="ruby-ivar">@available_resources</span> <span class="ruby-operator">||=</span> []
       <span class="ruby-keyword kw">end</span>
@@ -185,21 +186,21 @@ pretty output later and ensure that we are only calling available resources
         </div>
       </div>
 
-      <div id="method-M000356" class="method-detail">
-        <a name="M000356"></a>
+      <div id="method-M000374" class="method-detail">
+        <a name="M000374"></a>
 
         <div class="method-heading">
-          <a href="#M000356" class="method-signature">
+          <a href="#M000374" class="method-signature">
           <span class="method-name">custom_function</span><span class="method-args">(str)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000356-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000356-source">
+            onclick="toggleCode('M000374-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000374-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/poolparty/resource.rb, line 129</span>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/resource.rb, line 133</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">custom_function</span>(<span class="ruby-identifier">str</span>)
         <span class="ruby-identifier">custom_functions</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">str</span>
       <span class="ruby-keyword kw">end</span>
@@ -208,21 +209,21 @@ pretty output later and ensure that we are only calling available resources
         </div>
       </div>
 
-      <div id="method-M000357" class="method-detail">
-        <a name="M000357"></a>
+      <div id="method-M000375" class="method-detail">
+        <a name="M000375"></a>
 
         <div class="method-heading">
-          <a href="#M000357" class="method-signature">
+          <a href="#M000375" class="method-signature">
           <span class="method-name">custom_functions</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000357-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000357-source">
+            onclick="toggleCode('M000375-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000375-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/poolparty/resource.rb, line 132</span>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/resource.rb, line 136</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">custom_functions</span>
         <span class="ruby-ivar">@custom_functions</span> <span class="ruby-operator">||=</span> []
       <span class="ruby-keyword kw">end</span>
@@ -231,21 +232,21 @@ pretty output later and ensure that we are only calling available resources
         </div>
       </div>
 
-      <div id="method-M000359" class="method-detail">
-        <a name="M000359"></a>
+      <div id="method-M000377" class="method-detail">
+        <a name="M000377"></a>
 
         <div class="method-heading">
-          <a href="#M000359" class="method-signature">
+          <a href="#M000377" class="method-signature">
           <span class="method-name">custom_functions_to_string</span><span class="method-args">(pre=&quot;&quot;)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000359-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000359-source">
+            onclick="toggleCode('M000377-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000377-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/poolparty/resource.rb, line 139</span>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/resource.rb, line 143</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">custom_functions_to_string</span>(<span class="ruby-identifier">pre</span>=<span class="ruby-value str">&quot;&quot;</span>)
         <span class="ruby-identifier">returning</span> <span class="ruby-constant">Array</span>.<span class="ruby-identifier">new</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">output</span><span class="ruby-operator">|</span>
           <span class="ruby-constant">PoolParty</span><span class="ruby-operator">::</span><span class="ruby-constant">Resources</span>.<span class="ruby-identifier">available_custom_resources</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">resource</span><span class="ruby-operator">|</span>
@@ -260,11 +261,11 @@ pretty output later and ensure that we are only calling available resources
         </div>
       </div>
 
-      <div id="method-M000344" class="method-detail">
-        <a name="M000344"></a>
+      <div id="method-M000362" class="method-detail">
+        <a name="M000362"></a>
 
         <div class="method-heading">
-          <a href="#M000344" class="method-signature">
+          <a href="#M000362" class="method-signature">
           <span class="method-name">inherited</span><span class="method-args">(subclass)</span>
           </a>
         </div>
@@ -281,14 +282,14 @@ get_file method. This will just call out to get the resource. If the
 resource isn&#8216;t available in a resource store, we expect to return a
 nil result. Finally, the has_ and does_not_have_ methods are appended. See
 below for those methods. Then we make sure we add these resources as <a
-href="Resource.html#M000345">available_resources</a> onto the class so we
+href="Resource.html#M000363">available_resources</a> onto the class so we
 know it&#8216;s available as a resource
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000344-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000344-source">
+            onclick="toggleCode('M000362-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000362-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/poolparty/resource.rb, line 39</span>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/resource.rb, line 43</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">inherited</span>(<span class="ruby-identifier">subclass</span>)
         <span class="ruby-identifier">subclass</span> = <span class="ruby-identifier">subclass</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">split</span>(<span class="ruby-value str">&quot;::&quot;</span>)[<span class="ruby-value">-1</span>] <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">subclass</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">index</span>(<span class="ruby-value str">&quot;::&quot;</span>)
         <span class="ruby-identifier">lowercase_class_name</span> = <span class="ruby-identifier">subclass</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">underscore</span>.<span class="ruby-identifier">downcase</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">subclass</span>.<span class="ruby-identifier">downcase</span>
@@ -308,11 +309,11 @@ know it&#8216;s available as a resource
         </div>
       </div>
 
-      <div id="method-M000346" class="method-detail">
-        <a name="M000346"></a>
+      <div id="method-M000364" class="method-detail">
+        <a name="M000364"></a>
 
         <div class="method-heading">
-          <a href="#M000346" class="method-signature">
+          <a href="#M000364" class="method-signature">
           <span class="method-name">new</span><span class="method-args">(opts={}, extra_opts={}, &amp;block)</span>
           </a>
         </div>
@@ -325,10 +326,10 @@ takes the value of the block and sets whatever is sent there as the options
 Finally, it uses the parent&#8216;s options as the lowest priority
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000346-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000346-source">
+            onclick="toggleCode('M000364-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000364-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/poolparty/resource.rb, line 78</span>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/resource.rb, line 82</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">opts</span>={}, <span class="ruby-identifier">extra_opts</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
         <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">opts</span>, <span class="ruby-identifier">extra_opts</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
                 
@@ -346,11 +347,11 @@ Finally, it uses the parent&#8216;s options as the lowest priority
 
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000350" class="method-detail">
-        <a name="M000350"></a>
+      <div id="method-M000368" class="method-detail">
+        <a name="M000368"></a>
 
         <div class="method-heading">
-          <a href="#M000350" class="method-signature">
+          <a href="#M000368" class="method-signature">
           <span class="method-name">after_create</span><span class="method-args">()</span>
           </a>
         </div>
@@ -360,10 +361,10 @@ Finally, it uses the parent&#8216;s options as the lowest priority
 After create callback
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000350-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000350-source">
+            onclick="toggleCode('M000368-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000368-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/poolparty/resource.rb, line 104</span>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/resource.rb, line 108</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">after_create</span>
       <span class="ruby-keyword kw">end</span>
 </pre>
@@ -371,11 +372,11 @@ After create callback
         </div>
       </div>
 
-      <div id="method-M000365" class="method-detail">
-        <a name="M000365"></a>
+      <div id="method-M000383" class="method-detail">
+        <a name="M000383"></a>
 
         <div class="method-heading">
-          <a href="#M000365" class="method-signature">
+          <a href="#M000383" class="method-signature">
           <span class="method-name">class_name_sym</span><span class="method-args">()</span>
           </a>
         </div>
@@ -385,10 +386,10 @@ After create callback
 Private method just for resource retrievling purposes
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000365-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000365-source">
+            onclick="toggleCode('M000383-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000383-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/poolparty/resource.rb, line 179</span>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/resource.rb, line 183</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">class_name_sym</span>
         <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">top_level_class</span>.<span class="ruby-identifier">downcase</span>.<span class="ruby-identifier">to_sym</span>
       <span class="ruby-keyword kw">end</span>
@@ -397,11 +398,11 @@ Private method just for resource retrievling purposes
         </div>
       </div>
 
-      <div id="method-M000355" class="method-detail">
-        <a name="M000355"></a>
+      <div id="method-M000373" class="method-detail">
+        <a name="M000373"></a>
 
         <div class="method-heading">
-          <a href="#M000355" class="method-signature">
+          <a href="#M000373" class="method-signature">
           <span class="method-name">class_type_name</span><span class="method-args">()</span>
           </a>
         </div>
@@ -411,10 +412,10 @@ Private method just for resource retrievling purposes
 This way we can subclass resources without worry
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000355-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000355-source">
+            onclick="toggleCode('M000373-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000373-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/poolparty/resource.rb, line 126</span>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/resource.rb, line 130</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">class_type_name</span>
         <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">top_level_class</span>.<span class="ruby-identifier">underscore</span>.<span class="ruby-identifier">downcase</span>
       <span class="ruby-keyword kw">end</span>
@@ -423,21 +424,21 @@ This way we can subclass resources without worry
         </div>
       </div>
 
-      <div id="method-M000352" class="method-detail">
-        <a name="M000352"></a>
+      <div id="method-M000370" class="method-detail">
+        <a name="M000370"></a>
 
         <div class="method-heading">
-          <a href="#M000352" class="method-signature">
+          <a href="#M000370" class="method-signature">
           <span class="method-name">cloud</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000352-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000352-source">
+            onclick="toggleCode('M000370-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000370-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/poolparty/resource.rb, line 112</span>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/resource.rb, line 116</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cloud</span>
         <span class="ruby-value">2</span>.<span class="ruby-identifier">upto</span>(<span class="ruby-identifier">context_stack</span>.<span class="ruby-identifier">size</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">i</span><span class="ruby-operator">|</span>
           <span class="ruby-keyword kw">return</span> <span class="ruby-operator">::</span><span class="ruby-constant">PoolParty</span>.<span class="ruby-identifier">context_stack</span>[<span class="ruby-operator">-</span><span class="ruby-identifier">i</span>] <span class="ruby-keyword kw">if</span> <span class="ruby-operator">::</span><span class="ruby-constant">PoolParty</span>.<span class="ruby-identifier">context_stack</span>[<span class="ruby-operator">-</span><span class="ruby-identifier">i</span>].<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">PoolParty</span><span class="ruby-operator">::</span><span class="ruby-constant">Cloud</span><span class="ruby-operator">::</span><span class="ruby-constant">Cloud</span>)
@@ -449,21 +450,21 @@ This way we can subclass resources without worry
         </div>
       </div>
 
-      <div id="method-M000358" class="method-detail">
-        <a name="M000358"></a>
+      <div id="method-M000376" class="method-detail">
+        <a name="M000376"></a>
 
         <div class="method-heading">
-          <a href="#M000358" class="method-signature">
+          <a href="#M000376" class="method-signature">
           <span class="method-name">custom_function</span><span class="method-args">(str)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000358-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000358-source">
+            onclick="toggleCode('M000376-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000376-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/poolparty/resource.rb, line 135</span>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/resource.rb, line 139</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">custom_function</span>(<span class="ruby-identifier">str</span>)
         <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">custom_functions</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">str</span>
       <span class="ruby-keyword kw">end</span>
@@ -472,11 +473,11 @@ This way we can subclass resources without worry
         </div>
       </div>
 
-      <div id="method-M000360" class="method-detail">
-        <a name="M000360"></a>
+      <div id="method-M000378" class="method-detail">
+        <a name="M000378"></a>
 
         <div class="method-heading">
-          <a href="#M000360" class="method-signature">
+          <a href="#M000378" class="method-signature">
           <span class="method-name">disallowed_options</span><span class="method-args">()</span>
           </a>
         </div>
@@ -487,10 +488,10 @@ Some things in puppet aren&#8216;t allowed, so let&#8216;s override them
 here
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000360-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000360-source">
+            onclick="toggleCode('M000378-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000378-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/poolparty/resource.rb, line 149</span>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/resource.rb, line 153</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">disallowed_options</span>
         []
       <span class="ruby-keyword kw">end</span>
@@ -499,21 +500,21 @@ here
         </div>
       </div>
 
-      <div id="method-M000353" class="method-detail">
-        <a name="M000353"></a>
+      <div id="method-M000371" class="method-detail">
+        <a name="M000371"></a>
 
         <div class="method-heading">
-          <a href="#M000353" class="method-signature">
+          <a href="#M000371" class="method-signature">
           <span class="method-name">duplicatable?</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000353-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000353-source">
+            onclick="toggleCode('M000371-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000371-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/poolparty/resource.rb, line 119</span>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/resource.rb, line 123</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">duplicatable?</span>
         <span class="ruby-keyword kw">false</span>
       <span class="ruby-keyword kw">end</span>
@@ -522,11 +523,11 @@ here
         </div>
       </div>
 
-      <div id="method-M000366" class="method-detail">
-        <a name="M000366"></a>
+      <div id="method-M000384" class="method-detail">
+        <a name="M000384"></a>
 
         <div class="method-heading">
-          <a href="#M000366" class="method-signature">
+          <a href="#M000384" class="method-signature">
           <span class="method-name">get_modified_options</span><span class="method-args">()</span>
           </a>
         </div>
@@ -535,15 +536,15 @@ here
           <p>
 We want to gather the options, but if the option sent is nil then we want
 to override the option value by sending the <a
-href="Resource.html#M000361">key</a> as a method so that we can override
+href="Resource.html#M000379">key</a> as a method so that we can override
 this if necessary. Only runs on objects that have options defined,
 otherwise it returns an empty hash
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000366-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000366-source">
+            onclick="toggleCode('M000384-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000384-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/poolparty/resource.rb, line 187</span>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/resource.rb, line 191</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_modified_options</span>
         <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@modified_options</span>
           <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">dsl_options</span>
@@ -566,21 +567,21 @@ otherwise it returns an empty hash
         </div>
       </div>
 
-      <div id="method-M000363" class="method-detail">
-        <a name="M000363"></a>
+      <div id="method-M000381" class="method-detail">
+        <a name="M000381"></a>
 
         <div class="method-heading">
-          <a href="#M000363" class="method-signature">
+          <a href="#M000381" class="method-signature">
           <span class="method-name">is_a_resource?</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000363-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000363-source">
+            onclick="toggleCode('M000381-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000381-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/poolparty/resource.rb, line 166</span>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/resource.rb, line 170</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">is_a_resource?</span>
         <span class="ruby-keyword kw">true</span>
       <span class="ruby-keyword kw">end</span>
@@ -589,11 +590,11 @@ otherwise it returns an empty hash
         </div>
       </div>
 
-      <div id="method-M000362" class="method-detail">
-        <a name="M000362"></a>
+      <div id="method-M000380" class="method-detail">
+        <a name="M000380"></a>
 
         <div class="method-heading">
-          <a href="#M000362" class="method-signature">
+          <a href="#M000380" class="method-signature">
           <span class="method-name">is_in_plugin?</span><span class="method-args">()</span>
           </a>
         </div>
@@ -615,10 +616,10 @@ end def printable?
 end
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000362-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000362-source">
+            onclick="toggleCode('M000380-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000380-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/poolparty/resource.rb, line 162</span>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/resource.rb, line 166</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">is_in_plugin?</span>
         <span class="ruby-identifier">parent</span>.<span class="ruby-identifier">is_plugin?</span>
       <span class="ruby-keyword kw">end</span>
@@ -627,21 +628,21 @@ end
         </div>
       </div>
 
-      <div id="method-M000361" class="method-detail">
-        <a name="M000361"></a>
+      <div id="method-M000379" class="method-detail">
+        <a name="M000379"></a>
 
         <div class="method-heading">
-          <a href="#M000361" class="method-signature">
+          <a href="#M000379" class="method-signature">
           <span class="method-name">key</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000361-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000361-source">
+            onclick="toggleCode('M000379-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000379-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/poolparty/resource.rb, line 153</span>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/resource.rb, line 157</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">key</span>
         <span class="ruby-identifier">name</span>
       <span class="ruby-keyword kw">end</span>
@@ -650,11 +651,11 @@ end
         </div>
       </div>
 
-      <div id="method-M000347" class="method-detail">
-        <a name="M000347"></a>
+      <div id="method-M000365" class="method-detail">
+        <a name="M000365"></a>
 
         <div class="method-heading">
-          <a href="#M000347" class="method-signature">
+          <a href="#M000365" class="method-signature">
           <span class="method-name">loaded</span><span class="method-args">(opts={}, &amp;block)</span>
           </a>
         </div>
@@ -665,10 +666,10 @@ Stub, so you can create virtual resources This is called after the resource
 is initialized with the options given to it in the init-block
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000347-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000347-source">
+            onclick="toggleCode('M000365-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000365-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/poolparty/resource.rb, line 92</span>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/resource.rb, line 96</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">loaded</span>(<span class="ruby-identifier">opts</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
       <span class="ruby-keyword kw">end</span>
 </pre>
@@ -676,21 +677,21 @@ is initialized with the options given to it in the init-block
         </div>
       </div>
 
-      <div id="method-M000364" class="method-detail">
-        <a name="M000364"></a>
+      <div id="method-M000382" class="method-detail">
+        <a name="M000382"></a>
 
         <div class="method-heading">
-          <a href="#M000364" class="method-signature">
+          <a href="#M000382" class="method-signature">
           <span class="method-name">method_missing</span><span class="method-args">(m,*a,&amp;block)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000364-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000364-source">
+            onclick="toggleCode('M000382-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000382-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/poolparty/resource.rb, line 170</span>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/resource.rb, line 174</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">method_missing</span>(<span class="ruby-identifier">m</span>,<span class="ruby-operator">*</span><span class="ruby-identifier">a</span>,<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">parent</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">parent</span>.<span class="ruby-identifier">dsl_options</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-identifier">m</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">is_in_plugin?</span>
           <span class="ruby-identifier">parent</span>.<span class="ruby-identifier">send</span> <span class="ruby-identifier">m</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>
@@ -703,21 +704,21 @@ is initialized with the options given to it in the init-block
         </div>
       </div>
 
-      <div id="method-M000349" class="method-detail">
-        <a name="M000349"></a>
+      <div id="method-M000367" class="method-detail">
+        <a name="M000367"></a>
 
         <div class="method-heading">
-          <a href="#M000349" class="method-signature">
+          <a href="#M000367" class="method-signature">
           <span class="method-name">name</span><span class="method-args">(*args)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000349-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000349-source">
+            onclick="toggleCode('M000367-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000367-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/poolparty/resource.rb, line 99</span>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/resource.rb, line 103</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">name</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
         <span class="ruby-identifier">resource_name</span>
       <span class="ruby-keyword kw">end</span>
@@ -726,21 +727,21 @@ is initialized with the options given to it in the init-block
         </div>
       </div>
 
-      <div id="method-M000354" class="method-detail">
-        <a name="M000354"></a>
+      <div id="method-M000372" class="method-detail">
+        <a name="M000372"></a>
 
         <div class="method-heading">
-          <a href="#M000354" class="method-signature">
+          <a href="#M000372" class="method-signature">
           <span class="method-name">resource?</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000354-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000354-source">
+            onclick="toggleCode('M000372-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000372-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/poolparty/resource.rb, line 122</span>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/resource.rb, line 126</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">resource?</span>
         <span class="ruby-keyword kw">true</span>
       <span class="ruby-keyword kw">end</span>
@@ -749,21 +750,21 @@ is initialized with the options given to it in the init-block
         </div>
       </div>
 
-      <div id="method-M000348" class="method-detail">
-        <a name="M000348"></a>
+      <div id="method-M000366" class="method-detail">
+        <a name="M000366"></a>
 
         <div class="method-heading">
-          <a href="#M000348" class="method-signature">
+          <a href="#M000366" class="method-signature">
           <span class="method-name">resource_name</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000348-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000348-source">
+            onclick="toggleCode('M000366-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000366-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/poolparty/resource.rb, line 95</span>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/resource.rb, line 99</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">resource_name</span>
         <span class="ruby-ivar">@resource_name</span> <span class="ruby-operator">||=</span> <span class="ruby-keyword kw">nil</span>
       <span class="ruby-keyword kw">end</span>
@@ -772,11 +773,11 @@ is initialized with the options given to it in the init-block
         </div>
       </div>
 
-      <div id="method-M000351" class="method-detail">
-        <a name="M000351"></a>
+      <div id="method-M000369" class="method-detail">
+        <a name="M000369"></a>
 
         <div class="method-heading">
-          <a href="#M000351" class="method-signature">
+          <a href="#M000369" class="method-signature">
           <span class="method-name">services</span><span class="method-args">()</span>
           </a>
         </div>
@@ -784,14 +785,14 @@ is initialized with the options given to it in the init-block
         <div class="method-description">
           <p>
 We don&#8216;t want to inherit the <a
-href="Resource.html#M000351">services</a> on a resource, as resources are a
-base and should never have <a href="Resource.html#M000351">services</a>.
+href="Resource.html#M000369">services</a> on a resource, as resources are a
+base and should never have <a href="Resource.html#M000369">services</a>.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000351-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000351-source">
+            onclick="toggleCode('M000369-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000369-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/poolparty/resource.rb, line 109</span>
+<span class="ruby-comment cmt"># File lib/poolparty/poolparty/resource.rb, line 113</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">services</span>
       <span class="ruby-keyword kw">end</span>
 </pre>

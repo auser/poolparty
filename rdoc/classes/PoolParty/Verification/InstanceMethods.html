@@ -80,9 +80,9 @@
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000329">passing?</a>&nbsp;&nbsp;
-      <a href="#M000327">verifiers</a>&nbsp;&nbsp;
-      <a href="#M000328">verify</a>&nbsp;&nbsp;
+      <a href="#M000345">passing?</a>&nbsp;&nbsp;
+      <a href="#M000343">verifiers</a>&nbsp;&nbsp;
+      <a href="#M000344">verify</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -104,21 +104,21 @@
     <div id="methods">
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000329" class="method-detail">
-        <a name="M000329"></a>
+      <div id="method-M000345" class="method-detail">
+        <a name="M000345"></a>
 
         <div class="method-heading">
-          <a href="#M000329" class="method-signature">
+          <a href="#M000345" class="method-signature">
           <span class="method-name">passing?</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000329-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000329-source">
+            onclick="toggleCode('M000345-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000345-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/verification/verify.rb, line 21</span>
+<span class="ruby-comment cmt"># File lib/poolparty/verification/verify.rb, line 24</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">passing?</span>
         <span class="ruby-identifier">reset!</span>
         <span class="ruby-identifier">vputs</span> <span class="ruby-value str">&quot;Starting cloud verification&quot;</span>
@@ -135,19 +135,19 @@
         </div>
       </div>
 
-      <div id="method-M000327" class="method-detail">
-        <a name="M000327"></a>
+      <div id="method-M000343" class="method-detail">
+        <a name="M000343"></a>
 
         <div class="method-heading">
-          <a href="#M000327" class="method-signature">
+          <a href="#M000343" class="method-signature">
           <span class="method-name">verifiers</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000327-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000327-source">
+            onclick="toggleCode('M000343-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000343-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/verification/verify.rb, line 14</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">verifiers</span>
@@ -158,23 +158,26 @@
         </div>
       </div>
 
-      <div id="method-M000328" class="method-detail">
-        <a name="M000328"></a>
+      <div id="method-M000344" class="method-detail">
+        <a name="M000344"></a>
 
         <div class="method-heading">
-          <a href="#M000328" class="method-signature">
+          <a href="#M000344" class="method-signature">
           <span class="method-name">verify</span><span class="method-args">(&amp;block)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000328-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000328-source">
+            onclick="toggleCode('M000344-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000344-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/verification/verify.rb, line 17</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">verify</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
         <span class="ruby-identifier">v</span> = <span class="ruby-constant">Verify</span>.<span class="ruby-identifier">new</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+        <span class="ruby-comment cmt"># ugly, todo fix</span>
+        <span class="ruby-identifier">ip</span> = <span class="ruby-identifier">nodes</span>(<span class="ruby-identifier">:status</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;running&quot;</span>).<span class="ruby-identifier">first</span>.<span class="ruby-identifier">ip</span> <span class="ruby-keyword kw">rescue</span> <span class="ruby-value str">&quot;127.0.0.1&quot;</span>
+        <span class="ruby-identifier">v</span>.<span class="ruby-identifier">host</span> = <span class="ruby-identifier">ip</span>
         <span class="ruby-identifier">v</span>.<span class="ruby-identifier">verifiers</span>.<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">verifiers</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">v</span>}
       <span class="ruby-keyword kw">end</span>
 </pre>

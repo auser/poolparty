@@ -88,11 +88,11 @@
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000567">constantize</a>&nbsp;&nbsp;
-      <a href="#M000568">method_missing</a>&nbsp;&nbsp;
-      <a href="#M000564">new</a>&nbsp;&nbsp;
-      <a href="#M000566">passing?</a>&nbsp;&nbsp;
-      <a href="#M000565">verifiers</a>&nbsp;&nbsp;
+      <a href="#M000584">constantize</a>&nbsp;&nbsp;
+      <a href="#M000585">method_missing</a>&nbsp;&nbsp;
+      <a href="#M000581">new</a>&nbsp;&nbsp;
+      <a href="#M000583">passing?</a>&nbsp;&nbsp;
+      <a href="#M000582">verifiers</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -107,6 +107,19 @@
 
 
 
+    <div id="attribute-list">
+      <h3 class="section-bar">Attributes</h3>
+
+      <div class="name-list">
+        <table>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">host</td>
+          <td class="context-item-value">&nbsp;[RW]&nbsp;</td>
+          <td class="context-item-desc"></td>
+        </tr>
+        </table>
+      </div>
+    </div>
       
 
 
@@ -114,21 +127,21 @@
     <div id="methods">
       <h3 class="section-bar">Public Class methods</h3>
 
-      <div id="method-M000564" class="method-detail">
-        <a name="M000564"></a>
+      <div id="method-M000581" class="method-detail">
+        <a name="M000581"></a>
 
         <div class="method-heading">
-          <a href="#M000564" class="method-signature">
+          <a href="#M000581" class="method-signature">
           <span class="method-name">new</span><span class="method-args">(&amp;block)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000564-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000564-source">
+            onclick="toggleCode('M000581-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000581-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/verification/verify.rb, line 44</span>
+<span class="ruby-comment cmt"># File lib/poolparty/verification/verify.rb, line 48</span>
     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
       <span class="ruby-operator">::</span><span class="ruby-constant">PoolParty</span>.<span class="ruby-identifier">require_user_directory</span> <span class="ruby-value str">&quot;verifiers&quot;</span>
       
@@ -141,11 +154,11 @@
 
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000567" class="method-detail">
-        <a name="M000567"></a>
+      <div id="method-M000584" class="method-detail">
+        <a name="M000584"></a>
 
         <div class="method-heading">
-          <a href="#M000567" class="method-signature">
+          <a href="#M000584" class="method-signature">
           <span class="method-name">constantize</span><span class="method-args">(name, base_object=Monitors)</span>
           </a>
         </div>
@@ -156,10 +169,10 @@ Take a string and return a ruby object if a match is found in the
 base_objects namespace.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000567-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000567-source">
+            onclick="toggleCode('M000584-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000584-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/verification/verify.rb, line 58</span>
+<span class="ruby-comment cmt"># File lib/poolparty/verification/verify.rb, line 62</span>
     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">constantize</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">base_object</span>=<span class="ruby-constant">Monitors</span>)
       <span class="ruby-keyword kw">begin</span>
         <span class="ruby-identifier">const</span> = <span class="ruby-identifier">base_object</span>.<span class="ruby-identifier">constants</span>.<span class="ruby-identifier">find</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">cnst</span><span class="ruby-operator">|</span> <span class="ruby-identifier">cnst</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">name</span>.<span class="ruby-identifier">camelcase</span> }
@@ -174,21 +187,21 @@ base_objects namespace.
         </div>
       </div>
 
-      <div id="method-M000568" class="method-detail">
-        <a name="M000568"></a>
+      <div id="method-M000585" class="method-detail">
+        <a name="M000585"></a>
 
         <div class="method-heading">
-          <a href="#M000568" class="method-signature">
+          <a href="#M000585" class="method-signature">
           <span class="method-name">method_missing</span><span class="method-args">(m,*a,&amp;block)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000568-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000568-source">
+            onclick="toggleCode('M000585-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000585-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/verification/verify.rb, line 67</span>
+<span class="ruby-comment cmt"># File lib/poolparty/verification/verify.rb, line 71</span>
     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">method_missing</span> <span class="ruby-identifier">m</span>,<span class="ruby-operator">*</span><span class="ruby-identifier">a</span>,<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>
       <span class="ruby-keyword kw">begin</span>
         <span class="ruby-identifier">verifiers</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">constantize</span>(<span class="ruby-identifier">m</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">capitalize</span>, <span class="ruby-constant">PoolParty</span><span class="ruby-operator">::</span><span class="ruby-constant">Verifiers</span>).<span class="ruby-identifier">new</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
@@ -201,25 +214,25 @@ base_objects namespace.
         </div>
       </div>
 
-      <div id="method-M000566" class="method-detail">
-        <a name="M000566"></a>
+      <div id="method-M000583" class="method-detail">
+        <a name="M000583"></a>
 
         <div class="method-heading">
-          <a href="#M000566" class="method-signature">
+          <a href="#M000583" class="method-signature">
           <span class="method-name">passing?</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Check in with the <a href="Verify.html#M000565">verifiers</a> and make sure
-they are all <a href="Verify.html#M000566">passing?</a>
+Check in with the <a href="Verify.html#M000582">verifiers</a> and make sure
+they are all <a href="Verify.html#M000583">passing?</a>
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000566-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000566-source">
+            onclick="toggleCode('M000583-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000583-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/verification/verify.rb, line 53</span>
+<span class="ruby-comment cmt"># File lib/poolparty/verification/verify.rb, line 57</span>
     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">passing?</span>
       <span class="ruby-identifier">verifiers</span>.<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">raise</span> <span class="ruby-value str">&quot;Not working&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">v</span>.<span class="ruby-identifier">passing?</span> }
     <span class="ruby-keyword kw">end</span>
@@ -228,21 +241,21 @@ they are all <a href="Verify.html#M000566">passing?</a>
         </div>
       </div>
 
-      <div id="method-M000565" class="method-detail">
-        <a name="M000565"></a>
+      <div id="method-M000582" class="method-detail">
+        <a name="M000582"></a>
 
         <div class="method-heading">
-          <a href="#M000565" class="method-signature">
+          <a href="#M000582" class="method-signature">
           <span class="method-name">verifiers</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000565-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000565-source">
+            onclick="toggleCode('M000582-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000582-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/verification/verify.rb, line 50</span>
+<span class="ruby-comment cmt"># File lib/poolparty/verification/verify.rb, line 54</span>
     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">verifiers</span>;<span class="ruby-ivar">@verifiers</span> <span class="ruby-operator">||=</span> [];<span class="ruby-keyword kw">end</span>
 </pre>
           </div>

@@ -88,15 +88,15 @@
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000047">collect_with_index</a>&nbsp;&nbsp;
-      <a href="#M000051">get_named</a>&nbsp;&nbsp;
-      <a href="#M000049">nice_runnable</a>&nbsp;&nbsp;
-      <a href="#M000052">respec_string</a>&nbsp;&nbsp;
-      <a href="#M000048">runnable</a>&nbsp;&nbsp;
-      <a href="#M000053">select_with_hash</a>&nbsp;&nbsp;
-      <a href="#M000046">to_os</a>&nbsp;&nbsp;
-      <a href="#M000050">to_string</a>&nbsp;&nbsp;
-      <a href="#M000054">wrapping_next</a>&nbsp;&nbsp;
+      <a href="#M000048">collect_with_index</a>&nbsp;&nbsp;
+      <a href="#M000052">get_named</a>&nbsp;&nbsp;
+      <a href="#M000050">nice_runnable</a>&nbsp;&nbsp;
+      <a href="#M000053">respec_string</a>&nbsp;&nbsp;
+      <a href="#M000049">runnable</a>&nbsp;&nbsp;
+      <a href="#M000054">select_with_hash</a>&nbsp;&nbsp;
+      <a href="#M000047">to_os</a>&nbsp;&nbsp;
+      <a href="#M000051">to_string</a>&nbsp;&nbsp;
+      <a href="#M000055">wrapping_next</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -118,69 +118,23 @@
     <div id="methods">
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000047" class="method-detail">
-        <a name="M000047"></a>
+      <div id="method-M000048" class="method-detail">
+        <a name="M000048"></a>
 
         <div class="method-heading">
-          <a href="#M000047" class="method-signature">
+          <a href="#M000048" class="method-signature">
           <span class="method-name">collect_with_index</span><span class="method-args">(&amp;block)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000047-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000047-source">
+            onclick="toggleCode('M000048-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000048-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/core/array.rb, line 10</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">collect_with_index</span> <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>
     <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">enum_for</span>(<span class="ruby-identifier">:each_with_index</span>).<span class="ruby-identifier">collect</span> <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>
-  <span class="ruby-keyword kw">end</span>
-</pre>
-          </div>
-        </div>
-      </div>
-
-      <div id="method-M000051" class="method-detail">
-        <a name="M000051"></a>
-
-        <div class="method-heading">
-          <a href="#M000051" class="method-signature">
-          <span class="method-name">get_named</span><span class="method-args">(str=&quot;&quot;)</span>
-          </a>
-        </div>
-      
-        <div class="method-description">
-          <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000051-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000051-source">
-<pre>
-<span class="ruby-comment cmt"># File lib/poolparty/core/array.rb, line 26</span>
-  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_named</span>(<span class="ruby-identifier">str</span>=<span class="ruby-value str">&quot;&quot;</span>)
-    <span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">a</span><span class="ruby-operator">|</span> <span class="ruby-identifier">a</span>.<span class="ruby-identifier">name</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">str</span> <span class="ruby-value">? </span><span class="ruby-identifier">a</span> <span class="ruby-operator">:</span> <span class="ruby-keyword kw">nil</span> }.<span class="ruby-identifier">reject</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">a</span><span class="ruby-operator">|</span> <span class="ruby-identifier">a</span>.<span class="ruby-identifier">nil?</span> }
-  <span class="ruby-keyword kw">end</span>
-</pre>
-          </div>
-        </div>
-      </div>
-
-      <div id="method-M000049" class="method-detail">
-        <a name="M000049"></a>
-
-        <div class="method-heading">
-          <a href="#M000049" class="method-signature">
-          <span class="method-name">nice_runnable</span><span class="method-args">(quiet=true)</span>
-          </a>
-        </div>
-      
-        <div class="method-description">
-          <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000049-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000049-source">
-<pre>
-<span class="ruby-comment cmt"># File lib/poolparty/core/array.rb, line 18</span>
-  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">nice_runnable</span>(<span class="ruby-identifier">quiet</span>=<span class="ruby-keyword kw">true</span>)
-    <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">flatten</span>.<span class="ruby-identifier">reject</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">e</span><span class="ruby-operator">|</span> (<span class="ruby-identifier">e</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">e</span>.<span class="ruby-identifier">empty?</span>) }.<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot; \n &quot;</span>).<span class="ruby-identifier">chomp</span>.<span class="ruby-identifier">nice_runnable</span>(<span class="ruby-identifier">quiet</span>)
   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
@@ -192,7 +146,7 @@
 
         <div class="method-heading">
           <a href="#M000052" class="method-signature">
-          <span class="method-name">respec_string</span><span class="method-args">(ns=[])</span>
+          <span class="method-name">get_named</span><span class="method-args">(str=&quot;&quot;)</span>
           </a>
         </div>
       
@@ -201,32 +155,32 @@
             onclick="toggleCode('M000052-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000052-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/core/array.rb, line 30</span>
-  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">respec_string</span>(<span class="ruby-identifier">ns</span>=[])
-    <span class="ruby-node">&quot;'#{map {|e| e.to_option_string }.join(&quot;', '&quot;)}'&quot;</span>
+<span class="ruby-comment cmt"># File lib/poolparty/core/array.rb, line 26</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_named</span>(<span class="ruby-identifier">str</span>=<span class="ruby-value str">&quot;&quot;</span>)
+    <span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">a</span><span class="ruby-operator">|</span> <span class="ruby-identifier">a</span>.<span class="ruby-identifier">name</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">str</span> <span class="ruby-value">? </span><span class="ruby-identifier">a</span> <span class="ruby-operator">:</span> <span class="ruby-keyword kw">nil</span> }.<span class="ruby-identifier">reject</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">a</span><span class="ruby-operator">|</span> <span class="ruby-identifier">a</span>.<span class="ruby-identifier">nil?</span> }
   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000048" class="method-detail">
-        <a name="M000048"></a>
+      <div id="method-M000050" class="method-detail">
+        <a name="M000050"></a>
 
         <div class="method-heading">
-          <a href="#M000048" class="method-signature">
-          <span class="method-name">runnable</span><span class="method-args">(quiet=true)</span>
+          <a href="#M000050" class="method-signature">
+          <span class="method-name">nice_runnable</span><span class="method-args">(quiet=true)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000048-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000048-source">
+            onclick="toggleCode('M000050-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000050-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/core/array.rb, line 14</span>
-  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">runnable</span>(<span class="ruby-identifier">quiet</span>=<span class="ruby-keyword kw">true</span>)
-    <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot; \n &quot;</span>).<span class="ruby-identifier">runnable</span>(<span class="ruby-identifier">quiet</span>)
+<span class="ruby-comment cmt"># File lib/poolparty/core/array.rb, line 18</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">nice_runnable</span>(<span class="ruby-identifier">quiet</span>=<span class="ruby-keyword kw">true</span>)
+    <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">flatten</span>.<span class="ruby-identifier">reject</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">e</span><span class="ruby-operator">|</span> (<span class="ruby-identifier">e</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">e</span>.<span class="ruby-identifier">empty?</span>) }.<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot; \n &quot;</span>).<span class="ruby-identifier">chomp</span>.<span class="ruby-identifier">nice_runnable</span>(<span class="ruby-identifier">quiet</span>)
   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
@@ -238,6 +192,52 @@
 
         <div class="method-heading">
           <a href="#M000053" class="method-signature">
+          <span class="method-name">respec_string</span><span class="method-args">(ns=[])</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000053-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000053-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/core/array.rb, line 30</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">respec_string</span>(<span class="ruby-identifier">ns</span>=[])
+    <span class="ruby-node">&quot;'#{map {|e| e.to_option_string }.join(&quot;', '&quot;)}'&quot;</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000049" class="method-detail">
+        <a name="M000049"></a>
+
+        <div class="method-heading">
+          <a href="#M000049" class="method-signature">
+          <span class="method-name">runnable</span><span class="method-args">(quiet=true)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000049-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000049-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/core/array.rb, line 14</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">runnable</span>(<span class="ruby-identifier">quiet</span>=<span class="ruby-keyword kw">true</span>)
+    <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot; \n &quot;</span>).<span class="ruby-identifier">runnable</span>(<span class="ruby-identifier">quiet</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000054" class="method-detail">
+        <a name="M000054"></a>
+
+        <div class="method-heading">
+          <a href="#M000054" class="method-signature">
           <span class="method-name">select_with_hash</span><span class="method-args">(conditions={})</span>
           </a>
         </div>
@@ -247,8 +247,8 @@
 Example nodes.select_with_hash(:status=&gt;&#8217;running&#8217;)
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000053-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000053-source">
+            onclick="toggleCode('M000054-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000054-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/core/array.rb, line 34</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">select_with_hash</span>(<span class="ruby-identifier">conditions</span>={})
@@ -264,19 +264,19 @@ Example nodes.select_with_hash(:status=&gt;&#8217;running&#8217;)
         </div>
       </div>
 
-      <div id="method-M000046" class="method-detail">
-        <a name="M000046"></a>
+      <div id="method-M000047" class="method-detail">
+        <a name="M000047"></a>
 
         <div class="method-heading">
-          <a href="#M000046" class="method-signature">
+          <a href="#M000047" class="method-signature">
           <span class="method-name">to_os</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000046-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000046-source">
+            onclick="toggleCode('M000047-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000047-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/core/array.rb, line 6</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_os</span>
@@ -287,19 +287,19 @@ Example nodes.select_with_hash(:status=&gt;&#8217;running&#8217;)
         </div>
       </div>
 
-      <div id="method-M000050" class="method-detail">
-        <a name="M000050"></a>
+      <div id="method-M000051" class="method-detail">
+        <a name="M000051"></a>
 
         <div class="method-heading">
-          <a href="#M000050" class="method-signature">
+          <a href="#M000051" class="method-signature">
           <span class="method-name">to_string</span><span class="method-args">(pre=&quot;&quot;)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000050-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000050-source">
+            onclick="toggleCode('M000051-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000051-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/core/array.rb, line 22</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_string</span>(<span class="ruby-identifier">pre</span>=<span class="ruby-value str">&quot;&quot;</span>)
@@ -310,19 +310,19 @@ Example nodes.select_with_hash(:status=&gt;&#8217;running&#8217;)
         </div>
       </div>
 
-      <div id="method-M000054" class="method-detail">
-        <a name="M000054"></a>
+      <div id="method-M000055" class="method-detail">
+        <a name="M000055"></a>
 
         <div class="method-heading">
-          <a href="#M000054" class="method-signature">
+          <a href="#M000055" class="method-signature">
           <span class="method-name">wrapping_next</span><span class="method-args">(id)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000054-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000054-source">
+            onclick="toggleCode('M000055-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000055-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/core/array.rb, line 43</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">wrapping_next</span>(<span class="ruby-identifier">id</span>)

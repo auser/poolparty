@@ -88,10 +88,17 @@
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000620">current_directory</a>&nbsp;&nbsp;
-      <a href="#M000619">loaded</a>&nbsp;&nbsp;
-      <a href="#M000622">release_directory</a>&nbsp;&nbsp;
-      <a href="#M000621">shared_directory</a>&nbsp;&nbsp;
+      <a href="#M000639">add_user</a>&nbsp;&nbsp;
+      <a href="#M000642">call_deploy</a>&nbsp;&nbsp;
+      <a href="#M000640">create_directory_tree</a>&nbsp;&nbsp;
+      <a href="#M000644">current_directory</a>&nbsp;&nbsp;
+      <a href="#M000638">install_sqlite</a>&nbsp;&nbsp;
+      <a href="#M000636">loaded</a>&nbsp;&nbsp;
+      <a href="#M000646">release_directory</a>&nbsp;&nbsp;
+      <a href="#M000637">require_rails_gems</a>&nbsp;&nbsp;
+      <a href="#M000641">setup_database_yml</a>&nbsp;&nbsp;
+      <a href="#M000643">setup_shared_directory</a>&nbsp;&nbsp;
+      <a href="#M000645">shared_directory</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -113,21 +120,106 @@
     <div id="methods">
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000620" class="method-detail">
-        <a name="M000620"></a>
+      <div id="method-M000639" class="method-detail">
+        <a name="M000639"></a>
 
         <div class="method-heading">
-          <a href="#M000620" class="method-signature">
-          <span class="method-name">current_directory</span><span class="method-args">()</span>
+          <a href="#M000639" class="method-signature">
+          <span class="method-name">add_user</span><span class="method-args">(o)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000620-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000620-source">
+            onclick="toggleCode('M000639-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000639-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/plugins/rails_deploy.rb, line 64</span>
+<span class="ruby-comment cmt"># File lib/poolparty/plugins/rails_deploy.rb, line 49</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">add_user</span>(<span class="ruby-identifier">o</span>)
+        <span class="ruby-identifier">has_user</span> <span class="ruby-identifier">o</span>[<span class="ruby-identifier">:user</span>] <span class="ruby-keyword kw">do</span>
+          <span class="ruby-identifier">comment</span> <span class="ruby-node">&quot;Rails Deploy user #{o[:user]}&quot;</span>
+          <span class="ruby-identifier">home</span> <span class="ruby-identifier">o</span>[<span class="ruby-identifier">:user_dir</span>] <span class="ruby-operator">||</span> <span class="ruby-value str">&quot;/var/www&quot;</span>
+          <span class="ruby-identifier">shell</span> <span class="ruby-value str">&quot;/sbin/nologin&quot;</span>
+          <span class="ruby-identifier">password</span> <span class="ruby-value str">&quot;x&quot;</span>
+        <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000642" class="method-detail">
+        <a name="M000642"></a>
+
+        <div class="method-heading">
+          <a href="#M000642" class="method-signature">
+          <span class="method-name">call_deploy</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000642-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000642-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/plugins/rails_deploy.rb, line 71</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">call_deploy</span>
+        <span class="ruby-identifier">has_package</span> <span class="ruby-value str">&quot;git-core&quot;</span>
+        <span class="ruby-identifier">dopts</span> = <span class="ruby-identifier">options</span>.<span class="ruby-identifier">choose</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span> [<span class="ruby-identifier">:repo</span>, <span class="ruby-identifier">:user</span>, <span class="ruby-identifier">:action</span>].<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">k</span>) }
+        <span class="ruby-identifier">has_chef_deploy</span> <span class="ruby-identifier">dopts</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;#{release_directory}&quot;</span>, <span class="ruby-identifier">:user</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">owner</span>)
+      <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000640" class="method-detail">
+        <a name="M000640"></a>
+
+        <div class="method-heading">
+          <a href="#M000640" class="method-signature">
+          <span class="method-name">create_directory_tree</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000640-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000640-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/plugins/rails_deploy.rb, line 57</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">create_directory_tree</span>
+        <span class="ruby-identifier">has_directory</span> <span class="ruby-identifier">dir</span>
+        <span class="ruby-identifier">has_directory</span> <span class="ruby-identifier">release_directory</span>
+        <span class="ruby-identifier">has_directory</span> <span class="ruby-node">&quot;#{shared_directory}&quot;</span>, <span class="ruby-identifier">:owner</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">owner</span>
+        
+        <span class="ruby-node">%w(config pids log system)</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">d</span><span class="ruby-operator">|</span>
+          <span class="ruby-identifier">has_directory</span> <span class="ruby-node">&quot;#{shared_directory}/#{d}&quot;</span>, <span class="ruby-identifier">:owner</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">owner</span>
+        <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000644" class="method-detail">
+        <a name="M000644"></a>
+
+        <div class="method-heading">
+          <a href="#M000644" class="method-signature">
+          <span class="method-name">current_directory</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+HELPERS
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000644-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000644-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/plugins/rails_deploy.rb, line 91</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">current_directory</span>
         <span class="ruby-node">&quot;#{release_directory}/current&quot;</span>
       <span class="ruby-keyword kw">end</span>
@@ -136,45 +228,152 @@
         </div>
       </div>
 
-      <div id="method-M000619" class="method-detail">
-        <a name="M000619"></a>
+      <div id="method-M000638" class="method-detail">
+        <a name="M000638"></a>
 
         <div class="method-heading">
-          <a href="#M000619" class="method-signature">
+          <a href="#M000638" class="method-signature">
+          <span class="method-name">install_sqlite</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000638-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000638-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/plugins/rails_deploy.rb, line 46</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">install_sqlite</span>
+        <span class="ruby-identifier">has_gem_package</span> <span class="ruby-value str">&quot;sqlite3-ruby&quot;</span>
+      <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000636" class="method-detail">
+        <a name="M000636"></a>
+
+        <div class="method-heading">
+          <a href="#M000636" class="method-signature">
           <span class="method-name">loaded</span><span class="method-args">(o={}, &amp;block)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000619-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000619-source">
+            onclick="toggleCode('M000636-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000636-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/plugins/rails_deploy.rb, line 25</span>
+<span class="ruby-comment cmt"># File lib/poolparty/plugins/rails_deploy.rb, line 26</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">loaded</span>(<span class="ruby-identifier">o</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
         <span class="ruby-identifier">raise</span> <span class="ruby-value str">&quot;You must include the directory to deploy the rails app&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">dir?</span>
         <span class="ruby-identifier">raise</span> <span class="ruby-value str">&quot;You must include the repo to deploy the rails app&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">repo?</span>
         
-        <span class="ruby-identifier">has_package</span> <span class="ruby-value str">&quot;git-core&quot;</span>
-        <span class="ruby-identifier">has_directory</span> <span class="ruby-identifier">dir</span>
-        <span class="ruby-identifier">has_directory</span> <span class="ruby-identifier">release_directory</span>
-        <span class="ruby-identifier">has_directory</span> <span class="ruby-node">&quot;#{shared_directory}&quot;</span>, <span class="ruby-identifier">:owner</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">owner</span>
+        <span class="ruby-identifier">require_rails_gems</span>
+        <span class="ruby-identifier">install_sqlite</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">o</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-identifier">:install_sqlite</span>)
         
-        <span class="ruby-node">%w(config pids log)</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">d</span><span class="ruby-operator">|</span>
-          <span class="ruby-identifier">has_directory</span> <span class="ruby-node">&quot;#{shared_directory}/#{d}&quot;</span>, <span class="ruby-identifier">:owner</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">owner</span>
-        <span class="ruby-keyword kw">end</span>
+        <span class="ruby-identifier">create_directory_tree</span>
+        <span class="ruby-identifier">setup_database_yml</span>        
+        <span class="ruby-identifier">call_deploy</span>
         
+        <span class="ruby-identifier">setup_shared_directory</span>
+        
+      <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000646" class="method-detail">
+        <a name="M000646"></a>
+
+        <div class="method-heading">
+          <a href="#M000646" class="method-signature">
+          <span class="method-name">release_directory</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000646-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000646-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/plugins/rails_deploy.rb, line 97</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">release_directory</span>
+        <span class="ruby-node">&quot;#{dir}/#{name}&quot;</span>
+      <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000637" class="method-detail">
+        <a name="M000637"></a>
+
+        <div class="method-heading">
+          <a href="#M000637" class="method-signature">
+          <span class="method-name">require_rails_gems</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000637-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000637-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/plugins/rails_deploy.rb, line 41</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">require_rails_gems</span>
+        <span class="ruby-node">%w(rails actionmailer actionpack activerecord activesupport activeresource)</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">rails_gem</span><span class="ruby-operator">|</span>
+          <span class="ruby-identifier">has_gem_package</span> <span class="ruby-identifier">rails_gem</span>
+        <span class="ruby-keyword kw">end</span>        
+      <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000641" class="method-detail">
+        <a name="M000641"></a>
+
+        <div class="method-heading">
+          <a href="#M000641" class="method-signature">
+          <span class="method-name">setup_database_yml</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000641-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000641-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/plugins/rails_deploy.rb, line 66</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">setup_database_yml</span>
         <span class="ruby-identifier">has_file</span> <span class="ruby-node">&quot;#{shared_directory}/config/database.yml&quot;</span>, <span class="ruby-identifier">:owner</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">owner</span> <span class="ruby-keyword kw">do</span>
           <span class="ruby-identifier">content</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">file?</span>(<span class="ruby-identifier">database_yml</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">open</span>(<span class="ruby-identifier">database_yml</span>).<span class="ruby-identifier">read</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">database_yml</span>
         <span class="ruby-keyword kw">end</span>
-        
-        <span class="ruby-comment cmt"># Should these be here?</span>
-        <span class="ruby-identifier">has_chef_recipe</span> <span class="ruby-value str">&quot;apache2&quot;</span>
-        <span class="ruby-identifier">has_chef_recipe</span> <span class="ruby-value str">&quot;apache2::mod_rails&quot;</span>
-          
-        <span class="ruby-identifier">dopts</span> = <span class="ruby-identifier">options</span>.<span class="ruby-identifier">choose</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span> [<span class="ruby-identifier">:repo</span>, <span class="ruby-identifier">:user</span>].<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">k</span>)}
-        <span class="ruby-identifier">has_chef_deploy</span> <span class="ruby-identifier">dopts</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;#{release_directory}&quot;</span>)
-        
+      <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000643" class="method-detail">
+        <a name="M000643"></a>
+
+        <div class="method-heading">
+          <a href="#M000643" class="method-signature">
+          <span class="method-name">setup_shared_directory</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000643-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000643-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/plugins/rails_deploy.rb, line 76</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">setup_shared_directory</span>
         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">shared?</span>
           <span class="ruby-identifier">shared</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">sh</span><span class="ruby-operator">|</span>
             
@@ -187,51 +386,27 @@
             <span class="ruby-identifier">has_symlink</span> <span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;#{current_directory}/#{sh}&quot;</span>, <span class="ruby-identifier">:to</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;#{shared_directory}/#{sh}&quot;</span>
           <span class="ruby-keyword kw">end</span>
         <span class="ruby-keyword kw">end</span>
-        
       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000622" class="method-detail">
-        <a name="M000622"></a>
+      <div id="method-M000645" class="method-detail">
+        <a name="M000645"></a>
 
         <div class="method-heading">
-          <a href="#M000622" class="method-signature">
-          <span class="method-name">release_directory</span><span class="method-args">()</span>
-          </a>
-        </div>
-      
-        <div class="method-description">
-          <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000622-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000622-source">
-<pre>
-<span class="ruby-comment cmt"># File lib/poolparty/plugins/rails_deploy.rb, line 70</span>
-      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">release_directory</span>
-        <span class="ruby-node">&quot;#{dir}/#{name}&quot;</span>
-      <span class="ruby-keyword kw">end</span>
-</pre>
-          </div>
-        </div>
-      </div>
-
-      <div id="method-M000621" class="method-detail">
-        <a name="M000621"></a>
-
-        <div class="method-heading">
-          <a href="#M000621" class="method-signature">
+          <a href="#M000645" class="method-signature">
           <span class="method-name">shared_directory</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000621-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000621-source">
+            onclick="toggleCode('M000645-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000645-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/plugins/rails_deploy.rb, line 67</span>
+<span class="ruby-comment cmt"># File lib/poolparty/plugins/rails_deploy.rb, line 94</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">shared_directory</span>
         <span class="ruby-node">&quot;#{release_directory}/shared&quot;</span>
       <span class="ruby-keyword kw">end</span>

@@ -88,26 +88,26 @@
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000060">[]</a>&nbsp;&nbsp;
-      <a href="#M000061">[]=</a>&nbsp;&nbsp;
-      <a href="#M000071">clear</a>&nbsp;&nbsp;
-      <a href="#M000072">delete</a>&nbsp;&nbsp;
-      <a href="#M000074">delete_if</a>&nbsp;&nbsp;
-      <a href="#M000068">each</a>&nbsp;&nbsp;
-      <a href="#M000070">each_key</a>&nbsp;&nbsp;
-      <a href="#M000069">each_value</a>&nbsp;&nbsp;
-      <a href="#M000064">has_key?</a>&nbsp;&nbsp;
-      <a href="#M000063">keys</a>&nbsp;&nbsp;
-      <a href="#M000062">merge</a>&nbsp;&nbsp;
-      <a href="#M000067">merge!</a>&nbsp;&nbsp;
-      <a href="#M000075">method_missing</a>&nbsp;&nbsp;
-      <a href="#M000059">new</a>&nbsp;&nbsp;
-      <a href="#M000073">reject!</a>&nbsp;&nbsp;
-      <a href="#M000066">size</a>&nbsp;&nbsp;
-      <a href="#M000077">to_h</a>&nbsp;&nbsp;
-      <a href="#M000076">to_hash</a>&nbsp;&nbsp;
-      <a href="#M000078">to_json</a>&nbsp;&nbsp;
-      <a href="#M000065">values</a>&nbsp;&nbsp;
+      <a href="#M000061">[]</a>&nbsp;&nbsp;
+      <a href="#M000062">[]=</a>&nbsp;&nbsp;
+      <a href="#M000072">clear</a>&nbsp;&nbsp;
+      <a href="#M000073">delete</a>&nbsp;&nbsp;
+      <a href="#M000075">delete_if</a>&nbsp;&nbsp;
+      <a href="#M000069">each</a>&nbsp;&nbsp;
+      <a href="#M000071">each_key</a>&nbsp;&nbsp;
+      <a href="#M000070">each_value</a>&nbsp;&nbsp;
+      <a href="#M000065">has_key?</a>&nbsp;&nbsp;
+      <a href="#M000064">keys</a>&nbsp;&nbsp;
+      <a href="#M000063">merge</a>&nbsp;&nbsp;
+      <a href="#M000068">merge!</a>&nbsp;&nbsp;
+      <a href="#M000076">method_missing</a>&nbsp;&nbsp;
+      <a href="#M000060">new</a>&nbsp;&nbsp;
+      <a href="#M000074">reject!</a>&nbsp;&nbsp;
+      <a href="#M000067">size</a>&nbsp;&nbsp;
+      <a href="#M000078">to_h</a>&nbsp;&nbsp;
+      <a href="#M000077">to_hash</a>&nbsp;&nbsp;
+      <a href="#M000079">to_json</a>&nbsp;&nbsp;
+      <a href="#M000066">values</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -136,19 +136,19 @@
     <div id="methods">
       <h3 class="section-bar">Public Class methods</h3>
 
-      <div id="method-M000059" class="method-detail">
-        <a name="M000059"></a>
+      <div id="method-M000060" class="method-detail">
+        <a name="M000060"></a>
 
         <div class="method-heading">
-          <a href="#M000059" class="method-signature">
+          <a href="#M000060" class="method-signature">
           <span class="method-name">new</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000059-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000059-source">
+            onclick="toggleCode('M000060-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000060-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/core/ordered_hash.rb, line 8</span>
         <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>
@@ -162,35 +162,12 @@
 
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000060" class="method-detail">
-        <a name="M000060"></a>
-
-        <div class="method-heading">
-          <a href="#M000060" class="method-signature">
-          <span class="method-name">[]</span><span class="method-args">(k)</span>
-          </a>
-        </div>
-      
-        <div class="method-description">
-          <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000060-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000060-source">
-<pre>
-<span class="ruby-comment cmt"># File lib/poolparty/core/ordered_hash.rb, line 12</span>
-        <span class="ruby-keyword kw">def</span> <span class="ruby-operator">[]</span>(<span class="ruby-identifier">k</span>)
-                <span class="ruby-ivar">@h</span>[<span class="ruby-identifier">k</span>]
-        <span class="ruby-keyword kw">end</span>
-</pre>
-          </div>
-        </div>
-      </div>
-
       <div id="method-M000061" class="method-detail">
         <a name="M000061"></a>
 
         <div class="method-heading">
           <a href="#M000061" class="method-signature">
-          <span class="method-name">[]=</span><span class="method-args">(k,v)</span>
+          <span class="method-name">[]</span><span class="method-args">(k)</span>
           </a>
         </div>
       
@@ -199,200 +176,9 @@
             onclick="toggleCode('M000061-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000061-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/core/ordered_hash.rb, line 15</span>
-        <span class="ruby-keyword kw">def</span> <span class="ruby-operator">[]=</span>(<span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span>)
-                <span class="ruby-ivar">@a</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">k</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@h</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-identifier">k</span>)
-                <span class="ruby-ivar">@h</span>[<span class="ruby-identifier">k</span>] = <span class="ruby-identifier">v</span>
-        <span class="ruby-keyword kw">end</span>
-</pre>
-          </div>
-        </div>
-      </div>
-
-      <div id="method-M000071" class="method-detail">
-        <a name="M000071"></a>
-
-        <div class="method-heading">
-          <a href="#M000071" class="method-signature">
-          <span class="method-name">clear</span><span class="method-args">()</span>
-          </a>
-        </div>
-      
-        <div class="method-description">
-          <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000071-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000071-source">
-<pre>
-<span class="ruby-comment cmt"># File lib/poolparty/core/ordered_hash.rb, line 50</span>
-        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">clear</span>
-                <span class="ruby-ivar">@a</span>.<span class="ruby-identifier">clear</span>
-                <span class="ruby-ivar">@h</span>.<span class="ruby-identifier">clear</span>
-        <span class="ruby-keyword kw">end</span>
-</pre>
-          </div>
-        </div>
-      </div>
-
-      <div id="method-M000072" class="method-detail">
-        <a name="M000072"></a>
-
-        <div class="method-heading">
-          <a href="#M000072" class="method-signature">
-          <span class="method-name">delete</span><span class="method-args">(k, &amp;block)</span>
-          </a>
-        </div>
-      
-        <div class="method-description">
-          <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000072-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000072-source">
-<pre>
-<span class="ruby-comment cmt"># File lib/poolparty/core/ordered_hash.rb, line 54</span>
-        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">delete</span>(<span class="ruby-identifier">k</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
-                <span class="ruby-ivar">@a</span>.<span class="ruby-identifier">delete</span> <span class="ruby-identifier">k</span>
-                <span class="ruby-ivar">@h</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">k</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
-        <span class="ruby-keyword kw">end</span>
-</pre>
-          </div>
-        </div>
-      </div>
-
-      <div id="method-M000074" class="method-detail">
-        <a name="M000074"></a>
-
-        <div class="method-heading">
-          <a href="#M000074" class="method-signature">
-          <span class="method-name">delete_if</span><span class="method-args">(&amp;block)</span>
-          </a>
-        </div>
-      
-        <div class="method-description">
-          <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000074-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000074-source">
-<pre>
-<span class="ruby-comment cmt"># File lib/poolparty/core/ordered_hash.rb, line 64</span>
-        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">delete_if</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
-                <span class="ruby-identifier">reject!</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
-                <span class="ruby-keyword kw">self</span>
-        <span class="ruby-keyword kw">end</span>
-</pre>
-          </div>
-        </div>
-      </div>
-
-      <div id="method-M000068" class="method-detail">
-        <a name="M000068"></a>
-
-        <div class="method-heading">
-          <a href="#M000068" class="method-signature">
-          <span class="method-name">each</span><span class="method-args">() {|k,@h[k]| ...}</span>
-          </a>
-        </div>
-      
-        <div class="method-description">
-          <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000068-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000068-source">
-<pre>
-<span class="ruby-comment cmt"># File lib/poolparty/core/ordered_hash.rb, line 39</span>
-        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">each</span>
-                <span class="ruby-ivar">@a</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">k</span><span class="ruby-operator">|</span> <span class="ruby-keyword kw">yield</span> <span class="ruby-identifier">k</span>,<span class="ruby-ivar">@h</span>[<span class="ruby-identifier">k</span>] }
-        <span class="ruby-keyword kw">end</span>
-</pre>
-          </div>
-        </div>
-      </div>
-
-      <div id="method-M000070" class="method-detail">
-        <a name="M000070"></a>
-
-        <div class="method-heading">
-          <a href="#M000070" class="method-signature">
-          <span class="method-name">each_key</span><span class="method-args">() {|k| ...}</span>
-          </a>
-        </div>
-      
-        <div class="method-description">
-          <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000070-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000070-source">
-<pre>
-<span class="ruby-comment cmt"># File lib/poolparty/core/ordered_hash.rb, line 47</span>
-        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">each_key</span>
-                <span class="ruby-ivar">@a</span>.<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">k</span><span class="ruby-operator">|</span> <span class="ruby-keyword kw">yield</span> <span class="ruby-identifier">k</span>}
-        <span class="ruby-keyword kw">end</span>
-</pre>
-          </div>
-        </div>
-      </div>
-
-      <div id="method-M000069" class="method-detail">
-        <a name="M000069"></a>
-
-        <div class="method-heading">
-          <a href="#M000069" class="method-signature">
-          <span class="method-name">each_value</span><span class="method-args">() {|@h[k]| ...}</span>
-          </a>
-        </div>
-      
-        <div class="method-description">
-          <p>
-TODO: Need specs below here
-</p>
-          <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000069-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000069-source">
-<pre>
-<span class="ruby-comment cmt"># File lib/poolparty/core/ordered_hash.rb, line 44</span>
-        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">each_value</span>
-                <span class="ruby-ivar">@a</span>.<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">k</span><span class="ruby-operator">|</span> <span class="ruby-keyword kw">yield</span>(<span class="ruby-ivar">@h</span>[<span class="ruby-identifier">k</span>])}
-        <span class="ruby-keyword kw">end</span>
-</pre>
-          </div>
-        </div>
-      </div>
-
-      <div id="method-M000064" class="method-detail">
-        <a name="M000064"></a>
-
-        <div class="method-heading">
-          <a href="#M000064" class="method-signature">
-          <span class="method-name">has_key?</span><span class="method-args">(k)</span>
-          </a>
-        </div>
-      
-        <div class="method-description">
-          <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000064-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000064-source">
-<pre>
-<span class="ruby-comment cmt"># File lib/poolparty/core/ordered_hash.rb, line 27</span>
-        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">has_key?</span>(<span class="ruby-identifier">k</span>)
-         
-        <span class="ruby-keyword kw">end</span>
-</pre>
-          </div>
-        </div>
-      </div>
-
-      <div id="method-M000063" class="method-detail">
-        <a name="M000063"></a>
-
-        <div class="method-heading">
-          <a href="#M000063" class="method-signature">
-          <span class="method-name">keys</span><span class="method-args">()</span>
-          </a>
-        </div>
-      
-        <div class="method-description">
-          <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000063-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000063-source">
-<pre>
-<span class="ruby-comment cmt"># File lib/poolparty/core/ordered_hash.rb, line 24</span>
-        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">keys</span>
-                <span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">k</span> }
+<span class="ruby-comment cmt"># File lib/poolparty/core/ordered_hash.rb, line 12</span>
+        <span class="ruby-keyword kw">def</span> <span class="ruby-operator">[]</span>(<span class="ruby-identifier">k</span>)
+                <span class="ruby-ivar">@h</span>[<span class="ruby-identifier">k</span>]
         <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
@@ -404,7 +190,7 @@ TODO: Need specs below here
 
         <div class="method-heading">
           <a href="#M000062" class="method-signature">
-          <span class="method-name">merge</span><span class="method-args">(o={})</span>
+          <span class="method-name">[]=</span><span class="method-args">(k,v)</span>
           </a>
         </div>
       
@@ -412,6 +198,220 @@ TODO: Need specs below here
           <p><a class="source-toggle" href="#"
             onclick="toggleCode('M000062-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000062-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/core/ordered_hash.rb, line 15</span>
+        <span class="ruby-keyword kw">def</span> <span class="ruby-operator">[]=</span>(<span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span>)
+                <span class="ruby-ivar">@a</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">k</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@h</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-identifier">k</span>)
+                <span class="ruby-ivar">@h</span>[<span class="ruby-identifier">k</span>] = <span class="ruby-identifier">v</span>
+        <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000072" class="method-detail">
+        <a name="M000072"></a>
+
+        <div class="method-heading">
+          <a href="#M000072" class="method-signature">
+          <span class="method-name">clear</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000072-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000072-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/core/ordered_hash.rb, line 50</span>
+        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">clear</span>
+                <span class="ruby-ivar">@a</span>.<span class="ruby-identifier">clear</span>
+                <span class="ruby-ivar">@h</span>.<span class="ruby-identifier">clear</span>
+        <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000073" class="method-detail">
+        <a name="M000073"></a>
+
+        <div class="method-heading">
+          <a href="#M000073" class="method-signature">
+          <span class="method-name">delete</span><span class="method-args">(k, &amp;block)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000073-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000073-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/core/ordered_hash.rb, line 54</span>
+        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">delete</span>(<span class="ruby-identifier">k</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+                <span class="ruby-ivar">@a</span>.<span class="ruby-identifier">delete</span> <span class="ruby-identifier">k</span>
+                <span class="ruby-ivar">@h</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">k</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+        <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000075" class="method-detail">
+        <a name="M000075"></a>
+
+        <div class="method-heading">
+          <a href="#M000075" class="method-signature">
+          <span class="method-name">delete_if</span><span class="method-args">(&amp;block)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000075-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000075-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/core/ordered_hash.rb, line 64</span>
+        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">delete_if</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+                <span class="ruby-identifier">reject!</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+                <span class="ruby-keyword kw">self</span>
+        <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000069" class="method-detail">
+        <a name="M000069"></a>
+
+        <div class="method-heading">
+          <a href="#M000069" class="method-signature">
+          <span class="method-name">each</span><span class="method-args">() {|k,@h[k]| ...}</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000069-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000069-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/core/ordered_hash.rb, line 39</span>
+        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">each</span>
+                <span class="ruby-ivar">@a</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">k</span><span class="ruby-operator">|</span> <span class="ruby-keyword kw">yield</span> <span class="ruby-identifier">k</span>,<span class="ruby-ivar">@h</span>[<span class="ruby-identifier">k</span>] }
+        <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000071" class="method-detail">
+        <a name="M000071"></a>
+
+        <div class="method-heading">
+          <a href="#M000071" class="method-signature">
+          <span class="method-name">each_key</span><span class="method-args">() {|k| ...}</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000071-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000071-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/core/ordered_hash.rb, line 47</span>
+        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">each_key</span>
+                <span class="ruby-ivar">@a</span>.<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">k</span><span class="ruby-operator">|</span> <span class="ruby-keyword kw">yield</span> <span class="ruby-identifier">k</span>}
+        <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000070" class="method-detail">
+        <a name="M000070"></a>
+
+        <div class="method-heading">
+          <a href="#M000070" class="method-signature">
+          <span class="method-name">each_value</span><span class="method-args">() {|@h[k]| ...}</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+TODO: Need specs below here
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000070-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000070-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/core/ordered_hash.rb, line 44</span>
+        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">each_value</span>
+                <span class="ruby-ivar">@a</span>.<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">k</span><span class="ruby-operator">|</span> <span class="ruby-keyword kw">yield</span>(<span class="ruby-ivar">@h</span>[<span class="ruby-identifier">k</span>])}
+        <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000065" class="method-detail">
+        <a name="M000065"></a>
+
+        <div class="method-heading">
+          <a href="#M000065" class="method-signature">
+          <span class="method-name">has_key?</span><span class="method-args">(k)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000065-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000065-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/core/ordered_hash.rb, line 27</span>
+        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">has_key?</span>(<span class="ruby-identifier">k</span>)
+         
+        <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000064" class="method-detail">
+        <a name="M000064"></a>
+
+        <div class="method-heading">
+          <a href="#M000064" class="method-signature">
+          <span class="method-name">keys</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000064-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000064-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/core/ordered_hash.rb, line 24</span>
+        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">keys</span>
+                <span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">k</span> }
+        <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000063" class="method-detail">
+        <a name="M000063"></a>
+
+        <div class="method-heading">
+          <a href="#M000063" class="method-signature">
+          <span class="method-name">merge</span><span class="method-args">(o={})</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000063-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000063-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/core/ordered_hash.rb, line 19</span>
         <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">merge</span>(<span class="ruby-identifier">o</span>={})
@@ -424,19 +424,19 @@ TODO: Need specs below here
         </div>
       </div>
 
-      <div id="method-M000067" class="method-detail">
-        <a name="M000067"></a>
+      <div id="method-M000068" class="method-detail">
+        <a name="M000068"></a>
 
         <div class="method-heading">
-          <a href="#M000067" class="method-signature">
+          <a href="#M000068" class="method-signature">
           <span class="method-name">merge!</span><span class="method-args">(o={})</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000067-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000067-source">
+            onclick="toggleCode('M000068-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000068-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/core/ordered_hash.rb, line 36</span>
         <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">merge!</span>(<span class="ruby-identifier">o</span>={})
@@ -447,19 +447,19 @@ TODO: Need specs below here
         </div>
       </div>
 
-      <div id="method-M000075" class="method-detail">
-        <a name="M000075"></a>
+      <div id="method-M000076" class="method-detail">
+        <a name="M000076"></a>
 
         <div class="method-heading">
-          <a href="#M000075" class="method-signature">
+          <a href="#M000076" class="method-signature">
           <span class="method-name">method_missing</span><span class="method-args">(*args)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000075-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000075-source">
+            onclick="toggleCode('M000076-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000076-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/core/ordered_hash.rb, line 68</span>
         <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">method_missing</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
@@ -470,19 +470,19 @@ TODO: Need specs below here
         </div>
       </div>
 
-      <div id="method-M000073" class="method-detail">
-        <a name="M000073"></a>
+      <div id="method-M000074" class="method-detail">
+        <a name="M000074"></a>
 
         <div class="method-heading">
-          <a href="#M000073" class="method-signature">
+          <a href="#M000074" class="method-signature">
           <span class="method-name">reject!</span><span class="method-args">() {|k,v| ...}</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000073-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000073-source">
+            onclick="toggleCode('M000074-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000074-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/core/ordered_hash.rb, line 58</span>
         <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">reject!</span>
@@ -496,69 +496,23 @@ TODO: Need specs below here
         </div>
       </div>
 
-      <div id="method-M000066" class="method-detail">
-        <a name="M000066"></a>
+      <div id="method-M000067" class="method-detail">
+        <a name="M000067"></a>
 
         <div class="method-heading">
-          <a href="#M000066" class="method-signature">
+          <a href="#M000067" class="method-signature">
           <span class="method-name">size</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000066-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000066-source">
+            onclick="toggleCode('M000067-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000067-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/core/ordered_hash.rb, line 33</span>
         <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">size</span>
                 <span class="ruby-ivar">@h</span>.<span class="ruby-identifier">size</span>
-        <span class="ruby-keyword kw">end</span>
-</pre>
-          </div>
-        </div>
-      </div>
-
-      <div id="method-M000077" class="method-detail">
-        <a name="M000077"></a>
-
-        <div class="method-heading">
-          <a href="#M000077" class="method-signature">
-          <span class="method-name">to_h</span><span class="method-args">()</span>
-          </a>
-        </div>
-      
-        <div class="method-description">
-          <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000077-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000077-source">
-<pre>
-<span class="ruby-comment cmt"># File lib/poolparty/core/ordered_hash.rb, line 74</span>
-        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_h</span>
-                <span class="ruby-keyword kw">self</span>
-        <span class="ruby-keyword kw">end</span>
-</pre>
-          </div>
-        </div>
-      </div>
-
-      <div id="method-M000076" class="method-detail">
-        <a name="M000076"></a>
-
-        <div class="method-heading">
-          <a href="#M000076" class="method-signature">
-          <span class="method-name">to_hash</span><span class="method-args">()</span>
-          </a>
-        </div>
-      
-        <div class="method-description">
-          <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000076-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000076-source">
-<pre>
-<span class="ruby-comment cmt"># File lib/poolparty/core/ordered_hash.rb, line 71</span>
-        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_hash</span>
-                <span class="ruby-keyword kw">self</span>
         <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
@@ -570,7 +524,7 @@ TODO: Need specs below here
 
         <div class="method-heading">
           <a href="#M000078" class="method-signature">
-          <span class="method-name">to_json</span><span class="method-args">()</span>
+          <span class="method-name">to_h</span><span class="method-args">()</span>
           </a>
         </div>
       
@@ -578,6 +532,52 @@ TODO: Need specs below here
           <p><a class="source-toggle" href="#"
             onclick="toggleCode('M000078-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000078-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/core/ordered_hash.rb, line 74</span>
+        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_h</span>
+                <span class="ruby-keyword kw">self</span>
+        <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000077" class="method-detail">
+        <a name="M000077"></a>
+
+        <div class="method-heading">
+          <a href="#M000077" class="method-signature">
+          <span class="method-name">to_hash</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000077-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000077-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/core/ordered_hash.rb, line 71</span>
+        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_hash</span>
+                <span class="ruby-keyword kw">self</span>
+        <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000079" class="method-detail">
+        <a name="M000079"></a>
+
+        <div class="method-heading">
+          <a href="#M000079" class="method-signature">
+          <span class="method-name">to_json</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000079-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000079-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/core/ordered_hash.rb, line 77</span>
         <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_json</span>
@@ -589,19 +589,19 @@ TODO: Need specs below here
         </div>
       </div>
 
-      <div id="method-M000065" class="method-detail">
-        <a name="M000065"></a>
+      <div id="method-M000066" class="method-detail">
+        <a name="M000066"></a>
 
         <div class="method-heading">
-          <a href="#M000065" class="method-signature">
+          <a href="#M000066" class="method-signature">
           <span class="method-name">values</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000065-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000065-source">
+            onclick="toggleCode('M000066-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000066-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/poolparty/core/ordered_hash.rb, line 30</span>
         <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">values</span>
