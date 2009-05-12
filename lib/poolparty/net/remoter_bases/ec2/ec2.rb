@@ -91,7 +91,7 @@ module PoolParty
             :name => inst_name,
             :hostname => h[:ip],
             :ip => h[:ip].convert_from_ec2_to_ip,
-            :index => i,  #TODO MF get the instance id from the aws result instead
+            :index => i,  #TODO get the instance id from the aws result instead
             :launching_time => (h[:launching_time])
           })
         end.compact.sort {|a,b| a[:index] <=> b[:index] }

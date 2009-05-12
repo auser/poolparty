@@ -22,6 +22,7 @@ module PoolParty
     
     class Cloud < PoolParty::PoolPartyBaseClass
       attr_reader :templates, :cloud_name, :remote_base
+      attr_accessor :started_instance
 
       include CloudResourcer
       include PoolParty::PluginModel
@@ -36,10 +37,6 @@ module PoolParty
       include PoolParty::Verification
       # include PoolParty::Monitors
 
-      def verbose
-        true
-      end
-      
       def self.immutable_methods
         [:name]
       end
@@ -51,10 +48,22 @@ module PoolParty
       
       alias :name :cloud_name
       
-      # Call the remoter commands on the cloud if they don't exist on the cloud itself
-      # This gives the cloud access to the remote_base's methods
+      # Call the remoter commands on the remoter_base if they don't exist on the cloud itself.
+      # This gives the cloud access to the remote_base's methods.
       def method_missing(m, *args, &block)
-        remote_base.respond_to?(m) ? remote_base.send(m, *args, &block) : super
+        if remote_base.respond_to?(m)
+          remoter_opts = dsl_options.merge(remote_base.dsl_options).choose do |k,v|
+             remote_base.dsl_options.has_key?(k)
+          end
+          if args.size==1 && args.first.respond_to?(:merge)
+            new_args = [remoter_opts.merge args.first]
+          else
+            new_args = args.push(remoter_opts)
+          end
+          remote_base.send(m, *(new_args), &block)
+        else
+          super
+        end
       end
       
       # Default set of options. Most take the Default options from the default class
@@ -67,7 +76,8 @@ module PoolParty
         :secret_access_key => Default.secret_access_key,
         :ec2_dir => ENV["EC2_HOME"],
         :minimum_runtime => Default.minimum_runtime,
-        :user => Default.user
+        :user => Default.user,
+        :using_remoter_base => Default.remoter_base
       )
       
       additional_callbacks [
@@ -98,7 +108,7 @@ module PoolParty
         # context_stack.push self
         # TODO: PUT BACK IN
         # (parent ? parent : self).
-        add_poolparty_base_requirements
+        # add_poolparty_base_requirements
         # this can be overridden in the spec, but ec2 is the default        
         # context_stack.pop
       end
@@ -121,10 +131,18 @@ module PoolParty
       end
       
       # setup defaults for the cloud
-      def setup_defaults        
-        options[:keypair] ||= keypair rescue nil
-        options[:rules] = {:expand => dsl_options[:expand_when], :contract => dsl_options[:contract_when]}
+      def setup_defaults
+        options[:keypair_name] = keypair.basename
+        options[:keypair_path] = keypair.full_filepath
+        
+        options[:rules] = {:expand => dsl_options[:expand_when], :contract => dsl_options[:contract_when]}        
+        
         set_dependency_resolver 'chef'
+        if using_remoter_base.size > 1
+          _using using_remoter_base[0], &using_remoter_base[1]
+        else
+          _using using_remoter_base[0]
+        end        
       end
       
       def after_launch_instance(inst=nil)
@@ -177,7 +195,7 @@ module PoolParty
       def build_manifest
         vputs "Building manifest"
         @build_manifest ||= build_from_existing_file
-        unless @build_manifest          
+        unless @build_manifest
           props = to_properties_hash
           
           @build_manifest =  options[:dependency_resolver].send(:compile, props, self)
@@ -204,6 +222,10 @@ module PoolParty
         output = to_properties_hash.to_json
         ::File.open("#{file_path}/#{file_name}", "w") {|f| f.write output }
         true
+      end
+      
+      def to_json
+        to_properties_hash.to_json
       end
       
       # Add all the poolparty requirements here
