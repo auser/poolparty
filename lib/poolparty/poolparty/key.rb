@@ -30,6 +30,21 @@ module PoolParty
     end
     alias :to_s :full_filepath
     
+    #TODO: gracefully handle the case when a passpharase is needed
+    # Generate a public key from the private key
+    def public_key
+      if !@public_key_string || @public_key_string.empty?
+         @public_key_string = `ssh-keygen -y -f #{full_filepath}`
+         raise 'Unable to generate public_key_string' if @public_key_string.empty?
+      else
+        @public_key_string
+      end
+    end
+    
+    def public_key=(str)
+       @public_key_string = str
+    end
+    
     # Basename of the keypair
     def basename
       @basename ||= ::File.basename(full_filepath, ::File.extname(full_filepath)) rescue filepath

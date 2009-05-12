@@ -26,11 +26,14 @@ module PoolParty
       include               Dslify
       include  ::PoolParty::Remote
       
-      dsl_methods :cloud                # The cloud this remoter_base is a part of
+      attr_reader :cloud
       
-      def initialize(opts={}, &block)
-        set_vars_from_options opts
+      dsl_methods :keypair          # Name of the keypair we'll be using
+      
+      def initialize(prnt, opts={}, &block)
+        set_vars_from_options prnt.dsl_options.merge(opts) if prnt && prnt.respond_to?(:dsl_options)
         instance_eval &block if block
+        @cloud = prnt
       end
       
       def self.inherited(arg)
@@ -53,24 +56,24 @@ module PoolParty
       # An exception will be raised and poolparty will explode into tiny little 
       # pieces. Don't forget to overwrite these methods
       # Launch a new instance
-      def self.launch_new_instance!(o={})
-        new(o).launch_new_instance!(o)
+      def self.launch_new_instance!(cld, o={})
+        new(cld, o).launch_new_instance!(o)
       end
       def launch_new_instance!(o={})
         raise RemoteException.new(:method_not_defined, "launch_new_instance!")        
       end
       
       # Terminate an instance by id
-      def self.terminate_instance!(o={})
-        new(o).terminate_instance!(o)
+      def self.terminate_instance!(cld, o={})
+        new(cld, o).terminate_instance!(o)
       end
       def terminate_instance!(o={})        
         raise RemoteException.new(:method_not_defined, "terminate_instance!")
       end
       
       # Describe an instance's status
-      def self.describe_instance(o={})
-        new(o).describe_instance(o) 
+      def self.describe_instance(cld, o={})
+        new(cld, o).describe_instance(o) 
       end
       def describe_instance(o={})
         raise RemoteException.new(:method_not_defined, "describe_instance")
@@ -78,8 +81,8 @@ module PoolParty
       
       # Get instances
       # The instances must have a status associated with them on the hash
-      def self.describe_instances(o={})
-        new(o).describe_instances(o)
+      def self.describe_instances(cld, o={})
+        new(cld, o).describe_instances(o)
       end
       def describe_instances(o={})        
         raise RemoteException.new(:method_not_defined, "describe_instances")
@@ -88,31 +91,30 @@ module PoolParty
       # TODO: Rename and modularize the @inst.status =~ /pending/ so that it works on all 
       # remoter_bases
       def launch_instance!(o={}, &block)
-        @cloud = clouds[o[:cloud_name]]
-        @inst = launch_new_instance!( options.merge(o) )
+        @inst = launch_new_instance!( o )
         sleep(2)
         
-        @cloud.dputs "#{@cloud.name} launched instance checking for ip..."
+        cloud.dputs "#{cloud.name} launched instance checking for ip..."
         
         # Wait for 10 minutes for the instance to gain an ip if it doesn't already have one
         500.times do |i|
           break if @inst[:ip] =~ /\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/
           sleep(2)
           @inst = describe_instance(@inst)
-          @cloud.dprint "."
+          cloud.dprint "."
         end        
-        @cloud.dputs "Found an ip"
-        @cloud.dputs "#{@cloud.name} Launched instance #{@inst[:ip]}"
-        @cloud.dputs "   waiting for it to respond"
+        cloud.dputs "Found an ip"
+        cloud.dputs "#{@cloud.name} Launched instance #{@inst[:ip]}"
+        cloud.dputs "   waiting for it to respond"
         
         # Try for 10 minutes to pint port 22 
         500.times do |i|
-          @cloud.dprint "."
+          cloud.dprint "."
           if ping_port(@inst[:ip], 22)
-            @cloud.dputs ""
-            @cloud.started_instance = @inst
+            cloud.dputs ""
+            cloud.started_instance = @inst
             
-            @cloud.call_after_launch_instance_callbacks(@inst)
+            cloud.call_after_launch_instance_callbacks(@inst)
             block.call(@inst) if block
             
             return @inst
@@ -122,8 +124,8 @@ module PoolParty
         raise "Instance not responding at #{inst.ip}"
       end
       
-      def self.launch_instance!(o={}, &block)
-        new(o, &block).launch_instance!
+      def self.launch_instance!(cld, o={}, &block)
+        new(cld, o, &block).launch_instance!
       end
 
       # Called after an instance is launched
