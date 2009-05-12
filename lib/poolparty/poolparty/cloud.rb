@@ -35,10 +35,6 @@ module PoolParty
       include PoolParty::CloudDsl
       include PoolParty::Verification
       # include PoolParty::Monitors
-
-      def verbose
-        true
-      end
       
       def self.immutable_methods
         [:name]

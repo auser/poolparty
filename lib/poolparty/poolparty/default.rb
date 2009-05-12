@@ -10,6 +10,8 @@ module PoolParty
     
     # def self.options
     default_options(
+      :verbose => false,
+      :debug => false,
       :testing => false,
       :debugging => false,
       :minimum_instances => 2,

@@ -32,8 +32,6 @@ module PoolParty
       include CloudResourcer # WHY?!?! TODO: check on this
       include Remote
       
-      default_options Default.default_options
-      
       def initialize(name,&block)
         @pool_name = name
         @pool_name.freeze
