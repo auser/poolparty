@@ -109,8 +109,9 @@ module PoolParty
       
       # setup defaults for the cloud
       def setup_defaults
-        options[:keypair] ||= keypair
         options[:rules] = {:expand => dsl_options[:expand_when], :contract => dsl_options[:contract_when]}
+        options[:keypair] = keypair
+        
         set_dependency_resolver 'chef'
       end
       

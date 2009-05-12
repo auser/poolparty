@@ -25,6 +25,7 @@ module PoolParty
     # List the instances for the current key pair, regardless of their states
     # If no keypair is passed, select them all
     def _list_of_instances(select={})
+      p remote_base
       @describe_instances ||= remote_base.describe_instances(options).select_with_hash(select)
     end
     

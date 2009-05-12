@@ -4,9 +4,7 @@ require "poolparty"
 # require "poolpartycl"
 require 'git-style-binary/command'
 
-GitStyleBinary.command do
-  @theme = :short
-  
+GitStyleBinary.command do  
   version "PoolParty cloud command"  
   banner <<-EOS
 Usage: #{$0} #{all_options_string} COMMAND [ARGS]
