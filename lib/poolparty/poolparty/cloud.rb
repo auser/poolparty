@@ -56,7 +56,7 @@ module PoolParty
              remote_base.dsl_options.has_key?(k)
           end
           if args.size==1 && args.first.respond_to?(:merge)
-            new_args = [remoter_opts.merge args.first]
+            new_args = [remoter_opts.merge(args.first)]
           else
             new_args = args.push(remoter_opts)
           end
