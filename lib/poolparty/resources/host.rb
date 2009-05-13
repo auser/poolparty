@@ -29,7 +29,7 @@ The host parameter sets hosts on the instances. Setting this, every node will ha
       })
       
       def aka(i=nil)
-        i ? options[:alias] = i : options[:alias]
+        i ? dsl_options[:alias] = i : dsl_options[:alias]
       end
             
     end

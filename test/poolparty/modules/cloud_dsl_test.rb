@@ -22,12 +22,12 @@ class TestCloudDsl < Test::Unit::TestCase
     end
     
     should "be able to check if they are enabled" do
-      @cloud.enable :hyper_drive
-      @cloud.enabled?(:hyper_drive).should == true
+      @cloud.enable :hyper_slam
+      @cloud.enabled?(:hyper_slam).should == true
     end
     should "be able to check that they are disabled" do
-      @cloud.disable :hyper_drive
-      @cloud.enabled?(:hyper_drive).should == false
+      @cloud.disable :hyper_slam
+      @cloud.enabled?(:hyper_slam).should == false
     end
   end
   context "calling add_optional_enabled_services" do

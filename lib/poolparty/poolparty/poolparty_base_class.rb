@@ -20,7 +20,7 @@ module PoolParty
     
     include PoolParty::DependencyResolverCloudExtensions
     # attr_accessor :depth    
-    default_options Default.default_options
+    default_options Default.dsl_options
 
     def initialize(opts={}, extra_opts={}, &block)
       add_to_parent_if_parent_exists_and_is_a_service

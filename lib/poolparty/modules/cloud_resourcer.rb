@@ -78,9 +78,9 @@ module PoolParty
           # TODO: Move to after_setup
           @remote_base = remote_base_klass.send :new, dsl_options, &block
           @remote_base.instance_eval &block if block
-          dsl_option(:remote_base, @remote_base) if respond_to?(:options)
           
-          self.class.default_options.merge!(@remote_base.class.default_options)
+          self.class.set_default_options(:remote_base => @remote_base)
+          self.class.set_default_options(@remote_base.class.dsl_options)
           
           @parent_cloud = @cloud
           instance_eval "def #{t};@remote_base;end"

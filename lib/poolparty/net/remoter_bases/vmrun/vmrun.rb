@@ -49,9 +49,10 @@ module PoolParty
 
       def self.launch_new_instance!(o={})
         # puts "launch_new_instance 0 = #{o.inspect}"
-        new_instance(o).launch_new_instance!
+        new(o).launch_new_instance!
       end
       def launch_new_instance!(o={})
+        require 'rubygems'; require 'ruby-debug'; debugger
         raise "No available vmx files given!" unless next_unused_vmx_file
         VmwareInstance.new( {:vmx_file => next_unused_vmx_file, 
                              :ip => ip, 
@@ -142,7 +143,7 @@ module PoolParty
       end
       
       def next_unused_vmx_file
-        tmp = (vmx_files - running_instances.map {|a| a.vmx_file })
+        tmp = (vmx_files_array - running_instances.map {|a| a.vmx_file })
         (tmp.empty? ? vmx_files : tmp).first
       end
       
@@ -151,9 +152,13 @@ module PoolParty
       end
       
       def vmx_files_array
-        return @vmx_files_array if @vmx_files_array
-        @vmx_files_array = dsl_options[:vmx_files].is_a?(Array) ? dsl_options[:vmx_files] : vmx_hash.keys
-        dsl_options[:vmx_files] = @vmx_files_array
+        # return @vmx_files_array if @vmx_files_array
+        if dsl_options[:vmx_files].is_a?(Array) && !dsl_options[:vmx_files].empty?
+          dsl_options[:vmx_files]
+        else
+          vmx_hash.keys
+        end
+        # dsl_options[:vmx_files] = @vmx_files_array
       end
       
       def id(vfile)

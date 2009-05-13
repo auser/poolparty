@@ -35,7 +35,7 @@ module PoolParty
       end
 
       # Default options for the boot_strapper
-      @defaults = ::PoolParty::Default.default_options.merge({
+      @defaults = ::PoolParty::Default.dsl_options.merge({
         :full_keypair_path   => "#{ENV["AWS_KEYPAIR_NAME"]}" || "~/.ssh/id_rsa",
         :installer           => 'apt-get',
         :dependency_resolver => 'chef'

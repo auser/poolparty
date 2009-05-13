@@ -25,7 +25,7 @@ class Vmx
   end
   
   def compile
-    ::FileUtils.mkdir_p "#{base_directory}/#{options[:name]}"
+    ::FileUtils.mkdir_p "#{base_directory}/#{dsl_options[:name]}"
     vmdk = @vmx_disk.compile
     @vmx_file.set("ide0:0.fileName", vmdk)
     @vmx_file.compile    

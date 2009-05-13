@@ -15,10 +15,10 @@ describe "Server list active binary" do
       @pool_hash = @p.to_properties_hash
     end
     it "should have the name on the schema" do
-      @pool_hash.options.name.should == :binary_testing_cloud
+      @pool_hash.dsl_options.name.should == :binary_testing_cloud
     end
     it "should have the remoter base available" do
-      @pool_hash.options[:remote_base].nil?.should == false  
+      @pool_hash.dsl_options[:remote_base].nil?.should == false  
     end
   end
 end

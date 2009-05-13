@@ -9,10 +9,8 @@ module PoolParty
     class Metavirt < Remote::RemoterBase
       include Dslify
 
-
       default_options(
         # :machine_image => 'ubuntu-kvm',
-        :keypair       => nil,  #TODO lambda{ keypair.to_s  },
         :public_key    => nil, #TODO lambda{ keypair.public_key.to_s  }
         :server_config => {:content_type =>'application/json', 
                            :accept      => 'application/json',
@@ -113,7 +111,7 @@ module PoolParty
       
       private
       def id(o={})
-        @id || o[:id] || options[:id] || o[:instance_id] || options[:instance_id]
+        @id || o[:id] || dsl_options[:id] || o[:instance_id] || dsl_options[:instance_id]
       end
       
     end

@@ -29,7 +29,7 @@ To write a file to the template directory, use:
 == Example
   has_file(:name => '/etc/motd', :content => 'Hey and welcome to your node today!')
 =end
-    class File < Resource
+    class File < Resource 
       has_searchable_paths(:dir => "templates")
       
       dsl_methods :name,            # The name, the full path of the file
@@ -62,14 +62,14 @@ To write a file to the template directory, use:
           file = ::File.basename( filename )
           raise TemplateNotFound.new("no template given") unless file
 
-          template_opts = (parent ? options.merge(parent.options) : options)
-          options.merge!(:content => run_render ? Template.compile_file(filename, template_opts.merge(:renderer => run_render)).gsub("\"", "\"") : open(filename).read)
+          template_opts = (parent ? dsl_options.merge(parent.dsl_options) : dsl_options)
+          dsl_options.merge!(:content => run_render ? Template.compile_file(filename, template_opts.merge(:renderer => run_render)).gsub("\"", "\"") : open(filename).read)
         end
         
         if dsl_options.include?(:content)
           cont = dsl_options.delete(:content)
-          template_opts = (parent ? options.merge(parent.options) : options).merge(:renderer => run_render)
-          options.merge!(:content => run_render ? Template.compile_string(cont, template_opts) : cont)
+          template_opts = (parent ? dsl_options.merge(parent.dsl_options) : dsl_options).merge(:renderer => run_render)
+          dsl_options.merge!(:content => run_render ? Template.compile_string(cont, template_opts) : cont)
         end
       end
       
@@ -78,7 +78,7 @@ To write a file to the template directory, use:
       # end
       
       def variable(k,v)
-        dsl_option(k,v)
+        set_default_options(k => v)
       end
 
     end

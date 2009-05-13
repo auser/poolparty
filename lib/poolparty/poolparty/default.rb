@@ -46,17 +46,10 @@ module PoolParty
       :remoter_base => :ec2
     )
     
-    def options
-      default_options
-    end
-    
     # Class methods
     class << self
       def method_missing(m,*a,&block)
-        default_options.include?(m) ? default_options[m] : super
-      end
-      def options
-        default_options
+        dsl_options.include?(m) ? dsl_options[m] : super
       end
       # Get the access_key
       def access_key

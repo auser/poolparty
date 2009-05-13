@@ -14,7 +14,7 @@ module PoolParty
     def set_dependency_resolver(name='chef')
       klass = name.preserved_class_constant("Resolver")
       raise DependencyResolverException.new("Unknown resolver") unless klass
-      dsl_option(:dependency_resolver, klass) unless dsl_options[:dependency_resolver]
+      self.dependency_resolver = klass unless dsl_options[:dependency_resolver]
     end
     
     # Enable a service package

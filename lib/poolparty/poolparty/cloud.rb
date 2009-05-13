@@ -77,6 +77,7 @@ module PoolParty
         :ec2_dir => ENV["EC2_HOME"],
         :minimum_runtime => Default.minimum_runtime,
         :user => Default.user,
+        :dependency_resolver => ChefResolver,
         :using_remoter_base => Default.remoter_base
       )
       
@@ -132,10 +133,10 @@ module PoolParty
       
       # setup defaults for the cloud
       def setup_defaults
-        options[:keypair_name] = keypair.basename
-        options[:keypair_path] = keypair.full_filepath
+        dsl_options[:keypair_name] = key.basename
+        dsl_options[:keypair_path] = key.full_filepath
         
-        options[:rules] = {:expand => dsl_options[:expand_when], :contract => dsl_options[:contract_when]}        
+        dsl_options[:rules] = {:expand => dsl_options[:expand_when], :contract => dsl_options[:contract_when]}        
         
         set_dependency_resolver 'chef'
         if using_remoter_base.size > 1
@@ -198,7 +199,7 @@ module PoolParty
         unless @build_manifest
           props = to_properties_hash
           
-          @build_manifest =  options[:dependency_resolver].send(:compile, props, self)
+          @build_manifest = dependency_resolver.send(:compile, props, self)
         end
         dputs "Finished creating manifest"
         @build_manifest
