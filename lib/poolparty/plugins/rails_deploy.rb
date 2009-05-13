@@ -86,7 +86,7 @@ module PoolParty
             
             has_directory "#{shared_directory}/#{::File.dirname(sh)}", :owner => owner, :mode => "0755"
             
-            has_exec "Create rails-deploy-#{name}-#{sh}", 
+            has_exec "Create rails-deploy-#{git_name}-#{sh}", 
               :command => "cp #{current_directory}/#{sh} #{shared_directory}/#{sh} && chown -R #{owner} #{shared_directory}/#{sh}",
               :if_not => "test -f #{shared_directory}/#{sh}"
               
@@ -95,7 +95,7 @@ module PoolParty
         end
       end
       # HELPERS
-      def name(n=nil)
+      def git_name(n=nil)
         if n
           self.name = n
         else
@@ -110,7 +110,7 @@ module PoolParty
         "#{release_directory}/shared"
       end
       def release_directory
-        "#{dir}/#{name}"
+        "#{dir}/#{git_name}"
       end
       
     end
