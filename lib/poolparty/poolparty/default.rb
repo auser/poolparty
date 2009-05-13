@@ -41,6 +41,8 @@ module PoolParty
       :contract_when => "load < 0.25",
       :expand_when => "load > 0.9",
       :image_id => nil,
+      :access_key => nil,
+      :secret_access_key => nil,
       :remoter_base => :ec2
     )
     

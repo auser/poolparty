@@ -88,9 +88,6 @@ describe "Pool" do
       it "should have 2 clouds in the pool when there are 2 described" do
         @pool.clouds.size.should == 2
       end
-      it "should be able to tel the other clouds from within one cloud" do
-        cloud(:app).other_clouds.should == [cloud(:db)]
-      end
     end  
   end
 end
