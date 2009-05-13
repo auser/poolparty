@@ -96,7 +96,7 @@ module PoolParty
             @recipe.instance_eval &block if block
             @recipe.recipes(recipe_files.empty? ? ["poolparty"] : ["poolparty", "main"])
             # ::File.open("#{Default.tmp_path}/dr_configure/dna.json", "w+") {|f| f << @recipe.options.to_json }
-            ::Suitcase::Zipper.add_content_as(@recipe.options.to_json, "dna.json", "chef")
+            ::Suitcase::Zipper.add_content_as(@recipe.dsl_options.to_json, "dna.json", "chef")
             
             configure_commands ["cp -f /var/poolparty/dr_configure/chef/dna.json /etc/chef/dna.json"]
           end

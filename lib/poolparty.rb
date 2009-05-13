@@ -38,6 +38,7 @@ end
 
 require "dslify"
 require "parenting"
+require "suitcase"
 
 t=Time.now
 ## Load PoolParty

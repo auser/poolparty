@@ -61,8 +61,9 @@ module PoolParty
       end
       def launch_new_instance!(o={})
         raise "No available vmx files given!" unless next_unused_vmx_file
-        VmwareInstance.new( {:vmx_file => next_unused_vmx_file, 
-                             :ip => ip, 
+        vmx_file = next_unused_vmx_file
+        VmwareInstance.new( {:vmx_file => vmx_file, 
+                             :ip => vmx_hash[vmx_file],
                              :keypair => keypair
                             }.merge(o)
                           ).launch!

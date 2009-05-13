@@ -134,9 +134,7 @@ module PoolParty
       
       # setup defaults for the cloud
       def setup_defaults
-        dsl_options[:keypair_name] = key.basename
-        dsl_options[:keypair_path] = key.full_filepath
-        
+        set_vars_from_options(:keypair_name => key.basename, :keypair_path => key.full_filepath)        
         dsl_options[:rules] = {:expand => dsl_options[:expand_when], :contract => dsl_options[:contract_when]}        
         
         set_dependency_resolver 'chef'

@@ -92,18 +92,23 @@ module PoolParty
       # remoter_bases
       def launch_instance!(o={}, &block)
         @cloud = clouds[o[:cloud_name]]
-        @inst = launch_new_instance!( options.merge(o) )
+        @inst = launch_new_instance!( dsl_options.merge(o) )
         sleep(2)
         
         @cloud.dputs "#{@cloud.name} launched instance checking for ip..."
         
         # Wait for 10 minutes for the instance to gain an ip if it doesn't already have one
         500.times do |i|
-          break if @inst[:ip] && @inst[:ip] =~ /\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/
-          break if @inst[:public_ip] && @inst[:public_ip] =~ /\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/
-          sleep(2)
-          @inst = describe_instance(@inst)
-          @cloud.dprint "."
+          if @inst
+            break if @inst[:ip] && @inst[:ip] =~ /\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/
+            break if @inst[:public_ip] && @inst[:public_ip] =~ /\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/            
+            sleep(2)
+            @inst = describe_instance(@inst)
+            @cloud.dprint "."
+          else
+            @inst = describe_instances.last
+            @cloud.dprint "."
+          end
         end        
         @cloud.dputs "Found an ip"
         @cloud.dputs "#{@cloud.name} Launched instance #{@inst[:ip]}"

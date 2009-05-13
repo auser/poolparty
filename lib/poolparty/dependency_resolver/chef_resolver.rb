@@ -159,7 +159,8 @@ module PoolParty
         hsh.merge!({:source => "#{nm}.erb"})
       end
       # 
-      hsh.delete(:require) if hsh.has_key?(:require)
+      hsh.delete(:require)
+      hsh.delete(:requires)
       hsh.delete(:name) # we don't need the names in the methods
       hsh
     end
