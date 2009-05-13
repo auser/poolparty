@@ -23,6 +23,8 @@ Gempackages describe distributed gems on the cloud. The gem is only downloaded o
 * <tt>download_url</tt> The location of the gem to download and server across the instances
 * <tt>version</tt> The gem version requirement (optional and useless if download_url is given)
 * <tt>source</tt> The gem source (optional and useless matter if download_url is given)
+* <tt>bin</tt> Specify exact gem binary
+* <tt>jruby</tt> Will set 'bin' to 'jruby -S gem'
 
 == Examples
   has_gempackage(:name => 'rake', 
@@ -34,6 +36,8 @@ Gempackages describe distributed gems on the cloud. The gem is only downloaded o
     virtual_resource(:gem_package) do
       
       def loaded(opts={}, &block)
+        bin opts[:bin] ? opts[:bin] : opts[:jruby] ? "jruby -S gem" : "gem"
+
         if download_url?
           has_exec(
             :name => "download-#{name}", 
@@ -43,15 +47,15 @@ Gempackages describe distributed gems on the cloud. The gem is only downloaded o
           )
           has_exec(
             :name => "install-#{name}-gem",
-            :command => "gem install --no-ri --no-rdoc  #{Default.remote_storage_path}/#{name}.gem",
-            :if_not => "gem list --local #{name} | grep #{name} #{"| grep #{version}" if version?}",
+            :command => "#{bin} install --no-ri --no-rdoc  #{Default.remote_storage_path}/#{name}.gem",
+            :if_not => "#{bin} list --local #{name} | grep #{name} #{"| grep #{version}" if version?}",
             :requires => "download-#{name}"
           )
         else
           has_exec(
             :name => "#{name}",
-            :command  => "gem install --no-ri --no-rdoc #{"--version #{version}" if version?} #{"--source #{source}" if source?} #{name}",
-            :if_not => "gem list --local #{name} | grep #{name} #{"| grep #{version}" if version?}"
+            :command  => "#{bin} install --no-ri --no-rdoc #{"--version #{version}" if version?} #{"--source #{source}" if source?} #{name}",
+            :if_not => "#{bin} list --local #{name} | grep #{name} #{"| grep #{version}" if version?}"
           )
         end
       end
