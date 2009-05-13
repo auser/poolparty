@@ -72,14 +72,12 @@ module PoolParty
         :contract_when => Default.contract_when,
         :minimum_instances => 2,
         :maximum_instances => 5,
-        :access_key => Default.access_key,
-        :secret_access_key => Default.secret_access_key,
         :ec2_dir => ENV["EC2_HOME"],
         :minimum_runtime => Default.minimum_runtime,
         :user => Default.user,
         :dependency_resolver => ChefResolver,
-                      :using_remoter_base => Default.remoter_base,
-                      :remote_base => nil
+        :using_remoter_base => Default.remoter_base,
+        :remote_base => nil
       )
       
       additional_callbacks [
@@ -233,15 +231,6 @@ module PoolParty
         # poolparty_base_heartbeat
         poolparty_base_ruby
         poolparty_base_packages        
-      end
-      
-      # TODO: Deprecate
-      def other_clouds
-        arr = []
-        clouds.each do |name, cl|
-          arr << cl if name != self.name
-        end
-        arr
       end
       
       # Reset the entire cloud

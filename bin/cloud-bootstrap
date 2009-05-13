@@ -22,14 +22,14 @@ EOS
 
         # If an IP or DNS name is given, bootstrap that node, otherwise, bootstrap all running nodes.
         # ::FileUtils.rm_rf "#{Default.tmp_path}/" unless o.testing?
-        if cld.nodes.empty?
+        if cld.nodes(:status => "running").empty?
           puts "No nodes to bootstrap"
         else
           if command[:inst_num]
             vputs "\nBootStrapping: #{nodes[o.inst_num]}\n--------------------"
-            ::PoolParty::Provision::BootStrapper.new cld.nodes[ command[:inst_num] ], :cloud => cld
+            ::PoolParty::Provision::BootStrapper.new cld.nodes(:status => "running")[ command[:inst_num] ], :cloud => cld
           else
-            cld.nodes.each do |address|
+            cld.nodes(:status => "running").each do |address|
               cld.vputs "\nBootStrapping: #{address[:ip]}\n--------------------"      
               ::PoolParty::Provision::BootStrapper.new address[:ip], :cloud => cld
             end

@@ -23,8 +23,9 @@ module PoolParty
     # This class is the base class for all remote types, such as ec2
     # Everything remoting-wise is derived from this class
     class RemoterBase
-      include               Dslify
-      include  ::PoolParty::Remote
+      include           Dslify
+      include           ::PoolParty::Remote
+      include           ::PoolParty::Pinger
       
       dsl_methods :cloud,                # The cloud this remoter_base is a part of
                   :keypair,
@@ -110,9 +111,9 @@ module PoolParty
             @cloud.dprint "."
           end
         end        
-        @cloud.dputs "Found an ip"
-        @cloud.dputs "#{@cloud.name} Launched instance #{@inst[:ip]}"
-        @cloud.dputs "   waiting for it to respond"
+        dputs "Found an ip"
+        dputs "#{@cloud.name} Launched instance #{@inst[:ip]}"
+        dputs "   waiting for it to respond"
         
         # Try for 10 minutes to pint port 22 
         500.times do |i|

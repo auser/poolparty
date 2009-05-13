@@ -34,7 +34,7 @@ EOS
           if cld.nodes(:status => "pending").size > 0
             printer.empty
             printer.center "Pending instances"
-            printer << cld.nodes(:status => "pending").map{|a| a.to_s}.join("\n")
+            printer << cld.nodes(:status => "pending").map{|a| a.ip.strip rescue nil }.join("\n")
           end
           printer.empty
         end
