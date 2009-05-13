@@ -23,6 +23,10 @@ EOS
   opt :cloud_name, "Name of the working cloud", :type => String, :default => nil
 
   before_run do |command|
+    # Setup testing/debugging
+    $TESTING = true if command[:testing]
+    $DEBUGGING = true if command[:debug]
+    
     @loaded_pool = load_pool( command[:spec] ? command[:spec] : Binary.get_existing_spec_location)
     @loaded_clouds = command[:cloud_name] ? clouds[command[:cloud_name].to_sym] : clouds.map {|k,c| c }
     @loaded_clouds.each do |cld|

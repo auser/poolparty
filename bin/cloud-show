@@ -15,10 +15,11 @@ EOS
 
   short_desc "List the clouds"
 
-  run do |command|    
+  run do |command|
 
     @loaded_clouds.each do |cld|
-      
+        
+        dputs "Showing #{cld.name}"
         puts "\nFrom #{$pool_specfile}\n"
         print_with_nice_printer "Cloud: #{cld.name}", [
           "instances #{cld.minimum_instances}..#{cld.maximum_instances}",
