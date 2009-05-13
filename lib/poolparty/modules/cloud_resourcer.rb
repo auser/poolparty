@@ -55,36 +55,26 @@ module PoolParty
       end
     end
     
-    def remote_base_klass
-      @remote_base_klass ||= ::PoolParty::Remote::Ec2
-    end
-        
     # Declare the remoter base
     # Check to make sure the available_bases is available, otherwise raise
     # Give access to the cloud the remote_base and instantiate a new
     # instance of the remote base
-    def using(name, &block)
-      dsl_options[:using_remoter_base] = [name, block]
-    end
-    def _using(t, &block)
+    def using(t, &block)
       @cloud = self
       if self.class.available_bases.include?(t.to_sym)
-        # unless using_remoter?
-          self.class.send :attr_reader, :remote_base
-          self.class.send :attr_reader, :parent_cloud
-          klass_string = "#{t}".classify
-          @remote_base_klass = "::PoolParty::Remote::#{klass_string}".constantize
-          
-          # TODO: Move to after_setup
-          @remote_base = remote_base_klass.send :new, dsl_options, &block
-          @remote_base.instance_eval &block if block
-          
-          self.class.set_default_options(:remote_base => @remote_base)
-          self.class.set_default_options(@remote_base.class.dsl_options)
-          
-          @parent_cloud = @cloud
-          instance_eval "def #{t};@remote_base;end"
-        # end
+
+        klass_string = "#{t}".classify
+        @remote_base_klass = "::PoolParty::Remote::#{klass_string}".constantize
+        
+        # TODO: Move to after_setup
+        self.remote_base = @remote_base_klass.send :new, dsl_options, &block
+        remote_base.instance_eval &block if block
+        
+        self.class.set_default_options(:remote_base => remote_base)
+        self.class.set_default_options(@remote_base_klass.dsl_options)
+        
+        @parent_cloud = @cloud
+        instance_eval "def #{t};remote_base;end"
       else
         raise "Unknown remote base: #{t}"
       end

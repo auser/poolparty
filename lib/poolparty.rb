@@ -32,11 +32,10 @@ unless @required_software.empty?
   exit(0)
 end
 
-# Dir.glob(File.join(File.dirname(__FILE__),'..', 'vendor/gems/*/lib/*.rb')).each do |d|
-#   require d
-# end
+Dir.glob(File.join(File.dirname(__FILE__),'..', 'vendor/gems/*/lib')).each do |d|
+  $LOAD_PATH.unshift(d)
+end
 
-Dir.glob(File.join(File.dirname(__FILE__),'..', 'vendor/gems/*/lib')).each do |d|; $LOAD_PATH.unshift(d); end
 require "dslify"
 require "parenting"
 

@@ -16,11 +16,7 @@ class Object
     original = self.method(original_id).to_proc
     define_method(new_id){|*args| original.call(*args)}
   end
-  def with_options(opts={}, par=nil, &block)
-    @p = par.clone
-    @p.options.merge!(opts)
-    @p.instance_eval &block if block
-  end  
+
   def returning(receiver)
     yield receiver
     receiver
@@ -29,14 +25,7 @@ class Object
     block.in_context(self).call
     self
   end
-  def send_if_method(v, *args)
-    if (v.nil? || v.to_s.empty? || v.is_a?(Array) || v.is_a?(Integer))# && !v.is_a?(Symbol))#)v.is_a?(String)
-      v
-    else
-      vs = v.to_s.to_sym
-      respond_to?(vs) ? self.send(vs, *args) : v rescue v  #NOTE MF: maybe we should not rescue all errors?
-    end
-  end
+
   def respec_string
     case self.class
     when String

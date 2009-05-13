@@ -25,8 +25,9 @@ The sshkey resource specifies an ssh key that should be distributed on all the n
     
     class Sshkey < Resource
       
-      dsl_methods :key,
-                  :keypath
+      dsl_methods(:key,
+                  :keypath,
+                  :name)
 
       default_options(:type => 'rsa')
                   
@@ -34,14 +35,6 @@ The sshkey resource specifies an ssh key that should be distributed on all the n
         super(opts, extra_opts, &block)
         @key = Key.new(keypath? ? keypath : nil)
         self.key = @key.content
-      end
-      
-      def name(i=nil)
-        if i
-          self.name = i
-        else
-          name ? self.name : ::File.basename(@key.full_filepath)
-        end
       end
       
       def enctype(i=nil)

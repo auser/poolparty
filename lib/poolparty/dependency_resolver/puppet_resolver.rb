@@ -5,12 +5,6 @@ module PoolParty
   
   class PuppetResolver< DependencyResolver
     
-    permitted_resource_options({
-      :global => [:require, :name],
-      :file => [:content, :mode, :user],
-      :exec => [:command, :path, :refreshonly]
-    })
-    
     def initialize(hsh=nil)
       super(hsh)
     end
@@ -71,11 +65,6 @@ module PoolParty
     
     def permitted_option?(ty, key)
       true
-      # if permitted_resource_options.has_key?(ty)
-      #   permitted_resource_options[ty].include?(key) || true #permitted_resource_options[:global].include?(key)
-      # else
-      #   true
-      # end
     end
     
     def hash_flush_out(hash, pre="", post="")
@@ -96,6 +85,10 @@ module PoolParty
         else
           "present"
         end
+      end
+
+      if hsh.has_key?(:requires)
+        hsh[:require] = hsh.delete(:requires)
       end
       new_hsh ={}
       hsh.each do |k,v|
@@ -126,26 +119,11 @@ module PoolParty
     end
     
     def handle_print_service(klassname, plugin, tabs)
-      case klassname.to_s
-      when "conditional"
-        # "#{tf(tabs)}case $#{klasshash[:options][:variable]} {#{klasshash[:services][:control_statements].map do |k,v|"\n#{tf(tabs+1)}#{k} : {#{compile(v.to_properties_hash, tabs+2)}#{tf(tabs+1)}\n#{tf(tabs)}}" end}}"
-        # 
-        # str = ""        
-        # plugin.each do |klasshash|
-        #   # str << "\n#{tf(tabs+1)}#{compile(hsh,tabs+1)}"
-        #   str << "#{tf(tabs)}case $#{klasshash[:options][:variable]} {"
-        #   str << "#{klasshash[:services][:control_statements].map do |k,v|"\n#{tf(tabs+1)}#{k} : {#{compile(v.to_properties_hash, tabs+2)}#{tf(tabs+1)}\n#{tf(tabs)}}" end}"
-        # end        
-        # str << "#{tf(tabs)}}"
-        # deprecated conditional
-        
-      else
-        kname = klassname.to_s.gsub(/pool_party_/, '').gsub(/_class/, '')
-        str = "\n#{tf(tabs)}# #{kname}\n"
-        str << "#{tf(tabs)}class #{kname} {"
-        str << "\n#{tf(tabs+1)}#{compile(plugin,tabs+1)}"
-        str << "#{tf(tabs)}} include #{kname}"        
-      end
+      kname = klassname.to_s.gsub(/pool_party_/, '').gsub(/_class/, '')
+      str = "\n#{tf(tabs)}# #{kname}\n"
+      str << "#{tf(tabs)}class #{kname} {"
+      str << "\n#{tf(tabs+1)}#{compile(plugin,tabs+1)}"
+      str << "#{tf(tabs)}} include #{kname}"        
     end
     
     def handle_print_variable(name, value, tabs)

@@ -78,7 +78,8 @@ module PoolParty
         :minimum_runtime => Default.minimum_runtime,
         :user => Default.user,
         :dependency_resolver => ChefResolver,
-        :using_remoter_base => Default.remoter_base
+                      :using_remoter_base => Default.remoter_base,
+                      :remote_base => nil
       )
       
       additional_callbacks [
@@ -139,11 +140,6 @@ module PoolParty
         dsl_options[:rules] = {:expand => dsl_options[:expand_when], :contract => dsl_options[:contract_when]}        
         
         set_dependency_resolver 'chef'
-        if using_remoter_base.size > 1
-          _using using_remoter_base[0], &using_remoter_base[1]
-        else
-          _using using_remoter_base[0]
-        end        
       end
       
       def after_launch_instance(inst=nil)

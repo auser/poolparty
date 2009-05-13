@@ -7,12 +7,12 @@ include PoolParty::Remote
 describe "Ec2RemoteInstance" do
   before(:each) do
     @cloud = TestCloud.new :test_remoter_base_cloud
-    @tec2 = TestEC2Class.new(@cloud.options)
+    @tec2 = TestEC2Class.new(@cloud.dsl_options)
     @ec2 = TestEc2RemoteInstance.new( @tec2.dsl_options.merge(:name => "node3", :status => "pending", :ip => "192.168.0.3"))
   end
   it "should have the name set in the options" do
     @ec2.respond_to?(:name).should == true
-    @ec2.options.keys.include?(:name).should == true
+    @ec2.dsl_options.keys.include?(:name).should == true
     @ec2.name.should == 'node3'
   end
   it "should have access to parent cloud options" do
@@ -35,7 +35,6 @@ end
 
 describe "Remote Instance" do
   before(:each) do
-    setup
     @valid_hash = {:ip => "127.0.0.1", :name => "master"}
   end
 

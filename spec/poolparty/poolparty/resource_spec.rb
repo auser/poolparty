@@ -9,9 +9,7 @@ class MyResource < PoolParty::Resources::Resource
   default_options(:a => 1,:b => 2,:c => 3)
 end
 describe "Resource" do
-  before(:each) do
-    setup
-  end
+
   describe "wrapped" do
     before(:each) do
       @resource = MyResource.new({:a => 10}) do
@@ -39,19 +37,12 @@ describe "Resource" do
       before(:each) do
         @resource = MyResource.new
       end
-      %w(requires ensures is_present is_absent ifnot).each do |method|
+      %w(ensures is_present is_absent).each do |method|
         eval <<-EOE
           it "should have the method #{method} available" do; @resource.respond_to?(:#{method}).should == true; end
         EOE
       end
-      it "should be able to take requires method" do
-        @resource.respond_to?(:requires).should == true
-      end
-      it "should push require onto the options" do
-        @resource.dsl_options.has_key?(:require).should == false
-        @resource.requires("nibbles")
-        @resource.dsl_options.has_key?(:require).should == true
-      end
+
       it "should be able to call ensures method on the resource" do
         @resource.respond_to?(:ensures).should == true
       end
@@ -69,11 +60,6 @@ describe "Resource" do
         @resource.dsl_options.has_key?(:ensures).should == false
         @resource.is_absent
         @resource.dsl_options.has_key?(:ensures).should == true
-      end
-      it "should write the option unless for ifnot" do
-        @resource.dsl_options.has_key?(:unless).should == false
-        @resource.ifnot "str"
-        @resource.dsl_options[:unless].should == "str"
       end
     end
     describe "command" do

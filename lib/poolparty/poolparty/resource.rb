@@ -76,7 +76,8 @@ module PoolParty
                   :not_if, 
                   :if_not, 
                   :only_if, 
-                  :calls
+                  :calls,
+                  :requires
       
       # This is set in order of descending precedence
       # The options are overwritten from the bottom up
@@ -148,14 +149,6 @@ module PoolParty
       
       def is_a_resource?
         true
-      end
-      
-      def method_missing(m,*a,&block)
-        if parent && parent.dsl_options.has_key?(m) && is_in_plugin?
-          parent.send m, *a, &block
-        else
-          super
-        end
       end
       
       # Private method just for resource retrievling purposes

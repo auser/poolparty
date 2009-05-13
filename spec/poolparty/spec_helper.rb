@@ -1,17 +1,5 @@
-$:.unshift(File.dirname(__FILE__) + '/../../lib')
-require 'poolparty'
-
-# TODO: FIX THE STUBS
-# %w(context matchy).each do |library|
-%w(spec).each do |library|
-  begin
-    require library
-  rescue
-    STDERR.puts "== Cannot run test without #{library}"
-  end
-end
-
-# Dir["#{File.dirname(__FILE__)}/helpers/**"].each {|a| require a}
+require 'spec'
+require File.expand_path(File.dirname(__FILE__) + '/../../lib/poolparty')
 
 ENV["POOL_SPEC"] = nil
 ENV["AWS_ACCESS_KEY"] = 'fake_access_key'
@@ -72,9 +60,6 @@ class TestBaseClass < PoolParty::PoolPartyBaseClass
   end
 end
 
-def setup
-end
-
 def new_test_cloud(force_new=false)
   unless @test_cloud || force_new
     @test_cloud = TestCloud.new("test_cloud_#{rand(10000)}")
@@ -82,10 +67,6 @@ def new_test_cloud(force_new=false)
     @test_cloud.stub!(:describe_instances).and_return response_list_of_instances
   end
   @test_cloud
-end
-
-def setup_cl
-  require 'poolpartycl'
 end
 
 def stub_option_load
@@ -102,12 +83,6 @@ def stub_option_load
     Base.reset!
 end
 
-def wait_launch(time=5)
-  pid = fork {yield}
-  wait time
-  Process.kill("INT", pid)
-  Process.wait(pid, 0)
-end
 def reset_all!
   $cloud = nil
 end
@@ -201,7 +176,6 @@ def running_remote_instances
 end
 
 def reset_response!
-  setup
   @ris = nil
 end
 

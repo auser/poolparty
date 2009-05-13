@@ -47,9 +47,6 @@ module PoolParty
     def boolean_args
       @boolean_args ||= ['-V', '-h', '-t', '-v', '--debug']
     end
-    def add_args(*syms)
-      syms.each {|sym| self.class.create_method_on(self, sym) }
-    end
     
     # Break ARGV into 2 arrays, one for flagged options one for unflagged
     # For example the "command -v -i 1 five six -x"

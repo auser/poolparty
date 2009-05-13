@@ -12,10 +12,6 @@ class TestService
 end
 
 describe "Cloud" do
-  before(:each) do
-    setup
-    # 
-  end
   describe "wrapped" do
     before(:each) do
       @obj = Object.new
@@ -37,7 +33,7 @@ describe "Cloud" do
       it "should have set the using base on intantiation to ec2" do
         @cloud1.using_remoter?.should_not == nil
       end
-      it "should say the remoter_base is ec2 (by default)" do
+      it "should say the remote_base is ec2 (by default)" do
         @cloud1.remote_base.class.should == ::PoolParty::Remote::Ec2
       end
     end
@@ -48,7 +44,6 @@ describe "Cloud" do
     describe "options" do
       before(:each) do
         reset!
-        setup
         pool :options do
           user "bob"
           minimum_instances 100
@@ -96,8 +91,8 @@ describe "Cloud" do
         end
         cloud(:paddy_wack).parent.should == pool(:knick_knack)
       end
-      it "should respond to a options method (from Dslify)" do
-        @cloud.respond_to?(:options).should == true
+      it "should respond to a dsl_options method (from Dslify)" do
+        @cloud.respond_to?(:dsl_options).should == true
       end
       describe "configuration" do
         before(:each) do

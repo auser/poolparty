@@ -18,16 +18,16 @@ class TestVmRun < Test::Unit::TestCase
   context "registered as remote base" do
     setup do
       reset!
-      $vmx_keys = {
+      vmx_keys1 = {
         ::File.expand_path("~/Documents/vm/Ubuntu32bitVM.vmwarevm/Ubuntu32bitVM.vmx") => "192.168.248.133"
       }
-      $vmx_files = $vmx_keys.keys
-      $ipaddresses = $vmx_keys.values
+      @vmx_files = vmx_keys1.keys
+      @ipaddresses = vmx_keys1.values
       
       @cloud = cloud :test_vm_runner do
         using :vmrun do
           path_to_binary '/fake/path/to/vmrun'
-          vmx_hash $vmx_keys
+          vmx_hash vmx_keys1
         end
       end
       
@@ -40,7 +40,7 @@ class TestVmRun < Test::Unit::TestCase
     end
     should "have vmx_files" do
       @cloud.remote_base.vmx_files.size.should == 1
-      @cloud.remote_base.vmx_files.should == $vmx_files
+      @cloud.remote_base.vmx_files.should == @vmx_files
     end
     # should "start vmware instance" do
     #   @cloud.launch_instance!

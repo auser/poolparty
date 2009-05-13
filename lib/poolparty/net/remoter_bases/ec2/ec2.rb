@@ -57,7 +57,7 @@ module PoolParty
       # Start a new instance with the given options
       def launch_new_instance!(o={})
         raise "You must pass a keypair to launch an instance, or else you will not be able to login. options = #{o.inspect}" if !keypair
-        o.merge!( options ).merge!(:key_name=>keypair.basename)
+        o.merge!( dsl_options ).merge!(:key_name=>keypair.basename)
         instance = ec2(o).run_instances(o)
         begin
           h = EC2ResponseObject.get_hash_from_response(instance.instancesSet.item.first)
@@ -160,7 +160,7 @@ module PoolParty
       # and return that, otherwise, return the first elastic ip available
       def next_unused_elastic_ip
         # [{"instanceId"=>nil, "publicIp"=>"174.129.212.93"}, {"instanceId"=>nil, "publicIp"=>"174.129.212.94"}]
-        if addressesSet = ec2(options).describe_addresses["addressesSet"]
+        if addressesSet = ec2(dsl_options).describe_addresses["addressesSet"]
           begin
             empty_addresses = addressesSet["item"].select {|i| i["instanceId"].nil? }
             ips = empty_addresses.map {|addr| addr["publicIp"]}
