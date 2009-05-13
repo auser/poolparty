@@ -18,7 +18,7 @@ class TestRailsDeploy < Test::Unit::TestCase
       @cloud.ordered_resources.first.class.should == RailsDeployClass
     end
     should "raise if :repo is not passed" do
-      assert_raise ReposMissingError do
+      assert_raise PoolParty::ReposMissingError do
         cloud :boxy do
           has_rails_deploy do
             dir "/bweee"

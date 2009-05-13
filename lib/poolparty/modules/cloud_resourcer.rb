@@ -122,14 +122,6 @@ module PoolParty
       dsl_options[:dependency_resolver] = schema.options.dependency_resolver.split("::")[-1].gsub(/Resolver/, '').preserved_class_constant("Resolver") rescue PoolParty::Chef
       
     end
-        
-    # TODO: deprecate
-    def number_of_resources
-      arr = resources.map do |n, r|
-        r.size
-      end
-      resources.map {|n,r| r.size}.inject(0){|sum,i| sum+=i}
-    end
     
   end
 end
