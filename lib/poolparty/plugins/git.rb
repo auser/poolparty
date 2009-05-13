@@ -17,23 +17,21 @@ module PoolParty
             
       def loaded(opts={}, &block)
         raise DirectoryMissingError.new unless dir
-
+        
         has_package("git-core")
         has_git_repository
       end
 
       def has_git_repository
-        
         has_directory(::File.dirname(dir))
         has_directory(:name => "#{dir}", :requires => get_directory("#{::File.dirname(dir)}"))
         
         has_exec(:name => "git-#{name}", :creates => creates_dir ) do
           # Cloud, GitRepos, Exec
-
           if requires_user
-            command("git clone #{requires_user}@#{repo} #{dir}")
+            command("git clone #{requires_user}@#{repository} #{dir}")
           else
-            command("cd #{dir} && git clone #{repo}")
+            command("cd #{dir} && git clone #{repository}")
           end
           
           cwd "#{dir if dir}"          
@@ -63,6 +61,14 @@ module PoolParty
             
       def creates_dir
         "#{::File.join( dir, ::File.basename(name, ::File.extname(name)) )}/.git"
+      end
+      
+      def repository(n=nil)
+        if n
+          self.repo = n
+        else
+          self.repo ? self.repo : name
+        end
       end
       
     end

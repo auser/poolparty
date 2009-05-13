@@ -99,9 +99,10 @@ module PoolParty
         if n
           self.name = n
         else
-          ::File.basename(repo, ::File.extname(repo)) || self.name
-        end        
+          self.name ? self.name : ::File.basename(repo, ::File.extname(repo))
+        end
       end
+      
       def current_directory
         "#{release_directory}/current"
       end
