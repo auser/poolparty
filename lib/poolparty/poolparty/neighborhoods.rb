@@ -10,7 +10,7 @@ require "#{::File.dirname(__FILE__)}/../schema"
 
 module PoolParty
   class Neighborhoods
-    include ::PoolParty::Pinger    
+    include ::PoolParty::Pinger
     attr_reader :schema
     
     # Create a neighborhood from a string, array or hash given.

@@ -45,6 +45,8 @@ module PoolParty
         :instance_type => 'm1.small', # or 'm1.large', 'm1.xlarge', 'c1.medium', or 'c1.xlarge'
         :addressing_type => "public",
         :availabilty_zone => "us-east-1a",
+        :access_key => nil,
+        :secret_access_key => nil,
         :security_group => ["default"]
         })
       
@@ -80,7 +82,8 @@ module PoolParty
       # TODO: Clean up this method and remove hostnames
       def describe_instances(o={})
         id = 0
-        get_instances_description(options.merge(o)).each_with_index do |h,i|          
+        set_vars_from_options(dsl_options.merge(o))
+        get_instances_description(dsl_options).each_with_index do |h,i|          
           if h[:status] == "running"
             inst_name = id == 0 ? "master" : "node#{id}"
             id += 1
@@ -116,8 +119,8 @@ module PoolParty
       # Get the ec2 description for the response in a hash format
       def get_instances_description(o={})
         #TODO: only use keypair.full_filepath
-        key_hash = {:keypair => ::File.basename(keypair.is_a?(String) ? keypair : keypair.full_filepath)}
-        EC2ResponseObject.get_descriptions(ec2(o).describe_instances).select_with_hash(key_hash)
+        key_hash = {:keypair => self.keypair_name}
+        EC2ResponseObject.get_descriptions(ec2(dsl_options).describe_instances).select_with_hash(key_hash)
       end
       def get_descriptions(o={})
         self.class.get_descriptions(o)
@@ -125,7 +128,7 @@ module PoolParty
             
       # Class method helpers
       def aws_keys
-        unless @access_key && @secret_access_key          
+        unless @access_key && @secret_access_key
           aws_keys = {}
           aws_keys = YAML::load( File.open('/etc/poolparty/aws_keys.yml') ) rescue 'No aws_keys.yml file.   Will try to use enviornment variables'
           @access_key ||= aws_keys[:access_key] || ENV['AMAZON_ACCESS_KEY_ID'] || ENV['AWS_ACCESS_KEY']
@@ -148,6 +151,16 @@ module PoolParty
         if ip = next_unused_elastic_ip
           vputs "Associating #{instance.instance_id} with #{ip}"
           ec2.associate_address(:instance_id => instance.instance_id, :public_ip => ip)
+          
+          # Try for 10 minutes to pint port 22 
+          500.times do |i|
+            dprint "."
+            if ping_port(ip, 22)
+              instance[:ip] = ip
+              return true
+            end
+            sleep(2)
+          end 
         end
       end
       
@@ -229,10 +242,21 @@ module PoolParty
           # "/usr/bin/gem install --no-ri --no-rdoc amazon-ec2.gem 2>&1"
         ]
       end
-
-      def custom_configure_tasks_for(o)
-        [
-        ]
+      
+      def access_key(n=nil)
+        if n.nil?
+          dsl_options[:access_key] ||= Default.access_key
+        else
+          self.access_key = n
+        end
+      end
+      
+      def secret_access_key(n=nil)
+        if n.nil?
+          dsl_options[:secret_access_key] ||= Default.secret_access_key
+        else
+          self.secret_access_key = n
+        end
       end
 
       def reset_base!

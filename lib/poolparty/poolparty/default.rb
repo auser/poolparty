@@ -40,9 +40,9 @@ module PoolParty
       :minimum_runtime  => 3000, #50.minutes in seconds
       :contract_when => "load < 0.25",
       :expand_when => "load > 0.9",
-      :access_key => "access_key",
-      :secret_access_key => "secret_access_key",
       :image_id => nil,
+      :access_key => nil,
+      :secret_access_key => nil,
       :remoter_base => :ec2
     )
     

@@ -20,7 +20,7 @@ EOS
         begin
           if cld.verifiers.size > 0
             cld.passing?
-            cld.vputs "Cloud passed verification"
+            vputs "Cloud passed verification"
           else
             raise "Your cloud doesn't have any verifiers!"
             exit 2

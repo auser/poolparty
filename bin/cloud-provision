@@ -1,32 +1,3 @@
-# #!/usr/bin/env ruby
-# $:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
-# require "poolparty"
-# require "poolparty/provision/boot_strapper"
-# 
-# o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
-#   opts.on('-n cloudname', '--name name', 'Start cloud by this name')    { |c| optioner.cloudname c }
-#   opts.on('-i num', '--num i', 'Instance number')    { |i| optioner.inst_num i.to_i }
-# end
-# 
-# o.loaded_clouds.each do |cld|
-#   # If an IP or DNS name is given, bootstrap that node, otherwise, bootstrap all running nodes.
-#   nodes = !o.unflagged_args.empty? ?  o.unflagged_args : cld.nodes(:status => "running").collect {|i|i.ip }.compact
-#   if nodes.empty?
-#     puts "No nodes to bootstrap"
-#   else
-#     if o.inst_num?
-#       ::PoolParty::Provision::BootStrapper.new( nodes[o.inst_num], :full_keypair_path => cld.keypair.full_filepath, :cloud => cld )
-#       ::PoolParty::Provision::DrConfigure.new( nodes[o.inst_num], :full_keypair_path => cld.keypair.full_filepath,  :cloud => cld )
-#     else
-#       nodes.each do |address|
-#         puts "bootstrapping: #{address}"
-
-#       end
-#     end
-#   end
-# end
-# 
-
 #!/usr/bin/env ruby
 $:.unshift(File.dirname(__FILE__) + "/../lib")
 require "poolparty"
