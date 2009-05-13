@@ -164,7 +164,7 @@ module PoolParty
           begin
             empty_addresses = addressesSet["item"].select {|i| i["instanceId"].nil? }
             ips = empty_addresses.map {|addr| addr["publicIp"]}
-            if elastic_ips?
+            if elastic_ips
               ips_to_use = elastic_ips & ips
               ips_to_use.first
             else

@@ -39,7 +39,7 @@ Gempackages describe distributed gems on the cloud. The gem is only downloaded o
                   :source           # If source is available, it will use this as the gem source
       
       def loaded(opts={}, &block)
-        if download_url?
+        if download_url
           has_exec(
             :name => "download-#{name}", 
             :cwd => Default.remote_storage_path, 
@@ -49,14 +49,14 @@ Gempackages describe distributed gems on the cloud. The gem is only downloaded o
           has_exec(
             :name => "install-#{name}-gem",
             :command => "gem install --no-ri --no-rdoc  #{Default.remote_storage_path}/#{name}.gem",
-            :if_not => "gem list --local #{name} | grep #{name} #{"| grep #{version}" if version?}",
+            :if_not => "gem list --local #{name} | grep #{name} #{"| grep #{version}" if version}",
             :requires => "download-#{name}"
           )
         else
           has_exec(
             :name => "#{name}",
-            :command  => "gem install --no-ri --no-rdoc #{"--version #{version}" if version?} #{"--source #{source}" if source?} #{name}",
-            :if_not => "gem list --local #{name} | grep #{name} #{"| grep #{version}" if version?}"
+            :command  => "gem install --no-ri --no-rdoc #{"--version #{version}" if version} #{"--source #{source}" if source} #{name}",
+            :if_not => "gem list --local #{name} | grep #{name} #{"| grep #{version}" if version}"
           )
         end
       end

@@ -91,7 +91,6 @@ describe "ec2 remote base" do
       @tr.next_unused_elastic_ip.should == "174.129.212.93"
     end
     it "should use only the elastic ips set on the cloud" do
-      @tr.stub!(:elastic_ips?).and_return true
       @tr.stub!(:elastic_ips).and_return ["182.199.200.201"]
       @tr.stub!(:cloud).and_return @cloud
       @tr.next_unused_elastic_ip.should == "182.199.200.201"
