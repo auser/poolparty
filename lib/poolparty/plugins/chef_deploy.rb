@@ -40,7 +40,7 @@ module PoolParty
       def loaded(o={})
         raise "You must specify a git repo" unless repo?
         has_chef_library :name => "chef-deploy/lib/chef-deploy.rb"
-        has_chef_deploy_definition(options)
+        has_chef_deploy_definition(dsl_options)
       end
       
       def before_configure

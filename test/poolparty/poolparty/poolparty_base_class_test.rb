@@ -82,3 +82,41 @@ class TestBaseClassTest < Test::Unit::TestCase
     @@b.parent.should == @a
   end
 end
+
+class TestLookupMethod < Test::Unit::TestCase
+  context "look up methods" do
+    setup do
+      reset!
+      @tbc = TestBaseClass.new do
+        has_file "/var/note.txt"
+        has_directory "/var"
+        has_package :name => "apache2"
+        has_git_repo "git://git.git", :repos => "git://git.git", :to => "/var/www"
+      end
+    end
+    should "have the method gems" do
+      assert @tbc.respond_to?(:files)
+    end
+    should "have 1 file" do
+      assert_equal @tbc.files.size, 1
+    end
+    should "have the file name in the files lookup method" do
+      assert_equal @tbc.files.first.name, "/var/note.txt"
+    end
+    should "have the lookup method packages" do
+      assert @tbc.respond_to?(:packages)
+      assert_equal @tbc.packages.size, 1
+      assert_equal @tbc.packages.first.name, "apache2"
+    end
+    should "have lookup method directorys" do
+      assert @tbc.respond_to?(:directorys)
+      assert_equal @tbc.directorys.size, 1
+      assert_equal @tbc.directorys.first.name, "/var"
+    end
+    should "have plugin lookup methods" do
+      assert @tbc.respond_to?(:git_repos)
+      assert_equal @tbc.git_repos.size, 1
+      assert_equal @tbc.git_repos.first.name, "git://git.git"
+    end
+  end  
+end

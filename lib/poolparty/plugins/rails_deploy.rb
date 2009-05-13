@@ -14,7 +14,7 @@
 =end
 module PoolParty
   class Rails
-    
+
     plugin :rails_deploy do
       
       dsl_methods :shared, :database_yml, :repo, :user, :user_dir
@@ -28,14 +28,15 @@ module PoolParty
       )
       
       def loaded(o={}, &block)
-        raise "You must include the directory to deploy the rails app" unless dir?
-        raise "You must include the repo to deploy the rails app" unless repo?
+        # TODO: Change to custom class
+        raise DirectoryMissingError.new unless dir
+        raise ReposMissingError.new unless repo
         
         require_rails_gems
         install_sqlite if o[:install_sqlite]
         
         create_directory_tree
-        setup_database_yml        
+        setup_database_yml
         call_deploy
         
         setup_shared_directory
@@ -68,13 +69,15 @@ module PoolParty
         end
       end
       def setup_database_yml
-        has_file "#{shared_directory}/config/database.yml", :owner => owner do
-          content ::File.file?(database_yml) ? open(database_yml).read : database_yml
+        if database_yml
+          has_file "#{shared_directory}/config/database.yml", :owner => owner do
+            content ::File.file?(database_yml) ? open(database_yml).read : database_yml
+          end
         end
       end
       def call_deploy
         has_package "git-core"
-        dopts = options.choose {|k,v| [:repo, :user, :action].include?(k) }
+        dopts = dsl_options.choose {|k,v| [:repo, :user, :action].include?(k) }        
         has_chef_deploy dopts.merge(:name => "#{release_directory}", :user => owner)
       end
       def setup_shared_directory
@@ -92,6 +95,13 @@ module PoolParty
         end
       end
       # HELPERS
+      def name(n=nil)
+        if n
+          self.name = n
+        else
+          ::File.basename(repo, ::File.extname(repo)) || self.name
+        end        
+      end
       def current_directory
         "#{release_directory}/current"
       end
@@ -103,5 +113,16 @@ module PoolParty
       end
       
     end
+  end
+  
+  class DirectoryMissingError < StandardError
+    def initialize
+      super("You must include the directory to deploy the rails app")
+    end
+  end
+  class ReposMissingError < StandardError
+    def initialize
+      super("You must include the repo to deploy the rails app")
+    end 
   end
 end

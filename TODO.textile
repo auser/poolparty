@@ -6,7 +6,7 @@
 # Place suitcase and dependencies files in ~/.poolparty/tmp-poolname/ instead of /tmp/
 # XMPP
 # Add delayed and immediate for plugins (before and after services)
-
+# Change exeception usage to error
 
 == TODO:
 * Add hot reload to haproxy while reconfiguring

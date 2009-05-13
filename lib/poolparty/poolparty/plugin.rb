@@ -66,6 +66,7 @@ module PoolParty
       def self.inherited(subclass)
         method_name = subclass.to_s.top_level_class.gsub(/pool_party_/, '').gsub(/_class/, '').downcase.to_sym
         add_has_and_does_not_have_methods_for(method_name)
+        add_resource_lookup_method(method_name)
       end
       
     end

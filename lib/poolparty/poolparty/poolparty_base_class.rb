@@ -174,6 +174,15 @@ module PoolParty
       PoolParty::PoolPartyBaseClass.module_eval ev, ($pool_specfile || "")
     end
     
+    def self.add_resource_lookup_method(lookup_type=:file)
+      ev=<<-EOE
+        def #{lookup_type}s
+          ordered_resources.select {|q| q if q.class.to_s =~ /#{lookup_type.to_s.classify}/ }
+        end
+      EOE
+      PoolParty::PoolPartyBaseClass.module_eval ev, ($pool_specfile || "")
+    end
+    
     def handle_option_values(o)
       case o.class.to_s
       when "String"

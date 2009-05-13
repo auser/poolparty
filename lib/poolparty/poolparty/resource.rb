@@ -61,6 +61,7 @@ module PoolParty
           EOE
           PoolParty::PoolPartyBaseClass.module_eval method
           PoolParty::PoolPartyBaseClass.add_has_and_does_not_have_methods_for(lowercase_class_name.to_sym)
+          PoolParty::PoolPartyBaseClass.add_resource_lookup_method(lowercase_class_name)
           
           available_resources << subclass
         end

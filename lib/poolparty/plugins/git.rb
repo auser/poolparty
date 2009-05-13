@@ -8,14 +8,15 @@ module PoolParty
     end
     
     plugin :git_repo do
-      dsl_methods :name, 
+      dsl_methods :name,
+                  :repo,
                   :dir, 
                   :owner, 
                   :requires_user,
                   :deploy_key
             
       def loaded(opts={}, &block)
-        raise(StandardError.new("You must include a directory for the git repos set by to")) unless dir?
+        raise DirectoryMissingError.new unless dir
 
         has_package("git-core")
         has_git_repository
@@ -30,9 +31,9 @@ module PoolParty
           # Cloud, GitRepos, Exec
 
           if requires_user
-            command("git clone #{requires_user}@#{repos} #{dir}")
+            command("git clone #{requires_user}@#{repo} #{dir}")
           else
-            command("cd #{dir} && git clone #{repos}")
+            command("cd #{dir} && git clone #{repo}")
           end
           
           cwd "#{dir if dir}"          
@@ -42,13 +43,13 @@ module PoolParty
           command "cd #{::File.dirname( creates_dir )} && git pull"
         end
         
-        if owner?
+        if owner
           has_exec(:name => "chown-#{name}", :cwd => ::File.dirname( creates_dir )) do            
             command "chown #{owner} * -R"
           end
         end
         
-        if deploy_key?
+        if deploy_key
           raise Exception.new("Cannot find the git deploy key: #{deploy_key}") unless ::File.file?(::File.expand_path(deploy_key))
           ::Suitcase::Zipper.add(::File.expand_path(deploy_key), "keys")
           PoolParty::Provision::DrConfigure.class_commands << "cp -f /var/poolparty/dr_configure/keys/* ~/.ssh"
@@ -59,16 +60,17 @@ module PoolParty
       def to(d)
         dir d
       end
-      
-      def repos(r=nil)
-        name
-      end
-      
+            
       def creates_dir
         "#{::File.join( dir, ::File.basename(name, ::File.extname(name)) )}/.git"
       end
       
     end
     
+  end
+end
+class DirectoryMissingError < StandardError
+  def initialize
+    super("You must include a directory for the git repo set by to")
   end
 end
