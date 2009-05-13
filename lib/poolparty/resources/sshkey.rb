@@ -33,7 +33,7 @@ The sshkey resource specifies an ssh key that should be distributed on all the n
                   
       def initialize(opts={}, extra_opts={}, &block)
         super(opts, extra_opts, &block)
-        @key = Key.new(keypath? ? keypath : nil)
+        @key = Key.new(keypath ? keypath : nil)
         self.key = @key.content
       end
       

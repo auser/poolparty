@@ -81,7 +81,7 @@ module PoolParty
         has_chef_deploy dopts.merge(:name => "#{release_directory}", :user => owner)
       end
       def setup_shared_directory
-        if shared?
+        if shared
           shared.each do |sh|
             
             has_directory "#{shared_directory}/#{::File.dirname(sh)}", :owner => owner, :mode => "0755"
