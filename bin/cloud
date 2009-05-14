@@ -12,7 +12,7 @@ GitStyleBinary.primary do
 Usage: #{$0} #{all_options_string} COMMAND [ARGS]
 
 The cloud subcommands commands are:
-\#{GitStyleBinary.pretty_known_subcommands.join("\n   ")}
+  \#{GitStyleBinary.pretty_known_subcommands(:short).join("  ")}
 
 See 'cloud help COMMAND' for more information on a specific command.
 EOS
