@@ -25,6 +25,23 @@ class Object
     block.in_context(self).call
     self
   end
+  
+  # Procs that have been run already in the run_once blocks
+  # This is just a container array of procs
+  def run_procs
+    @run_procs ||= []
+  end
+  
+  # Do once.
+  # Takes a block. IF this block has already been run (from the run_procs array),
+  # then run it and store the block unique id in the run_procs array so
+  # it never gets run again
+  def do_once(&block)
+    unless run_procs.include?(block.to_s)      
+      instance_eval &block if block
+      run_procs << block.to_s
+    end    
+  end
 
   def respec_string
     case self.class

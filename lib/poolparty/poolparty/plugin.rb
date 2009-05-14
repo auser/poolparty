@@ -40,6 +40,10 @@ module PoolParty
       def after_create
       end
       
+      def calls(r)
+        has_exec "ls", :calls => r
+      end
+      
       def enable
       end
       def is_plugin?
