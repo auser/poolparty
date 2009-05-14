@@ -15,6 +15,7 @@ default host.
       dsl_methods :passenger_version
       
       def loaded(opts={}, &block)
+        configs
         has_service("apache2", :requires => get_package("apache2"))
       end
 
@@ -44,9 +45,7 @@ default host.
         unless @base_install
           has_exec({:name => "restart-apache2", :command => "/etc/init.d/apache2 restart", :action => :nothing})
           has_exec({:name => "reload-apache2", :command => "/etc/init.d/apache2 reload", :action => :nothing})
-          has_exec({:name => "force-reload-apache2", :command => "/etc/init.d/apache2 force-reload", :action => :nothing})
-
-          configs
+          has_exec({:name => "force-reload-apache2", :command => "/etc/init.d/apache2 force-reload", :action => :nothing})          
           @base_install = true
         end
       end
@@ -163,8 +162,8 @@ default host.
         end
       end
       
-      def listen(port="80")
-        has_variable(:name => "port", :value => port)
+      def listen(p="80")
+        has_variable(:name => "port", :value => p)
         @listen = true
       end
       
@@ -271,7 +270,9 @@ eof
 
     def loaded(opts={}, prnt=nil)
       enable_passenger
-      port "80" unless port
+      
+      port "80" unless self.port
+      
       appended_path "current" if opts[:with_deployment_directories]
       passenger_entry <<-EOE
 <VirtualHost *:#{port}>

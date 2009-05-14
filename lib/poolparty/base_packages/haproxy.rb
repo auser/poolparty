@@ -1,29 +1,33 @@
+=begin rdoc
+  Enables haproxy for a cloud
+=end
 module PoolParty
   class Base
     plugin :haproxy do
       
+      default_options(
+        :port => 80,
+        :forwarding_port => 8080,
+        :proxy_mode => "http"
+      )
+      
       def before_configure
       end
       
-      def enable
-        # has_chef_recipe "apache2"
-        # include_chef_recipe "#{::File.dirname(__FILE__)}/../../../vendor/chef/apache2"
-
+      def loaded(o={}, &block)
+        set_vars_from_options(cloud.dsl_options) if cloud
         # Restart sysklogd after we update the haproxy.log
         has_service(:name => "sysklogd")    
 
-        has_package "haproxy" do
-          # stops get_service("apache2"), :immediately
-          # starts get_service("apache2")
-        end
+        has_package "haproxy"
 
         # Template variables
-        has_variable("haproxy_name", :value => "#{cloud.name}")
+        has_variable("haproxy_name", :value => "#{(cloud ? cloud.name : name)}")
         has_variable("listen_ports", :value => [ "8080" ], :namespace => "apache")
         
-        has_variable("ports_haproxy", :value => ([(cloud.port || Default.port)].flatten))        
-        has_variable("forwarding_port", :value => (cloud.forwarding_port || Default.forwarding_port))
-        has_variable("proxy_mode", :value => (cloud.proxy_mode || Default.proxy_mode))
+        has_variable("ports_haproxy", :value => ([(port || Default.port)].flatten))        
+        has_variable("forwarding_port", :value => (forwarding_port || Default.forwarding_port))
+        has_variable("proxy_mode", :value => (proxy_mode || Default.proxy_mode))
     
         # Startup haproxy and enable it
         has_line_in_file(:line => "ENABLED=1", :file => "/etc/default/haproxy")
@@ -33,10 +37,7 @@ module PoolParty
           content ''
         end
         
-        has_directory "/var/run/haproxy"
-        # has_package "apache2"
-        # has_service "apache2"
-        
+        has_directory "/var/run/haproxy"        
 
         has_exec "reloadhaproxy", 
           :command => "/etc/init.d/haproxy reload", 
@@ -51,8 +52,6 @@ module PoolParty
         # Service is required
         has_service("haproxy") do
           action [:start, :enable]
-          # stops get_service("apache2"), :immediately
-          # starts get_service("apache2")
         end
         
       end

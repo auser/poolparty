@@ -46,7 +46,9 @@ module PoolParty
         true
       end
       def cloud
-        @parent
+        context_stack.find do |i|
+          i.class == PoolParty::Cloud::Cloud
+        end
       end
       
       def bootstrap_gems *gems
