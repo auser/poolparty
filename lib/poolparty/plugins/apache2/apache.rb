@@ -362,6 +362,14 @@ eof
                 :requires => get_package("libapache2-mod-php5"),
                 :calls => get_exec("reload-apache2")})
 
+        has_file(:name => "/etc/apache2/conf.d/enable-php.conf", 
+                 :mode => 755,
+                 :calls => get_exec("reload-apache2"),
+                 :content => <<-eos 
+                 AddHandler php5-script php
+                 AddType text/html       php
+                 eos
+                 )
       end
 
       def extras(*names)
