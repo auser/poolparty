@@ -9,6 +9,7 @@ module PoolParty
   module Remote
     class Metavirt < Remote::RemoterBase
       include Dslify
+      include CloudResourcer
       
       default_options(
         # :machine_image => 'ubuntu-kvm',
@@ -20,14 +21,21 @@ module PoolParty
         :keypair_name    => nil,
         :keypair_path    => nil,
         :authorized_keys => nil,
-        :remoter_base    => :vmrun,
+        :remoter_base  => :vmrun,
         :remote_base     => nil,
-        :server_config   => {}
+        :server_config   => {},
+        :remoter_base_options => nil
       ) 
       
       def initialize(opts={}, &block)
-        super
-        provider self.remoter_base
+        pp opts.inspect
+        
+        #super
+        opts.each {|k,v| opts[k] = v.call if v.respond_to?(:call) }
+        set_vars_from_options opts
+        instance_eval &block if block
+        
+        puts "remoter_base=#{self.remoter_base} in  #{self.class}"
       end
       
       def server
@@ -53,7 +61,7 @@ module PoolParty
         new_instance(o).launch_new_instance!
       end
       def launch_new_instance!(o={})
-        p remote_base.dsl_options[:vmx_files]
+        require 'rubygems'; require 'ruby-debug'; debugger
         opts =dsl_options.merge(:remoter_base_options=>remoter_base_options)
         result = JSON.parse(server['/run-instance'].put(opts.to_json)).symbolize_keys
         @id = result[:id]
@@ -86,13 +94,15 @@ module PoolParty
       
       # setup the contained remoter base
       # this is almost identical to cloud.using
-      def provider(t, opts={}, &block)        
+      def provider(t, opts={}, &block)
+        puts "\n--\nProvider = #{t}\n---"     
         return self.send(t) if self.respond_to? t
         if available_bases.include?(t.to_sym)
           klass_string = "#{t}".classify
           remote_base_klass = "::PoolParty::Remote::#{klass_string}".constantize
-          self.remote_base = remote_base_klass.send :new, dsl_options, &block
-          instance_eval "def #{t};remote_base;end"
+          self.cloud_base = remote_base_klass.send :new, dsl_options, &block
+          puts "dsl_options[:cloud_base]=#{self.cloud_base.name}"
+          instance_eval "def #{t};cloud_base;end"
         else
           raise "Unknown remote base: #{t}"
         end

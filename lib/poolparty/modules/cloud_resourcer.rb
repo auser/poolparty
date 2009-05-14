@@ -65,6 +65,7 @@ module PoolParty
         klass_string = "#{t}".classify
         @remote_base_klass = "::PoolParty::Remote::#{klass_string}".constantize      
         self.remote_base = @remote_base_klass.send :new, dsl_options, &block
+        self.remoter_base = t.to_sym
         set_vars_from_options(:remote_base => remote_base)
         set_vars_from_options(@remote_base_klass.dsl_options)        
         instance_eval "def #{t};remote_base;end"
