@@ -5,14 +5,14 @@ require "poolparty"
 require 'git-style-binary/command'
 
 GitStyleBinary.command do  
-  version "PoolParty cloud command"  
+  version "PoolParty #{$0} command"  
   banner <<-EOS
 Usage: #{$0} #{all_options_string} COMMAND [ARGS]
 
-  List the clouds and their nodes
+  Copy the IP address of a node to the Mac OS X clipboard
 EOS
 
-  short_desc "List the clouds"
+  short_desc "Copy the IP address of a node to the Mac OS X clipboard"
 
   run do |command|    
     @loaded_clouds.each do |cld|

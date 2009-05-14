@@ -5,14 +5,14 @@ require "poolparty"
 require 'git-style-binary/command'
 
 GitStyleBinary.command do  
-  version "PoolParty cloud command"  
+  version "PoolParty #{$0} command"  
   banner <<-EOS
-Usage: #{$0} #{all_options_string} COMMAND [ARGS]
+Usage: #{$0} #{all_options_string}
 
-  List the clouds and their nodes
+  combines bootstrap and configures an instance or multiple instances
 EOS
 
-  short_desc "List the clouds"
+  short_desc "combines bootstrap and configures an instance or multiple instances"
 
   run do |command|    
     @loaded_clouds.each do |cld|

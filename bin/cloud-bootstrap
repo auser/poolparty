@@ -5,9 +5,9 @@ require "poolparty"
 require 'git-style-binary/command'
 
 GitStyleBinary.command do  
-  version "PoolParty cloud command"  
+  version "PoolParty #{$0} command"  
   banner <<-EOS
-Usage: #{$0} #{all_options_string} COMMAND [ARGS]
+Usage: #{$0} #{all_options_string}
 
   Bootstrap a cloud instance
 EOS
