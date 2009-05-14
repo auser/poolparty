@@ -15,7 +15,7 @@ module PoolParty
       end
       
       def loaded(o={}, &block)
-        set_vars_from_options(cloud.dsl_options) if cloud
+        set_vars_from_options(cloud.dsl_options.reject{|k,v| [:enabled, :disabled].include?(v) }) if cloud
         # Restart sysklogd after we update the haproxy.log
         has_service(:name => "sysklogd")    
 
