@@ -16,3 +16,6 @@
 [submodule "vendor/gems/rest-client"]
 	path = vendor/gems/rest-client
 	url = git://github.com/adamwiggins/rest-client.git
+[submodule "vendor/gems/trollop"]
+	path = vendor/gems/trollop
+	url = git://github.com/jashmenn/trollop.git
