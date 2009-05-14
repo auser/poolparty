@@ -9,12 +9,19 @@ class TestMetavirt < Test::Unit::TestCase
         keypair '~/.ec2/front'
         instances 1
         using :metavirt
+          provider :vmrun do
+            vmx_files ['/path/to/vmx', '/another/path']
+          end
       end
-    end    
-    should "be setting the type of remote_base as metavirt" do
-      @cloud.remote_base.class.should == PoolParty::Remote::Metavirt
     end
-    should "have the method metavirt as the remoter base" do
+    should "be registered as a remote_base" do
+      @cloud.available_bases.include?(:vmrun).should == true
+    end
+    should "be setting the type of remote_base" do
+      @cloud.remote_base.class.should == PoolParty::Remote::Metavirt
+      @cloud.remote_base.remote_base.class.should == PoolParty::Remote::Vmrun
+    end
+    should "have metavirt as the remoter base" do
       @cloud.metavirt.should == @cloud.remote_base
     end
     should "have a keypair" do

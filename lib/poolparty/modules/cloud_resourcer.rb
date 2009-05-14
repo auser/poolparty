@@ -63,27 +63,16 @@ module PoolParty
       @cloud = self
       if self.class.available_bases.include?(t.to_sym)
         klass_string = "#{t}".classify
-        @remote_base_klass = "::PoolParty::Remote::#{klass_string}".constantize
-        
-        # TODO: Move to after_setup
+        @remote_base_klass = "::PoolParty::Remote::#{klass_string}".constantize      
         self.remote_base = @remote_base_klass.send :new, dsl_options, &block
-        remote_base.instance_eval &block if block
-        
-        #TODO: should not be dynamicly declaring default options here
-        self.class.set_default_options(:remote_base => remote_base)
-        self.class.set_default_options(@remote_base_klass.dsl_options)
-        
-        @parent_cloud = @cloud
+        set_vars_from_options(:remote_base => remote_base)
+        set_vars_from_options(@remote_base_klass.dsl_options)        
         instance_eval "def #{t};remote_base;end"
       else
         raise "Unknown remote base: #{t}"
       end
     end
-    
-    # Are we using a remoter?
-    def using_remoter?
-      !@remote_base.nil?
-    end
+
     
     # Keypairs
     # Use the keypair path

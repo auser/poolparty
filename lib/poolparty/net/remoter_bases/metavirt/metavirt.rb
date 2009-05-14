@@ -20,10 +20,15 @@ module PoolParty
         :keypair_name    => nil,
         :keypair_path    => nil,
         :authorized_keys => nil,
-        :remote_base    => :vmrun,
-        :server_config   => {},
-        :provider        => :vmrun
+        :remoter_base    => :vmrun,
+        :remote_base     => nil,
+        :server_config   => {}
       ) 
+      
+      def initialize(opts={}, &block)
+        super
+        provider self.remoter_base
+      end
       
       def server
         if @server
@@ -81,13 +86,12 @@ module PoolParty
       
       # setup the contained remoter base
       # this is almost identical to cloud.using
-      def provider(t, &block)
+      def provider(t, opts={}, &block)        
         return self.send(t) if self.respond_to? t
         if available_bases.include?(t.to_sym)
           klass_string = "#{t}".classify
-          @remote_base_klass = "::PoolParty::Remote::#{klass_string}".constantize
-          self.remote_base = @remote_base_klass.send :new, dsl_options, &block
-          remote_base.instance_eval &block if block
+          remote_base_klass = "::PoolParty::Remote::#{klass_string}".constantize
+          self.remote_base = remote_base_klass.send :new, dsl_options, &block
           instance_eval "def #{t};remote_base;end"
         else
           raise "Unknown remote base: #{t}"
