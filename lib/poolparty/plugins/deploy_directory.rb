@@ -7,7 +7,7 @@ The deploy directory will copy the source directory from the developer machine (
 
 == Usage
 
-  has_deploy_directory(has_deploy_directory 'bob', 
+  has_deploy_directory('bob', 
                      :from => "~/path/to/my/site", 
                      :to => "/mnt",
                      :owner => 'www-data',
@@ -17,7 +17,7 @@ This will place the contents of ~/path/to/my/site from your machine to /mnt/bob 
 
 =end
 
-  class Deploydirectory
+  class DeployDirectory
     virtual_resource(:deploy_directory) do
       
       dsl_methods :from, :to, :owner, :git_pull_first
@@ -36,15 +36,12 @@ This will place the contents of ~/path/to/my/site from your machine to /mnt/bob 
       end
       
       def add_unpack_directory
-        has_directory("#{::File.dirname(to)}")
-        has_exec("unpack-#{::File.basename(to)}-deploy-directory") do
-          requires get_directory("#{::File.dirname(to)}")
-          command "cp -R /var/poolparty/dr_configure/user_directory/#{name}/* #{to}"
-        end
-        if owner?
-          has_exec(:name => "chown-#{name}") do
-            command "chown #{owner} -R #{to}/#{name}"
-          end
+        has_directory(to)
+        has_exec("unpack-#{::File.basename(to)}-deploy-directory",
+          :requires => get_directory(to),
+          :command => "cp -R /var/poolparty/dr_configure/user_directory/#{name}/* #{to}")
+        if owner
+          has_exec(:name => "chown-#{name}", :command => "chown #{owner} -R #{to}/#{name}")
         end     
       end
       
