@@ -20,7 +20,7 @@ This will place the contents of ~/path/to/my/site from your machine to /mnt/bob 
   class DeployDirectory
     virtual_resource(:deploy_directory) do
       
-      dsl_methods :from, :to, :owner, :git_pull_first
+      dsl_methods :from, :to, :owner, :mode, :git_pull_first
       
       def loaded(opts={}, &block)        
         add_unpack_directory
@@ -41,8 +41,12 @@ This will place the contents of ~/path/to/my/site from your machine to /mnt/bob 
           :requires => get_directory(to),
           :command => "cp -R /var/poolparty/dr_configure/user_directory/#{name}/* #{to}")
         if owner
-          has_exec(:name => "chown-#{name}", :command => "chown #{owner} -R #{to}/#{name}")
+          has_exec(:name => "chown-#{name}", :command => "chown #{owner} -R #{to}")
         end     
+
+        if mode
+          has_exec(:name => "chmod-#{name}", :command => "chmod #{mode} #{to}")
+        end
       end
       
       def update_from_repo
