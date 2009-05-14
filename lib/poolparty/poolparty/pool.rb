@@ -29,7 +29,7 @@ module PoolParty
 
     class Pool < PoolParty::PoolPartyBaseClass
       include PrettyPrinter
-      include CloudResourcer # WHY?!?! TODO: check on this
+      include CloudResourcer
       include Remote
       
       def initialize(name,&block)
@@ -43,6 +43,7 @@ module PoolParty
 
         super(&block)
       end
+      
       def self.load_from_file(filename=nil)
         # a = new ::File.basename(filename, ::File.extname(filename))
         File.open(filename, 'r') do |f|
@@ -50,6 +51,7 @@ module PoolParty
         end
         # a
       end
+      
       def name(*args)
         @pool_name ||= @pool_name ? @pool_name : (args.empty? ? :default_pool : args.first)
       end

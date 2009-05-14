@@ -40,11 +40,18 @@ module PoolParty
       :minimum_runtime  => 3000, #50.minutes in seconds
       :contract_when => "load < 0.25",
       :expand_when => "load > 0.9",
+      # :access_key => "access_key",  #TODO: move to ec2 class
+      # :secret_access_key => "secret_access_key", #TODO: move to ec2 class
+      :ec2_dir => ENV["EC2_HOME"], #TODO: move to ec2 class
       :image_id => nil,
-      :access_key => nil,
-      :secret_access_key => nil,
-      :remoter_base => :ec2
+      :access_key => nil, #TODO: move to ec2 class
+      :secret_access_key => nil, #TODO: move to ec2 class
+      :remoter_base => :ec2,
+      :using_remoter_base => :ec2, #TODO: remove redundant code
+      :remote_base => :ec2
+      # :key => ::PoolParty::Key.new
     )
+    
     
     # Class methods
     class << self

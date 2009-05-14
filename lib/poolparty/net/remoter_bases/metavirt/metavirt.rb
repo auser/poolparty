@@ -3,54 +3,55 @@
   
 =end
 require 'restclient'
+require 'cgi'
 
 module PoolParty
   module Remote
     class Metavirt < Remote::RemoterBase
       include Dslify
-
+      
       default_options(
         # :machine_image => 'ubuntu-kvm',
-        :public_key    => nil, #TODO lambda{ keypair.public_key.to_s  }
-        :server_config => {:content_type =>'application/json', 
-                           :accept      => 'application/json',
-                           :host        => 'http://localhost',
-                           :port        => '3000'},
-        :vmx_files     => []
+        # :key       => lambda {Key.new},
+        # :keypair_name  => lambda {key.basename},
+        # :keypair_path  => lambda {key.full_filepath},
+        # :public_key    => lambda { key.public_key.to_s },
+        # :keypair       => nil,
+        :keypair_name    => nil,
+        :keypair_path    => nil,
+        :authorized_keys => nil,
+        :remote_base    => :vmrun,
+        :server_config   => {},
+        :provider        => :vmrun
       ) 
       
-      attr_accessor :id, :rank
-      def key
-        keypair.to_s
+      def server
+        if @server
+          @server
+        else
+          opts = {:content_type =>'application/json', 
+           :accept      => 'application/json',
+           :host        => 'http://localhost',
+           :port        => '3000'}.merge(server_config)
+          @uri = "#{opts.delete(:host)}:#{opts.delete(:port)}"
+          @server = RestClient::Resource.new( @uri, opts)
+        end
       end
       
-      def initialize(par, opts={}, &block)
-        dsl_options opts
-        instance_eval &block if block
-        dsl_options[:cloud] = par.name
-        setup_server opts
-        puts "MetaVirt setup with: #{dsl_options.inspect}"
-        
-        super(par, &block)
+      def remoter_base_options
+        dsl_options[:remoter_base_options] = remote_base.dsl_options.choose do |k,v|
+          v && (v.respond_to?(:empty) ? !v.empty?: true)
+        end
       end
       
-      private
-      def setup_server(opts)
-        server_config.merge!(opts[:server_config] || {})
-        puts 'server config='
-        p uri = "#{server_config.delete(:host)}:#{server_config.delete(:port)}"
-        @server = RestClient::Resource.new( uri, server_config)
-      end
-
-      public
       def self.launch_new_instance!(o={})
         new_instance(o).launch_new_instance!
       end
       def launch_new_instance!(o={})
-        useable_opts = Hash.new
-        options.keys.each {|k| useable_opts[k]=o[k]}
-        result = JSON.parse(@server['/run-instance'].put(options.to_json)).symbolize_keys
-        @id = result['id']
+        p remote_base.dsl_options[:vmx_files]
+        opts =dsl_options.merge(:remoter_base_options=>remoter_base_options)
+        result = JSON.parse(server['/run-instance'].put(opts.to_json)).symbolize_keys
+        @id = result[:id]
         result
       end
       # Terminate an instance by id
@@ -59,7 +60,7 @@ module PoolParty
       end
       def terminate_instance!(o={})
         raise "id or instance_id must be set before calling describe_instace" if !id(o)
-        @server["/instance/#{id(o)}"].delete
+        server["/instance/#{CGI.escape(id(o))}"].delete
       end
 
       # Describe an instance's status, must pass :vmx_file in the options
@@ -68,46 +69,30 @@ module PoolParty
       end
       def describe_instance(o={})
         raise "id or instance_id must be set before calling describe_instace" if !id(o)
-        JSON.parse(@server["/instance/#{id(o)}"].get).symbolize_keys!
+        JSON.parse(@server["/instance/#{CGI.escape(id(o))}"].get).symbolize_keys!
       end
 
       def self.describe_instances(o={})
         new_instance(o).describe_instances
       end
       def describe_instances(o={})
-        JSON.parse( @server["/instances/"].get ).collect{|i| i.symbolize_keys}
+        JSON.parse( server["/instances/"].get ).collect{|i| i.symbolize_keys!}
       end
       
-      # TODO: Rename and modularize the @inst.status =~ /pending/ so that it works on all 
-       # remoter_bases
-       def launch_instance!(o={}, &block)
-         @inst = launch_new_instance!( o )
-         sleep 2
-         cloud.dputs "#{cloud.name} launched instance checking for ip..."         
-         # Wait for 10 minutes for the instance to gain an ip if it doesn't already have one
-         5.times do |i|
-           @inst = describe_instance
-           return @inst if @inst[:status] && @inst[:status] == 'running'
-           print '.'
-           sleep 1
-         end
-         cloud.dputs "Found an ip"
-         cloud.dputs "#{@cloud.name} Launched instance #{@inst[:ip]}"
-         cloud.dputs "   waiting for it to respond"
-         # Try for 10 minutes to pint port 22 
-         500.times do |i|
-           print "."
-           if (@inst[:public_ip] && ping_port(@inst[:public_ip], 22)) 
-             #TODO make work with internal_ip|| (@inst[:internal_ip] && ping_port(@inst[:internal_ip], 22 ))
-             cloud.started_instance = @inst
-             cloud.call_after_launch_instance_callbacks(@inst)
-             block.call(@inst) if block
-             return @inst
-           end
-           sleep(2)
-         end
-         raise "Instance not responding at #{@inst.public_ip}"
-       end
+      # setup the contained remoter base
+      # this is almost identical to cloud.using
+      def provider(t, &block)
+        return self.send(t) if self.respond_to? t
+        if available_bases.include?(t.to_sym)
+          klass_string = "#{t}".classify
+          @remote_base_klass = "::PoolParty::Remote::#{klass_string}".constantize
+          self.remote_base = @remote_base_klass.send :new, dsl_options, &block
+          remote_base.instance_eval &block if block
+          instance_eval "def #{t};remote_base;end"
+        else
+          raise "Unknown remote base: #{t}"
+        end
+      end
       
       private
       def id(o={})

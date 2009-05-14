@@ -62,7 +62,6 @@ module PoolParty
     def using(t, &block)
       @cloud = self
       if self.class.available_bases.include?(t.to_sym)
-
         klass_string = "#{t}".classify
         @remote_base_klass = "::PoolParty::Remote::#{klass_string}".constantize
         
@@ -70,6 +69,7 @@ module PoolParty
         self.remote_base = @remote_base_klass.send :new, dsl_options, &block
         remote_base.instance_eval &block if block
         
+        #TODO: should not be dynamicly declaring default options here
         self.class.set_default_options(:remote_base => remote_base)
         self.class.set_default_options(@remote_base_klass.dsl_options)
         
@@ -109,7 +109,8 @@ module PoolParty
     def _keypair_filepaths
       _keypairs.map {|a| a.filepath }
     end
-        
+    
+    #TODO: deprecate: use key.full_filepath    
     def full_keypair_path
       @full_keypair_path ||= keypair.full_filepath
     end

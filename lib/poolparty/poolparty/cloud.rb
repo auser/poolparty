@@ -68,13 +68,12 @@ module PoolParty
       
       # Default set of options. Most take the Default options from the default class
       default_options(
-        :expand_when => Default.expand_when,
+       :expand_when => Default.expand_when,
         :contract_when => Default.contract_when,
         :minimum_instances => 2,
         :maximum_instances => 5,
         :ec2_dir => ENV["EC2_HOME"],
         :minimum_runtime => Default.minimum_runtime,
-        :user => Default.user,
         :dependency_resolver => ChefResolver,
         :using_remoter_base => Default.remoter_base,
         :remote_base => nil
@@ -104,7 +103,8 @@ module PoolParty
       end
       
       def before_create
-        using Default.remoter_base
+        using Default.remoter_base  #TODO: refactor to not need to line
+        
         # context_stack.push self
         # TODO: PUT BACK IN
         # (parent ? parent : self).
@@ -132,8 +132,10 @@ module PoolParty
       
       # setup defaults for the cloud
       def setup_defaults
-        set_vars_from_options(:keypair_name => key.basename, :keypair_path => key.full_filepath)        
-        dsl_options[:rules] = {:expand => dsl_options[:expand_when], :contract => dsl_options[:contract_when]}        
+        set_vars_from_options(:keypair_name => key.basename, 
+                              :keypair_path => key.full_filepath)        
+        dsl_options[:rules] = {:expand   => dsl_options[:expand_when], 
+                               :contract => dsl_options[:contract_when]}        
         
         set_dependency_resolver 'chef'
       end
@@ -144,10 +146,9 @@ module PoolParty
       
       # provide list of public ips to get into the cloud
       def ips
-        nodes(:status => "running").map {|ri| ri.ip }
+        nodes(:status => "running").map {|ri| ri.public_ip }
       end
       
-      # TODO: make this be a random ip, since we should not rely on it being the same each time
       def ip
         ips.first
       end
@@ -183,7 +184,7 @@ module PoolParty
         end
       end
 
-      #FIXME MOVE TO DEPENDECY RESOL
+      #FIXME MOVE TO DEPENDENCY RESOLVER
       # Configuration files
       def build_manifest
         vputs "Building manifest"
