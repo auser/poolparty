@@ -4,6 +4,8 @@ class Object
   def remote_bases
     $remote_bases ||= []
   end
+  
+  #TODO: deprecate, this is taken care of with inherited hook
   # Register the remoter base in the remote_bases global store
   def register_remote_base(*args)
     args.each do |arg|

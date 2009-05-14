@@ -1,6 +1,4 @@
-pool :poolpartyrb do
-  plugin_directory "docs_plugins"  
-  
+pool :poolpartyrb do  
   cloud :app do
         
     # Configuration

@@ -9,22 +9,25 @@ module PoolParty
       include PoolParty::DependencyResolverCloudExtensions
       include PoolParty::Callbacks
       
-      def initialize(opts={}, prnt=nil, &block)
+      default_options(
+        :name => nil
+      )
+      
+      def initialize(opts={}, extra_opts={}, prnt=nil, &block)        
         setup_callbacks
-
+        
         run_in_context do
           before_load(opts, &block)
         end
         
-        block = Proc.new {enable} unless block
+        block = Proc.new {enable} unless block        
         
-        @opts = (opts.is_a?(Hash) ? opts : {:name => opts})
         super(opts, &block)
         
         run_in_context do
-          loaded @opts, &block
+          loaded opts, &block
         end
-                
+        
         after_create
       end
       
@@ -43,7 +46,9 @@ module PoolParty
         true
       end
       def cloud
-        @parent
+        context_stack.find do |i|
+          i.class == PoolParty::Cloud::Cloud
+        end
       end
       
       def bootstrap_gems *gems
@@ -63,6 +68,7 @@ module PoolParty
       def self.inherited(subclass)
         method_name = subclass.to_s.top_level_class.gsub(/pool_party_/, '').gsub(/_class/, '').downcase.to_sym
         add_has_and_does_not_have_methods_for(method_name)
+        add_resource_lookup_method(method_name)
       end
       
     end

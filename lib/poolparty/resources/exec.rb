@@ -25,6 +25,7 @@ Ensure a command is run on the instances
     
     class Exec < Resource
       
+      dsl_methods :cwd, :creates, :command
       default_options({
         :path => ["/usr/bin:/bin:/usr/local/bin:$PATH"]
       })
@@ -38,7 +39,7 @@ Ensure a command is run on the instances
       end
       
       def after_create
-        options[:name] = options[:command] unless options.name
+        dsl_options[:name] = dsl_options[:command] unless dsl_options[:name]
       end
 
     end

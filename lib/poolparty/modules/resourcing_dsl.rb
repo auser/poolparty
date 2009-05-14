@@ -1,13 +1,5 @@
 module PoolParty
   module ResourcingDsl
-    # Overrides for syntax
-    # Allows us to send require to require a resource
-    def requires(str=nil)
-      str ? dsl_options.merge!(:require => send_if_method(str)) : dsl_options[:require]
-    end
-    def on_change(str=nil)
-      str ? dsl_options.merge!(:notify => send_if_method(str)) : dsl_options[:notify]
-    end
     def ensures(str = :present)
       if [:absent, :present].include?(str) 
         str == :absent ? is_absent : is_present
@@ -31,28 +23,8 @@ module PoolParty
       dsl_options.merge!(:ensures => absent)
       absent
     end
-    # Alias for unless
-    def ifnot(str="")
-      dsl_options.merge!(:unless => str)
-    end
-    def cancel(*args)
-      dsl_options[:cancelled] = args.empty? ? true : args[0]
-    end
-    def cancelled?
-      dsl_options[:cancelled] || false
-    end
-    def printed(*args)
-      dsl_options[:printed] = true
-    end
-    def printed?
-      dsl_options[:printed] || false
-    end
 
     #TODO: Diet
-    def render_template
-      # @templates.
-    end
-    
     def get_client_or_gem_template(file)
       if ::File.file?(file) && ::File.readable?(file)
         file

@@ -12,10 +12,6 @@ class TestService
 end
 
 describe "Cloud" do
-  before(:each) do
-    setup
-    # 
-  end
   describe "wrapped" do
     before(:each) do
       @obj = Object.new
@@ -37,8 +33,8 @@ describe "Cloud" do
       it "should have set the using base on intantiation to ec2" do
         @cloud1.using_remoter?.should_not == nil
       end
-      it "should say the remoter_base is ec2 (by default)" do
-        @cloud1.remote_base.class.should == Kernel::Ec2
+      it "should say the remote_base is ec2 (by default)" do
+        @cloud1.remote_base.class.should == ::PoolParty::Remote::Ec2
       end
     end
     it "should return the cloud if the cloud key is already in the clouds list" do
@@ -48,10 +44,8 @@ describe "Cloud" do
     describe "options" do
       before(:each) do
         reset!
-        setup
         pool :options do
           user "bob"
-          pop_stick true
           minimum_instances 100
           access_key "pool_access_key"
           cloud :apple do
@@ -67,9 +61,6 @@ describe "Cloud" do
       end
       it "should take the access_key option set from the cloud" do
         clouds[:apple].access_key.should == "cloud_access_key"
-      end
-      it "should take the option pop_stick from the superclass" do
-        clouds[:apple].pop_stick.should == true
       end
       it "should take the option testing true from the superclass" do
         pools[:options].user.should == "bob"
@@ -100,8 +91,8 @@ describe "Cloud" do
         end
         cloud(:paddy_wack).parent.should == pool(:knick_knack)
       end
-      it "should respond to a options method (from Dslify)" do
-        @cloud.respond_to?(:options).should == true
+      it "should respond to a dsl_options method (from Dslify)" do
+        @cloud.respond_to?(:dsl_options).should == true
       end
       describe "configuration" do
         before(:each) do
@@ -190,7 +181,7 @@ describe "Cloud" do
                 EOE
               end
               enable :haproxy
-              has_gempackage(:name => "poolparty")
+              has_gem_package(:name => "poolparty")
               has_package(:name => "dummy")            
             end
             context_stack.push @cloud
@@ -264,7 +255,7 @@ describe "Cloud" do
               str = "master 192.168.0.1
               node1 192.168.0.2"
               @sample_instances_list = [{:ip => "192.168.0.1", :name => "master"}, {:ip => "192.168.0.2", :name => "node1"}]
-              @ris = @sample_instances_list.map {|h| PoolParty::Remote::RemoteInstance.new(h, @cloud) }
+              @ris = @sample_instances_list.map {|h| PoolParty::Remote::RemoteInstance.new(h) }
               
               stub_remoter_for(@cloud)
               

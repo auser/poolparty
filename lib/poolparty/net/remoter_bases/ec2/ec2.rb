@@ -36,25 +36,30 @@ module PoolParty
   module Remote
     class Ec2 < Remote::RemoterBase
       
+      dsl_methods :elastic_ips,           # An array of the elastic ips
+                  :ebs_volume_id         # The volume id of an ebs volume
+      
       default_options({
         :image_id => 'ami-bf5eb9d6',
         # :key_name => ::File.basename(keypair.is_a?(String) ? keypair : keypair.full_filepath),
         :instance_type => 'm1.small', # or 'm1.large', 'm1.xlarge', 'c1.medium', or 'c1.xlarge'
         :addressing_type => "public",
         :availabilty_zone => "us-east-1a",
+        :access_key => nil,
+        :secret_access_key => nil,
         :security_group => ["default"]
         })
       
       # Requires a hash of options
-      def self.launch_new_instance!(parent_cloud, o)
-        new(parent_cloud, o).launch_new_instance!
+      def self.launch_new_instance!(o)
+        new(o).launch_new_instance!
       end
       
       # TODO: Fix the key_name issue
       # Start a new instance with the given options
       def launch_new_instance!(o={})
-        raise "You must pass a keypair to launch an instance, or else you will not be able to login. options = #{o.inspect}" if !cloud.keypair
-        o.merge!( options ).merge!(:key_name=>keypair.basename)
+        raise "You must pass a keypair to launch an instance, or else you will not be able to login. options = #{o.inspect}" if !keypair
+        o.merge!( dsl_options ).merge!(:key_name=>keypair.basename)
         instance = ec2(o).run_instances(o)
         begin
           h = EC2ResponseObject.get_hash_from_response(instance.instancesSet.item.first)
@@ -77,7 +82,8 @@ module PoolParty
       # TODO: Clean up this method and remove hostnames
       def describe_instances(o={})
         id = 0
-        get_instances_description(options.merge(o)).each_with_index do |h,i|          
+        set_vars_from_options(dsl_options.merge(o))
+        get_instances_description(dsl_options).each_with_index do |h,i|          
           if h[:status] == "running"
             inst_name = id == 0 ? "master" : "node#{id}"
             id += 1
@@ -88,7 +94,7 @@ module PoolParty
             :name => inst_name,
             :hostname => h[:ip],
             :ip => h[:ip].convert_from_ec2_to_ip,
-            :index => i,  #TODO MF get the instance id from the aws result instead
+            :index => i,  #TODO get the instance id from the aws result instead
             :launching_time => (h[:launching_time])
           })
         end.compact.sort {|a,b| a[:index] <=> b[:index] }
@@ -113,20 +119,16 @@ module PoolParty
       # Get the ec2 description for the response in a hash format
       def get_instances_description(o={})
         #TODO: only use keypair.full_filepath
-        key_hash = {:keypair => ::File.basename(keypair.is_a?(String) ? keypair : keypair.full_filepath)}
-        EC2ResponseObject.get_descriptions(ec2(o).describe_instances).select_with_hash(key_hash)
+        key_hash = {:keypair => self.keypair_name}
+        EC2ResponseObject.get_descriptions(ec2(dsl_options).describe_instances).select_with_hash(key_hash)
       end
       def get_descriptions(o={})
         self.class.get_descriptions(o)
       end
-      
-      def keypair
-        cloud.keypair
-      end
-      
+            
       # Class method helpers
       def aws_keys
-        unless @access_key && @secret_access_key          
+        unless @access_key && @secret_access_key
           aws_keys = {}
           aws_keys = YAML::load( File.open('/etc/poolparty/aws_keys.yml') ) rescue 'No aws_keys.yml file.   Will try to use enviornment variables'
           @access_key ||= aws_keys[:access_key] || ENV['AMAZON_ACCESS_KEY_ID'] || ENV['AWS_ACCESS_KEY']
@@ -149,6 +151,16 @@ module PoolParty
         if ip = next_unused_elastic_ip
           vputs "Associating #{instance.instance_id} with #{ip}"
           ec2.associate_address(:instance_id => instance.instance_id, :public_ip => ip)
+          
+          # Try for 10 minutes to pint port 22 
+          500.times do |i|
+            dprint "."
+            if ping_port(ip, 22)
+              instance[:ip] = ip
+              return true
+            end
+            sleep(2)
+          end 
         end
       end
       
@@ -161,12 +173,12 @@ module PoolParty
       # and return that, otherwise, return the first elastic ip available
       def next_unused_elastic_ip
         # [{"instanceId"=>nil, "publicIp"=>"174.129.212.93"}, {"instanceId"=>nil, "publicIp"=>"174.129.212.94"}]
-        if addressesSet = ec2(options).describe_addresses["addressesSet"]
+        if addressesSet = ec2(dsl_options).describe_addresses["addressesSet"]
           begin
             empty_addresses = addressesSet["item"].select {|i| i["instanceId"].nil? }
             ips = empty_addresses.map {|addr| addr["publicIp"]}
-            if cloud.elastic_ips?
-              ips_to_use = cloud.elastic_ips & ips
+            if elastic_ips
+              ips_to_use = elastic_ips & ips
               ips_to_use.first
             else
               ips.first
@@ -230,10 +242,21 @@ module PoolParty
           # "/usr/bin/gem install --no-ri --no-rdoc amazon-ec2.gem 2>&1"
         ]
       end
-
-      def custom_configure_tasks_for(o)
-        [
-        ]
+      
+      def access_key(n=nil)
+        if n.nil?
+          dsl_options[:access_key] ||= Default.access_key
+        else
+          self.access_key = n
+        end
+      end
+      
+      def secret_access_key(n=nil)
+        if n.nil?
+          dsl_options[:secret_access_key] ||= Default.secret_access_key
+        else
+          self.secret_access_key = n
+        end
       end
 
       def reset_base!

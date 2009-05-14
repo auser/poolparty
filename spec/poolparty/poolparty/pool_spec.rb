@@ -46,15 +46,11 @@ describe "Pool" do
       before(:each) do
         reset!
         @pool = Pool.new :test do
-          nick_nack "nails"
-          rocky_shores "ranger"
+          expand_when "nails"
         end
       end
       it "should set the plugin_directory to nails" do
-        @pool.nick_nack.should == "nails"
-      end
-      it "should set the rocky_shores to ranger" do
-        @pool.rocky_shores.should == "ranger"
+        @pool.expand_when.should == "nails"
       end
       describe "range for min/max instances" do
         it "should be able to respond to instances" do
@@ -91,9 +87,6 @@ describe "Pool" do
       end
       it "should have 2 clouds in the pool when there are 2 described" do
         @pool.clouds.size.should == 2
-      end
-      it "should be able to tel the other clouds from within one cloud" do
-        cloud(:app).other_clouds.should == [cloud(:db)]
       end
     end  
   end

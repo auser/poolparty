@@ -17,7 +17,11 @@ Ensures that the line given is in the file
 
   class LineInFile
     
-    virtual_resource(:line_in_file) do
+    plugin :line_in_file do
+      dsl_methods :file, :line
+      default_options(
+        :line => ""
+      )
       def loaded(opts={}, &block)
         has_exec "line_in_#{file}" do
           command "grep -q \'#{line.safe_quote}\' #{file} || echo \'#{line.safe_quote}\' >> #{file}"

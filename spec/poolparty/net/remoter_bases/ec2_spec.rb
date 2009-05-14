@@ -5,7 +5,7 @@ require File.dirname(__FILE__) + '/ec2_mocks_and_stubs.rb'
 describe "ec2 remote base" do
   before(:each) do
     @cloud = TestCloud.new :test_remoter_base_cloud
-    @tr = TestEC2Class.new(@cloud)
+    @tr = TestEC2Class.new(@cloud.dsl_options)
     stub_remoter_for(@tr)
     # @tr.stub!(:get_instances_description).and_return response_list_of_instances
   end
@@ -91,8 +91,7 @@ describe "ec2 remote base" do
       @tr.next_unused_elastic_ip.should == "174.129.212.93"
     end
     it "should use only the elastic ips set on the cloud" do
-      @cloud.stub!(:elastic_ips?).and_return true
-      @cloud.stub!(:elastic_ips).and_return ["182.199.200.201"]
+      @tr.stub!(:elastic_ips).and_return ["182.199.200.201"]
       @tr.stub!(:cloud).and_return @cloud
       @tr.next_unused_elastic_ip.should == "182.199.200.201"
     end

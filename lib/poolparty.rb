@@ -32,9 +32,13 @@ unless @required_software.empty?
   exit(0)
 end
 
-Dir.glob(File.join(File.dirname(__FILE__),'..', 'vendor/gems/*/lib/*.rb')).each do |d|
-  require d
+Dir.glob(File.join(File.dirname(__FILE__),'..', 'vendor/gems/*/lib')).each do |d|
+  $LOAD_PATH.unshift(d)
 end
+
+require "dslify"
+require "parenting"
+require "suitcase"
 
 t=Time.now
 ## Load PoolParty
@@ -43,11 +47,9 @@ end
 
 def PoolParty.require_directory(dir)
   if ::File.file?(dir)
-    puts "#{::File.expand_path(dir)}" if $DEBUGGING || $GENERATING_MANIFEST
     require dir
   else
     Dir["#{dir}/*.rb"].sort.each do |file|
-       puts "#{::File.expand_path(file)}" if $DEBUGGING || $GENERATING_MANIFEST
        require "#{file}" if ::File.file?(file)
     end
     Dir["#{dir}/*"].sort.each do |dir|

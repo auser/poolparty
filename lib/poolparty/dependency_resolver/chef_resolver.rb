@@ -159,7 +159,8 @@ module PoolParty
         hsh.merge!({:source => "#{nm}.erb"})
       end
       # 
-      hsh.delete(:require) if hsh.has_key?(:require)
+      hsh.delete(:require)
+      hsh.delete(:requires)
       hsh.delete(:name) # we don't need the names in the methods
       hsh
     end
@@ -211,9 +212,21 @@ module PoolParty
       when PoolParty::Resources::Resource
         "resources(:#{handle_chef_types(obj.class.to_s.top_level_class.downcase.to_sym)} => \"#{obj.name}\")"
       when Fixnum
-        "#{obj.to_i}"
+        case obj
+        when /^\d{3}$/
+          "0#{obj.to_i}"
+        else
+          "#{obj.to_i}"
+        end        
       when String
-        "\"#{obj}\""
+        case obj
+        when /^\d{4}$/
+          "#{obj}"
+        when /^\d{3}$/
+          "0#{obj}"
+        else
+          "\"#{obj}\""
+        end
       when Proc
         obj.call # eh
       when Array

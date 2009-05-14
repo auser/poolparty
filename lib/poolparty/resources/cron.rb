@@ -32,10 +32,14 @@ The cron resource will set cron jobs at the intervals you set
 =end
     class Cron < Resource
       
-      default_options({
+      default_options(
         :command => nil,
-        :user => "root"
-      })
+        :user => "root",
+        :minute => "*",
+        :hour => "*",
+        :month => "*",
+        :weekday => "*"
+      )
       
       def present
         :create

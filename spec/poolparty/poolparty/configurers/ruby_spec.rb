@@ -4,7 +4,7 @@ require File.dirname(__FILE__) + '/../test_plugins/webserver'
 describe "Configurer" do
   before(:each) do
     reset!
-    @basic = File.join(File.dirname(__FILE__), "files", "ruby_basic.rb")
+    $pool_specfile = @basic = File.join(File.dirname(__FILE__), "files", "ruby_basic.rb")
     PoolParty::Pool::Pool.load_from_file @basic
     @conf = Object.new
   end
@@ -13,11 +13,6 @@ describe "Configurer" do
   end
   
   describe "with a spec file" do
-    before(:each) do
-      @s = Script.new
-      Script.stub!(:new).and_return(@s)
-      @basic = File.join(File.dirname(__FILE__), "files", "ruby_basic.rb")
-    end
     describe "clouds" do
       before(:each) do
         reset!

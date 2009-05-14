@@ -43,7 +43,7 @@ To write a file to the template directory, use:
       })
       
       def source(arg=nil)
-        arg ? options[:source] = arg : "#{Default.fileserver_base}/#{::File.basename(name)}"
+        arg ? dsl_options[:source] = arg : "#{Default.fileserver_base}/#{::File.basename(name)}"
       end
       
     end

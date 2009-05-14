@@ -1,5 +1,12 @@
+$:.unshift(::File.dirname(__FILE__))
+$:.unshift("#{::File.dirname(__FILE__)}/../../../vendor/gems/*")
+$:.unshift("#{::File.dirname(__FILE__)}/../../../vendor/gems/dslify/lib")
+$:.unshift("#{::File.dirname(__FILE__)}/../../../vendor/gems/parenting/lib")
+
+require "default"
 require "dslify"
 require "parenting"
+
 module PoolParty
   
   def context_stack
@@ -7,10 +14,13 @@ module PoolParty
   end
   
   class PoolPartyBaseClass
-    include Dslify, Parenting
+    attr_reader :init_opts
+    
+    include Parenting, Dslify
     
     include PoolParty::DependencyResolverCloudExtensions
-    # attr_accessor :depth
+    # attr_accessor :depth    
+    default_options Default.dsl_options
 
     def initialize(opts={}, extra_opts={}, &block)
       add_to_parent_if_parent_exists_and_is_a_service
@@ -18,21 +28,25 @@ module PoolParty
       @init_block = block
       @base_name = get_name_from_options_and_extra_options(opts, extra_opts)
       
-      o = (opts.is_a?(Hash) ? extra_opts.merge(opts) : extra_opts).merge(:name => @base_name)
+      @init_opts = (opts.is_a?(Hash) ? extra_opts.merge(opts) : extra_opts.merge(:name => @base_name))
       
-      run_in_context(o, &block)
-      super(&block)
+      run_in_context(init_opts, &block)
+      # super(init_opts, &block)
     end
     
     # Overloading the parent run_in_context
-    def run_in_context(o={}, &block)
-      if o
-        context_stack.push self
-        set_vars_from_options(o)
-        instance_eval &block if block
-        context_stack.pop
-      else
-        super
+    def run_in_context(o={}, &block)      
+      context_stack.push self        
+      set_vars_from_options(o)
+      instance_eval &block if block
+      context_stack.pop
+    end
+    
+    def run_with_callbacks(o, &block)
+      run_in_context(o) do
+        before_load(o, &block)
+        yield if block_given?
+        loaded(o, &block)
       end
     end
     
@@ -46,7 +60,7 @@ module PoolParty
     
     # Try to extract the name from the options
     def get_name_from_options_and_extra_options(opts={}, extra_opts={})
-      opts.is_a?(Hash) ? (opts.has_key?(:name) ? opts.delete(:name) : nil) : dsl_options[:name] = opts
+      opts.is_a?(Hash) ? (opts.has_key?(:name) ? opts[:name] : nil) : dsl_options[:name] = opts
     end
     
     # Add to the services pool for the manifest listing
@@ -76,7 +90,7 @@ module PoolParty
     # A word about stores, the global store stores the entire list of stored
     # resources. The local resource store is available on all clouds and plugins
     # which stores the instance variable's local resources. 
-    def add_resource(ty, opts={}, extra_opts={}, &block)    
+    def add_resource(ty, opts={}, extra_opts={}, &block)       
       temp_name = get_name_from_options_and_extra_options(opts, extra_opts)
       
       if res = get_resource(ty, temp_name, opts)        
@@ -137,24 +151,6 @@ module PoolParty
       false
     end
     
-    def method_missing(m,*a,&block)
-      if respond_to?(:this_context) && this_context != self && this_context.respond_to?(m)# && !self.is_a?(PoolParty::Resources::Resource)
-        this_context.send m, *a, &block      
-      else
-        # if dsl_options.has_key?(m)
-        #          dsl_options[m]
-        #        elsif parent && parent.respond_to?(:dsl_options) && parent.dsl_options.has_key?(m)
-        #          parent.dsl_options[m]
-        #        elsif self.class.default_options.has_key?(m)
-        #          self.class.default_options[m]
-        #        elsif parent && parent.respond_to?(:dsl_options) && parent.default_options.has_key?(m)
-        #          parent.default_options[m]
-        #        else
-          super
-        # end
-      end
-    end
-    
     # Adds two methods to the module
     # Adds the method type:
     #   has_
@@ -167,7 +163,7 @@ module PoolParty
     # TODO: Refactor nicely to include other types that don't accept ensure
     def self.add_has_and_does_not_have_methods_for(typ=:file)
       method_name = "__#{typ}"
-      PoolParty::PoolPartyBaseClass.module_eval <<-EOE
+      ev=<<-EOE
         def has_#{typ}(opts={}, extra={}, &block)
           #{method_name}({:ensures => :present}.merge(handle_option_values(opts).merge(extra)), &block)
         end
@@ -175,6 +171,16 @@ module PoolParty
           #{method_name}({:ensures => :absent}.merge(handle_option_values(opts).merge(extra)), &block)
         end
       EOE
+      PoolParty::PoolPartyBaseClass.module_eval ev, ($pool_specfile || "")
+    end
+    
+    def self.add_resource_lookup_method(lookup_type=:file)
+      ev=<<-EOE
+        def #{lookup_type}s
+          ordered_resources.select {|q| q if q.class.to_s =~ /#{lookup_type.to_s.classify}/ }
+        end
+      EOE
+      PoolParty::PoolPartyBaseClass.module_eval ev, ($pool_specfile || "")
     end
     
     def handle_option_values(o)

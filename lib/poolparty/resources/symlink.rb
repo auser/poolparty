@@ -16,8 +16,8 @@ The symlink resource sets a symlink
 
 == Options
 
-* <tt>name</tt> The location of the symlink
-* <tt>target</tt> The source of the symlink, the existing file or directory
+* <tt>name</tt> The location of the symlink (target)
+* <tt>source</tt> The source of the symlink, the existing file or directory
 
 == Examples
 
@@ -25,9 +25,7 @@ The symlink resource sets a symlink
 =end
     class Symlink < Resource
       
-      def initialize *args, &block
-        super
-      end
+      dsl_methods :source
       
       def present
         :create

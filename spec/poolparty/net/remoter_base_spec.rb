@@ -7,14 +7,10 @@ end
 
 describe "RemoterBase" do
   before(:each) do
-    setup
+    @tr = TestRemoteClass.new
   end
-  describe "methods" do
-    before(:each) do
-      @tr = TestRemoteClass.new
-    end
-    %w(launch_new_instance! terminate_instance describe_instance instances_list).each do |method|
-      eval <<-EOE
+  %w(launch_new_instance! terminate_instance describe_instance instances_list).each do |method|
+    eval <<-EOE
         it "should raise an exception if #{method} is not defined as a method" do
           # pending # Weird .should raise_error
           lambda { @tr.class.#{method} }.should raise_error
@@ -28,8 +24,8 @@ describe "RemoterBase" do
             @tr.#{method}
           }.should_not raise_error
         end
-      EOE
-    end
-    
+EOE
+        
   end
 end
+    

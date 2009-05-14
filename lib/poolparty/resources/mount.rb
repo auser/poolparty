@@ -35,10 +35,6 @@ The mount specifies a mount that is to be mounted on the instances
         :atboot => "yes"
       })
       
-      def disallowed_options
-        [:name]
-      end
-      
     end
     
   end

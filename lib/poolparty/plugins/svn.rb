@@ -9,14 +9,14 @@ module PoolParty
     
     virtual_resource :svn_repos do
       
+      dsl_methods :creates, :command, :cwd, :source, :working_dir, :at
+      
       def loaded(opts={}, &block)
         has_package("subversion")
         has_svn_repository
       end
 
       def has_svn_repository
-        puts "wd #{working_dir}"
-        puts "cd #{creates_dir}"
         has_directory(::File.dirname(working_dir))
         has_directory(:name => "#{working_dir}", :requires => get_directory("#{::File.dirname(working_dir)}"))
         

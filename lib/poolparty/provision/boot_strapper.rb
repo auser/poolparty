@@ -13,6 +13,8 @@ module PoolParty
       
       # List of gems that are default to install
       def self.gem_list
+        # auser-dslify
+        # auser-parenting
         @gem_list ||= %w( logging
                           rake
                           xml-simple
@@ -26,8 +28,6 @@ module PoolParty
                           grempe-amazon-ec2
                           ohai
                           chef
-                          auser-dslify
-                          auser-parenting
                           adamwiggins-rest-client
                           rack
                           thin
@@ -35,7 +35,7 @@ module PoolParty
       end
 
       # Default options for the boot_strapper
-      @defaults = ::PoolParty::Default.default_options.merge({
+      @defaults = ::PoolParty::Default.dsl_options.merge({
         :full_keypair_path   => "#{ENV["AWS_KEYPAIR_NAME"]}" || "~/.ssh/id_rsa",
         :installer           => 'apt-get',
         :dependency_resolver => 'chef'
@@ -143,7 +143,7 @@ module PoolParty
           'touch /var/poolparty/POOLPARTY.PROGRESS',
           "mkdir -p /root/.ssh",
           "cp /var/poolparty/dependencies/keys/* /root/.ssh/",
-          "chmod 600 /root/.ssh/#{::File.basename(@cloud.keypair.full_filepath)}",
+          "chmod 600 /root/.ssh/#{keypair_name}",
           # "god -c /etc/poolparty/monitor.god",
           "mkdir -p /var/log/poolparty/",
           "thin -R /etc/poolparty/monitor.ru -p 8642 --pid /var/run/stats_monitor.pid --daemon -l /var/log/poolparty/monitor.log start 2>/dev/null",

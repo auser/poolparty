@@ -20,7 +20,7 @@ o.loaded_clouds.each do |cld|
   case vote_for
   when "expand"
     vputs "Launching new instance"
-    cld.send :launch_instance!, schema.options do |node|
+    cld.send :launch_instance!, schema.options.merge(:cloud_name => cld.name) do |node|
       dputs "Started node at #{node[:ip]}"
       
       ::PoolParty::Provision::BootStrapper.new( node[:ip], :cloud => cld )

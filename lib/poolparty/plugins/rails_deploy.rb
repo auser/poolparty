@@ -14,24 +14,29 @@
 =end
 module PoolParty
   class Rails
-    
+
     plugin :rails_deploy do
+      
+      dsl_methods :shared, :database_yml, :repo, :user, :user_dir
       
       default_options(
         :dir => "/var/www",
         :owner => "www-data",
-        :group => "root"
+        :group => "root",
+        :install_sqlite => false,
+        :migration_command => "rake db:migrate"
       )
       
       def loaded(o={}, &block)
-        raise "You must include the directory to deploy the rails app" unless dir?
-        raise "You must include the repo to deploy the rails app" unless repo?
+        # TODO: Change to custom class
+        raise DirectoryMissingError.new unless dir
+        raise ReposMissingError.new unless repo
         
         require_rails_gems
-        install_sqlite if o.has_key?(:install_sqlite)
+        install_sqlite if o[:install_sqlite]
         
         create_directory_tree
-        setup_database_yml        
+        setup_database_yml
         call_deploy
         
         setup_shared_directory
@@ -47,39 +52,41 @@ module PoolParty
         has_gem_package "sqlite3-ruby"
       end
       def add_user(o)
-        has_user o[:user] do
-          comment "Rails Deploy user #{o[:user]}"
-          home o[:user_dir] || "/var/www"
+        has_user user do
+          comment "Rails Deploy user #{user}"
+          home user_dir || "/var/www"
           shell "/sbin/nologin"
           password "x"
         end
       end
       def create_directory_tree
-        has_directory dir
-        has_directory release_directory
-        has_directory "#{shared_directory}", :owner => owner
+        has_directory dir, :mode => "0755", :owner => owner
+        has_directory release_directory, :mode => "0755", :owner => owner
+        has_directory "#{shared_directory}", :owner => owner, :mode => "0755"
         
         %w(config pids log system).each do |d|
-          has_directory "#{shared_directory}/#{d}", :owner => owner
+          has_directory "#{shared_directory}/#{d}", :owner => owner, :mode => "0755"
         end
       end
       def setup_database_yml
-        has_file "#{shared_directory}/config/database.yml", :owner => owner do
-          content ::File.file?(database_yml) ? open(database_yml).read : database_yml
+        if database_yml
+          has_file "#{shared_directory}/config/database.yml", :owner => owner do
+            content ::File.file?(database_yml) ? open(database_yml).read : database_yml
+          end
         end
       end
       def call_deploy
         has_package "git-core"
-        dopts = options.choose {|k,v| [:repo, :user, :action].include?(k) }
+        dopts = dsl_options.choose {|k,v| [:repo, :user, :action].include?(k) }        
         has_chef_deploy dopts.merge(:name => "#{release_directory}", :user => owner)
       end
       def setup_shared_directory
-        if shared?
+        if shared
           shared.each do |sh|
             
-            has_directory "#{shared_directory}/#{::File.dirname(sh)}", :owner => owner
+            has_directory "#{shared_directory}/#{::File.dirname(sh)}", :owner => owner, :mode => "0755"
             
-            has_exec "Create rails-deploy-#{name}-#{sh}", 
+            has_exec "Create rails-deploy-#{git_name}-#{sh}", 
               :command => "cp #{current_directory}/#{sh} #{shared_directory}/#{sh} && chown -R #{owner} #{shared_directory}/#{sh}",
               :if_not => "test -f #{shared_directory}/#{sh}"
               
@@ -88,6 +95,14 @@ module PoolParty
         end
       end
       # HELPERS
+      def git_name(n=nil)
+        if n
+          self.name = n
+        else
+          self.name ? self.name : ::File.basename(repo, ::File.extname(repo))
+        end
+      end
+      
       def current_directory
         "#{release_directory}/current"
       end
@@ -95,9 +110,20 @@ module PoolParty
         "#{release_directory}/shared"
       end
       def release_directory
-        "#{dir}/#{name}"
+        "#{dir}/#{git_name}"
       end
       
     end
+  end
+  
+  class DirectoryMissingError < StandardError
+    def initialize
+      super("You must include the directory to deploy the rails app")
+    end
+  end
+  class ReposMissingError < StandardError
+    def initialize
+      super("You must include the repo to deploy the rails app")
+    end 
   end
 end

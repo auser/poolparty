@@ -8,19 +8,25 @@ end
 class DependencyResolverSpecTestResource
   include Dslify
   include PoolParty::DependencyResolverResourceExtensions
+  
+  dsl_methods :name, :template, :content
 end
 
 # plugins, base_packages
 class DependencyResolverSpecTestService < DependencyResolverCloudExtensionsSpecBase
-  
+  dsl_methods :listen
 end
 
 # clouds, duh
 class DependencyResolverSpecTestCloud < DependencyResolverCloudExtensionsSpecBase
+  dsl_methods :keypair, :name
 end
 
 class JunkClassForDefiningPlugin
   plugin :apache_plugin do
+    default_options(
+      :listen => 80
+    )
     def loaded(o={},&block)
     end
   end  
@@ -29,35 +35,35 @@ end
 describe "Resolution spec" do
   before(:each) do
     @apache_file = DependencyResolverSpecTestResource.new
-    @apache_file.name "/etc/apache2/apache2.conf"
-    @apache_file.template "/absolute/path/to/template"
-    @apache_file.content "rendered template string"
+    @apache_file.name = "/etc/apache2/apache2.conf"
+    @apache_file.template = "/absolute/path/to/template"
+    @apache_file.content = "rendered template string"
     
     @apache = DependencyResolverSpecTestService.new :apache_file
-    @apache.listen "8080"
+    @apache.listen = "8080"
     @apache.resources[:file] = []
     @apache.resources[:file] << @apache_file
         
     @cloud = DependencyResolverSpecTestCloud.new :cloud
-    @cloud.keypair "bob"
-    @cloud.name "dog"
+    @cloud.keypair = "bob"
+    @cloud.name = "dog"
     
     (@cloud.resources[:apache] ||= []) << @apache
 
     @cloud_file_motd = DependencyResolverSpecTestResource.new
-    @cloud_file_motd.name "/etc/motd"
-    @cloud_file_motd.content "Welcome to the cloud"
+    @cloud_file_motd.name = "/etc/motd"
+    @cloud_file_motd.content = "Welcome to the cloud"
     
     @cloud_file_profile = DependencyResolverSpecTestResource.new
-    @cloud_file_profile.name "/etc/profile"
-    @cloud_file_profile.content "profile info"
+    @cloud_file_profile.name = "/etc/profile"
+    @cloud_file_profile.content = "profile info"
         
     @cloud.resources[:file] = []
     @cloud.resources[:file] << @cloud_file_motd
     @cloud.resources[:file] << @cloud_file_profile
     
     @cloud_directory_var_www = DependencyResolverSpecTestResource.new
-    @cloud_directory_var_www.name "/var/www"
+    @cloud_directory_var_www.name = "/var/www"
     
     @cloud.resources[:directory] = []
     @cloud.resources[:directory] << @cloud_directory_var_www    

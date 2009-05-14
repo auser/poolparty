@@ -29,7 +29,7 @@ module PoolParty
     end
     
     def ssh_options(opts={})
-      o = {"-i" => keypair.full_filepath,
+      o = {"-i" => keypair_path,
            "-l" => user,
            "-o" =>"StrictHostKeyChecking=no"
            }.merge(opts)
@@ -63,7 +63,7 @@ module PoolParty
     def netssh(cmds=[], opts={})
       user = opts.delete(:user) || user #rescue 'root'
       host = opts.delete(:host) || target_host
-      ssh_options_hash = {:keys => [keypair.full_filepath],
+      ssh_options_hash = {:keys => [keypair_path],
                           :auth_methods => 'publickey',
                           :paranoid => false
                            }.merge(opts)

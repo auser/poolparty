@@ -54,27 +54,27 @@ module PoolParty
         raise SpecException.new("Don't know how to handle instances cloud input #{arg}")
       end
     end
-        
+    
     # Declare the remoter base
     # Check to make sure the available_bases is available, otherwise raise
     # Give access to the cloud the remote_base and instantiate a new
     # instance of the remote base
     def using(t, &block)
       @cloud = self
-      if t && self.class.available_bases.include?(t.to_sym)
-        unless using_remoter?
-          self.class.send :attr_reader, :remote_base
-          self.class.send :attr_reader, :parent_cloud
-          klass_string = "#{t}".classify
-          klass = "::PoolParty::Remote::#{klass_string}".constantize
-          
-          @remote_base = klass.send :new, self, &block
-          @remote_base.instance_eval &block if block          
-          options[:remote_base] = klass.to_s if respond_to?(:options)
-          
-          @parent_cloud = @cloud
-          instance_eval "def #{t};@remote_base;end"
-        end
+      if self.class.available_bases.include?(t.to_sym)
+
+        klass_string = "#{t}".classify
+        @remote_base_klass = "::PoolParty::Remote::#{klass_string}".constantize
+        
+        # TODO: Move to after_setup
+        self.remote_base = @remote_base_klass.send :new, dsl_options, &block
+        remote_base.instance_eval &block if block
+        
+        self.class.set_default_options(:remote_base => remote_base)
+        self.class.set_default_options(@remote_base_klass.dsl_options)
+        
+        @parent_cloud = @cloud
+        instance_eval "def #{t};remote_base;end"
       else
         raise "Unknown remote base: #{t}"
       end
@@ -89,18 +89,27 @@ module PoolParty
     # Use the keypair path
     def keypair(*args)
       if args && !args.empty?
-        args.each {|arg| _keypairs.unshift Key.new(arg) unless arg.nil? || arg.empty? }
+        args.each {|arg| _keypairs.unshift Key.new(arg) unless arg.nil? || arg.empty? || _keypair_filepaths.include?(arg) }
       else
-        @keypair ||= _keypairs.select {|key| key.exists? }.first
+        dsl_options[:keypair] ||= _keypairs.select {|key| key.exists? }.first
       end
     end
     
     alias :set_keypairs :keypair
+    alias :key :keypair
     
     def _keypairs
       dsl_options[:keypairs] ||= [Key.new]
     end
+    def keypairs(*a)
+      dsl_options[:keypairs]
+    end
     
+    # Collect the filepaths of the already loaded keypairs
+    def _keypair_filepaths
+      _keypairs.map {|a| a.filepath }
+    end
+        
     def full_keypair_path
       @full_keypair_path ||= keypair.full_filepath
     end
@@ -112,14 +121,6 @@ module PoolParty
 
       dsl_options[:dependency_resolver] = schema.options.dependency_resolver.split("::")[-1].gsub(/Resolver/, '').preserved_class_constant("Resolver") rescue PoolParty::Chef
       
-    end
-        
-    # TODO: deprecate
-    def number_of_resources
-      arr = resources.map do |n, r|
-        r.size
-      end
-      resources.map {|n,r| r.size}.inject(0){|sum,i| sum+=i}
     end
     
   end

@@ -2,6 +2,22 @@
   Hash extentions
 =end
 class Hash
+  
+  # alias_method :_old_reader, :[]
+  # # Treat string and symbols the same
+  # def [](key)
+  #   if o = _old_reader(key) || has_key?(key)
+  #     return o 
+  #   elsif key.is_a? Symbol
+  #     _old_reader(key.to_s)
+  #   elsif key.is_a? String
+  #     _old_reader(key.to_sym) rescue _old_reader(key)
+  #   else
+  #     _old_reader(key)
+  #   end
+  # end
+  
+  # Return a hash of all the elements where the block evaluates to true
   def choose(&block)
     Hash[*self.select(&block).inject([]){|res,(k,v)| res << k << v}]
   end
@@ -65,6 +81,37 @@ class Hash
     idx = (size - keys.sort.index(from))
     keys.sort[idx - 1]
   end
+  
+  def stringify_keys
+    dup.stringify_keys!
+  end
+  
+  # Converts all of the keys to strings
+  def stringify_keys!
+    keys.each{|k| 
+      v = delete(k)
+      self[k.to_s] = v
+      v.stringify_keys! if v.is_a?(Hash)
+      v.each{|p| p.stringify_keys! if p.is_a?(Hash)} if v.is_a?(Array)
+    }
+    self
+  end
+  
+  def symbolize_keys
+    dup.stringify_keys!
+  end
+  
+  # Converts all of the keys to strings
+  def symbolize_keys!
+    keys.each{|k| 
+      v = delete(k)
+      self[k.to_sym] = v
+      v.symbolize_keys! if v.is_a?(Hash)
+      v.each{|p| p.symbolize_keys! if p.is_a?(Hash)} if v.is_a?(Array)
+    }
+    self
+  end
+  
   
   def method_missing(sym, *args, &block)
     if has_key?(sym)

@@ -3,7 +3,7 @@ require File.dirname(__FILE__) + '/../spec_helper'
 describe "Service" do
   describe "instances" do
     before(:each) do
-      @tc = TestBaseClass.new :test_base_class_cloud do
+      @tc = TestBaseClass.new do
         has_service("apache2", {:hasrestart => true})
       end
       @service = @tc.resource(:service).first

@@ -15,7 +15,7 @@ class TestParentClass < PoolParty::Cloud::Cloud
 end
 describe "CloudResourcer" do
   before(:each) do
-    @tc = ResourcerTestClass.new :bank do
+    @tc = Cloud.new :bank do
     end
   end
   it "should have the method instances" do

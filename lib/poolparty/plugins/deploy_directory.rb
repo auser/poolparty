@@ -10,19 +10,24 @@ The deploy directory will copy the source directory from the developer machine (
   has_deploy_directory(has_deploy_directory 'bob', 
                      :from => "~/path/to/my/site", 
                      :to => "/mnt",
-                     :owner => 'www-data' 
+                     :owner => 'www-data',
+                     :git_pull_first => false  #do a git pull in the from directory before syncing
 
 This will place the contents of ~/path/to/my/site from your machine to /mnt/bob on the cloud instances virtual_resource(:deploy_directory)
 
 =end
 
   class Deploydirectory
+    virtual_resource(:deploy_directory) do
+      
+      dsl_methods :from, :to, :owner, :git_pull_first
       
       def loaded(opts={}, &block)        
         add_unpack_directory
       end
       
       def before_configure
+        update_from_repo if git_pull_first
         package_deploy_directory
       end
       
@@ -36,14 +41,17 @@ This will place the contents of ~/path/to/my/site from your machine to /mnt/bob 
           requires get_directory("#{::File.dirname(to)}")
           command "cp -R /var/poolparty/dr_configure/user_directory/#{name}/* #{to}"
         end
-        
         if owner?
           has_exec(:name => "chown-#{name}") do
             command "chown #{owner} -R #{to}/#{name}"
           end
-        end
-        
+        end     
       end
-    
+      
+      def update_from_repo
+        `cd #{from} && git pull`
+      end
+      
+    end
   end
 end

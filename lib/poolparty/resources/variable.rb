@@ -27,7 +27,7 @@ To use these variables, in your Erb template, reference them like so
   has_variable(:name => "name", :value => "#{cloud.name}")
 =end
     class Variable < Resource
-      
+      dsl_methods :name, :value
     end
     
   end

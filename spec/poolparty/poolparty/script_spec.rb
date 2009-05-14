@@ -3,10 +3,7 @@ require File.dirname(__FILE__) + '/../spec_helper'
 include PoolParty::Resources
 
 describe "Script" do
-  before(:each) do
-    
-    setup
-  end
+
   describe "wrapped" do
     it "should have inflate as a class method" do
       Script.respond_to?(:inflate).should == true

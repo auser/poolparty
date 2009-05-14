@@ -10,3 +10,12 @@
 [submodule "vendor/gems/butterfly"]
 	path = vendor/gems/butterfly
 	url = git://github.com/auser/butterfly.git
+[submodule "vendor/gems/git-style-binaries"]
+	path = vendor/gems/git-style-binaries
+	url = git://github.com/jashmenn/git-style-binaries.git
+[submodule "vendor/gems/rest-client"]
+	path = vendor/gems/rest-client
+	url = git://github.com/adamwiggins/rest-client.git
+[submodule "vendor/gems/trollop"]
+	path = vendor/gems/trollop
+	url = git://github.com/lutzky/trollop.git

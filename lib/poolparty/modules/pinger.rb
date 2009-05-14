@@ -17,7 +17,10 @@ module PoolParty
     end
   
     module InstanceMethods
-      def ping_port(ip, port, retry_times=500);self.class.ping_port(ip, port, retry_times);end
+      def ping_port(ip, port=22, retry_times=500);self.class.ping_port(ip, port, retry_times);end
+      def ping_port_and(ip, port=22, retry_times=500, &block)        
+        block.call if ping_port(ip, port, retry_times) && block
+      end
     end
   
     def self.included(receiver)

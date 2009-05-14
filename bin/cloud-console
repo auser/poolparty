@@ -1,12 +1,34 @@
 #!/usr/bin/env ruby
-# File: script/console
-irb = RUBY_PLATFORM =~ /(:?mswin|mingw)/ ? 'irb.bat' : 'irb'
+$:.unshift(File.dirname(__FILE__) + "/../lib")
+require "poolparty"
+# require "poolpartycl"
+require 'git-style-binary/command'
 
-libs =  " -r irb/completion"
-# Perhaps use a console_lib to store any extra methods I may want available in the cosole
-# libs << " -r #{File.dirname(__FILE__) + '/../lib/console_lib/console_logger.rb'}"
-libs <<  " -r #{File.dirname(__FILE__) + '/../lib/poolparty.rb'}"
-libs <<  " -r #{File.dirname(__FILE__) + '/../lib/poolpartycl.rb'}"
-puts "Loading PoolParty console..."
+GitStyleBinary.command do  
+  version "PoolParty cloud command"  
+  banner <<-EOS
+Usage: #{$0} #{all_options_string} COMMAND [ARGS]
 
-exec "#{irb} #{libs} --simple-prompt"
+  Open an irb session with the clouds.rb loaded
+EOS
+
+  short_desc "Open an irb session with clouds.rb loaded"
+  
+  opt :inst_num, "The number of the instance to run bootstrap on", :type => :int
+
+  run do |command|    
+    
+    irb = RUBY_PLATFORM =~ /(:?mswin|mingw)/ ? 'irb.bat' : 'irb'
+
+    libs =  " -r irb/completion"
+    # Perhaps use a console_lib to store any extra methods I may want available in the cosole
+    # libs << " -r #{File.dirname(__FILE__) + '/../lib/console_lib/console_logger.rb'}"
+    libs <<  " -r #{File.dirname(__FILE__) + '/../lib/poolparty.rb'}"
+    libs <<  " -r #{File.dirname(__FILE__) + '/../lib/poolpartycl.rb'}"
+    libs <<  " -r #{$pool_specfile}" if $pool_specfile
+    puts "Loading PoolParty console..."
+
+    exec "#{irb} #{libs} --simple-prompt"
+    
+  end
+end

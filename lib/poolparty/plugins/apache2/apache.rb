@@ -12,7 +12,10 @@ default host.
 =end
 
     plugin :apache do
-      def loaded(opts={}, &block)        
+      dsl_methods :passenger_version
+      
+      def loaded(opts={}, &block)
+        configs
         has_service("apache2", :requires => get_package("apache2"))
       end
 
@@ -42,9 +45,7 @@ default host.
         unless @base_install
           has_exec({:name => "restart-apache2", :command => "/etc/init.d/apache2 restart", :action => :nothing})
           has_exec({:name => "reload-apache2", :command => "/etc/init.d/apache2 reload", :action => :nothing})
-          has_exec({:name => "force-reload-apache2", :command => "/etc/init.d/apache2 force-reload", :action => :nothing})
-
-          configs
+          has_exec({:name => "force-reload-apache2", :command => "/etc/init.d/apache2 force-reload", :action => :nothing})          
           @base_install = true
         end
       end
@@ -78,8 +79,8 @@ default host.
         unless @passenger_configs
           has_variable "gems_path", :value => lambda { "`gem env gemdir`.chomp!" }
           has_variable "ruby_path", :value => lambda { "`which ruby`.chomp!" }
-
-          passenger_version "2.2.2" unless defined?(passenger_version)
+          
+          passenger_version ||= "2.2.2"
 
           has_variable("passenger_version",     :value => passenger_version)
           has_variable("passenger_root_path",   :value => "\#{poolparty[:gems_path]}/gems/passenger-#{passenger_version}")
@@ -126,11 +127,11 @@ default host.
           has_directory("/etc/apache2/site-includes")
 
           has_file(:name => "/etc/apache2/apache2.conf") do
-            mode 644
+            mode 0644
             requires get_directory("/etc/apache2/conf.d")
             template "apache2"/"apache2.conf"
           end
-          does_not_have_file(:name => "/etc/apache2/ports.conf")
+          # does_not_have_file(:name => "/etc/apache2/ports.conf")
 
           has_exec(:command => "/usr/sbin/a2dissite default") do
             only_if "/usr/bin/test -L /etc/apache2/sites-enabled/000-default"
@@ -161,8 +162,8 @@ default host.
         end
       end
       
-      def listen(port="80")
-        has_variable(:name => "port", :value => port)
+      def listen(p="80")
+        has_variable(:name => "port", :value => p)
         @listen = true
       end
       
@@ -269,21 +270,23 @@ eof
 
     def loaded(opts={}, prnt=nil)
       enable_passenger
-      port "80" unless port
+      
+      port "80" unless self.port
+      
       appended_path "current" if opts[:with_deployment_directories]
       passenger_entry <<-EOE
 <VirtualHost *:#{port}>
     ServerName #{name}
     DocumentRoot #{site_directory}/public
     RailsEnv production
-    ErrorLog #{site_directory}}/log/error_log
+    ErrorLog #{site_directory}/log/error_log
     CustomLog #{site_directory}/log/access_log common
 </VirtualHost>
       EOE
       
-      has_directory(:name => "/var/www")
-      has_directory(:name => "/var/www/#{name}")
-      has_directory(:name => "/var/www/#{name}/log")
+      # has_directory(:name => "/var/www")
+      # has_directory(:name => "/var/www/#{name}")
+      # has_directory(:name => "/var/www/#{name}/log")
       parent.install_site(name, :no_file => true) # we already created the file with #passenger_entry
     end
 

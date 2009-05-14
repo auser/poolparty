@@ -10,6 +10,8 @@ module PoolParty
     
     # def self.options
     default_options(
+      :verbose => false,
+      :debug => false,
       :testing => false,
       :debugging => false,
       :minimum_instances => 2,
@@ -37,20 +39,17 @@ module PoolParty
       :butterfly_port => 8642,
       :minimum_runtime  => 3000, #50.minutes in seconds
       :contract_when => "load < 0.25",
-      :expand_when => "load > 0.9"
+      :expand_when => "load > 0.9",
+      :image_id => nil,
+      :access_key => nil,
+      :secret_access_key => nil,
+      :remoter_base => :ec2
     )
-    
-    def options
-      default_options
-    end
     
     # Class methods
     class << self
       def method_missing(m,*a,&block)
-        default_options.include?(m) ? default_options[m] : super
-      end
-      def options
-        default_options
+        dsl_options.include?(m) ? dsl_options[m] : super
       end
       # Get the access_key
       def access_key

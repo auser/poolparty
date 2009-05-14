@@ -22,16 +22,16 @@ describe "File" do
     describe "template" do
       before(:each) do
         ::File.stub!(:basename).and_return "template"
-        @file = "<%= friends %> <%= runner %>"
+        @file = "<%= friends %> <%= mode %>"
         @file.stub!(:read).and_return @file
         Template.stub!(:open).and_return @file
         
         @tc = TestBaseClass.new do
           has_file({:name => "/etc/apache2/puppetmaster.conf", :owner => "herman"}) do
             template "/absolute/path/to/template"
-            runner "is super fast"
-            friends "bob"
             render_as :erb
+            variable :mode, "is super fast"
+            variable :friends, "bob"
           end
         end
         @file = @tc.resource(:file).first
@@ -43,7 +43,7 @@ describe "File" do
         @file.content.should == "bob is super fast"
       end
       it "should remove the template from the options" do
-        @file.template?.should == false
+        @file.template.nil?.should == true
       end
     end
     describe "into PuppetResolver" do

@@ -1,32 +1,41 @@
 #!/usr/bin/env ruby
-$:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
+$:.unshift(File.dirname(__FILE__) + "/../lib")
 require "poolparty"
+# require "poolpartycl"
+require 'git-style-binary/command'
 
-o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
-  opts.on('-n cloudname', '--name name', 'Start cloud by this name')    { |c| optioner.cloudname c }
-  opts.on('-i num', '--num i', 'Instance number')    { |i| optioner.inst_num i.to_i }
-end
+GitStyleBinary.command do  
+  version "PoolParty cloud command"  
+  banner <<-EOS
+Usage: #{$0} #{all_options_string} COMMAND [ARGS]
 
-o.loaded_clouds.each do |cld|
+  List the clouds and their nodes
+EOS
 
-  begin
-    if cld.verifiers.size > 0
-      cld.passing?
-      cld.vputs "Cloud passed verification"
-    else
-      raise "Your cloud doesn't have any verifiers!"
-      exit 2
-    end
-  rescue Exception => e
-     cld.vputs <<-EOM
+  short_desc "List the clouds"
 
-      Verification failed: #{e}"
-        Please check your clouds.rb for any errors
-
-      Exception: #{e.class}: #{e.message}\n\t#{e.backtrace.join("\n\t")}
-
-      EOM
+  run do |command|    
+    @loaded_clouds.each do |cld|
+      
+        begin
+          if cld.verifiers.size > 0
+            cld.passing?
+            vputs "Cloud passed verification"
+          else
+            raise "Your cloud doesn't have any verifiers!"
+            exit 2
+          end
+        rescue Exception => e
+           cld.vputs <<-EOM
+      
+            Verification failed: #{e}"
+              Please check your clouds.rb for any errors
+      
+            Exception: #{e.class}: #{e.message}\n\t#{e.backtrace.join("\n\t")}
+      
+            EOM
+        end
+      
+    end    
   end
-
 end
-

@@ -25,10 +25,11 @@ The host parameter sets hosts on the instances. Setting this, every node will ha
     class Host < Resource
             
       default_options({
+        :ip => "127.0.0.1"
       })
       
       def aka(i=nil)
-        i ? options[:alias] = i : options[:alias]
+        i ? dsl_options[:alias] = i : dsl_options[:alias]
       end
             
     end

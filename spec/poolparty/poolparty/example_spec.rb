@@ -5,6 +5,7 @@ describe "basic" do
   before(:each) do
     PoolParty.reset!
     @example_spec_file = ::File.join(::File.dirname(__FILE__), "..", "..", "..", "examples", 'basic.rb')
+    set_pool_specfile @example_spec_file
     PoolParty::Pool::Pool.load_from_file(@example_spec_file)
     @db = clouds[:basic_db]
     @app = clouds[:basic_app]
@@ -31,10 +32,6 @@ describe "basic" do
     clouds[:basic_app].minimum_instances.should == 12
     pools[:application].minimum_instances.should ==3
   end
-  it "should set ambiguous methods on the cloud" do
-    clouds[:basic_app].junk_yard_dogs.should == "pains"
-    clouds[:basic_db].junk_yard_dogs.should == "are bad"
-  end
   it "should set the parent to the pool" do
     clouds[:basic_app].parent.should == pools[:application]
     clouds[:basic_db].parent.should == pools[:application]
@@ -44,7 +41,7 @@ describe "basic" do
     clouds[:basic_db]._keypairs.select{|a| a.filepath.match(/auser/)}
   end
   it "cloud should know what remoter base it is using" do
-    clouds[:basic_db].remote_base.class.should == PoolParty::Remote::Ec2
+    clouds[:basic_db].remote_base.class.should == PoolParty::Remote::Vmrun
   end
   it "cloud should have methods from the remoter base available" do
     clouds[:basic_db].remote_base.should_receive(:describe_instances).and_return({})
