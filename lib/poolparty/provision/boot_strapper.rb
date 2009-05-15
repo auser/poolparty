@@ -141,7 +141,7 @@ module PoolParty
           "cd ../ && rm -rf rubygems-1.3.1*",
           "gem source --add http://gems.github.com",
           "cd /var/poolparty/dependencies/gems/",
-          "gem install --no-rdoc --no-ri  --ignore-dependencies *.gem",
+          "gem install --no-rdoc --no-ri *.gem",
           "cd /var/poolparty/dependencies",
           "cp /var/poolparty/dependencies/etc/poolparty/* /etc/poolparty/",
           'touch /var/poolparty/POOLPARTY.PROGRESS',
