@@ -136,6 +136,7 @@ module PoolParty
                                :contract => dsl_options[:contract_when]}        
         
         set_dependency_resolver 'chef'
+        using Default.remoter_base unless remote_base
       end
       
       def after_launch_instance(inst=nil)
