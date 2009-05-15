@@ -134,6 +134,9 @@ describe "Cloud" do
             end
             @cloud = @pool.cloud(:app)
           end
+          it "should set it's own cloud.tmp_path" do
+            @cloud.tmp_path.should == "/tmp/poolparty/just_pool/app"
+          end
           it "should set the minimum based on the range" do
             @cloud.minimum_instances.should == 8
           end

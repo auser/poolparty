@@ -42,9 +42,13 @@ module PoolParty
                   :restart_command, :migration_command, :repo
       
       def loaded(o={})
-        raise ::ReposMissingError.new unless repo
-        has_chef_library :name => "chef-deploy/lib/chef-deploy.rb"
-        has_chef_deploy_definition(dsl_options)
+        if o.keys == [:ensures]
+          has_chef_library "chef-deploy/lib/chef-deploy.rb"
+        else
+          raise ::ReposMissingError.new unless repo
+          has_chef_library "chef-deploy/lib/chef-deploy.rb"
+          has_chef_deploy_definition(dsl_options)
+        end
       end
       
       def before_configure

@@ -34,7 +34,7 @@
         "default_properties_hash_filename": "cloud.json",
         "poolparty_home_path": "/Users/mfairchild/.poolparty",
         "keypairs": ["/Users/mfairchild/.ec2oncourse/r_and_d.pem", "/Users/mfairchild/.ssh/id_rsa"],
-        "availabilty_zone": "us-east-1a",
+        "availability_zone": "us-east-1a",
         "fileserver_base": "puppet://master/files",
         "debugging": false,
         "minimum_instances": 1,

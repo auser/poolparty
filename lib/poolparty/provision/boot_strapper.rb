@@ -42,6 +42,7 @@ module PoolParty
       })
       class <<self; attr_reader :defaults; end
       
+      attr_reader :cloud_name
       # In case the method is being called on ourself, let's check the 
       # defaults hash to see if it's available there
       def method_missing(m,*a,&block)
@@ -58,6 +59,7 @@ module PoolParty
         self.class.defaults.merge(opts).to_instance_variables(self)
         @target_host = host
         @cloud = opts[:cloud]
+        @cloud_name = @cloud.name
                 
         instance_eval &block if block
         @cloud.call_before_bootstrap_callbacks if @cloud
@@ -90,16 +92,16 @@ module PoolParty
         end
         # Add the gems to the suitcase
         puts "Adding default gem dependencies"
-        ::Suitcase::Zipper.gems self.class.gem_list, "#{Default.tmp_path}/trash/dependencies"
+        ::Suitcase::Zipper.gems self.class.gem_list, "#{cloud.tmp_path}/trash/dependencies"
 
         ::Suitcase::Zipper.packages( "http://rubyforge.org/frs/download.php/45905/rubygems-1.3.1.tgz",
-                 "#{Default.tmp_path}/trash/dependencies/packages")
+                 "#{cloud.tmp_path}/trash/dependencies/packages")
         # ::Suitcase::Zipper.add("templates/")
         
         ::Suitcase::Zipper.add("#{::File.dirname(__FILE__)}/../templates/monitor.ru", "/etc/poolparty/")
         ::Suitcase::Zipper.add("#{::File.dirname(__FILE__)}/../templates/monitor.god", "/etc/poolparty/")
                 
-        ::Suitcase::Zipper.add("#{Default.tmp_path}/trash/dependencies/cache", "gems")        
+        ::Suitcase::Zipper.add("#{cloud.tmp_path}/trash/dependencies/cache", "gems")        
         
         ::Suitcase::Zipper.add("#{::File.join(File.dirname(__FILE__), '..', 'templates', 'gemrc_template' )}", "etc/poolparty")
         
@@ -108,7 +110,7 @@ module PoolParty
           {:instances => instances.flatten.compact}.to_json, 
           "neighborhood.json", "/etc/poolparty")
         
-        ::Suitcase::Zipper.build_dir!("#{Default.tmp_path}/dependencies")
+        ::Suitcase::Zipper.build_dir!("#{cloud.tmp_path}/dependencies")
         
         ::Suitcase::Zipper.flush!
         
@@ -118,8 +120,8 @@ module PoolParty
       # The commands to setup a PoolParty enviornment
       def default_commands
         pack_the_dependencies
-        ::FileUtils.rm_rf "#{Default.tmp_path}/dependencies/gems/cache"
-        rsync "#{Default.tmp_path}/dependencies", '/var/poolparty'
+        ::FileUtils.rm_rf "#{cloud.tmp_path}/dependencies/gems/cache"
+        rsync "#{cloud.tmp_path}/dependencies", '/var/poolparty'
         
         commands << [
           "mkdir -p /etc/poolparty",

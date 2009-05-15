@@ -38,7 +38,7 @@ module PoolParty
         :remoter_base         => Default.remoter_base,
         :keypair              => nil,
         :keypair_path         => nil,
-        :keypair_name         => nil        
+        :keypair_name         => nil
         }.merge(Remote::Ec2.default_options)
       )
 
@@ -116,7 +116,7 @@ module PoolParty
       # here the base requirements are added as well as an empty chef recipe is called
       # Also, the after_create hook on the plugins used by the cloud are called here
       def after_create
-        ::FileUtils.mkdir_p("#{Default.tmp_path}/dr_configure")
+        ::FileUtils.mkdir_p("#{tmp_path}/dr_configure")
         
         run_in_context do
           add_optional_enabled_services
@@ -184,7 +184,7 @@ module PoolParty
       
       # provide list of public ips to get into the cloud
       def ips
-        nodes(:status => "running").map {|ri| ri.public_ip }
+        nodes(:status => "running").map {|ri| ri.ip }
       end
       
       def ip
@@ -248,7 +248,7 @@ module PoolParty
         ::FileTest.file?("#{Default.base_config_directory}/poolparty.pp") ? open("#{Default.base_config_directory}/poolparty.pp").read : nil
       end
       
-      def write_properties_hash(filename=::File.join(Default.tmp_path, Default.properties_hash_filename) )
+      def write_properties_hash(filename=::File.join(tmp_path, Default.properties_hash_filename) )
         file_path = ::File.dirname(filename)
         file_name = "#{::File.basename(filename, ::File.extname(filename))}_#{name}#{::File.extname(filename)}"
         output = to_properties_hash.to_json
@@ -258,6 +258,14 @@ module PoolParty
       
       def to_json
         to_properties_hash.to_json
+      end
+      
+      def tmp_path
+        Default.tmp_path / pool.name / name
+      end
+      
+      def pool
+        parent.is_a?(Pool) ? parent : self
       end
       
       # Add all the poolparty requirements here

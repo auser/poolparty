@@ -23,7 +23,10 @@ module PoolParty
           :vmx_file => vmx_file,
           :keypair => keypair
         }
-      end      
+      end
+      def []k
+        to_hash[k]
+      end
       def status
         "running"
       end      
