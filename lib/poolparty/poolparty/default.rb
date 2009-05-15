@@ -120,7 +120,7 @@ module PoolParty
             "/var/poolparty"
         ].select do |dir|
           dir if viable_directory?(dir)
-        end.first || ::File.join( "/tmp/poolparty")
+        end.first || ::File.join( "/tmp/poolparty/#{name}")
       end
       def logger_location
         [

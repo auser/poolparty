@@ -3,9 +3,13 @@ require 'spec/rake/spectask'
 require 'rake/testtask'
 require 'rake/rdoctask'
 
-task :default  => [:spec, :test]
+task :default  => [:spec, :test, :cleanup_test]
 desc "Update vendor directory and run tests"
 task :ci => ["poolparty:vendor:setup", "poolparty:vendor:update", :spec, :test]
+
+task :cleanup_test do
+  ::FileUtils.rm_rf "/tmp/poolparty"
+end
 
 Spec::Rake::SpecTask.new(:spec) do |t|
   t.warning = t.rcov = false

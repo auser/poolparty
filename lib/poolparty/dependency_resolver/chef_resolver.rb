@@ -26,7 +26,6 @@ module PoolParty
     def compile(props=@properties_hash, tabs=0, default_namespace="poolparty")
       base_dir(default_namespace)
       build_base_recipe_directory( default_namespace )
-      
       # ::Suitcase::Zipper.add( base_dir, "chef/cookbooks")
       
       _compile(props, tabs, default_namespace)
@@ -46,7 +45,6 @@ module PoolParty
     end
     
     def build_base_recipe_directory(nm)
-      dputs "Making new #{base_dir}"
       ::FileUtils.mkdir_p "#{base_dir}"
       
       [ "recipes", "templates", "attributes" ].each do |bdir|
@@ -61,7 +59,11 @@ module PoolParty
     end
     
     def base_dir(nm="poolparty")
-      @base_dir ||= "#{Default.tmp_path}/dr_configure/chef/cookbooks/#{nm}"
+      @base_dir ||= "#{tmp_path}/dr_configure/chef/cookbooks/#{nm}"
+    end
+    
+    def tmp_path
+      the_cloud ? the_cloud.tmp_path : "#{Default.tmp_path}/pool/cloud"
     end
     
     def options_to_string(opts,tabs=0)
