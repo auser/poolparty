@@ -35,7 +35,6 @@ module PoolParty
         :path_to_binary      => 'vmrun',
         :default_cli_options => 'gui',
         :terminate_options   => 'soft',
-        :vmx_files           => nil,
         :vmx_hash            => {},  # hash of vmx_filename => ip
         :images_repo_path    => ::File.expand_path("~/Documents/Virtual_Machines.localized/")
       )
@@ -68,7 +67,6 @@ module PoolParty
       def terminate_instance!(o={})
         dsl_options o
         VmwareInstance.new( :vmx_file => last_unused_vmx_file, 
-                            :ip => vmx_hash[last_unused_vmx_file], 
                             :keypair => keypair
                           ).terminate!(terminate_options)
       end

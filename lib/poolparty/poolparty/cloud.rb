@@ -23,6 +23,24 @@ module PoolParty
     class Cloud < PoolParty::PoolPartyBaseClass
       attr_reader :templates, :cloud_name, :remote_base
       attr_accessor :started_instance
+      
+      # Default set of options. Most take the Default options from the default class
+      default_options(
+        {
+        :expand_when          => Default.expand_when,
+        :contract_when        => Default.contract_when,
+        :minimum_instances    => 2,
+        :maximum_instances    => 5,
+        :ec2_dir              => ENV["EC2_HOME"],
+        :minimum_runtime      => Default.minimum_runtime,
+        :dependency_resolver  => ChefResolver,
+        :remote_base          => nil,
+        :remoter_base         => Default.remoter_base,
+        :keypair              => nil,
+        :keypair_path         => nil,
+        :keypair_name         => nil        
+        }.merge(Remote::Ec2.default_options)
+      )
 
       include CloudResourcer
       include PoolParty::PluginModel
@@ -66,19 +84,6 @@ module PoolParty
         end
       end
       
-      # Default set of options. Most take the Default options from the default class
-      default_options(
-       :expand_when => Default.expand_when,
-        :contract_when => Default.contract_when,
-        :minimum_instances => 2,
-        :maximum_instances => 5,
-        :ec2_dir => ENV["EC2_HOME"],
-        :minimum_runtime => Default.minimum_runtime,
-        :dependency_resolver => ChefResolver,
-        :using_remoter_base => Default.remoter_base,
-        :remote_base => nil
-      )
-      
       additional_callbacks [
         "after_launch_instance"
       ]
@@ -103,14 +108,7 @@ module PoolParty
       end
       
       def before_create
-        using Default.remoter_base  #TODO: refactor to not need to line
-        
-        # context_stack.push self
-        # TODO: PUT BACK IN
-        # (parent ? parent : self).
         add_poolparty_base_requirements
-        # this can be overridden in the spec, but ec2 is the default        
-        # context_stack.pop
       end
       
       # Callback
@@ -142,6 +140,45 @@ module PoolParty
       
       def after_launch_instance(inst=nil)
         remote_base.send :after_launch_instance, inst
+      end
+      
+      # Keypairs
+      # Use the keypair path
+      def keypair(*args)
+        if args && !args.empty?
+          args.each do |arg|
+            unless arg.nil? || _keypair_filepaths.include?(arg)
+              k = arg.is_a?(Key) ? arg : Key.new(arg)
+              _keypairs.unshift k
+            end
+          end
+          self.keypair
+        else
+          unless @keypair
+            @keypair = _keypairs.select {|key| key.exists? }.first
+            self.keypair_path = @keypair.full_filepath
+            self.keypair_name = @keypair.basename
+            self.keypair = @keypair
+          end
+          @keypair
+        end
+      end
+
+      alias :set_keypairs :keypair
+      alias :key :keypair
+
+      def _keypairs
+        @keypairs ||= [Key.new]
+      end
+
+      # Collect the filepaths of the already loaded keypairs
+      def _keypair_filepaths
+        _keypairs.map {|a| a.filepath }
+      end
+
+      #TODO: deprecate: use key.full_filepath    
+      def full_keypair_path
+        @full_keypair_path ||= keypair.full_filepath
       end
       
       # provide list of public ips to get into the cloud

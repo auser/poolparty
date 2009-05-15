@@ -14,7 +14,7 @@ EOS
 
   short_desc "List the clouds"
 
-  run do |command|    
+  run do |command|
     @loaded_clouds.each do |cld|
       
       # If an IP or DNS name is given, bootstrap that node, otherwise, bootstrap all running nodes.
@@ -28,8 +28,8 @@ EOS
           ::PoolParty::Provision::BootStrapper.new( address[:ip], :cloud => cld )
           ::PoolParty::Provision::DrConfigure.new( address[:ip], :cloud => cld )
         else
-          cld.nodes.each do |address|
-            cld.vputs "\nConfiguring: #{address[:ip]}\n--------------------"      
+          cld.nodes(:status=>'running').each do |address|
+            puts "\nConfiguring: #{address[:ip]}\n--------------------"      
             ::PoolParty::Provision::BootStrapper.new( address[:ip], :cloud => cld )
             ::PoolParty::Provision::DrConfigure.new( address[:ip], :cloud => cld )
             

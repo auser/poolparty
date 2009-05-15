@@ -60,49 +60,17 @@ module PoolParty
     # Give access to the cloud the remote_base and instantiate a new
     # instance of the remote base
     def using(t, &block)
-      @cloud = self
+      return self.send t if self.respond_to? t
       if self.class.available_bases.include?(t.to_sym)
         klass_string = "#{t}".classify
-        @remote_base_klass = "::PoolParty::Remote::#{klass_string}".constantize      
-        self.remote_base = @remote_base_klass.send :new, dsl_options, &block
-        self.remoter_base = t.to_sym
-        set_vars_from_options(:remote_base => remote_base)
-        set_vars_from_options(@remote_base_klass.dsl_options)        
+        remote_base_klass = "::PoolParty::Remote::#{klass_string}".constantize      
+        set_default_options(remote_base_klass.default_options)
+        self.remote_base = remote_base_klass.send(:new, dsl_options, &block)
+        self.remoter_base t.to_sym        
         instance_eval "def #{t};remote_base;end"
       else
         raise "Unknown remote base: #{t}"
       end
-    end
-
-    
-    # Keypairs
-    # Use the keypair path
-    def keypair(*args)
-      if args && !args.empty?
-        args.each {|arg| _keypairs.unshift Key.new(arg) unless arg.nil? || arg.empty? || _keypair_filepaths.include?(arg) }
-      else
-        dsl_options[:keypair] ||= _keypairs.select {|key| key.exists? }.first
-      end
-    end
-    
-    alias :set_keypairs :keypair
-    alias :key :keypair
-    
-    def _keypairs
-      dsl_options[:keypairs] ||= [Key.new]
-    end
-    def keypairs(*a)
-      dsl_options[:keypairs]
-    end
-    
-    # Collect the filepaths of the already loaded keypairs
-    def _keypair_filepaths
-      _keypairs.map {|a| a.filepath }
-    end
-    
-    #TODO: deprecate: use key.full_filepath    
-    def full_keypair_path
-      @full_keypair_path ||= keypair.full_filepath
     end
     
     def update_from_schema(schema)
