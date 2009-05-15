@@ -31,6 +31,8 @@ module PoolParty
                           adamwiggins-rest-client
                           rack
                           thin
+                          logging
+                          ruby2ruby
                         )
       end
 
@@ -79,15 +81,15 @@ module PoolParty
       def pack_the_dependencies
         # Add the keypair to the instance... shudder
         ::Suitcase::Zipper.add(keypair, "keys")
-        
+        edge_pp_gem = Dir["#{Default.vendor_path}/../pkg/*poolparty*gem"].pop
         # Use the locally built poolparty gem if it is availabl
-        if edge_pp_gem = Dir["#{Default.vendor_path}/../pkg/*poolparty*gem"].pop
-          puts "using edge poolparty: #{::File.expand_path(edge_pp_gem)}"
-          ::Suitcase::Zipper.add(edge_pp_gem, 'gems')
-        else
-          vputs "using gem auser-poolparty. use rake build to use edge"
-          self.class.gem_list << 'auser-poolparty'
-        end
+            if edge_pp_gem
+              puts "using edge poolparty: #{::File.expand_path(edge_pp_gem)}"
+              ::Suitcase::Zipper.add(edge_pp_gem, 'gems')
+            else
+              vputs "using gem auser-poolparty. use rake build to use edge"
+              self.class.gem_list << 'auser-poolparty'
+            end
         # Add the gems to the suitcase
         puts "Adding default gem dependencies"
         ::Suitcase::Zipper.gems self.class.gem_list, "#{Default.tmp_path}/trash/dependencies"
@@ -137,7 +139,7 @@ module PoolParty
           "cd ../ && rm -rf rubygems-1.3.1*",
           "gem source --add http://gems.github.com",
           "cd /var/poolparty/dependencies/gems/",
-          "gem install --no-rdoc --no-ri -y *.gem",
+          "gem install --no-rdoc --no-ri  --ignore-dependencies *.gem",
           "cd /var/poolparty/dependencies",
           "cp /var/poolparty/dependencies/etc/poolparty/* /etc/poolparty/",
           'touch /var/poolparty/POOLPARTY.PROGRESS',
@@ -147,6 +149,7 @@ module PoolParty
           # "god -c /etc/poolparty/monitor.god",
           "mkdir -p /var/log/poolparty/",
           "thin -R /etc/poolparty/monitor.ru -p 8642 --pid /var/run/stats_monitor.pid --daemon -l /var/log/poolparty/monitor.log start 2>/dev/null",
+          "tail /var/log/poolparty/monitor.log",
           'echo "bootstrap" >> /var/poolparty/POOLPARTY.PROGRESS']
         commands << self.class.class_commands unless self.class.class_commands.empty?
       end
