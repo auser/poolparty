@@ -16,7 +16,7 @@ module PoolParty
     # TODO: Deprecate
     def with_cloud(cl, opts={}, &block)
       raise CloudNotFoundException.new("Cloud not found") unless cl
-      cl.options.merge!(opts) if opts
+      cl.dsl_options.merge!(opts) if opts
       cl.run_in_context &block if block
     end
     
@@ -132,7 +132,7 @@ module PoolParty
       def setup_defaults
         set_vars_from_options(:keypair_name => key.basename, 
                               :keypair_path => key.full_filepath)        
-        dsl_options[:rules] = {:expand   => dsl_options[:expand_when], 
+        dsl_options[:rules] = {:expand   => "#{dsl_options[:expand_when]}, #{}", 
                                :contract => dsl_options[:contract_when]}        
         
         set_dependency_resolver 'chef'

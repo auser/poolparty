@@ -11,10 +11,10 @@ schema = PoolParty::Schema.new( ::File.read(json_file) )
 inst_array = PoolParty::Neighborhoods.load_default.instances.instances
 
 if !inst_array || inst_array.empty?
-  remoter_base = schema.options.remote_base
+  remoter_base = schema.dsl_options.remote_base
   remote_base = remoter_base.top_level_class.constantize(PoolParty::Remote)
 
-  instances = remote_base.send :describe_instances, schema.options
+  instances = remote_base.send :describe_instances, schema.dsl_options
   inst_array = instances.map {|inst| inst.send list_type.to_sym }  
 end
 
