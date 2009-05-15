@@ -60,7 +60,7 @@ module PoolParty
     # Give access to the cloud the remote_base and instantiate a new
     # instance of the remote base
     def using(t, &block)
-      return self.send t if self.respond_to? t
+      return self.send(t) if self.respond_to?(t)
       if self.class.available_bases.include?(t.to_sym)
         klass_string = "#{t}".classify
         remote_base_klass = "::PoolParty::Remote::#{klass_string}".constantize      

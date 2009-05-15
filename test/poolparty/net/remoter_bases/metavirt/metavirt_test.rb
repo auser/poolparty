@@ -6,7 +6,7 @@ class TestMetavirt < Test::Unit::TestCase
     setup do
       reset!
       @cloud = cloud :metvirt_cld do
-        keypair 'front'
+        keypair "#{::File.dirname(__FILE__)}/../../../../fixtures/test_key"
         instances 1
         using :metavirt do
           using :vmrun do
@@ -27,10 +27,10 @@ class TestMetavirt < Test::Unit::TestCase
     end
     should "have a keypair" do
       # assert_equal Key, @cloud.keypair.class
-      assert_equal 'front', @cloud.keypair.basename
-      assert_equal 'front', @cloud.keypair_name
+      assert_equal 'test_key', @cloud.keypair.basename
+      assert_equal 'test_key', @cloud.keypair_name
       # puts "----- #{@cloud.remote_base.dsl_options.inspect}"
-      assert_equal 'front', @cloud.remote_base.keypair_name
+      assert_equal 'test_key', @cloud.remote_base.keypair_name
     end
     should "be able to initialize without a cloud" do
       assert_nothing_raised  do PoolParty::Remote::Metavirt.new end
