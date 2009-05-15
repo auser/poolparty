@@ -40,30 +40,33 @@ module PoolParty
       :minimum_runtime  => 3000, #50.minutes in seconds
       :contract_when => "load < 0.25",
       :expand_when => "load > 0.9",
+      :ec2_dir => ENV["EC2_HOME"], #TODO: move to ec2 class
       :image_id => nil,
       :access_key => nil,
       :secret_access_key => nil,
-      :remoter_base => :ec2
+      :remoter_base => :ec2,
+      :availabilty_zone => 'us-east-1a'
     )
+    
     
     # Class methods
     class << self
       def method_missing(m,*a,&block)
         dsl_options.include?(m) ? dsl_options[m] : super
       end
-      # Get the access_key
-      def access_key
-        @access_key ||= load_access_keys_from_environment_var || load_keys_from_file[:access_key]
-      end
-      def load_access_keys_from_environment_var
-        [ ENV["AWS_ACCESS_KEY"], ENV["AWS_ACCESS_KEY_ID"]].reject {|a| a.nil? }.first
-      end
-      def secret_access_key
-        @secret_access_key ||= load_secret_access_keys_from_environment_var || load_keys_from_file[:secret_access_key]
-      end
-      def load_secret_access_keys_from_environment_var
-        [ ENV["AWS_SECRET_ACCESS_KEY"] ].reject {|a| a.nil? }.first
-      end
+      # # Get the access_key
+      # def access_key
+      #   @access_key ||= load_access_keys_from_environment_var || load_keys_from_file[:access_key]
+      # end
+      # def load_access_keys_from_environment_var
+      #   [ ENV["AWS_ACCESS_KEY"], ENV["AWS_ACCESS_KEY_ID"]].reject {|a| a.nil? }.first
+      # end
+      # def secret_access_key
+      #   @secret_access_key ||= load_secret_access_keys_from_environment_var || load_keys_from_file[:secret_access_key]
+      # end
+      # def load_secret_access_keys_from_environment_var
+      #   [ ENV["AWS_SECRET_ACCESS_KEY"] ].reject {|a| a.nil? }.first
+      # end
       def read_keyfile
         open(get_working_key_file_locations).read
       end
@@ -117,7 +120,7 @@ module PoolParty
             "/var/poolparty"
         ].select do |dir|
           dir if viable_directory?(dir)
-        end.first || ::File.join( "/tmp/poolparty")
+        end.first || ::File.join( "/tmp/poolparty/#{name}")
       end
       def logger_location
         [

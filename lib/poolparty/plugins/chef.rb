@@ -32,22 +32,19 @@ module PoolParty
       end
       
       def basedir
-        @basedir ||= "#{Default.tmp_path}/dr_configure/chef/cookbooks/main"
+        @basedir ||= "#{cloud.tmp_path}/dr_configure/chef/cookbooks/main"
       end
       
       def recipe(file=nil, o={}, &block)
         if file
           file = ::File.expand_path(file)
-          ::FileUtils.mkdir_p "#{basedir}/recipes"
-                    
-          unless ::File.file?(file)
-            tfile = Tempfile.new("main-poolparty-recipe")
-            tfile << file # copy the string into the temp file
-            file = tfile.path
-          end
-          ::FileUtils.rm "#{basedir}/recipes/default.rb" if ::File.file?("#{basedir}/recipes/default.rb")
-          ::File.cp file, "#{basedir}/recipes/default.rb"
+          raise RecipeNotFoundError.new(file) unless ::File.file?(file)
           
+          ::FileUtils.mkdir_p "#{basedir}/recipes" unless ::File.directory?("#{basedir}/recipes")          
+          ::FileUtils.rm "#{basedir}/recipes/default.rb" if ::File.file?("#{basedir}/recipes/default.rb")
+          # ::File.cp file, "#{basedir}/recipes/default.rb"
+          ::File.open("#{basedir}/recipes/default.rb", "w") {|f| f << open(file).read }
+                    
           templates o[:templates] if o[:templates]
           
           recipe_files << basedir
@@ -95,7 +92,7 @@ module PoolParty
             @recipe = ChefRecipe.new
             @recipe.instance_eval &block if block
             @recipe.recipes(recipe_files.empty? ? ["poolparty"] : ["poolparty", "main"])
-            # ::File.open("#{Default.tmp_path}/dr_configure/dna.json", "w+") {|f| f << @recipe.options.to_json }
+
             ::Suitcase::Zipper.add_content_as(@recipe.dsl_options.to_json, "dna.json", "chef")
             
             configure_commands ["cp -f /var/poolparty/dr_configure/chef/dna.json /etc/chef/dna.json"]
@@ -133,12 +130,7 @@ file_cache_path  "/etc/chef"
           else
             open(file).read
           end
-          # ::FileUtils.mkdir_p "#{Default.tmp_path}/trash" unless ::File.directory? "#{Default.tmp_path}/trash"
-          # ::File.open("#{Default.tmp_path}/trash/solo.rb", "w+") do |tf|
-          #   tf << conf_string
-          # end
           ::Suitcase::Zipper.add_content_as(conf_string, "solo.rb", "chef")
-          # ::Suitcase::Zipper.add("#{Default.tmp_path}/trash/solo.rb", "chef")
         end
       end
       
@@ -170,5 +162,10 @@ file_cache_path  "/etc/chef"
       
     end
     
+  end
+  class RecipeNotFoundError < StandardError
+    def initialize(n)
+      super("The recipe you specified cannot be found: #{n}")
+    end 
   end
 end

@@ -16,7 +16,7 @@
     register_remote_base :remote_base_name
   
 =end
-
+require "#{::File.dirname(__FILE__)}/../modules/pinger.rb"  #FIXME should not need this here
 module PoolParty
 
   module Remote    
@@ -32,10 +32,23 @@ module PoolParty
                   :image_id
         
       def initialize(opts={}, &block)
-        opts.each{|op| op.call if op.respond_to?(:call)} 
+        opts.each {|k,v| opts[k] = v.call if v.respond_to?(:call) }
         set_vars_from_options opts
         instance_eval &block if block
       end
+      
+      # def evaluate_proc_options(opts)
+      #   if opts.respond_to?(:call)
+      #     opts.call
+      #   elsif opts.respond_to? :each
+      #     if opts.respond_to?(:values) && opts.respond_to?(:keys)
+      #       opts.each {|k,v| opts[k] = evaluate_proc_options v }
+      #     elsif opts.respond_to?(:each_with_index)
+      #       opts.each_with_index{|o,i| opts[i] = evaluate_proc_options o}
+      #     end
+      #   end
+      #   opts
+      # end
       
       def self.inherited(arg)
         base_name = "#{arg}".downcase.top_level_class.to_sym

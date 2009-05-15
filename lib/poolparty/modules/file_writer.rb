@@ -10,7 +10,7 @@ module PoolParty
     end
     def copy_template_to_storage_directory(file, force=false)
       make_template_directory
-      path = ::File.join( Default.tmp_path, Default.template_directory, ::File.basename(file) )
+      path = ::File.join( tmp_path, Default.template_directory, ::File.basename(file) )
       if force
         FileUtils.cp file, path
       else
@@ -76,7 +76,7 @@ module PoolParty
       end            
     end
     def make_template_directory(dir=nil)
-      path = dir ? ::File.join(Default.tmp_path, Default.template_directory, ::File.basename(dir)) : ::File.join(Default.tmp_path, Default.template_directory)
+      path = dir ? ::File.join(tmp_path, Default.template_directory, ::File.basename(dir)) : ::File.join(tmp_path, Default.template_directory)
       begin
         make_base_directory
         FileUtils.mkdir path unless ::File.directory?(path)

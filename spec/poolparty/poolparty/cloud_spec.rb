@@ -31,10 +31,10 @@ describe "Cloud" do
         @obj.cloud(:pop).should == @cloud1
       end
       it "should have set the using base on intantiation to ec2" do
-        @cloud1.using_remoter?.should_not == nil
+        @cloud1.remoter_base.should_not == nil
       end
-      it "should say the remote_base is ec2 (by default)" do
-        @cloud1.remote_base.class.should == ::PoolParty::Remote::Ec2
+      it "should say the remoter_base is ec2 (by default)" do
+        @cloud1.remoter_base.should == :ec2
       end
     end
     it "should return the cloud if the cloud key is already in the clouds list" do
@@ -134,6 +134,9 @@ describe "Cloud" do
             end
             @cloud = @pool.cloud(:app)
           end
+          it "should set it's own cloud.tmp_path" do
+            @cloud.tmp_path.should == "/tmp/poolparty/just_pool/app"
+          end
           it "should set the minimum based on the range" do
             @cloud.minimum_instances.should == 8
           end
@@ -149,12 +152,12 @@ describe "Cloud" do
             @c = cloud :app do
               keypair "hotdog"
             end
-            @c.keypairs.first.filepath.should == "hotdog"
+            @c._keypairs.map {|a| a.basename }.include?("hotdog")
           end
           it "should take the pool parent's keypair if it's defined on the pool" do
-            pool :pool do
-              keypair "ney"
+            pool :pool do              
               cloud :app do
+                keypair "ney"
               end
             end            
             clouds[:app]._keypairs.first.stub!(:exists?).and_return true
@@ -162,12 +165,13 @@ describe "Cloud" do
           end
           it "should default to ~/.ssh/id_rsa if none are defined" do
             ::File.stub!(:exists?).and_return(false)
-            ::File.stub!(:exists?).with(File.expand_path("#{ENV["HOME"]}/.ssh/id_rsa")).and_return(true)
+            ::File.stub!(:exists?).with(File.expand_path("#{ENV["HOME"]}/.ssh/id_jokes")).and_return(true)
             pool :pool do
               cloud :app do
+                keypair "id_jokes"
               end
             end
-            clouds[:app].keypair.full_filepath.should match(/\.ssh\/id_rsa/)
+            clouds[:app].keypair.full_filepath.should match(/\.ssh\/id_jokes/)
           end
         end
         describe "Manifest" do
@@ -211,9 +215,6 @@ describe "Cloud" do
                 @heartbeat = nil
               end
               @hb = PoolpartyBaseHeartbeatClass.new
-            end
-            it "should call heartbeat on the cloud" do
-              pending
             end
             it "should call enable on the plugin call" do
               @hb = PoolpartyBaseHeartbeatClass.new

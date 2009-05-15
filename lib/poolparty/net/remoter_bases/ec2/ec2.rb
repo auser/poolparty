@@ -44,9 +44,9 @@ module PoolParty
         # :key_name => ::File.basename(keypair.is_a?(String) ? keypair : keypair.full_filepath),
         :instance_type => 'm1.small', # or 'm1.large', 'm1.xlarge', 'c1.medium', or 'c1.xlarge'
         :addressing_type => "public",
-        :availabilty_zone => "us-east-1a",
-        :access_key => nil,
-        :secret_access_key => nil,
+        :availability_zone => "us-east-1a",
+        :access_key => ENV['AWS_ACCESS_KEY'],
+        :secret_access_key => ENV['AWS_SECRET_ACCESS_KEY'],
         :security_group => ["default"]
         })
       
@@ -106,8 +106,8 @@ module PoolParty
       
       # return or create a new base EC2 connection object that will actually connect to ec2
       def ec2(o={})
-        @ec2 ||= EC2::Base.new( :access_key_id => o[:access_key], 
-                                :secret_access_key => o[:secret_access_key]
+        @ec2 ||= EC2::Base.new( :access_key_id => get_access_key, 
+                                :secret_access_key => get_secret_access_key
                               )
       end
       def self.ec2(o)
@@ -222,7 +222,7 @@ module PoolParty
       end
     
       def custom_minimum_runnable_options
-        [:ami, :availabilty_zone, :security_group]
+        [:ami, :availability_zone, :security_group]
       end
 
       # Hook
@@ -243,7 +243,7 @@ module PoolParty
         ]
       end
       
-      def access_key(n=nil)
+      def get_access_key(n=nil)
         if n.nil?
           dsl_options[:access_key] ||= Default.access_key
         else
@@ -251,7 +251,7 @@ module PoolParty
         end
       end
       
-      def secret_access_key(n=nil)
+      def get_secret_access_key(n=nil)
         if n.nil?
           dsl_options[:secret_access_key] ||= Default.secret_access_key
         else

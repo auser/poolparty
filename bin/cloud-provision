@@ -14,11 +14,10 @@ EOS
 
   short_desc "combines bootstrap and configures an instance or multiple instances"
 
-  run do |command|    
+  run do |command|
     @loaded_clouds.each do |cld|
       
       # If an IP or DNS name is given, bootstrap that node, otherwise, bootstrap all running nodes.
-      # ::FileUtils.rm_rf "#{Default.tmp_path}/" unless o.testing?
       if cld.nodes.empty?
         puts "No nodes to provision"
       else

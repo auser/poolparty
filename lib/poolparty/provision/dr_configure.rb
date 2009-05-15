@@ -31,13 +31,14 @@ module PoolParty
        end
      end
     
-     attr_reader :cloud, :keypair, :run_count
+     attr_reader :cloud, :keypair, :run_count, :cloud_name
      
      def initialize(host, opts={}, &block)
        self.class.defaults.merge(opts).to_instance_variables(self)
        @target_host = host
        @configurator = "::PoolParty::Provision::#{dependency_resolver.capitalize}".constantize
        @cloud = opts[:cloud]
+       @cloud_name = @cloud.name
        @keypair = @cloud.keypair
        @run_count = 0
        
@@ -50,15 +51,15 @@ module PoolParty
      private
      
      def prescribe_configuration
-       ::FileUtils.mkdir_p "#{Default.tmp_path}/dr_configure" unless ::File.directory?("#{Default.tmp_path}/dr_configure")
-      ::File.cp $pool_specfile, "#{Default.tmp_path}/dr_configure/clouds.rb"
-      ::File.open "#{Default.tmp_path}/dr_configure/clouds.json", "w" do |f|
+       ::FileUtils.mkdir_p "#{cloud.tmp_path}/dr_configure" unless ::File.directory?("#{cloud.tmp_path}/dr_configure")
+      ::File.cp $pool_specfile, "#{cloud.tmp_path}/dr_configure/clouds.rb"
+      ::File.open "#{cloud.tmp_path}/dr_configure/clouds.json", "w" do |f|
         f << cloud.to_properties_hash.to_json
       end
       
       setup_configurator
       # write_erlang_cookie
-      @configurator.files_to_upload.each {|f| ::FileUtils.cp f, "#{Default.tmp_path}/dr_configure/#{::File.basename(f)}" if ::File.file?(f) }
+      @configurator.files_to_upload.each {|f| ::FileUtils.cp f, "#{cloud.tmp_path}/dr_configure/#{::File.basename(f)}" if ::File.file?(f) }
       
       pack_up_and_ship_off_suitcase
       run_commands          
@@ -106,8 +107,8 @@ module PoolParty
      end
      
      def pack_up_and_ship_off_suitcase
-       ::Suitcase::Zipper.build_dir!("#{Default.tmp_path}/dr_configure")
-       rsync "#{Default.tmp_path}/dr_configure/", "/var/poolparty/dr_configure/", ['-a --stats']
+       ::Suitcase::Zipper.build_dir!("#{cloud.tmp_path}/dr_configure")
+       rsync "#{cloud.tmp_path}/dr_configure/", "/var/poolparty/dr_configure/", ['-a --stats']
      end
      
      # Pack up  monitors verifiers plugins directories in the same direcotry as your clouds.rb and send to nodes.
@@ -115,7 +116,7 @@ module PoolParty
        # @cloud.write_properties_hash("#{Default.tmp_path}/properties_hash.rb")
        #TODO: move to puppet class       
        #TODO: remove or conditionalize this puppet specific task
-       @cloud.build_and_store_new_config_file("#{Default.tmp_path}/dr_configure/poolparty.pp")
+       @cloud.build_and_store_new_config_file("#{cloud.tmp_path}/dr_configure/poolparty.pp")
        
        %w(monitors verifiers plugins).each do |dir|
         @cloud.pack_user_directory dir
@@ -129,8 +130,8 @@ module PoolParty
      def write_erlang_cookie
        # cookie = (1..16).collect { chars[rand(chars.size)] }.pack("C*")
        cookie =  (1..65).collect {rand(9)}.join()
-       cookie_file = ::File.open("#{Default.tmp_path}/dr_configure/erlang.cookie", 'w+'){|f| f << cookie }
-       ::File.cp "#{::File.dirname(__FILE__)}/../templates/erlang_cookie_maker", "#{Default.tmp_path}/dr_configure/"
+       cookie_file = ::File.open("#{cloud.tmp_path}/dr_configure/erlang.cookie", 'w+'){|f| f << cookie }
+       ::File.cp "#{::File.dirname(__FILE__)}/../templates/erlang_cookie_maker", "#{cloud.tmp_path}/dr_configure/"
      end
      
      def self.class_commands
