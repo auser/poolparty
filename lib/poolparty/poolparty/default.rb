@@ -42,8 +42,8 @@ module PoolParty
       :expand_when => "load > 0.9",
       :ec2_dir => ENV["EC2_HOME"], #TODO: move to ec2 class
       :image_id => nil,
-      :access_key => ENV['AWS_ACCESS_KEY'],
-      :secret_access_key => ENV['AWS_SECRET_ACCESS_KEY'],
+      :access_key => nil,
+      :secret_access_key => nil,
       :remoter_base => :ec2,
       :availabilty_zone => 'us-east-1a'
     )
