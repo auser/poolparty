@@ -10,6 +10,10 @@ describe "basic" do
     @db = clouds[:basic_db]
     @app = clouds[:basic_app]
   end
+  it "should have a remote base" do
+    clouds[:basic_app].remoter_base.should == :ec2
+    clouds[:basic_app].remote_base.class.should == Ec2
+  end
   it "should have one pool called :app" do
     pool(:application).should_not == nil
     pools[:application].should_not == nil
