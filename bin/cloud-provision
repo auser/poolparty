@@ -28,7 +28,7 @@ EOS
           ::PoolParty::Provision::BootStrapper.new( address[:ip], :cloud => cld )
           ::PoolParty::Provision::DrConfigure.new( address[:ip], :cloud => cld )
         else
-          cld.nodes.each do |address|
+          cld.nodes(:status => "running").each do |address|
             cld.vputs "\nConfiguring: #{address[:ip]}\n--------------------"      
             ::PoolParty::Provision::BootStrapper.new( address[:ip], :cloud => cld )
             ::PoolParty::Provision::DrConfigure.new( address[:ip], :cloud => cld )
