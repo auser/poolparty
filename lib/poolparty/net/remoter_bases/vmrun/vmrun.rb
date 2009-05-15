@@ -62,10 +62,10 @@ module PoolParty
       end
       # Terminate an instance by id
       def self.terminate_instance!(o={})
-        new(nil, o).terminate_instance!
+        new(o).terminate_instance!
       end
       def terminate_instance!(o={})
-        dsl_options o
+        set_vars_from_options o
         VmwareInstance.new( :vmx_file => last_unused_vmx_file, 
                             :keypair => keypair
                           ).terminate!(terminate_options)
