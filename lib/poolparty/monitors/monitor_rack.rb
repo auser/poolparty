@@ -61,6 +61,7 @@ module Monitors
     
     private
     def instance
+      return nil if path_map.nil?
       @instance ||= constantize( path_map.first ).new(env)
     end
     
