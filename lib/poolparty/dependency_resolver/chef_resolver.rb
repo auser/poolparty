@@ -45,7 +45,6 @@ module PoolParty
     end
     
     def build_base_recipe_directory(nm)
-      dputs "Making new #{base_dir}"
       ::FileUtils.mkdir_p "#{base_dir}"
       
       [ "recipes", "templates", "attributes" ].each do |bdir|
