@@ -28,11 +28,6 @@ describe "Ec2RemoteInstance" do
   end
 end
 
-
-
-
-
-
 describe "Remote Instance" do
   before(:each) do
     @valid_hash = {:ip => "127.0.0.1", :name => "master"}

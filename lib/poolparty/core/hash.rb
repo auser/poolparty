@@ -112,7 +112,6 @@ class Hash
     self
   end
   
-  
   def method_missing(sym, *args, &block)
     if has_key?(sym)
       fetch(sym)

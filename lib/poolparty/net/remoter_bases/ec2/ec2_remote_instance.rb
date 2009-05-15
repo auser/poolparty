@@ -5,7 +5,7 @@ module PoolParty
       
       attr_reader :uniquely_identifiable_by, :found_at
       
-      default_options :launching_time => Time.now
+      default_options( {:launching_time => Time.now}.merge(Remote::Ec2.default_options) )
       
       # A new instance will be created from the passed in hash.  
       # This hash of passed in values will be converted to methods on this instance.

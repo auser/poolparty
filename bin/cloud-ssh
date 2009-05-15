@@ -21,7 +21,7 @@ EOS
     
     if !nodes.empty?
       n = command[:inst_num] ? command[:inst_num].to_i : 0
-      @cloud.ssh_into( nodes[n].ip ) if @cloud
+      @cloud.ssh_into( nodes[n].public_ip ) if @cloud
     else
       puts "No running instances can be found"
     end

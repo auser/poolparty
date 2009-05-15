@@ -29,7 +29,7 @@ module PoolParty
       @base_name = get_name_from_options_and_extra_options(opts, extra_opts)
       
       @init_opts = (opts.is_a?(Hash) ? extra_opts.merge(opts) : extra_opts.merge(:name => @base_name))
-      
+
       run_in_context(init_opts, &block)
       # super(init_opts, &block)
     end

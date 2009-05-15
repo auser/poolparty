@@ -14,12 +14,13 @@ module PoolParty
       end
       
       def to_hash
-        {
-          :status => status,
+        { :status => status,
           :mac_address => mac_address,
           :ip => ip,
-          :internal_ip => ip,          
+          :public_ip => ip,
+          :internal_ip => ip, 
           :instance_id => vmx_file,
+          :vmx_file => vmx_file,
           :keypair => keypair
         }
       end      

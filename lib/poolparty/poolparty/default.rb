@@ -40,11 +40,13 @@ module PoolParty
       :minimum_runtime  => 3000, #50.minutes in seconds
       :contract_when => "load < 0.25",
       :expand_when => "load > 0.9",
+      :ec2_dir => ENV["EC2_HOME"], #TODO: move to ec2 class
       :image_id => nil,
-      :access_key => nil,
-      :secret_access_key => nil,
+      :access_key => nil, #TODO: move to ec2 class
+      :secret_access_key => nil, #TODO: move to ec2 class      
       :remoter_base => :ec2
     )
+    
     
     # Class methods
     class << self
