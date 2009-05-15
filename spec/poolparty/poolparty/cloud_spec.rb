@@ -31,7 +31,7 @@ describe "Cloud" do
         @obj.cloud(:pop).should == @cloud1
       end
       it "should have set the using base on intantiation to ec2" do
-        @cloud1.using_remoter?.should_not == nil
+        @cloud1.remoter_base.should_not == nil
       end
       it "should say the remoter_base is ec2 (by default)" do
         @cloud1.remoter_base.should == :ec2
