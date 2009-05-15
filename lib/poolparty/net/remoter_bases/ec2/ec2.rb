@@ -45,8 +45,8 @@ module PoolParty
         :instance_type => 'm1.small', # or 'm1.large', 'm1.xlarge', 'c1.medium', or 'c1.xlarge'
         :addressing_type => "public",
         :availability_zone => "us-east-1a",
-        :access_key => nil,
-        :secret_access_key => nil,
+        :access_key => ENV['AWS_ACCESS_KEY'],
+        :secret_access_key => ENV['AWS_SECRET_ACCESS_KEY'],
         :security_group => ["default"]
         })
       
