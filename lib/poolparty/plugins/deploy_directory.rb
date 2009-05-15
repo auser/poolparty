@@ -32,14 +32,18 @@ This will place the contents of ~/path/to/my/site from your machine to /mnt/bob 
       end
       
       def package_deploy_directory
-        ::Suitcase::Zipper.add("#{::File.expand_path(from)}", "user_directory/")
+        ::Suitcase::Zipper.add("#{::File.expand_path(from)}", "user_directory/#{name}/") # namespace by name
       end
       
       def add_unpack_directory
         has_directory(to)
         has_exec("unpack-#{::File.basename(to)}-deploy-directory",
           :requires => get_directory(to),
-          :command => "cp -R /var/poolparty/dr_configure/user_directory/#{name}/* #{to}")
+                                                                        # zipper uses the from basename
+                                                                        # while this is sometimes redundant, 
+                                                                        # it allows for two directories that
+                                                                        # might have the same directory name
+          :command => "cp -R /var/poolparty/dr_configure/user_directory/#{name}/#{File.basename(from)}/* #{to}") 
         if owner
           has_exec(:name => "chown-#{name}", :command => "chown #{owner} -R #{to}")
         end     

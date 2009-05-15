@@ -1,51 +1,62 @@
-# require File.dirname(__FILE__) + '/../spec_helper'
-# 
-# include PoolParty::Resources
-# 
-# class TestClass
-#   include PoolParty::Resources
-# end
-# describe "Remote Instance" do
-#   before(:each) do
-#     Kernel.stub!(:system).and_return true
-#   end
-#   describe "wrapped" do
-#     before(:each) do
-#       @tc = TestClass.new      
-#       @cloud = MyOpenStruct.new(:keypair => "keys", :remote_keypair_path => "/keypair_path", :name => "cloudcloud")
-#       @cloud.stub!(:is_a?).with(PoolParty::Cloud::Cloud).and_return true
-#       @tc.stub!(:parent).and_return @cloud
-#       
-#       @options = {:name => "deploydirectory", :from => ::File.dirname(__FILE__), :to => "/var/www/deploydirectory", :testing => false}
-#     end
-#     it "should be a string" do
-#       @tc.has_deploydirectory(@options).to_string.should =~ /exec \{/
-#     end
-#     it "should included the flushed out options" do
-#       @tc.has_deploydirectory(@options).to_string.should =~ /command/
-#     end
-#     describe "in resource" do
-#       before(:each) do
-#         @tc.instance_eval do
-#           has_deploydirectory do
-#             name "deploydirectory"
-#             from ::File.dirname(__FILE__)
-#             to "/var/www/deploydirectory"
-#           end
-#         end
-#       end
-#       it "should have the path set within the resource" do
-#         @tc.resource(:deploydirectory).first.to_string.should =~ /exec \{/
-#       end
-#       it "should not have the from in the to_string" do
-#         @tc.resource(:deploydirectory).first.to_string.should_not =~ /from /
-#       end
-#       it "should not have the to in the to_string" do
-#         @tc.resource(:deploydirectory).first.to_string.should_not =~ /to /
-#       end
-#       it "should have onlyif in the to_string" do
-#         @tc.resource(:deploydirectory).first.to_string.should =~ /onlyif/
-#       end
-#     end
-#   end
-# end
+require File.dirname(__FILE__) + '/../spec_helper'
+
+class TestDeployDirectoryClass < PoolParty::Cloud::Cloud
+end
+
+describe "Remote Instance" do
+  describe "wrapped" do
+    before(:each) do
+      reset!
+      @tc = cloud :test_deploy_directory_class_cloud do
+         has_deploy_directory("map-experiments", 
+                              :from => "~/projects/westfield/map-experiments", 
+                              :to => "/var/www/wifi-maps", 
+                              :mode => "755",
+                              :owner => "www-data")
+
+         has_deploy_directory("map-experiments-two", 
+                              :from => "~/projects/westfield/map-experiments", 
+                              :to => "/var/www/wifi-maps-two", 
+                              :mode => "755",
+                              :owner => "www-data")
+
+      end
+      @compiled = ChefResolver.new(@tc.to_properties_hash).compile
+    end
+
+    describe "when being listed the first time" do
+      it "should be a string" do
+        @compiled.should =~ /execute/
+      end
+
+      it "should create the directory specified in 'to'" do
+        @compiled.should =~ %r{directory "/var/www/wifi-maps"}
+      end
+
+      it "should copy from the deploy directory" do
+        @compiled.should =~ %r{command "cp \-R /var/poolparty/dr_configure/user_directory/map-experiments/map-experiments/\* /var/www/wifi-maps"}
+      end
+
+      it "should chown if needed" do
+        @compiled.should =~ %r{command "chown www-data \-R /var/www/wifi-maps"}
+      end
+
+      it "should chmod if needed" do
+        @compiled.should =~ %r{command "chmod 755 /var/www/wifi-maps"}
+      end
+    end
+
+    describe "when being listed a second time with the same source" do
+      it "should create the directory specified in 'to'" do
+        @compiled.should =~ %r{directory "/var/www/wifi-maps-two"}
+      end
+
+      it "should copy from the right deploy directory" do
+        @compiled.should =~ %r{command "cp \-R /var/poolparty/dr_configure/user_directory/map-experiments-two/map-experiments/\* /var/www/wifi-maps-two"}
+      end
+    end
+ 
+  end
+end
+
+# it should be able to have a different name and from
