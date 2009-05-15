@@ -60,7 +60,11 @@ module PoolParty
     end
     
     def base_dir(nm="poolparty")
-      @base_dir ||= "#{the_cloud.tmp_path}/dr_configure/chef/cookbooks/#{nm}"
+      @base_dir ||= "#{tmp_path}/dr_configure/chef/cookbooks/#{nm}"
+    end
+    
+    def tmp_path
+      the_cloud ? the_cloud.tmp_path : "#{Default.tmp_path}/pool/cloud"
     end
     
     def options_to_string(opts,tabs=0)

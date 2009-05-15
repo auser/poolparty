@@ -265,7 +265,7 @@ module PoolParty
       end
       
       def pool
-        parent.is_a?(Pool) ? parent : self
+        parent && parent.is_a?(Pool) ? parent : self
       end
       
       # Add all the poolparty requirements here
