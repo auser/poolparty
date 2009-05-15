@@ -1,3 +1,7 @@
+require 'rubygems'
+require 'json'
+require 'json/add/core'
+
 class String
   def hasherize(format=[])
     hash = {}
@@ -189,6 +193,15 @@ class String
   #   "merb"/"core_ext" #=> "merb/core_ext"
   def /(o)
     File.join(self, o.to_s)
+  end
+  
+  # Parse json string to a ruby object
+  def json_parse
+    return nil if self == "null" || self.empty?
+    result = JSON.parse self
+    if result.respond_to? :keys
+      result.symbolize_keys!
+    end
   end
   
 end

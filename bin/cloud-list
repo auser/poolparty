@@ -13,20 +13,23 @@ Usage: #{$0} #{all_options_string}
   e.g. show a list of the current instances on the cloud
 EOS
 
-  short_desc "show a list of the current instances on the clouds"
+  opt :instance_id, "Describe a specific instance", :type => String, :default => nil
 
   run do |command|    
     @loaded_clouds.each do |cld|
-      
-      puts header("Listing cloud #{cld.name}")
-      puts subheader("Active instances")
-      puts cld.nodes(:status => "running").map{|a| "#{a[:instance_id] || a[:id]}\t#{a[:public_ip]}" }.join("\n")
+      if command[:instance_id]
+        require 'pp'
+        pp result = cld.describe_instance(:instance_id=>command[:instance_id])
+      else
+        puts header("Listing cloud #{cld.name}")
+        puts subheader("Active instances")
+        puts cld.nodes(:status => "running").map{|a| "#{a[:instance_id] || a[:id]}\t#{a[:public_ip]}" }.join("\n")
 
-      if cld.nodes(:status => "pending").size > 0
-        puts subheader("Pending instances")
-        puts cld.nodes(:status => "pending").map{|a| "#{a[:instance_id] || a[:id]}\t#{a[:public_ip]}" }.join("\n")
+        if cld.nodes(:status => "pending").size > 0
+          puts subheader("Pending instances")
+          puts cld.nodes(:status => "pending").map{|a| "#{a[:instance_id] || a[:id]}\t#{a[:public_ip]}" }.join("\n")
+        end
       end
-      
     end    
   end
 end

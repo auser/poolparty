@@ -79,7 +79,7 @@ module PoolParty
       end
       def describe_instance(o={})
         raise "id or instance_id must be set before calling describe_instace" if !id(o)
-        JSON.parse(@server["/instance/#{id(o)}"].get).symbolize_keys!
+        server["/instance/#{id(o)}"].get.json_parse
       end
 
       def self.describe_instances(o={})
@@ -91,7 +91,7 @@ module PoolParty
       
       private
       def id(o={})
-        @id ||= o[:id] || dsl_options[:id] || o[:instance_id] || dsl_options[:instance_id]
+       @id = ( o[:id] || o[:instance_id] || @id || dsl_options[:id] || dsl_options[:instance_id] )
       end
       
     end
