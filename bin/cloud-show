@@ -7,13 +7,15 @@ require 'git-style-binary/command'
 GitStyleBinary.command do
   @theme = :short
   
-  version "PoolParty cloud command"  
+  version "PoolParty #{$0} command"  
   banner <<-EOS
-Usage: #{$0} #{all_options_string} COMMAND [ARGS]
+Usage: #{$0} #{all_options_string}
+
+shows output about the clouds.rb
 
 EOS
 
-  short_desc "List the clouds"
+  short_desc "shows output about the clouds.rb"
 
   run do |command|
 

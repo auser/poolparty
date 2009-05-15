@@ -5,14 +5,16 @@ require "poolpartycl"
 require 'git-style-binary/command'
 
 GitStyleBinary.command do  
-  version "PoolParty cloud command"  
+  version "PoolParty #{$0} command"  
   banner <<-EOS
 Usage: #{$0} #{all_options_string} COMMAND [ARGS]
 
-  List the clouds and their nodes
+  terminate the cloud
 EOS
 
-  short_desc "List the clouds"
+  short_desc "terminate the cloud"
+  
+  opt :yes, "Answer yes to the are you sure question", :type => :boolean, :default => false
 
   run do |command|    
     @loaded_clouds.each do |cld|
@@ -22,7 +24,7 @@ EOS
     Shutting down #{inst.instance_id}
     Are you sure? (Y/N)
         EOM
-        o = are_you_sure? msg
+        o = are_you_sure? msg || command[:yes]
         if o
           puts "Shutting down #{inst.instance_id}"
           cld.terminate_instance!(:instance_id => inst.instance_id)

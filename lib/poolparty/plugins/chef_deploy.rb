@@ -20,6 +20,8 @@ module PoolParty
     
     define_resource :chef_deploy_definition do
       
+      dsl_methods :repo
+      
       default_options(
                       :branch => "HEAD",
                       :enable_submodules => true,
@@ -36,9 +38,11 @@ module PoolParty
     end
     
     plugin :chef_deploy do
-                      
+      dsl_methods :branch, :enable_submodules, :migrate, :environment, :shallow_clone, :user,
+                  :restart_command, :migration_command, :repo
+      
       def loaded(o={})
-        raise "You must specify a git repo" unless repo
+        raise ::ReposMissingError.new unless repo
         has_chef_library :name => "chef-deploy/lib/chef-deploy.rb"
         has_chef_deploy_definition(dsl_options)
       end
@@ -55,4 +59,10 @@ module PoolParty
     end
     
   end
+end
+
+class ReposMissingError < StandardError
+  def initialize
+    super("You must include the repo to deploy with chef_deploy")
+  end 
 end

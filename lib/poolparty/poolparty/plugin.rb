@@ -40,13 +40,19 @@ module PoolParty
       def after_create
       end
       
+      def calls(r)
+        has_exec "ls", :calls => r
+      end
+      
       def enable
       end
       def is_plugin?
         true
       end
       def cloud
-        @parent
+        context_stack.find do |i|
+          i.class == PoolParty::Cloud::Cloud
+        end
       end
       
       def bootstrap_gems *gems
