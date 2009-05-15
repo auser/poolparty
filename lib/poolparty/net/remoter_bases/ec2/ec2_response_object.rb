@@ -52,11 +52,12 @@ class EC2ResponseObject
   def self.get_hash_from_response(resp, group = 'default')
       {
         :instance_id => resp.instanceId,
-        :name => resp.instanceId, 
-        :ip => resp.dnsName || "not-assigned",
+        :name => resp.instanceId,
         :status => resp.instanceState.name,
-        :launching_time => resp.launchTime.parse_datetime,
+        :public_ip => resp.dnsName || "not-assigned",
+        :ip => resp.dnsName || "not-assigned",
         :internal_ip => resp.privateDnsName,
+        :launching_time => resp.launchTime.parse_datetime,
         :keypair => resp.keyName,
         :security_group => group
       }        

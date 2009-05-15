@@ -25,11 +25,11 @@ EOS
       else
         puts header("Listing cloud #{cld.name}")
         puts subheader("Active instances")
-        puts cld.nodes(:status => "running").map{|a| "#{a[:instance_id] || a[:id]}\t#{a[:public_ip]}" }.join("\n")
+        puts cld.nodes(:status => "running").map{|a| "#{a[:instance_id] || a[:id]}\t#{a[:ip] ||a[:public_ip] }" }.join("\n")
 
         if cld.nodes(:status => "pending").size > 0
           puts subheader("Pending instances")
-          puts cld.nodes(:status => "pending").map{|a| "#{a[:instance_id] || a[:id]}\t#{a[:public_ip]}" }.join("\n")
+          puts cld.nodes(:status => "pending").map{|a| "#{a[:instance_id] || a[:id]}\t#{a[:ip] ||a[:public_ip] }" }.join("\n")
         end
       end
     end    
