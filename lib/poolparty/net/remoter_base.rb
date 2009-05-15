@@ -16,7 +16,7 @@
     register_remote_base :remote_base_name
   
 =end
-
+require "#{::File.dirname(__FILE__)}/../modules/pinger.rb"  #FIXME should not need this here
 module PoolParty
 
   module Remote    

@@ -2,7 +2,7 @@
   MonitorRack is a rack application that maps url requests to method calls on Monitor classes.
 =end
 
-require ::File.dirname(__FILE__)+"/../aska/aska"
+require ::File.dirname(__FILE__)+"/../aska"
 require ::File.dirname(__FILE__)+"/../lite"
 require ::File.dirname(__FILE__)+"/base_monitor"
 
