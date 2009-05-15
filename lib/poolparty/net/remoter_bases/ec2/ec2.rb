@@ -44,7 +44,7 @@ module PoolParty
         # :key_name => ::File.basename(keypair.is_a?(String) ? keypair : keypair.full_filepath),
         :instance_type => 'm1.small', # or 'm1.large', 'm1.xlarge', 'c1.medium', or 'c1.xlarge'
         :addressing_type => "public",
-        :availabilty_zone => "us-east-1a",
+        :availability_zone => "us-east-1a",
         :access_key => nil,
         :secret_access_key => nil,
         :security_group => ["default"]
