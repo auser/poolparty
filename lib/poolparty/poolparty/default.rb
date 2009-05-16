@@ -17,6 +17,7 @@ module PoolParty
       :minimum_instances => 2,
       :maximum_instances => 5,
       :user => "root", # This should change here
+      :keypair_name => nil,
       :base_keypair_path => "#{ENV["HOME"]}/.ec2",
       :base_ssh_path => "#{ENV["HOME"]}/.ssh",
       :tmp_path => "/tmp/poolparty",

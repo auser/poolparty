@@ -257,7 +257,22 @@ module PoolParty
       end
       
       def to_json
-        to_properties_hash.to_json
+        to_properties_hash.reject{|k,v| k == :remote_base }.to_json
+      end
+      
+      # TODO: test
+      def self.load_from_json(str)
+        parsed = JSON.parse(str).each {|k,v| self[k.to_sym] = v}
+        opts= parsed.options
+        opts.keypair = ::PoolParty::Key.new(opts['keypair_name'] || opts['keypair_path'] ||opts['keypair'])
+        # cld.remoter_base = PoolParty::Remote.module_eval( schema.options.remoter_base.camelcase )
+        # opts.remoter_base_class = PoolParty::Remote.module_eval( opts.remoter_base.camelcase )
+        # opts.remoter_base_class.new opts.remote_base
+        opts.dependency_resolver = PoolParty.module_eval(options.dependency_resolver.split("::")[-1].camelcase).send(:new)
+        cld = Cloud.new opts.cloud_name.to_sym
+        cld.dsl_options.merge opts
+        cld.using opts.remoter_base.to_sym
+        cld
       end
       
       def tmp_path

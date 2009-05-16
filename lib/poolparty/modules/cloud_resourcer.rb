@@ -74,11 +74,16 @@ module PoolParty
     end
     
     def update_from_schema(schema)
-      keypairs = schema.options.delete(:keypairs).map {|a| PoolParty::Key.new(a.basename) }
-      options.merge! schema.options
-      dsl_options[:keypairs] = keypairs
-
-      dsl_options[:dependency_resolver] = schema.options.dependency_resolver.split("::")[-1].gsub(/Resolver/, '').preserved_class_constant("Resolver") rescue PoolParty::Chef
+      self.dsl_options.merge! schema.options.to_hash
+      self.dependency_resolver = schema.options.dependency_resolver.split("::")[-1].gsub(/Resolver/, '').preserved_class_constant("Resolver") rescue PoolParty::Chef
+      self.keypair = PoolParty::Key.new schema.options.keypair.basename
+      
+      # self.keypair = PoolParty::Key.new schema.options.keypair.basename
+      # keypair = schema.options.delete(:keypairs).map {|a| PoolParty::Key.new(a.basename) }
+      # options.merge! schema.options.to_hash
+      # dsl_options[:keypairs] = keypairs
+      # 
+      # dsl_options[:dependency_resolver] = schema.options.dependency_resolver.split("::")[-1].gsub(/Resolver/, '').preserved_class_constant("Resolver") rescue PoolParty::Chef
       
     end
     

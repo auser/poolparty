@@ -47,8 +47,16 @@ module PoolParty
         :availability_zone => "us-east-1a",
         :access_key => ENV['AWS_ACCESS_KEY'],
         :secret_access_key => ENV['AWS_SECRET_ACCESS_KEY'],
-        :security_group => ["default"]
+        :security_group => ["default"],
+        :keypair_name =>nil
         })
+        
+      def ami
+        image_id
+      end
+      def keypair_name
+        dsl_options[:keypair_name] || keypair.basename
+      end
       
       # Requires a hash of options
       def self.launch_new_instance!(o)

@@ -17,6 +17,7 @@ module PoolParty
         JSON.parse(h).each {|k,v| self[k.to_sym] = v}
       end
     end
+    
 
     def [](k)
       hsh[k]
@@ -53,16 +54,14 @@ module PoolParty
       
       $pool_specfile = "/etc/poolparty/clouds.rb"
       
-      remoter_base = PoolParty::Remote.module_eval(options.remote_base.split('::')[-1].camelcase)
-      # TODO: Seriously, make this sexier
-      
+      # TODO: Seriously, make this sexier      
       cld = OpenStruct.new(options)
       cld.keypair = ::PoolParty::Key.new("/etc/poolparty/#{node[:keypair]}")
-      cld.remoter_base = remoter_base
+      # cld.remoter_base = PoolParty::Remote.module_eval( schema.options.remoter_base.camelcase )
+      cld.remote_base = PoolParty::Remote.module_eval( schema.options.remoter_base.camelcase )
       cld.build_and_store_new_config_file = "/etc/poolparty/clouds.json"
       cld.dependency_resolver = PoolParty.module_eval(options.dependency_resolver.split("::")[-1].camelcase).send(:new)
-      
-      cld
+
     end
   end
 end
