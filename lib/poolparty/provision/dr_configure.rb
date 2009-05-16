@@ -99,7 +99,6 @@ module PoolParty
          'chmod 644 /var/poolparty/dr_configure/clouds.rb',
          'cp /var/poolparty/dr_configure/clouds.json /etc/poolparty',
          'cp /var/poolparty/dr_configure/clouds.rb /etc/poolparty',
-         "touch /var/poolparty/POOLPARTY.PROGRESS",
          'echo "configure" >> /var/poolparty/POOLPARTY.PROGRESS'
          ]
        commands << self.class.class_commands unless self.class.class_commands.empty?

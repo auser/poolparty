@@ -96,7 +96,7 @@ module Monitors
         when 1 # example: /stats
           instance.send(verb.to_sym, @data)
         when 2 # example: /stats/load
-          instance.send("#{verb}_#{path[1]}".to_sym, @data)
+          instance.send("#{verb}_#{path[1]}".to_sym, @data) rescue instance.send("#{path[1]}".to_sym, @data)
         else # example: /stats/load/average/5/minutes
           instance.send("#{verb}_#{path[1]}".to_sym, env['rack.input'].read, *path[2..-1])
         end
@@ -120,5 +120,4 @@ module Monitors
   
   end
   
-
 end

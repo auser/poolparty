@@ -86,6 +86,7 @@ module Monitors
       # TODO: Move?
       # Expand the cloud if 50+% of the votes are for expansion
       # Contract the cloud if 51+% of the votes are for contraction
+      # Check to make sure an elected action is not already in progress
       if (candidates[:expand] - candidates[:contract])/stats.keys.size > 0.5
         %x[/usr/bin/server-cloud-elections expand] unless elected_action == "expand"
         @elected_action = "expand"
@@ -99,7 +100,6 @@ module Monitors
       log << "#{Time.now.strftime("%Y-%m-%d-%H-%M")}, #{stats.to_json}\n"
       stats.to_json
     end
-
 
     def elected_action(_n=nil)
       @elected_action ||= nil
@@ -151,6 +151,7 @@ module Monitors
     end
 
     def nominations(_n=nil)
+      return ['expand'] if instances.size<min_instances
       load = stats[my_ip]["load"] ||= self.send(:load)
       stats[my_ip]["nominations"] ||= rules.collect do |k,cld_rules|
         t = cld_rules.collect do |r|

@@ -7,6 +7,8 @@ rescue Exception => e
 end
 require "#{::File.dirname(__FILE__)}/poolparty/default"
 require "#{::File.dirname(__FILE__)}/modules/user_helpers"
+require "#{::File.dirname(__FILE__)}/modules/cloud_resourcer"
+require "#{::File.dirname(__FILE__)}/modules/pinger"
 require "#{::File.dirname(__FILE__)}/schema"
 require "#{::File.dirname(__FILE__)}/core/string"
 require "#{::File.dirname(__FILE__)}/net/init"
