@@ -15,6 +15,7 @@ module PoolParty
     end
     
     class Resource < PoolParty::PoolPartyBaseClass
+      include JSON
       attr_accessor :prestring, :poststring
       
       # include CloudResourcer

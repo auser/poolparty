@@ -191,8 +191,8 @@ module PoolParty
         self.class.name
       end
       
-      def to_json
-        dsl_options.to_json
+      def to_hash
+        dsl_options
       end
       
     end

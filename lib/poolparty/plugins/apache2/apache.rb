@@ -26,6 +26,10 @@ default host.
       def before_load(o={}, &block)
         install
       end
+      
+      def www_user(www_user_name='www-data')
+        www_user_name
+      end
             
       def install
         installed_as_worker
@@ -224,20 +228,21 @@ default host.
     def virtual_host_entry(file)
       @virtual_host_entry = true
       if ::File.file?(file)
-        has_file(options.merge({:name => "/etc/apache2/sites-available/#{name}", 
+        has_file(dsl_options.merge({:name => "/etc/apache2/sites-available/#{name}", 
                                 :template => file, 
                                 :requires => get_package("apache2")}))
       else
-        has_file(options.merge({:content => file, 
+        has_file(dsl_options.merge({:content => file, 
                                 :name => "/etc/apache2/sites-available/#{name}", 
                                 :requires => get_package("apache2")}))
       end
     end
+
     
     def loaded(opts={}, parent=self)
-      has_directory(:name => "/var/www")
-      has_directory(:name => "/var/www/#{name}")
-      has_directory(:name => "/var/www/#{name}/logs", :owner => "www-data")
+      has_directory(:name => "/var/www", :owner => www_user, :mode=>'0744')
+      has_directory(:name => "/var/www/#{name}", :owner => www_user, :mode=>'0744')
+      has_directory(:name => "/var/www/#{name}/logs", :owner => www_user, :mode=>'0744')
 
       has_variable(:name => "sitename", :value => "#{name}")
 
@@ -264,8 +269,11 @@ eof
   virtual_resource(:passengersite) do    # {{{
 
     default_options(
-      :dir => "/var/www",
-      :appended_path => nil
+      :dir            => "/var/www",
+      :appended_path  => nil,
+      :owner          => 'www-data', 
+      :mode           =>'0744',
+      :enviornment    => 'production'
     )
 
     def loaded(opts={}, prnt=nil)
@@ -278,7 +286,7 @@ eof
 <VirtualHost *:#{port}>
     ServerName #{name}
     DocumentRoot #{site_directory}/public
-    RailsEnv production
+    RailsEnv #{enviornment}
     ErrorLog #{site_directory}/log/error_log
     CustomLog #{site_directory}/log/access_log common
 </VirtualHost>

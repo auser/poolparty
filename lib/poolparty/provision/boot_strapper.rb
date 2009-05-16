@@ -28,6 +28,7 @@ module PoolParty
                           grempe-amazon-ec2
                           ohai
                           chef
+                          ruby-openid
                           adamwiggins-rest-client
                           rack
                           thin
@@ -141,6 +142,7 @@ module PoolParty
           "ln -sfv /usr/bin/gem1.8 /usr/bin/gem", #TODO: check if this is really needed
           "cd ../ && rm -rf rubygems-1.3.1*",
           "gem source --add http://gems.github.com",
+          "gem sources -a http://gems.opscode.com",
           "cd /var/poolparty/dependencies/gems/",
           "gem install --no-rdoc --no-ri *.gem",
           "cd /var/poolparty/dependencies",

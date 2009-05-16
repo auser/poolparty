@@ -296,6 +296,24 @@ describe "Cloud" do
           end
         end
       end
+      
+      describe "JSON" do
+        before(:each) do
+          pool :jason do
+            user "fred"
+            minimum_instances 10
+            access_key "pool_a_key"
+            cloud :stratus do
+              keypair "fake_keypair"
+              access_key "cloud_a_key"
+            end
+          end
+          
+        end
+        it "should have to_json method" do
+          clouds[:stratus].to_json.class.should == String
+        end
+      end
 
       # describe "instances" do
       #   before(:each) do

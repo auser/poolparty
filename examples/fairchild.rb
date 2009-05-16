@@ -5,7 +5,7 @@ pool :application do
   ami 'ami-7cfd1a15'  
   
   cloud :example_one do
-    
+    keypair 'front'
     has_directory "/var/www"
     
     has_file "/etc/motd", 

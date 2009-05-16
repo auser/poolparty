@@ -22,13 +22,13 @@ module PoolParty
      # In case the method is being called on ourself, let's check the 
      # defaults hash to see if it's available there
      def method_missing(m,*a,&block)
-       if self.class.defaults.has_key?(m) 
-         self.class.defaults[m]
-       elsif @cloud
+       # if self.class.defaults.has_key?(m) 
+       #   self.class.defaults[m]
+       # elsif @cloud
          @cloud.send m, *a, &block
-       else
-         super
-       end
+       # else
+         # super
+       # end
      end
     
      attr_reader :cloud, :keypair, :run_count, :cloud_name
@@ -36,7 +36,7 @@ module PoolParty
      def initialize(host, opts={}, &block)
        self.class.defaults.merge(opts).to_instance_variables(self)
        @target_host = host
-       @configurator = "::PoolParty::Provision::#{dependency_resolver.capitalize}".constantize
+       @configurator = "::PoolParty::Provision::#{dependency_resolver.camelcase}".constantize
        @cloud = opts[:cloud]
        @cloud_name = @cloud.name
        @keypair = @cloud.keypair
@@ -54,7 +54,7 @@ module PoolParty
        ::FileUtils.mkdir_p "#{cloud.tmp_path}/dr_configure" unless ::File.directory?("#{cloud.tmp_path}/dr_configure")
       ::File.cp $pool_specfile, "#{cloud.tmp_path}/dr_configure/clouds.rb"
       ::File.open "#{cloud.tmp_path}/dr_configure/clouds.json", "w" do |f|
-        f << cloud.to_properties_hash.to_json
+        f << cloud.to_json
       end
       
       setup_configurator
@@ -99,6 +99,7 @@ module PoolParty
          'chmod 644 /var/poolparty/dr_configure/clouds.rb',
          'cp /var/poolparty/dr_configure/clouds.json /etc/poolparty',
          'cp /var/poolparty/dr_configure/clouds.rb /etc/poolparty',
+         # 'server-mange-elections', #ensures that the monitor gets some data
          'echo "configure" >> /var/poolparty/POOLPARTY.PROGRESS'
          ]
        commands << self.class.class_commands unless self.class.class_commands.empty?
