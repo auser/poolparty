@@ -14,8 +14,7 @@ schema = ::PoolParty.load_cloud_from_json(o.unflagged_args.shift)  #TODO: smarte
 remote_base = PoolParty::Remote.module_eval( schema.options.remoter_base.camelcase )
 
 o.loaded_clouds.each do |cld|
-  cld.update_from_schema(schema)
-  
+  cld.update_from_schema(schema)  
   case vote_for
   when "expand"
     puts "Launching new instance"
