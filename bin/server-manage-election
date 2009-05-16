@@ -7,6 +7,7 @@
 # Error codes
 # 1 -> clouds.json was not loaded
 # 2 -> server-list-active didn't run
+$:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
 require "rubygems"
 require 'net/http'
 require 'json'
@@ -19,20 +20,18 @@ def get_json_stats_from(ip, port)
   Net::HTTP.start(ip, port) {|http| http.get('/stats.json') }.body rescue "{}"
 end
  
-ips = %x[/usr/bin/server-list-active internal_ip].split("\t")
-
-exit(2) unless ips
+ips = %x[server-list-active internal_ip].split("\t")
 
 minimum_instances = schema.options.minimum_instances
 maximum_instances = schema.options.maximum_instances
 
 if ips.size < minimum_instances
-  %x[/usr/bin/server-cloud-elections expand]
   puts "Cloud is too small, need to expand"
+ %x[server-cloud-elections expand]
   exit(0)
 elsif ips.size > maximum_instances
-  %x[/usr/bin/server-cloud-elections contract]
   puts "Cloud is too big, need to contract"
+ %x[n/server-cloud-elections contract]
   exit(0)
 end
 

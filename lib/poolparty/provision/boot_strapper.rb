@@ -110,7 +110,8 @@ module PoolParty
         instances = @cloud.nodes(:status => "running") + [@cloud.started_instance]
         ::Suitcase::Zipper.add_content_as(
           {:instances => instances.flatten.compact}.to_json, 
-          "neighborhood.json", "/etc/poolparty")
+          "neighborhood.json", "/etc/poolparty"
+        )
         
         ::Suitcase::Zipper.build_dir!("#{cloud.tmp_path}/dependencies")
         

@@ -25,7 +25,7 @@ o.loaded_clouds.each do |cld|
     end
     
   when "contract"
-    last_instance_id = %x[/usr/bin/server-list-active instance_id].split("\t").last
+    last_instance_id = %x[server-list-active instance_id].split("\t").last
     remote_base.terminate_instance! schema.options.merge(:instance_id => last_instance_id)
   else
     puts "Unknown action: #{vote_for}"

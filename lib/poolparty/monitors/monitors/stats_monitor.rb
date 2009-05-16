@@ -74,7 +74,7 @@ module Monitors
     end
     
     # Handle the elections
-    def handle_election(_n=nil)
+    def handle_election
       # Ballots look like:
       # host => ["contract"]
       candidates = {:expand => 0, :contract => 0}
@@ -88,10 +88,10 @@ module Monitors
       # Contract the cloud if 51+% of the votes are for contraction
       # Check to make sure an elected action is not already in progress
       if (candidates[:expand] - candidates[:contract])/stats.keys.size > 0.5
-        %x[/usr/bin/server-cloud-elections expand] unless elected_action == "expand"
+        %x[server-cloud-elections expand] unless elected_action == "expand"
         @elected_action = "expand"
       elsif (candidates[:contract] - candidates[:expand])/stats.keys.size > 0.5
-        %x[/usr/bin/server-cloud-elections contract] unless elected_action == "contract"
+        %x[server-cloud-elections contract] unless elected_action == "contract"
         @elected_action = "contract"
       end      
 
@@ -128,17 +128,17 @@ module Monitors
       %x{"uptime"}.split[-3].to_f
     end
 
-    def instances
+    def instances(_n=nil)
       # res = PoolParty::Neighborhoods.load_default.instances
-      res ||= %x[/usr/bin/server-list-active internal_ip].split("\t")
+      res ||= %x[server-list-active internal_ip].split("\t")
       res
     end
 
-    def can_expand?
+    def can_expand?(_n=nil)
       instances.size < max_instances
     end
 
-    def can_contract?
+    def can_contract?(_n=nil)
       instances.size > min_instances
     end
 
