@@ -67,7 +67,7 @@ module Monitors
     
     # HELPERS
     def instances
-      @instances ||= ::PoolParty::Neighborhoods.load_default.instances.to_hash[:instances]
+      @instances ||= ::PoolParty::Neighborhoods.load_default.instances #.to_hash #[:instances]
     end
     def stats
       @stats ||= ::PoolParty::Neighborhoods.load_default.stats rescue Stats.new(@env).get

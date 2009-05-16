@@ -11,7 +11,7 @@ module PoolParty
     
     def with_pool(pl, opts={}, &block)
       raise CloudNotFoundException.new("Pool not found") unless pl
-      pl.options.merge!(opts) if pl.options
+      pl.dsl_options.merge!(opts) if pl.dsl_options
       pl.run_in_context &block if block
     end
     

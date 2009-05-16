@@ -150,8 +150,9 @@ module PoolParty
           "chmod 600 /root/.ssh/#{keypair_name}",
           # "god -c /etc/poolparty/monitor.god",
           "mkdir -p /var/log/poolparty/",
+          "echo '-- Starting monitor_rack --'",
           "thin -R /etc/poolparty/monitor.ru -p 8642 --pid /var/run/stats_monitor.pid --daemon -l /var/log/poolparty/monitor.log start 2>/dev/null",
-          "tail /var/log/poolparty/monitor.log",
+          "tail -n 20 /var/log/poolparty/monitor.log",
           'echo "bootstrap" >> /var/poolparty/POOLPARTY.PROGRESS']
         commands << self.class.class_commands unless self.class.class_commands.empty?
       end

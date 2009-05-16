@@ -5,7 +5,7 @@ include PoolParty::Remote
 
 describe "Remote Instance" do
   before(:each) do
-    @valid_hash = {:ip => "127.0.0.1", :name => "master", :responding => "true"}
+    @valid_hash = {:public_ip=>'33.44.55.66', :ip => "127.0.0.1", :name => "master", :responding => "true"}
   end
 
   it "should have tests for the abstaract RemoteInstance class" do

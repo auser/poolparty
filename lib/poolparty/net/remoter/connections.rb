@@ -1,4 +1,3 @@
-require "#{::File.dirname(__FILE__)}/../../modules/pinger"
 require 'rubygems'
 require 'net/ssh'
 
