@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 $:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
 require "poolparty/lite"
+require "poolparty/core/array"
 
 list_type = ARGV.shift || "ip"
 
@@ -8,24 +9,11 @@ json_file = ARGV[0] || PoolParty::Default.properties_hash_file
 raise "ERROR: no json_file given" if !json_file
 schema = PoolParty::Schema.new( ::File.read(json_file) )
 
-inst_array = PoolParty::Neighborhoods.load_default.instances.instances
+inst_array = PoolParty::Neighborhoods.load_default.instances
 
 if !inst_array || inst_array.empty?
-  remoter_base = schema.dsl_options.remote_base
-  remote_base = remoter_base.top_level_class.constantize(PoolParty::Remote)
-
-  instances = remote_base.send :describe_instances, schema.dsl_options
-  inst_array = instances.map {|inst| inst.send list_type.to_sym }  
+  remote_base = PoolParty::Remote.module_eval( schema.options.remoter_base.camelcase )
+  instances = remote_base.send :describe_instances, schema.options
+  inst_array = instances.map {|inst| inst.send list_type.to_sym }.compact
+  print inst_array.compact.join("\t")
 end
-
-print_array = 
-case list_type
-when "ip"
-  inst_array.compact.map {|i| i.ip }
-when "internal_ip"
-  inst_array.compact.map {|i| i.internal_ip || i.ip }
-else
-  inst_array
-end
-
-print print_array.compact.join("\t")
