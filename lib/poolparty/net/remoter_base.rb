@@ -28,7 +28,8 @@ module PoolParty
       
       dsl_methods :cloud,                # The cloud this remoter_base is a part of
                   :keypair,
-                  :image_id
+                  :image_id,
+                  :keypair_name
         
       def initialize(opts={}, &block)
         opts.each {|k,v| opts[k] = v.call if v.respond_to?(:call) }
@@ -184,6 +185,14 @@ module PoolParty
       # Before shutdown callback
       # This is called before the cloud is contracted
       def before_shutdown
+      end
+      
+      def to_s
+        self.class.name
+      end
+      
+      def to_json
+        dsl_options.to_json
       end
       
     end

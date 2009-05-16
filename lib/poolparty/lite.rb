@@ -5,14 +5,15 @@ begin
 rescue Exception => e
   require "dslify"
 end
+require "#{::File.dirname(__FILE__)}/core/string"
+require "#{::File.dirname(__FILE__)}/core/hash"
+require "#{::File.dirname(__FILE__)}/core/object"
 require "#{::File.dirname(__FILE__)}/poolparty/default"
 require "#{::File.dirname(__FILE__)}/modules/user_helpers"
 require "#{::File.dirname(__FILE__)}/modules/cloud_resourcer"
 require "#{::File.dirname(__FILE__)}/modules/pinger"
 require "#{::File.dirname(__FILE__)}/schema"
-require "#{::File.dirname(__FILE__)}/core/string"
 require "#{::File.dirname(__FILE__)}/net/init"
-require "#{::File.dirname(__FILE__)}/core/hash"
 require "#{::File.dirname(__FILE__)}/poolparty/neighborhoods"
 require "#{::File.dirname(__FILE__)}/exceptions/RemoteException.rb"
 
@@ -21,7 +22,11 @@ module PoolParty
   
   def self.load_cloud_from_json(json_file_path=nil)
     json_file = json_file_path || PoolParty::Default.properties_hash_file
-    PoolParty::Schema.new( ::File.read(json_file) ) rescue exit 1
+    begin
+      schema = PoolParty::Schema.new( ::File.read(json_file) )      
+    rescue 
+      exit 1
+    end
   end  
 end
 

@@ -74,7 +74,7 @@ module Monitors
     end
     
     # Handle the elections
-    def handle_election
+    def handle_election(_n=nil)
       # Ballots look like:
       # host => ["contract"]
       candidates = {:expand => 0, :contract => 0}
