@@ -25,16 +25,16 @@ describe "basic" do
     pools[:application].clouds[:basic_db].should_not == nil
   end
   it "should set the minimum_instances on the cloud to 2 (overriding the pool options)" do    
-    pools[:application].minimum_instances.should == 3
-    clouds[:basic_app].minimum_instances.should == 12
+    pools[:application].minimum_instances.should == 1
+    clouds[:basic_app].minimum_instances.should == 2
   end
   it "should set the maximum_instances on the cloud to 50" do
-    clouds[:basic_app].maximum_instances.should == 50
+    clouds[:basic_app].maximum_instances.should == 5
   end
   it "should set the minimum_instances on the db cloud to 3" do
-    clouds[:basic_db].minimum_instances.should == 19
-    clouds[:basic_app].minimum_instances.should == 12
-    pools[:application].minimum_instances.should ==3
+    clouds[:basic_db].minimum_instances.should == 1
+    clouds[:basic_app].minimum_instances.should == 2
+    pools[:application].minimum_instances.should == 1
   end
   it "should set the parent to the pool" do
     clouds[:basic_app].parent.should == pools[:application]
