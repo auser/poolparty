@@ -1,6 +1,26 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 require "open-uri"
 
+# pool :application do
+#   instances 1..5
+#   
+#   cloud :basic_app do
+#     minimum_instances 3
+#     keypair 'front'
+#     image_id "ami-abc123"
+#     has_file :name => "/etc/motd", :content => "Welcome to your PoolParty instance"
+#   end
+#   
+#   cloud :basic_db do
+#     using :vmrun do
+#       vmx_hash "/path/to/vmx_file" => "192.168.248.122"
+#     end
+#     minimum_instances 1
+#     image_id "ami-1234bc"
+#   end
+# 
+# end
+
 describe "basic" do
   before(:each) do
     PoolParty.reset!
@@ -24,17 +44,17 @@ describe "basic" do
   it "should have a cloud called :db" do
     pools[:application].clouds[:basic_db].should_not == nil
   end
-  it "should set the minimum_instances on the cloud to 2 (overriding the pool options)" do    
-    pools[:application].minimum_instances.should == 3
-    clouds[:basic_app].minimum_instances.should == 12
+  it "should set the minimum_instances on the cloud (overriding the pool options)" do    
+    pools[:application].minimum_instances.should == 1
+    clouds[:basic_app].minimum_instances.should == 3
   end
-  it "should set the maximum_instances on the cloud to 50" do
-    clouds[:basic_app].maximum_instances.should == 50
+  it "should set the maximum_instances on the cloud to 5" do
+    clouds[:basic_app].maximum_instances.should == 5
   end
-  it "should set the minimum_instances on the db cloud to 3" do
-    clouds[:basic_db].minimum_instances.should == 19
-    clouds[:basic_app].minimum_instances.should == 12
-    pools[:application].minimum_instances.should ==3
+  it "should set the minimum_instances on the db cloud " do
+    clouds[:basic_db].minimum_instances.should == 1
+    clouds[:basic_app].minimum_instances.should == 3
+    pools[:application].minimum_instances.should == 1
   end
   it "should set the parent to the pool" do
     clouds[:basic_app].parent.should == pools[:application]
