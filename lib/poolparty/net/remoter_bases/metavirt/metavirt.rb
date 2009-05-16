@@ -8,7 +8,7 @@ module PoolParty
   module Remote
     class Metavirt < Remote::RemoterBase
       include Dslify
-      include CloudResourcer
+      include ::PoolParty::CloudResourcer
       
       default_options(
         # :machine_image => 'ubuntu-kvm',

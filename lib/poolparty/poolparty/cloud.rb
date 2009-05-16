@@ -130,8 +130,8 @@ module PoolParty
       
       # setup defaults for the cloud
       def setup_defaults
-        set_vars_from_options(:keypair_name => key.basename, 
-                              :keypair_path => key.full_filepath)        
+        set_vars_from_options(:keypair_name => key.basename, :keypair_path => key.full_filepath) rescue nil
+        
         dsl_options[:rules] = {:expand   => "#{dsl_options[:expand_when]}, #{}", 
                                :contract => dsl_options[:contract_when]}        
         
@@ -261,14 +261,15 @@ module PoolParty
       end
       
       # TODO: test
+      # ruby -rrubygems -e 'require "poolparty";puts Cloud.load_from_json(open("/etc/poolparty/clouds.json").read).minimum_instances'      
       def self.load_from_json(str)
-        parsed = JSON.parse(str).each {|k,v| self[k.to_sym] = v}
+        parsed = JSON.parse(str).each {|k,v| dsl_options[k.to_sym] = v}
         opts= parsed.options
-        opts.keypair = ::PoolParty::Key.new(opts['keypair_name'] || opts['keypair_path'] ||opts['keypair'])
+        opts["keypair"] = opts["keypair_path"] = opts["keypair_name"]
         # cld.remoter_base = PoolParty::Remote.module_eval( schema.options.remoter_base.camelcase )
         # opts.remoter_base_class = PoolParty::Remote.module_eval( opts.remoter_base.camelcase )
         # opts.remoter_base_class.new opts.remote_base
-        opts.dependency_resolver = PoolParty.module_eval(options.dependency_resolver.split("::")[-1].camelcase).send(:new)
+        opts["dependency_resolver"] = options.dependency_resolver.send(:new, opts)
         cld = Cloud.new opts.cloud_name.to_sym
         cld.dsl_options.merge opts
         cld.using opts.remoter_base.to_sym
