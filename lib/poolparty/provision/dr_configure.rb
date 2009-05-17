@@ -99,7 +99,7 @@ module PoolParty
          'chmod 644 /var/poolparty/dr_configure/clouds.rb',
          'cp /var/poolparty/dr_configure/clouds.json /etc/poolparty',
          'cp /var/poolparty/dr_configure/clouds.rb /etc/poolparty',
-         # 'server-mange-elections', #ensures that the monitor gets some data
+         'server-manage-elections', #ensures that the monitor gets some data
          'echo "configure" >> /var/poolparty/POOLPARTY.PROGRESS'
          ]
        commands << self.class.class_commands unless self.class.class_commands.empty?

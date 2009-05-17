@@ -273,6 +273,7 @@ module PoolParty
         cld = Cloud.new opts.cloud_name.to_sym
         cld.dsl_options.merge opts
         cld.using opts.remoter_base.to_sym
+        cld.dsl_options.symbolize_keys!
         cld
       end
       

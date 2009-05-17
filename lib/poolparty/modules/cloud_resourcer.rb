@@ -76,7 +76,7 @@ module PoolParty
     def update_from_schema(schema)
       self.dsl_options.merge! schema.options.to_hash
       self.dependency_resolver = schema.options.dependency_resolver.split("::")[-1].gsub(/Resolver/, '').preserved_class_constant("Resolver") rescue PoolParty::Chef
-      self.keypair = PoolParty::Key.new schema.options.keypair.basename
+      keypair schema.options.keypair_name
       remote_base_class = PoolParty::Remote.module_eval( schema.options.remoter_base.camelcase )
       self.remote_base = remote_base_class.new  schema.options.remote_base.to_hash
       

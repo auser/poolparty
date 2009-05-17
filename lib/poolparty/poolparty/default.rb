@@ -56,18 +56,18 @@ module PoolParty
         dsl_options.include?(m) ? dsl_options[m] : super
       end
       # # Get the access_key
-      # def access_key
-      #   @access_key ||= load_access_keys_from_environment_var || load_keys_from_file[:access_key]
-      # end
-      # def load_access_keys_from_environment_var
-      #   [ ENV["AWS_ACCESS_KEY"], ENV["AWS_ACCESS_KEY_ID"]].reject {|a| a.nil? }.first
-      # end
-      # def secret_access_key
-      #   @secret_access_key ||= load_secret_access_keys_from_environment_var || load_keys_from_file[:secret_access_key]
-      # end
-      # def load_secret_access_keys_from_environment_var
-      #   [ ENV["AWS_SECRET_ACCESS_KEY"] ].reject {|a| a.nil? }.first
-      # end
+      def access_key
+        @access_key ||= load_access_keys_from_environment_var || load_keys_from_file[:access_key]
+      end
+      def load_access_keys_from_environment_var
+        [ ENV["AWS_ACCESS_KEY"], ENV["AWS_ACCESS_KEY_ID"]].reject {|a| a.nil? }.first
+      end
+      def secret_access_key
+        @secret_access_key ||= load_secret_access_keys_from_environment_var || load_keys_from_file[:secret_access_key]
+      end
+      def load_secret_access_keys_from_environment_var
+        [ ENV["AWS_SECRET_ACCESS_KEY"] ].reject {|a| a.nil? }.first
+      end
       def read_keyfile
         open(get_working_key_file_locations).read
       end
@@ -76,10 +76,13 @@ module PoolParty
       end
       # Store the keys in a yaml format to give the master access
       # So that the master has access to the files
-      def store_keys_in_file
+      def store_keys_in_file(f=nil)
         unless access_key.nil? || secret_access_key.nil?
-          write_to_file( key_file_locations.first, YAML::dump({:access_key => access_key, :secret_access_key => secret_access_key}))        
+          write_to_file( (f ? f : key_file_locations.first), keys_in_yaml)
         end
+      end
+      def keys_in_yaml
+        YAML::dump({:access_key => access_key, :secret_access_key => secret_access_key})
       end
       def store_keys_in_file_for(obj=nil)
         if obj
@@ -102,7 +105,9 @@ module PoolParty
         [
           ".ppkeys",
           "#{Default.base_config_directory}/.ppkeys",
-          "#{Default.storage_directory}/ppkeys",          
+          "#{Default.storage_directory}/ppkeys",
+          "#{ENV["HOME"]}/.ssh/ppkeys",
+          "#{ENV["HOME"]}/.ssh/.ppkeys",
           "~/.ppkeys",
           "ppkeys"
         ]

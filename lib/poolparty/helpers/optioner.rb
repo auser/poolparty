@@ -114,7 +114,7 @@ module PoolParty
       output_options if verbose? && verbose
       
       if @load_pools
-        @loaded_pool = load_pool( spec? ? spec : Binary.get_existing_spec_location)
+        @loaded_pool = load_pool( spec ? spec : Binary.get_existing_spec_location)
         @loaded_clouds = extract_cloud_from_options(self)
         @loaded_pools = extract_pool_from_options(self)
 
@@ -152,10 +152,10 @@ module PoolParty
   end
   
   def extract_cloud_from_options(o)
-    o.cloudname? ? [cloud(o.cloudname.downcase.to_sym)] : clouds.collect {|n,cl| cl}
+    o.cloudname ? [cloud(o.cloudname.downcase.to_sym)] : clouds.collect {|n,cl| cl}
   end
   
   def extract_pool_from_options(o)
-    o.poolname? ? [pool(o.poolname.downcase.to_sym)] : pools.collect {|n,pl| pl}
+    o.poolname ? [pool(o.poolname.downcase.to_sym)] : pools.collect {|n,pl| pl}
   end
 end

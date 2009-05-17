@@ -36,6 +36,13 @@ EOS
   end
   
   run do |command|
-    puts "Primary Options: #{command.opts.inspect}"
+    subcommands = GitStyleBinary.list_subcommands
+    
+    puts "Usage: cloud COMMAND [ARGS]
+    
+    The cloud subcommands commands are:
+      #{subcommands}
+
+    See 'cloud help COMMAND' for more information on a specific command."
   end
 end

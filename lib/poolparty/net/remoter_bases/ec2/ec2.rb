@@ -54,9 +54,6 @@ module PoolParty
       def ami
         image_id
       end
-      def keypair_name
-        dsl_options[:keypair_name] || keypair.basename
-      end
       
       # Requires a hash of options
       def self.launch_new_instance!(o)
@@ -66,8 +63,9 @@ module PoolParty
       # TODO: Fix the key_name issue
       # Start a new instance with the given options
       def launch_new_instance!(o={})
+        set_vars_from_options o
         raise "You must pass a keypair to launch an instance, or else you will not be able to login. options = #{o.inspect}" if !keypair
-        o.merge!( dsl_options ).merge!(:key_name=>keypair.basename)
+        o.merge!( dsl_options.merge(:key_name=>keypair_name) )
         instance = ec2(o).run_instances(o)
         begin
           h = EC2ResponseObject.get_hash_from_response(instance.instancesSet.item.first)
@@ -91,7 +89,7 @@ module PoolParty
       def describe_instances(o={})
         id = 0
         set_vars_from_options(dsl_options.merge(o))
-        get_instances_description(dsl_options).each_with_index do |h,i|          
+        get_instances_description(dsl_options).each_with_index do |h,i|
           if h[:status] == "running"
             inst_name = id == 0 ? "master" : "node#{id}"
             id += 1
@@ -114,8 +112,8 @@ module PoolParty
       
       # return or create a new base EC2 connection object that will actually connect to ec2
       def ec2(o={})
-        @ec2 ||= EC2::Base.new( :access_key_id => get_access_key, 
-                                :secret_access_key => get_secret_access_key
+        @ec2 ||= EC2::Base.new( :access_key_id => o[:access_key] || get_access_key, 
+                                :secret_access_key => o[:secret_access_key] || get_secret_access_key
                               )
       end
       def self.ec2(o)
@@ -127,8 +125,10 @@ module PoolParty
       # Get the ec2 description for the response in a hash format
       def get_instances_description(o={})
         #TODO: only use keypair.full_filepath
+        set_vars_from_options dsl_options.merge(o)
         key_hash = {:keypair => self.keypair_name}
-        EC2ResponseObject.get_descriptions(ec2(dsl_options).describe_instances).select_with_hash(key_hash)
+        out = EC2ResponseObject.get_descriptions(ec2(dsl_options).describe_instances)
+        out = keypair_name ? out.select_with_hash(key_hash) : out
       end
       def get_descriptions(o={})
         self.class.get_descriptions(o)
