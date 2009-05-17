@@ -20,5 +20,5 @@ if !inst_array || inst_array.empty?
   end
   print inst_array.compact.join("\t")
 else
-  print inst_array.instances.map {|inst| inst.send list_type.to_sym }.compact
+  print inst_array.instances.map {|inst| inst.send list_type.to_sym }.compact.join("\t")
 end
