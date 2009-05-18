@@ -112,13 +112,21 @@ class Hash
     self
   end
   
+  def to_cloud
+    $:.unshift("#{::File.dirname(__FILE__)}/../../poolparty")
+    require "poolparty"
+    cld = Cloud.new((fetch(:name) rescue "hashed_cloud"))
+    cld.set_vars_from_options(self)
+    cld
+  end
+  
   def method_missing(sym, *args, &block)
-    if has_key?(sym)
+    if has_key?(sym.to_sym)
       fetch(sym)
     elsif has_key?(sym.to_s)
       fetch(sym.to_s)
     else
       super
     end
-  end
+  end  
 end
