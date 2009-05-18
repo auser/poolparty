@@ -105,7 +105,7 @@ module PoolParty
           new(data)
         end
       else
-        new("[]")
+        new("{\"instances\":[]}")
       end
     end
     

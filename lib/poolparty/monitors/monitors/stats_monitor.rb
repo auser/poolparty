@@ -30,7 +30,6 @@ module Monitors
     end
         
     def get(data=nil)
-      reload_data!
       begin
         if !request.params || request.params.empty?
           default_stats
