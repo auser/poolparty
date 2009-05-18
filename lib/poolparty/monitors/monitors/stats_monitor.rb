@@ -16,26 +16,19 @@ module Monitors
       
       begin
         @cloud = JSON.parse( open('/etc/poolparty/clouds.json' ).read )
+        # @cloud = ::PoolParty::Cloud::Cloud.load_from_json(open('/etc/poolparty/clouds.json' ).read)
       rescue 
         @cloud = ::PoolParty::Default.dsl_options.merge({"options" =>
           {"rules" => {"expand"   => PoolParty::Default.expand_when,
                        "contract" => PoolParty::Default.contract_when
                       }
           }
-        })
+        })        
       end
-      # Our cloud.dsl_options.rules looks like
-      #  {"expand_when" => "load > 0.9", "contract_when" => "load < 0.4"}
-      # We set these as rules on ourselves so we can use aska to parse the rules.
-      # Later, we can call vote_rules on ourself and we'll get back Aska::Rule(s)
-      # which we'll call valid_rule? for each Rule and return the result
-      @cloud["options"]["rules"].each do |name, rul|
-        r = Aska::Rule.new(rul)
-        rule(name) << r
-      end
-      # log << "#{::Time.now.strftime("%Y-%m-%d-%H-%M")}, #{stats.to_json}\n"
+      make_aska_rules(@cloud["options"]["rules"])
+      log << "#{::Time.now.strftime("%Y-%m-%d-%H-%M")}, #{stats.to_json}\n"
     end
-    
+        
     def get(data=nil)
       begin
         if !request.params || request.params.empty?
@@ -43,10 +36,11 @@ module Monitors
         else
           stats[request.params[0].to_sym] ||= self.send(request.params[0])
           stats[request.params[0].to_sym]
+          log << "#{::Time.now.strftime("%Y-%m-%d-%H-%M")}, #{stats.to_json}\n"
           stats.to_json
         end
       rescue Exception => e
-        "Error: #{e}"
+        "Error: #{e}".to_json
       end
     end
     
@@ -151,7 +145,7 @@ module Monitors
     end
 
     def nominations(_n=nil)
-      return ['expand'] if instances.size<min_instances
+      # return ['expand'] if instances.size<min_instances
       load = stats[my_ip]["load"] ||= self.send(:load)
       stats[my_ip]["nominations"] ||= rules.collect do |k,cld_rules|
         t = cld_rules.collect do |r|
@@ -191,6 +185,18 @@ module Monitors
     def reload_data!
       @stats[my_ip] = {}
       instances.each {|inst| @stats[inst] = {} }
+    end
+    
+    # Our cloud.dsl_options.rules looks like
+    #  {"expand_when" => "load > 0.9", "contract_when" => "load < 0.4"}
+    # We set these as rules on ourselves so we can use aska to parse the rules.
+    # Later, we can call vote_rules on ourself and we'll get back Aska::Rule(s)
+    # which we'll call valid_rule? for each Rule and return the result
+    def make_aska_rules(rules)
+      rules.each do |name, rul|
+        r = Aska::Rule.new(rul)
+        rule(name) << r
+      end
     end    
     
   end

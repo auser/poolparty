@@ -132,7 +132,7 @@ module PoolParty
       def setup_defaults
         set_vars_from_options(:keypair_name => key.basename, :keypair_path => key.full_filepath) rescue nil
         
-        dsl_options[:rules] = {:expand   => "#{dsl_options[:expand_when]}, #{}", 
+        dsl_options[:rules] = {:expand   => "#{dsl_options[:expand_when]}", 
                                :contract => dsl_options[:contract_when]}        
         
         set_dependency_resolver 'chef'
