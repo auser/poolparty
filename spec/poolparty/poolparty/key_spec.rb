@@ -8,7 +8,7 @@ describe "Key" do
     Key.new.filepath.should == "id_rsa"
   end
   it "should provide valid to_json" do
-    lambda {Key.new("file").to_json}.should_not raise_error  end
+    lambda {Key.new("file").to_hash.to_json}.should_not raise_error  end
   describe "that exists" do
     before(:each) do
       @keypair = "/var/home/id_rsa"

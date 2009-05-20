@@ -8,7 +8,8 @@ module Monitors
   class Neighborhood < BaseMonitor
     
     def get(data=nil)
-      neighborhood
+      reset!
+      neighborhood      
     end
     
     def put(data, from=nil)
@@ -66,12 +67,14 @@ module Monitors
     end
     
     # HELPERS
-    def instances
-      @instances ||= ::PoolParty::Neighborhoods.load_default.instances.to_hash[:instances]
+    def instances(_n=nil)
+      @instances ||= ::PoolParty::Neighborhoods.load_default.instances #.to_hash #[:instances]
     end
-    def stats
+    def stats(_n=nil)
       @stats ||= ::PoolParty::Neighborhoods.load_default.stats rescue Stats.new(@env).get
     end
-    
+    def reset!
+      @neighborhood = @stats = nil
+    end
   end
 end

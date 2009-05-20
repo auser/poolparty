@@ -4,6 +4,7 @@ require "test/unit"
 require "matchy"
 require "shoulda"
 # require "mocha"
+require 'ruby-debug'
 
 require File.dirname(__FILE__) + '/../lib/poolparty'
 require 'git-style-binary/command'

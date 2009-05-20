@@ -16,7 +16,6 @@
     register_remote_base :remote_base_name
   
 =end
-
 module PoolParty
 
   module Remote    
@@ -29,13 +28,27 @@ module PoolParty
       
       dsl_methods :cloud,                # The cloud this remoter_base is a part of
                   :keypair,
-                  :image_id
+                  :image_id,
+                  :keypair_name
         
       def initialize(opts={}, &block)
-        opts.each{|op| op.call if op.respond_to?(:call)} 
+        opts.each {|k,v| opts[k] = v.call if v.respond_to?(:call) }
         set_vars_from_options opts
         instance_eval &block if block
       end
+      
+      # def evaluate_proc_options(opts)
+      #   if opts.respond_to?(:call)
+      #     opts.call
+      #   elsif opts.respond_to? :each
+      #     if opts.respond_to?(:values) && opts.respond_to?(:keys)
+      #       opts.each {|k,v| opts[k] = evaluate_proc_options v }
+      #     elsif opts.respond_to?(:each_with_index)
+      #       opts.each_with_index{|o,i| opts[i] = evaluate_proc_options o}
+      #     end
+      #   end
+      #   opts
+      # end
       
       def self.inherited(arg)
         base_name = "#{arg}".downcase.top_level_class.to_sym
@@ -172,6 +185,14 @@ module PoolParty
       # Before shutdown callback
       # This is called before the cloud is contracted
       def before_shutdown
+      end
+      
+      def to_s
+        self.class.name
+      end
+      
+      def to_hash
+        dsl_options
       end
       
     end

@@ -2,18 +2,18 @@ module PoolParty
   module Remote
     
     # Select a list of instances based on their status
-    def nodes(hsh={})
-      list_of_instances.select_with_hash(hsh)
+    def nodes(hsh={}, with_neighborhood_default=true)
+      list_of_instances(with_neighborhood_default).select_with_hash(hsh)
     end
     
     # Select the list of instances, either based on the neighborhoods
     # loaded from /etc/poolparty/neighborhood.json
     # or by the remote_base on keypair
-    def list_of_instances
+    def list_of_instances(with_neighborhood_default=true)
       return @list_of_instances if @list_of_instances
       @containing_cloud = self
-      n = Neighborhoods.load_default
-      @list_of_instances = (n.instances.empty? ? _list_of_instances : n.instances)
+      n = with_neighborhood_default ? Neighborhoods.load_default : nil
+      @list_of_instances = ((n.nil? || n.instances.empty?) ? _list_of_instances : n.instances)
     end
 
     private
@@ -24,7 +24,7 @@ module PoolParty
     
     # List the instances for the current key pair, regardless of their states
     # If no keypair is passed, select them all
-    def _list_of_instances(select={})
+    def _list_of_instances(select={})      
       @describe_instances ||= remote_base.describe_instances(dsl_options).select_with_hash(select)
     end
     

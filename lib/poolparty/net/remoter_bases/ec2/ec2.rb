@@ -44,11 +44,16 @@ module PoolParty
         # :key_name => ::File.basename(keypair.is_a?(String) ? keypair : keypair.full_filepath),
         :instance_type => 'm1.small', # or 'm1.large', 'm1.xlarge', 'c1.medium', or 'c1.xlarge'
         :addressing_type => "public",
-        :availabilty_zone => "us-east-1a",
-        :access_key => nil,
-        :secret_access_key => nil,
-        :security_group => ["default"]
+        :availability_zone => "us-east-1a",
+        :access_key => ENV['AWS_ACCESS_KEY'],
+        :secret_access_key => ENV['AWS_SECRET_ACCESS_KEY'],
+        :security_group => ["default"],
+        :keypair_name =>nil
         })
+        
+      def ami
+        image_id
+      end
       
       # Requires a hash of options
       def self.launch_new_instance!(o)
@@ -58,8 +63,9 @@ module PoolParty
       # TODO: Fix the key_name issue
       # Start a new instance with the given options
       def launch_new_instance!(o={})
+        set_vars_from_options o
         raise "You must pass a keypair to launch an instance, or else you will not be able to login. options = #{o.inspect}" if !keypair
-        o.merge!( dsl_options ).merge!(:key_name=>keypair.basename)
+        o.merge!( dsl_options.merge(:key_name=>keypair_name) )
         instance = ec2(o).run_instances(o)
         begin
           h = EC2ResponseObject.get_hash_from_response(instance.instancesSet.item.first)
@@ -83,7 +89,7 @@ module PoolParty
       def describe_instances(o={})
         id = 0
         set_vars_from_options(dsl_options.merge(o))
-        get_instances_description(dsl_options).each_with_index do |h,i|          
+        get_instances_description(dsl_options).each_with_index do |h,i|
           if h[:status] == "running"
             inst_name = id == 0 ? "master" : "node#{id}"
             id += 1
@@ -106,8 +112,8 @@ module PoolParty
       
       # return or create a new base EC2 connection object that will actually connect to ec2
       def ec2(o={})
-        @ec2 ||= EC2::Base.new( :access_key_id => o[:access_key], 
-                                :secret_access_key => o[:secret_access_key]
+        @ec2 ||= EC2::Base.new( :access_key_id => o[:access_key] || get_access_key, 
+                                :secret_access_key => o[:secret_access_key] || get_secret_access_key
                               )
       end
       def self.ec2(o)
@@ -119,8 +125,10 @@ module PoolParty
       # Get the ec2 description for the response in a hash format
       def get_instances_description(o={})
         #TODO: only use keypair.full_filepath
+        set_vars_from_options dsl_options.merge(o)
         key_hash = {:keypair => self.keypair_name}
-        EC2ResponseObject.get_descriptions(ec2(dsl_options).describe_instances).select_with_hash(key_hash)
+        out = EC2ResponseObject.get_descriptions(ec2(dsl_options).describe_instances)
+        out = keypair_name ? out.select_with_hash(key_hash) : out
       end
       def get_descriptions(o={})
         self.class.get_descriptions(o)
@@ -222,7 +230,7 @@ module PoolParty
       end
     
       def custom_minimum_runnable_options
-        [:ami, :availabilty_zone, :security_group]
+        [:ami, :availability_zone, :security_group]
       end
 
       # Hook
@@ -243,7 +251,7 @@ module PoolParty
         ]
       end
       
-      def access_key(n=nil)
+      def get_access_key(n=nil)
         if n.nil?
           dsl_options[:access_key] ||= Default.access_key
         else
@@ -251,7 +259,7 @@ module PoolParty
         end
       end
       
-      def secret_access_key(n=nil)
+      def get_secret_access_key(n=nil)
         if n.nil?
           dsl_options[:secret_access_key] ||= Default.secret_access_key
         else

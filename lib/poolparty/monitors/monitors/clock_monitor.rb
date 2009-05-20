@@ -1,8 +1,8 @@
 # An example monitor
-# access it at /monitor_time/ or /monitor_time/now
+# access it at /monitor_clock/ or /monitor_clock/now
 module Monitors
   
-  class Time < BaseMonitor
+  class Clock < BaseMonitor
     def get(data=nil)
       Time.now
     end

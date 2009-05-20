@@ -1,4 +1,3 @@
-require "#{::File.dirname(__FILE__)}/../../modules/pinger"
 require 'rubygems'
 require 'net/ssh'
 
@@ -29,7 +28,7 @@ module PoolParty
     end
     
     def ssh_options(opts={})
-      o = {"-i" => keypair_path,
+      o = {"-i" => keypair.full_filepath,
            "-l" => user,
            "-o" =>"StrictHostKeyChecking=no"
            }.merge(opts)
@@ -63,7 +62,7 @@ module PoolParty
     def netssh(cmds=[], opts={})
       user = opts.delete(:user) || user #rescue 'root'
       host = opts.delete(:host) || target_host
-      ssh_options_hash = {:keys => [keypair_path],
+      ssh_options_hash = {:keys => [keypair.full_filepath],
                           :auth_methods => 'publickey',
                           :paranoid => false
                            }.merge(opts)

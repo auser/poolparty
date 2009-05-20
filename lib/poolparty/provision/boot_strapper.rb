@@ -28,9 +28,12 @@ module PoolParty
                           grempe-amazon-ec2
                           ohai
                           chef
+                          ruby-openid
                           adamwiggins-rest-client
                           rack
                           thin
+                          logging
+                          ruby2ruby
                         )
       end
 
@@ -42,6 +45,7 @@ module PoolParty
       })
       class <<self; attr_reader :defaults; end
       
+      attr_reader :cloud_name
       # In case the method is being called on ourself, let's check the 
       # defaults hash to see if it's available there
       def method_missing(m,*a,&block)
@@ -58,6 +62,7 @@ module PoolParty
         self.class.defaults.merge(opts).to_instance_variables(self)
         @target_host = host
         @cloud = opts[:cloud]
+        @cloud_name = @cloud.name
                 
         instance_eval &block if block
         @cloud.call_before_bootstrap_callbacks if @cloud
@@ -79,36 +84,39 @@ module PoolParty
       def pack_the_dependencies
         # Add the keypair to the instance... shudder
         ::Suitcase::Zipper.add(keypair, "keys")
+        ::Suitcase::Zipper.add_content_as(Default.keys_in_yaml, "ppkeys", "keys")
         
+        edge_pp_gem = Dir["#{Default.vendor_path}/../pkg/*poolparty*gem"].pop
         # Use the locally built poolparty gem if it is availabl
-        if edge_pp_gem = Dir["#{Default.vendor_path}/../pkg/*poolparty*gem"].pop
-          puts "using edge poolparty: #{::File.expand_path(edge_pp_gem)}"
-          ::Suitcase::Zipper.add(edge_pp_gem, 'gems')
-        else
-          vputs "using gem auser-poolparty. use rake build to use edge"
-          self.class.gem_list << 'auser-poolparty'
-        end
+            if edge_pp_gem
+              puts "using edge poolparty: #{::File.expand_path(edge_pp_gem)}"
+              ::Suitcase::Zipper.add(edge_pp_gem, 'gems')
+            else
+              vputs "using gem auser-poolparty. use rake build to use edge"
+              self.class.gem_list << 'auser-poolparty'
+            end
         # Add the gems to the suitcase
         puts "Adding default gem dependencies"
-        ::Suitcase::Zipper.gems self.class.gem_list, "#{Default.tmp_path}/trash/dependencies"
+        ::Suitcase::Zipper.gems self.class.gem_list, "#{cloud.tmp_path}/trash/dependencies"
 
         ::Suitcase::Zipper.packages( "http://rubyforge.org/frs/download.php/45905/rubygems-1.3.1.tgz",
-                 "#{Default.tmp_path}/trash/dependencies/packages")
+                 "#{cloud.tmp_path}/trash/dependencies/packages")
         # ::Suitcase::Zipper.add("templates/")
         
         ::Suitcase::Zipper.add("#{::File.dirname(__FILE__)}/../templates/monitor.ru", "/etc/poolparty/")
         ::Suitcase::Zipper.add("#{::File.dirname(__FILE__)}/../templates/monitor.god", "/etc/poolparty/")
                 
-        ::Suitcase::Zipper.add("#{Default.tmp_path}/trash/dependencies/cache", "gems")        
+        ::Suitcase::Zipper.add("#{cloud.tmp_path}/trash/dependencies/cache", "gems")        
         
         ::Suitcase::Zipper.add("#{::File.join(File.dirname(__FILE__), '..', 'templates', 'gemrc_template' )}", "etc/poolparty")
         
         instances = @cloud.nodes(:status => "running") + [@cloud.started_instance]
-        ::Suitcase::Zipper.add_content_as(
-          {:instances => instances.flatten.compact}.to_json, 
-          "neighborhood.json", "/etc/poolparty")
+        # ::Suitcase::Zipper.add_content_as(
+        #   instances.flatten.compact.to_json, 
+        #   "neighborhood.json", "/etc/poolparty"
+        # )
         
-        ::Suitcase::Zipper.build_dir!("#{Default.tmp_path}/dependencies")
+        ::Suitcase::Zipper.build_dir!("#{cloud.tmp_path}/dependencies")
         
         ::Suitcase::Zipper.flush!
         
@@ -118,8 +126,8 @@ module PoolParty
       # The commands to setup a PoolParty enviornment
       def default_commands
         pack_the_dependencies
-        ::FileUtils.rm_rf "#{Default.tmp_path}/dependencies/gems/cache"
-        rsync "#{Default.tmp_path}/dependencies", '/var/poolparty'
+        ::FileUtils.rm_rf "#{cloud.tmp_path}/dependencies/gems/cache"
+        rsync "#{cloud.tmp_path}/dependencies", '/var/poolparty'
         
         commands << [
           "mkdir -p /etc/poolparty",
@@ -136,8 +144,9 @@ module PoolParty
           "ln -sfv /usr/bin/gem1.8 /usr/bin/gem", #TODO: check if this is really needed
           "cd ../ && rm -rf rubygems-1.3.1*",
           "gem source --add http://gems.github.com",
+          "gem sources -a http://gems.opscode.com",
           "cd /var/poolparty/dependencies/gems/",
-          "gem install --no-rdoc --no-ri -y *.gem",
+          "gem install --no-rdoc --no-ri *.gem",
           "cd /var/poolparty/dependencies",
           "cp /var/poolparty/dependencies/etc/poolparty/* /etc/poolparty/",
           'touch /var/poolparty/POOLPARTY.PROGRESS',
@@ -146,7 +155,9 @@ module PoolParty
           "chmod 600 /root/.ssh/#{keypair_name}",
           # "god -c /etc/poolparty/monitor.god",
           "mkdir -p /var/log/poolparty/",
+          "echo '-- Starting monitor_rack --'",
           "thin -R /etc/poolparty/monitor.ru -p 8642 --pid /var/run/stats_monitor.pid --daemon -l /var/log/poolparty/monitor.log start 2>/dev/null",
+          "tail -n 20 /var/log/poolparty/monitor.log",
           'echo "bootstrap" >> /var/poolparty/POOLPARTY.PROGRESS']
         commands << self.class.class_commands unless self.class.class_commands.empty?
       end

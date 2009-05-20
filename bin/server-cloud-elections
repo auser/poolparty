@@ -11,27 +11,27 @@ end
 vote_for = o.unflagged_args.shift || "none"
 
 schema = ::PoolParty.load_cloud_from_json(o.unflagged_args.shift)  #TODO: smarter option parser
-remote_base_name = schema.options.remote_base.split('::')[-1].camelcase
-remoter_base = PoolParty::Remote.module_eval(remote_base_name)
+remote_base = PoolParty::Remote.module_eval( schema.options.remoter_base.camelcase )
 
 o.loaded_clouds.each do |cld|
   cld.update_from_schema(schema)
-  
   case vote_for
   when "expand"
-    vputs "Launching new instance"
+    puts "Launching new instance"
+    `rm /etc/poolparty/neighborhood.json`
     cld.send :launch_instance!, schema.options.merge(:cloud_name => cld.name) do |node|
       dputs "Started node at #{node[:ip]}"
-      
       ::PoolParty::Provision::BootStrapper.new( node[:ip], :cloud => cld )
       ::PoolParty::Provision::DrConfigure.new( node[:ip], :cloud => cld )
-    end
-    
+    end  
+  
   when "contract"
-    last_instance_id = %x[/usr/bin/server-list-active instance_id].split("\t").last
-    remoter_base.terminate_instance! schema.options.merge(:instance_id => last_instance_id)
+    `rm /etc/poolparty/neighborhood.json`
+    last_instance_id = %x[server-list-active instance_id].split("\t").last
+    remote_base.terminate_instance! schema.options.merge(:instance_id => last_instance_id)    
   else
     puts "Unknown action: #{vote_for}"
+    remote_base.describe_instances
   end
 
 end

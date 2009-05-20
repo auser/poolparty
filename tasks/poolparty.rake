@@ -11,6 +11,8 @@ task :slow_spec do
   puts "#{stats[:failures]} total errors"
 end
 namespace(:poolparty) do
+  task :build_gem => ["poolparty:vendor:setup", "poolparty:vendor:update", :gemspec, :build]
+  
   namespace(:setup) do
     desc "Generate a manifest for quicker loading times"
     task :manifest do

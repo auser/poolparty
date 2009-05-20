@@ -23,7 +23,7 @@ EOS
       
       if cld.minimum_instances < cld.nodes(:status => "running").size
         last_instance_id = cld.nodes(:status => "running").last[:instance_id]
-        cld.remote_base.terminate_instance! cld.options.merge(:instance_id => last_instance_id)
+        cld.remote_base.terminate_instance! cld.dsl_options.merge(:instance_id => last_instance_id)
       else
         puts "The cloud #{cld.name} is running minimum instances (#{cld.nodes(:status => "running").size})"
       end

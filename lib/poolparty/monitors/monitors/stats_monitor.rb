@@ -16,26 +16,19 @@ module Monitors
       
       begin
         @cloud = JSON.parse( open('/etc/poolparty/clouds.json' ).read )
+        # @cloud = ::PoolParty::Cloud::Cloud.load_from_json(open('/etc/poolparty/clouds.json' ).read)
       rescue 
-        @cloud = ::PoolParty::Default.options.merge({"options" =>
+        @cloud = ::PoolParty::Default.dsl_options.merge({"options" =>
           {"rules" => {"expand"   => PoolParty::Default.expand_when,
                        "contract" => PoolParty::Default.contract_when
                       }
           }
-        })
+        })        
       end
-      # Our cloud.options.rules looks like
-      #  {"expand_when" => "load > 0.9", "contract_when" => "load < 0.4"}
-      # We set these as rules on ourselves so we can use aska to parse the rules.
-      # Later, we can call vote_rules on ourself and we'll get back Aska::Rule(s)
-      # which we'll call valid_rule? for each Rule and return the result
-      @cloud["options"]["rules"].each do |name, rul|
-        r = Aska::Rule.new(rul)
-        rule(name) << r
-      end
-      # log << "#{::Time.now.strftime("%Y-%m-%d-%H-%M")}, #{stats.to_json}\n"
+      make_aska_rules(@cloud["options"]["rules"])
+      log << "#{::Time.now.strftime("%Y-%m-%d-%H-%M")}, #{stats.to_json}\n"
     end
-    
+        
     def get(data=nil)
       begin
         if !request.params || request.params.empty?
@@ -43,10 +36,11 @@ module Monitors
         else
           stats[request.params[0].to_sym] ||= self.send(request.params[0])
           stats[request.params[0].to_sym]
+          log << "#{::Time.now.strftime("%Y-%m-%d-%H-%M")}, #{stats.to_json}\n"
           stats.to_json
         end
       rescue Exception => e
-        "Error: #{e}"
+        "Error: #{e}".to_json
       end
     end
     
@@ -86,11 +80,12 @@ module Monitors
       # TODO: Move?
       # Expand the cloud if 50+% of the votes are for expansion
       # Contract the cloud if 51+% of the votes are for contraction
+      # Check to make sure an elected action is not already in progress
       if (candidates[:expand] - candidates[:contract])/stats.keys.size > 0.5
-        %x[/usr/bin/server-cloud-elections expand] unless elected_action == "expand"
+        %x[server-cloud-elections expand] unless elected_action == "expand"
         @elected_action = "expand"
       elsif (candidates[:contract] - candidates[:expand])/stats.keys.size > 0.5
-        %x[/usr/bin/server-cloud-elections contract] unless elected_action == "contract"
+        %x[server-cloud-elections contract] unless elected_action == "contract"
         @elected_action = "contract"
       end      
 
@@ -100,12 +95,11 @@ module Monitors
       stats.to_json
     end
 
-
-    def elected_action
+    def elected_action(_n=nil)
       @elected_action ||= nil
     end
 
-    def rules
+    def rules(_n=nil)
       @rules ||= {}
     end
 
@@ -120,37 +114,38 @@ module Monitors
       stats
     end
 
-    def stats
+    def stats(_n=nil)
       @stats ||= {my_ip  => {}}
     end
 
-    def load
+    def load(_n=nil)
       %x{"uptime"}.split[-3].to_f
     end
 
-    def instances
+    def instances(_n=nil)
       # res = PoolParty::Neighborhoods.load_default.instances
-      res ||= %x[/usr/bin/server-list-active internal_ip].split("\t")
+      res ||= %x[server-list-active internal_ip].split("\t")
       res
     end
 
-    def can_expand?
+    def can_expand?(_n=nil)
       instances.size < max_instances
     end
 
-    def can_contract?
+    def can_contract?(_n=nil)
       instances.size > min_instances
     end
 
-    def min_instances
+    def min_instances(_n=nil)
       (@cloud["options"]["minimum_instances"] || PoolParty::Default.minimum_instances).to_i
     end
 
-    def max_instances
+    def max_instances(_n=nil)
       (@cloud["options"]["maximum_instances"] || PoolParty::Default.maximum_instances).to_i
     end
 
-    def nominations
+    def nominations(_n=nil)
+      # return ['expand'] if instances.size<min_instances
       load = stats[my_ip]["load"] ||= self.send(:load)
       stats[my_ip]["nominations"] ||= rules.collect do |k,cld_rules|
         t = cld_rules.collect do |r|
@@ -170,17 +165,38 @@ module Monitors
       end.flatten.compact
     end
 
+    #alias to allow access thru http route GET /stats/nominations
+    def get_nominations(_nodes=[])
+      nominations.to_json
+    end
+    
+    def get_hello(_n=nil)
+      'hi there'
+    end
+    
     def my_ip
       @my_ip ||= ohai["ipaddress"]
     end
 
-    def ohai
+    def ohai(_n=nil)
       @ohai ||= JSON.parse(%x[ohai])
     end
 
     def reload_data!
       @stats[my_ip] = {}
       instances.each {|inst| @stats[inst] = {} }
+    end
+    
+    # Our cloud.dsl_options.rules looks like
+    #  {"expand_when" => "load > 0.9", "contract_when" => "load < 0.4"}
+    # We set these as rules on ourselves so we can use aska to parse the rules.
+    # Later, we can call vote_rules on ourself and we'll get back Aska::Rule(s)
+    # which we'll call valid_rule? for each Rule and return the result
+    def make_aska_rules(rules)
+      rules.each do |name, rul|
+        r = Aska::Rule.new(rul)
+        rule(name) << r
+      end
     end    
     
   end

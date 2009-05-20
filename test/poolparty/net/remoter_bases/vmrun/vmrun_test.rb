@@ -31,6 +31,12 @@ class TestVmRun < Test::Unit::TestCase
         end
       end
       
+      @cloud2 = cloud :files do
+        using :vmrun do
+          vmx_files ['/path/to/vmx/file', '/another/path']
+        end
+      end
+      
     end    
     should "be setting the type of remote_base as Vmrun" do
       @cloud.remote_base.class.should == PoolParty::Remote::Vmrun
@@ -38,9 +44,13 @@ class TestVmRun < Test::Unit::TestCase
     should "have the method vmrun as the remoter base" do
       @cloud.vmrun.should == @cloud.remote_base
     end
-    should "have vmx_files" do
+    should "have vmx_files from vmx_hash" do
       @cloud.remote_base.vmx_files.size.should == 1
       @cloud.remote_base.vmx_files.should == @vmx_files
+    end
+    should "have vmx_files form vmx_files option" do
+      @cloud.remote_base.vmx_files == ["~/Documents/vm/Ubuntu32bitVM.vmwarevm/Ubuntu32bitVM.vmx"]
+      @cloud2.remote_base.vmx_files == ['/path/to/vmx/file', '/another/path']
     end
     # should "start vmware instance" do
     #   @cloud.launch_instance!

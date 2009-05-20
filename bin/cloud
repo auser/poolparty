@@ -28,7 +28,7 @@ EOS
     $DEBUGGING = true if command[:debug]
     
     @loaded_pool = load_pool( command[:spec] ? command[:spec] : Binary.get_existing_spec_location)
-    @loaded_clouds = command[:cloud_name] ? clouds[command[:cloud_name].to_sym] : clouds.map {|k,c| c }
+    @loaded_clouds = command[:cloud_name] ? [clouds[command[:cloud_name].to_sym]] : clouds.map {|k,c| c }
     @loaded_clouds.each do |cld|
       cld.verbose command[:verbose]
       cld.debug command[:debug]
@@ -36,6 +36,13 @@ EOS
   end
   
   run do |command|
-    puts "Primary Options: #{command.opts.inspect}"
+    subcommands = GitStyleBinary.list_subcommands
+    
+    puts "Usage: cloud COMMAND [ARGS]
+    
+    The cloud subcommands commands are:
+      #{subcommands}
+
+    See 'cloud help COMMAND' for more information on a specific command."
   end
 end

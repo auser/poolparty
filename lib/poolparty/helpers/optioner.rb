@@ -114,17 +114,17 @@ module PoolParty
       output_options if verbose? && verbose
       
       if @load_pools
-        @loaded_pool = load_pool( spec? ? spec : Binary.get_existing_spec_location)
+        @loaded_pool = load_pool( spec ? spec : Binary.get_existing_spec_location)
         @loaded_clouds = extract_cloud_from_options(self)
         @loaded_pools = extract_pool_from_options(self)
 
         reject_junk_options!
         raise CloudNotFoundException.new("Please specify your cloud with -s, move it to ./clouds.rb or in your POOL_SPEC environment variable") unless loaded_clouds && !loaded_clouds.empty?
         loaded_pools.each do |pl|
-          pl.dsl_options.merge!(self.options)
+          pl.dsl_options.merge!(self.dsl_options)
         end
         loaded_clouds.each do |cl|
-          cl.dsl_options.merge!(self.options)
+          cl.dsl_options.merge!(self.dsl_options)
         end
       end
     end
@@ -152,10 +152,10 @@ module PoolParty
   end
   
   def extract_cloud_from_options(o)
-    o.cloudname? ? [cloud(o.cloudname.downcase.to_sym)] : clouds.collect {|n,cl| cl}
+    o.cloudname ? [cloud(o.cloudname.downcase.to_sym)] : clouds.collect {|n,cl| cl}
   end
   
   def extract_pool_from_options(o)
-    o.poolname? ? [pool(o.poolname.downcase.to_sym)] : pools.collect {|n,pl| pl}
+    o.poolname ? [pool(o.poolname.downcase.to_sym)] : pools.collect {|n,pl| pl}
   end
 end

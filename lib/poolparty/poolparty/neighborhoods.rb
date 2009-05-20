@@ -20,7 +20,7 @@ module PoolParty
       when Array
         {:instances => data.map {|entry| disect(entry) }}
       when String
-        {:instances => JSON.parse(data)}#.map "#{inst["instance_id"]}\t#{inst["ip"]}"}}
+        JSON.parse(data)#.map "#{inst["instance_id"]}\t#{inst["ip"]}"}}
       when Hash
         data
       end
@@ -30,7 +30,7 @@ module PoolParty
     
     # Get the known instances from the neighborhood.json file on the server
     def instances
-      @instances ||= @schema.to_hash[:instances] rescue @schema.instances.collect {|line| disect(line) }
+      @instances ||= @schema.to_hash[:instances] #rescue @schema.instances.collect {|line| disect(line) }
     end
     
     # Returns empty if the neighborhood has no instances
@@ -92,9 +92,20 @@ module PoolParty
         new( open("/etc/poolparty/neighborhood.json").read )
       elsif ping_port("127.0.0.1", Default.butterfly_port, 1)# butterfly responding?
         require "open-uri"
-        new( open("http://127.0.0.1:8642/neighborhood").read )
+        begin
+          timeout(2) do
+            new( open("http://127.0.0.1:8642/neighborhood").read )
+          end
+        rescue TimeoutError => e
+          require "#{::File.dirname(__FILE__)}/../../poolparty"
+          cld = ::PoolParty::Cloud::Cloud.load_from_json(open("/etc/poolparty/clouds.json").read)          
+          nodes = cld.nodes({:status => "running"}, false)
+          data = nodes.map {|hsh| hsh.reject {|k,v| v.nil? }}.map {|a| a.merge(:launching_time => a[:launching_time].to_s) }
+          # ::File.open("/etc/poolparty/neighborhood.json", "w") {|f| f << "{\"instances\":#{data.to_json}}" }
+          new(data)
+        end
       else
-        new("[]")
+        new("{\"instances\":[]}")
       end
     end
     

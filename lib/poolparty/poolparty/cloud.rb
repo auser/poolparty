@@ -16,13 +16,31 @@ module PoolParty
     # TODO: Deprecate
     def with_cloud(cl, opts={}, &block)
       raise CloudNotFoundException.new("Cloud not found") unless cl
-      cl.options.merge!(opts) if opts
+      cl.dsl_options.merge!(opts) if opts
       cl.run_in_context &block if block
     end
     
     class Cloud < PoolParty::PoolPartyBaseClass
       attr_reader :templates, :cloud_name, :remote_base
       attr_accessor :started_instance
+      
+      # Default set of options. Most take the Default options from the default class
+      default_options(
+        {
+        :expand_when          => Default.expand_when,
+        :contract_when        => Default.contract_when,
+        :minimum_instances    => 2,
+        :maximum_instances    => 5,
+        :ec2_dir              => ENV["EC2_HOME"],
+        :minimum_runtime      => Default.minimum_runtime,
+        :dependency_resolver  => ChefResolver,
+        :remote_base          => nil,
+        :remoter_base         => Default.remoter_base,
+        :keypair              => nil,
+        :keypair_path         => nil,
+        :keypair_name         => nil
+        }.merge(Remote::Ec2.default_options)
+      )
 
       include CloudResourcer
       include PoolParty::PluginModel
@@ -66,20 +84,6 @@ module PoolParty
         end
       end
       
-      # Default set of options. Most take the Default options from the default class
-      default_options(
-        :expand_when => Default.expand_when,
-        :contract_when => Default.contract_when,
-        :minimum_instances => 2,
-        :maximum_instances => 5,
-        :ec2_dir => ENV["EC2_HOME"],
-        :minimum_runtime => Default.minimum_runtime,
-        :user => Default.user,
-        :dependency_resolver => ChefResolver,
-        :using_remoter_base => Default.remoter_base,
-        :remote_base => nil
-      )
-      
       additional_callbacks [
         "after_launch_instance"
       ]
@@ -104,13 +108,7 @@ module PoolParty
       end
       
       def before_create
-        using Default.remoter_base
-        # context_stack.push self
-        # TODO: PUT BACK IN
-        # (parent ? parent : self).
         add_poolparty_base_requirements
-        # this can be overridden in the spec, but ec2 is the default        
-        # context_stack.pop
       end
       
       # Callback
@@ -118,7 +116,7 @@ module PoolParty
       # here the base requirements are added as well as an empty chef recipe is called
       # Also, the after_create hook on the plugins used by the cloud are called here
       def after_create
-        ::FileUtils.mkdir_p("#{Default.tmp_path}/dr_configure")
+        ::FileUtils.mkdir_p("#{tmp_path}/dr_configure")
         
         run_in_context do
           add_optional_enabled_services
@@ -132,14 +130,56 @@ module PoolParty
       
       # setup defaults for the cloud
       def setup_defaults
-        set_vars_from_options(:keypair_name => key.basename, :keypair_path => key.full_filepath)        
-        dsl_options[:rules] = {:expand => dsl_options[:expand_when], :contract => dsl_options[:contract_when]}        
+        set_vars_from_options(:keypair_name => key.basename, :keypair_path => key.full_filepath) rescue nil
+        
+        dsl_options[:rules] = {:expand   => "#{dsl_options[:expand_when]}", 
+                               :contract => dsl_options[:contract_when]}        
         
         set_dependency_resolver 'chef'
+        using Default.remoter_base unless remote_base
       end
       
       def after_launch_instance(inst=nil)
         remote_base.send :after_launch_instance, inst
+      end
+      
+      # Keypairs
+      # Use the keypair path
+      def keypair(*args)
+        if args && !args.empty?
+          args.each do |arg|
+            unless arg.nil? || _keypair_filepaths.include?(arg)
+              k = arg.is_a?(Key) ? arg : Key.new(arg)
+              _keypairs.unshift k
+            end
+          end
+          self.keypair
+        else
+          unless @keypair
+            @keypair = _keypairs.select {|key| key.exists? }.first
+            self.keypair_path = @keypair.full_filepath
+            self.keypair_name = @keypair.basename
+            self.keypair = @keypair
+          end
+          @keypair
+        end
+      end
+
+      alias :set_keypairs :keypair
+      alias :key :keypair
+
+      def _keypairs
+        @keypairs ||= [Key.new]
+      end
+
+      # Collect the filepaths of the already loaded keypairs
+      def _keypair_filepaths
+        _keypairs.map {|a| a.filepath }
+      end
+
+      #TODO: deprecate: use key.full_filepath    
+      def full_keypair_path
+        @full_keypair_path ||= keypair.full_filepath
       end
       
       # provide list of public ips to get into the cloud
@@ -147,7 +187,6 @@ module PoolParty
         nodes(:status => "running").map {|ri| ri.ip }
       end
       
-      # TODO: make this be a random ip, since we should not rely on it being the same each time
       def ip
         ips.first
       end
@@ -183,7 +222,7 @@ module PoolParty
         end
       end
 
-      #FIXME MOVE TO DEPENDECY RESOL
+      #FIXME MOVE TO DEPENDENCY RESOLVER
       # Configuration files
       def build_manifest
         vputs "Building manifest"
@@ -209,7 +248,7 @@ module PoolParty
         ::FileTest.file?("#{Default.base_config_directory}/poolparty.pp") ? open("#{Default.base_config_directory}/poolparty.pp").read : nil
       end
       
-      def write_properties_hash(filename=::File.join(Default.tmp_path, Default.properties_hash_filename) )
+      def write_properties_hash(filename=::File.join(tmp_path, Default.properties_hash_filename) )
         file_path = ::File.dirname(filename)
         file_name = "#{::File.basename(filename, ::File.extname(filename))}_#{name}#{::File.extname(filename)}"
         output = to_properties_hash.to_json
@@ -218,7 +257,32 @@ module PoolParty
       end
       
       def to_json
-        to_properties_hash.to_json
+        to_properties_hash.reject{|k,v| k == :remote_base }.to_json
+      end
+      
+      # TODO: test
+      # ruby -rrubygems -e 'require "poolparty";puts Cloud.load_from_json(open("/etc/poolparty/clouds.json").read).minimum_instances'      
+      def self.load_from_json(str)
+        parsed = JSON.parse(str).each {|k,v| dsl_options[k.to_sym] = v}
+        opts= parsed.options
+        opts["keypair"] = opts["keypair_path"] = opts["keypair_name"]
+        # cld.remoter_base = PoolParty::Remote.module_eval( schema.options.remoter_base.camelcase )
+        # opts.remoter_base_class = PoolParty::Remote.module_eval( opts.remoter_base.camelcase )
+        # opts.remoter_base_class.new opts.remote_base
+        opts["dependency_resolver"] = options.dependency_resolver.send(:new, opts)
+        cld = Cloud.new opts.cloud_name.to_sym
+        cld.dsl_options.merge opts
+        cld.using opts.remoter_base.to_sym
+        cld.dsl_options.symbolize_keys!
+        cld
+      end
+      
+      def tmp_path
+        Default.tmp_path / pool.name / name
+      end
+      
+      def pool
+        parent && parent.is_a?(Pool) ? parent : self
       end
       
       # Add all the poolparty requirements here

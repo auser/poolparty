@@ -3,7 +3,7 @@ module PoolParty
 =begin  rdoc    
 == Deploy Directory
 
-The deploy directory will copy the source directory from the developer machine (i.e. your laptop) to /tmp/poolparty, and then rsync it to the specified target directory on the cloud nodes.
+The deploy directory will copy the source directory from the developer machine (i.e. your laptop) to /tmp/poolparty/cloudname, and then rsync it to the specified target directory on the cloud nodes.
 
 == Usage
 

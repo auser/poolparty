@@ -11,7 +11,7 @@ class TestEC2Class < Ec2
   # def size; "small";end
   # def security_group; "default";end
   # def ebs_volume_id; "ebs_volume_id";end
-  # def availabilty_zone; "us-east-1a";end
+  # def availability_zone; "us-east-1a";end
   # def verbose; false; end
   def describe_instances(o={})
     response_list_of_instances

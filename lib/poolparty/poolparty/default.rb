@@ -17,6 +17,7 @@ module PoolParty
       :minimum_instances => 2,
       :maximum_instances => 5,
       :user => "root", # This should change here
+      :keypair_name => nil,
       :base_keypair_path => "#{ENV["HOME"]}/.ec2",
       :base_ssh_path => "#{ENV["HOME"]}/.ssh",
       :tmp_path => "/tmp/poolparty",
@@ -40,18 +41,21 @@ module PoolParty
       :minimum_runtime  => 3000, #50.minutes in seconds
       :contract_when => "load < 0.25",
       :expand_when => "load > 0.9",
+      :ec2_dir => ENV["EC2_HOME"], #TODO: move to ec2 class
       :image_id => nil,
       :access_key => nil,
       :secret_access_key => nil,
-      :remoter_base => :ec2
+      :remoter_base => :ec2,
+      :availabilty_zone => 'us-east-1a'
     )
+    
     
     # Class methods
     class << self
       def method_missing(m,*a,&block)
         dsl_options.include?(m) ? dsl_options[m] : super
       end
-      # Get the access_key
+      # # Get the access_key
       def access_key
         @access_key ||= load_access_keys_from_environment_var || load_keys_from_file[:access_key]
       end
@@ -72,10 +76,13 @@ module PoolParty
       end
       # Store the keys in a yaml format to give the master access
       # So that the master has access to the files
-      def store_keys_in_file
+      def store_keys_in_file(f=nil)
         unless access_key.nil? || secret_access_key.nil?
-          write_to_file( key_file_locations.first, YAML::dump({:access_key => access_key, :secret_access_key => secret_access_key}))        
+          write_to_file( (f ? f : key_file_locations.first), keys_in_yaml)
         end
+      end
+      def keys_in_yaml
+        YAML::dump({:access_key => access_key, :secret_access_key => secret_access_key})
       end
       def store_keys_in_file_for(obj=nil)
         if obj
@@ -98,7 +105,9 @@ module PoolParty
         [
           ".ppkeys",
           "#{Default.base_config_directory}/.ppkeys",
-          "#{Default.storage_directory}/ppkeys",          
+          "#{Default.storage_directory}/ppkeys",
+          "#{ENV["HOME"]}/.ssh/ppkeys",
+          "#{ENV["HOME"]}/.ssh/.ppkeys",
           "~/.ppkeys",
           "ppkeys"
         ]
@@ -117,7 +126,7 @@ module PoolParty
             "/var/poolparty"
         ].select do |dir|
           dir if viable_directory?(dir)
-        end.first || ::File.join( "/tmp/poolparty")
+        end.first || ::File.join( "/tmp/poolparty/#{name}")
       end
       def logger_location
         [

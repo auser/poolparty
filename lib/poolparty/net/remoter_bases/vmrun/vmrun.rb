@@ -35,7 +35,6 @@ module PoolParty
         :path_to_binary      => 'vmrun',
         :default_cli_options => 'gui',
         :terminate_options   => 'soft',
-        :vmx_files           => nil,
         :vmx_hash            => {},  # hash of vmx_filename => ip
         :images_repo_path    => ::File.expand_path("~/Documents/Virtual_Machines.localized/")
       )
@@ -44,15 +43,8 @@ module PoolParty
         if n.nil?
           dsl_options[:vmx_files] || vmx_hash.keys
         else
-          self.vmx_files = n
+          dsl_options[:vmx_files] = n
         end
-      end
-      
-      def initialize(opts={}, &block)
-        set_vars_from_options opts
-        vmx_files
-        instance_eval &block if block
-        super(opts, &block)    
       end
 
       def self.launch_new_instance!(o={})
@@ -62,20 +54,20 @@ module PoolParty
       def launch_new_instance!(o={})
         raise "No available vmx files given!" unless next_unused_vmx_file
         vmx_file = next_unused_vmx_file
-        VmwareInstance.new( {:vmx_file => vmx_file, 
-                             :ip => vmx_hash[vmx_file],
+        VmwareInstance.new( {:vmx_file  => vmx_file, 
+                             :public_ip => ip(vmx_file),
+                             :ip => ip(vmx_file),
                              :keypair => keypair
                             }.merge(o)
                           ).launch!
       end
       # Terminate an instance by id
       def self.terminate_instance!(o={})
-        new(nil, o).terminate_instance!
+        new(o).terminate_instance!
       end
       def terminate_instance!(o={})
-        dsl_options o
+        set_vars_from_options o
         VmwareInstance.new( :vmx_file => last_unused_vmx_file, 
-                            :ip => vmx_hash[last_unused_vmx_file], 
                             :keypair => keypair
                           ).terminate!(terminate_options)
       end
@@ -83,17 +75,18 @@ module PoolParty
       # Describe an instance's status, must pass :vmx_file in the options
       def self.describe_instance(o={})
         # vmx_file = o[:vmx_file] || Vmrun.running_instances.first
-        new_instance(o).describe_instance
+        new(o).describe_instance
       end
       def describe_instance(o={})        
         running_instances.select {|inst| inst.vmx_file == o[:vmx_file] }.first
       end
 
       def self.describe_instances(o={})
-        new_instance(o).describe_instances
+        new(o).describe_instances
       end
       def describe_instances(o={})
-        running_instances.map {|a| a.to_hash }
+        # TODO: WTF
+        running_instances.map {|a| a.to_hash.merge(:public_ip => ip(a.vmx_file), :ip => ip(a.vmx_file)) }
       end
 
       # After launch callback
@@ -112,27 +105,19 @@ module PoolParty
             
       def after_launch_instance(inst=nil)
         if inst
-          dputs "Associate address after launched: #{inst.ip}"
+          dputs "Associate address after launched: #{inst.public_ip}"
         end
       end
       
       private
-      # handle the case where a cloud is not passed in
-      def self.new_instance(o={})
-
-        inst = Vmrun.new((cloud rescue o), o)
-        inst.dsl_options.merge! o
-        inst
-      end
       
       def running_instances(o={})
         output = run_local "#{path_to_binary} list"
         lines = output.split("\n")
         lines.shift
         lines.map {|vmx_file| VmwareInstance.new( :vmx_file => vmx_file, 
-                                                  :ip => vmx_hash[vmx_file], 
+                                                  :ip => ip, 
                                                   :keypair => keypair
-
                                                 ) }
       end
       

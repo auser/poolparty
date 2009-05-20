@@ -1,5 +1,8 @@
 =begin rdoc
   Aska
+  
+  A rule parser.
+  
   TODO: Extract this into a proper gem
 =end
 module Aska
