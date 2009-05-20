@@ -56,7 +56,7 @@ module PoolParty
         new_instance(o).launch_new_instance!
       end
       def launch_new_instance!(o={})
-        opts =dsl_options.merge(:remoter_base_options=>remoter_base_options)
+        opts =dsl_options.merge(:remoter_base_options=>remoter_base_options).merge(o)
         result = JSON.parse(server['/run-instance'].put(opts.to_json)).symbolize_keys!
         p result
         @id = result[:instance_id]
@@ -75,7 +75,7 @@ module PoolParty
 
       # Describe an instance's status, must pass :vmx_file in the options
       def self.describe_instance(o={})
-        new_instance(o).describe_instance
+        new(o).describe_instance
       end
       def describe_instance(o={})
         raise "id or instance_id must be set before calling describe_instace" if !id(o)
@@ -83,7 +83,7 @@ module PoolParty
       end
 
       def self.describe_instances(o={})
-        new_instance(o).describe_instances
+        new(o).describe_instances
       end
       def describe_instances(o={})
         JSON.parse( server["/instances/"].get ).collect{|i| i.symbolize_keys!}

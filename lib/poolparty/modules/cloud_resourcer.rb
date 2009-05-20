@@ -61,13 +61,17 @@ module PoolParty
     # instance of the remote base
     def using(t, &block)
       return self.send(t) if self.respond_to?(t)
-      if self.class.available_bases.include?(t.to_sym)
+      if ::PoolParty::Remote::RemoterBase.available_bases.include?(t.to_sym)
         klass_string = "#{t}".classify
         remote_base_klass = "::PoolParty::Remote::#{klass_string}".constantize      
         set_default_options(remote_base_klass.default_options)
         self.remote_base = remote_base_klass.send(:new, dsl_options, &block)
         self.remoter_base t.to_sym        
         instance_eval "def #{t};remote_base;end"
+        # instance_eval "def launch_new_instance!(o={}); remote_base.launch_new_instance!;end"
+        # instance_eval "def terminate_instance!(o={}); remote_base.terminate_instance!(id);end"
+        # instance_eval "def describe_instances(o={}); remote_base.describe_instances;end"
+        # instance_eval "def describe_instance(o={}); remote_base.describe_instance(id);end"
       else
         raise "Unknown remote base: #{t}"
       end

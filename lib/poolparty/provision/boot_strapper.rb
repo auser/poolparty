@@ -23,6 +23,9 @@ module PoolParty
                           net-scp
                           net-ssh-gateway
                           highline
+                          flexmock
+                          lockfile
+                          rubigen
                           json
                           activesupport
                           grempe-amazon-ec2
@@ -34,6 +37,7 @@ module PoolParty
                           thin
                           logging
                           ruby2ruby
+                          extlib
                         )
       end
 
@@ -127,7 +131,7 @@ module PoolParty
       def default_commands
         pack_the_dependencies
         ::FileUtils.rm_rf "#{cloud.tmp_path}/dependencies/gems/cache"
-        rsync "#{cloud.tmp_path}/dependencies", '/var/poolparty'
+        rsync "#{cloud.tmp_path}/dependencies", '/var/poolparty', ['-v', '-a', '--delete']
         
         commands << [
           "mkdir -p /etc/poolparty",

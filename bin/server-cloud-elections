@@ -18,7 +18,7 @@ o.loaded_clouds.each do |cld|
   case vote_for
   when "expand"
     puts "Launching new instance"
-    `rm /etc/poolparty/neighborhood.json`
+    `rm /etc/poolparty/neighborhood.json` rescue nil
     cld.send :launch_instance!, schema.options.merge(:cloud_name => cld.name) do |node|
       dputs "Started node at #{node[:ip]}"
       ::PoolParty::Provision::BootStrapper.new( node[:ip], :cloud => cld )
@@ -26,7 +26,7 @@ o.loaded_clouds.each do |cld|
     end  
   
   when "contract"
-    `rm /etc/poolparty/neighborhood.json`
+    `rm /etc/poolparty/neighborhood.json` rescue nil
     last_instance_id = %x[server-list-active instance_id].split("\t").last
     remote_base.terminate_instance! schema.options.merge(:instance_id => last_instance_id)    
   else
