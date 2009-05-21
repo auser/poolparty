@@ -268,7 +268,7 @@ module PoolParty
       
       # TODO: test
       # ruby -rrubygems -e 'require "poolparty";puts Cloud.load_from_json(open("/etc/poolparty/clouds.json").read).minimum_instances'      
-      def self.load_from_json(str)
+      def self.load_from_json(str, o={})
         if ::File.file?(str)
           str = open(str).read
         end
@@ -281,15 +281,24 @@ module PoolParty
         cld.using opts.remoter_base.to_sym, opts.remote_base
         cld.dependency_resolver opts[:dependency_resolver]
         
-        cld.ordered_resources = parsed.resources.map do |r|
-          case typ = r.delete(:pp_type)
-          when "plugin"
-            # This may become a problem on the server where the plugins
-            # cannot be found. TODO: Fix?!? How? Uh... fake plugin maybe?
-            cld.send(typ.to_sym, r)
-          else
-            cld.send("has_#{typ}".to_sym, r)
+        #TODO: will never run
+        unless true || o[:full_stack]
+          context_stack.push cld
+          cld.ordered_resources = parsed.resources.map do |r|
+            case typ = r.delete(:pp_type)
+            when "plugin"
+              # This may become a problem on the server where the plugins
+              # cannot be found. TODO: Fix?!? How? Uh... fake plugin maybe?            
+              cld.send(r[:name].gsub(/_class/, '').to_sym) do              
+                set_vars_from_options(r)
+              end            
+            else
+              cld.send("has_#{typ}".to_sym, r)
+            end
+            context_stack.pop
           end
+        else
+          cld.ordered_resources = parsed.resources
         end
         cld
       end

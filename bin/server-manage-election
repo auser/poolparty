@@ -7,7 +7,7 @@ require 'json'
 require 'poolparty'
 
 status = ARGV.shift || "running" # or pending or terminated
-schema = ::PoolParty::Cloud::Cloud.load_from_json(ARGV.shift || ENV['CLOUDS_JSON_FILE'] || '/etc/poolparty/clouds.json')  #TODO: smarter option parser
+schema = ::PoolParty::Cloud::Cloud.load_from_json(ENV['CLOUDS_JSON_FILE'] || '/etc/poolparty/clouds.json')
 
 def get_json_stats_from(ip, port)
   Net::HTTP.start(ip, port) {|http| http.get('/stats') }.body rescue "{}"

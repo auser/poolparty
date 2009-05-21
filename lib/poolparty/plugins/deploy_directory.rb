@@ -39,7 +39,7 @@ This will place the contents of ~/path/to/my/site from your machine to /mnt/bob 
         has_directory(to)
         has_exec("unpack-#{::File.basename(to)}-deploy-directory",
           :requires => get_directory(to),
-          :command => "cp -R /var/poolparty/dr_configure/user_directory/#{name}/* #{to}")
+          :command => "cp -R /var/poolparty/dr_configure/user_directory/#{dir_name}/* #{to}")
         if owner
           has_exec(:name => "chown-#{name}", :command => "chown #{owner} -R #{to}")
         end     
@@ -51,6 +51,11 @@ This will place the contents of ~/path/to/my/site from your machine to /mnt/bob 
       
       def update_from_repo
         `cd #{from} && git pull`
+      end
+      
+      private
+      def dir_name
+        ::File.basename(::File.dirname(name))
       end
       
     end
