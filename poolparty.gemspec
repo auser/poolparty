@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Ari Lerner"]
-  s.date = %q{2009-05-18}
+  s.date = %q{2009-05-20}
   s.description = %q{PoolParty: The easy, open-source, cross-cloud management solution}
   s.email = %q{ari.lerner@citrusbyte.com}
   s.executables = ["cloud", "cloud-bootstrap", "cloud-configure", "cloud-console", "cloud-contract", "cloud-expand", "cloud-list", "cloud-osxcopy", "cloud-provision", "cloud-setup-dev", "cloud-show", "cloud-ssh", "cloud-start", "cloud-terminate", "cloud-verify", "install-poolparty", "server-butterfly", "server-cloud-elections", "server-ensure-provisioning", "server-fire-cmd", "server-get-load", "server-list-active", "server-manage-election", "server-monitor.ru", "server-query-agent", "server-rerun", "server-send-command", "server-show-stats", "server-write-new-nodes"]
@@ -300,7 +300,6 @@ Gem::Specification.new do |s|
     "lib/poolparty/extra/deployments.rb",
     "lib/poolparty/helpers/binary.rb",
     "lib/poolparty/helpers/console.rb",
-    "lib/poolparty/helpers/display.rb",
     "lib/poolparty/helpers/hash_printer.rb",
     "lib/poolparty/helpers/loading.rb",
     "lib/poolparty/helpers/nice_printer.rb",
@@ -334,7 +333,6 @@ Gem::Specification.new do |s|
     "lib/poolparty/monitors/monitors/neighborhood_monitor.rb",
     "lib/poolparty/monitors/monitors/stats_monitor.rb",
     "lib/poolparty/net/init.rb",
-    "lib/poolparty/net/remote_bases.rb",
     "lib/poolparty/net/remote_instance.rb",
     "lib/poolparty/net/remoter/cloud_control.rb",
     "lib/poolparty/net/remoter/connections.rb",
@@ -465,7 +463,6 @@ Gem::Specification.new do |s|
     "spec/poolparty/fixtures/clouds.json",
     "spec/poolparty/fixtures/test_template.erb",
     "spec/poolparty/helpers/binary_spec.rb",
-    "spec/poolparty/helpers/display_spec.rb",
     "spec/poolparty/helpers/hash_printer_spec.rb",
     "spec/poolparty/helpers/optioner_spec.rb",
     "spec/poolparty/id_rsa",
@@ -531,6 +528,7 @@ Gem::Specification.new do |s|
     "tasks/poolparty.rake",
     "tasks/server.rake",
     "tasks/spec.rake",
+    "test/fixtures/metavirt_cloud.json",
     "test/fixtures/test_key",
     "test/fixtures/test_template.erb",
     "test/poolparty/core/array_test.rb",
@@ -541,14 +539,17 @@ Gem::Specification.new do |s|
     "test/poolparty/modules/callbacks_test.rb",
     "test/poolparty/modules/cloud_dsl_test.rb",
     "test/poolparty/monitors/test_monitor_rack.rb",
+    "test/poolparty/net/remoter_base_test.rb",
     "test/poolparty/net/remoter_bases/metavirt/metavirt_test.rb",
     "test/poolparty/net/remoter_bases/vmrun/vmrun_test.rb",
     "test/poolparty/net/remoter_test.rb",
     "test/poolparty/plugins/chef_deploy_test.rb",
     "test/poolparty/plugins/rails_deploy_test.rb",
+    "test/poolparty/poolparty/cloud_test.rb",
     "test/poolparty/poolparty/neighborhood_test.rb",
     "test/poolparty/poolparty/plugin_test.rb",
     "test/poolparty/poolparty/poolparty_base_class_test.rb",
+    "test/poolparty/poolparty/schema_test.rb",
     "test/poolparty/poolparty/template_test.rb",
     "test/poolparty/provision/boot_strapper_test.rb",
     "test/poolparty/provision/dr_configure_test.rb",

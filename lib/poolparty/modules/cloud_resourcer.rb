@@ -59,39 +59,52 @@ module PoolParty
     # Check to make sure the available_bases is available, otherwise raise
     # Give access to the cloud the remote_base and instantiate a new
     # instance of the remote base
-    def using(t, &block)
+    def using(t, o={}, &block)
       return self.send(t) if self.respond_to?(t)
       if ::PoolParty::Remote::RemoterBase.available_bases.include?(t.to_sym)
         klass_string = "#{t}".classify
         remote_base_klass = "::PoolParty::Remote::#{klass_string}".constantize      
         set_default_options(remote_base_klass.default_options)
-        self.remote_base = remote_base_klass.send(:new, dsl_options, &block)
-        self.remoter_base t.to_sym        
-        instance_eval "def #{t};remote_base;end"
+        @remote_base = remote_base_klass.send(:new, o.merge(:cloud=>self), &block)
+        self.remoter_base t.to_sym
+        instance_eval "def #{t};@remote_base;end"
+        
         # instance_eval "def launch_new_instance!(o={}); remote_base.launch_new_instance!;end"
-        # instance_eval "def terminate_instance!(o={}); remote_base.terminate_instance!(id);end"
+        # instance_eval "def terminate_instance!(o={}); remote_base.terminate_instance!(o);end"
         # instance_eval "def describe_instances(o={}); remote_base.describe_instances;end"
-        # instance_eval "def describe_instance(o={}); remote_base.describe_instance(id);end"
+        # instance_eval "def describe_instance(o={}); remote_base.describe_instance(o);end"
       else
         raise "Unknown remote base: #{t}"
       end
     end
-    
-    def update_from_schema(schema)
-      self.dsl_options.merge! schema.options.to_hash
-      self.dependency_resolver = schema.options.dependency_resolver.split("::")[-1].gsub(/Resolver/, '').preserved_class_constant("Resolver") rescue PoolParty::Chef
-      keypair schema.options.keypair_name
-      remote_base_class = PoolParty::Remote.module_eval( schema.options.remoter_base.camelcase )
-      self.remote_base = remote_base_class.new  schema.options.remote_base.to_hash
-      
-      # self.keypair = PoolParty::Key.new schema.options.keypair.basename
-      # keypair = schema.options.delete(:keypairs).map {|a| PoolParty::Key.new(a.basename) }
-      # options.merge! schema.options.to_hash
-      # dsl_options[:keypairs] = keypairs
-      # 
-      # dsl_options[:dependency_resolver] = schema.options.dependency_resolver.split("::")[-1].gsub(/Resolver/, '').preserved_class_constant("Resolver") rescue PoolParty::Chef
-      
+
+    def dependency_resolver(name=nil)
+      if !name.nil?
+        ext = name=~/Resolver$/  ? nil : 'Resolver'
+        klass = ::PoolParty.module_eval("#{name.camelcase}#{ext}")
+        raise DependencyResolverException.new("Unknown resolver") unless klass
+        dsl_options[:dependency_resolver] = "#{name.camelcase}#{ext}"
+        @dependency_resolver = klass
+      else
+        @dependency_resolver
+      end
     end
+        
+    # def update_from_schema(schema)
+    #   self.dsl_options.merge! schema.options.to_hash
+    #   self.dependency_resolver = schema.options.dependency_resolver.split("::")[-1].gsub(/Resolver/, '').preserved_class_constant("Resolver") rescue PoolParty::Chef
+    #   keypair schema.options.keypair_name
+    #   remote_base_class = PoolParty::Remote.module_eval( schema.options.remoter_base.camelcase )
+    #   self.remote_base = remote_base_class.new  schema.options.remote_base.to_hash
+    #   
+    #   # self.keypair = PoolParty::Key.new schema.options.keypair.basename
+    #   # keypair = schema.options.delete(:keypairs).map {|a| PoolParty::Key.new(a.basename) }
+    #   # options.merge! schema.options.to_hash
+    #   # dsl_options[:keypairs] = keypairs
+    #   # 
+    #   # dsl_options[:dependency_resolver] = schema.options.dependency_resolver.split("::")[-1].gsub(/Resolver/, '').preserved_class_constant("Resolver") rescue PoolParty::Chef
+    #   
+    # end
     
   end
 end

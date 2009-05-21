@@ -33,8 +33,7 @@ module PoolParty
         :maximum_instances    => 5,
         :ec2_dir              => ENV["EC2_HOME"],
         :minimum_runtime      => Default.minimum_runtime,
-        :dependency_resolver  => ChefResolver,
-        :remote_base          => nil,
+        # :dependency_resolver  => ChefResolver,
         :remoter_base         => Default.remoter_base,
         :keypair              => nil,
         :keypair_path         => nil,
@@ -135,8 +134,8 @@ module PoolParty
         dsl_options[:rules] = {:expand   => "#{dsl_options[:expand_when]}", 
                                :contract => dsl_options[:contract_when]}        
         
-        set_dependency_resolver 'chef'
-        using Default.remoter_base unless remote_base
+        dependency_resolver 'chef'
+        using Default.remoter_base unless @remote_base
       end
       
       def after_launch_instance(inst=nil)
@@ -256,25 +255,51 @@ module PoolParty
         true
       end
       
-      def to_json
-        to_properties_hash.reject{|k,v| k == :remote_base }.to_json
+      def to_hash
+        hsh = to_properties_hash
+        hsh[:options].merge!({:remote_base => remote_base.to_hash})  
+        # hsh.reject{|k,v| k == :remote_base || k == :cloud}
+        hsh
+      end
+      
+      def to_h
+        to_hash
       end
       
       # TODO: test
       # ruby -rrubygems -e 'require "poolparty";puts Cloud.load_from_json(open("/etc/poolparty/clouds.json").read).minimum_instances'      
       def self.load_from_json(str)
-        parsed = JSON.parse(str).each {|k,v| dsl_options[k.to_sym] = v}
-        opts= parsed.options
+        if ::File.file?(str)
+          str = open(str).read
+        end
+        parsed = JSON.parse(str).symbolize_keys!
+        opts = parsed.options
         opts["keypair"] = opts["keypair_path"] = opts["keypair_name"]
-        # cld.remoter_base = PoolParty::Remote.module_eval( schema.options.remoter_base.camelcase )
-        # opts.remoter_base_class = PoolParty::Remote.module_eval( opts.remoter_base.camelcase )
-        # opts.remoter_base_class.new opts.remote_base
-        opts["dependency_resolver"] = options.dependency_resolver.send(:new, opts)
+
         cld = Cloud.new opts.cloud_name.to_sym
-        cld.dsl_options.merge opts
-        cld.using opts.remoter_base.to_sym
-        cld.dsl_options.symbolize_keys!
+        cld.dsl_options.merge! opts
+        cld.using opts.remoter_base.to_sym, opts.remote_base
+        cld.dependency_resolver opts[:dependency_resolver]
+        
+        cld.ordered_resources = parsed.resources.map do |r|
+          case typ = r.delete(:pp_type)
+          when "plugin"
+            # This may become a problem on the server where the plugins
+            # cannot be found. TODO: Fix?!? How? Uh... fake plugin maybe?
+            cld.send(typ.to_sym, r)
+          else
+            cld.send("has_#{typ}".to_sym, r)
+          end
+        end
         cld
+      end
+      
+      def remote_base(n=nil)
+        if n.nil?
+          @remote_base
+        else
+          @remote_base = n
+        end
       end
       
       def tmp_path

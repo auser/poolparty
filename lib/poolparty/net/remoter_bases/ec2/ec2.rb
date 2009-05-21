@@ -51,8 +51,13 @@ module PoolParty
         :keypair_name =>nil
         })
         
-      def ami
-        image_id
+      # alias to image_id
+      def ami(n=nil)
+        if n.nil?
+          image_id
+        else
+          image_id n
+        end
       end
       
       # Requires a hash of options

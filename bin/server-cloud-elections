@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
 $:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
 require "poolparty"
-require "poolparty/lite"
 
 o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
   opts.on('-n cloudname', '--name name', 'Start cloud by this name')    { |c| optioner.cloudname c }
@@ -10,28 +9,23 @@ end
 
 vote_for = o.unflagged_args.shift || "none"
 
-schema = ::PoolParty.load_cloud_from_json(o.unflagged_args.shift)  #TODO: smarter option parser
-remote_base = PoolParty::Remote.module_eval( schema.options.remoter_base.camelcase )
+cld = ::PoolParty::Cloud::Cloud.load_from_json(ENV['CLOUDS_JSON_FILE'] || '/etc/poolparty/clouds.json')  #TODO: smarter option parser
 
-o.loaded_clouds.each do |cld|
-  cld.update_from_schema(schema)
-  case vote_for
-  when "expand"
-    puts "Launching new instance"
-    `rm /etc/poolparty/neighborhood.json` rescue nil
-    cld.send :launch_instance!, schema.options.merge(:cloud_name => cld.name) do |node|
-      dputs "Started node at #{node[:ip]}"
-      ::PoolParty::Provision::BootStrapper.new( node[:ip], :cloud => cld )
-      ::PoolParty::Provision::DrConfigure.new( node[:ip], :cloud => cld )
-    end  
-  
-  when "contract"
-    `rm /etc/poolparty/neighborhood.json` rescue nil
-    last_instance_id = %x[server-list-active instance_id].split("\t").last
-    remote_base.terminate_instance! schema.options.merge(:instance_id => last_instance_id)    
-  else
-    puts "Unknown action: #{vote_for}"
-    remote_base.describe_instances
-  end
+case vote_for
+when "expand"
+  puts "Launching new instance"
+  cld.launch_instance! do |node|
+    dputs "Started node at #{node[:ip]}"
+    ::PoolParty::Provision::BootStrapper.new( node[:ip], :cloud => cld )
+    ::PoolParty::Provision::DrConfigure.new( node[:ip], :cloud => cld )
+  end  
 
+when "contract"
+  last_instance_id = %x[server-list-active instance_id].split("\t").last
+  cloud.terminate_instance!(:instance_id => last_instance_id)
+when 'none'
+  nil
+else
+  puts "Unknown action: #{vote_for}"
 end
+

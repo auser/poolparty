@@ -26,8 +26,7 @@ module PoolParty
       include           ::PoolParty::Remote
       include           ::PoolParty::Pinger
       
-      dsl_methods :cloud,                # The cloud this remoter_base is a part of
-                  :keypair,
+      dsl_methods :keypair,
                   :image_id,
                   :keypair_name
         
@@ -35,6 +34,14 @@ module PoolParty
         opts.each {|k,v| opts[k] = v.call if v.respond_to?(:call) }
         set_vars_from_options opts
         instance_eval &block if block
+      end
+      
+      def cloud(n=nil)
+        if n.nil?
+          @cloud
+        else
+          @cloud = n
+        end
       end
       
       # def evaluate_proc_options(opts)
@@ -156,6 +163,16 @@ module PoolParty
       # Called after an instance is launched
       def after_launch_instance(instance=nil)
         puts "after_launch_instance in remoter_base"
+      end
+      
+      def remoter_base_options(n=nil)
+        if n.nil?
+          dsl_options[:remoter_base_options]
+        else
+          dsl_options[:remoter_base_options] = remote_base.dsl_options.choose do |k,v|
+            v && (v.respond_to?(:empty) ? !v.empty?: true)
+          end
+        end
       end
 
       #TODO: Remove
