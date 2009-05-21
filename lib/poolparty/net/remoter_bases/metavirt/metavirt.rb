@@ -20,19 +20,22 @@ module PoolParty
         :keypair_path    => nil,
         :authorized_keys => nil,
         :remoter_base    => :vmrun,
-        :remote_base     => nil,
         :server_config   => {}
         )
-        
-      def initialize(opts={}, &block)
+      
+      def initialize(o={}, &block)
+        using o[:remoter_base], o.delete(:remote_base) if o.has_key?(:remoter_base)
         super
-        # self.keypair_name = keypair.basename
-        # # try and generate the public_key if needed
-        # if self.authorized_keys.nil?
-        #  self.authorized_keys = keypair.public_key  rescue nil
-        # end
       end
       
+      def remote_base(n=nil)
+        if n.nil?
+          @remote_base
+        else
+          @remote_base = n
+        end
+      end
+        
       def server
         if @server
           @server
@@ -46,21 +49,13 @@ module PoolParty
         end
       end
       
-      def remoter_base_options
-        dsl_options[:remoter_base_options] = remote_base.dsl_options.choose do |k,v|
-          v && (v.respond_to?(:empty) ? !v.empty?: true)
-        end
-      end
-      
       def self.launch_new_instance!(o={})
         new_instance(o).launch_new_instance!
       end
       def launch_new_instance!(o={})
-        opts =dsl_options.merge(:remoter_base_options=>remoter_base_options)
+        opts = to_hash.merge(o)
         result = JSON.parse(server['/run-instance'].put(opts.to_json)).symbolize_keys!
-        p result
         @id = result[:instance_id]
-        puts "\nid = #{@id}\n---"
         result
       end
       # Terminate an instance by id
@@ -68,25 +63,31 @@ module PoolParty
         new(nil, o).terminate_instance!
       end
       def terminate_instance!(o={})
-        puts "ID= #{id(o)}"
+        opts = to_hash.merge(o)
         raise "id or instance_id must be set before calling describe_instace" if !id(o)
         server["/instance/#{id(o)}"].delete
       end
 
       # Describe an instance's status, must pass :vmx_file in the options
       def self.describe_instance(o={})
-        new_instance(o).describe_instance
+        new(o).describe_instance
       end
       def describe_instance(o={})
+        opts = to_hash.merge(o)
         raise "id or instance_id must be set before calling describe_instace" if !id(o)
         server["/instance/#{id(o)}"].get.json_parse
       end
 
       def self.describe_instances(o={})
-        new_instance(o).describe_instances
+        new(o).describe_instances
       end
       def describe_instances(o={})
+        opts = to_hash.merge(o)
         JSON.parse( server["/instances/"].get ).collect{|i| i.symbolize_keys!}
+      end
+      
+      def to_hash
+        dsl_options.merge(:remote_base => remote_base.to_hash)
       end
       
       private

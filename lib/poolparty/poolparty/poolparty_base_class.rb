@@ -73,7 +73,20 @@ module PoolParty
       # services.merge!({lowercase_class_name.to_sym => serv})
     end
     # Container for the services
+
+    def inspect
+      to_properties_hash.inspect
+    end
     
+    def to_hash
+      to_properties_hash
+    end
+          
+    def to_json
+      to_hash.to_json
+      # JSON.generate(to_hash)
+    end
+
     def resources
       @resources ||= OrderedHash.new
     end
@@ -141,7 +154,8 @@ module PoolParty
     
     def ordered_resources
       @ordered_resources ||= []
-    end
+    end    
+    attr_writer :ordered_resources
     
     def is_plugin?
       false

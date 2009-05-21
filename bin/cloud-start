@@ -19,7 +19,7 @@ EOS
     @loaded_clouds.each do |cld|
 
       if cld.nodes(:status => "running").size.zero?
-        puts header("Starting cloud #{cld.name} (#{cld.keypair})")
+        puts "Starting cloud #{cld.name} (#{cld.keypair})"
         puts "#{cld.nodes(:status => "running").size} running instances (#{cld.minimum_instances} - #{cld.maximum_instances})"
         
         cld.launch_instance!(:cloud_name => cld.name) do |node|

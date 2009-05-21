@@ -1,10 +1,5 @@
-require File.dirname(__FILE__) + "/display"
-
 module PoolParty
   module Console
-    
-    include Display
-    
     # Print help commands for the console
     # level 0 - Basic help
     # level 1 - Commands

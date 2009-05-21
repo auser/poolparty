@@ -16,7 +16,7 @@ class TestMetavirt < Test::Unit::TestCase
       end
     end
     should "be registered as a remote_base" do
-      @cloud.available_bases.include?(:vmrun).should == true
+      PoolParty::Remote::RemoterBase.available_bases.include?(:vmrun).should == true
     end
     should "be setting the type of remote_base" do
       assert_equal PoolParty::Remote::Vmrun, @cloud.remote_base.remote_base.class
@@ -26,11 +26,8 @@ class TestMetavirt < Test::Unit::TestCase
       @cloud.metavirt.should == @cloud.remote_base
     end
     should "have a keypair" do
-      # assert_equal Key, @cloud.keypair.class
       assert_equal 'test_key', @cloud.keypair.basename
       assert_equal 'test_key', @cloud.keypair_name
-      # puts "----- #{@cloud.remote_base.dsl_options.inspect}"
-      assert_equal 'test_key', @cloud.remote_base.keypair_name
     end
     should "be able to initialize without a cloud" do
       assert_nothing_raised  do PoolParty::Remote::Metavirt.new end

@@ -30,7 +30,6 @@ module PoolParty
         
         returning Array.new do |output|
           unless cancelled?
-            output << @prestring || ""
 
             if resources && !resources.empty? 
               output << resources_string_from_resources(resources, pre)

@@ -57,7 +57,7 @@ class TestPuppetResolver < Test::Unit::TestCase
         has_directory :name => "/var/www"
         has_file :name => "/var/www/index.html", :content => "profile info", :requires => get_directory("/var/www")
 
-        set_dependency_resolver "puppet"
+        dependency_resolver "puppet"
         # has_package :name => "bash"        
         # parent == cloud
         apache do
