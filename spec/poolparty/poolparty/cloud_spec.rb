@@ -198,7 +198,7 @@ describe "Cloud" do
             @cloud.add_optional_enabled_services
           end
           it "should have at least 3 resources" do            
-            @cloud.add_poolparty_base_requirements
+            @cloud.send :add_poolparty_base_requirements
             @cloud.ordered_resources.size.should > 2
           end
           it "should receive add_poolparty_base_requirements before building the manifest" do
@@ -220,13 +220,13 @@ describe "Cloud" do
               @hb = PoolpartyBaseHeartbeatClass.new
               PoolpartyBaseHeartbeatClass.stub!(:new).and_return @hb
               
-              @cloud.add_poolparty_base_requirements
+              @cloud.send :add_poolparty_base_requirements
               @cloud.poolparty_base_heartbeat.should == @hb
             end
             describe "after adding" do
               before(:each) do
                 stub_list_from_remote_for(@cloud)
-                @cloud.add_poolparty_base_requirements
+                @cloud.send :add_poolparty_base_requirements
               end
               describe "resources" do
                 before(:each) do
