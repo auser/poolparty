@@ -1,13 +1,13 @@
 module PoolParty    
   class SvnResource
         
-    virtual_resource :svn do
+    plugin :svn do
       def loaded(*args)
         has_package :name => "subversion"
       end
     end
     
-    virtual_resource :svn_repos do
+    plugin :svn_repos do
       
       dsl_methods :creates, :command, :cwd, :source, :working_dir, :at
       

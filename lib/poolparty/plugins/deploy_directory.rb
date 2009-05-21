@@ -13,12 +13,12 @@ The deploy directory will copy the source directory from the developer machine (
                      :owner => 'www-data',
                      :git_pull_first => false  #do a git pull in the from directory before syncing
 
-This will place the contents of ~/path/to/my/site from your machine to /mnt/bob on the cloud instances virtual_resource(:deploy_directory)
+This will place the contents of ~/path/to/my/site from your machine to /mnt/bob on the cloud instances plugin(:deploy_directory)
 
 =end
 
   class DeployDirectory
-    virtual_resource(:deploy_directory) do
+    plugin(:deploy_directory) do
       
       dsl_methods :from, :to, :owner, :mode, :git_pull_first
       

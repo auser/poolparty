@@ -6,11 +6,12 @@ module PoolParty
     def plugin(name=:plugin, cloud=nil, &block)
       plugins[name] ||= PluginModel.new(name, &block)
     end
+
     alias_method :register_plugin, :plugin
     
     def plugins
       $plugins ||= {}
-    end
+    end; module_function :plugins
     
     class PluginModel
       attr_accessor :klass
@@ -18,6 +19,8 @@ module PoolParty
       def initialize(name,&block)        
         symc = "#{name}".top_level_class.camelcase
         klass = symc.class_constant(PoolParty::Plugin::Plugin, {:preserve => true}, &block)
+
+        PoolParty::Service.add_has_and_does_not_have_methods_for(symc)
         
         lowercase_class_name = symc.downcase
         # Store the name of the class for pretty printing later

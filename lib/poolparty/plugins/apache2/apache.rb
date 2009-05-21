@@ -219,7 +219,7 @@ default host.
       
     end
 
-  virtual_resource(:virtualhost) do
+  plugin(:virtualhost) do
     def listen(port="80")
       has_variable(:name => "port", :value => port)
       port port
@@ -266,7 +266,7 @@ eof
 
   end
   
-  virtual_resource(:passengersite) do    # {{{
+  plugin(:passengersite) do    # {{{
 
     default_options(
       :dir            => "/var/www",
@@ -311,7 +311,7 @@ eof
     end
   end
   
-#   virtual_resource(:passengersite_with_ssl) do# {{{
+#   plugin(:passengersite_with_ssl) do# {{{
 #     def loaded(opts={}, parent=self)
 #       enable_passenger
 
@@ -359,7 +359,7 @@ eof
     # enable_php5 do
     #   extras :cli, :pspell, :mysql
     # end
-    virtual_resource(:enable_php5) do
+    plugin(:enable_php5) do
       def loaded(opts={}, parent=self)
         has_package(:name => "php5")
         has_package(:name => "libapache2-mod-php5")

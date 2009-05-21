@@ -33,7 +33,7 @@ Gempackages describe distributed gems on the cloud. The gem is only downloaded o
   
   class GempackageResource
     
-    virtual_resource(:gem_package) do
+    plugin(:gem_package) do
       
       dsl_methods :name,            # Name of the gem
                   :download_url,    # Url to download the gem. If not set, it will try to grab the latest gem available on gems.github.com or rubyforge
