@@ -37,8 +37,8 @@ module PoolParty
       
       def recipe(file=nil, o={}, &block)
         if file
-          file = ::File.expand_path(file)
-          raise RecipeNotFoundError.new(file) unless ::File.file?(file)
+          file = search_in_known_locations(file)
+          raise RecipeNotFoundError.new(file) unless file
           
           ::FileUtils.mkdir_p "#{basedir}/recipes" unless ::File.directory?("#{basedir}/recipes")          
           ::FileUtils.rm "#{basedir}/recipes/default.rb" if ::File.file?("#{basedir}/recipes/default.rb")

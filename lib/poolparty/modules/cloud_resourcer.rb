@@ -65,6 +65,7 @@ module PoolParty
         klass_string = "#{t}".classify
         remote_base_klass = "::PoolParty::Remote::#{klass_string}".constantize      
         set_default_options(remote_base_klass.default_options)
+
         @remote_base = remote_base_klass.send(:new, o.merge(:cloud=>self), &block)
         self.remoter_base t.to_sym
         instance_eval "def #{t};@remote_base;end"
