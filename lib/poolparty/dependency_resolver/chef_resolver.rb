@@ -20,7 +20,7 @@
 =end
 module PoolParty
   
-  class ChefResolver< DependencyResolver
+  class ChefResolver < DependencyResolver
     
     # Compile and add to the zipper
     def compile(props=@properties_hash, tabs=0, default_namespace="poolparty")

@@ -295,7 +295,7 @@ module PoolParty
         # poolparty_base_heartbeat
         poolparty_base_ruby
         poolparty_base_packages        
-      end
+      end      
       
       # Reset the entire cloud
       def reset!

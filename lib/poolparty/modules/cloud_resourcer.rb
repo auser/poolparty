@@ -66,7 +66,8 @@ module PoolParty
         remote_base_klass = "::PoolParty::Remote::#{klass_string}".constantize      
         set_default_options(remote_base_klass.default_options)
         self.remote_base = remote_base_klass.send(:new, dsl_options, &block)
-        self.remoter_base t.to_sym        
+        self.remoter_base t.to_sym
+        # TODO: Singleton method
         instance_eval "def #{t};remote_base;end"
       else
         raise "Unknown remote base: #{t}"
