@@ -13,14 +13,13 @@ module PoolParty
     $context_stack ||= []
   end
   
-  class PoolPartyBaseClass
-    include PoolParty::SearchablePaths
-        
+  class PoolPartyBaseClass          
     attr_reader :init_opts
     
     include Parenting, Dslify
     
     include PoolParty::DependencyResolverCloudExtensions
+    include PoolParty::SearchablePaths
     
     # attr_accessor :depth
     has_searchable_paths
@@ -54,11 +53,10 @@ module PoolParty
         loaded(o, &block)
       end
     end
-    
-    # 
+
     def search_in_known_locations(filepath, additional_search_paths=[])
-      super(filepath, ::File.dirname(pool_specfile))
-    end
+      find_file(filepath, [::File.dirname(pool_specfile)])
+    end    
     
     # Add the parent's options to my own and add myself as a service if I am not a resource
     def add_to_parent_if_parent_exists_and_is_a_service      

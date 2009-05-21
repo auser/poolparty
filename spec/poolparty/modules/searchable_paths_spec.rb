@@ -73,7 +73,7 @@ describe "FileWriter" do
     end
     
     it "should look in the additional search paths first" do
-      @cloud.find_file("clouds.rb", ['extra']).should == PATH_ONE/'extra'/'clouds.rb'
+      @cloud.find_file("clouds.rb", [PATH_ONE/'extra']).should == PATH_ONE/'extra'/'clouds.rb'
     end    
   end
 
