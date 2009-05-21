@@ -43,7 +43,7 @@ This will place the contents of ~/path/to/my/site from your machine to /mnt/bob 
                                                                         # while this is sometimes redundant, 
                                                                         # it allows for two directories that
                                                                         # might have the same directory name
-          :command => "cp -R /var/poolparty/dr_configure/user_directory/#{dir_name}/#{File.basename(from)}/* #{to}") 
+          :command => "cp -R /var/poolparty/dr_configure/user_directory/#{name}/#{File.basename(from)}/* #{to}") 
         if owner
           has_exec(:name => "chown-#{name}", :command => "chown #{owner} -R #{to}")
         end     
@@ -58,9 +58,9 @@ This will place the contents of ~/path/to/my/site from your machine to /mnt/bob 
       end
       
       private
-      def dir_name
-        ::File.basename(::File.dirname(name))
-      end
+      # def dir_name
+      #   ::File.basename(::File.dirname(name))
+      # end
       
     end
   end
