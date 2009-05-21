@@ -5,7 +5,7 @@ require File.dirname(__FILE__) + '/ec2_mocks_and_stubs.rb'
 describe "ec2 remote base" do
   before(:each) do
     @cloud = TestCloud.new :test_remoter_base_cloud
-    @tr = TestEC2Class.new(@cloud.dsl_options)
+    @tr = TestEC2Class.new( TestCloud.default_options )
     stub_remoter_for(@tr)
     # @tr.stub!(:get_instances_description).and_return response_list_of_instances
   end

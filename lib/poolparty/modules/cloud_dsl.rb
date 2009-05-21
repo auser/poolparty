@@ -11,12 +11,6 @@ module PoolParty
     #   has_directory(:name => loc)
     # end
     
-    def set_dependency_resolver(name='chef')
-      klass = name.preserved_class_constant("Resolver")
-      raise DependencyResolverException.new("Unknown resolver") unless klass
-      self.dependency_resolver = klass unless dsl_options[:dependency_resolver]
-    end
-    
     # Enable a service package
     def enable(*services)
       services.each do |service|

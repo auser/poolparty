@@ -26,8 +26,7 @@ module PoolParty
       include           ::PoolParty::Remote
       include           ::PoolParty::Pinger
       
-      dsl_methods :cloud,                # The cloud this remoter_base is a part of
-                  :keypair,
+      dsl_methods :keypair,
                   :image_id,
                   :keypair_name
         
@@ -35,6 +34,14 @@ module PoolParty
         opts.each {|k,v| opts[k] = v.call if v.respond_to?(:call) }
         set_vars_from_options opts
         instance_eval &block if block
+      end
+      
+      def cloud(n=nil)
+        if n.nil?
+          @cloud
+        else
+          @cloud = n
+        end
       end
       
       # def evaluate_proc_options(opts)
@@ -50,8 +57,12 @@ module PoolParty
       #   opts
       # end
       
+      def self.available_bases
+        @available_bases ||= []        
+      end
       def self.inherited(arg)
         base_name = "#{arg}".downcase.top_level_class.to_sym
+        (available_bases << base_name) unless available_bases.include?(base_name)
         (remote_bases << base_name) unless remote_bases.include?(base_name)
       end
 
@@ -105,11 +116,11 @@ module PoolParty
       # TODO: Rename and modularize the @inst.status =~ /pending/ so that it works on all 
       # remoter_bases
       def launch_instance!(o={}, &block)
-        @cloud = clouds[o[:cloud_name]]
+        @cloud = clouds[o[:cloud_name] || o[:name]]
         @inst = launch_new_instance!( dsl_options.merge(o) )
         sleep(2)
         
-        @cloud.dputs "#{@cloud.name} launched instance checking for ip..."
+        dputs "#{@cloud.name} launched instance checking for ip..."
         
         # Wait for 10 minutes for the instance to gain an ip if it doesn't already have one
         500.times do |i|
@@ -118,10 +129,10 @@ module PoolParty
             break if @inst[:public_ip] && @inst[:public_ip] =~ /\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/            
             sleep(2)
             @inst = describe_instance(@inst)
-            @cloud.dprint "."
+            dprint "."
           else
             @inst = describe_instances.last
-            @cloud.dprint "."
+            dprint "."
           end
         end        
         dputs "Found an ip"
@@ -130,9 +141,9 @@ module PoolParty
         
         # Try for 10 minutes to pint port 22 
         500.times do |i|
-          @cloud.dprint "."
+          dprint "."
           if ping_port(@inst[:ip], 22)
-            @cloud.dputs ""
+            dputs ""
             @cloud.started_instance = @inst
             
             @cloud.call_after_launch_instance_callbacks(@inst)
@@ -152,6 +163,16 @@ module PoolParty
       # Called after an instance is launched
       def after_launch_instance(instance=nil)
         puts "after_launch_instance in remoter_base"
+      end
+      
+      def remoter_base_options(n=nil)
+        if n.nil?
+          dsl_options[:remoter_base_options]
+        else
+          dsl_options[:remoter_base_options] = remote_base.dsl_options.choose do |k,v|
+            v && (v.respond_to?(:empty) ? !v.empty?: true)
+          end
+        end
       end
 
       #TODO: Remove

@@ -1,7 +1,7 @@
 # Convenience class to convert standard amazon-ec2 responses from their camel cased style to a hash using underscore style.
 # For example: instanceId to instance_id
 class EC2ResponseObject
-  def self.get_descriptions(resp)      
+  def self.get_descriptions(resp)          
     rs = get_instance_from_response(resp)
     group = get_group_from_response(resp)
     
@@ -58,7 +58,7 @@ class EC2ResponseObject
         :ip => resp.dnsName || "not-assigned",
         :internal_ip => resp.privateDnsName,
         :launching_time => resp.launchTime.parse_datetime,
-        :keypair => resp.keyName,
+        :keypair => (resp.keyName rescue ""),
         :security_group => group
       }        
   end

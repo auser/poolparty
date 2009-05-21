@@ -17,7 +17,7 @@ EOS
   run do |command|    
     @loaded_clouds.each do |cld|
 
-      puts header("Contracting cloud #{cld.name}")
+      puts "Contracting cloud #{cld.name}"
       puts "#{cld.nodes(:status => "running").size} running instances (#{cld.minimum_instances} minimum instances)"
       puts testing ? "Not contracting (test mode)" : "Contracting the cloud if possible"
       

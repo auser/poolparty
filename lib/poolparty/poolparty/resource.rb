@@ -8,18 +8,13 @@
 =end
 module PoolParty
   module Resources
-
     
     def custom_file(path, str)
       write_to_file_in_storage_directory(path, str)
     end
     
     class Resource < PoolParty::PoolPartyBaseClass
-      include JSON
-      attr_accessor :prestring, :poststring
-      
-      # include CloudResourcer
-      
+            
       # For the time being, we'll make puppet the only available dependency resolution
       # base, but in the future, we can rip this out and make it an option
       # include PoolParty::DependencyResolutions::Puppet
