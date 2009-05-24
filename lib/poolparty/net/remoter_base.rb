@@ -186,17 +186,17 @@ module PoolParty
       # def when_instance_is_responding(inst, &block);self.class.when_instance_is_responding;end
       
       # TODO: BAD FORM, already defined in connections.rb. Fix this, ASAP
-      def self.ping_port(host, port=22, retry_times=400)
-        connected = false
-        retry_times.times do |i|
-          begin
-            break if connected = TCPSocket.new(host, port).is_a?(TCPSocket)
-          rescue Exception => e
-            sleep(2)
-          end
-        end
-        connected
-      end
+      # def self.ping_port(host, port=22, retry_times=400)
+      #   connected = false
+      #   retry_times.times do |i|
+      #     begin
+      #       break if connected = TCPSocket.new(host, port).is_a?(TCPSocket)
+      #     rescue Exception => e
+      #       sleep(2)
+      #     end
+      #   end
+      #   connected
+      # end
       
       # After launch callback
       # This is called after a new instance is launched
