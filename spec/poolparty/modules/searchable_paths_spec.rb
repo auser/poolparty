@@ -63,11 +63,18 @@ describe "FileWriter" do
     it "should find things in the right order" do
       @cloud.find_file("clouds.rb").should == PATH_ONE/'clouds.rb'
     end
-
-
-
-
-
+  end
+  
+  describe "#search_in_known_locations" do
+    before(:each) do
+      # create path one
+      FileUtils.mkdir_p(PATH_ONE/'extra')
+      File.write_to_file(PATH_ONE/'extra'/'clouds.rb')
+    end
+    
+    it "should look in the additional search paths first" do
+      @cloud.find_file("clouds.rb", [PATH_ONE/'extra']).should == PATH_ONE/'extra'/'clouds.rb'
+    end    
   end
 
   after(:each) do

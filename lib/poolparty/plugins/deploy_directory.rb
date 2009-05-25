@@ -32,7 +32,7 @@ This will place the contents of ~/path/to/my/site from your machine to /mnt/bob 
       end
       
       def package_deploy_directory
-        ::Suitcase::Zipper.add("#{::File.expand_path(from)}", "user_directory/")
+        ::Suitcase::Zipper.add("#{from}", "user_directory/")
       end
       
       def add_unpack_directory
@@ -55,7 +55,7 @@ This will place the contents of ~/path/to/my/site from your machine to /mnt/bob 
       
       private
       def dir_name
-        ::File.basename(::File.dirname(name))
+        ::File.basename(from)
       end
       
     end

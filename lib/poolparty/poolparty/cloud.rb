@@ -127,6 +127,25 @@ module PoolParty
         setup_defaults
       end
       
+      # CALLBACKS
+      # To hook into the chain of processes that PoolParty uses
+      # when launching, bootstrapping, configuring tasks, call
+      # these methods in your clouds.rb.
+      # Example:
+      # 
+      #   after :bootstrap do
+      #     stuff
+      #   end
+      # 
+      # These store the blocks into the after/before_blocks on self
+      # and are called as appropriate at the runtime
+      def after time, &block 
+        (after_blocks[time.to_sym] ||= []) << block
+      end      
+      def before time, &block
+        (before_blocks[time.to_sym] ||= []) << block
+      end
+      
       # setup defaults for the cloud
       def setup_defaults
         set_vars_from_options(:keypair_name => key.basename, :keypair_path => key.full_filepath) rescue nil
@@ -314,6 +333,45 @@ module PoolParty
       def tmp_path
         Default.tmp_path / pool.name / name
       end
+            
+      # Reset the entire cloud
+      def reset!
+        reset_remoter_base!
+        @build_manifest = @describe_instances = @remote_instances_list = nil
+      end
+      
+      # Call before and after configure callbacks
+      # on the cloud.
+      # These are called from the dynamically defined callback method
+      #   call_before/after_configure/bootstrap_callbacks
+      # from within callbacks.rb
+      # If there is a callback block defined for the specific runtime
+      # method being called, then the appropriate callback blocks
+      # will be accessed and called from within the before/after_ callback
+      def before_bootstrap
+        before_blocks[:bootstrap].each {|b| b.call(self) } if before_blocks.has_key?(:bootstrap)
+      end
+      def after_bootstrap
+        after_blocks[:bootstrap].each {|b| b.call(self) } if after_blocks.has_key?(:bootstrap)
+      end
+      def before_configure
+        before_blocks[:configure].each {|b| b.call(self) } if before_blocks.has_key?(:configure)
+      end
+      def after_configure
+        after_blocks[:configure].each {|b| b.call(self) } if after_blocks.has_key?(:configure)
+      end
+      
+      private
+      
+      # Storage for the after and before callback blocks
+      # when calling the callbacks in the cloud. They are stored as hashes with
+      # and are filled with arrays of blocks during load-time
+      def after_blocks
+        @after_blocks ||= {}
+      end
+      def before_blocks
+        @before_blocks ||= {}
+      end
       
       def pool
         parent && parent.is_a?(Pool) ? parent : self
@@ -328,14 +386,9 @@ module PoolParty
       def add_poolparty_base_requirements
         # poolparty_base_heartbeat
         poolparty_base_ruby
-        poolparty_base_packages        
+        poolparty_base_packages
       end
-      
-      # Reset the entire cloud
-      def reset!
-        reset_remoter_base!
-        @build_manifest = @describe_instances = @remote_instances_list = nil
-      end            
+                
     end
   end 
 end

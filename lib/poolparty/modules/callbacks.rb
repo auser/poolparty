@@ -22,6 +22,13 @@ module PoolParty
       end
       
       # Callbacks on bootstrap and configuration
+      # Defines the callback accessors:
+      #   call_before/after_bootstrap/configure_callbacks
+      # 
+      # When called, this method will first check to see if there 
+      # are plugins and call those plugin's callbacks when called
+      # The method (before/after_bootstrap/configure) is called
+      # on self if the callback method is defined on self
       def setup_callbacks
         defined_callbacks.each do |meth|
           unless respond_to?("call_#{meth}_callbacks".to_sym)
