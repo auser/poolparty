@@ -278,10 +278,23 @@ eof
 
     def loaded(opts={}, prnt=nil)
       enable_passenger
-      
       port "80" unless self.port
       
-      appended_path "current" if opts[:with_deployment_directories]
+      has_directory(:name => dir,                   :owner => www_user, :mode => '0744')
+      has_directory(:name => "#{dir}/#{name}",      :owner => www_user, :mode => '0744')
+      has_directory(:name => "#{dir}/#{name}/logs", :owner => www_user, :mode => '0744')
+      if opts[:with_deployment_directories]
+        has_directory(:name => "#{dir}/#{name}/shared", :owner => www_user, :mode=>'0744')
+        has_directory(:name => "#{dir}/#{name}/shared/public", :owner => www_user, :mode=>'0744')
+        has_directory(:name => "#{dir}/#{name}/shared/config", :owner => www_user, :mode=>'0744')
+        has_directory(:name => "#{dir}/#{name}/releases", :owner => www_user, :mode=>'0744')
+        has_directory(:name => "#{dir}/#{name}", :owner => www_user, :mode=>'0744')
+        # setup an initial symlink so apache will start even if there have not been any deploys yet
+        #FIXME  the following line is chef specific.  It will fail with puppet
+        has_symlink(:target_file => "#{dir}/#{name}/current", :to => "#{dir}/#{name}/shared/public")
+        appended_path "current"
+      end
+      
       passenger_entry <<-EOE
 <VirtualHost *:#{port}>
     ServerName #{name}

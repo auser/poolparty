@@ -9,7 +9,7 @@ The symlink resource sets a symlink
 
 == Usage
 
-  has_symlink(:key => '...') do
+  has_symlink(:name => 'target', :source=>'/where/to' ) do
     # More options. 
     # This block is optional
   end
@@ -21,11 +21,18 @@ The symlink resource sets a symlink
 
 == Examples
 
+puppet style:
   has_symlink(:name => "/var/www/poolpartyrb.com/public", :source => "/var/www/poolpartyrb.com/poolparty-website/site")
+chef style:
+  has_symlink(:to => "/var/www/poolpartyrb.com/public", :target_file => "/var/www/poolpartyrb.com/poolparty-website/site")
 =end
     class Symlink < Resource
       
-      dsl_methods :source
+      dsl_methods :source,
+                  :to,
+                  :target_file
+                  
+      default_options :link_type => :symbolic
       
       def present
         :create
