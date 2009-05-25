@@ -16,7 +16,7 @@ module PoolParty
       
       def loaded(o={}, &block)
         has_directory "~#{for_user}/.ssh", :owner => for_user
-        has_file      "~#{for_user}/.ssh/authorized_keys", :content => public_key_content
+        has_file      "~#{for_user}/.ssh/authorized_keys", :content => ""
         has_line_in_file(:line => public_key_content, :file => "~#{for_user}/.ssh/authorized_keys")
       end
       
