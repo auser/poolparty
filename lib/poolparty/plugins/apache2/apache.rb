@@ -281,18 +281,24 @@ eof
       port "80" unless self.port
       
       has_directory(:name => dir,                   :owner => www_user, :mode => '0744')
-      has_directory(:name => "#{dir}/#{name}",      :owner => www_user, :mode => '0744')
-      has_directory(:name => "#{dir}/#{name}/logs", :owner => www_user, :mode => '0744')
+      has_directory(:name => "#{site_directory}",      :owner => www_user, :mode => '0744')
+      has_directory(:name => "#{site_directory}/logs", :owner => www_user, :mode => '0744')
       if opts[:with_deployment_directories]
-        has_directory(:name => "#{dir}/#{name}/shared", :owner => www_user, :mode=>'0744')
-        has_directory(:name => "#{dir}/#{name}/shared/public", :owner => www_user, :mode=>'0744')
-        has_directory(:name => "#{dir}/#{name}/shared/config", :owner => www_user, :mode=>'0744')
-        has_directory(:name => "#{dir}/#{name}/releases", :owner => www_user, :mode=>'0744')
-        has_directory(:name => "#{dir}/#{name}", :owner => www_user, :mode=>'0744')
-        # setup an initial symlink so apache will start even if there have not been any deploys yet
-        #FIXME  the following line is chef specific.  It will fail with puppet
-        has_symlink(:target_file => "#{dir}/#{name}/current", :to => "#{dir}/#{name}/shared/public")
+        has_directory(:name => "#{site_directory}/shared", :owner => www_user, :mode=>'0744')
+        has_directory(:name => "#{site_directory}/shared/public", :owner => www_user, :mode=>'0744')
+        has_directory(:name => "#{site_directory}/shared/config", :owner => www_user, :mode=>'0744')
+        has_directory(:name => "#{site_directory}/shared/log", :owner => www_user, :mode=>'0744')
+        has_directory(:name => "#{site_directory}/releases", :owner => www_user, :mode=>'0744')
+        do_once do |variable|
+          # setup an initial symlink so apache will start even if there have not been any deploys yet
+          has_directory(:name => "#{site_directory}/releases/initial/public", :owner => www_user, :mode=>'0744')
+          #FIXME  the following line is chef specific.  It will fail with puppet
+          has_symlink(:target_file => "#{dir}/#{name}/current", :to => "#{dir}/#{name}/releases/initial")
+        end        
+        log_dir = "#{site_directory}/shared/log"
         appended_path "current"
+      else
+        log_dir = "#{site_directory}/log"
       end
       
       passenger_entry <<-EOE
@@ -300,8 +306,8 @@ eof
     ServerName #{name}
     DocumentRoot #{site_directory}/public
     RailsEnv #{enviornment}
-    ErrorLog #{site_directory}/log/error_log
-    CustomLog #{site_directory}/log/access_log common
+    ErrorLog #{log_dir}/error_log
+    CustomLog #{log_dir}/access_log common
 </VirtualHost>
       EOE
       
