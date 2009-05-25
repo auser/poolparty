@@ -1,9 +1,9 @@
 =begin rdoc
-  Ssh key
+  Authorized key
   
   Usage:
-    has_ssh_key :for_user         => "username",
-                :public_key_file  => "/Users/alerner/.ssh/id_rsa.pub"
+    has_authorized_key  :for_user         => "username",
+                        :public_key_file  => "/Users/alerner/.ssh/id_rsa.pub"
 =end
 module PoolParty
   class Base
