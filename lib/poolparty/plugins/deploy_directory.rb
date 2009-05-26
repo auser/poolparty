@@ -18,7 +18,7 @@ This will place the contents of ~/path/to/my/site from your machine to /mnt/bob 
 =end
 
   class DeployDirectory
-    virtual_resource(:deploy_directory) do
+    plugin(:deploy_directory) do
       
       dsl_methods :from, :to, :owner, :mode, :git_pull_first
       

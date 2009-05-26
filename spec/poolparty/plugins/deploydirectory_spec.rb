@@ -34,7 +34,8 @@ describe "Remote Instance" do
       end
 
       it "should copy from the deploy directory" do
-        @compiled.should =~ %r{command "cp \-R /var/poolparty/dr_configure/user_directory/map-experiments/map-experiments/\* /var/www/wifi-maps"}
+        #@compiled.should =~ %r{command "cp \-R /var/poolparty/dr_configure/user_directory/map-experiments/map-experiments/\* /var/www/wifi-maps"}
+        @compiled.should =~ %r{command "cp \-R /var/poolparty/dr_configure/user_directory/map-experiments/\* /var/www/wifi-maps"}
       end
 
       it "should chown if needed" do
@@ -52,7 +53,8 @@ describe "Remote Instance" do
       end
 
       it "should copy from the right deploy directory" do
-        @compiled.should =~ %r{command "cp \-R /var/poolparty/dr_configure/user_directory/map-experiments-two/map-experiments/\* /var/www/wifi-maps-two"}
+        #@compiled.should =~ %r{command "cp \-R /var/poolparty/dr_configure/user_directory/map-experiments-two/map-experiments/\* /var/www/wifi-maps-two"}
+        @compiled.should =~ %r{command "cp \-R /var/poolparty/dr_configure/user_directory/map-experiments/\* /var/www/wifi-maps-two"}
       end
     end
  
