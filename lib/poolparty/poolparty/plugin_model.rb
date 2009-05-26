@@ -40,6 +40,7 @@ module PoolParty
         EOM
 
         PoolParty::Cloud::Cloud.class_eval meth
+        PoolParty::Service.add_has_and_does_not_have_methods_for(lowercase_class_name.to_sym)
       end
       
     end

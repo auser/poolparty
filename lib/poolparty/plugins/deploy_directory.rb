@@ -13,12 +13,12 @@ The deploy directory will copy the source directory from the developer machine (
                      :owner => 'www-data',
                      :git_pull_first => false  #do a git pull in the from directory before syncing
 
-This will place the contents of ~/path/to/my/site from your machine to /mnt/bob on the cloud instances plugin(:deploy_directory)
+This will place the contents of ~/path/to/my/site from your machine to /mnt/bob on the cloud instances virtual_resource(:deploy_directory)
 
 =end
 
   class DeployDirectory
-    plugin(:deploy_directory) do
+    virtual_resource(:deploy_directory) do
       
       dsl_methods :from, :to, :owner, :mode, :git_pull_first
       
@@ -32,18 +32,14 @@ This will place the contents of ~/path/to/my/site from your machine to /mnt/bob 
       end
       
       def package_deploy_directory
-        ::Suitcase::Zipper.add("#{::File.expand_path(from)}", "user_directory/#{name}/") # namespace by name
+        ::Suitcase::Zipper.add("#{from}", "user_directory/")
       end
       
       def add_unpack_directory
         has_directory(to)
         has_exec("unpack-#{::File.basename(to)}-deploy-directory",
           :requires => get_directory(to),
-                                                                        # zipper uses the from basename
-                                                                        # while this is sometimes redundant, 
-                                                                        # it allows for two directories that
-                                                                        # might have the same directory name
-          :command => "cp -R /var/poolparty/dr_configure/user_directory/#{name}/#{File.basename(from)}/* #{to}") 
+          :command => "cp -R /var/poolparty/dr_configure/user_directory/#{dir_name}/* #{to}")
         if owner
           has_exec(:name => "chown-#{name}", :command => "chown #{owner} -R #{to}")
         end     
@@ -58,9 +54,9 @@ This will place the contents of ~/path/to/my/site from your machine to /mnt/bob 
       end
       
       private
-      # def dir_name
-      #   ::File.basename(::File.dirname(name))
-      # end
+      def dir_name
+        ::File.basename(from)
+      end
       
     end
   end
