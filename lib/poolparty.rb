@@ -2,8 +2,9 @@ $LOAD_PATH<< File.dirname(__FILE__)
 # Load required gems
 #TODO: remove activesupport
 @required_software = Array.new
-%w(rubygems ftools logging resolv digest/sha2 json pp).each do |lib|
+%w(rubygems fileutils resolv digest/sha2 json pp logging).each do |lib|
   begin
+    NSLog('loading up: ' + lib)
     require lib
   rescue Exception => e
     @required_software << lib
