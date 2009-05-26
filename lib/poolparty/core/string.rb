@@ -203,5 +203,10 @@ class String
       result.symbolize_keys!
     end
   end
+
+  # dumb and ugly pluralize
+  def pluralize(count=2)
+    count > 1 ? self + "s" : self 
+  end
   
 end

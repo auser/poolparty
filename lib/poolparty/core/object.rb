@@ -106,4 +106,18 @@ class Object
   def unix_hide_string
     "2>&1 > /dev/null"
   end
+
+  # Get object's meta (ghost, eigenclass, singleton) class
+  # from activesupport
+  def metaclass
+    class << self
+      self
+    end
+  end
+
+  # If class_eval is called on an object, add those methods to its metaclass
+  # from activesupport
+  def class_eval(*args, &block)
+    metaclass.class_eval(*args, &block)
+  end
 end
