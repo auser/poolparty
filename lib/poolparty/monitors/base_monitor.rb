@@ -7,7 +7,16 @@
 module Monitors
   class BaseMonitor
     
+    @available_monitors =[]  
+    def self.available_monitors
+      @available_monitors     
+    end
+    
     def initialize(env=nil)
+      @env=env
+    end
+    
+    def env(env=@env)
       @env=env
     end
     
@@ -28,5 +37,10 @@ module Monitors
     def after_close_callbacks
       @after_close_callbacks ||= []
     end
+    
+    def self.inherited(subclass)
+      (@available_monitors << subclass) unless @available_monitors.include?(subclass)
+    end
+    
   end
 end
