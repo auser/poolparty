@@ -7,14 +7,16 @@
 module Monitors
   
   @available_monitors =[]
-  def self.available_monitors
+  def self.available
     @available_monitors
   end
   
   class BaseMonitor
     
     def self.inherited(subclass)
-      (Monitors.available_monitors << subclass) unless Monitors.available_monitors.include?(subclass)
+      unless Monitors.available.include?(subclass)
+        Monitors.available << subclass
+      end
     end
     
     def initialize(env=nil)

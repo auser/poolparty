@@ -44,8 +44,13 @@ module PoolParty
         super(&block)
       end
       
+      
       def self.load_from_file(filename=nil)
         # a = new ::File.basename(filename, ::File.extname(filename))
+        #TODO: load any user defined monitors plugins verifiers before the cloud spec is evaled
+        #%w(monitors plugins verifiers).each do |lib|
+        #  Dir[File.join(::File.dirname(::File.basename(filename)), lib, '*')].each{|f| require f }
+        # end
         File.open(filename, 'r') do |f|
           instance_eval f.read, pool_specfile
         end
