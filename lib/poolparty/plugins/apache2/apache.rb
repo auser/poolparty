@@ -284,6 +284,7 @@ eof
       has_directory(:name => "#{site_directory}",      :owner => www_user, :mode => '0744')
       has_directory(:name => "#{site_directory}/logs", :owner => www_user, :mode => '0744')
       if opts[:with_deployment_directories]
+        has_directory(:name => "#{site_directory}/current", :owner => www_user, :mode=>'0744')
         has_directory(:name => "#{site_directory}/shared", :owner => www_user, :mode=>'0744')
         has_directory(:name => "#{site_directory}/shared/public", :owner => www_user, :mode=>'0744')
         has_directory(:name => "#{site_directory}/shared/config", :owner => www_user, :mode=>'0744')

@@ -9,7 +9,7 @@ say("\nWhat remoter base would you like to use?")
 choose do |menu|
   menu.prompt = "> "
 
-  available_bases.each do |base|
+  PoolParty::Remote::RemoterBase.available_bases.each do |base|
     menu.choice base.to_sym do 
       
       say "Great, we'll be using #{base}"
