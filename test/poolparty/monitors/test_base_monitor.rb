@@ -1,15 +1,15 @@
 require "#{::File.dirname(__FILE__)}/../../test_helper"
 
-::Monitors
-class ExtraFoo < Monitors::BaseMonitor
-end
-
 class BaseMonitorTest < Test::Unit::TestCase
   context "Available Monitors" do
+    should "start out with available monitors" do
+      assert Monitors.available_monitors.size > 5
+      assert Monitors.available_monitors.include? Monitors::Load
+    end
     
     should "have available_monitors" do
-      assert !Monitors::BaseMonitor.available_monitors.nil?
-      assert Monitors::BaseMonitor.available_monitors.include? ExtraFoo
+      class ExtraFoo < ::Monitors::BaseMonitor; end
+      assert Monitors.available_monitors.include? ExtraFoo
     end
 
   end

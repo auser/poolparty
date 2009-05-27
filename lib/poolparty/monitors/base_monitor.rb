@@ -5,11 +5,16 @@
   monitors
 =end
 module Monitors
+  
+  @available_monitors =[]
+  def self.available_monitors
+    @available_monitors
+  end
+  
   class BaseMonitor
     
-    @available_monitors =[]  
-    def self.available_monitors
-      @available_monitors     
+    def self.inherited(subclass)
+      (Monitors.available_monitors << subclass) unless Monitors.available_monitors.include?(subclass)
     end
     
     def initialize(env=nil)
@@ -36,10 +41,6 @@ module Monitors
     end
     def after_close_callbacks
       @after_close_callbacks ||= []
-    end
-    
-    def self.inherited(subclass)
-      (@available_monitors << subclass) unless @available_monitors.include?(subclass)
     end
     
   end
