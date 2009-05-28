@@ -3,7 +3,12 @@ require "#{::File.dirname(__FILE__)}/../provision/boot_strapper.rb"
 
 module PoolParty
   module Plugin
-        
+    
+    @available_plugins = []
+    def self.available
+      @available_plugins
+    end
+    
     class Plugin < PoolParty::Service
       include CloudResourcer
       include PoolParty::DependencyResolverCloudExtensions

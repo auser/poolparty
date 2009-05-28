@@ -19,6 +19,7 @@ module PoolParty
         symc = "#{name}".top_level_class.camelcase
         klass = symc.class_constant(PoolParty::Plugin::Plugin, {:preserve => true}, &block)
         
+        
         lowercase_class_name = symc.downcase
         # Store the name of the class for pretty printing later
         # klass.name = name
@@ -38,6 +39,10 @@ module PoolParty
 
         PoolParty::Cloud::Cloud.class_eval meth
         PoolParty::Service.add_has_and_does_not_have_methods_for(lowercase_class_name.to_sym)
+        
+        #store the plugins so they will be availble in an array at Plugin.available
+        ::PoolParty::Plugin.available << symc
+        
       end
       
     end
