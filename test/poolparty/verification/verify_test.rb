@@ -33,6 +33,10 @@ class TestVerification < Test::Unit::TestCase
         end
       end
     end
+    should "have available_verifiers" do
+      Verifiers.available.grep /Ding/
+    end
+    
     should "have a the ping verifier as a verifiers in the class" do
       @vc.verifiers.first.class.should == PoolParty::Verifiers::Ding
     end
