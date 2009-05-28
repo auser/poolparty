@@ -52,7 +52,7 @@ module PoolParty
      
      def prescribe_configuration
        ::FileUtils.mkdir_p "#{cloud.tmp_path}/dr_configure" unless ::File.directory?("#{cloud.tmp_path}/dr_configure")
-      ::File.cp $pool_specfile, "#{cloud.tmp_path}/dr_configure/clouds.rb"
+      ::FileUtils.cp $pool_specfile, "#{cloud.tmp_path}/dr_configure/clouds.rb"
       ::File.open "#{cloud.tmp_path}/dr_configure/clouds.json", "w" do |f|
         f << cloud.to_json
       end
