@@ -120,7 +120,8 @@ module PoolParty
         opts = (opts.is_a?(Hash) ? extra_opts.merge(opts) : extra_opts).merge(:name => temp_name)
         
         # opts.merge!(:name => temp_name) unless opts.has_key?(:name)
-        res = if PoolParty::Resources::Resource.available_resources.include?(ty.to_s.camelize)
+        res = if (PoolParty::Resources::Resource.available_resources.include?(ty.to_s.camelize) || 
+                  PoolParty::Resources::Resource.available_resources.include?("PoolParty::Resources::#{ty.to_s.camelize}".camelize.constantize))
           "PoolParty::Resources::#{ty.to_s.camelize}".camelize.constantize.new(opts, &block)
         else
           "#{ty.to_s.camelize}".camelize.constantize.new(opts.merge(:name), &block)
