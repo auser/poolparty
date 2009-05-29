@@ -16,9 +16,8 @@ The deploy directory will copy the source directory from the developer machine (
 This will place the contents of ~/path/to/my/site from your machine to /mnt/bob on the cloud instances virtual_resource(:deploy_directory)
 
 =end
-
-  class DeployDirectory
-    virtual_resource(:deploy_directory) do
+  module Plugin
+    class DeployDirectory < Plugin
       
       dsl_methods :from, :to, :owner, :mode, :git_pull_first
       

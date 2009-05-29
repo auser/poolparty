@@ -1,13 +1,13 @@
-module PoolParty    
-  class GitResource
-    
-    plugin :git do
+module PoolParty
+  module Plugin
+    class Git < Plugin
+      
       def loaded(*args)
         has_package(:name => "git-core")
       end
     end
     
-    plugin :git_repo do
+    class GitRepo < Plugin
       dsl_methods :name,
                   :repo,
                   :dir, 
@@ -75,6 +75,7 @@ module PoolParty
     
   end
 end
+
 class DirectoryMissingError < StandardError
   def initialize
     super("You must include a directory for the git repo set by to")

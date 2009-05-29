@@ -13,9 +13,8 @@
     chef-deploy to deploy the application
 =end
 module PoolParty
-  class Rails
-
-    plugin :rails_deploy do
+  module Plugin
+    class  RailsDeploy< Plugin
       
       dsl_methods :shared, :database_yml, :repo, :user, :user_dir
       

@@ -22,15 +22,15 @@ class DependencyResolverSpecTestCloud < DependencyResolverCloudExtensionsSpecBas
   dsl_methods :keypair, :name
 end
 
-class JunkClassForDefiningPlugin
-  plugin :apache_plugin do
-    default_options(
-      :listen => 80
-    )
-    def loaded(o={},&block)
-    end
-  end  
-end
+# class JunkClassForDefiningPlugin
+#   apache_plugin do
+#     default_options(
+#       :listen => 80
+#     )
+#     def loaded(o={},&block)
+#     end
+#   end  
+# end
 
 describe "Resolution spec" do
   before(:each) do
@@ -84,7 +84,7 @@ describe "Resolution spec" do
     before(:each) do
       reset!
       ::File.stub!(:basename).and_return "template"
-      @file = "Hello <%= friends %> on port <%= listen %>"
+      @file = "Hello <%= friends %> on port <%= port %>"
       @file.stub!(:read).and_return @file
       Template.stub!(:open).and_return @file
 
@@ -95,11 +95,14 @@ describe "Resolution spec" do
         has_directory :name => "/var/www"
         has_package :name => "bash"
         # parent == nil
-        apache_plugin do
+        apache do
           # parent == TestClass
           # puts "<pre>#{parent}</pre> on <pre>#{context_stack.map {|a| a.class }.join(", ")} from #{self.class}</pre>"
           listen "8080"
-          has_file :name => "/etc/apache2/apache2.conf", :template => "/absolute/path/to/template", :friends => "bob", :render_as => :erb
+          has_file :name => "/etc/apache2/apache2.conf", 
+                   :template => "/absolute/path/to/template", 
+                   :friends => "bob", 
+                   :render_as => :erb
         end
       end
       @cloud = clouds[:dog_for_test]
@@ -115,7 +118,7 @@ describe "Resolution spec" do
       @properties[:resources].class.should == Array
     end
     it "contain content in the template's hash" do
-      @apache_key.resources.select_with_hash(:pp_type => "file").last[:content].should == "Hello bob on port 8080"
+      @apache_key.resources.select_with_hash(:pp_type => "file").first[:content].should == "Hello bob on port 8080"
     end
     it "contain the files in a hash" do
       # puts "<pre>#{@properties.to_yaml}</pre>"

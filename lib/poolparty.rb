@@ -135,10 +135,6 @@ class Object
   include PoolParty::DefinableResource
 end
 
-class Class
-  include PoolParty::PluginModel
-end
-
 ## Load PoolParty Plugins and package
 module PoolParty
   %w(plugins base_packages).each do |dir|

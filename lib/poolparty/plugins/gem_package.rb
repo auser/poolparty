@@ -29,11 +29,9 @@ Gempackages describe distributed gems on the cloud. The gem is only downloaded o
 == Examples
   has_gempackage(:name => 'rake', 
     :download_url => 'http://rubyforge.org/frs/download.php/43954/rake-0.8.3.gem')
-=end
-  
-  class GempackageResource
-    
-    virtual_resource(:gem_package) do
+=end  
+    module Plugin
+      class GemPackage < Plugin
       
       dsl_methods :name,            # Name of the gem
                   :download_url,    # Url to download the gem. If not set, it will try to grab the latest gem available on gems.github.com or rubyforge

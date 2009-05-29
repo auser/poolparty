@@ -1,6 +1,6 @@
 module PoolParty
-  class Base
-    plugin :poolparty_base_ruby do
+  module Plugin
+    class Ruby < Plugin
       
       def enable
         install_base_packages
@@ -8,7 +8,7 @@ module PoolParty
       
       def install_base_packages
         has_package(:name => "libreadline-ruby1.8")
-        has_package(:name => "libruby1.8")                
+        has_package(:name => "libruby1.8")
         has_package(:name => "ruby1.8-dev")
         has_package(:name => "ruby1.8")
         

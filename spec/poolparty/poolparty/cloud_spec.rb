@@ -1,13 +1,15 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
-class TestService
-  plugin :test_service do
-    def initialize(o={}, e=nil, &block)
-      super(&block)
-    end
-    def enable(o={})
-      has_file(:name => "/etc/poolparty/lobos")
-    end                  
+module PoolParty
+  module Plugin
+   class  TestService < Plugin
+      def initialize(o={}, e=nil, &block)
+        super(&block)
+      end
+      def enable(o={})
+        has_file(:name => "/etc/poolparty/lobos")
+      end
+    end 
   end
 end
 
@@ -214,14 +216,14 @@ describe "Cloud" do
               @cloud.instance_eval do
                 @heartbeat = nil
               end
-              @hb = PoolpartyBaseHeartbeatClass.new
+              @hb = PoolParty::Plugin::Heartbeat.new
             end
             it "should call enable on the plugin call" do
-              @hb = PoolpartyBaseHeartbeatClass.new
-              PoolpartyBaseHeartbeatClass.stub!(:new).and_return @hb
+              @hb = PoolParty::Plugin::Heartbeat.new
+              PoolParty::Plugin::Heartbeat.stub!(:new).and_return @hb
               
               @cloud.send :add_poolparty_base_requirements
-              @cloud.poolparty_base_heartbeat.should == @hb
+              @cloud.heartbeat.should == @hb
             end
             describe "after adding" do
               before(:each) do
@@ -234,19 +236,19 @@ describe "Cloud" do
                   @cloud8 = cloud :tester do
                     test_service
                   end
-                  @service = clouds[:tester].ordered_resources.select {|hsh| hsh.class == TestServiceClass }.first
+                  @service = clouds[:tester].ordered_resources.select {|hsh|
+                    hsh.name == "test_service" 
+                    }.first
                   @files = @service.resource(:file)
                 end
                 it "should have a file resource" do
-                  # @files.first.nil?.should == false
-                  pending
+                  @files.first.nil?.should == false
                 end
                 it "should have an array of lines" do
                   @files.class.should == Array
                 end
-                it "should not be empty" do
-                  # @files.should_not be_empty
-                  pending
+                it "should have the file /etc/poolparty/lobos" do
+                  @files.first.name.should == "/etc/poolparty/lobos"
                 end
               end
             end

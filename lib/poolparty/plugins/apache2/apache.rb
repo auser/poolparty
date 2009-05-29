@@ -1,5 +1,5 @@
 module PoolParty
-  class Base
+  module Plugin
 
 =begin rdoc
 
@@ -11,8 +11,10 @@ default host.
 
 =end
 
-    plugin :apache do
+    class Apache < Plugin
       dsl_methods :passenger_version
+      
+      default_options :port => 80
       
       def loaded(opts={}, &block)
         configs
@@ -168,6 +170,7 @@ default host.
       
       def listen(p="80")
         has_variable(:name => "port", :value => p)
+        self.port = p
         @listen = true
       end
       
@@ -219,117 +222,7 @@ default host.
       
     end
 
-  virtual_resource(:virtualhost) do
-    def listen(port="80")
-      has_variable(:name => "port", :value => port)
-      port port
-    end
-        
-    def virtual_host_entry(file)
-      @virtual_host_entry = true
-      if ::File.file?(file)
-        has_file(dsl_options.merge({:name => "/etc/apache2/sites-available/#{name}", 
-                                :template => file, 
-                                :requires => get_package("apache2")}))
-      else
-        has_file(dsl_options.merge({:content => file, 
-                                :name => "/etc/apache2/sites-available/#{name}", 
-                                :requires => get_package("apache2")}))
-      end
-    end
-
-    
-    def loaded(opts={}, parent=self)
-      has_directory(:name => "/var/www", :owner => www_user, :mode=>'0744')
-      has_directory(:name => "/var/www/#{name}", :owner => www_user, :mode=>'0744')
-      has_directory(:name => "/var/www/#{name}/logs", :owner => www_user, :mode=>'0744')
-
-      has_variable(:name => "sitename", :value => "#{name}")
-
-      unless @virtual_host_entry
-        virtual_host_entry <<-eof
-<VirtualHost *:#{port}> 
-ServerName     #{name}
-DocumentRoot   /var/www/#{name}
-</VirtualHost>
-eof
-      end
-      
-      has_exec(:name => "insert-site-#{name}", 
-               :command => "/usr/sbin/a2ensite #{name}", 
-               :calls => get_exec("reload-apache2"), 
-               :requires => get_file("/etc/apache2/sites-available/#{name}")) do
-        requires get_package("apache2")
-        if_not "/bin/sh -c '[ -L /etc/apache2/sites-enabled/#{parent.name} ] && [ /etc/apache2/sites-enabled/#{parent.name} -ef /etc/apache2/sites-available/#{parent.name} ]'"
-      end
-    end
-
-  end
   
-  virtual_resource(:passengersite) do    # {{{
-
-    default_options(
-      :dir            => "/var/www",
-      :appended_path  => nil,
-      :owner          => 'www-data', 
-      :mode           =>'0744',
-      :enviornment    => 'production'
-    )
-
-    def loaded(opts={}, prnt=nil)
-      enable_passenger
-      port "80" unless self.port
-      
-      has_directory(:name => dir,                   :owner => www_user, :mode => '0744')
-      has_directory(:name => "#{site_directory}",      :owner => www_user, :mode => '0744')
-      has_directory(:name => "#{site_directory}/logs", :owner => www_user, :mode => '0744')
-      if opts[:with_deployment_directories]
-        has_directory(:name => "#{site_directory}/shared", :owner => www_user, :mode=>'0744')
-        has_directory(:name => "#{site_directory}/shared/public", :owner => www_user, :mode=>'0744')
-        has_directory(:name => "#{site_directory}/shared/config", :owner => www_user, :mode=>'0744')
-        has_directory(:name => "#{site_directory}/shared/log", :owner => www_user, :mode=>'0744')
-        has_directory(:name => "#{site_directory}/releases", :owner => www_user, :mode=>'0744')
-        do_once do |variable|
-          # setup an initial symlink so apache will start even if there have not been any deploys yet
-          has_directory(:name => "#{site_directory}/releases/initial/public", :owner => www_user, :mode=>'0744')
-          #FIXME  the following line is chef specific.  It will fail with puppet
-          
-          # has_symlink(:target_file => "#{dir}/#{name}/current", :to => "#{dir}/#{name}/releases/initial")
-        end        
-        log_dir = "#{site_directory}/shared/log"
-        appended_path "current"
-      else
-        log_dir = "#{site_directory}/log"
-      end
-      
-      passenger_entry <<-EOE
-<VirtualHost *:#{port}>
-    ServerName #{name}
-    DocumentRoot #{site_directory}/public
-    RailsEnv #{enviornment}
-    ErrorLog #{log_dir}/error_log
-    CustomLog #{log_dir}/access_log common
-</VirtualHost>
-      EOE
-      
-      # has_directory(:name => "/var/www")
-      # has_directory(:name => "/var/www/#{name}")
-      # has_directory(:name => "/var/www/#{name}/log")
-      parent.install_site(name, :no_file => true) # we already created the file with #passenger_entry
-    end
-
-    def passenger_entry(file)
-      if ::File.file?(file)
-        has_file({:name => "/etc/apache2/sites-available/#{name}", :template => file})
-      else
-        has_file({:content => file, :name => "/etc/apache2/sites-available/#{name}" })
-      end
-    end
-
-    def site_directory
-      "#{dir}/#{name}%s" % [appended_path ? "/" + appended_path : ""]
-    end
-  end
   
 #   virtual_resource(:passengersite_with_ssl) do# {{{
 #     def loaded(opts={}, parent=self)
@@ -373,40 +266,6 @@ eof
 #     end    
 #   end
 # }}}
-
-    # Usage: 
-    # 
-    # enable_php5 do
-    #   extras :cli, :pspell, :mysql
-    # end
-    virtual_resource(:enable_php5) do
-      def loaded(opts={}, parent=self)
-        has_package(:name => "php5")
-        has_package(:name => "libapache2-mod-php5")
-        present_apache_module("php5")
-        has_file({:name => "/etc/php5/apache2/php.ini",
-                :template => "apache2/php.ini.erb",
-                :mode => 755,
-                :requires => get_package("libapache2-mod-php5"),
-                :calls => get_exec("reload-apache2")})
-
-        has_file(:name => "/etc/apache2/conf.d/enable-php.conf", 
-                 :mode => 755,
-                 :calls => get_exec("reload-apache2"),
-                 :content => <<-eos 
-                 AddHandler php5-script php
-                 AddType text/html       php
-                 eos
-                 )
-      end
-
-      def extras(*names)
-        names.each do |name|
-         has_package(:name => "php5-#{name}", :requires => get_package("php5"))
-        end
-      end
-
-    end
 
   end
 

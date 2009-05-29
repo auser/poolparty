@@ -1,17 +1,21 @@
 require "tempfile"
 # BIG TODO: Slim the place where the content is gathered from
 module PoolParty
-  class ChefRecipe
-    include Dslify
+
+  class ::PoolParty::Resources::ChefRecipe < ::PoolParty::Resources::Resource
     dsl_methods :recipes
   end
-  class Chef
-    define_resource :chef_recipe do
-    end
-    define_resource :chef_library do
-    end
+  
+  class ::PoolParty::Resources::ChefLibrary < ::PoolParty::Resources::Resource
+  end
     
-    plugin :include_chef_recipe do
+  module Plugin
+  # class ChefRecipe
+  #   include Dslify
+  #   dsl_methods :recipes
+  # end
+      
+    class IncludeChefRecipe < Plugin
       def loaded(opts={}, &block)
         has_chef_recipe ::File.basename(name)
       end
@@ -20,7 +24,7 @@ module PoolParty
       end
     end
     
-    plugin :chef do
+    class Chef < Plugin
       def before_load(o, &block)
       end
       
@@ -90,7 +94,7 @@ module PoolParty
         else
           unless @recipe
             @recipe = ChefRecipe.new
-            @recipe.instance_eval &block if block
+            @recipe.instance_eval(&block) if block
             @recipe.recipes(recipe_files.empty? ? ["poolparty"] : ["poolparty", "main"])
 
             ::Suitcase::Zipper.add_content_as(@recipe.dsl_options.to_json, "dna.json", "chef")

@@ -1,10 +1,5 @@
 require "#{::File.dirname(__FILE__)}/../../test_helper"
 
-class PuppetResolverSpec
-  plugin :apache do
-  end
-end
-
 class TestPuppetResolver < Test::Unit::TestCase
   context "from a hash" do
     setup do
