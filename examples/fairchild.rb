@@ -1,11 +1,17 @@
+require 'rubygems'
+$:.unshift "#{File.dirname(__FILE__)}/../lib"
+require "poolparty"
+
 # Basic pool spec
 # Shows global settings for the clouds
 pool :application do
   instances 1..3
-  ami 'ami-7cfd1a15'  
+  image_id 'ami-7cfd1a15'  
   
-  cloud :example_one do
-    keypair 'front'
+  cloud :la do
+    using :ec2
+    image_id 'ami-7cfd1a15'
+    keypair 'brighthouse_front'
     has_directory "/var/www"
     
     has_file "/etc/motd", 
@@ -16,10 +22,10 @@ pool :application do
       owner "www-data"
     end
     
-    has_git_repo "paparazzi" do
-      source "git://github.com/auser/paparazzi.git"
-      at "/var/www"
-    end
+    # has_git "paparazzi" do
+    #   source "git://github.com/auser/paparazzi.git" rescue require 'ruby-debug'; debugger
+    #   dir "/var/www"
+    # end
     
     apache
     

@@ -9,7 +9,7 @@ module PoolParty
     def target_host(dns_or_ip=nil)
       dns_or_ip ? @target_host=dns_or_ip : @target_host
     end
-  
+    
     # Simply shell out and call ssh, simple, reliable and fewest dependencies, but slow
     def simplest_run_remote(host=target_host, command=[], extra_ssh_ops={})
       command = command.compact.join(' && ') if command.is_a? Array
@@ -34,19 +34,20 @@ module PoolParty
            }.merge(opts)
       o.collect{ |k,v| "#{k} #{v}"}.join(' ')
     end
-  
+    
     def rsync( source_path, destination_path, rsync_opts=['-v -a'] )
       dputs "rsync -e 'ssh #{ssh_options}' #{rsync_opts.join(' ')} #{source_path}  root@#{target_host}:#{destination_path}"
       out = %x{ rsync -e 'ssh #{ssh_options}' #{rsync_opts.join(' ')} #{source_path}  root@#{target_host}:#{destination_path} }
       puts out if debugging?
     end
-   
+    
+    # Run commands on the local machine, i.e. your laptop, not the server
     def run_local(commands)
       commands.each do |cmd|
         puts `#{cmd}`
       end
     end
-
+    
     def commands
       @commands ||= Array.new
     end
@@ -60,15 +61,17 @@ module PoolParty
     end
     
     def netssh(cmds=[], opts={})
-      user = opts.delete(:user) || user #rescue 'root'
+      user = opts.delete(:user) || 'root' #user rescue 'root'
       host = opts.delete(:host) || target_host
-      ssh_options_hash = {:keys => [keypair.full_filepath],
+      ssh_options_hash = {:keys         => [keypair.full_filepath],
                           :auth_methods => 'publickey',
-                          :paranoid => false
+                          :paranoid     => false,
+                          :timeout      => 3.minutes,
+                          :verbose      => :debug,
+                          :user         => user,
+                          :port         => 22000
                            }.merge(opts)
-      
-      # Start the connection
-      Net::SSH.start(host, user, ssh_options_hash) do |ssh|  
+      Net::SSH.start(host, user, ssh_options_hash) do |ssh|
         cmds.each do |command|
           ssh.exec!(command) do |ch, stream, data|
             if stream == :stdout
@@ -82,7 +85,7 @@ module PoolParty
     end
     
     
-##########################################################################################################   
+##########################################################################################
 # TODO: Delete deprecated commands below here
     
     def rsync_storage_files_to_command(remote_instance)

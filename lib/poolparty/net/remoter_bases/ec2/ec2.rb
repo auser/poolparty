@@ -35,20 +35,22 @@ end
 module PoolParty    
   module Remote
     class Ec2 < Remote::RemoterBase
+      require "#{::File.dirname(__FILE__)}/ec2_remote_instance"
       
       dsl_methods :elastic_ips,           # An array of the elastic ips
                   :ebs_volume_id         # The volume id of an ebs volume
       
       default_options({
-        :image_id => 'ami-bf5eb9d6',
+        :image_id           => 'ami-bf5eb9d6',
+        :ami                => 'ami-bf5eb9d6',
         # :key_name => ::File.basename(keypair.is_a?(String) ? keypair : keypair.full_filepath),
-        :instance_type => 'm1.small', # or 'm1.large', 'm1.xlarge', 'c1.medium', or 'c1.xlarge'
-        :addressing_type => "public",
-        :availability_zone => "us-east-1a",
-        :access_key => ENV['AWS_ACCESS_KEY'],
-        :secret_access_key => ENV['AWS_SECRET_ACCESS_KEY'],
-        :security_group => ["default"],
-        :keypair_name =>nil
+        :instance_type      => 'm1.small', # or 'm1.large', 'm1.xlarge', 'c1.medium', or 'c1.xlarge'
+        :addressing_type    => "public",
+        :availability_zone  => "us-east-1a",
+        :access_key         => ENV['AWS_ACCESS_KEY'],
+        :secret_access_key  => ENV['AWS_SECRET_ACCESS_KEY'],
+        :security_group     => ["default"],
+        :keypair_name       =>nil
         })
         
       # alias to image_id
@@ -87,29 +89,38 @@ module PoolParty
       end
       # Describe an instance's status
       def describe_instance(o={})
-        return describe_instances.first if o[:instance_id].nil?
+        return describe_instances.first if o.empty? || o[:instance_id].nil?
         describe_instances.detect {|a| a[:name] == o[:instance_id] || a[:ip] == o[:instance_id] || a[:instance_id] == o[:instance_id] }
       end
-      # TODO: Clean up this method and remove hostnames
+      
       def describe_instances(o={})
-        id = 0
-        set_vars_from_options(dsl_options.merge(o))
-        get_instances_description(dsl_options).each_with_index do |h,i|
-          if h[:status] == "running"
-            inst_name = id == 0 ? "master" : "node#{id}"
-            id += 1
-          else
-            inst_name = "#{h[:status]}_node#{i}"
-          end
-          h.merge!({
-            :name => inst_name,
-            :hostname => h[:ip],
-            :ip => h[:ip].convert_from_ec2_to_ip,
-            :index => i,  #TODO get the instance id from the aws result instead
-            :launching_time => (h[:launching_time])
-          })
-        end.compact.sort {|a,b| a[:index] <=> b[:index] }
+        instances = EC2ResponseObject.describe_instances(ec2.describe_instances)
+        instances = instances.select_with_hash(o) if !o.empty?
+        ec2_remote_instances = instances.collect{|i| Ec2RemoteInstance.new(i)}
+        ec2_remote_instances.sort {|a,b| a[:ami_launch_index] <=> b[:ami_launch_index] }
       end
+      
+      # TODO: Clean up this method and remove hostnames
+      # def describe_instances(o={})
+      #   id = 0
+      #   set_vars_from_options(dsl_options.merge(o))
+      #   get_instances_description(dsl_options).each_with_index do |h,i|
+      #     if h[:status] == "running"
+      #       inst_name = id == 0 ? "master" : "node#{id}"
+      #       id += 1
+      #     else
+      #       inst_name = "#{h[:status]}_node#{i}"
+      #     end
+      #     h.merge!({
+      #       :name           => inst_name,
+      #       :hostname       => h[:ip],
+      #       :ip             => h[:ip].convert_from_ec2_to_ip,
+      #       # :internal_ip    => h.ip
+      #       :index          => i,  #TODO get the instance id from the aws result instead
+      #       :launching_time => (h[:launching_time])
+      #     })
+      #   end.compact.sort {|a,b| a[:index] <=> b[:index] }
+      # end
       
       # ===================================
       # = Ec2 Specific methods below here =

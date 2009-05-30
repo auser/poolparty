@@ -1,7 +1,15 @@
+=begin rdoc
+speficy a git repo that should be checked out to all the nodes.
+
+has_git_repos(:name       => "xnot",
+              :source     => "git://github.com/auser/xnot.org.git", 
+              :dir        => "/var/www",
+              :owner      => 'www-data',
+              :deploy_key => 'pool_cloud.rsa')
+=end
 module PoolParty
   module Plugin
     class Git < Plugin
-      
       def loaded(*args)
         has_package(:name => "git-core")
       end
@@ -13,13 +21,19 @@ module PoolParty
                   :dir, 
                   :owner, 
                   :requires_user,
-                  :deploy_key
-            
+                  :deploy_key,
+                  :source
+                  
       def loaded(opts={}, &block)
         raise DirectoryMissingError.new unless dir
         
         has_package("git-core")
         has_git_repository
+      end
+      
+      # retrieve/set source.  If source is not set, try and use name.
+      def source(n=nil)
+        n.nil? ? (dsl_options[:source] ? dsl_options[:source] : dsl_options[:source]= name) : dsl_options[:source]=n
       end
 
       def has_git_repository

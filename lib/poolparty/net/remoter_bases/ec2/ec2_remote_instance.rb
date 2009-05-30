@@ -1,12 +1,26 @@
 require "#{::File.dirname(__FILE__)}/ec2"
 module PoolParty  
   module Remote
-    class Ec2RemoteInstance < RemoteInstance
+    class Ec2RemoteInstance # < RemoteInstance
       include Dslify
+      include Remote
       
-      attr_reader :uniquely_identifiable_by, :found_at
+      default_options({
+        # :launching_time   => Time.now,
+        :dns_name         => nil,
+        :private_dns_name => nil,
+        :key_name         => nil,
+        :kernel_id        => nil,
+        :ramdisk_id       => nil,
+        :launch_time      => nil,
+        :instance_id      => nil,
+        :ami_launch_index => nil,
+        :ip               => nil,
+        :public_ip        => nil,
+        :internal_ip      => nil
+        }.merge(Remote::Ec2.default_options) )
       
-      default_options( {:launching_time => Time.now}.merge(Remote::Ec2.default_options) )
+      @uniquely_identifiable_by = [:ip, :name, :dns_name, :instance_id]
       
       # A new instance will be created from the passed in hash.  
       # This hash of passed in values will be converted to methods on this instance.
@@ -14,9 +28,13 @@ module PoolParty
       # If an instance is found, this instance's properties will be set to the properties provided
       # If the found instance has properties of the same key as the provided options, the found instance's values will override the passed in options
       def initialize(opts={})
-        @uniquely_identifiable_by = [:ip, :name, :dns_name, :instance_id]
-        @original_options = opts
-        super(opts)
+        set_vars_from_options(opts) if opts.is_a?(Hash)
+        @target_host = public_ip || internal_ip || ip  #set this for the netssh commands
+        # super(opts)
+      end
+      
+      def keypair
+        @keypair ||= Key.new(key_name)
       end
          
       # Is this instance running?

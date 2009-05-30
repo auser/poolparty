@@ -58,14 +58,13 @@ module PoolParty
       # end
       
       def self.available_bases
-        @available_bases ||= []        
+        @available_bases ||= []
       end
       def self.inherited(arg)
         base_name = "#{arg}".downcase.top_level_class.to_sym
         (available_bases << base_name) unless available_bases.include?(base_name)
-        (remote_bases << base_name) unless remote_bases.include?(base_name)
+        (remote_bases << base_name) unless remote_bases.include?(base_name)  #TODO: Deprecate
       end
-
       
       # def method_missing(meth, *args, &block)
       #   if @cloud

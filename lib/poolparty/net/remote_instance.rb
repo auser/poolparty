@@ -7,6 +7,7 @@ module PoolParty
       dsl_methods :name,        # Name of the remote instance (internal usage)
                   :ip,          # Ip of the remote instance
                   :internal_ip, # Internal ip of the remote instance
+                  :public_ip,
                   :status       # Status of the remote instance
       
       def initialize(opts={})
