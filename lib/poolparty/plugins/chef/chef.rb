@@ -96,7 +96,7 @@ module PoolParty
             @recipe = has_chef_recipe "poolparty", &block
             @recipe.instance_eval(&block) if block
             @recipe.recipes(recipe_files.empty? ? ["poolparty"] : ["poolparty", "main"])
-
+            
             ::Suitcase::Zipper.add_content_as(@recipe.dsl_options.to_json, "dna.json", "chef")
             
             configure_commands ["cp -f /var/poolparty/dr_configure/chef/dna.json /etc/chef/dna.json"]
@@ -109,7 +109,7 @@ module PoolParty
           recps.each do |rcp|
             Dir[::File.expand_path(rcp)].each do |f|
               included_recipes << f
-            end            
+            end
           end
         end
       end
@@ -145,7 +145,7 @@ file_cache_path  "/etc/chef"
       def before_bootstrap
         bootstrap_gems "chef", "ohai"
         bootstrap_commands [
-          "mkdir -p /etc/chef/cookbooks /etc/chef/cache"          
+          "mkdir -p /etc/chef/cookbooks /etc/chef/cache"
         ]
       end
       def before_configure
