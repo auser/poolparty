@@ -67,10 +67,10 @@ module PoolParty
                           :auth_methods => 'publickey',
                           :paranoid     => false,
                           :timeout      => 3.minutes,
-                          :verbose      => :debug,
-                          :user         => user,
-                          :port         => 22000
+                          :user         => user
                            }.merge(opts)
+      ssh_options_hash[:verbose]=:debug if debugging?
+      puts "connecting to ssh with options = #{ssh_options_hash.inspect}"
       Net::SSH.start(host, user, ssh_options_hash) do |ssh|
         cmds.each do |command|
           ssh.exec!(command) do |ch, stream, data|

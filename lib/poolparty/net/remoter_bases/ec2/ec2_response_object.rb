@@ -100,6 +100,7 @@ class EC2ResponseObject
     n = inst.symbolize_keys(:snake_case)
     n[:internal_ip] = convert_from_ec2_dns_to_ip(n[:private_dns_name])
     n[:public_ip]   = convert_from_ec2_dns_to_ip(n[:dns_name])
+    n[:ip]          = n[:public_ip]
     n[:launch_time] = parse_datetime(n[:launch_time])
     n[:status]      = n[:instance_state][:name]
     n[:key_name]    = n[:key_name]
