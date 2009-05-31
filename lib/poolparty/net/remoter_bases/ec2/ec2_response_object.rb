@@ -64,6 +64,8 @@ class EC2ResponseObject
       }
   end
   
+  #####
+  
   # Convert the standard reponse into output similar to this example
   # {:dns_name=>"ec2-75-101-175-49.compute-1.amazonaws.com",
   #  :private_dns_name=>"domU-11-31-39-00-DC-78.compute-1.internal",
@@ -87,7 +89,8 @@ class EC2ResponseObject
   end
   
   def self.describe_instances(response)
-    instances = response['reservationSet']['item'].first['instancesSet']['item'] rescue debugger
+    return [] if response['reservationSet'].nil?
+    instances = response['reservationSet']['item'].first['instancesSet']['item']
     instances.collect {|i| symbolize_and_snakecase(i) }
   end
   
