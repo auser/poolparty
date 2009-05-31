@@ -5,7 +5,7 @@ module PoolParty
     #
     # passengersite do
     # end
-    class PassengerSite < Apache
+    class PassengerSite < Plugin
       
       default_options(
         :dir            => "/var/www",
@@ -13,12 +13,10 @@ module PoolParty
         :owner          => 'www-data', 
         :mode           =>'0744',
         :enviornment    => 'production'
-      )
+      ).merge(Apache.default_options)
       
       def loaded(opts={}, prnt=nil)
         enable_passenger
-        require 'ruby-debug'; debugger
-        'hi'
         port "80" unless self.port
         
         has_directory(:name => dir,                      :owner => www_user, :mode => '0744')
@@ -31,17 +29,17 @@ module PoolParty
           has_site_directory :name => "shared/config"
           has_site_directory :name => "shared/log"
           has_site_directory :name => "releases"
-          if !::File.exists?(#{dir}/#{name}/current)
+          if !::File.exists?("#{dir}/#{name}/current")
           
           # setup an initial symlink so apache will start even if there have not been any deploys yet
             has_site_directory(:name => "releases/initial/public")
             #FIXME  the following line is chef specific.  It will fail with puppet
-            has_symlink(:target_file => "#{dir}/#{name}/current", 
-                        :to => "#{dir}/#{name}/releases/initial")
+            has_symlink({:target_file => "#{dir}/#{name}/current",
+                        :to => "#{dir}/#{name}/releases/initial"})
           end
           log_dir = "#{site_directory}/shared/log"
           appended_path "current"
-          
+        
         else
           log_dir = "#{site_directory}/log"
         end

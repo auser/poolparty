@@ -10,7 +10,6 @@ host. This means apache will not start up unless you specify at least the
 default host. 
 
 =end
-
     class Apache < Plugin
       dsl_methods :passenger_version
       
@@ -44,14 +43,14 @@ default host.
 
           base_install
           @installed_as_worker = true
-        end            
+        end
       end
 
-      def base_install        
+      def base_install
         unless @base_install
           has_exec({:name => "restart-apache2", :command => "/etc/init.d/apache2 restart", :action => :nothing})
           has_exec({:name => "reload-apache2", :command => "/etc/init.d/apache2 reload", :action => :nothing})
-          has_exec({:name => "force-reload-apache2", :command => "/etc/init.d/apache2 force-reload", :action => :nothing})          
+          has_exec({:name => "force-reload-apache2", :command => "/etc/init.d/apache2 force-reload", :action => :nothing})
           @base_install = true
         end
       end
@@ -215,7 +214,7 @@ default host.
           has_exec({:name => "no-mod-#{name}"}, :command => "/usr/sbin/a2dismod #{name}") do
             requires get_package("apache2")
             if_not "/bin/sh -c \'[ -L /etc/apache2/mods-enabled/#{name}.load ] && [ /etc/apache2/mods-enabled/#{name}.load -ef /etc/apache2/mods-available/#{name}.load ]\'"
-    				calls get_exec("force-reload-apache2")
+            calls get_exec("force-reload-apache2")
           end
         end
       end
