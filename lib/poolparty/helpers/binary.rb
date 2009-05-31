@@ -1,4 +1,4 @@
-require "ftools"
+require "fileutils"
 module PoolParty
   
   # Load a file that contains a pool into memory

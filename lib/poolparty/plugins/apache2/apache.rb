@@ -222,9 +222,7 @@ default host.
       
     end
 
-  
-  
-#   virtual_resource(:passengersite_with_ssl) do# {{{
+#   plugin(:passengersite_with_ssl) do# {{{
 #     def loaded(opts={}, parent=self)
 #       enable_passenger
 

@@ -6,7 +6,7 @@
     
   method is stored, for instance. It's also where the key convenience methods are written
 =end
-require "ftools"
+require "fileutils"
 
 module PoolParty
   module CloudResourcer

@@ -23,7 +23,7 @@ module PoolParty
     class PluginModel
       attr_accessor :klass
       
-      def initialize(name,&block)        
+      def initialize(name,&block)
         # symc = "#{name}".top_level_class.camelcase
         # klass = symc.class_constant(PoolParty::Plugin::Plugin, {:preserve => true}, &block)
         # 
@@ -37,7 +37,7 @@ module PoolParty
         #     i = plugin_store.select {|i| i if i.class == #{lowercase_class_name.camelcase} }.first if plugin_store
         #     if i
         #       i
-        #     else              
+        #     else
         #       inst = #{lowercase_class_name.camelcase}.new(opts, parent, &block)
         #       plugin_store << inst if plugin_store
         #       inst

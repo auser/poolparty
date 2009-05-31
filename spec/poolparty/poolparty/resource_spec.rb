@@ -26,11 +26,21 @@ describe "Resource" do
       @resource.c.should == 3    
     end
     describe "class methods" do
-      it "should have an array of available resources" do
-        PoolParty::Resources::Resource.available_resources.class.should == Array
-      end
-      it "should not be empty" do
-        PoolParty::Resources::Resource.available_resources.empty?.should == false
+      describe "available resources" do
+        before(:each) do 
+          @available = PoolParty::Resources::Resource.available_resources
+        end
+        it "should be an array" do
+          @available.class.should == Array
+        end
+        it "should not be empty" do
+          @available.empty?.should == false
+        end
+        it "should have some basic resources" do
+          @available.should include(PoolParty::Resources::Cron)
+          @available.should include(PoolParty::Resources::File)
+          @available.should include(PoolParty::Resources::Package)
+        end
       end
     end
     describe "instance methods" do

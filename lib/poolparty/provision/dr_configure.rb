@@ -52,7 +52,7 @@ module PoolParty
      
      def prescribe_configuration
        ::FileUtils.mkdir_p "#{cloud.tmp_path}/dr_configure" unless ::File.directory?("#{cloud.tmp_path}/dr_configure")
-      ::File.cp $pool_specfile, "#{cloud.tmp_path}/dr_configure/clouds.rb"
+      ::FileUtils.cp $pool_specfile, "#{cloud.tmp_path}/dr_configure/clouds.rb"
       ::File.open "#{cloud.tmp_path}/dr_configure/clouds.json", "w" do |f|
         f << cloud.to_json
       end
@@ -99,7 +99,7 @@ module PoolParty
          'chmod 644 /var/poolparty/dr_configure/clouds.rb',
          'cp /var/poolparty/dr_configure/clouds.json /etc/poolparty',
          'cp /var/poolparty/dr_configure/clouds.rb /etc/poolparty',
-         'server-manage-election', #ensures that the monitor gets some data
+         # 'server-manage-election', #ensures that the monitor gets some data
          'echo "configure" >> /var/poolparty/POOLPARTY.PROGRESS'
          ]
        commands << self.class.class_commands unless self.class.class_commands.empty?

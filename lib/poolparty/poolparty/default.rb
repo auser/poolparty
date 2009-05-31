@@ -3,7 +3,7 @@
   This handles user interaction, loading the parameters, etc.
 =end
 require "open-uri"
-require "ftools"
+require "fileutils"
 module PoolParty
   class Default
     include Dslify
