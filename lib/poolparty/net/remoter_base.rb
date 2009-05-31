@@ -33,7 +33,7 @@ module PoolParty
       def initialize(opts={}, &block)
         opts.each {|k,v| opts[k] = v.call if v.respond_to?(:call) }
         set_vars_from_options opts
-        instance_eval &block if block
+        instance_eval(&block) if block
       end
       
       def cloud(n=nil)
@@ -116,7 +116,7 @@ module PoolParty
       # remoter_bases
       def launch_instance!(o={}, &block)
         @cloud = clouds[o[:cloud_name] || o[:name]]
-        o[:key_name] = @cloud.keypair.basename
+        o[:keypair_name] = @cloud.keypair.basename
         @inst = launch_new_instance!( dsl_options.merge(o) )
         sleep(2)
         

@@ -71,8 +71,8 @@ module PoolParty
       # Start a new instance with the given options
       def launch_new_instance!(o={})
         set_vars_from_options o
-        key_name = o[:key_name] || o[:keypair_name] || keypair || (clouds[o[:cloud_name]].keypair.basename if o[:cloud_name])
-        raise "You must pass a keypair to launch an instance, or else you will not be able to login. options = #{o.inspect}" if !key_name 
+        keypair_name ||= o[:keypair_name] || keypair || (clouds[o[:cloud_name]].keypair.basename if o[:cloud_name])
+        raise "You must pass a keypair to launch an instance, or else you will not be able to login. options = #{o.inspect}" if !keypair_name 
         o.merge!( dsl_options.merge(:key_name=>keypair_name) )
         instance = ec2(o).run_instances(o)
         begin
