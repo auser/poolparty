@@ -93,7 +93,7 @@ module PoolParty
           end
         else
           unless @recipe
-            @recipe = ChefRecipe.new
+            @recipe = has_chef_recipe "poolparty", &block
             @recipe.instance_eval(&block) if block
             @recipe.recipes(recipe_files.empty? ? ["poolparty"] : ["poolparty", "main"])
 

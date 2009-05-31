@@ -65,6 +65,10 @@ module PoolParty
         "#{name}\t#{ip}\t#{instance_id rescue ""}"
       end
       
+      def has_key?(key)
+        dsl_options.has_key?(key)
+      end
+      
       # Class method to disect a neighborhood line
       def self.hash_from_s(s)
         arr = s.split("\t")

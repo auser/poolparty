@@ -70,7 +70,7 @@ module PoolParty
       end
       
       def has_site_directory( dir_name='' , opts={})
-        has_directory({ :name   => "#{site_directory}/#{dir_name}}", 
+        has_directory({ :name   => "#{site_directory}/#{dir_name}", 
                         :owner  => www_user, 
                         :mode   =>'0744'
                       }.merge(opts) )

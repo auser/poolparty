@@ -18,7 +18,6 @@ EOS
   run do |command|    
     @cloud = @loaded_clouds.first
     nodes = @cloud.nodes(:status => "running")
-    require 'ruby-debug'; debugger
     
     if !nodes.empty?
       n = command[:inst_num] ? command[:inst_num].to_i : 0
