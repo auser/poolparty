@@ -33,7 +33,7 @@ module PoolParty
         # super(opts)
       end
       
-      def keypair
+      def keypair(*n)
         @keypair ||= Key.new(key_name)
       end
          
