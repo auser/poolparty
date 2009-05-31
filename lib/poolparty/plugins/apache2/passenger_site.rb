@@ -33,7 +33,7 @@ module PoolParty
           if !::File.exists?("#{dir}/#{name}/current")
           
           # setup an initial symlink so apache will start even if there have not been any deploys yet
-            has_site_directory(:name => "releases/initial/public")
+            has_site_directory "releases/initial/public"
             #FIXME  the following line is chef specific.  It will fail with puppet
             has_symlink({:target_file => "#{dir}/#{name}/current",
                         :to => "#{dir}/#{name}/releases/initial"})
