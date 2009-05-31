@@ -13,7 +13,8 @@ default host.
     class Apache < Plugin
       dsl_methods :passenger_version
       
-      default_options :port => 80
+      default_options :port     => 80,
+                      :www_user => 'www-data'
       
       def loaded(opts={}, &block)
         configs
@@ -28,15 +29,11 @@ default host.
         install
       end
       
-      def www_user(www_user_name='www-data')
-        www_user_name
-      end
-            
       def install
         installed_as_worker
       end
       
-      def installed_as_worker            
+      def installed_as_worker
         unless @installed_as_worker
           has_package("apache2")
           has_package("apache2-mpm-worker")
@@ -126,7 +123,7 @@ default host.
       
       def configs
         unless @configs
-          listen unless @listen
+          listen(port) unless @listen
           has_directory("/etc/apache2")
           has_directory("/etc/apache2/conf.d")
           has_directory("/etc/apache2/site-includes")

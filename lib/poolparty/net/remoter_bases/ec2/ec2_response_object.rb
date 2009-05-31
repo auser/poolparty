@@ -108,6 +108,7 @@ class EC2ResponseObject
   end
   
   def self.convert_from_ec2_dns_to_ip(str)
+    return nil if str.nil?
     str.scan(/-(\d{1,3})-(\d{1,3})-(\d{1,3})-(\d{1,3})/).flatten.join('.')
   end
   

@@ -36,7 +36,30 @@ module PoolParty
       def keypair
         @keypair ||= Key.new(key_name)
       end
+      
+      ## hash like methods
+      # TODO: move these into a module, or into dslify
+      # include Enumerable
+      def each
+        dsl_options.each{ |k,v| yield k,v }
+      end
+      def [](k)
+        dsl_options[k]
+      end
+      
+      def []=(k,v)
+        dsl_options[k] = v
+      end
+      
+      def keys
+        dsl_options.keys
+      end
          
+      def values
+        dsl_options.values
+      end
+      ##end of hash like methods
+      
       # Is this instance running?
       def running?
         !(status =~ /running/).nil?

@@ -42,7 +42,7 @@ module PoolParty
       
       default_options({
         :image_id           => 'ami-bf5eb9d6',
-        :ami                => 'ami-bf5eb9d6',
+        :ami                => 'ami-bf5eb9d6',  #Deprecated, but here for backwards compatability
         # :key_name => ::File.basename(keypair.is_a?(String) ? keypair : keypair.full_filepath),
         :instance_type      => 'm1.small', # or 'm1.large', 'm1.xlarge', 'c1.medium', or 'c1.xlarge'
         :addressing_type    => "public",
@@ -50,17 +50,17 @@ module PoolParty
         :access_key         => ENV['AWS_ACCESS_KEY'],
         :secret_access_key  => ENV['AWS_SECRET_ACCESS_KEY'],
         :security_group     => ["default"],
-        :keypair_name       =>nil
+        :keypair_name       => nil
         })
         
       # alias to image_id
-      def ami(n=nil)
-        if n.nil?
-          image_id
-        else
-          image_id n
-        end
-      end
+      # def ami(n=nil)
+      #   if n.nil?
+      #     image_id
+      #   else
+      #     image_id n
+      #   end
+      # end
       
       # Requires a hash of options
       def self.launch_new_instance!(o)
@@ -71,7 +71,8 @@ module PoolParty
       # Start a new instance with the given options
       def launch_new_instance!(o={})
         set_vars_from_options o
-        raise "You must pass a keypair to launch an instance, or else you will not be able to login. options = #{o.inspect}" if !keypair
+        key_name = o[:key_name] || o[:keypair_name] || keypair || (clouds[o[:cloud_name]].keypair.basename if o[:cloud_name])
+        raise "You must pass a keypair to launch an instance, or else you will not be able to login. options = #{o.inspect}" if !key_name 
         o.merge!( dsl_options.merge(:key_name=>keypair_name) )
         instance = ec2(o).run_instances(o)
         begin
@@ -83,10 +84,12 @@ module PoolParty
         end
         h
       end
+      
       # Terminate an instance by id
       def terminate_instance!(o={})
         ec2(o).terminate_instances(:instance_id => o[:instance_id])
       end
+      
       # Describe an instance's status
       def describe_instance(o={})
         return describe_instances.first if o.empty? || o[:instance_id].nil?

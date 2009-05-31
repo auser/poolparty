@@ -94,7 +94,7 @@ module PoolParty
         
         setup_callbacks
         
-        plugin_directory "#{pool_specfile ? ::File.dirname(pool_specfile) : Dir.pwd}/plugins"        
+        plugin_directory "#{pool_specfile ? ::File.dirname(pool_specfile) : Dir.pwd}/plugins"
         before_create
         super
         after_create

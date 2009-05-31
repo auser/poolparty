@@ -116,6 +116,7 @@ module PoolParty
       # remoter_bases
       def launch_instance!(o={}, &block)
         @cloud = clouds[o[:cloud_name] || o[:name]]
+        o[:key_name] = @cloud.keypair.basename
         @inst = launch_new_instance!( dsl_options.merge(o) )
         sleep(2)
         

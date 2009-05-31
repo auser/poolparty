@@ -17,15 +17,15 @@ module PoolParty
       
       def initialize(opts={}, extra_opts={}, prnt=nil, &block)
         setup_callbacks
-
+        
         run_in_context {  before_load(opts, &block) }
-
+        
         block = Proc.new {enable} unless block
-
+        
         super(opts, &block)
-
+        
         run_in_context { loaded opts, &block }
-
+        
         after_create
       end
       

@@ -5,30 +5,31 @@ module PoolParty
     #
     # passengersite do
     # end
-    class PassengerSite < Plugin
+    class PassengerSite < Apache
       
       default_options(
         :dir            => "/var/www",
         :appended_path  => nil,
         :owner          => 'www-data', 
         :mode           =>'0744',
-        :enviornment    => 'production'
-      ).merge(Apache.default_options)
+        :enviornment    => 'production',
+        :deploy_dirs    => false
+      )
       
       def loaded(opts={}, prnt=nil)
         enable_passenger
         port "80" unless self.port
         
-        has_directory(:name => dir,                      :owner => www_user, :mode => '0744')
-        has_directory(:name => "#{site_directory}",      :owner => www_user, :mode => '0744')
-        has_directory(:name => "#{site_directory}/logs", :owner => www_user, :mode => '0744')
+        has_directory(:name => dir,                 :owner => www_user, :mode => '0744')
+        has_directory(:name => "#{site_directory}", :owner => www_user, :mode => '0744')
+        has_site_directory 'logs'
         
-        if opts[:with_deployment_directories]
-          has_site_directory :name => "shared"
-          has_site_directory :name => "shared/public"
-          has_site_directory :name => "shared/config"
-          has_site_directory :name => "shared/log"
-          has_site_directory :name => "releases"
+        if deploy_dirs || opts[:with_deployment_directories]
+          has_site_directory "shared"
+          has_site_directory "shared/public"
+          has_site_directory "shared/config"
+          has_site_directory "shared/log"
+          has_site_directory "releases"
           if !::File.exists?("#{dir}/#{name}/current")
           
           # setup an initial symlink so apache will start even if there have not been any deploys yet
@@ -68,11 +69,11 @@ module PoolParty
         end
       end
       
-      def has_site_directory(opts={})
-        has_directory(:name   => "#{site_directory}/#{opts.delete(:name)}", 
-                      :owner  => www_user, 
-                      :mode   =>'0744'
-                      ).merge(opts)
+      def has_site_directory( dir_name='' , opts={})
+        has_directory({ :name   => "#{site_directory}/#{dir_name}}", 
+                        :owner  => www_user, 
+                        :mode   =>'0744'
+                      }.merge(opts) )
       end
       
       def site_directory
