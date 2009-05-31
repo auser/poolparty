@@ -34,8 +34,8 @@ class TestRailsDeploy < Test::Unit::TestCase
     end
     should "create the directory tree" do
       arr = @cloud.rails_deploys.first.directorys.map {|a| a.name }
-      ["/shared", "/shared/config", "/shared/pids", "/shared/log", "/shared/system"].each do |dir|
-        assert arr.include?("/var/www/paparazzi#{dir}")
+      ["shared", "shared/config", "shared/pids", "shared/log", "shared/system"].each do |dir|
+        assert arr.include?("/var/www/paparazzi/#{dir}")
       end      
     end
     should "have git-core defined as a package" do

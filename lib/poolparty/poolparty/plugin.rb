@@ -53,14 +53,6 @@ module PoolParty
         end
       end
       
-      def name(n=nil)
-        if n
-          self.name = n
-        else
-          self.name ||= self.class.to_s.split('::').pop.snake_case
-        end
-      end
-      
       def bootstrap_gems *gems
         gems.each do |g|
           Provision::BootStrapper.gem_list << g unless Provision::BootStrapper.gem_list.include?(g)

@@ -233,11 +233,11 @@ describe "Cloud" do
               describe "resources" do
                 before(:each) do
                   reset!
-                  @cloud8 = cloud :tester do
+                  cloud :tester do
                     test_service
                   end
                   @service = clouds[:tester].ordered_resources.select {|hsh|
-                    hsh.name == "test_service" 
+                    hsh.to_properties_hash.name == "test_service"
                     }.first
                   @files = @service.resource(:file)
                 end
