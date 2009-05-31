@@ -1,7 +1,7 @@
 require "#{::File.dirname(__FILE__)}/ec2"
 module PoolParty  
   module Remote
-    class Ec2RemoteInstance # < RemoteInstance
+    class Ec2RemoteInstance < RemoteInstance
       include Dslify
       include Remote
       
@@ -33,7 +33,7 @@ module PoolParty
         # super(opts)
       end
       
-      def keypair
+      def keypair(*n)
         @keypair ||= Key.new(key_name)
       end
       

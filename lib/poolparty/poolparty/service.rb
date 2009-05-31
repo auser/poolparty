@@ -6,7 +6,7 @@ module PoolParty
     
     def to_properties_hash
       { :pp_type => "plugin", :options => dsl_options, 
-        # :name => self.class.to_s.top_level_class,
+        :name => (dsl_options[:name] ? dsl_options[:name] : self.class.to_s.split('::').pop.snake_case),
         :resources => ordered_resources.map {|a| a.to_properties_hash }}
     end
     
