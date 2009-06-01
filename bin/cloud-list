@@ -21,7 +21,7 @@ EOS
     @loaded_clouds.each do |cld|
       if command[:instance_id]
         require 'pp'
-        pp result = cld.describe_instance(:instance_id=>command[:instance_id])
+        pp result = cld.nodes(:instance_id=>command[:instance_id])
       else
         puts "Listing cloud #{cld.name}"
         puts "Active instances"

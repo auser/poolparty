@@ -50,7 +50,8 @@ module PoolParty
         :access_key         => ENV['AWS_ACCESS_KEY'],
         :secret_access_key  => ENV['AWS_SECRET_ACCESS_KEY'],
         :security_group     => ["default"],
-        :keypair_name       => nil
+        :keypair_name       => nil,
+        :key_name           => nil
         })
         
       # alias to image_id
@@ -97,9 +98,9 @@ module PoolParty
       end
       
       def describe_instances(o={})
-        instances = EC2ResponseObject.describe_instances(ec2.describe_instances)
-        instances = instances.select_with_hash(o) if !o.empty?
-        ec2_remote_instances = instances.collect{|i| Ec2RemoteInstance.new(i)}
+        ec2_instants = EC2ResponseObject.describe_instances(ec2.describe_instances)
+        insts = ec2_instants.select_with_hash(o) if !o.empty?
+        ec2_remote_instances = ec2_instants.collect{|i| Ec2RemoteInstance.new(i)}
         ec2_remote_instances.sort {|a,b| a[:ami_launch_index] <=> b[:ami_launch_index] }
       end
       

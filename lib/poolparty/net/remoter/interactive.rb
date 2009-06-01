@@ -2,8 +2,13 @@ module PoolParty
   module Remote
     
     # Select a list of instances based on their status
-    def nodes(hsh={}, with_neighborhood_default=true)
-      list_of_instances(with_neighborhood_default).select_with_hash(hsh)
+    def nodes(hsh={}, with_neighborhood_default=false)
+      if with_neighborhood_default
+        list_of_instances(with_neighborhood_default).select_with_hash(hsh)
+      else
+        conditions = hsh.merge(:key_name => (self.key_name || keypair.basename))
+        @described_instances ||= describe_instances.select_with_hash(conditions)
+      end
     end
     
     # Select the list of instances, either based on the neighborhoods
