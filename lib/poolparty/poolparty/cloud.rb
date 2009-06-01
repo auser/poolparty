@@ -83,7 +83,8 @@ module PoolParty
       end
       
       additional_callbacks [
-        "after_launch_instance"
+        "after_launch_instance",
+        "after_provision"
       ]
       
       # Freeze the cloud_name so we can't modify it at all, set the plugin_directory
