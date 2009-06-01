@@ -46,7 +46,7 @@ module PoolParty
           
           ::FileUtils.mkdir_p "#{basedir}/recipes" unless ::File.directory?("#{basedir}/recipes")          
           ::FileUtils.rm "#{basedir}/recipes/default.rb" if ::File.file?("#{basedir}/recipes/default.rb")
-          # ::File.cp file, "#{basedir}/recipes/default.rb"
+          # ::FileUtils.cp file, "#{basedir}/recipes/default.rb"
           ::File.open("#{basedir}/recipes/default.rb", "w") {|f| f << open(file).read }
                     
           templates o[:templates] if o[:templates]
@@ -68,13 +68,13 @@ module PoolParty
           templates.each do |f|
             f = ::File.expand_path(f)
             if ::File.file?(f)
-              ::File.cp f, "#{basedir}/templates/default/#{::File.basename(f)}"
+              ::FileUtils.cp f, "#{basedir}/templates/default/#{::File.basename(f)}"
             elsif ::File.directory?(f)
-              Dir["#{f}/**"].each {|f| ::File.cp f, "#{basedir}/templates/default/#{::File.basename(f)}" }
+              Dir["#{f}/**"].each {|f| ::FileUtils.cp f, "#{basedir}/templates/default/#{::File.basename(f)}" }
             else
               tfile = Tempfile.new("main-poolparty-recipe")
               tfile << f # copy the string into the temp file
-              ::File.cp tfile.path, "#{basedir}/templates/default/#{::File.basename(f)}"
+              ::FileUtils.cp tfile.path, "#{basedir}/templates/default/#{::File.basename(f)}"
             end
           end
         end
