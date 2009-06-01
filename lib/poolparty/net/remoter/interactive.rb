@@ -6,8 +6,14 @@ module PoolParty
       if with_neighborhood_default
         list_of_instances(with_neighborhood_default).select_with_hash(hsh)
       else
-        conditions = hsh.merge(:key_name => (self.key_name || keypair.basename))
-        @described_instances ||= describe_instances.select_with_hash(conditions)
+        key_condition = {:key_name => (hsh[:key_name] ||self.key_name || keypair.basename) }
+        # if hsh.delete(:uncached)
+        #   @nodes = describe_instances.select_with_hash(conditions)
+        # else
+        #   @nodes ||= describe_instances.select_with_hash(conditions)
+        # end
+        results = describe_instances.select_with_hash(key_condition)
+        results.select_with_hash(hsh)
       end
     end
     

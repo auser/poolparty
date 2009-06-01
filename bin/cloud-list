@@ -17,7 +17,7 @@ EOS
 
   short_desc "show a list of the current instances on the clouds"
 
-  run do |command|    
+  run do |command|
     @loaded_clouds.each do |cld|
       if command[:instance_id]
         require 'pp'
@@ -26,12 +26,12 @@ EOS
         puts "Listing cloud #{cld.name}"
         puts "Active instances"
         puts cld.nodes(:status => "running").map{|a| "#{a[:instance_id] || a[:id]}\t#{a[:ip] ||a[:public_ip] }" }.join("\n")
-
+        
         if cld.nodes(:status => "pending").size > 0
           puts "Pending instances"
           puts cld.nodes(:status => "pending").map{|a| "#{a[:instance_id] || a[:id]}\t#{a[:ip] ||a[:public_ip] }" }.join("\n")
         end
       end
-    end    
+    end
   end
 end
