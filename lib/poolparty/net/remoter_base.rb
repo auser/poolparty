@@ -114,6 +114,11 @@ module PoolParty
       
       # TODO: Rename and modularize the @inst.status =~ /pending/ so that it works on all 
       # remoter_bases
+      # 1.) Launches a new instance, 
+      # 2.) Waits for the instance to get an ip address
+      # 3.) Waits for port 22 to be open
+      # 4.) Calls call_after_launch_instance callbacks
+      # 5.) Executes passes block, if any
       def launch_instance!(o={}, &block)
         @cloud = clouds[o[:cloud_name] || o[:name]]
         o[:keypair_name] = @cloud.keypair.basename

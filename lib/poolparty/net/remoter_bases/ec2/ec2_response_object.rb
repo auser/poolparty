@@ -90,8 +90,10 @@ class EC2ResponseObject
   
   def self.describe_instances(response)
     return [] if response['reservationSet'].nil?
-    instances = response['reservationSet']['item'].first['instancesSet']['item']
-    instances.collect {|i| symbolize_and_snakecase(i) }
+    ec2_insts = response['reservationSet']['item'].collect do |ri|
+      ri['instancesSet']['item'].collect{|i| i}
+    end
+    ec2_insts.flatten.collect {|i| symbolize_and_snakecase(i) }
   end
   
   # Convert the standard response hash to format used throughout the rest of PoolParty code.
@@ -103,7 +105,6 @@ class EC2ResponseObject
     n[:ip]          = n[:public_ip]
     n[:launch_time] = parse_datetime(n[:launch_time])
     n[:status]      = n[:instance_state][:name]
-    n[:key_name]    = n[:key_name]
     n[:availability_zone] = n[:placement][:availability_zone]
     n
   end
