@@ -1,4 +1,3 @@
-require File.dirname(__FILE__) + "/plugin_model"
 require File.dirname(__FILE__) + "/resource"
 
 module PoolParty    
