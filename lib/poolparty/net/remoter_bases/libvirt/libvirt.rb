@@ -5,23 +5,23 @@ require 'xmlsimple'
 
 module PoolParty
   module Remote
-    class Vmrun < Remote::RemoterBase
+    class Libvirt < Remote::RemoterBase
       include Dslify
-
+      
       default_options(
-        :image_id           => nil,
-        :keypair_name       => nil
+        :image_id => nil
       )
       
       def initialize(opts={}, &block)
         super
       end
-
+      
       def self.launch_new_instance!(o={})
         new(o).launch_new_instance!
       end
       def launch_new_instance!(o={})
         `virsh start #{image_id}`
+        describe_instance
       end
       # Terminate an instance by id
       def self.terminate_instance!(o={})
@@ -30,7 +30,7 @@ module PoolParty
       def terminate_instance!(o={})
         `virsh shutdown #{image_id}`
       end
-
+      
       def self.describe_instance(o={})
         new(o).describe_instance
       end
