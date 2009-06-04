@@ -1,28 +1,8 @@
 require "tempfile"
 # BIG TODO: Slim the place where the content is gathered from
 module PoolParty
-
-  class ::PoolParty::Resources::ChefRecipe < ::PoolParty::Resources::Resource
-    dsl_methods :recipes
-  end
-  
-  class ::PoolParty::Resources::ChefLibrary < ::PoolParty::Resources::Resource
-  end
-    
-  module Plugin
-  # class ChefRecipe
-  #   include Dslify
-  #   dsl_methods :recipes
-  # end
       
-    class IncludeChefRecipe < Plugin
-      def loaded(opts={}, &block)
-        has_chef_recipe ::File.basename(name)
-      end
-      def before_configure
-        ::Suitcase::Zipper.add(name, "chef/cookbooks") if ::File.exist?(name)
-      end
-    end
+  module Plugin
     
     class Chef < Plugin
       def before_load(o, &block)
