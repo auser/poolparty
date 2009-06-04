@@ -25,7 +25,7 @@ end
   
 class String
   def convert_from_ec2_to_ip
-    self.gsub(/.compute-1.amazonaws.com*/, '').gsub(/ec2-/, '').gsub(/-/, '.')
+    self.match(/-(\d+-\d+-\d+-\d+)\./) ? $1.gsub(/-/, '.') : self
   end
   def parse_datetime
     DateTime.parse( self.chomp ) rescue self
