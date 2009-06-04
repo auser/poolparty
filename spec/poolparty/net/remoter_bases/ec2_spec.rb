@@ -17,8 +17,11 @@ describe "ec2 remote base" do
     EOE
   end
   describe "helpers" do
-    it "should be able to convert an ec2 ip to a real ip" do
+    it "should be able to convert an american ec2 ip to a real ip" do
       "ec2-72-44-36-12.compute-1.amazonaws.com".convert_from_ec2_to_ip.should == "72.44.36.12"
+    end
+    it "should be able to convert an european ec2 ip to a real ip" do
+      "ec2-72-44-36-12.eu-west-1.compute.amazonaws.com".convert_from_ec2_to_ip.should == "72.44.36.12"
     end
     it "should not throw an error if another string is returned" do
       "72.44.36.12".convert_from_ec2_to_ip.should == "72.44.36.12"
