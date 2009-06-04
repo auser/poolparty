@@ -9,7 +9,7 @@ pool :poolpartyrb do
         :document_root => "/www/domain2",
         :server_name => "domain2.com"
       })
-    end    
+    end
     
   end
   

@@ -130,4 +130,5 @@ describe "ec2 remote base" do
       @tr.create_snapshot.should == nil
     end
   end
+
 end

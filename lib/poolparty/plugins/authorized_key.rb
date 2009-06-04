@@ -6,8 +6,8 @@
                         :public_key_file  => "/Users/alerner/.ssh/id_rsa.pub"
 =end
 module PoolParty
-  class Base
-    plugin :authorized_key do
+  module Plugin
+    class AuthorizedKey < Plugin
       
       default_options(
         :for_user => "root",

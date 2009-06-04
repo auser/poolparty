@@ -60,7 +60,7 @@ class String
   # Refactor this guy to get the class if the class is defined, and not always create a new one
   # although, it doesn't really matter as ruby will just reopen the class
   def class_constant(superclass=nil, opts={}, &block)
-    symc = ((opts && opts[:preserve]) ? ("#{self.camelcase}Class") : "PoolParty#{self.camelcase}Class").classify
+    symc = ((opts && opts[:preserve]) ? ("#{self.camelcase}") : "PoolParty#{self.camelcase}").classify
 
     kla=<<-EOE
       class #{symc} #{"< #{superclass}" if superclass}

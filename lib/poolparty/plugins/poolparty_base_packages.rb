@@ -1,6 +1,6 @@
 module PoolParty
-  class Base
-    plugin :poolparty_base_packages do
+  module Plugin
+    class PoolPartyBasePackages < Plugin
       
       def enable        
         has_cron "/usr/bin/server-manage-election" do

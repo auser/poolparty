@@ -1,13 +1,15 @@
-module PoolParty    
-  class SvnResource
-        
-    plugin :svn do
+module PoolParty
+  module Plugin
+    
+    class Svn < Plugin
+    
       def loaded(*args)
         has_package :name => "subversion"
       end
+    
     end
     
-    plugin :svn_repos do
+    class SvnRepos < Plugin
       
       dsl_methods :creates, :command, :cwd, :source, :working_dir, :at
       
@@ -15,7 +17,7 @@ module PoolParty
         has_package("subversion")
         has_svn_repository
       end
-
+      
       def has_svn_repository
         has_directory(::File.dirname(working_dir))
         has_directory(:name => "#{working_dir}", :requires => get_directory("#{::File.dirname(working_dir)}"))

@@ -15,7 +15,7 @@ class TestRailsDeploy < Test::Unit::TestCase
     end
 
     should "place a resource on the cloud" do
-      @cloud.ordered_resources.first.class.should == RailsDeployClass
+      assert_equal PoolParty::Plugin::RailsDeploy, @cloud.ordered_resources.first.class
     end
     should "raise if :repo is not passed" do
       assert_raise PoolParty::ReposMissingError do
@@ -34,8 +34,8 @@ class TestRailsDeploy < Test::Unit::TestCase
     end
     should "create the directory tree" do
       arr = @cloud.rails_deploys.first.directorys.map {|a| a.name }
-      ["/shared", "/shared/config", "/shared/pids", "/shared/log", "/shared/system"].each do |dir|
-        assert arr.include?("/var/www/paparazzi#{dir}")
+      ["shared", "shared/config", "shared/pids", "shared/log", "shared/system"].each do |dir|
+        assert arr.include?("/var/www/paparazzi/#{dir}")
       end      
     end
     should "have git-core defined as a package" do

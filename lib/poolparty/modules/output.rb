@@ -6,8 +6,8 @@ module PoolParty
         args.each do |line|
           (output ||= []) << line
         end
-      end        
-    end      
+      end
+    end
 
   end
 end

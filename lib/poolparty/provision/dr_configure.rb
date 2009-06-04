@@ -131,7 +131,7 @@ module PoolParty
        # cookie = (1..16).collect { chars[rand(chars.size)] }.pack("C*")
        cookie =  (1..65).collect {rand(9)}.join()
        cookie_file = ::File.open("#{cloud.tmp_path}/dr_configure/erlang.cookie", 'w+'){|f| f << cookie }
-       ::File.cp "#{::File.dirname(__FILE__)}/../templates/erlang_cookie_maker", "#{cloud.tmp_path}/dr_configure/"
+       ::FileUtils.cp "#{::File.dirname(__FILE__)}/../templates/erlang_cookie_maker", "#{cloud.tmp_path}/dr_configure/"
      end
      
      def self.class_commands

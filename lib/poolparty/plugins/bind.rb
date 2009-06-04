@@ -1,11 +1,10 @@
 module PoolParty
-  class Base
-    plugin :bind do
-      
+  module Plugin
+    
+    class Bind < Plugin
       def enable
-        
       end
-      
     end
+    
   end
 end

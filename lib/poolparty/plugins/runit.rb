@@ -3,8 +3,8 @@
   NOT IMPLEMENTED YET
 =end
 module PoolParty
-  class Base
-    plugin :poolparty_base_runit do
+  module Plugin
+    class PoolPartyBaseRunit < Plugin
       
       def enable
         unless enabled
@@ -13,7 +13,7 @@ module PoolParty
           has_exec(:name => "/sbin/start runsvdir", :cwd => "/var/service")
           # has_remotefile(:name => "/etc/event.d/runsvdir", :notify => get_exec("/sbin/start runsvdir"))
           enabled true
-        end          
+        end
       end
       
     end

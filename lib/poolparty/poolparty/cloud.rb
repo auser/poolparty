@@ -1,4 +1,3 @@
-require File.dirname(__FILE__) + "/plugin_model"
 require File.dirname(__FILE__) + "/resource"
 
 module PoolParty    
@@ -42,14 +41,13 @@ module PoolParty
       )
 
       include CloudResourcer
-      include PoolParty::PluginModel
       include PoolParty::Resources
       include PoolParty::Callbacks
       include PoolParty::DependencyResolverCloudExtensions
       include PrettyPrinter
 
       # Net methods
-      include ::PoolParty::Remote
+      include PoolParty::Remote
       include PoolParty::CloudDsl
       include PoolParty::Verification
       # include PoolParty::Monitors
@@ -84,7 +82,8 @@ module PoolParty
       end
       
       additional_callbacks [
-        "after_launch_instance"
+        "after_launch_instance",
+        "after_provision"
       ]
       
       # Freeze the cloud_name so we can't modify it at all, set the plugin_directory
@@ -95,7 +94,7 @@ module PoolParty
         
         setup_callbacks
         
-        plugin_directory "#{pool_specfile ? ::File.dirname(pool_specfile) : Dir.pwd}/plugins"        
+        plugin_directory "#{pool_specfile ? ::File.dirname(pool_specfile) : Dir.pwd}/plugins"
         before_create
         super
         after_create
@@ -277,7 +276,6 @@ module PoolParty
       def to_hash
         hsh = to_properties_hash
         hsh[:options].merge!({:remote_base => remote_base.to_hash})  
-        # hsh.reject{|k,v| k == :remote_base || k == :cloud}
         hsh
       end
       
@@ -378,15 +376,15 @@ module PoolParty
       end
       
       # Add all the poolparty requirements here
-      # NOTE: These are written as plugins in the lib/poolparty/base_packages directory
+      # NOTE: These are written as plugins in the lib/poolparty/plugins directory
       # for examples. 
       # Also note that there is no block associated. This is because we have written
       # all that is necessary in a method called enable
       # which is called when there is no block
       def add_poolparty_base_requirements
         # poolparty_base_heartbeat
-        poolparty_base_ruby
-        poolparty_base_packages
+        ruby
+        pool_party_base_packages
       end
                 
     end

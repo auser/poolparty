@@ -33,7 +33,7 @@ module PoolParty
       def initialize(opts={}, &block)
         opts.each {|k,v| opts[k] = v.call if v.respond_to?(:call) }
         set_vars_from_options opts
-        instance_eval &block if block
+        instance_eval(&block) if block
       end
       
       def cloud(n=nil)
@@ -58,14 +58,13 @@ module PoolParty
       # end
       
       def self.available_bases
-        @available_bases ||= []        
+        @available_bases ||= []
       end
       def self.inherited(arg)
         base_name = "#{arg}".downcase.top_level_class.to_sym
         (available_bases << base_name) unless available_bases.include?(base_name)
-        (remote_bases << base_name) unless remote_bases.include?(base_name)
+        (remote_bases << base_name) unless remote_bases.include?(base_name)  #TODO: Deprecate
       end
-
       
       # def method_missing(meth, *args, &block)
       #   if @cloud
@@ -115,8 +114,14 @@ module PoolParty
       
       # TODO: Rename and modularize the @inst.status =~ /pending/ so that it works on all 
       # remoter_bases
+      # 1.) Launches a new instance, 
+      # 2.) Waits for the instance to get an ip address
+      # 3.) Waits for port 22 to be open
+      # 4.) Calls call_after_launch_instance callbacks
+      # 5.) Executes passes block, if any
       def launch_instance!(o={}, &block)
         @cloud = clouds[o[:cloud_name] || o[:name]]
+        o[:keypair_name] = @cloud.keypair.basename
         @inst = launch_new_instance!( dsl_options.merge(o) )
         sleep(2)
         

@@ -2,8 +2,8 @@
   Enables haproxy for a cloud
 =end
 module PoolParty
-  class Base
-    plugin :haproxy do
+  module Plugin
+    class Haproxy < Plugin
       
       default_options(
         :port => 80,

@@ -15,7 +15,7 @@ class TestChefDeploy < Test::Unit::TestCase
     end
 
     should "place a resource on the cloud" do
-      @cloud.ordered_resources.first.class.should == ChefDeployClass
+      assert_equal PoolParty::Plugin::ChefDeploy, @cloud.ordered_resources.first.class
     end
     should "raise if :repo is not passed" do
       assert_raise ReposMissingError do

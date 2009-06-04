@@ -5,34 +5,27 @@ describe "Plugin" do
   before(:each) do
     reset!
     @c = cloud :test_plugin_model_cloud do
-      apachetest do                
+      apache_test do                
         site("heady", {
           :document_root => "/root"
         })
       end
     end
   end
-  describe "methods should include" do
-    it "register_plugin(plugin)" do;WebServers.respond_to?(:register_plugin).should == true;end
-  end
+
   describe "registered" do
     before(:each) do
-      @plugin = @c.apachetest
+      @plugin = @c.apache_test
     end
 
-    describe "storage" do
-      it "should be able to retrieve the plugin as a name" do
-        @c.plugin("apachetest").should_not be_nil
-      end
-    end
-    it "be of the class apachetesttestClass on the Kernel" do
-      @plugin.class.should == Kernel::ApachetestClass
+    it "be of the class apache_testtestClass on the Kernel" do
+      @plugin.class.should == PoolParty::Plugin::ApacheTest
     end
     it "should store the regsitered plugins in an array" do
       @plugin.should_not be_nil
     end
     it "should have the plugin name as a method on the cloud " do
-      @c.respond_to?(:apachetest).should == true
+      @c.respond_to?(:apache_test).should == true
     end
     
     describe "methods" do
