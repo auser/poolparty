@@ -63,8 +63,7 @@ module PoolParty
 
       def parent;nil;end
       
-      def setup_defaults        
-        PoolParty::Extra::Deployments.include_deployments "#{Dir.pwd}/deployments"
+      def setup_defaults
       end
       
       def pool_clouds

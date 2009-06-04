@@ -64,8 +64,6 @@ describe "ChefResolver" do
   describe "with a cloud" do
     before(:each) do
       class ChefResolverSpec
-        plugin :apache do
-        end
       end
       @cloud = cloud :hope do
         keypair "bob"

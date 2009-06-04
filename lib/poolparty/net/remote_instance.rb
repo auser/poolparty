@@ -7,6 +7,7 @@ module PoolParty
       dsl_methods :name,        # Name of the remote instance (internal usage)
                   :ip,          # Ip of the remote instance
                   :internal_ip, # Internal ip of the remote instance
+                  :public_ip,
                   :status       # Status of the remote instance
       
       def initialize(opts={})
@@ -62,6 +63,10 @@ module PoolParty
       # local side into the local listing file
       def to_s
         "#{name}\t#{ip}\t#{instance_id rescue ""}"
+      end
+      
+      def has_key?(key)
+        dsl_options.has_key?(key)
       end
       
       # Class method to disect a neighborhood line

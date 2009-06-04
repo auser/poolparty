@@ -6,7 +6,7 @@ module PoolParty
     
     def to_properties_hash
       { :pp_type => "plugin", :options => dsl_options, 
-        :name => self.class.to_s.top_level_class,
+        :name => (dsl_options[:name] ? dsl_options[:name] : self.class.to_s.split('::').pop.snake_case),
         :resources => ordered_resources.map {|a| a.to_properties_hash }}
     end
     
@@ -17,20 +17,18 @@ module PoolParty
       nil
     end
     
-    def self.add_has_and_does_not_have_methods_for(typ=:file)
-      lowercase_class_name = typ.to_s.top_level_class.downcase
-      
+    def self.add_has_and_does_not_have_methods_for(typ=:file)      
       meth = <<-EOM
-        def __#{lowercase_class_name}(opts={}, &block)
-          i = PoolParty::#{lowercase_class_name.camelcase}Class.new(opts, &block)
+        def __#{typ}(opts={}, &block)
+          i = ::PoolParty::Plugin::#{typ.camelcase}.new(opts, &block)
           plugin_store << i if respond_to?(:plugin_store)
           i
         end
-        alias :#{lowercase_class_name} :__#{lowercase_class_name}
+        alias :#{typ} :__#{typ}
       EOM
       
       PoolParty::PoolPartyBaseClass.module_eval meth
-      PoolParty::PoolPartyBaseClass.add_has_and_does_not_have_methods_for(lowercase_class_name.to_sym)
+      PoolParty::PoolPartyBaseClass.add_has_and_does_not_have_methods_for(typ.to_sym)
     end
     
   end

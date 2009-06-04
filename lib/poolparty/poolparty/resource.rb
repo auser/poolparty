@@ -37,6 +37,7 @@ module PoolParty
       # those methods. Then we make sure we add these resources as available_resources
       # onto the class so we know it's available as a resource
       def self.inherited(subclass)
+        original_subclass = subclass
         subclass = subclass.to_s.split("::")[-1] if subclass.to_s.index("::")
         lowercase_class_name = subclass.to_s.underscore.downcase || subclass.downcase
         method_name = "__#{lowercase_class_name}".to_sym
@@ -59,7 +60,7 @@ module PoolParty
           PoolParty::PoolPartyBaseClass.add_has_and_does_not_have_methods_for(lowercase_class_name.to_sym)
           PoolParty::PoolPartyBaseClass.add_resource_lookup_method(lowercase_class_name)
           
-          available_resources << subclass
+          available_resources << original_subclass
         end
       end
       

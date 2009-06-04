@@ -16,28 +16,29 @@
   
 =end
 module PoolParty
-  class ChefDeploy
+  module Plugin
     
-    define_resource :chef_deploy_definition do
+    class ChefDeploy < Plugin
       
-      dsl_methods :repo
-      
-      default_options(
-                      :branch => "HEAD",
-                      :enable_submodules => true,
-                      :migrate => true,
-                      :environment => "production",
-                      :shallow_clone => true,
-                      :user => "www-data",
-                      :restart_command => "touch tmp/restart.txt",
-                      :migration_command => "rake db:migrate"
-                      )
-      def present
-        :deploy
+      define_resource :chef_deploy_definition do
+        
+        dsl_methods :repo
+        
+        default_options(
+                        :branch => "HEAD",
+                        :enable_submodules => true,
+                        :migrate => true,
+                        :environment => "production",
+                        :shallow_clone => true,
+                        :user => "www-data",
+                        :restart_command => "touch tmp/restart.txt",
+                        :migration_command => "rake db:migrate"
+                        )
+        def present
+          :deploy
+        end
       end
-    end
-    
-    plugin :chef_deploy do
+      
       dsl_methods :branch, :enable_submodules, :migrate, :environment, :shallow_clone, :user,
                   :restart_command, :migration_command, :repo
       

@@ -54,3 +54,9 @@ class Numeric
     "#{in_units.to_i} #{in_units != 1 ? unit.to_s.pluralize : unit} ago" 
   end
 end
+
+class Time
+  def to_time
+    self
+  end
+end

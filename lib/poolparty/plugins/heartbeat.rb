@@ -1,16 +1,16 @@
 module PoolParty
-  class Base
-    plugin :poolparty_base_heartbeat do
+  module Plugin
+    class Heartbeat < Plugin
       
-      def enable        
-
+      def enable
+        
         has_package({:name => "heartbeat-2"})
         has_package({:name => "heartbeat-2-dev"})
         
         has_service("heartbeat")
-          
+        
       end
-
-    end  
+      
+    end 
   end
 end

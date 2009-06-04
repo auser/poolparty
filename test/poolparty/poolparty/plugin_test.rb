@@ -1,18 +1,19 @@
 require "#{::File.dirname(__FILE__)}/../../test_helper"
 
-class PluginClass
-  plugin :box do
+module PoolParty
+  module Plugin
+    class Box < Plugin
+    end
   end
 end
 
 class TestPlugins < Test::Unit::TestCase
   context "services" do
-    setup do
-      reset!
-      @tbc = TestBaseClass.new do
-        box do
-        end
-      end
+    
+    should " have array of availble plugins" do
+      assert Plugin.available.include?(PoolParty::Plugin::Box)
+      assert Plugin.available.include?(PoolParty::Plugin::Git)
     end
+    
   end
 end

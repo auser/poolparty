@@ -1,26 +1,10 @@
 require "tempfile"
 # BIG TODO: Slim the place where the content is gathered from
 module PoolParty
-  class ChefRecipe
-    include Dslify
-    dsl_methods :recipes
-  end
-  class Chef
-    define_resource :chef_recipe do
-    end
-    define_resource :chef_library do
-    end
+      
+  module Plugin
     
-    plugin :include_chef_recipe do
-      def loaded(opts={}, &block)
-        has_chef_recipe ::File.basename(name)
-      end
-      def before_configure
-        ::Suitcase::Zipper.add(name, "chef/cookbooks") if ::File.exist?(name)
-      end
-    end
-    
-    plugin :chef do
+    class Chef < Plugin
       def before_load(o, &block)
       end
       
@@ -42,7 +26,7 @@ module PoolParty
           
           ::FileUtils.mkdir_p "#{basedir}/recipes" unless ::File.directory?("#{basedir}/recipes")          
           ::FileUtils.rm "#{basedir}/recipes/default.rb" if ::File.file?("#{basedir}/recipes/default.rb")
-          # ::File.cp file, "#{basedir}/recipes/default.rb"
+          # ::FileUtils.cp file, "#{basedir}/recipes/default.rb"
           ::File.open("#{basedir}/recipes/default.rb", "w") {|f| f << open(file).read }
                     
           templates o[:templates] if o[:templates]
@@ -64,13 +48,13 @@ module PoolParty
           templates.each do |f|
             f = ::File.expand_path(f)
             if ::File.file?(f)
-              ::File.cp f, "#{basedir}/templates/default/#{::File.basename(f)}"
+              ::FileUtils.cp f, "#{basedir}/templates/default/#{::File.basename(f)}"
             elsif ::File.directory?(f)
-              Dir["#{f}/**"].each {|f| ::File.cp f, "#{basedir}/templates/default/#{::File.basename(f)}" }
+              Dir["#{f}/**"].each {|f| ::FileUtils.cp f, "#{basedir}/templates/default/#{::File.basename(f)}" }
             else
               tfile = Tempfile.new("main-poolparty-recipe")
               tfile << f # copy the string into the temp file
-              ::File.cp tfile.path, "#{basedir}/templates/default/#{::File.basename(f)}"
+              ::FileUtils.cp tfile.path, "#{basedir}/templates/default/#{::File.basename(f)}"
             end
           end
         end
@@ -89,10 +73,10 @@ module PoolParty
           end
         else
           unless @recipe
-            @recipe = ChefRecipe.new
-            @recipe.instance_eval &block if block
+            @recipe = has_chef_recipe "poolparty", &block
+            @recipe.instance_eval(&block) if block
             @recipe.recipes(recipe_files.empty? ? ["poolparty"] : ["poolparty", "main"])
-
+            
             ::Suitcase::Zipper.add_content_as(@recipe.dsl_options.to_json, "dna.json", "chef")
             
             configure_commands ["cp -f /var/poolparty/dr_configure/chef/dna.json /etc/chef/dna.json"]
@@ -105,7 +89,7 @@ module PoolParty
           recps.each do |rcp|
             Dir[::File.expand_path(rcp)].each do |f|
               included_recipes << f
-            end            
+            end
           end
         end
       end
@@ -141,7 +125,7 @@ file_cache_path  "/etc/chef"
       def before_bootstrap
         bootstrap_gems "chef", "ohai"
         bootstrap_commands [
-          "mkdir -p /etc/chef/cookbooks /etc/chef/cache"          
+          "mkdir -p /etc/chef/cookbooks /etc/chef/cache"
         ]
       end
       def before_configure

@@ -1,6 +1,6 @@
 require "#{::File.dirname(__FILE__)}/../../test_helper"
 
-class TestPuppetResolver < Test::Unit::TestCase
+class TestChefResolver < Test::Unit::TestCase
   context "from a hash" do
     setup do
       reset!
@@ -18,25 +18,25 @@ class TestPuppetResolver < Test::Unit::TestCase
     end
 
     should "throw an exception if not given a hash" do
-      lambda { PoolParty::PuppetResolver.compile }.should raise_error
+      lambda { PoolParty::ChefResolver.compile }.should raise_error
     end
     should "accept a hash" do
-      lambda { PoolParty::PuppetResolver.compile(@cloud_reference_hash)}.should_not raise_error
+      lambda { PoolParty::ChefResolver.compile(@cloud_reference_hash)}.should_not raise_error
     end
     context "compiled" do
       setup do
         reset!
-        @dr = PuppetResolver.new(@cloud_reference_hash)
+        @dr = ChefResolver.new(@cloud_reference_hash)
         @compiled = @dr.compile
       end
 
       should "should print resources in the proper layout" do        
-        @compiled.should =~ /file \{ "\/etc\/motd"/
+        @compiled.should =~ /template \"\/etc\/motd\" do\n\tsource \"\/etc\/motd\.erb\"/
       end
 
       should "should print apache into a class definition" do
         # puts "<pre>#{@compiled.to_yaml}</pre>"
-        @compiled.should =~ /class apache \{/
+        @compiled.should =~ /# apache/
       end
     end
   end
@@ -52,7 +52,7 @@ class TestPuppetResolver < Test::Unit::TestCase
         has_directory :name => "/var/www"
         has_file :name => "/var/www/index.html", :content => "profile info", :requires => get_directory("/var/www")
 
-        dependency_resolver "puppet"
+        dependency_resolver "chef"
         # has_package :name => "bash"        
         # parent == cloud
         apache do
@@ -65,7 +65,7 @@ class TestPuppetResolver < Test::Unit::TestCase
       @properties = @cloud.to_properties_hash
 
       # puts "<pre>#{@cloud_reference_hash.to_yaml}\n\n#{@properties}</pre>"
-      @dr = PuppetResolver.new(@properties)
+      @dr = ChefResolver.new(@properties)
       @compiled = @dr.compile
     end
     should "should compile to a string" do
@@ -73,13 +73,10 @@ class TestPuppetResolver < Test::Unit::TestCase
       @compiled.class.should == String
     end
     should "should include apache class" do
-      @compiled.should =~ /class apache \{/
+      @compiled.should =~ /# apache/
     end
     should "should require the file to have the directory (written as file)" do
-      @compiled.should =~ /require => File\[\"\/var\/www\"\]/
-    end
-    should "should ensure file" do
-      @compiled.should =~ /ensure => "present"/      
+      @compiled.should =~ /directory \"\/var\/www\"/
     end
   end
 end

@@ -52,7 +52,7 @@ class TestCloudDsl < Test::Unit::TestCase
     should "call haproxy when adding enabled serivces" do
       @cloud.add_optional_enabled_services
       klasses = @cloud.plugin_store.map {|a| a.class.to_s.split("::")[-1] }
-      klasses.include?("HaproxyClass").should == true
+      klasses.include?("Haproxy").should == true
     end
   end
   

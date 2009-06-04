@@ -2,7 +2,7 @@ $LOAD_PATH<< File.dirname(__FILE__)
 # Load required gems
 #TODO: remove activesupport
 @required_software = Array.new
-%w(rubygems activesupport ftools logging resolv digest/sha2 json pp).each do |lib|
+%w(rubygems fileutils resolv digest/sha2 json pp).each do |lib|
   begin
     require lib
   rescue Exception => e
@@ -133,10 +133,6 @@ class Object
   include PoolParty::Pool
   include PoolParty::Cloud
   include PoolParty::DefinableResource
-end
-
-class Class
-  include PoolParty::PluginModel
 end
 
 ## Load PoolParty Plugins and package

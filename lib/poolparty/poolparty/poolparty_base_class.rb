@@ -13,7 +13,7 @@ module PoolParty
     $context_stack ||= []
   end
   
-  class PoolPartyBaseClass          
+  class PoolPartyBaseClass
     attr_reader :init_opts
     
     include Parenting, Dslify
@@ -72,16 +72,10 @@ module PoolParty
     end
     
     # Add to the services pool for the manifest listing
-    def add_service(serv, extra_name="")
-      subclass = "#{serv.class.to_s.top_level_class.underscore.downcase}#{extra_name}"
-      lowercase_class_name = subclass.to_s.underscore.downcase || subclass.downcase
-      
-      # (services[lowercase_class_name.to_sym] ||= []) << serv if serv && !serv.empty?
+    def add_service(serv)      
       ordered_resources << serv
-      # services.merge!({lowercase_class_name.to_sym => serv})
     end
-    # Container for the services
-
+    
     def inspect
       to_properties_hash.inspect
     end
@@ -92,7 +86,6 @@ module PoolParty
           
     def to_json
       to_hash.to_json
-      # JSON.generate(to_hash)
     end
 
     def resources
@@ -120,7 +113,8 @@ module PoolParty
         opts = (opts.is_a?(Hash) ? extra_opts.merge(opts) : extra_opts).merge(:name => temp_name)
         
         # opts.merge!(:name => temp_name) unless opts.has_key?(:name)
-        res = if PoolParty::Resources::Resource.available_resources.include?(ty.to_s.camelize)
+        res = if (PoolParty::Resources::Resource.available_resources.include?(ty.to_s.camelize) || 
+                  PoolParty::Resources::Resource.available_resources.include?("PoolParty::Resources::#{ty.to_s.camelize}".camelize.constantize))
           "PoolParty::Resources::#{ty.to_s.camelize}".camelize.constantize.new(opts, &block)
         else
           "#{ty.to_s.camelize}".camelize.constantize.new(opts.merge(:name), &block)

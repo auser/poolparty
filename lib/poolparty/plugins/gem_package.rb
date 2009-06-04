@@ -1,14 +1,10 @@
 module PoolParty
-  
-  # Allows you to specify a gem to be installed
-  # You can optionally pass a :download_url if you want a specific gem or version installed
-  # example:
-  #   has_gem_package :name => 'rubot',  :download_url => 'http://rubyforge.org/frs/download.php/35089/rubot-base-0.0.1.gem'
 
 =begin rdoc
 == Gempackage
 
-Gempackages describe distributed gems on the cloud. The gem is only downloaded once and then hosted on the master if a download url is given. 
+# Allows you to specify a gem to be installed
+# You can optionally pass a :download_url if you want a specific gem or version installed
 
 == Usage
 
@@ -26,14 +22,12 @@ Gempackages describe distributed gems on the cloud. The gem is only downloaded o
 * <tt>bin</tt> Specify exact gem binary
 * <tt>jruby</tt> Will set 'bin' to 'jruby -S gem'
 
-== Examples
+== Example
   has_gempackage(:name => 'rake', 
     :download_url => 'http://rubyforge.org/frs/download.php/43954/rake-0.8.3.gem')
-=end
-  
-  class GempackageResource
-    
-    virtual_resource(:gem_package) do
+=end  
+    module Plugin
+      class GemPackage < Plugin
       
       dsl_methods :name,            # Name of the gem
                   :download_url,    # Url to download the gem. If not set, it will try to grab the latest gem available on gems.github.com or rubyforge
