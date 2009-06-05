@@ -15,29 +15,12 @@
   end
   
 =end
+require "chef_deploy_definition"
+
 module PoolParty
   module Plugin
     
     class ChefDeploy < Plugin
-      
-      define_resource :chef_deploy_definition do
-        
-        dsl_methods :repo
-        
-        default_options(
-                        :branch => "HEAD",
-                        :enable_submodules => true,
-                        :migrate => true,
-                        :environment => "production",
-                        :shallow_clone => true,
-                        :user => "www-data",
-                        :restart_command => "touch tmp/restart.txt",
-                        :migration_command => "rake db:migrate"
-                        )
-        def present
-          :deploy
-        end
-      end
       
       dsl_methods :branch, :enable_submodules, :migrate, :environment, :shallow_clone, :user,
                   :restart_command, :migration_command, :repo
@@ -55,10 +38,9 @@ module PoolParty
       def before_configure
         configure_commands [
           "mkdir -p /etc/chef/lib",
-          "cp -R /var/poolparty/dr_configure/etc/chef/lib /etc/chef"
+          "if [ -d /var/poolparty/dr_configure/etc/chef/lib ] ; then cp -R /var/poolparty/dr_configure/etc/chef/lib /etc/chef; fi"
         ]
-        ::Suitcase::Zipper.add("#{::File.dirname(__FILE__)}/../../../vendor/chef/chef-deploy", 
-                                "etc/chef/lib")
+        ::Suitcase::Zipper.add("#{::File.dirname(__FILE__)}/../../../../vendor/chef/chef-deploy", "etc/chef/lib")
       end
       
     end

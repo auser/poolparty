@@ -16,6 +16,7 @@ module PoolParty
     # 
     # For example usage, see lib/poolparty/plugins/line.rb
     def define_resource(name, &block)
+      $stderr.puts "define_resource (#{name}) is depricated (#{caller[0]})"
       name.to_s.new_resource_class &block
     end
     

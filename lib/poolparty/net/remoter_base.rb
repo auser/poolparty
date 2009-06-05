@@ -22,11 +22,12 @@ module PoolParty
     # This class is the base class for all remote types, such as ec2
     # Everything remoting-wise is derived from this class
     class RemoterBase
-      include           Dslify
-      include           ::PoolParty::Remote
-      include           ::PoolParty::Pinger
+      include Dslify
+      include ::PoolParty::Remote
+      include ::PoolParty::Pinger
       
       dsl_methods :keypair,
+                  :keypair_name,
                   :image_id,
                   :keypair_name
         

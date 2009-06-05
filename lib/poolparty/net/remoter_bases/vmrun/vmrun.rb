@@ -153,6 +153,10 @@ module PoolParty
         vmx_file
       end
       
+      def keypair
+        cloud.keypair_name
+      end
+      
       def ip(vmx_file_string=nil)
         return dsl_options[:ip] if dsl_options[:ip]
         vmx_file_string ? vmx_hash[vmx_file_string] : nil
