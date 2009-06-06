@@ -9,8 +9,8 @@ pool :party do
   image_id 'ami-7cfd1a15'
   debugging true
   
-  access_key "XXXXXX"
-  secret_access_key "XXXXXXX"
+  # access_key "XXXXXX"
+  # secret_access_key "XXXXXXX"
   
   cloud :app do
     keypair 'app'

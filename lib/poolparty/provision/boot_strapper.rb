@@ -141,7 +141,7 @@ module PoolParty
           'cd /var/poolparty/dependencies',
           "cp /var/poolparty/dependencies/etc/poolparty/gemrc_template /etc/poolparty",          
           "#{installer} update",
-          "#{installer} install -y ruby ruby1.8-dev libopenssl-ruby1.8 build-essential wget",  #optional, but nice to have
+          "#{installer} install -y ruby ruby1.8-dev irb libopenssl-ruby1.8 build-essential wget",  #optional, but nice to have
           "tar -zxvf packages/rubygems-1.3.1.tgz",
           "cd rubygems-1.3.1",
           "ruby setup.rb --no-ri --no-rdoc",
