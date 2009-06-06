@@ -16,7 +16,6 @@ module PoolParty
         # :keypair_name  => lambda {key.basename},
         # :keypair_path  => lambda {key.full_filepath},
         # :public_key    => lambda { key.public_key.to_s },
-        :keypair_name    => nil,
         :keypair_path    => nil,
         :authorized_keys => nil,
         :remoter_base    => :vmrun,
@@ -28,6 +27,10 @@ module PoolParty
         super
       end
       
+      def method_missing(m, args, &blk)
+        remote_base.respond_to?(m) ? remote_base.send(m, args, &blk) : super
+      end
+      
       def remote_base(n=nil)
         if n.nil?
           @remote_base
@@ -35,7 +38,11 @@ module PoolParty
           @remote_base = n
         end
       end
-        
+      
+      def image_id
+        remote_base.image_id
+      end
+      
       def server
         if @server
           @server
