@@ -35,17 +35,24 @@ module PoolParty
         new(o).describe_instance
       end
       def describe_instance(o={})
-        xml = `virsh dumpxml #{image_id}`
-        hsh = XmlSimple.xml_in(xml, 'KeyToSymbol'=>true)
-        hsh[:state] = `virsh domstate #{image_id}`
-        hsh
+        LibvirtInstance.new(o).details
       end
       
+      # Returns an array of instance name => state
+      # For example:
+      #   [{"i-3687065A" =>"shut off"},
+      #     {"jaunty19"  =>"shut off"},
+      #     {"jauntykvm" =>"running"}]
       def self.describe_instances(o={})
         new(o).describe_instances
       end
       def describe_instances(o={})
-        `virsh list`
+        output = `virsh list`.split("\n")
+        return [] if output.empty? || output.size < 3
+        output[2..-1].collect do |i|
+          d=i.split(' ')
+          LibvirtInstance.new(:name => d[1], :status  => d[2..-1].join(' '))
+        end
       end
       
       # After launch callback

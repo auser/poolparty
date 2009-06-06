@@ -1,4 +1,4 @@
-module PoolParty  
+module PoolParty
   module Remote
     
     class MetavirtInstance
@@ -6,18 +6,18 @@ module PoolParty
       
       def initialize(o={}, cld=nil)
         @ip = o[:ip]
-        @keypair = o[:keypair]        
+        @keypair = o[:keypair]
         @cloud = cld
       end
       
       def to_hash
         {
-          :status => status,
-          :mac_addresses => mac_address,
-          :ip => ip,
-          :instance_id => vmx_file,
-          :internal_ip => ip,
-          :keypair => keypair
+          :status         => status,
+          :mac_addresses  => mac_address,
+          :ip             => ip,
+          :instance_id    => vmx_file,
+          :internal_ip    => ip,
+          :keypair        => keypair
         }
       end
       
@@ -46,7 +46,7 @@ module PoolParty
       def terminate!(o)
       end
       
-    end    
+    end
     
   end
 end
