@@ -13,6 +13,7 @@ module PoolParty
       )
       
       def initialize(opts={}, &block)
+        set_vars_from_options opts
         super
       end
       
@@ -21,7 +22,7 @@ module PoolParty
       end
       def launch_new_instance!(o={})
         `virsh start #{image_id}`
-        describe_instance
+        describe_instance :image_id=>image_id
       end
       # Terminate an instance by id
       def self.terminate_instance!(o={})
@@ -35,7 +36,7 @@ module PoolParty
         new(o).describe_instance
       end
       def describe_instance(o={})
-        LibvirtInstance.new(o).details
+        LibvirtInstance.new(o).description
       end
       
       # Returns an array of instance name => state

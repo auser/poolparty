@@ -30,7 +30,7 @@ module PoolParty
       include           Dslify
       include           ::PoolParty::Remote
       include           ::PoolParty::Pinger
-
+      
       # All inheriting remoter bases should override these default_options
       dsl_methods :keypair,
                   :keypair_name
@@ -47,7 +47,6 @@ module PoolParty
           Remote.available << subclass
         end
       end
-      
       
       def cloud(n=nil)
         if n.nil?
