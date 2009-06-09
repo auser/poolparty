@@ -31,6 +31,10 @@ module PoolParty
         hsh
       end
       
+      def mac_address
+        
+      end
+      
     end
     
   end

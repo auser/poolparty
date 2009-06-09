@@ -73,6 +73,12 @@ class TestMetavirt < Test::Unit::TestCase
         assert_equal 'jaunty19', @cloud_lv.metavirt.image_id
       end
     end
+    
+    should "use libvirt options from metavirt" do
+      assert_equal 'jaunty19', clouds[:lv].metavirt.libvirt.image_id
+      assert_not_nil clouds[:lv].metavirt.image_id
+      assert_equal clouds[:lv].metavirt.libvirt.image_id, clouds[:lv].metavirt.image_id
+    end
   end
   
 end

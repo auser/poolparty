@@ -30,10 +30,11 @@ module PoolParty
       include           Dslify
       include           ::PoolParty::Remote
       include           ::PoolParty::Pinger
-      
+
+      # All inheriting remoter bases should override these default_options
       dsl_methods :keypair,
-                  :image_id,
                   :keypair_name
+      #             :image_id,
         
       def initialize(opts={}, &block)
         opts.each {|k,v| opts[k] = v.call if v.respond_to?(:call) }
