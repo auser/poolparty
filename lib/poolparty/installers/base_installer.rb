@@ -17,21 +17,19 @@ We are going to take you through the installation process of PoolParty.
 
 First, we'll setup your environment so using PoolParty will be a breeze
         EOE
-                
-        colored_say "Welcome to PoolParty!", :help
-        say welcome_msg
-        begin
-          t = colored_ask "Press enter to continue or Ctrl+C to exit"
-        rescue Exception => e
-          say <<-EOE
+
+          @exit_msg = <<-EOE
 
 Cancelled PoolParty installation
 
 You can always restart this by typing:
   install-poolparty
 EOE
-          exit 0
-        end
+
+
+        colored_say "Welcome to PoolParty!", :help
+        say welcome_msg
+        colored_ask "Press enter to continue or Ctrl+C to exit"
         
       end
       
@@ -53,6 +51,27 @@ EOE
       end
       
       protected
+      
+      def ask(msg, &block)
+        begin
+          super
+        rescue Exception => e                    
+          colored_say exit_msg, :help
+          exit 0
+        end        
+      end
+      
+      def exit_msg
+        @exit_msg || <<-EOE
+
+--- quiting ---
+You can always restart the installer by typing #{$0}. 
+
+If you need help, feel free to stop by the irc room:
+irc.freenode.net / #poolpartyrb
+
+        EOE
+      end
       
       def ask_with_help(opts={}, &block)
         help_str = opts[:help]

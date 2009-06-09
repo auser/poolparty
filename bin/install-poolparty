@@ -6,17 +6,31 @@ require "poolparty/installers/base_installer"
 require "highline/import"
 
 say("\nWhat remoter base would you like to use?")
-choose do |menu|
-  menu.prompt = "> "
+begin
+  choose do |menu|
+    menu.prompt = "> "
 
-  PoolParty::Remote::RemoterBase.available_bases.each do |base|
-    menu.choice base.to_sym do 
-      
-      say "Great, we'll be using #{base}"
-      
-      klass = "::PoolParty::Installers::#{base.to_s.capitalize}".constantize
-      klass.send :new
+    PoolParty::Remote::RemoterBase.available_bases.each do |base|
+      menu.choice base.to_sym do 
+
+        say "Great, we'll be using #{base}"
+
+        klass = "::PoolParty::Installers::#{base.to_s.capitalize}".constantize
+        klass.send :new
+      end
     end
+
   end
+rescue Exception => e
+  
+  say <<-EOE
+  
+  --- quiting ---
+  You can always restart the installer by typing #{$0}. 
+
+  If you need help, feel free to stop by the irc room:
+    irc.freenode.net / #poolpartyrb
+  
+  EOE
   
 end
