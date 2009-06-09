@@ -69,8 +69,6 @@ describe "Remote Instance" do
     end
     it "should say that it is responding? if responding is not nil" do
       @ec2.running?.should == true
-      @ec2.responding?.should == true
-      # @ec2.responding.should_not be_nil
     end
   end
 end
