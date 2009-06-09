@@ -26,11 +26,12 @@ namespace(:pp) do
       puts "Manifest created"
     end
   end
+  desc "Fetch all the submodules"
+  task :submodules do
+    `git submodule update --init && cd vendor/gems/git-style-binaries && git submodule update --init`
+  end
+  
   namespace :vendor do
-    desc "Fetch all the submodules"
-    task :submodules do
-      `git submodule update --init && cd vendor/gems/git-style-binaries && git submodule update --init`
-    end
     desc "Initialize the submodules"
     task :setup do
       `git submodule init`
