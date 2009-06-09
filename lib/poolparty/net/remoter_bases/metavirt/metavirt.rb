@@ -27,8 +27,8 @@ module PoolParty
         super
       end
       
-      def method_missing(m, args, &blk)
-        remote_base.respond_to?(m) ? remote_base.send(m, args, &blk) : super
+      def method_missing(m, *args, &blk)
+        remote_base.respond_to?(m) ? remote_base.send(m, *args, &blk) : super
       end
       
       def remote_base(n=nil)
@@ -94,7 +94,7 @@ module PoolParty
       end
       
       def to_hash
-        dsl_options.merge(:remote_base => remote_base.to_hash)
+        default_options.merge(:remote_base => remote_base.to_hash)
       end
       
       private

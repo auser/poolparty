@@ -34,7 +34,6 @@ module PoolParty
       # All inheriting remoter bases should override these default_options
       dsl_methods :keypair,
                   :keypair_name
-      #             :image_id,
         
       def initialize(opts={}, &block)
         opts.each {|k,v| opts[k] = v.call if v.respond_to?(:call) }

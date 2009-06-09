@@ -75,7 +75,7 @@ class TestMetavirt < Test::Unit::TestCase
     end
     
     should "use libvirt options from metavirt" do
-      assert_equal 'jaunty19', clouds[:lv].metavirt.libvirt.image_id
+      assert_equal 'jaunty19', clouds[:lv].metavirt.libvirt.image_id      
       assert_not_nil clouds[:lv].metavirt.image_id
       assert_equal clouds[:lv].metavirt.libvirt.image_id, clouds[:lv].metavirt.image_id
     end
