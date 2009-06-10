@@ -32,7 +32,7 @@ module PoolParty
       include CloudResourcer
       include Remote
       
-      dsl_methods :name
+      default_options Default.default_options
       
       def initialize(name,&block)
         @pool_name = name
