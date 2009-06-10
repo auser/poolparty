@@ -39,6 +39,10 @@ module PoolParty
         :images_repo_path    => ::File.expand_path("~/Documents/Virtual_Machines.localized/")
       )
       
+      def image_id
+        next_unused_vmx_file
+      end
+      
       def vmx_files(n=nil)
         if n.nil?
           dsl_options[:vmx_files] || vmx_hash.keys
@@ -108,6 +112,11 @@ module PoolParty
         end
       end
       
+      # def id(vfile=nil)
+      #   vfile.nil? ?   : vmx_files[vfile]
+      # end
+      # alias :image_id :id
+      
       private
       
       def running_instances(o={})
@@ -143,10 +152,6 @@ module PoolParty
       
       def last_unused_vmx_file
         running_instances.last.vmx_file
-      end
-      
-      def id(vfile)
-        vmx_file(vfile)
       end
       
       ## method's to override default RemoteInstance

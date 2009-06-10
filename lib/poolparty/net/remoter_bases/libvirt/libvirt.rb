@@ -8,9 +8,7 @@ module PoolParty
     class Libvirt < Remote::RemoterBase
       include Dslify
       
-      default_options(
-        :image_id => nil
-      )
+      default_options :image_id => nil 
       
       def initialize(opts={}, &block)
         set_vars_from_options opts

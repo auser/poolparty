@@ -29,9 +29,6 @@ class TestMetavirt < Test::Unit::TestCase
       assert_equal 'test_key', @cloud.keypair.basename
       assert_equal 'test_key', @cloud.keypair_name
     end
-    should "be able to initialize without a cloud" do
-      assert_nothing_raised  do PoolParty::Remote::Metavirt.new end
-    end
     # should "start metavirt instance" do
     #   @cloud.launch_instance!
     #   assert @cloud.metavirt.describe_instances.first[:instance_id]>0

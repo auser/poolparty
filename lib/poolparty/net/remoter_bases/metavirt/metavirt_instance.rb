@@ -17,7 +17,8 @@ module PoolParty
           :ip             => ip,
           :instance_id    => vmx_file,
           :internal_ip    => ip,
-          :keypair        => keypair
+          :keypair        => keypair,
+          :key_name       => keypair.name
         }
       end
       

@@ -26,6 +26,7 @@ module PoolParty
       def initialize(o={}, &block)
         using o[:remoter_base], o.delete(:remote_base) if o.has_key?(:remoter_base)
         super
+        set_vars_from_options remote_base.dsl_options
       end
       
       def method_missing(m, args, &blk)
@@ -45,7 +46,9 @@ module PoolParty
       end
       
       def image_id
-        remote_base.image_id
+        require 'ruby-debug'; debugger
+        puts "calling imageid "
+        dsl_options[:remote_base].image_id
       end
       
       def server
