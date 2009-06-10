@@ -16,7 +16,8 @@ module PoolParty
         # :keypair_name  => lambda {key.basename},
         # :keypair_path  => lambda {key.full_filepath},
         # :public_key    => lambda { key.public_key.to_s },
-        :keypair_path    => nil,
+        # :keypair_path    => nil,
+        :keypair_name    => nil,
         :authorized_keys => nil,
         :remoter_base    => :vmrun,
         :server_config   => {}
@@ -29,6 +30,10 @@ module PoolParty
       
       def method_missing(m, *args, &blk)
         remote_base.respond_to?(m) ? remote_base.send(m, *args, &blk) : super
+      end
+      
+      def authorized_keys
+        keypair.public_key
       end
       
       def remote_base(n=nil)
@@ -47,16 +52,18 @@ module PoolParty
         if @server
           @server
         else
-          opts = {:content_type =>'application/json', 
-           :accept      => 'application/json',
-           :host        => 'http://localhost',
-           :port        => '3000'}.merge(server_config)
+          opts = { :content_type  =>'application/json', 
+                   :accept        => 'application/json',
+                   :host          => 'http://localhost',
+                   :port          => '3000'
+                  }.merge(server_config)
           @uri = "#{opts.delete(:host)}:#{opts.delete(:port)}"
           @server = RestClient::Resource.new( @uri, opts)
         end
       end
       
       def self.launch_new_instance!(o={})
+        require 'ruby-debug'; debugger
         new_instance(o).launch_new_instance!
       end
       def launch_new_instance!(o={})
