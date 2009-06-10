@@ -26,6 +26,7 @@ module PoolParty
       def initialize(o={}, &block)
         using o[:remoter_base], o.delete(:remote_base) if o.has_key?(:remoter_base)
         super
+        set_vars_from_options remote_base.dsl_options
       end
       
       def method_missing(m, *args, &blk)
@@ -44,7 +45,7 @@ module PoolParty
         end
       end
       
-      def image_id
+      def image_id(*n)
         remote_base.image_id
       end
       

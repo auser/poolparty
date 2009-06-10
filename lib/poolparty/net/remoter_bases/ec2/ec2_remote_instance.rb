@@ -34,6 +34,10 @@ module PoolParty
         # super(opts)
       end
       
+      def keypair(*n)
+        dsl_options[:keypair] ||= Key.new(key_name)
+      end
+      
       # Printing. This is how we extract the instances into the listing on the 
       # local side into the local listing file
       def to_s

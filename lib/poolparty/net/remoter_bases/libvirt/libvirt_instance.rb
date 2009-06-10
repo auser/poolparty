@@ -26,6 +26,10 @@ module PoolParty
         dsl_options
       end
       
+      def keypair(*n)
+        dsl_options[:keypair] ||= Key.new(keypair_name)
+      end
+      
       # TODO: this needs to be extended for selecting between multiple interfaces
       def mac_address(hsh=nil)
         mac_addresses.first(hsh)

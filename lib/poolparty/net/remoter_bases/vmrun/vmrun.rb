@@ -38,7 +38,11 @@ module PoolParty
         :vmx_hash            => {},  # hash of vmx_filename => ip
         :images_repo_path    => ::File.expand_path("~/Documents/Virtual_Machines.localized/")
       )
-
+      
+      def image_id
+        next_unused_vmx_file
+      end
+      
       def vmx_files(n=nil)
         if n.nil?
           dsl_options[:vmx_files] || vmx_hash.keys
@@ -46,7 +50,7 @@ module PoolParty
           dsl_options[:vmx_files] = n
         end
       end
-
+      
       def self.launch_new_instance!(o={})
         # puts "launch_new_instance 0 = #{o.inspect}"
         new(o).launch_new_instance!
@@ -56,8 +60,8 @@ module PoolParty
         vmx_file = next_unused_vmx_file
         VmwareInstance.new( {:vmx_file  => vmx_file, 
                              :public_ip => ip(vmx_file),
-                             :ip => ip(vmx_file),
-                             :keypair => keypair
+                             :ip        => ip(vmx_file),
+                             :keypair   => keypair
                             }.merge(o)
                           ).launch!
       end
@@ -85,8 +89,7 @@ module PoolParty
         new(o).describe_instances
       end
       def describe_instances(o={})
-        # TODO: WTF
-        running_instances.map {|a| a.to_hash.merge(:public_ip => ip(a.vmx_file), :ip => ip(a.vmx_file)) }
+        running_instances
       end
 
       # After launch callback
@@ -109,16 +112,23 @@ module PoolParty
         end
       end
       
+      # def id(vfile=nil)
+      #   vfile.nil? ?   : vmx_files[vfile]
+      # end
+      # alias :image_id :id
+      
       private
       
       def running_instances(o={})
         output = run_local "#{path_to_binary} list"
         lines = output.split("\n")
         lines.shift
-        lines.map {|vmx_file| VmwareInstance.new( :vmx_file => vmx_file, 
-                                                  :ip => ip, 
-                                                  :keypair => keypair
-                                                ) }
+        lines.map {|vmx_filename|
+          VmwareInstance.new( :vmx_file => vmx_filename, 
+                              :ip       => ip,
+                              :keypair  => keypair,
+                              :key_name => key_name
+                            ) }
       end
       
       # vmrun specific methods
@@ -142,10 +152,6 @@ module PoolParty
       
       def last_unused_vmx_file
         running_instances.last.vmx_file
-      end
-      
-      def id(vfile)
-        vmx_file(vfile)
       end
       
       ## method's to override default RemoteInstance

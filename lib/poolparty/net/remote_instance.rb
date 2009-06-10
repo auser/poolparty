@@ -11,12 +11,9 @@ module PoolParty
                   :status       # Status of the remote instance
       
       def initialize(opts={})
+        opts.choose{|k,v| dsl_options.has_key? k}
         set_vars_from_options(opts) if opts.is_a?(Hash)
         on_init
-      end
-      
-      def keypair(*n)
-        @keypair ||= Key.new(key_name)
       end
       
       ## hash like methods
