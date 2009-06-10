@@ -33,9 +33,8 @@ module PoolParty
       
       # All inheriting remoter bases should override these default_options
       dsl_methods :keypair,
-                  :keypair_name
-      #             :image_id,
-        
+                  :key_name
+      
       def initialize(opts={}, &block)
         opts.each {|k,v| opts[k] = v.call if v.respond_to?(:call) }
         set_vars_from_options opts
@@ -54,6 +53,14 @@ module PoolParty
         else
           @cloud = n
         end
+      end
+      
+      def keypair
+        cloud.keypair
+      end
+      
+      def key_name
+        keypair.basename
       end
       
       # def evaluate_proc_options(opts)
@@ -137,7 +144,7 @@ module PoolParty
       # 2.) Waits for the instance to get an ip address
       # 3.) Waits for port 22 to be open
       # 4.) Calls call_after_launch_instance callbacks
-      # 5.) Executes passes block, if any
+      # 5.) Executes passed &block, if any
       def launch_instance!(o={}, &block)
         @cloud = clouds[o[:cloud_name] || o[:name]]
         o[:keypair_name] = @cloud.keypair.basename

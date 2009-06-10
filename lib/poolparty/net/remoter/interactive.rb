@@ -14,6 +14,8 @@ module PoolParty
         # else
         #   @nodes ||= describe_instances.select_with_hash(conditions)
         # end
+        # 
+        # 
         results = describe_instances.select_with_hash(key_condition)
         results.select_with_hash(hsh)
       end
