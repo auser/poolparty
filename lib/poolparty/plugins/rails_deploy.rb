@@ -76,7 +76,7 @@ module PoolParty
       end
       def call_deploy
         has_package "git-core"
-        dopts = dsl_options.choose {|k,v| [:repo, :user, :action].include?(k) }        
+        dopts = default_options.choose {|k,v| [:repo, :user, :action].include?(k) }
         has_chef_deploy dopts.merge(:name => "#{release_directory}", :user => owner)
       end
       def setup_shared_directory

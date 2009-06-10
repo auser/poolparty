@@ -31,7 +31,8 @@ module PoolParty
         else
           raise ::ReposMissingError.new unless repo
           has_chef_library "chef-deploy/lib/chef-deploy.rb"
-          has_chef_deploy_definition(dsl_options)
+          
+          has_chef_deploy_definition o
         end
       end
       

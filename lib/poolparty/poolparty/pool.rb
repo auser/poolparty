@@ -32,6 +32,8 @@ module PoolParty
       include CloudResourcer
       include Remote
       
+      dsl_methods :name
+      
       def initialize(name,&block)
         @pool_name = name
         @pool_name.freeze

@@ -18,6 +18,10 @@ module PoolParty
         :deploy
       end
       
+      def loaded(o={})
+        # require 'rubygems'; require 'ruby-debug'; debugger
+      end
+      
     end
   end
 end

@@ -39,7 +39,7 @@ module PoolParty
       end
       
       def calls(r)
-        has_exec "ls", :calls => r
+        has_exec "echo 'calling #{r.name}'", :calls => r
       end
       
       def enable
