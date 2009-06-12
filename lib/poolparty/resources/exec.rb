@@ -29,6 +29,13 @@ Ensure a command is run on the instances
       default_options({
         :path => ["/usr/bin:/bin:/usr/local/bin:$PATH"]
       })
+
+      def loaded(o={})
+        if user
+          name "sudo -u #{user} -H #{name}"
+          dsl_options.delete(:user)
+        end
+      end
       
       def present
         nil
