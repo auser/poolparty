@@ -94,15 +94,17 @@ class Object
     o.respond_to?(:verbose) ? o.verbose : (debugging? || $TESTING ||= false)
   end
   def debugging?(o=self)
-    o.respond_to?(:debug) ? o.debug : ($DEBUGGING ||= false)
+    debugging
   end
-  def debugging(bool=nil)
-    bool.nil? ? $DEBUGGING : $DEBUGGING = bool
+  def debugging
+    $DEBUGGING ||= false
+  end
+  def debugging=(bool)
+    $DEBUGGING = bool
   end
   def testing(bool=$TESTING)
     bool.nil? ? $TESTING : $TESTING = bool
   end
-  alias :debug :debugging
   def unix_hide_string
     "2>&1 > /dev/null"
   end

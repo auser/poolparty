@@ -11,9 +11,7 @@ module PoolParty
     # def self.options
     default_options(
       :verbose => false,
-      :debug => false,
       :testing => false,
-      :debugging => false,
       :minimum_instances => 2,
       :maximum_instances => 5,
       :user => "root", # This should change here
