@@ -160,6 +160,7 @@ module PoolParty
           # "god -c /etc/poolparty/monitor.god",
           "mkdir -p /var/log/poolparty/",
           "echo '-- Starting monitor_rack --'",
+          # NOTE: if someone has an old version of thin/rack on their system, this will fail silently and never finish bootstrapping
           "thin -R /etc/poolparty/monitor.ru -p 8642 --pid /var/run/stats_monitor.pid --daemon -l /var/log/poolparty/monitor.log start 2>/dev/null",
           "tail -n 20 /var/log/poolparty/monitor.log",
           'echo "bootstrap" >> /var/poolparty/POOLPARTY.PROGRESS']
