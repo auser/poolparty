@@ -5,8 +5,8 @@ module PoolParty
       
       dsl_methods :name,        # Name of the user
                   :password,    # Password for the user
-                  :home,         # Home directory
-                  :group, # primary group for user
+                  :home,        # Home directory
+                  :gid,        # primary group for user
                   :authorized_keys
                   
                   
@@ -21,9 +21,6 @@ module PoolParty
       def after_create
         if authorized_keys
           cloud.has_file :name=>"/home/#{name}/.ssh/authorized_keys", :content => authorized_keys
-        end
-        if @group
-          cloud.has_exec "usermod -g #{@group} #{name}"
         end
       end
       
