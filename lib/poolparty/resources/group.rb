@@ -3,9 +3,9 @@ module PoolParty
         
     class Group < Resource      
       
-      default_options({
-        :shell => "/bin/sh"
-      })
+      # default_options({
+      #   :shell => "/bin/sh"
+      # })
       
       def present
         :manage
