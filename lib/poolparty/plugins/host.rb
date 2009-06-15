@@ -1,5 +1,5 @@
 module PoolParty    
-  module Resources
+  module Plugin
 =begin rdoc
 
 == Host
@@ -22,14 +22,15 @@ The host parameter sets hosts on the instances. Setting this, every node will ha
 
   has_host({:name => "other_machine", :ip => 192.168.0.101 })
 =end       
-    class Host < Resource
+    class Host < Plugin
             
       default_options({
+        :name => "localhost",
         :ip => "127.0.0.1"
       })
       
-      def aka(i=nil)
-        i ? dsl_options[:alias] = i : dsl_options[:alias]
+      def loaded(o={},&block)
+        has_line_in_file(:file => "/etc/hosts", :line => "#{o[:ip]} #{o[:name]}")
       end
             
     end
