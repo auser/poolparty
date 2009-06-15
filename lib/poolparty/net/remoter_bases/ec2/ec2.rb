@@ -77,13 +77,13 @@ module PoolParty
         o.merge!( dsl_options.merge(:key_name=>keypair_name) )
         instance = ec2(o).run_instances(o)
         begin
-          h = EC2ResponseObject.get_hash_from_response(instance.instancesSet.item.first)
+          h = EC2ResponseObject.describe_instance(instance)
           #h = instance.instancesSet.item.first
         rescue Exception => e
           h = EC2ResponseObject.get_hash_from_response(instance) rescue instance
           # h = instance
         end
-        h
+        Ec2RemoteInstance.new(h)
       end
       
       # Terminate an instance by id
