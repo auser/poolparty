@@ -21,6 +21,9 @@ EOS
       if cld.nodes.empty?
         puts "No nodes to provision"
       else
+        # Call before_provision callback on cloud
+        cld.call_before_provision_callbacks
+        
         if command[:inst_num]
           vputs "\nConfiguring: #{nodes[o.inst_num]}\n--------------------"
           address = cld.nodes[ command[:inst_num] ]
