@@ -1,36 +1,23 @@
 require "#{::File.dirname(__FILE__)}/../../test_helper"
 require 'tempfile'
+require 'rack/test'
+
 
 class MonitorRackTest < Test::Unit::TestCase
+  include Rack::Test::Methods
   context "MonitorRack" do
     setup do
-      @rackup=<<EOS
-      #!/usr/bin/env ruby
-      require 'rubygems'
-      require 'rack'
-      require 'json'
-      require 'thin'
-      require 'rest_client'
-      require "#{::File.dirname(__FILE__)}/../../../lib/poolparty/monitors/monitor_rack" 
-
-      app = Rack::Builder.new do
-        # use Rack::Reloader, 2
-        use Rack::ShowExceptions
-        # use Rack::PostBodyContentTypeParser  #parses json requests to params hash
-        run Monitors::MonitorRack.new()
-      end
-
-      run app
-EOS
+      @rackup = ::File.dirname(__FILE__)+"/../../../lib/poolparty/templates/monitor.ru"
     end
-
+    
     should "be able to start" do
-      tfile = Tempfile.new('monitor_rackup.ru'){|f| f.write @rackup}
-      
-      output = `thin -R #{tfile.path} start --daemon`
-      
+      tfile = Tempfile.new('monitor_rack.pid')
+      output = IO.popen("thin -R #{@rackup} start", 'r')
+      # output = IO.popen("uptime", 'r')
+      p output.status
       assert $?.success?
-      # `thin -R #{tfile.path} stop`
+      
+      `thin -R #{tfile.path} stop`
       assert $?.success?
       tfile.unlink
     end

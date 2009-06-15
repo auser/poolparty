@@ -45,13 +45,8 @@ module Monitors
         path_array= path_map(env['REQUEST_PATH']) || []
         verb = env['REQUEST_METHOD'].downcase
         @response.write map_to_method(path_array, verb).to_json
+        setup_callbacks
         
-        if instance.respond_to? :before_close_callbacks
-          @response.before_close_callbacks << instance.before_close_callbacks
-        end
-        if instance.respond_to?(:after_close_callbacks)
-          @response.after_close_callbacks << instance.after_close_callbacks
-        end
       # rescue Exception=>e
       #   @response.write e
       #   @response.status = 500
@@ -60,6 +55,14 @@ module Monitors
     end
     
     private
+    def setup_callbacks
+      if instance.respond_to? :before_close_callbacks
+        @response.before_close_callbacks << instance.before_close_callbacks
+      end
+      if instance.respond_to?(:after_close_callbacks)
+        @response.after_close_callbacks << instance.after_close_callbacks
+      end
+    end
     def instance
       return nil if path_map.nil?
       @instance ||= constantize( path_map.first ).new(env)
@@ -79,20 +82,26 @@ module Monitors
     def path_map(requested_path=env['REQUEST_PATH'])
       requested_path.split('.')[0].split('/')[1..-1]
     end
-  
+    
+    def html_list
+      str = "<h1>Available Monitors</h1>\n<ul>"
+      ::Monitors.available.each do |monitor|
+        str<< "<li><a href=/#{monitor.to_s.split('::').pop}>#{monitor}</a></li>"
+      end
+      str << "</ul>"
+      str
+    end
+    
     # Find class and call method from the pattern /class_name/method/args
     # GET /neighborhood => ::Monitors::Neighboorhood.get
     # POST /neighborhood => ::Monitors::Neighboorhood.post(params)
     # GET /neighborhood/size => ::Monitors::Neighboorhood.get_size
     def map_to_method(path, verb='get')
       if !path or path.empty? or path[0].nil?
-        response.write 'cannot map an empty path' 
-        response.status='404'
+        response.write html_list
       else
         raise "#{path[0]} did not map to a Constant" if !instance
         case path.size
-        when 0 # usefull if you want to subclass from MonitorRack
-          self.respond_to?(verb.to_sym) ? self.send(verb.to_sym) : response.status='404'
         when 1 # example: /stats
           instance.send(verb.to_sym, @data)
         when 2 # example: /stats/load

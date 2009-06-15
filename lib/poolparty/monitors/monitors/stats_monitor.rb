@@ -61,9 +61,14 @@ module Monitors
       if @logfile
         @logfile
       else
-        ::File.file? log_file_path
-        ::FileUtils.mkdir_p ::File.dirname(log_file_path) unless ::File.directory?(::File.dirname(log_file_path))
-        @logfile ||= ::File.open(log_file_path, 'a+')
+        begin
+          ::File.file? log_file_path
+          ::FileUtils.mkdir_p ::File.dirname(log_file_path) unless ::File.directory?(::File.dirname(log_file_path))
+          @logfile ||= ::File.open(log_file_path, 'a+')
+        rescue Exception => e
+          @log_file = $stdout
+        end
+        
       end
     end
     
@@ -154,6 +159,9 @@ module Monitors
             # if we are facing an expansion rule
             if k =~ /expand/
               k if can_expand?
+              neigborhood.each do |i|
+                RestClient.put "#{i.ip}/elections", stats.to_json, :content_type => 'text/x-json'
+              end
             # if we are facing a contraction rule
             elsif k =~ /contract/
               k if can_contract?
@@ -163,6 +171,10 @@ module Monitors
           end
         end.compact
       end.flatten.compact
+    end
+    
+    def neighborhood
+      @neighborhood ||= clouds[open('/etc/poolparty/cloud_name').read].nodes
     end
 
     #alias to allow access thru http route GET /stats/nominations

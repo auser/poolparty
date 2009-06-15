@@ -3,14 +3,15 @@
 pool :application do
   instances 1..5
   
-  cloud :basic_app do
+  cloud :frontend do
     minimum_instances 3
-    keypair 'application_front'
+    keypair 'application_frontend'
     image_id "ami-abc123"
     has_file :name => "/etc/motd", :content => "Welcome to your PoolParty instance"
   end
   
-  cloud :basic_db do
+  cloud :database do
+    keypair 'application_database'
     using :vmrun do
       vmx_hash "/path/to/vmx_file" => "192.168.248.122"
     end
