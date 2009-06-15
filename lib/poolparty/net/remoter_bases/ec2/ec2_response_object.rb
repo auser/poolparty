@@ -84,8 +84,16 @@ class EC2ResponseObject
   #
   # Selects the first instance if an index is not given.
   def self.describe_instance(response, index=0)
-    inst=response['reservationSet']['item'].first['instancesSet']['item'][index]
-    Ec2RemoteInstance.new(symbolize_and_snakecase(inst))
+    inst = if response.has_key?("reservationSet")
+      response['reservationSet']['item'].first['instancesSet']['item'][index]
+    elsif response.has_key?("instancesSet")
+      response['instancesSet']['item'][index]
+    else
+      raise StandardError.new("EC2ResponseObject was given a response it doesn't know about\n\t#{response.inspect}")
+    end
+    
+    # Ec2RemoteInstance.new(
+    symbolize_and_snakecase(inst)
   end
   
   def self.describe_instances(response)
