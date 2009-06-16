@@ -4,6 +4,9 @@ module PoolParty
       def additional_callbacks(arr=[])
         @additional_callbacks ||= arr
       end
+      def callback_block(&block)
+        @callback_block ||= (block ? block : nil)
+      end
     end
     
     module InstanceMethods
@@ -21,7 +24,7 @@ module PoolParty
           self.class.additional_callbacks
         ].flatten
       end
-      
+            
       # Callbacks on bootstrap and configuration
       # Defines the callback accessors:
       #   call_before/after_bootstrap/configure_callbacks
@@ -31,6 +34,20 @@ module PoolParty
       # The method (before/after_bootstrap/configure) is called
       # on self if the callback method is defined on self
       def callback(call_time, *args, &block)
+        # plugins?
+        callback_block.call(self, call_time) if callback_block
+        callback_on_self(call_time, *args, &block)
+      end
+      
+      def callbacks
+        @callbacks ||= defined_callbacks
+      end
+      
+      private
+      def callback_block
+        self.class.callback_block
+      end
+      def callback_on_self(call_time, *args, &block)
         if respond_to?(call_time)
           callbacks << call_time.to_sym
           case self.method(call_time).arity
@@ -42,10 +59,6 @@ module PoolParty
             self.send(call_time, *args, &block)
           end          
         end
-      end
-      
-      def callbacks
-        @callbacks ||= defined_callbacks
       end
       # def setup_callbacks
       #   defined_callbacks.each do |meth|

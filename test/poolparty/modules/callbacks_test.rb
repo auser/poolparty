@@ -1,40 +1,43 @@
-require "#{::File.dirname(__FILE__)}/../../test_helper"
+require "#{File.dirname(__FILE__)}/../../test_helper"
 
-class CallbacksTestClass
-  attr_reader :configured
+class CallbackTestClass
   include PoolParty::Callbacks
+  attr_reader :var
+  attr_accessor :last_callback
   
-  additional_callbacks ["after_boxes"]
+  callback_block do |instance, time|
+    instance.last_callback = time
+  end
   
-  def before_configure
-    @configured = true
+  def after_load(v)
+    @var = v
   end
 end
 
-class TestCallbacks < Test::Unit::TestCase
-  context "methods" do
+class CallbacksTest < Test::Unit::TestCase
+  context "callbacks" do
     setup do
-      @tc = CallbacksTestClass.new
-      @tc.setup_callbacks
+      @cClass = CallbackTestClass.new
     end
 
-    should "have the 4 basic callbacks" do
-      assert @tc.respond_to?(:call_before_bootstrap_callbacks)
-      assert @tc.respond_to?(:call_after_bootstrap_callbacks)
-      assert @tc.respond_to?(:call_before_configure_callbacks)
-      assert @tc.respond_to?(:call_after_configure_callbacks)
+    should "call the callback method on the object" do
+      assert_equal @cClass.var, nil
+      @cClass.callback :after_load, "a"
+      assert_equal @cClass.var, "a"
+      assert_equal :after_load, @cClass.last_callback
     end
-    should "have an addiitonal callback caller method" do
-      assert @tc.respond_to?(:call_after_boxes_callbacks)
+    
+    should "not call a method if it isn't on the object" do
+      assert_nothing_raised do 
+        @cClass.callback :after_sleep
+      end
+      assert_equal :after_sleep, @cClass.last_callback
     end
-    should "call the callback on the class when calling call_(\w+)_callbacks method" do
-      assert_nil @tc.configured
-      @tc.call_before_configure_callbacks
-      assert @tc.configured
+    
+    should "have a list of the callbacks available" do
+      assert_equal @cClass.callbacks.class, Array      
     end
-    should "not explode when the method does not exist on the call_(\w+)_callbacks method" do
-      lambda {@tc.call_after_boxes_callbacks}.should_not raise_error
-    end
+    
   end
   
 end
