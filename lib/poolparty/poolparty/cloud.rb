@@ -83,6 +83,7 @@ module PoolParty
       
       additional_callbacks [
         "after_launch_instance",
+        "before_provision",
         "after_provision"
       ]
       
