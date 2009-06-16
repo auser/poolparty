@@ -1,6 +1,0 @@
-#!/usr/bin/env ruby
-
-::File.open("/etc/hosts", "a+") do |f| 
-  str = "127.0.0.1 localhost master puppet\n"
-  f << str if f.read.scan(Regexp.new(str)).empty?
-end
