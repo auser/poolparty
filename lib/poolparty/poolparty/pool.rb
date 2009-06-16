@@ -51,10 +51,16 @@ module PoolParty
         #%w(monitors plugins verifiers).each do |lib|
         #  Dir[File.join(::File.dirname(::File.basename(filename)), lib, '*')].each{|f| require f }
         # end
-        File.open(filename, 'r') do |f|
+        o = File.open(filename, 'r') do |f|
           instance_eval f.read, pool_specfile
         end
-        # a
+        after_all_loaded.call if after_all_loaded
+        o
+      end
+      
+      # callback
+      def self.after_all_loaded(&block)
+        @after_all_loaded ||= block
       end
       
       def name(*args)
