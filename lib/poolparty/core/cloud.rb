@@ -4,15 +4,15 @@ module PoolParty
     # Options we want on the output of the compiled script
     # but want to take the options from the parent if they
     # are nil on the cloud
-    required_options  :expand_when,
-                      :contract_when,
-                      :keypair
+    additional_options  :expand_when,
+                        :contract_when,
+                        :keypair
     
     default_options(
       :minimum_instances    => 2,     # minimum_instances default
       :maximum_instances    => 5,     # maximum_instances default
       :minimum_runtime      => 3600,  # minimum_instances default: 1 hour
-      :hardware_provider    => :ec2   # hardware_provider default: ec2
+      :cloud_provider       => :ec2   # hardware_provider default: ec2
     )
     
     # Callbacks
