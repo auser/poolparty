@@ -7,3 +7,5 @@ module PoolParty
     
   end
 end
+
+Dir["#{File.dirname(__FILE__)}/../resources/*.rb"].each {|lib| require lib }

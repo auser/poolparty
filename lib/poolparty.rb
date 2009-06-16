@@ -21,7 +21,8 @@ end
 end
 
 # PoolParty core
-%w(default base cloud key plugin pool resource).each do |lib|
+%w( default base cloud key plugin 
+    pool resource dependency_resolver).each do |lib|
   require "core/#{lib}"
 end
 
