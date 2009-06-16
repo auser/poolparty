@@ -8,19 +8,19 @@ class EC2ResponseObject
     # puts rs.methods.sort - rs.ancestors.methods
     out = begin
       if rs.respond_to?(:instancesSet)
-        [EC2ResponseObject.get_hash_from_response(rs.instancesSet.item, group)]
+        [EC2ResponseObject.describe_instances(rs)]
       else
         rs.collect {|r| 
           if r.instancesSet.item.class == Array
-            r.instancesSet.item.map {|t| EC2ResponseObject.get_hash_from_response(t, group)}
+            r.instancesSet.item.map {|t| EC2ResponseObject.describe_instances(t)}
           else
-            [EC2ResponseObject.get_hash_from_response(r.instancesSet.item, group)]
+            [EC2ResponseObject.describe_instances(r)]
           end            
         }.flatten.reject {|a| a.nil? }
       end
     rescue Exception => e
       # Really weird bug with amazon's ec2 gem
-      rs.collect {|r| EC2ResponseObject.get_hash_from_response(r)}.reject {|a| a.nil? } rescue []
+      rs.collect {|r| EC2ResponseObject.describe_instances(r)}.reject {|a| a.nil? } rescue []
     end
 
     out
