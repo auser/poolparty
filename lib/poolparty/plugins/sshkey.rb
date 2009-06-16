@@ -1,5 +1,5 @@
 module PoolParty    
-  module Resources
+  module Plugin
 =begin rdoc
 
 == Ssh Key
@@ -16,30 +16,32 @@ The sshkey resource specifies an ssh key that should be distributed on all the n
 == Options
 
 * <tt>key</tt> The key content for the ssh key
-* <tt>target</tt> The location of the ssh key
+* <tt>name</tt> The location of the ssh key
 
 == Examples
 
-  has_sshkey(:key => "ABIGLONGSTRINGOFDIGETS", :target => "/root/.ssh/key_file")
+  has_sshkey(:key => "ABIGLONGSTRINGOFDIGETS", :name => "/root/.ssh/key_file")
 =end
     
-    class Sshkey < Resource
+    class Sshkey < Plugin
       
       dsl_methods(:key,
                   :keypath,
                   :name)
 
-      default_options(:type => 'rsa')
+      default_options(:type => 'rsa', :mode => "600")
                   
       def initialize(opts={}, extra_opts={}, &block)
         super(opts, extra_opts, &block)
         @key = Key.new(keypath ? keypath : nil)
         self.key = @key.content
       end
-      
-      def enctype(i=nil)
-        i ? self.type = i : type
+
+      def loaded(opts={}, &block)
+        has_directory(::File.dirname(opts[:name]))
+        has_file(:name => opts[:name], :content => self.key, :mode => opts[:mode])
       end
+
       
     end
     

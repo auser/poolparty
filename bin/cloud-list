@@ -14,6 +14,7 @@ Usage: #{$0} #{all_options_string}
 EOS
 
   opt :instance_id, "Describe a specific instance", :type => String, :default => nil
+  opt :short, "show a short description rather than a long one", :default => false
 
   short_desc "show a list of the current instances on the clouds"
 
@@ -23,13 +24,24 @@ EOS
         require 'pp'
         pp result = cld.nodes(:instance_id=>command[:instance_id])
       else
-        puts "Listing cloud #{cld.name}"
-        puts "Active instances"
-        puts cld.nodes(:status => "running").map{|a| "#{a[:instance_id] || a[:id]}\t#{a[:ip] ||a[:public_ip] }" }.join("\n")
-        
-        if cld.nodes(:status => "pending").size > 0
-          puts "Pending instances"
-          puts cld.nodes(:status => "pending").map{|a| "#{a[:instance_id] || a[:id]}\t#{a[:ip] ||a[:public_ip] }" }.join("\n")
+        if command[:short]
+          %w{running pending}.each do |status|
+            nodes = cld.nodes(:status => status)
+            if nodes.size > 0
+              puts nodes.map{|a| 
+                "%-15s [%s]: #{a[:instance_id] || a[:id]}\t#{a[:ip] ||a[:public_ip] }" % [cld.name, status] 
+              }.join("\n")
+            end
+          end
+        else
+          puts "Listing cloud #{cld.name}"
+          puts "Active instances"
+          puts cld.nodes(:status => "running").map{|a| "#{a[:instance_id] || a[:id]}\t#{a[:ip] ||a[:public_ip] }" }.join("\n")
+          
+          if cld.nodes(:status => "pending").size > 0
+            puts "Pending instances"
+            puts cld.nodes(:status => "pending").map{|a| "#{a[:instance_id] || a[:id]}\t#{a[:ip] ||a[:public_ip] }" }.join("\n")
+          end
         end
       end
     end

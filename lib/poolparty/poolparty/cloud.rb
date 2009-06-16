@@ -353,6 +353,12 @@ module PoolParty
       def after_bootstrap
         after_blocks[:bootstrap].each {|b| b.call(self) } if after_blocks.has_key?(:bootstrap)
       end
+      def before_provision
+        before_blocks[:provision].each {|b| b.call(self) } if before_blocks.has_key?(:provision)
+      end
+      def after_provision
+        after_blocks[:provision].each {|b| b.call(self) } if after_blocks.has_key?(:provision)
+      end
       def before_configure
         before_blocks[:configure].each {|b| b.call(self) } if before_blocks.has_key?(:configure)
       end
