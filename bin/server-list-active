@@ -11,7 +11,7 @@ raise "ERROR: no json_file given" if !json_file
 
 cld = Cloud.load_from_json(::File.read(json_file))
 conditions= {:status=>'running', :keypair=>cld.keypair_name}
-inst_array = cld.remote_base.describe_instances.select_with_hash(conditions)
+inst_array = cld.nodes(conditions)
 puts inst_array.collect{|n| n[list_type] || n[list_type.to_sym]}.join("\t")
 
 
