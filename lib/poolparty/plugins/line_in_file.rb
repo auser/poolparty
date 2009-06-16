@@ -16,7 +16,7 @@ Ensures that the line given is in the file
 =end
 
   module Plugin
-    class  LineInFile < Plugin
+    class LineInFile < Plugin
     
       dsl_methods :file, :line
       default_options(
