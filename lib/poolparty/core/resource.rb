@@ -1,7 +1,9 @@
 module PoolParty
-  class Resource
+  class Resource < Base
     
-    
+    default_options(
+      :name => "resource"
+    )
     
   end
 end
