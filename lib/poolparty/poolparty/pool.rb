@@ -52,15 +52,19 @@ module PoolParty
         #  Dir[File.join(::File.dirname(::File.basename(filename)), lib, '*')].each{|f| require f }
         # end
         o = File.open(filename, 'r') do |f|
-          instance_eval f.read, pool_specfile
+          instance_eval f.read, (pool_specfile || filename)
         end
-        after_all_loaded.call if after_all_loaded
+        o.call_after_all_loaded if o.respond_to?(:call_after_all_loaded)
         o
       end
       
       # callback
-      def self.after_all_loaded(&block)
+      def after_all_loaded(&block)
         @after_all_loaded ||= block
+      end
+      
+      def call_after_all_loaded
+        after_all_loaded.call if after_all_loaded
       end
       
       def name(*args)
