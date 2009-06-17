@@ -5,13 +5,18 @@ $TESTING = true # Just for now
 
 t=Time.now
 
+# Gems
+%w(rubygems json).each do |lib|
+  require lib
+end
+
 %w(dslify parenting).each do |dep|
   $LOAD_PATH.unshift(File.join(File.dirname(__FILE__),'..', 'vendor/gems', dep, 'lib'))
   require "#{dep}"
 end
 
 # Core object overloads
-%w(object).each do |lib|
+%w(object string).each do |lib|
   require "ruby/#{lib}"
 end
 

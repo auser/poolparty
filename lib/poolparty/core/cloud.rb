@@ -53,7 +53,6 @@ module PoolParty
     
     ##### Internal methods #####
     def key
-      @
     end
     
   end

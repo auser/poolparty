@@ -1,7 +1,7 @@
 require "#{::File.dirname(__FILE__)}/../../test_helper"
 
 module PoolParty
-  module Plugin
+  module Plugins
     class Box < Plugin
     end
   end
@@ -11,8 +11,8 @@ class TestPlugins < Test::Unit::TestCase
   context "services" do
     
     should " have array of availble plugins" do
-      assert Plugin.available.include?(PoolParty::Plugin::Box)
-      assert Plugin.available.include?(PoolParty::Plugin::Git)
+      assert PoolParty::Plugin.available.include?(:box)
+      assert !PoolParty::Plugin.available.include?(:git)
     end
     
   end
