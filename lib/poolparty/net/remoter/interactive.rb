@@ -6,7 +6,7 @@ module PoolParty
       if with_neighborhood_default
         list_of_instances(with_neighborhood_default).select_with_hash(hsh)
       else
-        kname = (hsh[:key_name] ||self.key_name || keypair.basename)
+        kname = (hsh[:key_name] ||self.key_name || self.keypair_name || keypair.basename)
         # Added keypair to filter on either key_name or keypair response
         key_condition = {:key_name => kname, :keypair => kname }
         # if hsh.delete(:uncached)

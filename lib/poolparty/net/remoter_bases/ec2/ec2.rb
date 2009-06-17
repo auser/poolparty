@@ -25,7 +25,7 @@ end
   
 class String
   def convert_from_ec2_to_ip
-    self.gsub(/.compute-1.amazonaws.com*/, '').gsub(/ec2-/, '').gsub(/-/, '.')
+    self.match(/-(\d+-\d+-\d+-\d+)\./) ? $1.gsub(/-/, '.') : self
   end
   def parse_datetime
     DateTime.parse( self.chomp ) rescue self
@@ -77,13 +77,13 @@ module PoolParty
         o.merge!( dsl_options.merge(:key_name=>keypair_name) )
         instance = ec2(o).run_instances(o)
         begin
-          h = EC2ResponseObject.get_hash_from_response(instance.instancesSet.item.first)
+          h = EC2ResponseObject.describe_instance(instance)
           #h = instance.instancesSet.item.first
         rescue Exception => e
           h = EC2ResponseObject.get_hash_from_response(instance) rescue instance
           # h = instance
         end
-        h
+        Ec2RemoteInstance.new(h)
       end
       
       # Terminate an instance by id

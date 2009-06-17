@@ -10,7 +10,7 @@ task :slow_spec do
   end
   puts "#{stats[:failures]} total errors"
 end
-namespace(:poolparty) do
+namespace(:pp) do
   task :build_gem => ["poolparty:vendor:setup", "poolparty:vendor:update", :gemspec, :build]
   
   namespace(:setup) do
@@ -27,6 +27,10 @@ namespace(:poolparty) do
     end
   end
   namespace :vendor do
+    desc "Fetch all the submodules"
+    task :submodules do
+      `git submodule update --init && cd vendor/gems/git-style-binaries && git submodule update --init`
+    end
     desc "Initialize the submodules"
     task :setup do
       `git submodule init`

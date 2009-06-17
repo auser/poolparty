@@ -2,11 +2,12 @@
 
 pool :poolparty do
   
-  instances 2..5
+  instances 1
     
   cloud :app do
-    keypair "auser"
-    ami "ami-4bb05422"
+    keypair "cloudteam_test"
+    
+    has_file "/etc/motd", :content => "Simple"
   end
   
 end

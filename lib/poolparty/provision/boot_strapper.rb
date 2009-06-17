@@ -103,7 +103,7 @@ module PoolParty
         puts "Adding default gem dependencies"
         ::Suitcase::Zipper.gems self.class.gem_list, "#{cloud.tmp_path}/trash/dependencies"
 
-        ::Suitcase::Zipper.packages( "http://rubyforge.org/frs/download.php/45905/rubygems-1.3.1.tgz",
+        ::Suitcase::Zipper.packages( "http://rubyforge.org/frs/download.php/57643/rubygems-1.3.4.tgz",
                  "#{cloud.tmp_path}/trash/dependencies/packages")
         # ::Suitcase::Zipper.add("templates/")
         
@@ -141,9 +141,9 @@ module PoolParty
           'cd /var/poolparty/dependencies',
           "cp /var/poolparty/dependencies/etc/poolparty/gemrc_template /etc/poolparty",          
           "#{installer} update",
-          "#{installer} install -y ruby ruby1.8-dev libopenssl-ruby1.8 build-essential wget",  #optional, but nice to have
-          "tar -zxvf packages/rubygems-1.3.1.tgz",
-          "cd rubygems-1.3.1",
+          "#{installer} install -y ruby ruby1.8-dev irb libopenssl-ruby1.8 build-essential wget",  #optional, but nice to have
+          "tar -zxvf packages/rubygems-1.3.4.tgz",
+          "cd rubygems-1.3.4",
           "ruby setup.rb --no-ri --no-rdoc",
           "ln -sfv /usr/bin/gem1.8 /usr/bin/gem", #TODO: check if this is really needed
           "cd ../ && rm -rf rubygems-1.3.1*",

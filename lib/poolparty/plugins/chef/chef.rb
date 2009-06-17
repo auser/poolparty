@@ -1,4 +1,10 @@
+$:.unshift(::File.dirname(__FILE__))
 require "tempfile"
+require "chef_deploy"
+require "chef_library"
+require "chef_recipe"
+require "include_chef_recipe"
+
 # BIG TODO: Slim the place where the content is gathered from
 module PoolParty
       
@@ -73,11 +79,11 @@ module PoolParty
           end
         else
           unless @recipe
-            @recipe = has_chef_recipe "poolparty", &block
-            @recipe.instance_eval(&block) if block
-            @recipe.recipes(recipe_files.empty? ? ["poolparty"] : ["poolparty", "main"])
-            
-            ::Suitcase::Zipper.add_content_as(@recipe.dsl_options.to_json, "dna.json", "chef")
+            # @recipe = has_chef_recipe "poolparty", &block
+            # @recipe.instance_eval(&block) if block
+            # @recipe.recipes(recipe_files.empty? ? ["poolparty"] : ["poolparty", "main"])
+            dna_content = recipe_files.empty? ? ["poolparty"] : ["poolparty", "main"]
+            ::Suitcase::Zipper.add_content_as({:recipes => dna_content}.to_json, "dna.json", "chef")
             
             configure_commands ["cp -f /var/poolparty/dr_configure/chef/dna.json /etc/chef/dna.json"]
           end

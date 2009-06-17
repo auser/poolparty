@@ -6,6 +6,7 @@ pool :application do
   cloud :frontend do
     minimum_instances 3
     keypair 'application_frontend'
+    keypair 'application_front'
     image_id "ami-abc123"
     has_file :name => "/etc/motd", :content => "Welcome to your PoolParty instance"
   end

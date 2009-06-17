@@ -27,14 +27,17 @@ module PoolParty
     # This class is the base class for all remote types, such as ec2
     # Everything remoting-wise is derived from this class
     class RemoterBase
-      include           Dslify
-      include           ::PoolParty::Remote
-      include           ::PoolParty::Pinger
+      include Dslify
+      include ::PoolParty::Remote
+      include ::PoolParty::Pinger
       
       # All inheriting remoter bases should override these default_options
       dsl_methods :keypair,
                   :key_name
-      
+                  :keypair_name,
+                  :image_id,
+                  :keypair_name
+        
       def initialize(opts={}, &block)
         opts.each {|k,v| opts[k] = v.call if v.respond_to?(:call) }
         set_vars_from_options opts
