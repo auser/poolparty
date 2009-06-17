@@ -5,7 +5,7 @@ $TESTING = true # Just for now
 
 t=Time.now
 
-%w(dslify).each do |dep|
+%w(dslify parenting).each do |dep|
   $LOAD_PATH.unshift(File.join(File.dirname(__FILE__),'..', 'vendor/gems', dep, 'lib'))
   require "#{dep}"
 end

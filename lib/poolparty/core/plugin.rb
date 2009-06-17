@@ -25,7 +25,7 @@
 #     # Overwrite this method
 #     def before_load(o={}, &block)
 #     end
-#     def loaded(o={}, &block)
+#     def after_loaded(o={}, &block)
 #     end
 #     
 #     def calls(r)

@@ -21,6 +21,16 @@ module PoolParty
       "after_provision"
     ]
     
+    # Define what gets run on the callbacks
+    # This is where we can specify what gets called
+    # on callbacks
+    #   parameters: cld, time
+    # 
+    #   cld - the cloud the callback came from
+    #   callback - the callback called (i.e. :after_provision)
+    callback_block do |cld, callback|
+    end
+    
     # Freeze the cloud_name so we can't modify it at all, set the plugin_directory
     # call and run instance_eval on the block and then call the after_create callback
     def initialize(n, &block)
@@ -30,6 +40,20 @@ module PoolParty
       callback :before_create
       super
       callback :after_create
+    end
+    
+    ##### DSL #####
+    # The following methods are dsl methods that are available
+    # on the cloud.
+    ###############
+    
+    def keypair(*args)
+      
+    end
+    
+    ##### Internal methods #####
+    def key
+      @
     end
     
   end
