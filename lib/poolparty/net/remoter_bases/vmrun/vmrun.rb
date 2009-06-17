@@ -123,12 +123,13 @@ module PoolParty
         output = run_local "#{path_to_binary} list"
         lines = output.split("\n")
         lines.shift
-        lines.map {|vmx_filename|
-          VmwareInstance.new( :vmx_file => vmx_filename, 
-                              :ip       => ip,
-                              :keypair  => keypair,
-                              :key_name => key_name
-                            ) }
+        lines.map {|vmx_file|
+          VmwareInstance.new( {:vmx_file  => vmx_file, 
+                               :public_ip => ip(vmx_file),
+                               :ip        => ip(vmx_file),
+                               :keypair   => keypair
+                              }.merge(o) )
+        }
       end
       
       # vmrun specific methods

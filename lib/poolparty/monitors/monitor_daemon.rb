@@ -24,11 +24,9 @@ module PoolParty
     end
     
     def pass_the_baton
-      log "Running the daemon"
-      %w(load election).each do |monitor|
-        log "Running #{monitor}"
+      %w(Memory neighborhood elections).each do |monitor|
         out = open("http://localhost:8642/#{monitor}").read
-        log "Put to #{monitor} = #{out.inspect}"        
+        log "#{monitor} / #{out.inspect}"        
       end
       sleep sleep_time
     end
@@ -49,13 +47,15 @@ module PoolParty
       pwd = Dir.pwd # Current directory is changed during daemonization, so store it
       
       remove_stale_pid_file
-      trap("CHLD") {Process.wait(-1, Process::WNOHANG)}        
       pid = fork do
         Signal.trap('HUP') do
           restart
         end
         Signal.trap('INT') do
           stop!
+        end
+        Signal.trap("CHLD") do 
+          Process.waitpid(pid, Process::WNOHANG)
         end
         File.open("/dev/null", "r+") do |devnull|
           $stdout.reopen(devnull)
@@ -102,7 +102,8 @@ module PoolParty
       log "Stopping daemon"
       log_file.close
       send_signal("INT")
-      exit!
+      remove_stale_pid_file
+      exit 0
     end
     
     def restart

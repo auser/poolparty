@@ -18,7 +18,7 @@ app = Rack::Builder.new do
   begin
     PoolParty::MonitorDaemon.run  :daemonize => true, 
                                   :sleep_time => 10, 
-                                  :log_file_path => "/var/log/poolparty/monitor.log"
+                                  :log_file_path => "/var/log/poolparty/monitor_daemon.log"
 
   rescue Exception => e
     puts "Error with daemon: #{e.inspect}"

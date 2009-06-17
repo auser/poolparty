@@ -7,7 +7,7 @@ module PoolParty
       def initialize(o={})
         raise "You must pass a vmx_file" unless o[:vmx_file]
         @vmx_file = ::File.expand_path(o[:vmx_file])
-        o.delete(:status)
+        # o.delete(:status)
         super o
       end
       
@@ -20,12 +20,7 @@ module PoolParty
           :instance_id  => vmx_file,
           :vmx_file     => vmx_file,
           :keypair      => keypair
-          :key_name     => key_name
         }
-      end
-      
-      def key_name
-        @key_name ||= keypair.basename
       end
       
       def status

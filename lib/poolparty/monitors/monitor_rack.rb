@@ -85,7 +85,7 @@ module Monitors
     end
     
     def html_list
-      str = "<h1>Available Monitors</h1>\n<ul>"
+      str = "<h1>Available Monitors</h1><br /><ul>"
       ::Monitors.available.each do |monitor|
         str<< "<li><a href=/#{monitor.to_s.split('::').pop}>#{monitor}</a></li>"
       end
@@ -99,7 +99,7 @@ module Monitors
     # GET /neighborhood/size => ::Monitors::Neighboorhood.get_size
     def map_to_method(path, verb='get')
       if !path or path.empty? or path[0].nil?
-        response.write html_list
+        html_list
       else
         raise "#{path[0]} did not map to a Constant" if !instance
         case path.size

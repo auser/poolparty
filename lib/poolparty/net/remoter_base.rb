@@ -33,7 +33,6 @@ module PoolParty
       
       # All inheriting remoter bases should override these default_options
       dsl_methods :keypair,
-                  :key_name,
                   :image_id,
                   :keypair_name
         
