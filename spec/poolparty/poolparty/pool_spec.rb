@@ -88,6 +88,7 @@ describe "Pool" do
       it "should have 2 clouds in the pool when there are 2 described" do
         @pool.clouds.size.should == 2
       end
-    end  
+    end
+    
   end
 end

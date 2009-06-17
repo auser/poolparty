@@ -26,6 +26,7 @@ namespace(:pp) do
       puts "Manifest created"
     end
   end
+  
   namespace :vendor do
     desc "Fetch all the submodules"
     task :submodules do
@@ -45,6 +46,27 @@ namespace(:pp) do
     end
   end
   namespace :deps do
+    desc "Get all the edge packages required and stash them in pkg/"
+    task :grab do
+      require 'rubygems/dependency_installer'
+      require "#{File.dirname(__FILE__)}/../lib/poolparty"
+      di = Gem::DependencyInstaller.new
+      to = "#{::File.dirname(__FILE__)}/../pkg"
+      existing_gems = Dir["#{to}/*.gem"]
+      PoolParty::Provision::BootStrapper.gem_list.each do |g|
+        unless existing_gems.find {|f| f =~ /#{g}/}
+          puts "Downloading #{g}"
+          spec, url = di.find_spec_by_name_and_version(g).first
+          f = begin
+            Gem::RemoteFetcher.fetcher.download spec, "http://gems.github.com", to
+          rescue Exception => e
+            Gem::RemoteFetcher.fetcher.download spec, url, to
+          end
+          ::FileUtils.mv f, "#{::File.dirname(__FILE__)}/../pkg/#{::File.basename(f)}"          
+        end
+      end
+      FileUtils.rm_rf "#{to}/cache"
+    end
     task :clean_gem_cache do
       gem_location = "#{::File.dirname(__FILE__)}/../vendor/dependencies"
       cache_dir = "#{gem_location}/cache"

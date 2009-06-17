@@ -11,6 +11,8 @@ module PoolParty
         [
           :before_bootstrap,
           :after_bootstrap,
+          :before_provision,
+          :after_provision,
           :before_configure,
           :after_configure,
           :after_create,

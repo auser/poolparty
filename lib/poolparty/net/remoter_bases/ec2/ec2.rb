@@ -74,13 +74,15 @@ module PoolParty
         set_vars_from_options o
         keypair_name ||= o[:keypair_name] || keypair || (clouds[o[:cloud_name]].keypair.basename if o[:cloud_name])
         raise "You must pass a keypair to launch an instance, or else you will not be able to login. options = #{o.inspect}" if !keypair_name 
-        o.merge!( dsl_options.merge(:key_name=>keypair_name) )
+        o.merge!( dsl_options.merge(:key_name=>keypair_name, :group_id => security_group) )
         instance = ec2(o).run_instances(o)
+        
         begin
           h = EC2ResponseObject.describe_instance(instance)
           #h = instance.instancesSet.item.first
         rescue Exception => e
-          h = EC2ResponseObject.get_hash_from_response(instance) rescue instance
+          vputs "There was an error:\n\t#{e.inspect}"
+          # h = EC2ResponseObject.describe_instance(instance) rescue instance
           # h = instance
         end
         Ec2RemoteInstance.new(h)

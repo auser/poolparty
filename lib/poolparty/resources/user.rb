@@ -5,13 +5,18 @@ module PoolParty
       
       dsl_methods :name,        # Name of the user
                   :password,    # Password for the user
-                  :home,         # Home directory
+                  :home,        # Home directory
+                  :gid,        # primary group for user
                   :authorized_keys
                   
                   
       default_options({
         :shell => "/bin/sh"
       })
+
+      def loaded(o={})
+        @group = dsl_options.delete(:group)
+      end
       
       def after_create
         if authorized_keys

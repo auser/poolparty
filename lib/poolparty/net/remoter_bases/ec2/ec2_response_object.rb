@@ -8,19 +8,19 @@ class EC2ResponseObject
     # puts rs.methods.sort - rs.ancestors.methods
     out = begin
       if rs.respond_to?(:instancesSet)
-        [EC2ResponseObject.get_hash_from_response(rs.instancesSet.item, group)]
+        [EC2ResponseObject.describe_instances(rs)]
       else
         rs.collect {|r| 
           if r.instancesSet.item.class == Array
-            r.instancesSet.item.map {|t| EC2ResponseObject.get_hash_from_response(t, group)}
+            r.instancesSet.item.map {|t| EC2ResponseObject.describe_instances(t)}
           else
-            [EC2ResponseObject.get_hash_from_response(r.instancesSet.item, group)]
+            [EC2ResponseObject.describe_instances(r)]
           end            
         }.flatten.reject {|a| a.nil? }
       end
     rescue Exception => e
       # Really weird bug with amazon's ec2 gem
-      rs.collect {|r| EC2ResponseObject.get_hash_from_response(r)}.reject {|a| a.nil? } rescue []
+      rs.collect {|r| EC2ResponseObject.describe_instances(r)}.reject {|a| a.nil? } rescue []
     end
 
     out
@@ -84,8 +84,16 @@ class EC2ResponseObject
   #
   # Selects the first instance if an index is not given.
   def self.describe_instance(response, index=0)
-    inst=response['reservationSet']['item'].first['instancesSet']['item'][index]
-    Ec2RemoteInstance.new(symbolize_and_snakecase(inst))
+    inst = if response.has_key?("reservationSet")
+      response['reservationSet']['item'].first['instancesSet']['item'][index]
+    elsif response.has_key?("instancesSet")
+      response['instancesSet']['item'][index]
+    else
+      raise StandardError.new("EC2ResponseObject was given a response it doesn't know about\n\t#{response.inspect}")
+    end
+    
+    # Ec2RemoteInstance.new(
+    symbolize_and_snakecase(inst)
   end
   
   def self.describe_instances(response)

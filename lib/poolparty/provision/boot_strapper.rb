@@ -91,7 +91,7 @@ module PoolParty
         ::Suitcase::Zipper.add_content_as(Default.keys_in_yaml, "ppkeys", "keys")
         
         edge_pp_gem = Dir["#{Default.vendor_path}/../pkg/*poolparty*gem"].pop
-        # Use the locally built poolparty gem if it is availabl
+        # Use the locally built poolparty gem if it is available
             if edge_pp_gem
               puts "using edge poolparty: #{::File.expand_path(edge_pp_gem)}"
               ::Suitcase::Zipper.add(edge_pp_gem, 'gems')
@@ -101,7 +101,7 @@ module PoolParty
             end
         # Add the gems to the suitcase
         puts "Adding default gem dependencies"
-        ::Suitcase::Zipper.gems self.class.gem_list, "#{cloud.tmp_path}/trash/dependencies"
+        ::Suitcase::Zipper.gems self.class.gem_list, :gem_location => "#{cloud.tmp_path}/trash/dependencies", :search_paths => ["#{Default.vendor_path}/../pkg"]
 
         ::Suitcase::Zipper.packages( "http://rubyforge.org/frs/download.php/57643/rubygems-1.3.4.tgz",
                  "#{cloud.tmp_path}/trash/dependencies/packages")
@@ -160,6 +160,7 @@ module PoolParty
           # "god -c /etc/poolparty/monitor.god",
           "mkdir -p /var/log/poolparty/",
           "echo '-- Starting monitor_rack --'",
+          # NOTE: if someone has an old version of thin/rack on their system, this will fail silently and never finish bootstrapping
           "thin -R /etc/poolparty/monitor.ru -p 8642 --pid /var/run/stats_monitor.pid --daemon -l /var/log/poolparty/monitor.log start 2>/dev/null",
           "tail -n 20 /var/log/poolparty/monitor.log",
           'echo "bootstrap" >> /var/poolparty/POOLPARTY.PROGRESS']
