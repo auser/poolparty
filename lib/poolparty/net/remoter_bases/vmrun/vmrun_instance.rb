@@ -19,9 +19,13 @@ module PoolParty
           :internal_ip  => ip, 
           :instance_id  => vmx_file,
           :vmx_file     => vmx_file,
-          :keypair      => keypair,
+          :keypair      => keypair
           :key_name     => key_name
         }
+      end
+      
+      def key_name
+        @key_name ||= keypair.basename
       end
       
       def status
