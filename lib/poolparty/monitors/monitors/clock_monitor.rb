@@ -10,6 +10,11 @@ module Monitors
     def get_now
       Time.now
     end
+    
+    def put(data=nil)
+      get(data)
+    end
+    
   end
   
 end

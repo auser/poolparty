@@ -5,6 +5,7 @@
 require ::File.dirname(__FILE__)+"/../aska"
 require ::File.dirname(__FILE__)+"/../lite"
 require ::File.dirname(__FILE__)+"/base_monitor"
+require ::File.dirname(__FILE__)+"/monitor_daemon"
 
 require 'rubygems'
 require 'rack'
