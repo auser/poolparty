@@ -4,7 +4,7 @@ module PoolParty
 
       include ::PoolParty::Pinger
       
-      def initialize
+      def go
         begin
           self.__send__ :welcome_message
           steps.each {|c| self.__send__ c.to_sym }

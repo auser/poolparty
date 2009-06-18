@@ -6,5 +6,3 @@ require "poolparty"
 %w(base_installer vmware).each do |lib|
   require "installers/#{lib}"
 end
-
-PoolParty::Installers::Vmware.new

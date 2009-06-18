@@ -11,12 +11,12 @@ module PoolParty
         ]
       end
       
-      def self.name
+      def name
         "Vmware"
       end
       
-      def self.description
-        "Vmware Fusion"
+      def description
+        "Vmware Fusion installer"
       end
       
       private
