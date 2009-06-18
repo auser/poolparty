@@ -2,16 +2,6 @@ class String
   def ^(h={})
     self.gsub(/:([\w]+)/) {h[$1.to_sym] if h.include?($1.to_sym)}
   end
-  def grab_filename_from_caller_trace
-    self.gsub(/\.rb(.*)/, '.rb')
-  end
-  def arrayable
-    self.strip.split(/\n/)
-  end
-  def runnable(quite=true)
-    # map {|l| l << "#{" >/dev/null 2>/dev/null" if quite}" }.
-    self.strip.split(/\n/).join(" && ")
-  end
   def top_level_class
     self.split("::")[-1].underscore.downcase rescue self.class.to_s
   end
@@ -22,13 +12,8 @@ class String
     signed_short = 0x7FFFFFFF
     len = self.sanitize.length
     hash = 0 
-    len.times{ |i| 
-      hash = self[i] + ( hash << 6 ) + ( hash << 16 ) - hash 
-    } 
+    len.times{ |i|  hash = self[i] + ( hash << 6 ) + ( hash << 16 ) - hash }
     hash & signed_short
-  end
-  def dir_safe
-    self.downcase.gsub(/[ ]/, '_')
   end
   def safe_quote
     self.gsub(/['"]/, '\\\"')
@@ -41,16 +26,10 @@ class String
   def camelcase
     gsub(/(^|_|-)(.)/) { $2.upcase }
   end
-  def camelize
-    camelcase
-  end
   
   # "FooBar".snake_case #=> "foo_bar"
    def snake_case
      gsub(/\B[A-Z]+/, '_\&').downcase
-   end
-   def underscore
-     snake_case
    end
    
     # "FooBar".dasherize #=> "foo-bar"
