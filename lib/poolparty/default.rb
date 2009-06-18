@@ -9,7 +9,12 @@ module PoolParty
     include Dslify
     
     default_options(
-      :user => "root"
+      :user => "root",
+      :poolparty_home_path => "#{ENV["HOME"]}/.poolparty",
+      :ec2_home => "#{ENV["HOME"]}/.poolparty",
+      :poolparty_src_path => "#{::File.dirname(__FILE__)}/../../",
+      :base_config_directory => "/etc/poolparty",
+      :remote_storage_path => "/var/poolparty"
     )
     
     # Method missing

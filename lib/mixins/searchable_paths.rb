@@ -50,7 +50,7 @@ module PoolParty
         [
           Dir.pwd,
           PoolParty::Default.poolparty_home_path,
-          PoolParty::Default.base_keypair_path,
+          PoolParty::Default.ec2_home,
           PoolParty::Default.poolparty_src_path,
           PoolParty::Default.poolparty_src_path/:lib/:poolparty,
           PoolParty::Default.base_config_directory,
