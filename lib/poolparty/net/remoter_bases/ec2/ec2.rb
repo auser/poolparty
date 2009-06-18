@@ -82,7 +82,7 @@ module PoolParty
           #h = instance.instancesSet.item.first
         rescue Exception => e
           vputs "There was an error:\n\t#{e.inspect}"
-          # h = EC2ResponseObject.describe_instance(instance) rescue instance
+          h = EC2ResponseObject.describe_instance(instance) rescue instance
           # h = instance
         end
         Ec2RemoteInstance.new(h)
