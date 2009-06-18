@@ -9,22 +9,7 @@ module PoolParty
       end
     end
     
-    module InstanceMethods
-      def defined_callbacks
-        [
-          :before_bootstrap,
-          :after_bootstrap,
-          :before_configure,
-          :after_configure,
-          :before_create,
-          :after_create,
-          # TODO: Add after_launch_instance and after_terminate_instance
-          :after_launch_instance,
-          # :after_terminate_instance,
-          self.class.additional_callbacks
-        ].flatten
-      end
-            
+    module InstanceMethods            
       # Callbacks on bootstrap and configuration
       # Defines the callback accessors:
       #   call_before/after_bootstrap/configure_callbacks
@@ -34,19 +19,16 @@ module PoolParty
       # The method (before/after_bootstrap/configure) is called
       # on self if the callback method is defined on self
       def callback(call_time, *args, &block)
-        # plugins?
-        callback_block.call(self, call_time) if callback_block
+        self.class.callback_block.call(self, call_time) if self.class.callback_block
         callback_on_self(call_time, *args, &block)
       end
       
       def callbacks
-        @callbacks ||= defined_callbacks
+        @callbacks ||= []
       end
       
       private
-      def callback_block
-        self.class.callback_block
-      end
+
       def callback_on_self(call_time, *args, &block)
         if respond_to?(call_time)
           callbacks << call_time.to_sym
