@@ -62,6 +62,18 @@ module PoolParty
       end
     end
     
+    # Base callbacks for run_with_callbacks
+    # before_load
+    # This is called before the block is yielded
+    def before_load(o={}, &block)      
+    end
+    
+    # after_loaded
+    # This is run immediately after the block given
+    # on init is yielded
+    def after_loaded(o={}, &block)
+    end
+    
     # Try to extract the name from the options
     # Either the first parameter is a string or it is a hash
     # if it is a hash, just merge the two hashes

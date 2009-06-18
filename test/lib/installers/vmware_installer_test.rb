@@ -1,5 +1,5 @@
-require "#{File.dirname(__FILE__)}/../test_helper"
-require File.dirname(__FILE__) + '/../../lib/installer'
+require "#{File.dirname(__FILE__)}/../../test_helper"
+require 'installer'
 
 class VmwareInstallerTest < Test::Unit::TestCase
   context "vmware installer" do
