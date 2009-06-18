@@ -16,7 +16,9 @@ end
 end
 
 # Core object overloads
-%w(object string array).each do |lib|
+%w( object string integer
+    array hash symbol
+    time).each do |lib|
   require "ruby/#{lib}"
 end
 

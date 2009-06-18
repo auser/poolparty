@@ -29,7 +29,6 @@ class CloudTest < Test::Unit::TestCase
   
   context "callbacks" do
     setup do
-    reset!
       cloud :apple do
         user "bob"
         minimum_instances 100        

@@ -7,7 +7,6 @@ require File.dirname(__FILE__) + '/../../../lib/poolparty'
 class CloudTest < Test::Unit::TestCase
   context "pulling options" do
     setup do
-      reset!      
       pool :test_pool_test do
         access_key "pool_access_key"
         cloud :orange do

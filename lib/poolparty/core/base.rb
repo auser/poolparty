@@ -9,6 +9,7 @@ module PoolParty
   end
   
   class Base
+    attr_reader :init_opts
     include Parenting, Dslify
     include SearchablePaths
     include Callbacks
