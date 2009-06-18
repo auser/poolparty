@@ -14,5 +14,15 @@ module PoolParty
       callback :after_create
     end
     
+    # cloud
+    # Define a cloud by a name and a block
+    def cloud(name, &block)
+      if block
+        clouds[name] ||= PoolParty::Cloud.new(name, &block)
+      else
+        raise PoolPartyError.new("CloudError", "You must pass a block when defining a cloud")
+      end    
+    end
+    
   end
 end

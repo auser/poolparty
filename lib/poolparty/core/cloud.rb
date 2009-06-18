@@ -47,13 +47,14 @@ module PoolParty
     # on the cloud.
     ###############
     
+    # Define the keypair method
     def keypair(*args)
-      
     end
     
     ##### Internal methods #####
-    def key
-    end
+    # Methods that only the cloud itself will use
+    # and thus are private
+    private
     
   end
 end

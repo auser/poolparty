@@ -24,12 +24,12 @@ end
 
 # Features
 %w(callbacks pinger searchable_paths).each do |lib|
-  require "features/#{lib}"
+  require "mixins/#{lib}"
 end
 
 # PoolParty core
-%w( default base cloud key plugin 
-    pool resource dependency_resolver).each do |lib|
+%w( default base cloud keypair pool_party_error
+    plugin pool resource dependency_resolver).each do |lib|
   require "core/#{lib}"
 end
 

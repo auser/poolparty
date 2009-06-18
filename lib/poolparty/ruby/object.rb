@@ -1,10 +1,5 @@
 class Object
   
-  # Object space access to the cloud method
-  def cloud(name, &block)
-    clouds[name] ||= PoolParty::Cloud.new(name, &block)
-  end
-  
   def clouds
     $clouds ||= {}
   end

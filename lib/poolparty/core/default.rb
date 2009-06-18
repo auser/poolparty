@@ -12,6 +12,7 @@ module PoolParty
       :user => "root"
     )
     
+    # Method missing
     def self.method_missing(m,*a,&block)
       dsl_options.include?(m) ? dsl_options[m] : super
     end

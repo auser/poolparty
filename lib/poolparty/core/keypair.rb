@@ -2,7 +2,8 @@
   ssh key used to login to remote instances
 =end
 module PoolParty
-  class Key
+  class Keypair
+    
     include SearchablePaths
     has_searchable_paths(:dirs => ["/", "keys"], :prepend_paths => ["#{ENV["HOME"]}/.ssh"])
     
