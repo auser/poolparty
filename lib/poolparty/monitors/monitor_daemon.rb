@@ -1,4 +1,5 @@
 require "open-uri"
+require "json"
 
 module PoolParty
   class MonitorDaemon
@@ -24,10 +25,30 @@ module PoolParty
     end
     
     def pass_the_baton
-      %w(Memory neighborhood elections).each do |monitor|
-        out = open("http://localhost:8642/#{monitor}").read
-        log "#{monitor} / #{out.inspect}"        
+      # Trigger stats update first
+      stats = open("http://localhost:8642/stats").read
+      
+      # elections
+      actions = JSON.parse(open("http://localhost:8642/elections").read)
+      # Response:
+      #   {"expand":0,"contract":0}
+      # If there are nominations that are greater than 0
+      elected_actions = Hash[*actions.select {|k,v| v > 0}.flatten]
+      unless elected_actions.empty?
+        elected_actions.each do |act, count|
+          # get actions from everyone else
+          # and compile them here (count ballots) and handle results
+          ballots = my_cloud.nodes.map do |node|
+            hsh = JSON.parse(open("http://#{node.internal_ip}:8642/elections"))
+            hsh[act]
+          end
+          
+          # Handle the election
+          Monitors::Elections.handle_election(ballots)
+        end
       end
+      
+      # sleep yo
       sleep sleep_time
     end
     
@@ -133,7 +154,15 @@ module PoolParty
       nil
     end
     
+    def  my_cloud
+      require "poolparty"
+      require '/etc/poolparty/clouds.rb'
+      name = open("/etc/poolparty/cloudname").read
+      clouds[name.to_sym]
+    end
+    
     protected
+    
     def remove_pid_file
       File.delete(pid_file) if pid_file && File.exists?(pid_file)
     end

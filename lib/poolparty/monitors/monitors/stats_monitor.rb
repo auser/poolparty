@@ -15,7 +15,7 @@ module Monitors
       @response = Rack::Response.new
       
       begin
-        @cloud = JSON.parse( open('/etc/poolparty/clouds.json' ).read )
+        @cloud = my_cloud #JSON.parse( open('/etc/poolparty/clouds.json' ).read )
         # @cloud = ::PoolParty::Cloud::Cloud.load_from_json(open('/etc/poolparty/clouds.json' ).read)
       rescue 
         @cloud = ::PoolParty::Default.dsl_options.merge({"options" =>
@@ -37,6 +37,7 @@ module Monitors
           stats[request.params[0].to_sym] ||= self.send(request.params[0])
           stats[request.params[0].to_sym]
           log << "#{::Time.now.strftime("%Y-%m-%d-%H-%M")}, #{stats.to_json}\n"
+          self.class.last_stats = stats.to_json
           stats.to_json
         end
       rescue Exception => e
@@ -54,6 +55,10 @@ module Monitors
       end
     end
     alias :update :put
+    
+    def self.latest_stats
+      @last_stats ||= ""
+    end
     
     protected
     
@@ -129,7 +134,7 @@ module Monitors
 
     def instances(_n=nil)
       # res = PoolParty::Neighborhoods.load_default.instances
-      res ||= %x[server-list-active internal_ip].split("\t")
+      res ||= my_cloud.nodes.map {|node| node.internal_ip }
       res
     end
 

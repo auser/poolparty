@@ -99,7 +99,7 @@ module Monitors
     # GET /neighborhood/size => ::Monitors::Neighboorhood.get_size
     def map_to_method(path, verb='get')
       if !path or path.empty? or path[0].nil?
-        html_list
+        response.body = html_list
       else
         raise "#{path[0]} did not map to a Constant" if !instance
         case path.size

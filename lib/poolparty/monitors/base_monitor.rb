@@ -38,6 +38,13 @@ module Monitors
       
     end
     
+    def  my_cloud
+      require "poolparty"
+      require '/etc/poolparty/clouds.rb'
+      name = open("/etc/poolparty/cloudname").read
+      clouds[name.to_sym]
+    end
+    
     def before_close_callbacks
       @before_close_callbacks ||= []
     end
