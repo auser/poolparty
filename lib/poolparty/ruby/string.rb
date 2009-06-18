@@ -1,16 +1,4 @@
 class String
-  def hasherize(format=[])
-    hash = {}
-    i = 0
-    self.split(%r{[\n|\t|\s| ]+}).map {|a| a.strip}.each do |f|
-      next unless format[i]
-      unless f == "" || f.nil?
-        hash[format[i].to_sym] = f
-        i+=1
-      end      
-    end
-    hash
-  end
   def ^(h={})
     self.gsub(/:([\w]+)/) {h[$1.to_sym] if h.include?($1.to_sym)}
   end
