@@ -2,6 +2,8 @@ module PoolParty
   module Remote
     
     class VmwareInstance < RemoteInstance
+      include ::PoolParty::Pinger
+      
       dsl_methods :mac_address, :vmx_file, :keypair
       
       def initialize(o={})
@@ -24,7 +26,7 @@ module PoolParty
       end
       
       def status
-        "running"
+        ping_port(ip, 22, 1) ? "running" : "terminated"
       end
       
       # Is this instance running?

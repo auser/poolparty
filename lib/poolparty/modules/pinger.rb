@@ -1,3 +1,4 @@
+require "timeout"
 module PoolParty
   module Pinger
     module ClassMethods
@@ -5,9 +6,12 @@ module PoolParty
       # for response. 
       def ping_port(host, port=22, retry_times=400)
         connected = false
+        dputs "pinging #{host}:#{port} for #{retry_times}"
         retry_times.times do |i|
           begin
-            break if connected = TCPSocket.new(host, port).is_a?(TCPSocket)
+            timeout 5 do
+              break if connected = TCPSocket.new(host, port).is_a?(TCPSocket)
+            end            
           rescue Exception => e
             sleep(2)
           end

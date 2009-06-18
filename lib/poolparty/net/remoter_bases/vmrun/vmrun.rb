@@ -120,15 +120,13 @@ module PoolParty
       private
       
       def running_instances(o={})
-        vmx_hash.map do |vmx_file, ip|
-          if ping_port(ip, 22)
-            VmwareInstance.new( {:vmx_file  => vmx_file, 
-                                 :public_ip => ip,
-                                 :ip        => ip,
-                                 :keypair   => keypair
-                                }.merge(o) )
-          end
-        end
+        vmx_hash.map do |vmx_file, ip|          
+          VmwareInstance.new( {:vmx_file  => vmx_file, 
+                               :public_ip => ip,
+                               :ip        => ip,
+                               :keypair   => keypair
+                              }.merge(o) )
+        end || {}
         # output = run_local "#{path_to_binary} list"
         # lines = output.split("\n")
         # lines.shift

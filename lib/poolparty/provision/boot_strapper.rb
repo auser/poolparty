@@ -27,12 +27,11 @@ module PoolParty
                           lockfile
                           rubigen
                           json
-                          activesupport
                           grempe-amazon-ec2
                           ohai
                           chef
                           ruby-openid
-                          adamwiggins-rest-client
+                          auser-rest-client
                           rack
                           thin
                           logging
