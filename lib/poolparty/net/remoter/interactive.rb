@@ -3,7 +3,7 @@ module PoolParty
     
     # Select a list of instances based on their status
     def nodes(hsh={}, with_neighborhood_default=false)
-      unordered = begin 
+      unordered = begin
         if with_neighborhood_default
           list_of_instances(with_neighborhood_default).select_with_hash(hsh)
         else
@@ -18,8 +18,8 @@ module PoolParty
           results = describe_instances.select_with_hash(key_condition)
           results.select_with_hash(hsh)
         end
-                  end
-
+      end
+      
       unordered.sort_by(&:launch_time) # provide consistent sorting for nodes
     end
     
