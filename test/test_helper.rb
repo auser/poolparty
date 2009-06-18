@@ -23,3 +23,7 @@ modify_env_with_hash(
 def fixtures_dir
   "#{::File.dirname(__FILE__)}/fixtures"
 end
+
+def clear!
+  $pools = $clouds = nil
+end

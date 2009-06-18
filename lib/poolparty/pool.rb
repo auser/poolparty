@@ -21,7 +21,7 @@ module PoolParty
         clouds[name] ||= PoolParty::Cloud.new(name, &block)
       else
         raise PoolPartyError.new("CloudError", "You must pass a block when defining a cloud")
-      end    
+      end
     end
     
   end

@@ -14,6 +14,9 @@ end
   require "#{dep}"
 end
 
+# Require the poolparty error so we can use it ubiqutiously
+require "poolparty/pool_party_error"
+
 # Core object overloads
 %w( object string integer
     array hash symbol
@@ -27,7 +30,7 @@ end
 end
 
 # PoolParty core
-%w( default base cloud keypair pool_party_error
+%w( default base cloud keypair
     plugin pool resource dependency_resolver).each do |lib|
   require "poolparty/#{lib}"
 end

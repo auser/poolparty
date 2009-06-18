@@ -5,7 +5,11 @@ class Object
   end
   
   def pool(name, &block)
-    pools[name] ||= PoolParty::Pool.new(name, &block)
+    if block
+      pools[name] ||= PoolParty::Pool.new(name, &block)
+    else
+      raise PoolParty::PoolPartyError.create("PoolError", "You must pass a block when defining a pool")
+    end
   end
   
   def pools
