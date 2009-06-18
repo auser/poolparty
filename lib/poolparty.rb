@@ -1,5 +1,4 @@
 $LOAD_PATH.unshift(File.dirname(__FILE__))
-$LOAD_PATH.unshift(File.dirname(__FILE__) + "/poolparty")
 
 $TESTING = true # Just for now
 
@@ -30,7 +29,7 @@ end
 # PoolParty core
 %w( default base cloud keypair pool_party_error
     plugin pool resource dependency_resolver).each do |lib|
-  require "core/#{lib}"
+  require "poolparty/#{lib}"
 end
 
 vputs "PoolParty core loadtime: #{Time.now-t}"
