@@ -18,7 +18,7 @@ end
 %w( object string integer
     array hash symbol
     time).each do |lib|
-  require "ruby/#{lib}"
+  require "core/#{lib}"
 end
 
 # Features
