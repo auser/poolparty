@@ -29,11 +29,12 @@ end
   require "mixins/#{lib}"
 end
 
+# dependency_resolvers
+require "dependency_resolver"
+
 # PoolParty core
 %w( default base cloud keypair plugin 
-    pool resource 
-    dependency_resolver
-    ).each do |lib|
+    pool resource ).each do |lib|
   require "poolparty/#{lib}"
 end
 

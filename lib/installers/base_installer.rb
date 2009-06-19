@@ -217,7 +217,3 @@ irc.freenode.net / #poolpartyrb
     end
   end
 end
-
-%w(vmware).each do |lib|
-  require "#{::File.dirname(__FILE__)}/#{lib}"
-end

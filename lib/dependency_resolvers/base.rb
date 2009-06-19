@@ -9,7 +9,3 @@ module PoolParty
     
   end
 end
-
-%w().each do |lib|
-  require "#{::File.dirname(__FILE__)}/#{lib}"
-end
