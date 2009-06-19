@@ -1,2 +1,0 @@
-namespace(:instance) do
-end
