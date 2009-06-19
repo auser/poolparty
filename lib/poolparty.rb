@@ -30,8 +30,10 @@ end
 end
 
 # PoolParty core
-%w( default base cloud keypair
-    plugin pool resource dependency_resolver).each do |lib|
+%w( default base cloud keypair plugin 
+    pool resource 
+    dependency_resolver
+    ).each do |lib|
   require "poolparty/#{lib}"
 end
 
