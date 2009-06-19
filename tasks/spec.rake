@@ -43,7 +43,7 @@ begin
       '-xlib/erlang',
       '--text-report',
       '--sort coverage'
-    ]# + FileList['tasks/*.rake'].pathmap("-x%p")
+    ] + FileList['tasks/*.rake'].pathmap("-x%p")
     t.test_files = FileList['test/lib/**/*_test.rb']
     t.output_dir = 'coverage'
     t.verbose = true
