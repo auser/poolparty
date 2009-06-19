@@ -2,12 +2,18 @@ class String
   def ^(h={})
     self.gsub(/:([\w]+)/) {h[$1.to_sym] if h.include?($1.to_sym)}
   end
+  
+  # Get the top level class
   def top_level_class
-    self.split("::")[-1].underscore.downcase rescue self.class.to_s
+    self.classify.split("::").last.snake_case
   end
+  
+  # Strip ugly characters out of a string
   def sanitize
     self.gsub(/[ \.\/\-]*/, '')
   end
+  
+  # Generate a unique integer key for this string
   def keyerize
     signed_short = 0x7FFFFFFF
     len = self.sanitize.length
@@ -15,38 +21,50 @@ class String
     len.times{ |i|  hash = self[i] + ( hash << 6 ) + ( hash << 16 ) - hash }
     hash & signed_short
   end
+  
+  # Strip quotes from the string and replaced them with backslashed quotes
   def safe_quote
     self.gsub(/['"]/, '\\\"')
-    # self.gsub(/["']/, "\\\"")
   end
+  
+  # Substitute spaces in a path for '\ ' spaces
   def path_quote
     self.safe_quote.gsub(/[ ]/, '\ ')
   end
   
+  # Turn a downcased string and capitalize it
+  # so that it can be a class
+  # doc_river #=> DocRiver
   def camelcase
     gsub(/(^|_|-)(.)/) { $2.upcase }
   end
   
   # "FooBar".snake_case #=> "foo_bar"
-   def snake_case
-     gsub(/\B[A-Z]+/, '_\&').downcase
-   end
-   
-    # "FooBar".dasherize #=> "foo-bar"
-    def dasherize
-      gsub(/\B[A-Z]+/, '-\&').downcase
-    end
+  def snake_case
+   gsub(/\B[A-Z]+/, '_\&').downcase
+  end
+
+  # "FooBar".dasherize #=> "foo-bar"
+  def dasherize
+    gsub(/\B[A-Z]+/, '-\&').downcase
+  end
     
-    def classify
-      self.sub(/.*\./, '').camelcase
-    end
-    
-    #TODO: implement here to drop activesupport
-    # # Form can be either :utc (default) or :local.
-    # def to_time(form = :utc)
-    #   ::Time.send("#{form}_time", *::Date._parse(self, false)(:year, :mon, :mday, :hour, :min, :sec).map { |arg| arg || 0 })
-    # end
-    
+  # Turn a string from lowercased with a .
+  # to a classified classname
+  # rice_and_beans #=> "RiceAndBeans"
+  # handles subclassed and namespaced classes as well
+  # for instance
+  #   rice::and::beans #=> Rice::And::Beans
+  def classify
+    self.sub(/.*\./, '').split("::").map {|ele| ele.camelcase }.join("::")
+  end
+  
+  #TODO: implement here to drop activesupport
+  # # Form can be either :utc (default) or :local.
+  # def to_time(form = :utc)
+  #   ::Time.send("#{form}_time", *::Date._parse(self, false)(:year, :mon, :mday, :hour, :min, :sec).map { |arg| arg || 0 })
+  # end
+  
     
   # Constantize tries to find a declared constant with the name specified
   # in the string. It raises a NameError when the name is not in CamelCase
@@ -65,6 +83,8 @@ class String
     end
   end
   
+  # Collect every line in the the array of the string split by newlines
+  # and assign an index with the line on the enumeration
   def collect_each_line_with_index(&block)
     returning [] do |arr|
       arr << self.split(/\n/).collect_with_index(&block)
