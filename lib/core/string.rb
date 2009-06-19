@@ -1,9 +1,16 @@
 class String
+  # Quick replacement of variables in a string with the
+  # hash equivalent
+  # Usage:
+  #   ":god bless :country" ^ {:god => "Budda", :country => "India"} #=> "Budda bless India"
+  # 
   def ^(h={})
     self.gsub(/:([\w]+)/) {h[$1.to_sym] if h.include?($1.to_sym)}
   end
   
   # Get the top level class
+  # such as:
+  #   Dr::Pepper #=> pepper
   def top_level_class
     self.classify.split("::").last.snake_case
   end
