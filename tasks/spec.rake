@@ -29,23 +29,22 @@ end
 
 Rake::TestTask.new(:test) do |t|
   t.test_files = FileList['test/lib/**/*_test.rb']
-  t.warning = false
-  t.verbose = false
+  t.warning = true
+  t.verbose = true
 end
 
 begin
   require 'rcov/rcovtask'
  
   Rcov::RcovTask.new(:rcov) do |t|
-    t.libs << FileList['lib/poolparty/**/*.rb']
-    dot_rakes = 
+    t.libs << FileList['lib/**/*.rb']
     t.rcov_opts = [
       '-xRakefile', '-xrakefile',
       '-xlib/erlang',
       '--text-report',
       '--sort coverage'
-    ] + FileList['tasks/*.rake'].pathmap("-x%p")
-    t.test_files = FileList['test/poolparty/**/*_test.rb']
+    ]# + FileList['tasks/*.rake'].pathmap("-x%p")
+    t.test_files = FileList['test/lib/**/*_test.rb']
     t.output_dir = 'coverage'
     t.verbose = true
   end
