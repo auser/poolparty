@@ -14,13 +14,7 @@ module PoolParty
       :minimum_runtime      => 3600,  # minimum_instances default: 1 hour
       :cloud_provider       => :ec2   # hardware_provider default: ec2
     )
-    
-    # Callbacks
-    additional_callbacks [
-      "after_launch_instance",
-      "after_provision"
-    ]
-    
+        
     # Define what gets run on the callbacks
     # This is where we can specify what gets called
     # on callbacks
@@ -37,9 +31,7 @@ module PoolParty
       @cloud_name = n
       @cloud_name.freeze
       
-      callback :before_create
       super
-      callback :after_create
     end
     
     ##### DSL #####
@@ -48,6 +40,8 @@ module PoolParty
     ###############
     
     # Define the keypair method
+    # If passed with an argument, this method sets the keypair
+    # instance method on self
     def keypair(*args)
     end
     

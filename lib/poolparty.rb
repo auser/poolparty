@@ -1,7 +1,5 @@
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 
-$TESTING = true # Just for now
-
 t=Time.now
 
 # Gems
@@ -14,7 +12,7 @@ end
   require "#{dep}"
 end
 
-# Require the poolparty error so we can use it ubiqutiously
+# Require the poolparty error so we can use it ubiquitously
 require "poolparty/pool_party_error"
 
 # Core object overloads

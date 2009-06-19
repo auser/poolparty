@@ -30,7 +30,7 @@ class Object
     puts "[DEBUG] -- #{m.inspect}" if debugging?(o) rescue ""
   end
   def verbose?(o=self)
-    o.respond_to?(:verbose) ? o.verbose : (debugging? || $TESTING ||= false)
+    o.respond_to?(:verbose) ? o.verbose : (debugging? || $TESTING || false)
   end
   def debugging?(o=self)
     o.respond_to?(:debug) ? o.debug : ($DEBUGGING ||= false)

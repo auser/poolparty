@@ -3,24 +3,12 @@ require 'spec/rake/spectask'
 require 'rake/testtask'
 require 'rake/rdoctask'
 
-task :default  => [:spec, :test, :cleanup_test]
+task :default  => [:test, :cleanup_test]
 desc "Update vendor directory and run tests"
 task :ci => ["poolparty:vendor:setup", "poolparty:vendor:update", :spec, :test]
 
 task :cleanup_test do
   ::FileUtils.rm_rf "/tmp/poolparty"
-end
-
-Spec::Rake::SpecTask.new(:spec) do |t|
-  t.warning = t.rcov = false
-  t.spec_files = Dir["spec/**/*_spec.rb"]
-end
-
-Spec::Rake::SpecTask.new(:spec_v) do |t|
-  t.rcov = true
-  t.rcov_opts = ['--exclude', 'gems*,spec*,website*,test*']
-  t.ruby_opts = []
-  t.spec_files = Dir["spec/**/*_spec.rb"]
 end
 
 # task :test do
@@ -29,8 +17,8 @@ end
 
 Rake::TestTask.new(:test) do |t|
   t.test_files = FileList['test/lib/**/*_test.rb']
-  t.warning = true
-  t.verbose = true
+  t.warning = false
+  t.verbose = false
 end
 
 begin
