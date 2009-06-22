@@ -106,5 +106,13 @@ module PoolParty
       end
     end
     
+    private
+    
+    # Methods that can take a default, but otherwise return 
+    # the yielded block value
+    def self.default_method(meth, &block)
+      defain
+    end
+    
   end
 end
