@@ -90,8 +90,8 @@ describe "ec2 remote base" do
       @resp = {"requestId"=>"be9bd2e9-4f8c-448f-993d-c21fe537e322", "addressesSet"=>{"item"=>[{"instanceId"=>nil, "publicIp"=>"174.129.212.93"}, {"instanceId"=>nil, "publicIp"=>"182.199.200.201"}]}, "xmlns"=>"http://ec2.amazonaws.com/doc/2008-12-01/"}
       @tr.ec2.stub!(:describe_addresses).and_return @resp
     end
-    it "should have the next available elastic_ip" do
-      @tr.next_unused_elastic_ip.should == "174.129.212.93"
+    it "should have the next available elastic_ip as nil if there are no ips set" do
+      @tr.next_unused_elastic_ip.should == nil
     end
     it "should use only the elastic ips set on the cloud" do
       @tr.stub!(:elastic_ips).and_return ["182.199.200.201"]
