@@ -91,7 +91,6 @@ module PoolParty
       def describe_instance(o={})
         opts = to_hash.merge(o)
         raise "id or instance_id must be set before calling describe_instace" if !id(o)
-        
         MetavirtInstance.new server["/instances/#{id(o)}"].get.json_parse
       end
 
