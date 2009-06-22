@@ -66,7 +66,6 @@ module PoolParty
       end
       
       def self.launch_new_instance!(o={})
-        require 'ruby-debug'; debugger
         new_instance(o).launch_new_instance!
       end
       def launch_new_instance!(o={})
@@ -82,7 +81,7 @@ module PoolParty
       def terminate_instance!(o={})
         opts = to_hash.merge(o)
         raise "id or instance_id must be set before calling describe_instace" if !id(o)
-        server["/instance/#{id(o)}"].delete
+        server["/instances/#{id(o)}"].delete
       end
 
       # Describe an instance's status, must pass :vmx_file in the options
@@ -92,7 +91,7 @@ module PoolParty
       def describe_instance(o={})
         opts = to_hash.merge(o)
         raise "id or instance_id must be set before calling describe_instace" if !id(o)
-        server["/instance/#{id(o)}"].get.json_parse
+        server["/instances/#{id(o)}"].get.json_parse
       end
 
       def self.describe_instances(o={})
