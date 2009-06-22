@@ -1,8 +1,8 @@
 module PoolParty
   module Remote
     
-    class MetavirtInstance
-      attr_reader :ip, :mac_address, :vmx_file, :keypair, :cloud
+    class MetavirtInstance < RemoteInstance
+      attr_reader :ip, :mac_address, :vmx_file, :keypair, :cloud, :launch_time
       
       def initialize(o={}, cld=nil)
         @ip = o[:ip]

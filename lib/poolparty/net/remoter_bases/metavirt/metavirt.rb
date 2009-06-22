@@ -72,7 +72,7 @@ module PoolParty
         opts = to_hash.merge(o)
         result = JSON.parse(server['/run-instance'].put(opts.to_json)).symbolize_keys!
         @id = result[:instance_id]
-        result
+        MetavirtInstance.new result
       end
       # Terminate an instance by id
       def self.terminate_instance!(o={})
@@ -81,7 +81,7 @@ module PoolParty
       def terminate_instance!(o={})
         opts = to_hash.merge(o)
         raise "id or instance_id must be set before calling describe_instace" if !id(o)
-        server["/instances/#{id(o)}"].delete
+        MetavirtInstance.new server["/instances/#{id(o)}"].delete
       end
 
       # Describe an instance's status, must pass :vmx_file in the options
@@ -91,7 +91,8 @@ module PoolParty
       def describe_instance(o={})
         opts = to_hash.merge(o)
         raise "id or instance_id must be set before calling describe_instace" if !id(o)
-        server["/instances/#{id(o)}"].get.json_parse
+        
+        MetavirtInstance.new server["/instances/#{id(o)}"].get.json_parse
       end
 
       def self.describe_instances(o={})
@@ -99,7 +100,8 @@ module PoolParty
       end
       def describe_instances(o={})
         opts = to_hash.merge(o)
-        JSON.parse( server["/instances/"].get ).collect{|i| i.symbolize_keys!}
+        list = JSON.parse( server["/instances/"].get ).collect{|i| i.symbolize_keys!}
+        list.collect{|l| MetavirtInstance.new l}
       end
       
       def to_hash
