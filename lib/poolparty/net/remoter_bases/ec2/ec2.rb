@@ -202,21 +202,23 @@ module PoolParty
       # intersection of the unused ips and those, find the first one available
       # and return that, otherwise, return the first elastic ip available
       def next_unused_elastic_ip
-        # [{"instanceId"=>nil, "publicIp"=>"174.129.212.93"}, {"instanceId"=>nil, "publicIp"=>"174.129.212.94"}]
-        if addressesSet = ec2(dsl_options).describe_addresses["addressesSet"]
-          begin
-            empty_addresses = addressesSet["item"].select {|i| i["instanceId"].nil? }
-            ips = empty_addresses.map {|addr| addr["publicIp"]}
-            if elastic_ips
-              ips_to_use = elastic_ips & ips
-              ips_to_use.first
-            else
-              ips.first
+        if elastic_ips.empty?
+          nil
+        else
+          # [{"instanceId"=>nil, "publicIp"=>"174.129.212.93"}, {"instanceId"=>nil, "publicIp"=>"174.129.212.94"}]
+          if addressesSet = ec2(dsl_options).describe_addresses(:public_ip => elastic_ips)["addressesSet"]
+            begin
+              empty_addresses = addressesSet["item"].select {|i| i["instanceId"].nil? }
+              ips = empty_addresses.map {|addr| addr["publicIp"]}
+              if elastic_ips
+                ips_to_use = elastic_ips & ips
+                ips_to_use.first
+              end
+            rescue Exception => e
+              puts "Error: #{e}"
+              nil
             end
-          rescue Exception => e
-            puts "Error: #{e}"
-            nil
-          end          
+          end
         end
       end
 
