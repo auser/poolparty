@@ -17,7 +17,7 @@ module PoolParty
                   :keypair_name,
                   :cloud
       
-      def initialize(o={}, cld=nil)
+      def initialize(o={})
         set_vars_from_options o
         # super
       end
