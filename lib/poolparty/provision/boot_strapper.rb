@@ -139,21 +139,15 @@ module PoolParty
           "mkdir -p /var/log/poolparty",
           "groupadd -f poolparty",
           # "useradd poolparty  --home-dir /var/poolparty  --groups poolparty  --create-home",
-          'cd /var/poolparty/dependencies',
-          "cp /var/poolparty/dependencies/etc/poolparty/gemrc_template /etc/poolparty",          
+          "cd /var/poolparty/dependencies && cp /var/poolparty/dependencies/etc/poolparty/gemrc_template /etc/poolparty",
           "#{installer} update",
           "#{installer} install -y ruby ruby1.8-dev irb libopenssl-ruby1.8 build-essential wget",  #optional, but nice to have
-          "tar -zxvf packages/rubygems-1.3.4.tgz",
-          "cd rubygems-1.3.4",
-          "ruby setup.rb --no-ri --no-rdoc",
-          "ln -sfv /usr/bin/gem1.8 /usr/bin/gem", #TODO: check if this is really needed
-          "cd ../ && rm -rf rubygems-1.3.1*",
+          "tar -zxvf packages/rubygems-1.3.4.tgz && cd rubygems-1.3.4 && ruby setup.rb --no-ri --no-rdoc && ln -sfv /usr/bin/gem1.8 /usr/bin/gem && cd ../ && rm -rf rubygems-1.3.1*",
           "gem source --add http://gems.github.com",
-          "gem sources -a http://gems.opscode.com",
+          "gem source -a http://gems.opscode.com",
           "cd /var/poolparty/dependencies/gems/",
           "gem install --no-rdoc --no-ri *.gem",
-          "cd /var/poolparty/dependencies",
-          "cp /var/poolparty/dependencies/etc/poolparty/* /etc/poolparty/",
+          "cd /var/poolparty/dependencies && cp /var/poolparty/dependencies/etc/poolparty/* /etc/poolparty/",
           'touch /var/poolparty/POOLPARTY.PROGRESS',
           "mkdir -p /root/.ssh",
           "cp /var/poolparty/dependencies/keys/* /root/.ssh/",
@@ -162,7 +156,7 @@ module PoolParty
           "mkdir -p /var/log/poolparty/",
           "echo '-- Starting monitor_rack --'",
           # NOTE: if someone has an old version of thin/rack on their system, this will fail silently and never finish bootstrapping
-          "thin -R /etc/poolparty/monitor.ru -p 8642 --pid /var/run/stats_monitor.pid --daemon -l /var/log/poolparty/monitor.log start 2>/dev/null",
+          "ps aux | grep thin | grep -v grep | awk '{print $2}' | xargs kill -9; thin -R /etc/poolparty/monitor.ru -p 8642 --pid /var/run/stats_monitor.pid --daemon -l /var/log/poolparty/monitor.log start 2>/dev/null",
           "tail -n 20 /var/log/poolparty/monitor.log",
           'echo "bootstrap" >> /var/poolparty/POOLPARTY.PROGRESS']
         commands << self.class.class_commands unless self.class.class_commands.empty?

@@ -1,10 +1,11 @@
 require "open-uri"
 require "json"
+require "#{::File.dirname(__FILE__)}/base_monitor"
 
 module PoolParty
-  class MonitorDaemon
+  class MonitorDaemon < Monitors::BaseMonitor
     
-    attr_reader :should_daemonize, :pid_file, :log_file_path, :sleep_time
+    attr_reader :should_daemonize, :pid_file, :sleep_time
     
     def self.run(o={})
       new(o).run
@@ -13,26 +14,31 @@ module PoolParty
     def initialize(o={})
       @should_daemonize = o.delete(:daemonize)
       @pid_file = o.delete(:daemonize) || "/tmp/poolparty_monitor.pid"
-      temp_log_file_path = o.delete(:log_file_path) || "poolparty_monitor.log"
-      @log_file_path = temp_log_file_path
-      
-      unless ::File.file?(temp_log_file_path)
-        ::FileUtils.mkdir_p ::File.dirname(temp_log_file_path) unless ::File.directory?(::File.dirname(temp_log_file_path))
-        ::File.open(temp_log_file_path, 'a+')
-        temp_log_file_path
-      end
       @sleep_time = o.delete(:sleep_time) || 20
+            
+      super
     end
     
     def pass_the_baton
-      # Handle stats    
-      nominations = JSON.parse(open("http://localhost:8642/stats/get_nominations").read)
-      unless nominations.empty?
-        my_cloud.nodes.each do |node|
-          nominations << open("http://localhost:8642/stats/get_nominations").read.json_parse
+      # Handle stats
+      my_nominations = JSON.parse(open("http://localhost:8642/stats/get_nominations").read)
+      unless my_nominations.empty?
+        running_nodes = my_cloud.nodes(:status => "running")
+        nominations = []
+        running_nodes.each do |node|
+          timeout(10) do
+            log "Checking with #{node.internal_ip} for nominations: #{open("http://#{node.internal_ip}:8642/stats/get_nominations").read}"
+            nominations << begin
+              JSON.parse(open("http://#{node.internal_ip}:8642/stats/nominations").read) || "none"
+            rescue
+              log "Error when connecting to #{node.internal_ip}: #{e.inspect}"
+              "none"
+            end            
+          end
         end
+        log "Sending #{nominations.flatten.to_json} to #{server["/elections"].inspect}"
         # put to "http://localhost:8642/elections/handle_election", data => nominations.to_json
-        server["/elections"].put(nominations.to_json)
+        server["/elections"].put(nominations.flatten.to_json)
       end
     end
     
@@ -83,29 +89,7 @@ module PoolParty
 
       Process.detach(pid)
     end
-    
-    def log(msg)
-      log_file.flush
-      log_file << "[INFO] - #{Time.now} -- #{msg}\n"
-    end
-    
-    private
-    
-    def log_file
-      if @logfile
-        @logfile
-      else
-        begin
-          ::FileUtils.mkdir_p ::File.dirname(log_file_path) unless ::File.directory?(::File.dirname(log_file_path))
-          @logfile ||= ::File.open(log_file_path, 'a+')
-        rescue Exception => e
-          puts "ERROR: #{e.inspect}"
-          @logfile = $stdout
-        end
         
-      end
-    end
-    
     def pid
       @pid ||= File.file?(pid_file) ? open(pid_file).read.to_i : nil
     end
@@ -144,7 +128,7 @@ module PoolParty
       puts "process not found!"
       nil
     end
-    
+        
     protected
     def remove_pid_file
       File.delete(pid_file) if pid_file && File.exists?(pid_file)
@@ -173,8 +157,8 @@ module PoolParty
         opts = { :content_type  =>'application/json', 
                  :accept        => 'application/json',
                  :host          => 'http://localhost',
-                 :port          => '3000'
-                }.merge(server_config)
+                 :port          => '8642'
+                }
         @uri = "#{opts.delete(:host)}:#{opts.delete(:port)}"
         @server = RestClient::Resource.new( @uri, opts)
       end

@@ -26,7 +26,6 @@ module Monitors
         })        
       end
       make_aska_rules(@cloud["options"]["rules"])
-      log << "#{::Time.now.strftime("%Y-%m-%d-%H-%M")}, #{stats.to_json}\n"
     end
         
     def get(data=nil)
@@ -36,7 +35,6 @@ module Monitors
         else
           stats[request.params[0].to_sym] ||= self.send(request.params[0])
           stats[request.params[0].to_sym]
-          log << "#{::Time.now.strftime("%Y-%m-%d-%H-%M")}, #{stats.to_json}\n"
           stats.to_json
         end
       rescue Exception => e
@@ -62,21 +60,6 @@ module Monitors
     
     protected
     
-    def log(log_file_path="/var/log/poolparty/stats_monitor.log")
-      if @logfile
-        @logfile
-      else
-        begin
-          ::File.file? log_file_path
-          ::FileUtils.mkdir_p ::File.dirname(log_file_path) unless ::File.directory?(::File.dirname(log_file_path))
-          @logfile ||= ::File.open(log_file_path, 'a+')
-        rescue Exception => e
-          @log_file = $stdout
-        end
-        
-      end
-    end
-    
     # Handle the elections
     def handle_election
       # Ballots look like:
@@ -101,7 +84,7 @@ module Monitors
 
       reload_data!
       stats[my_ip]["elected_action"] = @elected_action if @elected_action
-      log << "#{Time.now.strftime("%Y-%m-%d-%H-%M")}, #{stats.to_json}\n"
+      log "#{Time.now.strftime("%Y-%m-%d-%H-%M")}, #{stats.to_json}\n"
       stats.to_json
     end
 
@@ -133,9 +116,7 @@ module Monitors
     end
 
     def instances(_n=nil)
-      # res = PoolParty::Neighborhoods.load_default.instances
-      res ||= %x[server-list-active internal_ip].split("\t")
-      res
+      my_cloud.nodes(:status => "running")
     end
 
     def can_expand?(_n=nil)
@@ -147,17 +128,30 @@ module Monitors
     end
 
     def min_instances(_n=nil)
-      (@cloud["options"]["minimum_instances"] || PoolParty::Default.minimum_instances).to_i
+      (my_cloud.minimum_instances || PoolParty::Default.minimum_instances).to_i
     end
 
     def max_instances(_n=nil)
-      (@cloud["options"]["maximum_instances"] || PoolParty::Default.maximum_instances).to_i
+      (my_cloud.maximum_instances || PoolParty::Default.maximum_instances).to_i
     end
 
     def nominations(_n=nil)
       # return ['expand'] if instances.size<min_instances
-      load = stats[my_ip]["load"] ||= self.send(:load)      
-      stats[my_ip]["nominations"] ||= rules.collect do |k,cld_rules|
+      load = stats[my_ip]["load"] ||= self.send(:load)
+      nominations = if my_cloud.running_action
+        ["none"]
+      else
+        collect_nominations
+      end
+      # Hackity hack hack
+      nominations << "expand" if my_cloud.nodes(:status => "running").size < min_instances
+      nominations << "contract" if my_cloud.nodes(:status => "running").size > max_instances
+      stats[my_ip]["nominations"] = nominations #TODO: Deprecate
+      nominations
+    end
+    
+    def collect_nominations
+      nominations = rules.collect do |k,cld_rules|
         t = cld_rules.collect do |r|
           # If the comparison works
           if self.send(r.key.to_sym).to_f.send(r.comparison, r.var.to_f)
@@ -172,12 +166,7 @@ module Monitors
             end
           end        
         end.compact
-      end.flatten.compact
-      # Hackity hack hack
-      p [:nodes, my_cloud.nodes(:status => "running"), min_instances, max_instances]
-      stats[my_ip]["nominations"] << "expand" if my_cloud.nodes(:status => "running").size < min_instances
-      stats[my_ip]["nominations"] << "contract" if my_cloud.nodes(:status => "running").size > max_instances
-      stats[my_ip]["nominations"]
+      end.flatten.compact      
     end
     
     def neighborhood

@@ -7,7 +7,8 @@ module Monitors
       {
         :expand => :contract,
         :contract => :expand,
-        :configure => nil
+        :configure => nil,
+        :none => nil
       }
     end
     
@@ -15,8 +16,10 @@ module Monitors
       'hello'
     end
     
-    def put(data=nil)      
-      handle_election(data.json_parse.histogram)
+    def put(data=nil)
+      elections = JSON.parse(data)
+      log "Received #{elections.histogram.inspect} in Elections Monitor"
+      handle_election(elections.histogram)
     end
         
     def count_ballots(ballots={}, candidates={:expand => 0, :contract => 0})
@@ -38,18 +41,34 @@ module Monitors
     def handle_election(ballots={})      
       # Expand the cloud if 50+% of the votes are for expansion
       # Contract the cloud if 51+% of the votes are for contraction
-      # Check to make sure an elected action is not already in progress
-      ballots.each do |ballot, pro|
-        con = self.class.candidates[ballot.to_sym]
-        if (pro - con)/ballot.keys.size > 0.5
-          return elect(ballot)
+      # Check to make sure an elected action is not already in progress      
+      log "handle_election: #{ballots.inspect}"
+      ballots.symbolize_keys!
+      total_votes = ballots.inject(0) {|total, arr| total += arr[1] }
+            
+      ballots.each do |ballot, pro_votes|        
+        contra = self.class.candidates[ballot]
+        con_votes = ballots[contra] || 0
+        
+        if (pro_votes - con_votes)/total_votes > 0.5
+          return run_elected_action(ballot)
         end
       end
     end
     
-    def elect(ballot)
-      if %w(expand contract).include?(ballot)
-        %x[server-cloud-elections #{ballot}]
+    def run_elected_action(ballot)
+      log "Electing #{ballot}"
+      case ballot
+      when :expand
+        my_cloud.running_action = :expanding
+        my_cloud.launch_instance!(:cloud_name => my_cloud.name)
+        my_cloud.running_action = nil
+      when :contract        
+        my_cloud.running_action = :contracting
+        my_cloud.terminate_youngest_instance!
+        my_cloud.running_action = nil
+      else
+        "none"
       end
     end
   

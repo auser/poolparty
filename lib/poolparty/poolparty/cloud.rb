@@ -21,7 +21,7 @@ module PoolParty
     
     class Cloud < PoolParty::PoolPartyBaseClass
       attr_reader :templates, :cloud_name, :remote_base
-      attr_accessor :started_instance
+      attr_accessor :started_instance, :running_action
       
       # Default set of options. Most take the Default options from the default class
       default_options(

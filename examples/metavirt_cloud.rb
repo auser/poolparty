@@ -5,7 +5,7 @@ require "poolparty"
 pool :multiverse do
   
   cloud :front do
-    instances 1
+    instances 2..4
     keypair 'multiverse_front'
     has_file "/etc/motd", :content => "Welcome to your poolparty instance!"
     using :metavirt do

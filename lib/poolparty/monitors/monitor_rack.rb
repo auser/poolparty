@@ -45,7 +45,11 @@ module Monitors
       begin
         path_array= path_map(env['REQUEST_PATH']) || []
         verb = env['REQUEST_METHOD'].downcase
-        @response.write map_to_method(path_array, verb).to_json
+        
+        new_body = map_to_method(path_array, verb)
+        new_body = new_body.to_json unless (!path_array || path_array.empty? || path_array[0].nil?)
+        
+        @response.write new_body
         setup_callbacks
         
       # rescue Exception=>e

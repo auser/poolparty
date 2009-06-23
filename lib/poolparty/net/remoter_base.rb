@@ -191,6 +191,10 @@ module PoolParty
       def self.launch_instance!(o={}, &block)
         new(o, &block).launch_instance!
       end
+      
+      def terminate_youngest_instance!(o={})
+        terminate_instance!(:instance_id => nodes(:status => "running").last.instance_id)
+      end
 
       # Called after an instance is launched
       def after_launch_instance(instance=nil)
