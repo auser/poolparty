@@ -8,7 +8,9 @@ module PoolParty
                   :ip,          # Ip of the remote instance
                   :internal_ip, # Internal ip of the remote instance
                   :public_ip,
-                  :status       # Status of the remote instance
+                  :status,       # Status of the remote instance
+                  :launch_time,
+                  :keypair_name
       
       def initialize(opts={})
         opts.choose{|k,v| dsl_options.has_key? k}

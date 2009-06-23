@@ -7,20 +7,21 @@ module PoolParty
         if with_neighborhood_default
           list_of_instances(with_neighborhood_default).select_with_hash(hsh)
         else
-          kname = (hsh[:key_name] ||self.key_name || self.keypair_name || keypair.basename)
-          # Added keypair to filter on either key_name or keypair response
-          key_condition = {:key_name => kname, :keypair => kname }
+          kname = (hsh[:keypair_name] ||self.keypair_name || self.keypair_name || keypair.basename)
+          # Added keypair to filter on either keypair_name or keypair response
+          key_condition = {:keypair_name => kname, :keypair => kname, :key_name => kname}
           # if hsh.delete(:uncached)
           #   @nodes = describe_instances.select_with_hash(conditions)
           # else
           #   @nodes ||= describe_instances.select_with_hash(conditions)
           # end
+          # 
           results = describe_instances.select_with_hash(key_condition)
           results.select_with_hash(hsh)
         end
       end
       
-      unordered.sort_by(&:launch_time) # provide consistent sorting for nodes
+      unordered.sort_by(&:launch_time) # provide consistent sorting for nodes 
     end
     
     # Select the list of instances, either based on the neighborhoods
