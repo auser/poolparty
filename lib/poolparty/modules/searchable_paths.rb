@@ -47,7 +47,7 @@ module PoolParty
       # * /etc/poolparty
       # * /var/poolparty
       def default_paths
-        [
+        @default_searchable_paths ||= [
           Dir.pwd,
           PoolParty::Default.poolparty_home_path,
           PoolParty::Default.base_keypair_path,
@@ -56,6 +56,11 @@ module PoolParty
           PoolParty::Default.base_config_directory,
           PoolParty::Default.remote_storage_path
         ]
+      end
+
+      def add_searchable_path(path)
+        default_paths # instantiate @default_searchable_paths
+        @default_searchable_paths << path
       end
 
       # returns the full set of valid searchable paths, given the options
