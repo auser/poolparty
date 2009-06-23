@@ -5,7 +5,7 @@ require 'rake/rdoctask'
 
 task :default  => [:spec, :test, :cleanup_test]
 desc "Update vendor directory and run tests"
-task :ci => ["poolparty:vendor:setup", "poolparty:vendor:update", :spec, :test]
+task :ci => ["pp:vendor:setup", "pp:vendor:update", :spec, :test]
 
 task :cleanup_test do
   ::FileUtils.rm_rf "/tmp/poolparty"
