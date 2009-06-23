@@ -1,4 +1,5 @@
 require "open-uri"
+require "json"
 
 module PoolParty
   class MonitorDaemon
@@ -20,15 +21,19 @@ module PoolParty
         ::File.open(temp_log_file_path, 'a+')
         temp_log_file_path
       end
-      @sleep_time = o.delete(:sleep_time) || 5
+      @sleep_time = o.delete(:sleep_time) || 20
     end
     
     def pass_the_baton
-      %w(Memory neighborhood elections).each do |monitor|
-        out = open("http://localhost:8642/#{monitor}").read
-        log "#{monitor} / #{out.inspect}"        
+      # Handle stats    
+      nominations = JSON.parse(open("http://localhost:8642/stats/get_nominations").read)
+      unless nominations.empty?
+        my_cloud.nodes.each do |node|
+          nominations << open("http://localhost:8642/stats/get_nominations").read.json_parse
+        end
+        # put to "http://localhost:8642/elections/handle_election", data => nominations.to_json
+        server["/elections"].put(nominations.to_json)
       end
-      sleep sleep_time
     end
     
     def run      
@@ -37,7 +42,14 @@ module PoolParty
         daemonize
       else
         log "Starting MonitorDaemon"
-        loop {pass_the_baton}        
+        loop {          
+          begin
+            pass_the_baton
+          rescue Exception => e
+            log "There was an error with pass_the_baton: #{e}"
+          end
+          sleep sleep_time
+        }
       end
     end
     
@@ -153,7 +165,20 @@ module PoolParty
         end
       end
     end
-
+    
+    def server
+      if @server
+        @server
+      else
+        opts = { :content_type  =>'application/json', 
+                 :accept        => 'application/json',
+                 :host          => 'http://localhost',
+                 :port          => '3000'
+                }.merge(server_config)
+        @uri = "#{opts.delete(:host)}:#{opts.delete(:port)}"
+        @server = RestClient::Resource.new( @uri, opts)
+      end
+    end
     
   end
 end

@@ -1,11 +1,25 @@
 module Monitors
   class Elections < BaseMonitor
     
+    # these are the rules that define the 
+    # elected actions
+    def self.candidates
+      {
+        :expand => :contract,
+        :contract => :expand,
+        :configure => nil
+      }
+    end
+    
     def get(data=nil)
       'hello'
     end
     
-    def count_ballots(candidates={:expand => 0, :contract => 0}, ballots={})
+    def put(data=nil)      
+      handle_election(data.json_parse.histogram)
+    end
+        
+    def count_ballots(ballots={}, candidates={:expand => 0, :contract => 0})
       # Ballots look like:
       # {host => ["contract"]}
       # Count the number of nominations for each candidate action
@@ -20,29 +34,23 @@ module Monitors
     end
     
     # Handle the elections
-    def handle_election(ballots={})
-      count_votes(ballots)
+    # ballots: {"contract" => 1, "expand" => 4}
+    def handle_election(ballots={})      
       # Expand the cloud if 50+% of the votes are for expansion
       # Contract the cloud if 51+% of the votes are for contraction
       # Check to make sure an elected action is not already in progress
-      if (candidates[:expand] - candidates[:contract])/stats.keys.size > 0.5
-        %x[server-cloud-elections expand] unless elected_action == "expand"
-        @elected_action = "expand"
-      elsif (candidates[:contract] - candidates[:expand])/stats.keys.size > 0.5
-        %x[server-cloud-elections contract] unless elected_action == "contract"
-        @elected_action = "contract"
+      ballots.each do |ballot, pro|
+        con = self.class.candidates[ballot.to_sym]
+        if (pro - con)/ballot.keys.size > 0.5
+          return elect(ballot)
+        end
       end
-      
-      reload_data!
-      stats[my_ip]["elected_action"] = @elected_action if @elected_action
-      log << "#{Time.now.strftime("%Y-%m-%d-%H-%M")}, #{stats.to_json}\n"
-      stats.to_json
     end
-
-    def  my_cloud
-      require '/etc/poolparty/clouds.rb'
-      name = open("/etc/poolparty/cloudname").read
-      clouds[name.to_sym]
+    
+    def elect(ballot)
+      if %w(expand contract).include?(ballot)
+        %x[server-cloud-elections #{ballot}]
+      end
     end
   
   end

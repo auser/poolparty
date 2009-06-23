@@ -15,7 +15,7 @@ module Monitors
       @response = Rack::Response.new
       
       begin
-        @cloud = JSON.parse( open('/etc/poolparty/clouds.json' ).read )
+        @cloud = my_cloud#JSON.parse( open('/etc/poolparty/clouds.json' ).read )
         # @cloud = ::PoolParty::Cloud::Cloud.load_from_json(open('/etc/poolparty/clouds.json' ).read)
       rescue 
         @cloud = ::PoolParty::Default.dsl_options.merge({"options" =>
@@ -44,11 +44,16 @@ module Monitors
       end
     end
     
+    #alias to allow access thru http route GET /stats/nominations
+    def get_nominations(_nodes=[])
+      nominations
+    end
+    
     def put(data)
       if d = JSON.parse(request.params)
         hsh = d.reject {|ip, _node| ip == my_ip }
         stats.merge!(hsh)
-        handle_election
+        # handle_election
       else
         "boom"
       end
@@ -151,7 +156,7 @@ module Monitors
 
     def nominations(_n=nil)
       # return ['expand'] if instances.size<min_instances
-      load = stats[my_ip]["load"] ||= self.send(:load)
+      load = stats[my_ip]["load"] ||= self.send(:load)      
       stats[my_ip]["nominations"] ||= rules.collect do |k,cld_rules|
         t = cld_rules.collect do |r|
           # If the comparison works
@@ -159,27 +164,23 @@ module Monitors
             # if we are facing an expansion rule
             if k =~ /expand/
               k if can_expand?
-              neigborhood.each do |i|
-                RestClient.put "#{i.ip}/elections", stats.to_json, :content_type => 'text/x-json'
-              end
             # if we are facing a contraction rule
             elsif k =~ /contract/
               k if can_contract?
             else
               k
             end
-          end
+          end        
         end.compact
       end.flatten.compact
+      # Hackity hack hack
+      stats[my_ip]["nominations"] << "expand" if my_cloud.nodes(:status => "running").size < min_instances
+      stats[my_ip]["nominations"] << "contract" if my_cloud.nodes(:status => "running").size > max_instances
+      stats[my_ip]["nominations"]
     end
     
     def neighborhood
       @neighborhood ||= clouds[open('/etc/poolparty/cloud_name').read].nodes
-    end
-
-    #alias to allow access thru http route GET /stats/nominations
-    def get_nominations(_nodes=[])
-      nominations.to_json
     end
     
     def get_hello(_n=nil)

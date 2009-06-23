@@ -18,4 +18,15 @@ class TestWrappingArray < Test::Unit::TestCase
     end
   end
   
+  context "histogram" do
+    should "provide a histogram" do
+      out = %w(tart q a b a a b c).histogram
+      assert_equal 1, out["tart"]
+      assert_equal 3, out["a"]
+      assert_equal 2, out["b"]
+      assert_equal 1, out["c"]
+    end
+  end
+  
+  
 end

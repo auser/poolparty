@@ -17,7 +17,7 @@ app = Rack::Builder.new do
   # Dumb daemon for now
   begin
     PoolParty::MonitorDaemon.run  :daemonize => true, 
-                                  :sleep_time => 10, 
+                                  :sleep_time => 20, 
                                   :log_file_path => "/var/log/poolparty/monitor_daemon.log"
 
   rescue Exception => e
