@@ -27,6 +27,7 @@ The sshkey resource specifies an ssh key that should be distributed on all the n
       
       dsl_methods(:key,
                   :keypath,
+                  :content,
                   :name)
 
       default_options(:type => 'rsa', :mode => "600")
@@ -39,7 +40,7 @@ The sshkey resource specifies an ssh key that should be distributed on all the n
 
       def loaded(opts={}, &block)
         has_directory(::File.dirname(opts[:name]))
-        has_file(:name => opts[:name], :content => self.key, :mode => opts[:mode])
+        has_file(:name => opts[:name], :content => opts[:content], :mode => opts[:mode])
       end
 
       

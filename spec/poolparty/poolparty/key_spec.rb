@@ -25,7 +25,7 @@ describe "Key" do
     before(:each) do
       @keypair = "sshkey_test"      
       Dir.stub!(:pwd).and_return "#{::File.dirname(__FILE__)}/test_plugins"
-      
+      Key.add_searchable_path("#{::File.dirname(__FILE__)}/test_plugins")
       @key = Key.new(@keypair)
     end
     it "should search in known locations for the key" do
