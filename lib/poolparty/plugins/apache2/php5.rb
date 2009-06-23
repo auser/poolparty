@@ -29,7 +29,7 @@ module PoolParty
 
       def extras(*names)
         names.each do |name|
-         has_package(:name => "php5-#{name}", :requires => get_package("php5"))
+         has_package(:name => "php5-#{name}")
         end
       end
 
