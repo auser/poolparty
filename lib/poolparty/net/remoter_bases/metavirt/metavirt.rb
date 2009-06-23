@@ -11,15 +11,8 @@ module PoolParty
       include ::PoolParty::CloudResourcer
       
       default_options(
-        # :machine_image => 'ubuntu-kvm',
-        # :key       => lambda {Key.new},
-        # :keypair_name  => lambda {key.basename},
-        # :keypair_path  => lambda {key.full_filepath},
-        # :public_key    => lambda { key.public_key.to_s },
-        # :keypair_path    => nil,
-        :keypair_name    => nil,
         :authorized_keys => nil,
-        :remoter_base    => :vmrun,
+        :remoter_base    => :libvirt,
         :server_config   => {}
         )
       
@@ -46,11 +39,10 @@ module PoolParty
       end
       
       def image_id
-        require 'ruby-debug'; debugger
-        puts "calling imageid "
         dsl_options[:remote_base].image_id
       end
       
+      #Setup server instance that will talk to metavirt webservice
       def server
         if @server
           @server
@@ -74,6 +66,7 @@ module PoolParty
         @id = result[:instance_id]
         MetavirtInstance.new result
       end
+      
       # Terminate an instance by id
       def self.terminate_instance!(o={})
         new(nil, o).terminate_instance!
@@ -81,7 +74,7 @@ module PoolParty
       def terminate_instance!(o={})
         opts = to_hash.merge(o)
         raise "id or instance_id must be set before calling describe_instace" if !id(o)
-        MetavirtInstance.new server["/instance/#{id(o)}"].delete
+        MetavirtInstance.new server["/instances/#{id(o)}"].delete.json_parse
       end
 
       # Describe an instance's status, must pass :vmx_file in the options
@@ -91,7 +84,7 @@ module PoolParty
       def describe_instance(o={})
         opts = to_hash.merge(o)
         raise "id or instance_id must be set before calling describe_instace" if !id(o)
-        MetavirtInstance.new server["/instance/#{id(o)}"].get.json_parse
+        MetavirtInstance.new server["/instances/#{id(o)}"].get.json_parse
       end
 
       def self.describe_instances(o={})
