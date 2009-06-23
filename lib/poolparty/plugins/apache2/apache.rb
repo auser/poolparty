@@ -36,7 +36,7 @@ default host.
       def installed_as_worker
         unless @installed_as_worker
           has_package("apache2")
-          has_package("apache2-mpm-worker")
+          # has_package("apache2-mpm-worker")
 
           base_install
           @installed_as_worker = true

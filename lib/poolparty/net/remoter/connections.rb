@@ -22,9 +22,10 @@ module PoolParty
       netssh hst, cmds
     end
     
-    def ssh_into(inst, extra_ssh_ops={} )
+    def ssh_into(inst, extra_ssh_ops={})
       ip =  ((inst.respond_to?(:has_key) && inst.has_key?(:ip)) || inst.respond_to?(:ip)) ? inst.ip : inst
-      Kernel.system("ssh #{ssh_options(extra_ssh_ops)} #{ip}")
+      cmd = extra_ssh_ops.delete(:cmd) if extra_ssh_ops.has_key?(:cmd)
+      Kernel.system("ssh #{ssh_options(extra_ssh_ops)} #{ip}%s" % [cmd ? " #{cmd}" : ""])
     end
     
     def ssh_options(opts={})

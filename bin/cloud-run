@@ -1,0 +1,37 @@
+#!/usr/bin/env ruby
+$:.unshift(File.dirname(__FILE__) + "/../lib")
+require "poolparty"
+# require "poolpartycl"
+require 'git-style-binary/command'
+
+GitStyleBinary.command do  
+  version "PoolParty #{$0} command"  
+  banner <<-EOS
+Usage: #{$0} #{all_options_string} cmd
+
+  run a cmd in the cloud
+EOS
+
+  short_desc "run a cmd in the cloud"
+  opt :inst_num, "The number of the instance to ssh to, starts at 0.", :type => :int
+  
+  run do |command|    
+    @loaded_clouds.each do |cloud|
+      @cloud = cloud
+      nodes = @cloud.nodes(:status => "running")
+      
+      if !nodes.empty?
+        nodes.each_with_index do |node, i|
+          next unless i == command[:inst_num].to_i if command[:inst_num]
+          ip = nodes[i].ip || nodes[i].public_ip
+          cmd = ARGV.join(" ")
+          puts "%s %s: %s" % [cloud.cloud_name, ip, cmd]
+          @cloud.ssh_into(ip, :cmd => cmd) if @cloud
+        end
+      else
+        puts "No running instances can be found"
+      end
+    end
+    
+  end    
+end
