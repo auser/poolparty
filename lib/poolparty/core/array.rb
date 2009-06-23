@@ -7,6 +7,18 @@ class Array
     map {|a| a.to_os }
   end
   
+  def histogram
+    out = {}
+    map do |ele|
+      if out.has_key?(ele)
+        out[ele] += 1
+      else
+        out.merge!(ele => 1)
+      end
+    end
+    out
+  end
+  
   def collect_with_index &block
     self.enum_for(:each_with_index).collect &block
   end

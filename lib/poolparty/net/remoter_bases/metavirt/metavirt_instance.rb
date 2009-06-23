@@ -1,52 +1,37 @@
-module PoolParty  
+module PoolParty
   module Remote
     
-    class MetavirtInstance
-      attr_reader :ip, :mac_address, :vmx_file, :keypair, :cloud
-      
-      def initialize(o={}, cld=nil)
-        @ip = o[:ip]
-        @keypair = o[:keypair]        
-        @cloud = cld
-      end
+    class MetavirtInstance < RemoteInstance
+      dsl_methods :mac_address, 
+                  :vmx_file
       
       def to_hash
         {
-          :status => status,
-          :mac_addresses => mac_address,
-          :ip => ip,
-          :instance_id => vmx_file,
-          :internal_ip => ip,
-          :keypair => keypair
+          :status         => status,
+          :mac_addresses  => mac_address,
+          :ip             => ip,
+          :instance_id    => instance_id,
+          :internal_ip    => internal_ip,
+          :keypair_name   => keypair.basename
         }
       end
       
-      def status
-        "running"
-      end      
-      # Is this instance running?
-      def running?
-        true
-      end
-      # Is this instance pending?
-      def pending?
-        false
-      end
-      # Is this instance terminating?
-      def terminating?
-        false
-      end
-      # Has this instance been terminated?
-      def terminated?
-        false
+      def keypair(n=nil)
+        if n.nil?
+          @keypair ||= Key.new(keypair_name)
+        else
+          @keypair = Key.new(n)
+        end
       end
       
       def launch!
       end
-      def terminate!(o)
+      
+      def terminate!
+        `virsh destroy #{instance_id}`
       end
       
-    end    
+    end
     
   end
 end

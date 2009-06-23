@@ -67,20 +67,20 @@ class EC2ResponseObject
   #####
   
   # Convert the standard reponse into output similar to this example
-  # {:dns_name=>"ec2-75-101-175-49.compute-1.amazonaws.com",
-  #  :private_dns_name=>"domU-11-31-39-00-DC-78.compute-1.internal",
-  #  :reason=>nil,
-  #  :instance_state=>{"name"=>"running", "code"=>"16"},
-  #  :kernel_id=>"aki-a71cf9ce",
-  #  :ramdisk_id=>"ari-a51cf9cc",
-  #  :placement=>{"availabilityZone"=>"us-east-1a"},
-  #  :product_codes=>nil,
-  #  :image_id=>"ami-bf5eb9d6",
-  #  :launch_time=>"2009-05-29T05:07:09.000Z",
-  #  :key_name=>"poolname_cloudname",
-  #  :instance_id=>"i-1b7b2942",
-  #  :ami_launch_index=>"0",
-  #  :instance_type=>"m1.small"}
+  # {:dns_name          =>"ec2-75-101-175-49.compute-1.amazonaws.com",
+  #  :private_dns_name  =>"domU-11-31-39-00-DC-78.compute-1.internal",
+  #  :reason            =>nil,
+  #  :instance_state    =>{"name"=>"running", "code"=>"16"},
+  #  :kernel_id         =>"aki-a71cf9ce",
+  #  :ramdisk_id        =>"ari-a51cf9cc",
+  #  :placement         =>{"availabilityZone"=>"us-east-1a"},
+  #  :product_codes     =>nil,
+  #  :image_id          =>"ami-bf5eb9d6",
+  #  :launch_time       =>"2009-05-29T05:07:09.000Z",
+  #  :key_name          =>"poolname_cloudname",
+  #  :instance_id       =>"i-1b7b2942",
+  #  :ami_launch_index  =>"0",
+  #  :instance_type     =>"m1.small"}
   #
   # Selects the first instance if an index is not given.
   def self.describe_instance(response, index=0)

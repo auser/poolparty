@@ -72,6 +72,7 @@ module PoolParty
                            }.merge(opts)
       # ssh_options_hash[:verbose]=:debug if debugging?
       puts "connecting to ssh with options = #{ssh_options_hash.inspect}"
+
       Net::SSH.start(host, user, ssh_options_hash) do |ssh|
         cmds.each do |command|
           $stderr.print command if debugging

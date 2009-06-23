@@ -11,7 +11,7 @@ class BaseMonitorTest < Test::Unit::TestCase
       class ExtraFoo < ::Monitors::BaseMonitor; end
       assert Monitors.available.include? ExtraFoo
     end
-
+    
   end
- 
+  
 end

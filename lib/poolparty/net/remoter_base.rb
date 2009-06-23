@@ -18,7 +18,12 @@
 =end
 module PoolParty
 
-  module Remote    
+  module Remote
+    
+    def self.available
+      @available ||= []
+    end
+    
     # This class is the base class for all remote types, such as ec2
     # Everything remoting-wise is derived from this class
     class RemoterBase
@@ -26,8 +31,8 @@ module PoolParty
       include ::PoolParty::Remote
       include ::PoolParty::Pinger
       
+      # All inheriting remoter bases should override these default_options
       dsl_methods :keypair,
-                  :keypair_name,
                   :image_id,
                   :keypair_name
         
@@ -37,12 +42,26 @@ module PoolParty
         instance_eval(&block) if block
       end
       
+      def self.inherited(subclass)
+        unless Remote.available.include?(subclass)
+          Remote.available << subclass
+        end
+      end
+      
       def cloud(n=nil)
         if n.nil?
           @cloud
         else
           @cloud = n
         end
+      end
+      
+      def keypair
+        cloud.keypair
+      end
+      
+      def key_name
+        keypair.basename
       end
       
       # def evaluate_proc_options(opts)
@@ -58,13 +77,14 @@ module PoolParty
       #   opts
       # end
       
+      #TODO: deprecate these two methods, use Remote.available
       def self.available_bases
-        @available_bases ||= []
+        Remote.available.collect{|b| b.name.split('::').pop.snake_case.to_sym}
       end
-      def self.inherited(arg)
-        base_name = "#{arg}".downcase.top_level_class.to_sym
-        (available_bases << base_name) unless available_bases.include?(base_name)
-        (remote_bases << base_name) unless remote_bases.include?(base_name)  #TODO: Deprecate
+      
+      # Returns a :remote_base_name symbol for the remoter base name
+      def self.symbol
+        name.top_level_class.to_sym
       end
       
       # def method_missing(meth, *args, &block)
@@ -96,7 +116,12 @@ module PoolParty
         raise RemoteException.new(:method_not_defined, "terminate_instance!")
       end
       
-      # Describe an instance's status
+      # Describe an instance's status.  Should return a hash like object
+      #Required keys are:
+      # :image_id
+      # :keypair_name
+      # :instance_id
+      # :status
       def self.describe_instance(o={})
         new(o).describe_instance(o) 
       end
@@ -105,7 +130,8 @@ module PoolParty
       end
       
       # Get instances
-      # The instances must have a status associated with them on the hash
+      # The instances must return an object responding to each
+      # Each yielded object must respond to [:status]
       def self.describe_instances(o={})
         new(o).describe_instances(o)
       end
@@ -119,7 +145,7 @@ module PoolParty
       # 2.) Waits for the instance to get an ip address
       # 3.) Waits for port 22 to be open
       # 4.) Calls call_after_launch_instance callbacks
-      # 5.) Executes passes block, if any
+      # 5.) Executes passed &block, if any
       def launch_instance!(o={}, &block)
         @cloud = clouds[o[:cloud_name] || o[:name]]
         o[:keypair_name] = @cloud.keypair.basename

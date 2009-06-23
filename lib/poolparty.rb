@@ -75,7 +75,7 @@ $_poolparty_load_directories = [
   "dependency_resolver",
   "aska.rb",
   "config",
-  "monitors/monitor_rack.rb",
+  "monitors/monitor_rack.rb", 
   "capistrano.rb",
   'provisioners/provisioner_base.rb',
   'provisioners/capistrano/capistrano.rb',

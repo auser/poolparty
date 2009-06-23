@@ -1,7 +1,7 @@
 class Object
   #TODO: deprecate. use RemoterBase.available_bases instead
   def remote_bases
-    $remote_bases ||= []
+    PoolParty::Remote.available
   end
 end
 

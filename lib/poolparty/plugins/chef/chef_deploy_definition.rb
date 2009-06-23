@@ -14,6 +14,15 @@ module PoolParty
                       :restart_command => "touch tmp/restart.txt",
                       :migration_command => "rake db:migrate"
                       )
+      
+      def to_properties_hash
+        {:pp_type => "deploy", :name => "#{to}"}.merge!(default_options)
+      end
+      
+      def to(n=nil)
+        @to ||= n.nil? ? "/var/www" : n
+      end
+                      
       def present
         :deploy
       end

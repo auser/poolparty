@@ -15,13 +15,13 @@ module Monitors
     def put(data, from=nil)
       @neighborhood_instances = merge_array_of_hashes_with_key(neighborhood.instances, JSON.parse(data), 'ip')
       @neighborhood = {@neighborhood[:instances] => @neighborhood_instances}
-      after_close do
-        if @neighborhood.instances.size>1
-          # TODO: Add logger here
-          puts "Pinging #{"#{@neighborhood.instances.rand.ip}/neighborhood"}"
-          RestClient.put "#{@neighborhood.instances.rand.ip}/neighborhood", @neighborhood, :content_type => 'text/x-json'
-        end
-      end
+      # after_close do
+      #   if @neighborhood.instances.size>1
+      #     # TODO: Add logger here
+      #     puts "Pinging #{"#{@neighborhood.instances.rand.ip}/neighborhood"}"
+      #     RestClient.put "#{@neighborhood.instances.rand.ip}/neighborhood", @neighborhood, :content_type => 'text/x-json'
+      #   end
+      # end
       save
     end
     

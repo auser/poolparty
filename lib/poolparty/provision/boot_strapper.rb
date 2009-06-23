@@ -27,12 +27,11 @@ module PoolParty
                           lockfile
                           rubigen
                           json
-                          activesupport
                           grempe-amazon-ec2
                           ohai
                           chef
                           ruby-openid
-                          adamwiggins-rest-client
+                          auser-rest-client
                           rack
                           thin
                           logging
@@ -135,6 +134,8 @@ module PoolParty
         
         commands << [
           "mkdir -p /etc/poolparty",
+          "echo #{cloud.name} > /etc/poolparty/cloud_name",
+          "echo #{cloud.pool.name}>/etc/poolparty/pool_name",
           "mkdir -p /var/log/poolparty",
           "groupadd -f poolparty",
           # "useradd poolparty  --home-dir /var/poolparty  --groups poolparty  --create-home",

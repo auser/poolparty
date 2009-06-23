@@ -1,6 +1,5 @@
-# TODO: Diet
-# module PoolParty
-#       
+# # TODO: Diet
+# module PoolParty      
 #   module Daemonizeable
 #     
 #     attr_accessor :pid_file
@@ -14,7 +13,7 @@
 #     end
 #     
 #     def pid_file
-#       @pid_file ||= PoolParty::Default.agent_pid_file
+#       @pid_file ||= "/tmp/poolparty_monitor.pid"
 #     end
 #     
 #     # Returns +true+ the process identied by +pid+ is running.
@@ -135,7 +134,7 @@
 #         end
 #       end
 #   end
-#   class Daemonize
+#   class Daemon
 #     include Daemonizeable
 #   end
 # end

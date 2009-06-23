@@ -28,53 +28,35 @@ module PoolParty
       # If an instance is found, this instance's properties will be set to the properties provided
       # If the found instance has properties of the same key as the provided options, the found instance's values will override the passed in options
       def initialize(opts={})
+        opts.delete(:id)  # metavirt passes an id that we do not want to set
         set_vars_from_options(opts) if opts.is_a?(Hash)
         @target_host = public_ip || internal_ip || ip  #set this for the netssh commands
         # super(opts)
       end
       
       def keypair(*n)
-        @keypair ||= Key.new(key_name)
+        dsl_options[:keypair] ||= Key.new(key_name)
       end
       
-      ## hash like methods
-      # TODO: move these into a module, or into dslify
-      # include Enumerable
-      def each
-        dsl_options.each{ |k,v| yield k,v }
-      end
-      def [](k)
-        dsl_options[k]
+      # Printing. This is how we extract the instances into the listing on the 
+      # local side into the local listing file
+      def to_s
+        "#{name}\t#{ip}\t#{instance_id rescue ""}"
       end
       
-      def []=(k,v)
-        dsl_options[k] = v
+      # Class method to disect a neighborhood line
+      def self.hash_from_s(s)
+        arr = s.split("\t")
+        {:name => arr[0], :ip => arr[1]}
       end
       
-      def keys
-        dsl_options.keys
+      def self.to_s(hsh)
+        new(hsh).to_s
       end
-         
-      def values
-        dsl_options.values
-      end
-      ##end of hash like methods
       
-      # Is this instance running?
-      def running?
-        !(status =~ /running/).nil?
-      end
-      # Is this instance pending?
-      def pending?
-        !(status =~ /pending/).nil?
-      end
-      # Is this instance terminating?
-      def terminating?
-        !(status =~ /shutting/).nil?
-      end
-      # Has this instance been terminated?
-      def terminated?
-        !(status =~ /terminated/).nil?
+      def hosts_file_listing_for(cl)
+        string = (cl.name == cloud.name) ? "#{name}.#{my_cloud.name}\t#{name}" : "#{name}.#{my_cloud.name}"
+        "#{internal_ip}\t#{string}"
       end
       
     end
