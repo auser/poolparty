@@ -39,9 +39,13 @@ module Monitors
     end
     
     def  my_cloud
-      require '/etc/poolparty/clouds.rb'
-      name = open("/etc/poolparty/cloudname").read
-      clouds[name.to_sym]
+      begin
+        require '/etc/poolparty/clouds.rb'
+        name = open("/etc/poolparty/cloud_name").read
+        clouds[name.chomp.to_sym]
+      rescue Exception => e
+        JSON.parse( open('/etc/poolparty/clouds.json' ).read )
+      end
     end
     
     

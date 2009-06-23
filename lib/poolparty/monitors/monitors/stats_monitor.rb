@@ -15,7 +15,7 @@ module Monitors
       @response = Rack::Response.new
       
       begin
-        @cloud = my_cloud#JSON.parse( open('/etc/poolparty/clouds.json' ).read )
+        @cloud = JSON.parse( open('/etc/poolparty/clouds.json' ).read )
         # @cloud = ::PoolParty::Cloud::Cloud.load_from_json(open('/etc/poolparty/clouds.json' ).read)
       rescue 
         @cloud = ::PoolParty::Default.dsl_options.merge({"options" =>
@@ -174,6 +174,7 @@ module Monitors
         end.compact
       end.flatten.compact
       # Hackity hack hack
+      p [:nodes, my_cloud.nodes(:status => "running"), min_instances, max_instances]
       stats[my_ip]["nominations"] << "expand" if my_cloud.nodes(:status => "running").size < min_instances
       stats[my_ip]["nominations"] << "contract" if my_cloud.nodes(:status => "running").size > max_instances
       stats[my_ip]["nominations"]
