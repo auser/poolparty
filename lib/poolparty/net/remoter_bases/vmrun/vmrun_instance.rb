@@ -25,6 +25,10 @@ module PoolParty
         }
       end
       
+      def instance_id
+        vmx_file
+      end
+      
       def status
         ping_port(ip, 22, 1) ? "running" : "terminated"
       end
