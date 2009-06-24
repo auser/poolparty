@@ -7,10 +7,12 @@ module Monitors
   class Cloud < BaseMonitor
     
     def get(_unused=nil)
-      <<-EOE
-        #{my_cloud.name}
-        #{my_cloud.minimum_instances}..#{my_cloud.maximum_instances}
-      EOE
+      {   :name => my_cloud.name, 
+          :minimum_instances => my_cloud.minimum_instances, 
+          :maximum_instances => my_cloud.maximum_instances,
+          :remoter_base => my_cloud.remoter_base,
+          :keypair => my_cloud.keypair
+      }
     end
     
     def nominations(_unused=nil)
