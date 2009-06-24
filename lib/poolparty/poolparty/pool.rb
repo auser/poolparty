@@ -63,8 +63,8 @@ module PoolParty
       def self.call_before_all_loaded(filepath)
         # Load the plugins
         $:.unshift(::File.dirname(filepath))
-        Dir["#{::File.dirname(filepath)}/plugins/*"].each do |plugin|
-          $:.unshift(plugin)
+        Dir["#{::File.dirname(filepath)}/plugins/*"].each do |plugin_path|
+          $:.unshift(plugin_path)
         end
       end
       
