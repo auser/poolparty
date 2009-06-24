@@ -97,6 +97,8 @@ module PoolParty
        commands << [
          'chmod 644 /var/poolparty/dr_configure/clouds.json',
          'chmod 644 /var/poolparty/dr_configure/clouds.rb',
+         "cp -R /var/poolparty/dr_configure/etc/poolparty/* /etc/poolparty/",
+         # TODO: slightly redundant
          'cp /var/poolparty/dr_configure/clouds.json /etc/poolparty',
          'cp /var/poolparty/dr_configure/clouds.rb /etc/poolparty',
          # 'server-manage-election', #ensures that the monitor gets some data
@@ -107,6 +109,8 @@ module PoolParty
      end
      
      def pack_up_and_ship_off_suitcase
+       ::Suitcase::Zipper.add(::File.dirname(pool_specfile), "/etc/poolparty")
+       
        ::Suitcase::Zipper.build_dir!("#{cloud.tmp_path}/dr_configure")
        rsync "#{cloud.tmp_path}/dr_configure/", "/var/poolparty/dr_configure/", ['-a --stats']
      end

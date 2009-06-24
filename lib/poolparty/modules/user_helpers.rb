@@ -12,7 +12,7 @@ module PoolParty
   # Add to the suitcase files below the clouds.rb base directory
   def pack_user_directory(dirname)
     begin
-      ::Suitcase::Zipper.add("#{::File.dirname($pool_specfile)}/#{dirname}", "etc")
+      ::Suitcase::Zipper.add("#{::File.dirname($pool_specfile)}/#{dirname}", "/etc/poolparty")
     rescue Exception => e
       vputs "Error packing user directory #{dirname}: #{e}"
     end    

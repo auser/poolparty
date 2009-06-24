@@ -51,6 +51,7 @@ module PoolParty
         #%w(monitors plugins verifiers).each do |lib|
         #  Dir[File.join(::File.dirname(::File.basename(filename)), lib, '*')].each{|f| require f }
         # end
+        call_before_all_loaded(pool_specfile || filename)
         o = File.open(filename, 'r') do |f|
           instance_eval f.read, (pool_specfile || filename)
         end
@@ -58,7 +59,15 @@ module PoolParty
         o
       end
       
-      # callback
+      # callbacks
+      def self.call_before_all_loaded(filepath)
+        # Load the plugins
+        $:.unshift(::File.dirname(filepath))
+        Dir["#{::File.dirname(filepath)}/plugins/*"].each do |plugin|
+          $:.unshift(plugin)
+        end
+      end
+      
       def after_all_loaded(&block)
         @after_all_loaded ||= block
       end
