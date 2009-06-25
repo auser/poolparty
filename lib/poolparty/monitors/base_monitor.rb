@@ -51,8 +51,9 @@ module Monitors
     # Reload the cloud if necessary after 60 seconds
     # of cache time
     def  my_cloud
-      @my_cloud = nil if last_cloud_loaded_time && last_cloud_loaded_time > 60
-      @my_cloud ||= begin
+      # @my_cloud = nil if last_cloud_loaded_time && last_cloud_loaded_time > 60
+      # @my_cloud ||= 
+      begin
         require '/etc/poolparty/clouds.rb'
         name = open("/etc/poolparty/cloud_name").read
         last_cloud_loaded_time = Time.now.to_i
