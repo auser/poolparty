@@ -35,6 +35,7 @@ module PoolParty
                           rack
                           thin
                           logging
+                          ruby_parser
                           ruby2ruby
                           extlib
                         )
