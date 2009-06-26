@@ -46,6 +46,7 @@ module PoolParty
       # * ~/.ec2
       # * /etc/poolparty
       # * /var/poolparty
+      # TODO: Add: pool_specfile ? ::File.dirname(pool_specfile) : "/etc/poolparty"
       def default_paths
         @default_searchable_paths ||= [
           Dir.pwd,
@@ -54,7 +55,7 @@ module PoolParty
           PoolParty::Default.poolparty_src_path,
           PoolParty::Default.poolparty_src_path/:lib/:poolparty,
           PoolParty::Default.base_config_directory,
-          PoolParty::Default.remote_storage_path
+          PoolParty::Default.remote_storage_path          
         ]
       end
 

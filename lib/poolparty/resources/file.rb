@@ -30,7 +30,7 @@ To write a file to the template directory, use:
   has_file(:name => '/etc/motd', :content => 'Hey and welcome to your node today!')
 =end
     class File < Resource 
-      has_searchable_paths(:dir => "templates")
+      has_searchable_paths(:dirs => ["templates", ""])
       
       dsl_methods :name,            # The name, the full path of the file
                   :owner,           # String that describes the owner of the file
