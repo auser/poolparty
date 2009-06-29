@@ -8,10 +8,7 @@ namespace :metavirt do
     #   change the remoter base to metavirt
     #   start the cloud
     #   run the verifiers
-    #   record success
-    successful_clouds = []
-    failed_clouds = []
-    
+    #   record success    
     if ::File.directory?("poolparty-examples")
       `cd poolparty-examples && git pull origin master`
     else
@@ -33,27 +30,26 @@ namespace :metavirt do
           begin
             consume_cloud_for_testing(cloud)
           rescue Exception => e
-            failed(cloud_name, e, "Cloud consuming failure")
+            failed(cloud_name, e, "Cloud consuming failure") && next
           end
           begin
             start_the_cloud(cloud)
           rescue Exception => e
-            failed(cloud_name, e, "Cloud starting failed")
+            failed(cloud_name, e, "Cloud starting failed") && next
           end
           begin
             verify_the_cloud(cloud)
           rescue Exception => e
-            failed(cloud_name, e, "Cloud verification failed")
+            failed(cloud_name, e, "Cloud verification failed") && next
           end          
           begin
             terminate_the_cloud(cloud)
           rescue Exception => e
-            failed(cloud_name, e, "Cloud termination failed")
+            failed(cloud_name, e, "Cloud termination failed") && next
           end
         rescue Exception => e
-          failed(cloud_name, e, "Error loading cloud")
+          failed(cloud_name, e, "Error loading cloud") && next
         end
-                
       end
       PoolParty::Pool::Pool.reset!
     end
@@ -61,15 +57,18 @@ namespace :metavirt do
     if failed_clouds
       puts "\n********************* #{failed_clouds.size} FAILED TESTS *********************"
       failed_clouds.each {|cloud_name, e, msg| $stderr.puts "#{cloud_name}: #{msg}\n#{e.inspect}" }
-      puts "**********************************************************"
+      puts "************************************************************"
     end
   end
   
   private
   
   def failed(cloud_name, error, msg)
-    failed_clouds << [cloud_name, msg, e]
-    next
+    failed_clouds << [cloud_name, msg, error]
+  end
+  
+  def failed_clouds
+    @failed_clouds ||= []
   end
   
   # Consume the cloud for testing
@@ -79,7 +78,7 @@ namespace :metavirt do
     orig_remoter_base = cloud.remoter_base
     cloud.instance_eval "@remote_base = nil"
     
-    cloud.using :metavirt do
+    cloud.send :using, :metavirt do
       server_config({:host=>"127.0.0.1", :port=>3000})
       authorized_keys 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCTppECfx7Tb0zoviRfqFaePyAek6+ZktKkHiTHu/jkhG1s4q1oHEe89no21xLxuReyJrDlNe8rLxxZzoYCaAWRdhcqMR3BNqb2w2jpF4pH+bFj0557KrwWP6HSNpRRkyYhxLqZbuH/2t3TzkPevZbcfSYa09jIzqnmTruh9l1s+n5E3cNr/RDdDn7tv3Ok7mKN7GEjkK7F83Pt9xviHevg22xqzm99nS+hg6Kl/fQUTO6pOmC5x+9V47RJz1+9WdhGJ7M83zijX9rMnAwrR5LFoL6aZyyU0G71SpoIL5e8XD/jt1WNKFJOfG8YMLb3i03UABm/Q5Q30+R7UoRxSWRX'
       
