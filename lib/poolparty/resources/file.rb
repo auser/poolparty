@@ -3,7 +3,7 @@ module PoolParty
     
     class FileResource < Resource
       
-      def has_method_name
+      def self.has_method_name
         "file"
       end
             

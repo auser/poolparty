@@ -24,8 +24,8 @@ class ObjectTest < Test::Unit::TestCase
         assert_nil @o.pools[:fun_pool]
         @pool = @o.pool :fun_pool do
         end
-        assert_not_nil @o.pools[:fun_pool]
-        assert_equal @pool, @o.pools[:fun_pool]
+        assert_not_nil @o.pools["fun_pool"]
+        assert_equal @pool, @o.pools["fun_pool"]
       end
       
       should "throw an error if the method pool for creation is given without a block" do

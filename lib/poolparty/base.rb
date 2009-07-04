@@ -9,7 +9,8 @@ module PoolParty
   end
   
   class Base
-    attr_reader :init_opts
+    attr_reader :init_opts, :base_name
+    
     include Parenting, Dslify
     include SearchablePaths
     include Callbacks
@@ -23,13 +24,12 @@ module PoolParty
     def self.additional_options(*o)
       dsl_options.merge!(o.inject({}) {|s,i| s.merge(i => nil)})
     end
-    
+        
     def initialize(opts={}, extra_opts={}, &block)      
       @init_block = block
       @init_opts = compile_opts(opts, extra_opts)
-      @base_name = @init_opts[:name]
-
-      # run_in_context(init_opts, &block)
+      @base_name = self.name
+      
       run_with_callbacks(init_opts, &block)
     end
     
@@ -42,8 +42,8 @@ module PoolParty
     # - self
     #   - instance_eval block
     # - stack
-    def run_in_context(o={}, &block)      
-      context_stack.push self        
+    def run_in_context(o={}, &block)
+      context_stack.push self
       set_vars_from_options(o)
       instance_eval &block if block
       context_stack.pop
@@ -56,9 +56,9 @@ module PoolParty
     #   after_loaded
     def run_with_callbacks(o, &block)
       run_in_context(o) do
-        before_load(o, &block)
-        yield if block_given?
-        after_loaded(o, &block)
+        callback :before_load, o, &block
+        instance_eval &block if block
+        callback :after_loaded, o, &block
       end
     end
     
@@ -81,8 +81,8 @@ module PoolParty
     # instance on the hash
     def compile_opts(o={}, extra={})
       case o
-      when String
-        extra.merge(:name => o)
+      when Symbol, String
+        extra.merge(:name => o.to_s)
       else
         extra.merge(o)
       end
@@ -105,6 +105,11 @@ module PoolParty
     # are the resources associated with this base
     def ordered_resources
       @ordered_resources ||= []
+    end
+    
+    # The clouds.rb file
+    def self.clouds_dot_rb_file
+      @clouds_dot_rb_file
     end    
     
     # If the method is missing from ourself, check the Default

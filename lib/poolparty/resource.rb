@@ -4,11 +4,7 @@ module PoolParty
     attr_reader :exists
     
     default_options()
-    
-    def initialize(opts={}, extra_opts={}, &block)      
-      super
-    end
-    
+        
     # Dependency resolver methods
     
     # print_to_chef
@@ -67,6 +63,7 @@ module PoolParty
         ddputs "Defining resource: #{res}"
         Base.class_eval <<-EOE
           def has_#{res.has_method_name}(a={},b={},&block)
+            ddputs "New #{res.has_method_name}(\#{a.inspect}, \#{b.inspect}, \#{block})"
             obj = #{res}.new(a,b,&block)
             obj.exists!
             ordered_resources << obj
@@ -88,18 +85,17 @@ module PoolParty
     # When a new resource is created, the class gets stored as a defined resource
     # in the defined_resources resources class variable
     def self.inherited(bclass)
-      puts "inherited: #{bclass}"
       defined_resources << bclass
     end
     
     # Storage of defined resources that are stored when
     # the subclass'd resource is subclassed
     def self.defined_resources
-      @@defined_resources ||= []
+      @defined_resources ||= []
     end
     
     
   end
 end
 
-Dir["#{File.dirname(__FILE__)}/../resources/*.rb"].each {|lib| puts "lib: #{lib}";require lib }
+Dir["#{File.dirname(__FILE__)}/resources/*.rb"].each {|lib| require lib }

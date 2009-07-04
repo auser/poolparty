@@ -28,12 +28,18 @@ class Object
     define_method(new_id){|*args| original.call(*args)}
   end
   
+  # Benchmark a block
+  def bm(msg, &block)
+    t = Time.now
+    block.call
+    puts "#{msg}: #{Time.now-t}"
+  end
   # Debugging output helpers
   def vputs(m="", o=self)
     puts "[INFO] -- #{m}" if verbose?
   end
   def dputs(m="", o=self)
-    puts "[DEBUG] -- #{m.inspect}" if debugging?(o) rescue ""
+    puts "[DEBUG] -- #{m.inspect}" if debugging?(o)
   end
   def ddputs(m="", o=self)
     puts "[DEBUG] -- #{m.inspect}" if very_debugging?(o)
@@ -45,7 +51,7 @@ class Object
     o.respond_to?(:debug) ? o.debug : ($DEBUGGING ||= false)
   end
   def very_debugging?(o=self)
-    o.respond_to?(:very_debugging) ? o.very_debugging : false
+    o.respond_to?(:very_debugging) ? o.very_debugging : ($VERY_DEBUGGING ||= false)
   end
   # Do once.
   # Takes a block. IF this block has already been run (from the run_procs array),

@@ -15,7 +15,10 @@ module PoolParty
       :poolparty_src_path => File.expand_path("#{::File.dirname(__FILE__)}/../../"),
       :base_config_directory => "/etc/poolparty",
       :remote_storage_path => "/var/poolparty",
-      :poolparty_log_path => "#{File.dirname(__FILE__)}/log/poolparty.log"
+      :poolparty_log_path => "#{File.dirname(__FILE__)}/log/poolparty.log",
+      :verbose        => false,
+      :debug          => false,
+      :very_debugging => true
     )
         
     # Method missing

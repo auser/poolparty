@@ -10,9 +10,7 @@ module PoolParty
       @pool_name = n.to_s
       @pool_name.freeze
       
-      callback :before_create
-      super(&block)
-      callback :after_create
+      super
     end
     
     # cloud
@@ -29,7 +27,6 @@ module PoolParty
     
     # Load a clouds.rb
     def self.load_from_file(filename=nil)
-      puts "Loading #{filename} from file in Pool"
       ddputs "Loading #{filename} from file in Pool"
       @clouds_dot_rb_file = filename
       before_specfile_load(clouds_dot_rb_file)
