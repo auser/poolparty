@@ -1,0 +1,158 @@
+== 0.9.5 / 2009-01-25
+
+2 minor enhancements
+  - The pattern layout can output the current thread name
+    if set using Thread.current[:name]         [valodzka]
+  - Added buffered logging to all IO based loggers
+    (console, file, rolling file)
+1 bug fix
+  - Uncaught TimeoutError in the e-mail appender
+
+== 0.9.4 / 2008-10-04
+
+2 minor enhancements
+  - Flag to suppress exception backtraces from being logged
+  - Cleaning up color codes on Growl output
+4 bug fixes
+  - Child loggers were not being found in some cases
+  - RollingFileAppender fails to reopen the log file if
+    the log file is deleted.
+  - Fixed a copy/paste error in the YAML configurator
+  - Bug in the configurator where a nil object was being used
+
+== 0.9.3 / 2008-09-12
+
+2 minor enhancement
+  - Added a class for tracking basic statistics
+  - Will use the 'fastthread' gem if availble
+
+== 0.9.2 / 2008-09-03
+
+2 bug fixes
+  - Properly generates logger names for anonymous classes and
+    modules and meta-classes
+  - Fixed the rescue clause when 'turn' cannot be required
+
+== 0.9.1 / 2008-08-14
+
+1 minor enhancement
+  - added a method to show the logging configuration
+2 bug fixes
+  - checking for sync method on the IO streams before calling
+  - fixed the internal logging levels
+
+== 0.9.0 / 2008-07-16
+
+2 minor enhancement
+  - Exceptions from appenders are captured and logged
+  - Internal logger for the Logging framework (disabled by default)
+  - Added a DSL configuration format (more readable than YAML)
+1 bug fix
+  - Modules could not have their own logger instance
+
+== 0.8.0 / 2008-07-02
+
+1 minor enhancement
+  - Setting the log level of a parent will cause this level to
+    be propagated to the children
+1 bug fix
+  - Fixed error with the e-mail appender and missing hostname
+
+== 0.7.1 / 2008-02-25
+
+1 minor enhancement
+  - Removed dependency on the Lockfile gem (brought the ruby
+    file into the logging/stelan directory)
+1 bug fix
+  - Fixed bug with age based rolling: was not multi-process safe
+
+== 0.7.0 / 2008-02-12
+
+1 major enhancement
+  - Rails compatibility
+    * renamed Logger#add method to Logger#add_appenders
+    * renamed Logger#remove method to Logger#remove_appenders
+    * renamed Logger#clear method to Logger#clear_appenders
+    * added a new Logger#add method that conforms to the calling
+      semantics of the Ruby stdlib Logger 
+
+2 minor enhancements
+  - Speed improvements and test coverage
+  - Created a top-level Logging.init method that is used to
+    define the default logging levels
+
+1 bug fix
+  - Tweaked windows detection code
+
+== 0.6.3 / 2008-02-08
+
+2 minor enhancements
+  - YAML configuration now supports multiple keys -- i.e. development
+    or production or whatever
+  - Reorganized a lot of files so that requiring files is cleaner and
+    more deterministic
+
+== 0.6.2 / 2008-02-06
+
+2 bug fixes
+  - An extra e-mail was being pushed out when the e-mail
+    appender was closed
+  - Created an at_exit handler to close all appenders
+
+== 0.6.1 / 2008-01-01
+
+1 bug fix
+  - Fixed include order to avoid double loading when testing
+
+== 0.6.0 / 2007-12-26
+
+* Using the new 'getopt' method for handling option hashes
+* Rolling file appender is safe for multiple processes
+* Added an e-mail appender from Jeremy Hinegardner
+* Updated tests for the appenders
+
+== 0.5.3 / 2007-12-08
+
+* Fixed the quoting for messages sent to the growl appender
+
+== 0.5.2 / 2007-11-28
+
+* Updated the library to work with Ruby 1.9
+* Fixed coalescing with the growl appender
+
+== 0.5.1 / 2007-11-18
+
+* Fixed a bug on Windows when attempting to load the syslog library
+
+== 0.5.0 / 2007-11-18
+
+* Added the ability to log via the syslog daemon
+* Can send messages to the Growl notification system on Mac OS X
+* The Growl appender can coalesce messages of the same title/priority
+
+== 0.4.0 / 2007-03-21
+
+* Added a microsecond flag to the Pattern layout
+* All appenders write immediately upon receipt of a logging event
+* Added a basic logging method that returns a logger object configured in
+  the same manner as the standard Ruby logger
+* Fixed a bug caused by nil log messages
+
+== 0.3.1 / 2007-02-08
+
+* Bugfix Release
+
+== 0.3.0 / 2007-02-01
+
+* Remove the ability to log multiple objects from a single log method call
+
+== 0.2.0 / 2007-01-29
+
+* The "once every four years" release
+* Storage and retrieval of appenders by name
+* YAML configuration support
+* Rolling file appender
+
+== 0.1.0 / 2007-01-12
+
+* Birthday!

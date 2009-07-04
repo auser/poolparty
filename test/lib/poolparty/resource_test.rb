@@ -32,6 +32,16 @@ class ResourceTest < Test::Unit::TestCase
     end
   end
   
+  context "print_to methods" do
+    setup do
+      @inst = ResourceTestClass.new
+    end
+
+    should "have the method print_to_chef" do
+      assert @inst.respond_to?(:print_to_chef)
+      assert !@inst.respond_to?(:print_to_non_existant_dependency_resolver)
+    end
+  end
   
   
 end

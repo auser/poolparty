@@ -3,12 +3,25 @@ module PoolParty
     
     attr_reader :exists
     
-    default_options(
-      :name => "resource"
-    )
+    default_options()
     
     def initialize(opts={}, extra_opts={}, &block)      
       super
+    end
+    
+    # Dependency resolver methods
+    
+    # print_to_chef
+    # When the dependency resolver comes through and resolves
+    # this resource, it will come through and check if it resolves
+    # to chef by checking it it responds to the 
+    #  print_to_chef
+    # method. The contents of the method are considered an ERB
+    # template and will be rendered as an ERB template.
+    def print_to_chef
+      <<-EOE
+        # <%= self.class.has_method_name %>        
+      EOE
     end
     
     # Should this resource exist on the remote systems
@@ -20,7 +33,6 @@ module PoolParty
     # on the remote systems.
     def exists!
       @exists = true
-
     end
     
     # The resource should be removed or deleted from the remote
@@ -50,7 +62,9 @@ module PoolParty
     #   <resource_name>
     # on the Base class
     def self.define_resource_methods
+      ddputs "Defining resources..."
       defined_resources.each do |res|
+        ddputs "Defining resource: #{res}"
         Base.class_eval <<-EOE
           def has_#{res.has_method_name}(a={},b={},&block)
             obj = #{res}.new(a,b,&block)
@@ -74,6 +88,7 @@ module PoolParty
     # When a new resource is created, the class gets stored as a defined resource
     # in the defined_resources resources class variable
     def self.inherited(bclass)
+      puts "inherited: #{bclass}"
       defined_resources << bclass
     end
     
@@ -87,4 +102,4 @@ module PoolParty
   end
 end
 
-Dir["#{File.dirname(__FILE__)}/../resources/*.rb"].each {|lib| require lib }
+Dir["#{File.dirname(__FILE__)}/../resources/*.rb"].each {|lib| puts "lib: #{lib}";require lib }

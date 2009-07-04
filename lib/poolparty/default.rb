@@ -14,9 +14,10 @@ module PoolParty
       :ec2_home => "#{ENV["HOME"]}/.ec2",
       :poolparty_src_path => File.expand_path("#{::File.dirname(__FILE__)}/../../"),
       :base_config_directory => "/etc/poolparty",
-      :remote_storage_path => "/var/poolparty"
+      :remote_storage_path => "/var/poolparty",
+      :poolparty_log_path => "#{File.dirname(__FILE__)}/log/poolparty.log"
     )
-    
+        
     # Method missing
     def self.method_missing(m,*a,&block)
       dsl_options.include?(m) ? dsl_options[m] : super

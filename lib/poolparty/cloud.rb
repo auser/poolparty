@@ -1,5 +1,5 @@
 module PoolParty  
-  class Cloud < Base
+  class Cloud < DslBase
     
     # Options we want on the output of the compiled script
     # but want to take the options from the parent if they
@@ -27,11 +27,11 @@ module PoolParty
     
     # Freeze the cloud_name so we can't modify it at all, set the plugin_directory
     # call and run instance_eval on the block and then call the after_create callback
-    def initialize(n, &block)
+    def initialize(n, o={}, &block)
       @cloud_name = n
       @cloud_name.freeze
       
-      super
+      super(n,o,&block)
     end
     
     ##### DSL #####

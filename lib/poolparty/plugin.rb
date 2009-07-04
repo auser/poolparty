@@ -7,14 +7,9 @@ module PoolParty
       @available_plugins ||= []
     end
     
-    def initialize(opts={}, extra_opts={}, prnt=nil, &block)
-      run_in_context {  callback(:before_load, opts) }
-      
+    def initialize(opts={}, extra_opts={}, prnt=nil, &block)      
       block = Proc.new {enable} unless block      
       super(opts, &block)
-      
-      run_in_context { callback(:loaded, opts) }
-      
       after_create
     end
   

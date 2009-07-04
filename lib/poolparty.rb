@@ -3,7 +3,7 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 t=Time.now
 
 # Gems
-%w(rubygems json).each do |lib|
+%w(rubygems json logger).each do |lib|
   require lib
 end
 
@@ -31,7 +31,8 @@ end
 require "dependency_resolver"
 
 # PoolParty core
-%w( default base cloud keypair plugin 
+%w( default pool_party_log base dsl_base cloud 
+    keypair plugin 
     pool resource ).each do |lib|
   require "poolparty/#{lib}"
 end

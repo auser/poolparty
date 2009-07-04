@@ -1,19 +1,25 @@
 class Object
-  
-  def clouds
-    $clouds ||= {}
-  end
-  
+    
+  # The pool method creates a pool and
+  # inserts it into the pool hash
   def pool(name, &block)
     if block
-      pools[name] ||= PoolParty::Pool.new(name, &block)
+      pools[name.to_s] ||= PoolParty::Pool.new(name, &block)
     else
       raise PoolParty::PoolPartyError.create("PoolError", "You must pass a block when defining a pool")
     end
   end
   
+  # The global hash of pools
   def pools
     $pools ||= {}
+  end
+  
+  # The clouds hash is a global hash
+  # that all objects can retrieve clouds from
+  # and they are stored by name
+  def clouds
+    $clouds ||= {}
   end
   
   # Alias method
@@ -29,13 +35,18 @@ class Object
   def dputs(m="", o=self)
     puts "[DEBUG] -- #{m.inspect}" if debugging?(o) rescue ""
   end
+  def ddputs(m="", o=self)
+    puts "[DEBUG] -- #{m.inspect}" if very_debugging?(o)
+  end
   def verbose?(o=self)
     o.respond_to?(:verbose) ? o.verbose : (debugging? || $TESTING || false)
   end
   def debugging?(o=self)
     o.respond_to?(:debug) ? o.debug : ($DEBUGGING ||= false)
   end
-  
+  def very_debugging?(o=self)
+    o.respond_to?(:very_debugging) ? o.very_debugging : false
+  end
   # Do once.
   # Takes a block. IF this block has already been run (from the run_procs array),
   # then run it and store the block unique id in the run_procs array so
