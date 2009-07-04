@@ -16,7 +16,10 @@ module PoolParty
     # template and will be rendered as an ERB template.
     def print_to_chef
       <<-EOE
-        # <%= self.class.has_method_name %>        
+        # <%= self.class.has_method_name %>
+        <%= ordered_resources.each do |res| %>
+            #{res.print_to_chef}
+        <% end %>
       EOE
     end
     

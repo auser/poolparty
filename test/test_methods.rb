@@ -1,3 +1,12 @@
+# Helpers
+def fixtures_dir
+  "#{::File.dirname(__FILE__)}/fixtures"
+end
+
+def clear!
+  $pools = $clouds = nil
+end
+
 def modify_env_with_hash(h={})
   orig_env = Kernel.const_get(:ENV)
   
@@ -20,4 +29,10 @@ def capture_stdout(&block)
       $stdout = old_stdout
    end
    out.string
+end
+
+def include_fixture_resources
+  Dir["#{::File.dirname(__FILE__)}/fixtures/resources/*.rb"].each do |res|
+    require res
+  end
 end

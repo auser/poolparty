@@ -8,10 +8,10 @@ module PoolParty
             
       def self.compile(array_of_resources=[])
         out = []
-        array_of_resources.each do |res|
+        array_of_resources.each do |res|          
           if res.respond_to?(compile_method_name)
-            str = res.send(compile_method_name)
-            out << ERB.new(str).result(res.send(:binding))
+            po = ProxyObject.new(res)
+            out << po.compile(compile_method_name)
           end
         end
         out.join("\n")
