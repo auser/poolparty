@@ -8,7 +8,10 @@ class PoolTest < Test::Unit::TestCase
 
     should "load the file with load_from_file on Pool" do
       PoolParty::Pool.load_from_file(@filepath)
-      assert_equal pools["poolparty"].class, PoolParty::Pool
+      assert_equal PoolParty::Pool, pools["poolparty"].class
+      assert_equal PoolParty::Cloud, pools["poolparty"].clouds["app"].class
+      assert_equal "cloudteam_test", pools["poolparty"].clouds["app"].keypair
+      assert_equal "/etc/motd", pools["poolparty"].clouds["app"].files.first.name
     end
   end
   

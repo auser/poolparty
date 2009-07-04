@@ -34,17 +34,6 @@ module PoolParty
       super(n,o,&block)
     end
     
-    ##### DSL #####
-    # The following methods are dsl methods that are available
-    # on the cloud.
-    ###############
-    
-    # Define the keypair method
-    # If passed with an argument, this method sets the keypair
-    # instance method on self
-    def keypair(*args)
-    end
-    
     ##### Internal methods #####
     # Methods that only the cloud itself will use
     # and thus are private

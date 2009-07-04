@@ -57,6 +57,8 @@ module PoolParty
     #   does_not_have_<resource_name>
     #   <resource_name>
     # on the Base class
+    # The has_ method calls exists! on the resource, then places the resource
+    # in the ordered_resources array
     def self.define_resource_methods
       ddputs "Defining resources..."
       defined_resources.each do |res|

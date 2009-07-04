@@ -26,6 +26,10 @@ module PoolParty
     # Singleton methods
     
     # Load a clouds.rb
+    # Call the prerequisites (before_specfile_load)
+    # and then instance_eval the contents
+    # finally, call after_specfile_load callback after the
+    # clouds.rb is loaded
     def self.load_from_file(filename=nil)
       ddputs "Loading #{filename} from file in Pool"
       @clouds_dot_rb_file = filename

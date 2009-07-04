@@ -106,6 +106,7 @@ module PoolParty
     def ordered_resources
       @ordered_resources ||= []
     end
+    alias :resources :ordered_resources
     
     # The clouds.rb file
     def self.clouds_dot_rb_file

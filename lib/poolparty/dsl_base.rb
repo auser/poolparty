@@ -24,7 +24,7 @@ module PoolParty
       when Hash
         nodes(arg)
       else
-        raise SpecException.new("Don't know how to handle instances cloud input #{arg}")
+        raise PoolParty::PoolPartyError.create("DslMethodCall", "You must call instances with either a number, a range or a hash (for a list of nodes)")
       end
     end
         
