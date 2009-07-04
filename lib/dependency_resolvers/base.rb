@@ -5,7 +5,25 @@ module PoolParty
   module DependencyResolvers
     
     class Base
-      attr_accessor :name
+            
+      def self.compile(array_of_resources=[])
+        out = []
+        array_of_resources.each do |res|
+          if res.respond_to?(compile_method_name)
+            str = res.send(compile_method_name)
+            out << ERB.new(str).result(res.send(:binding))
+          end
+        end
+        out.join("\n")
+      end
+      
+      # The name of the method that the resource
+      # should respond to to compile
+      # Format:
+      #   print_to_<dependency_resolver.name>
+      def self.compile_method_name
+        @compile_method_name ||= "print_to_#{name.to_s.top_level_class}".to_sym
+      end
       
     end
     

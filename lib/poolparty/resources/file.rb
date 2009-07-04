@@ -9,10 +9,9 @@ module PoolParty
             
       def print_to_chef        
         <<-EOE
-        template <%= name %> do
-          <%- options.each do |k,v| %>
-            <%= k -%> <%= v %>
-          <% end %>        
+        template "<%= name %>" do
+          content "<%= content %>"
+        end
         EOE
       end
       
