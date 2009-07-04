@@ -1,7 +1,11 @@
 module PoolParty
   module Resources
     
-    class File < Resource
+    class FileResource < Resource
+      
+      def has_method_name
+        "file"
+      end
             
       def print_to_chef        
         <<-EOE

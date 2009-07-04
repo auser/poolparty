@@ -2,7 +2,7 @@
   ssh key used to login to remote instances
 =end
 module PoolParty
-  class Keypair
+  class Keypair < Base
     
     include SearchablePaths
     has_searchable_paths(:dirs => ["/", "keys"], :prepend_paths => ["#{ENV["HOME"]}/.ssh"])
@@ -61,6 +61,18 @@ module PoolParty
     # Support to add the enumerable each to keys
     def each
       yield full_filepath
+    end
+    
+    private
+    
+    # Validations
+    def validations
+      [:has_proper_permissions]
+    end
+    
+    # Check the proper permissions
+    def has_proper_permissions
+      [:readable?, :writable?, :executable?].map {|meth| }
     end
     
     # Turn the keypair into the a useful json string

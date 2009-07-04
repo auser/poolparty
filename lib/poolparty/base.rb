@@ -88,6 +88,19 @@ module PoolParty
       end
     end
     
+    # Validation checks
+    # if all of the validations pass, the object is considered valid
+    # the validations are responsible for raising a PoolPartyError (StandardError)
+    def valid?
+      validations.each {|validation| self.send(validation.to_sym) }
+    end
+    
+    # The array of validations that the instances must pass
+    # to be considered valid. These must be methods available on the instance
+    def validations
+      []
+    end
+    
     # Ordered resources
     # are the resources associated with this base
     def ordered_resources
