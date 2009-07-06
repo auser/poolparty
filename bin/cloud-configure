@@ -25,7 +25,7 @@ EOS
           puts "No nodes to bootstrap"
         else
           if command[:inst_num]
-            vputs "\nConfiguring: #{cld.nodes[o.inst_num]}\n--------------------"
+            vputs "\nConfiguring: #{cld.nodes[command[:inst_num]]}\n--------------------"
             address = cld.nodes(:status => "running")[ command[:inst_num] ]
             ::PoolParty::Provision::DrConfigure.new( address[:ip], :cloud => cld )
           else
