@@ -54,8 +54,8 @@ module PoolParty
       # are to printed in the same format
       def print_dsl_options(str)
         dsl_options.map do |k,v|
-          str ^ {:key => k, :value => v}
-        end.join("\n")
+          v.nil? ? nil : str ^ {:key => k, :value => v}
+        end.compact.join("\n")
       end
       
       # Take all the ordered_resources of the proxy object
