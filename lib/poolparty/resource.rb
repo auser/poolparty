@@ -3,10 +3,11 @@ module PoolParty
     
     attr_reader :exists
     
-    default_options()
-        
-    # Dependency resolver methods
+    default_options(
+      :name => to_s.top_level_class
+    )
     
+    # Dependency resolver methods    
     # print_to_chef
     # When the dependency resolver comes through and resolves
     # this resource, it will come through and check if it resolves
@@ -98,7 +99,6 @@ module PoolParty
     def self.defined_resources
       @defined_resources ||= []
     end
-    
     
   end
 end

@@ -13,9 +13,9 @@ module PoolParty
             
       def print_to_chef        
         <<-EOE
-        template "<%= name %>" do
-          content "<%= content %>"
-        end
+template "<%= name %>" do
+  content "<%= content %>"
+end
         EOE
       end
       

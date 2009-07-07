@@ -26,9 +26,9 @@ class BaseTest < Test::Unit::TestCase
     
     should "compile" do
       str =<<-EOE
-        template "/etc/motd" do
-          content "piper"
-        end
+template "/etc/motd" do
+  content "piper"
+end
       EOE
       
       assert_equal str, @base.compile(@cloud.resources)

@@ -7,20 +7,21 @@ PoolParty::Resource.define_resource_methods
 class FakeObject < PoolParty::Resource
   
   default_options(
-    :name => "Faker",
-    :profession => "thief",
-    :default_value => "default, fo shiz"
+    :name => "Faker"
   )
   
   def initialize(hsh)
     set_vars_from_options(hsh)
   end
   
+  def default_value
+    "default, fo shiz"
+  end
+  
   def print_to_chef
     <<-EOE
 fake :<%= name %> do
   name "<%= name %>"
-  profession "<%= profession %>"
   chap "<%= chap ? true : false %>"
   default_value "<%= default_value %>"
 end
@@ -43,8 +44,6 @@ class ProxyObjectTest < Test::Unit::TestCase
     should "default to the method_missing of the object" do      
       assert_equal "keyyyyy", @po.cap
       assert_equal "man", @po.chap
-      assert_equal "Faker", @po.name
-      assert_equal "thief", @po.profession
       assert_raises NoMethodError do
         @po.snakes
       end
@@ -54,7 +53,6 @@ class ProxyObjectTest < Test::Unit::TestCase
       str = @po.compile(:print_to_chef)
       output = 'fake :Faker do
   name "Faker"
-  profession "thief"
   chap "true"
   default_value "default, fo shiz"
 end
@@ -63,6 +61,10 @@ fake "/etc/motd" do
 end
 '
       assert_equal str.chomp, output
+    end
+    
+    should "have default options printed in layout with print_dsl_options" do
+      assert_equal @po.print_dsl_options(":key: ':value'"), "name: 'Faker'\ncap: 'keyyyyy'\nchap: 'man'"
     end
   end
   

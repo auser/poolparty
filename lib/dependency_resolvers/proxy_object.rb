@@ -9,7 +9,8 @@ module PoolParty
   module DependencyResolvers
     
     class ProxyObject
-      attr_reader :proxy, :current_printing_method
+      attr_accessor :proxy
+      attr_reader :current_printing_method
       
       def initialize(proxy)
         @proxy = proxy
@@ -36,6 +37,14 @@ module PoolParty
           raise PoolParty::PoolPartyError.create("ProxyObjectError", "Compilation of #{proxy.inspect} error. Strings and symbols are supported")
         end        
         ERB.new(str).result(self.send(:binding))
+      end
+      
+      # Print the dsl options in the Erb string format
+      # given by the method
+      def print_dsl_options(str)
+        dsl_options.map do |k,v|
+          str ^ {:key => k, :value => v}
+        end.join("\n")
       end
       
       # Take all the ordered_resources of the proxy object
