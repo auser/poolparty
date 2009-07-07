@@ -4,10 +4,17 @@ module PoolParty
     attr_reader :exists
     
     default_options(
-      :name => to_s.top_level_class
+      :name     => to_s.top_level_class,
+      :not_if   => nil
     )
     
     # Dependency resolver methods
+    
+    def initialize(o={}, extra={}, &block)
+      callback :before_loaded
+      super
+      callback :after_loaded
+    end
     
     def compile(compiler)
       @compiler = PoolParty.module_eval("PoolParty::DependencyResolvers::#{compiler.to_s.capitalize}")
