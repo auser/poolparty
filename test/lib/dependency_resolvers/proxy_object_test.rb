@@ -64,8 +64,12 @@ end
     end
     
     should "have default options printed in layout with print_dsl_options" do
-      assert_equal @po.print_dsl_options(":key: ':value'"), "name: 'Faker'\ncap: 'keyyyyy'\nchap: 'man'"
+      str = @po.print_dsl_options(":key: ':value'")
+      assert_match /name: 'Faker'/, str
+      assert_match /cap: 'keyyyyy'/, str
+      assert_match /chap: 'man'/, str
     end
+    
   end
   
 end

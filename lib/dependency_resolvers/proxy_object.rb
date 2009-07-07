@@ -40,7 +40,18 @@ module PoolParty
       end
       
       # Print the dsl options in the Erb string format
-      # given by the method
+      # given by the method print_dsl_options(str)
+      # To use print_dsl_options, the format is:
+      # print_dsl_options("print :key = ':value'")
+      # The string substitution uses the ^ substitution found in string.rb
+      # This will substitute the key and the value in the format given by the 
+      # string passed. For instance
+      #   dsl_options = {:to => "world", :message => "hello"}
+      #   print_dsl_options(":key => :value") =
+      #     message => hello
+      #     to => world
+      # This should be used if all the dsl_options
+      # are to printed in the same format
       def print_dsl_options(str)
         dsl_options.map do |k,v|
           str ^ {:key => k, :value => v}

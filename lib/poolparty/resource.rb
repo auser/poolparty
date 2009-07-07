@@ -7,7 +7,12 @@ module PoolParty
       :name => to_s.top_level_class
     )
     
-    # Dependency resolver methods    
+    # Dependency resolver methods
+    
+    def compile(compiler)
+      @compiler = PoolParty.module_eval("PoolParty::DependencyResolvers::#{compiler.to_s.capitalize}")
+      @compiler.compile(self)
+    end
     # print_to_chef
     # When the dependency resolver comes through and resolves
     # this resource, it will come through and check if it resolves
