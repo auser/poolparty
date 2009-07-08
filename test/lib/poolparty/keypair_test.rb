@@ -11,6 +11,7 @@ class KeypairTest < Test::Unit::TestCase
     should "set the file given as the file for the keypair" do
       assert_equal @keypair.filepath, fixtures_dir/"test_key"
       assert_equal @keypair.full_filepath, File.expand_path(fixtures_dir/"test_key")
+      assert_equal @keypair.to_s, File.expand_path(fixtures_dir/"test_key")
     end
     
     should "have the content of the file available" do

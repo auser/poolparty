@@ -74,11 +74,6 @@ module PoolParty
       perm_truth = [:readable?, :writable?, :executable?].map {|meth| File.send(meth, full_filepath)} == [true, true, false]
       raise PoolPartyError.create("KeypairError", "Your keypair #{full_filepath} has improper file permissions. Keypairs must be 0600 permission. Please chmod your keypair file and try again") unless perm_truth
     end
-    
-    # Turn the keypair into the a useful json string
-    # def to_hash
-    #   "{\"basename\":\"#{basename}\",\"full_filepath\": \"/etc/poolparty/#{filename}\"}"
-    # end
-    
+        
   end
 end
