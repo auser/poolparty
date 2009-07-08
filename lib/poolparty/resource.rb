@@ -9,13 +9,6 @@ module PoolParty
     )
     
     # Dependency resolver methods
-    
-    def initialize(o={}, extra={}, &block)
-      callback :before_loaded
-      super
-      callback :after_loaded
-    end
-    
     def compile(compiler)
       @compiler = PoolParty.module_eval("PoolParty::DependencyResolvers::#{compiler.to_s.capitalize}")
       @compiler.compile(self)
