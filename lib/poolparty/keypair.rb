@@ -34,11 +34,10 @@ module PoolParty
     #TODO: gracefully handle the case when a passpharase is needed
     # Generate a public key from the private key
     # net/ssh already has this built-in from our extension.
-    # TODO: UPDATE THIS TO USE net/ssh
     def public_key
       if !@public_key_string || @public_key_string.empty?
-         @public_key_string = `ssh-keygen -y -f #{full_filepath}`
-         raise 'Unable to generate public_key_string' if @public_key_string.empty?
+        pkey = Net::SSH::KeyFactory.load_private_key(full_filepath)
+        @public_key_string = pkey.public_key
       else
         @public_key_string
       end
@@ -67,12 +66,13 @@ module PoolParty
     
     # Validations
     def validations
-      [:has_proper_permissions]
+      [:has_proper_permissions?]
     end
     
     # Check the proper permissions
-    def has_proper_permissions
-      [:readable?, :writable?, :executable?].map {|meth| }
+    def has_proper_permissions?
+      perm_truth = [:readable?, :writable?, :executable?].map {|meth| File.send(meth, full_filepath)} == [true, true, false]
+      raise PoolPartyError.create("KeypairError", "Your keypair #{full_filepath} has improper file permissions. Keypairs must be 0600 permission. Please chmod your keypair file and try again") unless perm_truth
     end
     
     # Turn the keypair into the a useful json string
