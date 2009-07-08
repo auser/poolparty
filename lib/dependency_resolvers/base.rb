@@ -25,6 +25,7 @@ module PoolParty
       
       private
       
+      # Compile a resource directly
       def self.compile_resource(res)
         po = ProxyObject.new(res)
         po.compile(compile_method_name)

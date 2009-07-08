@@ -22,13 +22,10 @@ module PoolParty
     # template and will be rendered as an ERB template.
     def print_to_chef
       <<-EOE
-        # <%= has_method_name %>
-        <%= has_method_name.downcase %> "<%= name %>" do
-          <%= print_dsl_options(':key: \":value\"') %>
-        end
-        <% ordered_resources.each do |res| %>
-            <%= res.print_to_chef %>
-        <% end %>
+# <%= has_method_name %>
+<% ordered_resources.each do |res| %>
+<%= res.compile(:chef) %>
+<% end %>
       EOE
     end
     
@@ -63,6 +60,8 @@ module PoolParty
       to_s.top_level_class
     end
     
+    # has_method_name alias for the singleton method has_method_name
+    # so that there is access to the has_method_name on the instance
     def has_method_name
       self.class.has_method_name
     end

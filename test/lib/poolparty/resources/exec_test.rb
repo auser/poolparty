@@ -7,7 +7,6 @@ class ExecResourceTest < Test::Unit::TestCase
     setup do
       PoolParty::Resource.define_resource_methods
       @res = PoolParty::Resources::Exec.new "/usr/sbin/mail -s 'hi' arilerner@mac.com"
-      @base = PoolParty::DependencyResolvers::Chef
     end
     
     should "have the method denoted by has_method_name" do
