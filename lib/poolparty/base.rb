@@ -58,7 +58,6 @@ module PoolParty
       run_in_context(o) do
         callback :before_load, o, &block
         instance_eval &block if block
-        puts "calling after_loaded on #{self.class}"
         callback :after_loaded, o, &block
       end
     end

@@ -18,14 +18,6 @@ module PoolParty
           not_if "grep -q \'#{line.safe_quote}\' #{file}"
         end
       end
-            
-      def print_to_chef        
-        <<-EOE
-template "<%= name %>" do
-  content "<%= content %>"
-end
-        EOE
-      end
       
     end
     

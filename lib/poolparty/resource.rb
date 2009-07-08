@@ -23,11 +23,11 @@ module PoolParty
     def print_to_chef
       <<-EOE
         # <%= self.class.has_method_name %>
-        <%= has_method_name.downcase %> "<%= name %>" do
+        <%= self.class.has_method_name.downcase %> "<%= name %>" do
           <%= print_dsl_options(':key: \":value\"') %>
         end
-        <%= ordered_resources.each do |res| %>
-            #{res.print_to_chef}
+        <% ordered_resources.each do |res| %>
+            <%= res.print_to_chef %>
         <% end %>
       EOE
     end

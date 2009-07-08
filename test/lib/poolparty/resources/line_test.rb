@@ -10,8 +10,8 @@ class LineResourceTest < Test::Unit::TestCase
       @base = PoolParty::DependencyResolvers::Chef
     end
     
-    should "have the method denoted by has_method_name" do      
-      assert_match /execute "\/usr\/sbin\/mail -s 'hi' arilerner@mac\.com"/, @res.compile(:chef)
+    should "have the method denoted by has_method_name" do
+      assert_match /line_in_file "\/etc\/poolparty"/, @res.compile(:chef)
     end
     
   end
