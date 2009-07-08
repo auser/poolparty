@@ -22,8 +22,8 @@ module PoolParty
     # template and will be rendered as an ERB template.
     def print_to_chef
       <<-EOE
-        # <%= self.class.has_method_name %>
-        <%= self.class.has_method_name.downcase %> "<%= name %>" do
+        # <%= has_method_name %>
+        <%= has_method_name.downcase %> "<%= name %>" do
           <%= print_dsl_options(':key: \":value\"') %>
         end
         <% ordered_resources.each do |res| %>
@@ -61,6 +61,10 @@ module PoolParty
     #   has_tengo
     def self.has_method_name
       to_s.top_level_class
+    end
+    
+    def has_method_name
+      self.class.has_method_name
     end
     
     # Define the resource methods for all the resources sublcassed by Resource
