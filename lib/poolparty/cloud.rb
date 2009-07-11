@@ -34,6 +34,13 @@ module PoolParty
       super(n,o,&block)
     end
     
+    # compile
+    # Take the cloud's resources and compile them down using 
+    # the defined (or the default dependency_resolver, chef)
+    def compile
+      dependency_resolver.compile(resources)
+    end
+    
     ##### Internal methods #####
     # Methods that only the cloud itself will use
     # and thus are private

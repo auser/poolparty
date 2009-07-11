@@ -2,7 +2,7 @@ RUBY							= `which ruby`
 RUBYGEMS					= `which gem`
 GEMENV						= `gem env`
 
-all: check_install run_tests
+all: run_tests
 
 check_install:
 	$(RUBY) -v

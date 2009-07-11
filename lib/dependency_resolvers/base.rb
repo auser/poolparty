@@ -27,6 +27,7 @@ module PoolParty
       
       # Compile a resource directly
       def self.compile_resource(res)
+        return nil unless res.respond_to?(compile_method_name)
         po = ProxyObject.new(res)
         po.compile(compile_method_name)
       end
@@ -34,11 +35,8 @@ module PoolParty
       # Compile an array of resources
       def self.compile_array(array_of_resources=[])
         out = []
-        array_of_resources.each do |res|          
-          if res.respond_to?(compile_method_name)
-            po = ProxyObject.new(res)
-            out << po.compile(compile_method_name)
-          end
+        array_of_resources.each do |res|                    
+          out << compile_resource(res)
         end
         out.join("\n")
       end
