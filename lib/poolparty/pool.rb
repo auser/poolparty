@@ -30,11 +30,15 @@ module PoolParty
     # and then instance_eval the contents
     # finally, call after_specfile_load callback after the
     # clouds.rb is loaded
+    # Arguments:
+    #   + file on the filesystem
+    #   + open-uri url (http)
     def self.load_from_file(filename=nil)
+      require "open-uri"
       ddputs "Loading #{filename} from file in Pool"
       @clouds_dot_rb_file = filename
       before_specfile_load(clouds_dot_rb_file)
-      o = File.open(filename, 'r') {|f| instance_eval f.read, clouds_dot_rb_file }
+      instance_eval open(clouds_dot_rb_file).read, clouds_dot_rb_file
       after_specfile_load
       o
     end
