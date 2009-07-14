@@ -36,6 +36,7 @@ module PoolParty
                           thin
                           logging
                           ruby_parser
+                          sexp_processor
                           ruby2ruby
                           extlib
                         )
