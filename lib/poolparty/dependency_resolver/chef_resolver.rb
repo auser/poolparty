@@ -201,6 +201,8 @@ module PoolParty
         "not_if"
       when :only_if
         "only_if"
+      when :subscribe
+        "subscribes"
       else
         "#{key}"        
       end
