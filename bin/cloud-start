@@ -13,6 +13,7 @@ Usage: #{$0} #{all_options_string}
 EOS
 
   short_desc "starts a single instance in your cloud"
+  opt :skip_bootstrap, "Skip bootstrapping. This is useful if you are starting with an AMI with PoolParty already installed"
 
   run do |command|    
     
@@ -24,7 +25,7 @@ EOS
         
         cld.launch_instance!(:cloud_name => cld.name) do |node|
           
-          ::PoolParty::Provision::BootStrapper.new(node.ip, :cloud => cld)
+          ::PoolParty::Provision::BootStrapper.new(node.ip, :cloud => cld) unless command[:skip_bootstrap]
           ::PoolParty::Provision::DrConfigure.new(node.ip,  :cloud => cld)
           
           puts <<-EOM
