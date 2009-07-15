@@ -234,8 +234,11 @@ module PoolParty
       when Proc
         obj.call # eh
       when Array
+        # if we are subscribing to an event
+        if obj[1] && ([:reload, :run, :stop, :start].include?(obj[0]))
+          ":#{obj[0]}, #{to_option_string(obj[1])}"
         # If we are sending a notifies with a second argument
-        if obj[1] && [:immediately, :delayed].include?(obj[1])
+        elsif obj[1] && ([:immediately, :delayed].include?(obj[1]) || [:reload, :run, :stop, :start].include?(obj[0]))
           "#{to_option_string(obj[0])}, :#{obj[1]}"
         else
           "[ #{obj.map {|e| to_option_string(e) }.reject {|a| a.nil? || a.empty? }.join(", ")} ]"

@@ -77,7 +77,7 @@ describe "ChefResolver" do
           # parent == apache
           listen "8080"
           has_file :name => "/etc/apache2/apache2.conf", :template => "#{::File.dirname(__FILE__)}/../fixtures/test_template.erb", :friends => "bob"
-          has_exec :command => "ls /etc/apache2"
+          has_exec :command => "ls /etc/apache2", :subscribe => [:reload, get_file("/etc/apache2/apache2.conf")]
         end
       end
       @properties = @cloud.to_properties_hash
@@ -96,6 +96,10 @@ describe "ChefResolver" do
     end
     it "should require the file to have the directory (written as file)" do
       @compiled.should =~ /directory \"\/var\/www\" do/
+    end
+    it "should handle subscribing to events" do
+      puts @compiled
+      @compiled.should =~ %r{subscribes :reload, resources\(:template => "/etc/apache2/apache2.conf"\)}
     end
     after(:all) do
       # ::FileUtils.rm_rf "/tmp/poolparty/dr_configure/"
