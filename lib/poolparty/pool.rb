@@ -38,7 +38,7 @@ module PoolParty
       ddputs "Loading #{filename} from file in Pool"
       @clouds_dot_rb_file = filename
       before_specfile_load(clouds_dot_rb_file)
-      instance_eval open(clouds_dot_rb_file).read, clouds_dot_rb_file
+      o = instance_eval open(clouds_dot_rb_file).read, clouds_dot_rb_file
       after_specfile_load
       o
     end
