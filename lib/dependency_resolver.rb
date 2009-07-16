@@ -3,7 +3,7 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 module PoolParty
   module DependencyResolvers
     def self.all
-      PoolParty::DependencyResolvers.constants
+      @all ||= PoolParty::DependencyResolvers.constants - %w(Base ProxyObject)
     end
   end
 end
