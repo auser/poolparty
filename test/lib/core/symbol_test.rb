@@ -17,6 +17,10 @@ class SymbolTest < Test::Unit::TestCase
       assert_equal "abcd", "a.b-c d".to_sym.sanitize
     end
     
+    should "classify the symbol" do
+      assert_equal :C, :c.classify
+    end
+    
   end
   
 end

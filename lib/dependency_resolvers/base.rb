@@ -5,6 +5,10 @@ module PoolParty
   module DependencyResolvers
     
     class Base
+      
+      def initialize
+        
+      end
             
       def self.compile(resources=[])
         case resources

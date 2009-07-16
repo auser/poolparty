@@ -14,6 +14,14 @@ class CloudTest < Test::Unit::TestCase
       assert_equal @cloud.dependency_resolver, PoolParty::DependencyResolvers::Chef
     end
     
+    should "raise an error if you cannot resolve_with the dependency resolver" do
+      @cloud.resolve_with :chef
+      PoolParty::PoolPartyError.create("DependencyResolverError")
+      assert_raises DependencyResolverError do
+        @cloud.resolve_with :foo
+      end
+    end
+    
     should "compile with the dependency resolver"
       # @cloud.compile
     # end

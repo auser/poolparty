@@ -21,4 +21,9 @@ class Symbol
   def /(o)
     File.join(self.to_s, o.to_s)
   end
+  
+  # Classify the symbol
+  def classify
+    to_s.classify.to_sym
+  end
 end

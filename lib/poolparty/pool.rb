@@ -39,7 +39,7 @@ module PoolParty
       @clouds_dot_rb_file = filename
       before_specfile_load(clouds_dot_rb_file)
       o = instance_eval open(clouds_dot_rb_file).read, clouds_dot_rb_file
-      after_specfile_load
+      after_specfile_load(clouds_dot_rb_file)
       o
     end
     
@@ -56,7 +56,7 @@ module PoolParty
     end
     
     # After the entire cloud is loaded
-    def self.after_specfile_load
+    def self.after_specfile_load(filepath)
     end
     
   end

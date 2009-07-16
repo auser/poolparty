@@ -13,7 +13,8 @@ module PoolParty
       # and set the variable there
       def print_to_chef
         # Variable
-        "# TODO: Variable => <%= name %>"
+        # TODO: Variable => <%= name %>
+        "poolparty[:#{name}] = #{value}"
       end
       
     end
