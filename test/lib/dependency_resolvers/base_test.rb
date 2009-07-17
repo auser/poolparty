@@ -31,7 +31,7 @@ template "/etc/motd" do
 end
       EOE
       
-      assert_equal str, @base.compile(@cloud.resources)
+      assert_equal str, @base.compile_to(@cloud.resources, test_dir)
     end
   end
   

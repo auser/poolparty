@@ -18,9 +18,9 @@ class ChefTest < Test::Unit::TestCase
       assert_equal :print_to_chef, @base.compile_method_name
     end
     
-    should "be able to compile a variable" # do
-     #      @base.compile(@resources[:variable])
-     #    end
+    should "be able to compile a variable" do
+      a = @base.compile_to(@resources[:variable], test_dir)
+    end
     
     should "be able to compile a file" # do
      #      p @base.compile(@resources[:file])

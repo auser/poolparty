@@ -34,6 +34,18 @@ module PoolParty
       super(n,o,&block)
     end
     
+    # Temporary path
+    # Starts at the global default tmp path and appends the pool name
+    # and the cloud name
+    def tmp_path
+      Default.tmp_path / pool.name / name
+    end
+    
+    # The pool this cloud belongs to
+    def pool
+      parent
+    end
+    
     ##### Internal methods #####
     # Methods that only the cloud itself will use
     # and thus are private
@@ -43,7 +55,7 @@ module PoolParty
     # Take the cloud's resources and compile them down using 
     # the defined (or the default dependency_resolver, chef)
     def compile
-      dependency_resolver.compile(resources)
+      dependency_resolver.compile_to(resources, tmp_path/"var"/"poolparty")
     end
     
     # Form the cloud

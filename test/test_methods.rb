@@ -3,6 +3,10 @@ def fixtures_dir
   "#{::File.dirname(__FILE__)}/fixtures"
 end
 
+def test_dir
+  "#{File.dirname(__FILE__)}/test_dir"
+end
+
 def clear!
   $pools = $clouds = nil
 end

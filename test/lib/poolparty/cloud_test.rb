@@ -27,6 +27,14 @@ class CloudTest < Test::Unit::TestCase
       end
     end
     
+    should "have a pool name" do
+      assert_equal "poolparty", @cloud.pool.name
+    end
+    
+    should "have a temp path of the name: Default.tmp_path / pool_name / cloud_name" do
+      assert_equal Default.tmp_path/"poolparty"/"app", @cloud.tmp_path
+    end
+    
     should "compile with the dependency resolver"
       # @cloud.compile
     # end

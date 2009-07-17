@@ -10,6 +10,7 @@ module PoolParty
     
     default_options(
       :user => "root",
+      :tmp_path => "/tmp/poolparty",
       :poolparty_home_path => "#{ENV["HOME"]}/.poolparty",
       :ec2_home => "#{ENV["HOME"]}/.ec2",
       :poolparty_src_path => File.expand_path("#{::File.dirname(__FILE__)}/../../"),

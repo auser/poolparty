@@ -6,17 +6,29 @@ module PoolParty
     
     class Base
       
-      def initialize
-        
+      def self.compile_to(resources=[], outdir=Dir.pwd)
+        @compile_directory ||= outdir
+        compile(resources)
       end
-            
+      
       def self.compile(resources=[])
-        case resources
+        before_compile
+        o = case resources
         when Array
           compile_array(resources)
         when PoolParty::Resource
           compile_resource(resources)
         end
+        after_compile
+        o
+      end
+      
+      # CALLBACKS
+      # Called before anything is compiled
+      def self.before_compile
+      end
+      # Called after everything is compiled
+      def self.after_compile
       end
       
       # The name of the method that the resource
@@ -43,6 +55,10 @@ module PoolParty
           out << compile_resource(res)
         end
         out.join("\n")
+      end
+      
+      def self.compile_directory
+        @compile_directory
       end
       
     end

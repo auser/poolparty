@@ -43,10 +43,11 @@ module PoolParty
     #   - instance_eval block
     # - stack
     def run_in_context(o={}, &block)
-      context_stack.push self
-      set_vars_from_options(o)
-      instance_eval &block if block
-      context_stack.pop
+      proc = Proc.new do
+        set_vars_from_options(o)
+        instance_eval &block if block
+      end
+      super(&proc)
     end
     
     # Run the block in the context of self
