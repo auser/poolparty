@@ -34,13 +34,10 @@ module PoolParty
       super(n,o,&block)
     end
     
-    def resolve_with(a)
-      if PoolParty::DependencyResolvers.const_defined?(a.classify)
-        dependency_resolver PoolParty::DependencyResolvers.module_eval("#{a.classify}")
-      else
-        raise PoolParty::PoolPartyError.create("DependencyResolverError", "Undefined dependency resolver: #{a}. Please specify one of the following: #{PoolParty::DependencyResolvers.all.join(", ")}")
-      end
-    end
+    ##### Internal methods #####
+    # Methods that only the cloud itself will use
+    # and thus are private
+    private
     
     # compile
     # Take the cloud's resources and compile them down using 
@@ -48,11 +45,6 @@ module PoolParty
     def compile
       dependency_resolver.compile(resources)
     end
-    
-    ##### Internal methods #####
-    # Methods that only the cloud itself will use
-    # and thus are private
-    private
     
     # Form the cloud
     # Run the init block with the init_opts
