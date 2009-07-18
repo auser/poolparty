@@ -9,8 +9,12 @@ class ChefTest < Test::Unit::TestCase
       
       @resources = {
         :variable => Resources::Variable.new(:animal, "Duck"),
-        :file => Resources::FileResource.new(:name => "/etc/motd", :content => "Welcome to a fake file")
+        :files => Resources::FileResource.new(:name => "/etc/motd", :content => "Welcome to a fake file")
       }
+    end
+    
+    teardown do
+      FileUtils.rm_rf test_dir
     end
     
     should "have compile to chef" do
@@ -19,8 +23,13 @@ class ChefTest < Test::Unit::TestCase
     end
     
     should "be able to compile a variable" do
-      a = @base.compile_to(@resources[:variable], test_dir)
+      @base.compile_to(@resources[:variable], test_dir)
       assert_equal "# PoolParty variables\npoolparty Mash.new unless attribute?('poolparty')\npoolparty[:animal] = \"Duck\"\n", open(test_dir/"attributes"/"poolparty.rb").read
+    end
+    
+    should "be able to compile a file" do
+      @base.compile_to(@resources[:files], test_dir)
+      assert_equal "Welcome to a fake file", open(test_dir/"templates"/"default"/"etc"/"motd.erb").read
     end
     
     should "be able to compile a file" # do

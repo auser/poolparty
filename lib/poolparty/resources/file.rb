@@ -17,13 +17,18 @@ module PoolParty
       def print_to_chef        
         <<-EOE
 template "<%= name %>" do
-  content "<%= content %>"
+  source "<%= content %>"
   action :<%= exists? ? :create : :delete %>
   backup <%= backup %>
   mode <%= print_variable(mode) %>
   owner <%= print_variable(owner) %>
 end
         EOE
+      end
+      
+      # A convenience helper to point to the path of the file
+      def path
+        name
       end
       
     end

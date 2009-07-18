@@ -15,6 +15,7 @@ module PoolParty
         
         def after_compile
           compile_variables
+          compile_files
         end
            
         # compile the resources
@@ -23,12 +24,15 @@ module PoolParty
           when Resources::Variable
             # do variable stuff
             variables << res
+          when Resources::FileResource
+            files << res
           else
             super
           end
         end
         
         default_attr_reader :variables, []
+        default_attr_reader :files, []
         
         private
         
@@ -40,6 +44,18 @@ module PoolParty
             f << "poolparty Mash.new unless attribute?('poolparty')\n"
             variables.each do |var|
               f << "poolparty[:#{var.name}] = #{handle_print_variable(var.value)}\n"
+            end
+          end
+        end
+        
+        # Compile the files
+        def compile_files
+          FileUtils.mkdir_p compile_directory/"files" unless ::File.directory?(compile_directory/"files")
+          files.each do |fi|
+            fpath = compile_directory/"templates"/"default"/"#{fi.path}.erb"
+            FileUtils.mkdir_p File.dirname(fpath) unless File.directory?(File.dirname(fpath))
+            File.open(fpath, "w") do |f|
+              f << fi.content
             end
           end
         end
