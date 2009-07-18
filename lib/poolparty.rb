@@ -7,7 +7,7 @@ t=Time.now
   require lib
 end
 
-%w(dslify parenting baker).each do |dep|
+%w(dslify parenting).each do |dep|
   $LOAD_PATH.unshift(File.join(File.dirname(__FILE__),'..', 'vendor/gems', dep, 'lib'))
   require "#{dep}"
 end

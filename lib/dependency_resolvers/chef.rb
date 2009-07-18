@@ -10,18 +10,17 @@ module PoolParty
         attr_reader :meal
         
         def before_compile
-          @meal = Baker::Meal.new(compile_directory)
+          ::FileUtils.mkdir_p compile_directory unless ::File.directory?(compile_directory)
         end
         
         def after_compile
-          meal.compile
         end
                 
         def compile_resource(res)
           case res
           when Resources::Variable
             # do variable stuff
-            meal.attribute res
+            variables << res
           else
             super
           end
@@ -30,10 +29,6 @@ module PoolParty
         def variables
           @variables ||= []
         end
-        
-        def compile_variables
-          @attr = Baker::Attributes.new :cookbook_directory => "#{File.dirname(__FILE__)}/../test_dir", :basename => "poolparty"
-        end        
         
       end
             
