@@ -14,7 +14,7 @@ class ChefTest < Test::Unit::TestCase
     end
     
     teardown do
-      # FileUtils.rm_rf test_dir
+      FileUtils.rm_rf test_dir
     end
     
     should "have compile to chef" do
@@ -32,9 +32,11 @@ class ChefTest < Test::Unit::TestCase
       assert_equal "Welcome to a fake file", open(test_dir/"templates"/"default"/"etc"/"motd.erb").read
     end
     
-    should "be able to compile a file" # do
-     #      p @base.compile(@resources[:file])
-     #    end
+    should "compile to the recipes" do
+      @base.compile_to(@resources[:files], test_dir)
+      assert_equal "template \"/etc/motd\" do\n  source \"/etc/motd.erb\"\n  action :delete\n  backup 5\n  mode 0644\n  owner \"root\"\nend\n", open(test_dir/"recipes"/"default.rb").read
+    end
+    
   end
   
 end
