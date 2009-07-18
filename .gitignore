@@ -24,3 +24,4 @@ vendor/dependencies/packages
 tags
 .session
 clouds.rb
+test/test_dir/
