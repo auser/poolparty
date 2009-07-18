@@ -21,6 +21,13 @@ module PoolParty
         end
            
         # compile the resources
+        # Compiles the resource appropriately against the type
+        # If the resource is a variable, then we don't have any output
+        # as the output will be handled in after_compile with compile_variables
+        # If the resource is a file, then add it to the files array and run the
+        # compile_resource command (on super) for the output. The file will later
+        # be turned into a .erb template file in the compile_directory
+        # Otherwise just run the output to get the default.rb recipe
         def compile_resource(res)
           case res
           when Resources::Variable
