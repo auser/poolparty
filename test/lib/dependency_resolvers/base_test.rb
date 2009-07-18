@@ -28,6 +28,10 @@ class BaseTest < Test::Unit::TestCase
       str =<<-EOE
 template "/etc/motd" do
   content "piper"
+  action :create
+  backup 5
+  mode 0644
+  owner "root"
 end
       EOE
       

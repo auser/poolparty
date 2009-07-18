@@ -16,7 +16,8 @@ module PoolParty
         def after_compile
           compile_variables
         end
-                
+           
+        # compile the resources
         def compile_resource(res)
           case res
           when Resources::Variable
@@ -27,16 +28,15 @@ module PoolParty
           end
         end
         
-        def variables
-          @variables ||= []
-        end
+        default_attr_reader :variables, []
         
         private
         
+        # Take the variables and compile them into the file attributes/poolparty.rb
         def compile_variables
           FileUtils.mkdir_p compile_directory/"attributes" unless ::File.directory?(compile_directory/"attributes")
           File.open(compile_directory/"attributes"/"poolparty.rb", "w") do |f|
-            f << "# variables\n"
+            f << "# PoolParty variables\n"
             f << "poolparty Mash.new unless attribute?('poolparty')\n"
             variables.each do |var|
               f << "poolparty[:#{var.name}] = #{handle_print_variable(var.value)}\n"
