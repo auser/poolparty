@@ -20,7 +20,7 @@ class ChefTest < Test::Unit::TestCase
     
     should "be able to compile a variable" do
       a = @base.compile_to(@resources[:variable], test_dir)
-      assert_equal "hi", open(test_dir/"attributes"/"poolparty.rb").read
+      assert_equal "# variables\npoolparty Mash.new unless attribute?('poolparty')\npoolparty[:animal] = \"Duck\"\n", open(test_dir/"attributes"/"poolparty.rb").read
     end
     
     should "be able to compile a file" # do

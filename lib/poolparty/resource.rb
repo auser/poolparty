@@ -111,6 +111,60 @@ module PoolParty
       @defined_resources ||= []
     end
     
+    # HELPERS FOR RESOURCES
+    # Print objects
+    # This helper takes an object and prints them out with as expected
+    # Case of:
+    #   Number:
+    #     Integer of the format \d\d\d      => 0644
+    #     Else                              => 79
+    #   String
+    #     String of the format \d\d\d\d     => 0655
+    #     String of the format \d\d\d       => 0644
+    #     Else                              => "String"
+    #   Proc object
+    #     Calls the proc object
+    #   Array
+    #     All                               => [ "a", "b" ]
+    #   Symbol
+    #     All                               => :a
+    #   Hash
+    #     All                               => :a => "a", :b => ["b"]
+    #   Object
+    #     All                               => object
+    def print_variable(obj)
+      case obj
+      when Fixnum
+        case obj
+        when /^\d{3}$/
+          "0#{obj.to_i}"
+        else
+          "#{obj.to_i}"
+        end        
+      when String
+        case obj
+        when /^\d{4}$/
+          "#{obj}"
+        when /^\d{3}$/
+          "0#{obj}"
+        else
+          "\"#{obj}\""
+        end
+      when Proc
+        obj.call # eh
+      when Array
+        "[ #{obj.map {|e| print_variable(e) }.reject {|a| a.nil? || a.empty? }.join(", ")} ]"
+      when nil
+        nil
+      when Symbol
+        ":#{obj}"
+      when Hash
+        "#{obj.map {|k,v| ":#{k} => #{print_variable(v)}" unless v == obj }.compact.join(",\n")}"
+      else
+        "#{obj}"
+      end
+    end
+    
   end
 end
 

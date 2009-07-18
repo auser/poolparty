@@ -15,6 +15,8 @@ module PoolParty
         <<-EOE
 template "<%= name %>" do
   content "<%= content %>"
+  action :<%= exists? ? :create : :delete %>
+  backup <%= backup %>
 end
         EOE
       end

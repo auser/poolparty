@@ -61,6 +61,45 @@ module PoolParty
         @compile_directory
       end
       
+      # Print objects
+      def self.handle_print_variable(obj)
+        case obj
+        when Fixnum
+          case obj
+          when /^\d{3}$/
+            "0#{obj.to_i}"
+          else
+            "#{obj.to_i}"
+          end        
+        when String
+          case obj
+          when /^\d{4}$/
+            "#{obj}"
+          when /^\d{3}$/
+            "0#{obj}"
+          else
+            "\"#{obj}\""
+          end
+        when Proc
+          obj.call # eh
+        when Array
+          # If we are sending a notifies with a second argument
+          if obj[1] && [:immediately, :delayed].include?(obj[1])
+            "#{handle_print_variable(obj[0])}, :#{obj[1]}"
+          else
+            "[ #{obj.map {|e| handle_print_variable(e) }.reject {|a| a.nil? || a.empty? }.join(", ")} ]"
+          end        
+        when nil
+          nil
+        when Symbol
+          ":#{obj}"
+        when Hash
+          "#{obj.map {|k,v| ":#{k} => #{handle_print_variable(v)}" unless v == obj }.compact.join(",\n")}"
+        else
+          "#{obj}"
+        end
+      end
+      
     end
     
   end
