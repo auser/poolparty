@@ -19,7 +19,7 @@ module PoolParty
         when PoolParty::Resource
           compile_resource(resources)
         end
-        after_compile
+        after_compile(o)
         o
       end
       
@@ -28,7 +28,7 @@ module PoolParty
       def self.before_compile
       end
       # Called after everything is compiled
-      def self.after_compile
+      def self.after_compile(o)
       end
       
       # The name of the method that the resource

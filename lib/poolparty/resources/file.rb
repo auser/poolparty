@@ -17,7 +17,7 @@ module PoolParty
       def print_to_chef        
         <<-EOE
 template "<%= name %>" do
-  source "<%= content %>"
+  source "<%= name %>.erb"
   action :<%= exists? ? :create : :delete %>
   backup <%= backup %>
   mode <%= print_variable(mode) %>

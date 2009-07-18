@@ -13,9 +13,11 @@ module PoolParty
           FileUtils.mkdir_p compile_directory unless ::File.directory?(compile_directory)
         end
         
-        def after_compile
+        def after_compile(o)
+          compile_default_recipe(o)
           compile_variables
           compile_files
+          compile_recipes          
         end
            
         # compile the resources
@@ -24,8 +26,10 @@ module PoolParty
           when Resources::Variable
             # do variable stuff
             variables << res
+            nil
           when Resources::FileResource
             files << res
+            super
           else
             super
           end
@@ -59,7 +63,19 @@ module PoolParty
             end
           end
         end
-                
+        
+        # compile the recipes
+        # TODO
+        def compile_recipes
+        end
+        
+        def compile_default_recipe(content)
+          FileUtils.mkdir_p compile_directory/"recipes" unless ::File.directory?(compile_directory/"recipes")
+          File.open(compile_directory/"recipes"/"default.rb", "w") do |f|
+            f << content
+          end
+        end
+        
       end
             
     end

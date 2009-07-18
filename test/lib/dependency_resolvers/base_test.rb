@@ -27,7 +27,7 @@ class BaseTest < Test::Unit::TestCase
     should "compile" do
       str =<<-EOE
 template "/etc/motd" do
-  content "piper"
+  source "/etc/motd.erb"
   action :create
   backup 5
   mode 0644
