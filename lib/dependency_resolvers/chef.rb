@@ -30,7 +30,8 @@ module PoolParty
         # be turned into a .erb template file in the compile_directory
         # Otherwise just run the output to get the default.rb recipe
         def compile_resource(res)
-          case res
+          # Apply meta_functions here
+          o = case res
           when Resources::Variable
             # do variable stuff
             variables << res
@@ -41,12 +42,19 @@ module PoolParty
           else
             super
           end
+          
+          apply_meta_functions(res, o)
         end
         
         default_attr_reader :variables, []
         default_attr_reader :files, []
         
         private
+        
+        # Take this string and apply metafunctions to the string on the resource
+        def apply_meta_functions(resource, str)
+          str
+        end
         
         # Take the variables and compile them into the file attributes/poolparty.rb
         def compile_variables
