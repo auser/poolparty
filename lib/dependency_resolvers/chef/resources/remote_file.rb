@@ -1,7 +1,7 @@
 module PoolParty
   module Resources
     
-    class RemoteFile < Directory
+    class RemoteFile < FileResource
             
       default_options(
         :cookbook => nil,
