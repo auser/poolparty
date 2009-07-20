@@ -11,7 +11,7 @@ class DirectoryResourceTest < Test::Unit::TestCase
       @base.compile_directory = test_dir
     end
     
-    should "have the method denoted by has_method_name" do
+    should "have the template method denoted by has_method_name" do
       str = "template \"/etc/poolparty/lyrics\" do\n  source \"/etc/poolparty/lyrics.erb\"\n  action :create\n  backup 5\n  mode 0644\n  owner \"root\"\nend\n"
       
       assert_equal str, @base.compile(@res)

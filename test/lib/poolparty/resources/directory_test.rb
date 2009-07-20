@@ -11,7 +11,7 @@ class DirectoryResourceTest < Test::Unit::TestCase
       @base.compile_directory = test_dir
     end
     
-    should "have the method denoted by has_method_name" do
+    should "have the directory method denoted by has_method_name" do
       str = "directory \"/etc/poolparty\" do\n  action :create\n  recursive false\n  mode 0644\n  owner \"root\"\n  group \"root\"\nend\n"
       assert_equal str, @base.compile(@res)
     end

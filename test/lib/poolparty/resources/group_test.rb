@@ -11,7 +11,7 @@ class GroupResourceTest < Test::Unit::TestCase
       @base.compile_directory = test_dir
     end
     
-    should "have the method denoted by has_method_name" do
+    should "have the group method denoted by has_method_name" do
       str = "group \"moderators\" do\n   action :create\nend"
       assert_equal str, @base.compile(@res)
     end

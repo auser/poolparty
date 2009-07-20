@@ -11,7 +11,7 @@ class LinkResourceTest < Test::Unit::TestCase
       @base.compile_directory = test_dir
     end
     
-    should "have the method denoted by has_method_name" do
+    should "have the link method denoted by has_method_name" do
       str = 'link "/tmp/passwd" do
   link_type :symbolic
   action :create

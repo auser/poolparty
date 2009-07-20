@@ -12,7 +12,7 @@ class HttpResourceTest < Test::Unit::TestCase
       @base.compile_directory = test_dir
     end
     
-    should "have the method denoted by has_method_name" do
+    should "have the method denoted by has_method_name for http_request" do
       str =<<-EOE
 http_request "posting data" do
   action :post

@@ -18,7 +18,7 @@ execute "/usr/sbin/mail -s 'hi' arilerner@mac.com" do
 EOE
     end
     
-    should "have the method denoted by has_method_name" do      
+    should "have the method denoted by has_method_name turn into the string without any modifications" do      
       assert_equal "#{@str}end".chomp, @res.compile(:chef)
     end
     

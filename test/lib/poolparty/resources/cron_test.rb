@@ -11,7 +11,7 @@ class CronResourceTest < Test::Unit::TestCase
       @base.compile_directory = test_dir
     end
     
-    should "have the method denoted by has_method_name" do
+    should "have the cron method denoted by has_method_name" do
       str = "cron \"run root scripts\" do
   command \"/bin/sh /usr/bin/root_scripts\"
   action :create

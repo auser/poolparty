@@ -21,7 +21,7 @@ class RemoteDirectoryResourceTest < Test::Unit::TestCase
       @base.compile_directory = test_dir
     end
     
-    should "have the method denoted by has_method_name" do
+    should "have the method denoted by has_method_name for remote_directory" do
       str =<<-EOE
 remote_directory "/tmp/remote_something" do
   source "something"
