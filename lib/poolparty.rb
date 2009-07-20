@@ -27,14 +27,14 @@ end
   require "mixins/#{lib}"
 end
 
-# dependency_resolvers
-require "dependency_resolver"
-
 # PoolParty core
 %w( default pool_party_log base dsl_base cloud 
     keypair plugin
     pool resource ).each do |lib|
   require "poolparty/#{lib}"
 end
+
+# dependency_resolvers
+require "dependency_resolver"
 
 vputs "PoolParty core loadtime: #{Time.now-t}"

@@ -11,12 +11,13 @@ class ChefTest < Test::Unit::TestCase
       @resources = {
         :variables => Resources::Variable.new(:animal, "Duck"),
         :files => Resources::FileResource.new(:name => "/etc/motd", :content => "Welcome to a fake file"),
-        :directories => Resources::Directory.new("/etc/poolparty")
+        :directories => Resources::Directory.new("/etc/poolparty"),
+        :http_request => PoolParty::Resources::HttpRequest.new("posting data", :url => "http://check.in", :message => {:some => "data"}, :action => :post)
       }
     end
     
     teardown do
-      FileUtils.rm_rf test_dir
+      # FileUtils.rm_rf test_dir
     end
     
     should "have compile to chef" do
@@ -32,6 +33,11 @@ class ChefTest < Test::Unit::TestCase
     should "be able to compile a file" do
       @base.compile_to(@resources[:files], test_dir)
       assert_equal "Welcome to a fake file", open(test_dir/"templates"/"default"/"etc"/"motd.erb").read
+    end
+    
+    should "be able to compile an http_request" do
+      @base.compile_to(@resources[:http_request], test_dir)
+      assert_equal "http_request \"posting data\" do\n  action :post\n  url \"http://check.in\"\n  message :some => \"data\"\nend\n", open(test_dir/"recipes"/"default.rb").read
     end
     
     should "compile to the recipes" do

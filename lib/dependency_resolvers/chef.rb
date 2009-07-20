@@ -1,6 +1,11 @@
 =begin rdoc
   Base dependency_resolver
 =end
+# Require the chef-only resources
+$:.unshift("#{File.dirname(__FILE__)}/chef")
+%w(http_request).each do |res|
+  require "resources/#{res}"
+end
 module PoolParty
   module DependencyResolvers
     
