@@ -11,7 +11,7 @@ module PoolParty
       )
             
       def print_to_chef        
-        str = 'group "<%= name %>" do   action :<%= (action ? action : (exists ? :create : :remove)) %>'
+        str = "group \"<%= name %>\" do\n   action :<%= (action ? action : (exists ? :create : :remove)) %>"
         str << "  gid: <%= print_variable(gid) %>\n" if gid
         str << "  members: <%= print_variable(members) %>\n" if members
         str << "  append: <%= print_variable(append) %>\n" if append      
