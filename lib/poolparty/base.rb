@@ -25,7 +25,7 @@ module PoolParty
       dsl_options.merge!(o.inject({}) {|s,i| s.merge(i => nil)})
     end
         
-    def initialize(opts={}, extra_opts={}, &block)      
+    def initialize(opts={}, extra_opts={}, &block)
       @init_block = block
       @init_opts = compile_opts(opts, extra_opts)
       @base_name = self.name

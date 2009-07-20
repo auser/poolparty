@@ -5,13 +5,20 @@ module PoolParty
       
       default_options(
         :recursive => true,
-        :mode => "0644"
+        :mode => "0644",
+        :owner => "root",
+        :group => "root",
+        :recursive => false
       )
             
       def print_to_chef        
         <<-EOE
 directory "<%= name %>" do
-  <%= print_dsl_options(':key: \":value\"') %>
+  action :<%= exists ? :create : :delete %>
+  recursive <%= print_variable(recursive) %>
+  mode <%= print_variable(mode) %>
+  owner <%= print_variable(owner) %>
+  group <%= print_variable(group) %>
 end
         EOE
       end

@@ -10,6 +10,7 @@ module PoolParty
         attr_reader :meal
         
         def before_compile
+          raise PoolParty::PoolPartyError.create("ChefCompileError", "No compile_directory is specified. Please specify one.") unless compile_directory
           FileUtils.mkdir_p compile_directory unless ::File.directory?(compile_directory)
         end
         

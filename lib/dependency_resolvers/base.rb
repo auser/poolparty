@@ -61,6 +61,10 @@ module PoolParty
         @compile_directory
       end
       
+      def self.compile_directory=(d)
+        @compile_directory = d
+      end
+      
       # Print objects
       def self.handle_print_variable(obj)
         case obj

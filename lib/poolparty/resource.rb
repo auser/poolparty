@@ -8,6 +8,11 @@ module PoolParty
       :not_if   => nil
     )
     
+    def initialize(opts={}, extra_opts={}, &block)
+      @exists = true
+      super
+    end
+    
     # Dependency resolver methods
     def compile(compiler)
       @compiler = PoolParty.module_eval("PoolParty::DependencyResolvers::#{compiler.to_s.capitalize}")
@@ -32,6 +37,7 @@ module PoolParty
     # Should this resource exist on the remote systems
     # which is a lookup of the instance variable 
     # on the instance of the resource
+    # The default is that the resource DOES exist    
     alias :exists? :exists
     
     # The resource exists in the output and should be created
@@ -44,6 +50,7 @@ module PoolParty
     # system
     def does_not_exist!
       @exists = false
+      false
     end
     
     # Singleton methods
@@ -80,7 +87,6 @@ module PoolParty
         ddputs "Defining resource: #{res}"
         Base.class_eval <<-EOE
           def has_#{res.has_method_name}(a={},b={},&block)
-            ddputs "New #{res.has_method_name}(\#{a.inspect}, \#{b.inspect}, \#{block})"
             obj = #{res}.new(a,b,&block)
             obj.exists!
             ordered_resources << obj

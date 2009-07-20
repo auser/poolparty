@@ -6,10 +6,12 @@ class ChefTest < Test::Unit::TestCase
   context "chef dependency_resolver test" do
     setup do
       @base = PoolParty::DependencyResolvers::Chef
+      @base.compile_directory = test_dir
       
       @resources = {
-        :variable => Resources::Variable.new(:animal, "Duck"),
-        :files => Resources::FileResource.new(:name => "/etc/motd", :content => "Welcome to a fake file")
+        :variables => Resources::Variable.new(:animal, "Duck"),
+        :files => Resources::FileResource.new(:name => "/etc/motd", :content => "Welcome to a fake file"),
+        :directories => Resources::Directory.new("/etc/poolparty")
       }
     end
     
@@ -23,7 +25,7 @@ class ChefTest < Test::Unit::TestCase
     end
     
     should "be able to compile a variable" do
-      @base.compile_to(@resources[:variable], test_dir)
+      @base.compile_to(@resources[:variables], test_dir)
       assert_equal "# PoolParty variables\npoolparty Mash.new unless attribute?('poolparty')\npoolparty[:animal] = \"Duck\"\n", open(test_dir/"attributes"/"poolparty.rb").read
     end
     
@@ -34,7 +36,39 @@ class ChefTest < Test::Unit::TestCase
     
     should "compile to the recipes" do
       @base.compile_to(@resources[:files], test_dir)
-      assert_equal "template \"/etc/motd\" do\n  source \"/etc/motd.erb\"\n  action :delete\n  backup 5\n  mode 0644\n  owner \"root\"\nend\n", open(test_dir/"recipes"/"default.rb").read
+      assert_equal "template \"/etc/motd\" do\n  source \"/etc/motd.erb\"\n  action :create\n  backup 5\n  mode 0644\n  owner \"root\"\nend\n", open(test_dir/"recipes"/"default.rb").read
+    end
+    
+    should "compile all the resources when passed the entire array" do
+      resources = []
+      resources << @resources[:files]
+      resources << @resources[:directories]
+      resources << @resources[:variables]
+      @base.compile(resources)
+      ["recipes"/"default.rb", "templates"/"default"/"etc"/"motd.erb"].each do |fi|
+        assert File.file?(test_dir/fi)
+      end
+      
+      output =<<-EOE
+template "/etc/motd" do
+  source "/etc/motd.erb"
+  action :create
+  backup 5
+  mode 0644
+  owner "root"
+end
+
+directory "/etc/poolparty" do
+  action :create
+  recursive false
+  mode 0644
+  owner "root"
+  group "root"
+end
+
+EOE
+      
+      assert_equal output, open(test_dir/"recipes"/"default.rb").read
     end
     
   end
