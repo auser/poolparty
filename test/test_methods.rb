@@ -40,3 +40,7 @@ def include_fixture_resources
     require res
   end
 end
+
+def include_chef_only_resources
+  PoolParty::DependencyResolvers::Chef.send :require_chef_only_resources
+end

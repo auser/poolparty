@@ -17,7 +17,7 @@ class ChefTest < Test::Unit::TestCase
     end
     
     teardown do
-      FileUtils.rm_rf test_dir
+      # FileUtils.rm_rf test_dir
     end
     
     should "have compile to chef" do

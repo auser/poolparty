@@ -1,6 +1,7 @@
 require "#{File.dirname(__FILE__)}/../../../../test_helper"
 
 include_fixture_resources
+include_chef_only_resources
 
 class RemoteFileResourceTest < Test::Unit::TestCase
   context "Base" do

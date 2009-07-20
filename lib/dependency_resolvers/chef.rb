@@ -1,13 +1,6 @@
 =begin rdoc
   Base dependency_resolver
 =end
-# Require the chef-only resources
-$:.unshift("#{File.dirname(__FILE__)}/chef")
-
-%w(http_request remote_directory remote_file).each do |res|
-  require "resources/#{res}"
-end
-
 module PoolParty
   module DependencyResolvers
     
@@ -17,6 +10,7 @@ module PoolParty
         attr_reader :meal
         
         def before_compile
+          require_chef_only_resources
           raise PoolParty::PoolPartyError.create("ChefCompileError", "No compile_directory is specified. Please specify one.") unless compile_directory
           FileUtils.mkdir_p compile_directory unless ::File.directory?(compile_directory)
         end
@@ -57,6 +51,15 @@ module PoolParty
         default_attr_reader :files, []
         
         private
+        
+        def require_chef_only_resources
+          # Require the chef-only resources
+          $:.unshift("#{File.dirname(__FILE__)}/chef")
+
+          %w(http_request remote_directory remote_file route).each do |res|
+            require "resources/#{res}"
+          end
+        end
         
         # Take this string and apply metafunctions to the string on the resource
         def apply_meta_functions(resource, str)
