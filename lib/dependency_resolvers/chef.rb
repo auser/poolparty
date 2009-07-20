@@ -4,7 +4,7 @@
 # Require the chef-only resources
 $:.unshift("#{File.dirname(__FILE__)}/chef")
 
-%w(http_request remote_directory).each do |res|
+%w(http_request remote_directory remote_file).each do |res|
   require "resources/#{res}"
 end
 
