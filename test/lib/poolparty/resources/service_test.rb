@@ -14,12 +14,6 @@ class ServiceResourceTest < Test::Unit::TestCase
     end
     
     should "have the mount method denoted by has_method_name" do
-      str =<<-EOE
-service "example_service" do
-  supports :status => true, :restart => true, :reload => true
-  action [ :enable, :start ]
-end
-EOE
 
 str = <<-EOS
 service "example_service" do
@@ -30,7 +24,6 @@ service "example_service" do
 :restart => true
 end
 EOS
-
 
       assert_equal str.chomp, @base.compile(@res)
     end
