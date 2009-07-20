@@ -36,7 +36,7 @@ module PoolParty
           when Resources::Variable
             # do variable stuff
             variables << res
-            nil
+            ""
           when Resources::FileResource
             files << res
             super
@@ -63,8 +63,18 @@ module PoolParty
         end
         
         # Take this string and apply metafunctions to the string on the resource
-        def apply_meta_functions(resource, str)
-          str
+        # If there are no meta functions on the resource, do not touch the resulting
+        # string
+        def apply_meta_functions(re, str)
+          regex = /[(.*)do(\w*)?(.*)]?[\w+]*end$/
+          
+          add = []
+          add << "  notifies :#{re.meta_notifies[0]}, resources(:#{re.meta_notifies[1].has_method_name} => \"#{re.meta_notifies[1].name}\")" if re.meta_notifies
+          
+                    
+          return str if add.empty?
+          newstr = str.chomp.gsub(regex, "\0")
+          "#{newstr}#{add.join("\n")}\nend"
         end
         
         # Take the variables and compile them into the file attributes/poolparty.rb

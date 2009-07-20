@@ -1,5 +1,8 @@
 require "#{File.dirname(__FILE__)}/../../test_helper"
 
+include_fixture_resources
+include_chef_only_resources
+
 class ChefTest < Test::Unit::TestCase
   include PoolParty
   
@@ -12,7 +15,8 @@ class ChefTest < Test::Unit::TestCase
         :variables => Resources::Variable.new(:animal, "Duck"),
         :files => Resources::FileResource.new(:name => "/etc/motd", :content => "Welcome to a fake file"),
         :directories => Resources::Directory.new("/etc/poolparty"),
-        :http_request => PoolParty::Resources::HttpRequest.new("posting data", :url => "http://check.in", :message => {:some => "data"}, :action => :post)
+        :http_request => PoolParty::Resources::HttpRequest.new("posting data", :url => "http://check.in", :message => {:some => "data"}, :action => :post),
+        :link => PoolParty::Resources::Link.new("/tmp/passwd", :to => "/etc/passwd")
       }
     end
     
@@ -75,6 +79,20 @@ end
 EOE
       
       assert_equal output, open(test_dir/"recipes"/"default.rb").read
+    end
+    
+    context "meta functions" do
+      setup do
+        PoolParty::Resource.define_resource_methods
+        @inst = FakeResource.new
+      end
+
+      should "Add meta notifies on the resource output" do
+        res = @resources[:link]
+        @inst.has_service("apache")        
+        res.notifies :reload, @inst.get_service("apache")
+        assert_match /notifies :reload, resources\(:service => "apache"\)/, @base.compile(res)
+      end
     end
     
   end

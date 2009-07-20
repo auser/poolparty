@@ -2,11 +2,14 @@ module PoolParty
   class Resource < Base
     
     attr_reader :exists
-    
-    # TODO: Add global chef methods, like notifies, etc.
+    attr_reader :meta_notifies, :meta_not_if, :meta_only_if
+
     default_options(
       :name     => to_s.top_level_class,
-      :not_if   => nil
+      :ignore_failure => nil,
+      :subscribes => nil,
+      :provider => nil,
+      :supports => nil
     )
     
     def initialize(opts={}, extra_opts={}, &block)
@@ -33,6 +36,19 @@ module PoolParty
 <%= res.compile(:chef) %>
 <% end %>
       EOE
+    end
+    
+    # META FUNCTIONS
+    def notifies(action_to_take, other_resource)
+      @meta_notifies = [action_to_take, other_resource]
+    end
+    
+    def not_if(code_str, &block)
+      if block
+        
+      else
+        @meta_not_if = code_str
+      end
     end
     
     # Should this resource exist on the remote systems
@@ -102,6 +118,12 @@ module PoolParty
             ordered_resources.select {|q| q if q.class.to_s =~ /#{res.to_s.classify}/ }
           end
           alias :#{res.has_method_name} :has_#{res.has_method_name}
+          
+          def get_#{res.has_method_name}(nm)
+            out_res = #{res.has_method_name}s.detect {|other| other.base_name == nm}
+            raise PoolParty::PoolPartyError.create("ResourceNotFound", "The #{res.has_method_name} \#{nm} was not found. Please make sure you've specified it") unless out_res
+            out_res
+          end          
         EOE
       end
     end

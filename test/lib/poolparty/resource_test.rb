@@ -26,6 +26,13 @@ class ResourceTest < Test::Unit::TestCase
       @inst.does_not_have_tester
       assert_equal false, @inst.testers[2].exists?
     end
+    
+    should "have be able to pull out a resource with get_resource" do
+      assert @inst.respond_to?(:get_tester)
+      res = @inst.has_tester "hi"
+      assert_equal true, @inst.testers[0].exists?
+      assert_equal res, @inst.get_tester("hi")
+    end
   end
   
   context "print_to methods" do

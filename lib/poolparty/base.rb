@@ -27,10 +27,10 @@ module PoolParty
         
     def initialize(opts={}, extra_opts={}, &block)
       @init_block = block
-      @init_opts = compile_opts(opts, extra_opts)
-      @base_name = self.name
+      @init_opts = compile_opts(opts, extra_opts)      
       
       run_with_callbacks(init_opts, &block)
+      @base_name = self.name
     end
     
     # Overloading the parent run_in_context
