@@ -8,7 +8,7 @@ class ServiceResourceTest < Test::Unit::TestCase
       PoolParty::Resource.define_resource_methods
       @res = PoolParty::Resources::Service.new "example_service", 
                                                 :action => [:enable, :start],
-                                                :supports => {:status => true, :restart => true, :reload => true}
+                                                :supports => {:reload => true}
       @base = PoolParty::DependencyResolvers::Chef
       @base.compile_directory = test_dir
     end
@@ -19,9 +19,7 @@ str = <<-EOS
 service "example_service" do
   pattern "example_service"
   action :[ :enable, :start ]
-  supports :reload => true,
-:status => true,
-:restart => true
+  supports :reload => true
 end
 EOS
 
