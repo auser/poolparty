@@ -3,6 +3,7 @@ module PoolParty
     
     attr_reader :exists
     
+    # TODO: Add global chef methods, like notifies, etc.
     default_options(
       :name     => to_s.top_level_class,
       :not_if   => nil

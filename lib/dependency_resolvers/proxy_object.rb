@@ -35,7 +35,7 @@ module PoolParty
           self.send(meth_name)
         else
           raise PoolParty::PoolPartyError.create("ProxyObjectError", "Compilation of #{proxy.inspect} error. Strings and symbols are supported")
-        end        
+        end
         ERB.new(str).result(self.send(:binding))
       end
       
