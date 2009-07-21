@@ -2,7 +2,7 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 
 module DependencyResolvers
   def self.all
-    @all ||= DependencyResolvers.constants - %w(Base ProxyObject)
+    @all ||= []
   end
 end
 

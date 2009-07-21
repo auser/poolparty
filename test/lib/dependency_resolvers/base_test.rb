@@ -11,6 +11,9 @@ class BaseTest < Test::Unit::TestCase
       assert @base.respond_to?(:compile_method_name)
       assert_equal :print_to_base, @base.compile_method_name
     end
+    should "have a list of all the DependencyResolvers" do
+      assert DependencyResolvers.all.include?(DependencyResolvers::Chef)
+    end
   end
   
   context "resolving" do

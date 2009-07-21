@@ -5,6 +5,10 @@ module DependencyResolvers
   
   class Base
     
+    def self.inherited(subclass)
+      DependencyResolvers.all << subclass unless DependencyResolvers.all.include?(subclass)
+    end
+    
     def self.compile_to(resources=[], outdir=Dir.pwd)
       @compile_directory ||= outdir
       compile(resources)
