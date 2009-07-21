@@ -5,9 +5,7 @@ require fixtures_dir/'clouds/fake_clouds'
 class Ec2ProviderTest < Test::Unit::TestCase
   
   def setup
-    capture_stdout do
-      @provider = CloudProviders::Ec2.new(:image_id => "ami-abc123")
-    end    
+    @provider = CloudProviders::Ec2.new(:image_id => "ami-abc123")
   end
   
   def test_initialize_with_options_set
