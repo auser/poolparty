@@ -36,14 +36,25 @@ class CloudTest < Test::Unit::TestCase
       assert_not_nil clouds['app'].keypair
       assert_equal 'test_key', clouds['app'].keypair.basename
     end
+        
+    should "have a temp path of the name: Default.tmp_path / pool_name / cloud_name" do
+      assert_equal PoolParty::Default.tmp_path/"poolparty"/"app", @cloud.tmp_path
+    end
     
     should "be using ec2 cloud_provider by default" do
       assert_equal :ec2, clouds['app'].cloud_provider_name
       assert_kind_of ::CloudProviders::Ec2, clouds['app'].cloud_provider
     end
     
-    should "have a temp path of the name: Default.tmp_path / pool_name / cloud_name" do
-      assert_equal PoolParty::Default.tmp_path/"poolparty"/"app", @cloud.tmp_path
+    should "set the cloud provider with a using block" do
+      clouds["app"].instance_eval do
+        using :ec2 do
+          image_id 'emi-39921602'
+        end
+      end
+      assert_equal :ec2, clouds["app"].cloud_provider_name
+      assert_equal CloudProviders::Ec2, clouds["app"].cloud_provider.class
+      assert_equal "emi-39921602", clouds["app"].cloud_provider.image_id
     end
     
     should "compile with the dependency resolver"

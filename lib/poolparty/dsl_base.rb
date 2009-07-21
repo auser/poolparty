@@ -13,7 +13,7 @@ module PoolParty
       :minimum_instances    => 2,
       :maximum_instances    => 5
     )
-        
+            
     # Set instances with a range or a number
     # if passed with a hash, call nodes(hash) to return filtered list of 
     # instances
