@@ -6,7 +6,12 @@ require fixtures_dir/'clouds/fake_clouds'
 require 'fakeweb'
 
 FakeWeb.allow_net_connect=false
-FakeWeb.register_uri(:get, /AccessKeyId=fake_access_key&Action=DescribeInstances&.*/,
+#?AWSAccessKeyId=fake_access_key&Action=DescribeInstances&SignatureMethod=HmacSHA1&SignatureVersion=2&Timestamp=2009-07-21T21%3A44%3A18.000Z&Version=2008-12-01&Signature=CzSW6VaYQyellBHl3h1DUQWqIo4%3D"
+
+# FakeWeb.register_uri :get, %r{http://search.twitter.com/search.json\?q=(.*)}
+get_url = %r{http://ec2.local\?(.*)}
+p get_url
+FakeWeb.register_uri(:get, get_url,
                      :body=>'fake_instance_list')
 # FakeWeb.register_uri(:get, /NOT-AWSAccessKeyId=fake_access_key&Action=DescribeInstances&.*/, :body=>'instance_list')
 
@@ -43,7 +48,7 @@ class Ec2ProviderTest < Test::Unit::TestCase
   end
   
   def test_basic_setup
-    assert_equal 'ec2', clouds['app'].cloud_provider_name
+    assert_equal :ec2, clouds['app'].cloud_provider_name
     assert_instance_of CloudProviders::Ec2, clouds['app'].cloud_provider
     assert_instance_of RightAws::Ec2, clouds['app'].cloud_provider.ec2
   end
