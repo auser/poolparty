@@ -4,12 +4,22 @@
 module Provision
   class Bootstrapper
     
+    # bootstrap_script
+    # Get the bootstrap_script for the appropriate os located in the bootstrap_scripts directory
+    # in the PoolParty provision/bootstrap_scripts directory
+    # If there is no bootstrap script (of the format: build_<os>.sh), then we raise an 
+    # exception to notify that the os is not yet supported
     def self.bootstrap_script(os=:ubuntu)
       file = File.expand_path(File.dirname(__FILE__)/"bootstrap_scripts"/"build_#{os}.sh")
       raise StandardError.new("#{os} is not supported by PoolParty's Bootstrapper") unless File.file?(file)
       file
     end
     
+    # configure_script
+    # Find the configure script that corresponds to the os given.
+    # Raise an exception if the configure_script does not exist (of the format: configure_<os>.sh)
+    # Use Erb to format the script with Erb and save to the given outfile (default cloud.tmp_path/var/poolparty/configure_script.sh)
+    # and return the path to the file
     def self.configure_script(cloud, os=:ubuntu, outfile=nil)
       file = File.expand_path(File.dirname(__FILE__)/"configure_scripts"/"configure_#{os}.erb")
       raise StandardError.new("#{os} is not supported by PoolParty's Bootstrapper") unless File.file?(file)
