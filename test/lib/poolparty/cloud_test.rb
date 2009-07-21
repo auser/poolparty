@@ -4,7 +4,7 @@ class CloudTest < Test::Unit::TestCase
   include PoolParty
   context "load_from_file" do
     setup do
-      @filepath = File.join(File.dirname(__FILE__), "../../../", "examples/simple.rb")
+      @filepath = fixtures_dir/"clouds/simple_cloud.rb"
       @pool = Pool.load_from_file(@filepath)
       @cloud = @pool.clouds[@pool.clouds.keys.first]
     end
@@ -14,7 +14,7 @@ class CloudTest < Test::Unit::TestCase
       assert_equal @cloud.dependency_resolver, DependencyResolvers::Chef
     end
     
-    should "raise an error if you cannot resolve_with the dependency resolver" do      
+    should "raise an error if you cannot resolve_with the dependency resolver" do
       PoolParty::PoolPartyError.create("DependencyResolverError")
       assert_raises DependencyResolverError do
         @cloud.resolve_with :foo

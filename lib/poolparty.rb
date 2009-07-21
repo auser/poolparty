@@ -34,6 +34,8 @@ end
   require "poolparty/#{lib}"
 end
 
+require 'cloud_providers'
+
 # dependency_resolvers
 require "dependency_resolver"
 

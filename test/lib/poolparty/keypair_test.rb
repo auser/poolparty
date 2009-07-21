@@ -18,9 +18,9 @@ class KeypairTest < Test::Unit::TestCase
       assert_equal @keypair.content, open(fixtures_dir/"test_key").read
     end
     
-    should "be able to generate the public key from the private" do
-      # assert_equal @keypair.public_key, open(fixtures_dir/"test_pub_key").read
-    end
+    should "be able to generate the public key from the private" # do
+    #       # assert_equal @keypair.public_key, "#{open(fixtures_dir/"test_pub_key").read}"
+    #     end
     
     should "have the basename of the keypair" do
       assert_equal @keypair.basename, "test_key"
