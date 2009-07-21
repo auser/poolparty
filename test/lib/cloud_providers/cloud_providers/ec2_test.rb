@@ -1,4 +1,7 @@
 require "#{File.dirname(__FILE__)}/../../../test_helper"
+
+PoolParty::Keypair.searchable_paths << fixtures_dir/"keys"
+
 require fixtures_dir/'clouds/fake_clouds'
 require 'fakeweb'
 
@@ -6,7 +9,6 @@ FakeWeb.allow_net_connect=false
 FakeWeb.register_uri(:get, /AccessKeyId=fake_access_key&Action=DescribeInstances&.*/,
                      :body=>'fake_instance_list')
 # FakeWeb.register_uri(:get, /NOT-AWSAccessKeyId=fake_access_key&Action=DescribeInstances&.*/, :body=>'instance_list')
-
 
 class Ec2ProviderTest < Test::Unit::TestCase
   

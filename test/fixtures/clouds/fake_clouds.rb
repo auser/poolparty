@@ -1,7 +1,7 @@
 pool :boxed do
   
   cloud :app do
-    keypair 'boxed_app'
+    keypair 'test_key'
     using :ec2 do
     end
   end

@@ -78,7 +78,7 @@ module PoolParty
           return full_path if ::File.exists?(full_path)
         end
         self.class.searchable_paths.each do |path|
-          self.class.searchable_paths_dirs.each do |dir|
+          self.class.searchable_paths_dirs.each do |dir|            
             full_path = ::File.expand_path(path / dir / filepath)
             return full_path if ::File.exists?(full_path)
           end
