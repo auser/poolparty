@@ -20,6 +20,15 @@ module PoolParty
       @keypair ||= Keypair.new(n)
     end
     
+    # Using
+    # Define the cloud provider with using
+    def using(provider_symbol, o={}, &block)
+      return @cloud_provider if @cloud_provider
+      self.cloud_provider_name = provider_symbol
+      cloud_provider(o, &block)
+    end
+    
+    # The actual cloud_provider instance
     def cloud_provider(opts={}, &block)
        @cloud_provider ||= "::CloudProviders::#{cloud_provider_name}".classify.constantize.new(dsl_options.merge(opts), &block)
     end

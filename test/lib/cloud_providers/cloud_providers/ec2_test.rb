@@ -9,10 +9,7 @@ FakeWeb.allow_net_connect=false
 #?AWSAccessKeyId=fake_access_key&Action=DescribeInstances&SignatureMethod=HmacSHA1&SignatureVersion=2&Timestamp=2009-07-21T21%3A44%3A18.000Z&Version=2008-12-01&Signature=CzSW6VaYQyellBHl3h1DUQWqIo4%3D"
 
 # FakeWeb.register_uri :get, %r{http://search.twitter.com/search.json\?q=(.*)}
-get_url = %r{http://ec2.local\?(.*)}
-p get_url
-FakeWeb.register_uri(:get, get_url,
-                     :body=>'fake_instance_list')
+FakeWeb.register_uri(:get, %r{AWSAccessKeyId=fake_access_key&Action=DescribeInstances(.*)}, :body=>'fake_instance_list')
 # FakeWeb.register_uri(:get, /NOT-AWSAccessKeyId=fake_access_key&Action=DescribeInstances&.*/, :body=>'instance_list')
 
 class Ec2ProviderTest < Test::Unit::TestCase

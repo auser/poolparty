@@ -149,6 +149,7 @@ module RightAws
         request['Content-Type'] = 'application/x-www-form-urlencoded'
       else
         request        = Net::HTTP::Get.new("#{@params[:service]}?#{service_params}")
+        p "#{@params[:server]}#{@params[:service]}?#{service_params}"
       end
         # prepare output hash
       { :request  => request, 
