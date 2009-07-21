@@ -109,8 +109,9 @@ module DependencyResolvers
         files.each do |fi|
           fpath = compile_directory/"templates"/"default"/"#{fi.path}.erb"
           FileUtils.mkdir_p File.dirname(fpath) unless File.directory?(File.dirname(fpath))
+          content = fi.template ? open(fi.template).read : fi.content
           File.open(fpath, "w") do |f|
-            f << fi.content
+            f << content
           end
         end
       end

@@ -38,7 +38,7 @@ module PoolParty
     
     # META FUNCTIONS
     # ALL RESOURCES HAVE THESE METHODS AVAILABLE
-    def notifies(action_to_take, other_resource)
+    def notifies(other_resource, action_to_take=:reload)
       @meta_notifies = [action_to_take, other_resource]
     end
     
@@ -58,6 +58,11 @@ module PoolParty
     # Subscribes to changes
     def subscribes(action_to_take, other_resource, at_time=:delayed)
       @meta_subscribes = [action_to_take, other_resource, at_time]
+    end
+    
+    # Requires
+    def requires(other_resource)
+      @meta_requires = other_resource
     end
     
     # Should this resource exist on the remote systems
@@ -130,6 +135,7 @@ module PoolParty
           
           def get_#{res.has_method_name}(nm)
             out_res = #{res.has_method_name}s.detect {|other| other.base_name == nm}
+            out_res ||= current_context.reverse.detect {|s| s.get_#{res.has_method_name}(nm) if s}
             raise PoolParty::PoolPartyError.create("ResourceNotFound", "The #{res.has_method_name} \#{nm} was not found. Please make sure you've specified it") unless out_res
             out_res
           end          

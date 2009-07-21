@@ -28,9 +28,10 @@ end
 end
 
 # PoolParty core
+$LOAD_PATH.unshift(File.dirname(__FILE__)/"poolparty")
 %w( default pool_party_log base dsl_base cloud 
-    keypair plugin installer
-    pool resource ).each do |lib|
+    keypair installer
+    pool resource plugin ).each do |lib|
   require "poolparty/#{lib}"
 end
 

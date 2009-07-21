@@ -21,7 +21,7 @@ class ChefTest < Test::Unit::TestCase
     end
     
     teardown do
-      # FileUtils.rm_rf test_dir
+      FileUtils.rm_rf test_dir
     end
     
     should "have compile to chef" do
@@ -90,7 +90,7 @@ EOE
       end
 
       should "Add meta notifies on the resource output" do        
-        @res.notifies :reload, @inst.get_service("apache")
+        @res.notifies @inst.get_service("apache"), :reload
         assert_match /notifies :reload, resources\(:service => "apache"\)/, @base.compile(@res)
       end
       
