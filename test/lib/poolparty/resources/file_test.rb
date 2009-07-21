@@ -7,7 +7,7 @@ class DirectoryResourceTest < Test::Unit::TestCase
     setup do
       PoolParty::Resource.define_resource_methods
       @res = PoolParty::Resources::FileResource.new "/etc/poolparty/lyrics", :content => "I'm just a file, a lonely little file in the world"
-      @base = PoolParty::DependencyResolvers::Chef
+      @base = DependencyResolvers::Chef
       @base.compile_directory = test_dir
     end
     

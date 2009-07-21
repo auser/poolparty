@@ -32,6 +32,7 @@ class ModuleTest < Test::Unit::TestCase
     should "carry to the child" do
       assert_equal ["b"], ChildModTestObject.new.a
     end
+    
   end
   
 end

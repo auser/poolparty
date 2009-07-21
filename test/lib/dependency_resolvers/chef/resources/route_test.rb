@@ -14,7 +14,7 @@ class RouteResourceTest < Test::Unit::TestCase
         netmask "255.255.0.0"
       end
       @res.does_not_exist!
-      @base = PoolParty::DependencyResolvers::Chef
+      @base = DependencyResolvers::Chef
       @base.compile_directory = test_dir
     end
     

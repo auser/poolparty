@@ -17,7 +17,7 @@ module PoolParty
     
     # Dependency resolver methods
     def compile(compiler)
-      @compiler = PoolParty.module_eval("PoolParty::DependencyResolvers::#{compiler.to_s.capitalize}")
+      @compiler = PoolParty.module_eval("DependencyResolvers::#{compiler.to_s.capitalize}")
       @compiler.compile(self)
     end
     # print_to_chef

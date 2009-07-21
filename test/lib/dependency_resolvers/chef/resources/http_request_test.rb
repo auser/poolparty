@@ -8,7 +8,7 @@ class HttpResourceTest < Test::Unit::TestCase
     setup do
       PoolParty::Resource.define_resource_methods
       @res = PoolParty::Resources::HttpRequest.new "posting data", :url => "http://example.com/check_in", :message => {:some => "data"}, :action => :post
-      @base = PoolParty::DependencyResolvers::Chef
+      @base = DependencyResolvers::Chef
       @base.compile_directory = test_dir
     end
     

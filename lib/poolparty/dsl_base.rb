@@ -34,10 +34,10 @@ module PoolParty
     
     # Resolve with the dependency resolver
     def resolve_with(a)
-      if PoolParty::DependencyResolvers.const_defined?(a.classify)
-        dependency_resolver PoolParty::DependencyResolvers.module_eval("#{a.classify}")
+      if DependencyResolvers.const_defined?(a.classify)
+        dependency_resolver DependencyResolvers.module_eval("#{a.classify}")
       else
-        raise PoolParty::PoolPartyError.create("DependencyResolverError", "Undefined dependency resolver: #{a}. Please specify one of the following: #{PoolParty::DependencyResolvers.all.join(", ")}")
+        raise PoolParty::PoolPartyError.create("DependencyResolverError", "Undefined dependency resolver: #{a}. Please specify one of the following: #{DependencyResolvers.all.join(", ")}")
       end
     end
     
@@ -45,7 +45,7 @@ module PoolParty
     def dependency_resolver(sym=nil)
       @dependency_resolver ||= case sym
       when :chef, nil
-         PoolParty::DependencyResolvers::Chef
+         DependencyResolvers::Chef
       end
     end
     

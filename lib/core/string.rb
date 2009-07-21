@@ -81,7 +81,7 @@ class String
   #   "Module".constantize #=> Module
   #   "Class".constantize #=> Class
   def constantize(mod=Object)
-    camelcased_word = camelcase
+    camelcased_word = classify
     begin
       mod.module_eval(camelcased_word, __FILE__, __LINE__)
     rescue NameError

@@ -69,7 +69,7 @@ module CloudProviders
       })
 
     def ec2(o={})
-      @ec2 ||= Rightscale::Ec2.new(access_key, secret_access_key, o)
+      @ec2 ||= Rightscale::Ec2.new(access_key, secret_access_key, o.merge(:logger => PoolParty::PoolPartyLog))
     end
     
     # Start a new instance with the given options

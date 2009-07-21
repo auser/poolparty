@@ -7,7 +7,7 @@ class DirectoryResourceTest < Test::Unit::TestCase
     setup do
       PoolParty::Resource.define_resource_methods
       @res = PoolParty::Resources::Package.new "debian-archive-keyring", :options => "--force-yes", :version => "1.16.1-1"
-      @base = PoolParty::DependencyResolvers::Chef
+      @base = DependencyResolvers::Chef
       @base.compile_directory = test_dir
     end
     

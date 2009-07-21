@@ -21,7 +21,7 @@ make install
 EOH
       end
       @res.does_not_exist!
-      @base = PoolParty::DependencyResolvers::Chef
+      @base = DependencyResolvers::Chef
       @base.compile_directory = test_dir
     end
     

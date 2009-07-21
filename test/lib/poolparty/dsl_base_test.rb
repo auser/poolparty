@@ -27,7 +27,7 @@ class DslBaseTest < Test::Unit::TestCase
     
     should "set the dependency_resolver" do
       @base.dependency_resolver(:chef)
-      assert_equal PoolParty::DependencyResolvers::Chef, @base.dependency_resolver
+      assert_equal DependencyResolvers::Chef, @base.dependency_resolver
     end
     
   end  

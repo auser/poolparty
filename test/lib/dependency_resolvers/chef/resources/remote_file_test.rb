@@ -12,7 +12,7 @@ class RemoteFileResourceTest < Test::Unit::TestCase
         mode "0644"
         checksum "08da002l" # A SHA256 (or portion thereof) of the file.
       end
-      @base = PoolParty::DependencyResolvers::Chef
+      @base = DependencyResolvers::Chef
       @base.compile_directory = test_dir
     end
     

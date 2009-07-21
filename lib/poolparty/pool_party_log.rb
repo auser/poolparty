@@ -10,7 +10,7 @@ module PoolParty
       attr_accessor :logger, :level, :file #:nodoc
       
       def init(path = false)
-        @file = path ? File.join(path, "poolparty.log") : $stdout
+        @file = path ? File.join(path, "poolparty.log") : StringIO.new
         @logger = Logger.new(file)
         level = @log_level = :info
       end

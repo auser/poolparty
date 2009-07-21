@@ -17,7 +17,7 @@ class RemoteDirectoryResourceTest < Test::Unit::TestCase
         group "nobody"
         mode "0755"
       end
-      @base = PoolParty::DependencyResolvers::Chef
+      @base = DependencyResolvers::Chef
       @base.compile_directory = test_dir
     end
     

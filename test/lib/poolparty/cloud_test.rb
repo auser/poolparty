@@ -1,17 +1,18 @@
 require "#{File.dirname(__FILE__)}/../../test_helper"
 
 class CloudTest < Test::Unit::TestCase
-  include PoolParty
+
   context "load_from_file" do
     setup do
+      clear!
       @filepath = fixtures_dir/"clouds/simple_cloud.rb"
-      @pool = Pool.load_from_file(@filepath)
+      @pool = PoolParty::Pool.load_from_file(@filepath)
       @cloud = @pool.clouds[@pool.clouds.keys.first]
     end
 
     should "be able to set the dependency_resolver" do
       @cloud.dependency_resolver :chef
-      assert_equal @cloud.dependency_resolver, PoolParty::DependencyResolvers::Chef
+      assert_equal @cloud.dependency_resolver, DependencyResolvers::Chef
     end
     
     should "raise an error if you cannot resolve_with the dependency resolver" do
@@ -32,7 +33,7 @@ class CloudTest < Test::Unit::TestCase
     end
     
     should "have a temp path of the name: Default.tmp_path / pool_name / cloud_name" do
-      assert_equal Default.tmp_path/"poolparty"/"app", @cloud.tmp_path
+      assert_equal PoolParty::Default.tmp_path/"poolparty"/"app", @cloud.tmp_path
     end
     
     should "compile with the dependency resolver"
