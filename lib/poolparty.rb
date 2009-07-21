@@ -17,7 +17,7 @@ require "poolparty/pool_party_error"
 
 # Core object overloads
 %w( object module string integer
-    array hash symbol
+    array hash symbol proc
     time).each do |lib|
   require "core/#{lib}"
 end
