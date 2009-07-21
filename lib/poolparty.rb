@@ -28,11 +28,13 @@ end
 end
 
 # PoolParty core
-%w( default pool_party_log base dsl_base cloud 
+%w( default pool_party_log base dsl_base cloud
     keypair plugin
     pool resource ).each do |lib|
   require "poolparty/#{lib}"
 end
+
+require 'cloud_providers'
 
 # dependency_resolvers
 require "dependency_resolver"
