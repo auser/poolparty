@@ -1,11 +1,11 @@
 =begin rdoc
-  ssh key used to login to remote instances
+  ssh key used to login to remote instances\
 =end
 module PoolParty
   class Keypair < Base
     
     include SearchablePaths
-    has_searchable_paths(:paths_override => ["#{ENV["HOME"]}/.ssh", "#{ENV["HOME"]}/.ec2"])
+    has_searchable_paths(:paths => ["#{ENV["HOME"]}/.ssh/", "#{ENV["HOME"]}/.ec2/"])
     
     attr_accessor :filepath
     

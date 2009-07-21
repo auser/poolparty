@@ -10,7 +10,7 @@ module PoolParty
       :minimum_runtime      => 3600,  # minimum_instances default: 1 hour
       :contract_when        => nil,
       :expand_when          => nil,
-      :cloud_provider_name  => 'ec2'
+      :cloud_provider_name  => :ec2
     )
     
     # returns an instance of Keypair
@@ -21,7 +21,7 @@ module PoolParty
     end
     
     def cloud_provider(opts={}, &block)
-      @cloud_provider ||= "::CloudProviders::#{cloud_provider_name}".classify.constantize.new(dsl_options.merge(opts), &block)
+       @cloud_provider ||= "::CloudProviders::#{cloud_provider_name}".classify.constantize.new(dsl_options.merge(opts), &block)
     end
         
     # Define what gets run on the callbacks

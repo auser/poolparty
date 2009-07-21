@@ -1,5 +1,11 @@
 require "#{File.dirname(__FILE__)}/../../../test_helper"
 require fixtures_dir/'clouds/fake_clouds'
+require 'fakeweb'
+
+FakeWeb.allow_net_connect=false
+FakeWeb.register_uri(:get, /AccessKeyId=fake_access_key&Action=DescribeInstances&.*/,
+                     :body=>'fake_instance_list')
+# FakeWeb.register_uri(:get, /NOT-AWSAccessKeyId=fake_access_key&Action=DescribeInstances&.*/, :body=>'instance_list')
 
 
 class Ec2ProviderTest < Test::Unit::TestCase
@@ -7,6 +13,12 @@ class Ec2ProviderTest < Test::Unit::TestCase
   def setup
     @provider = CloudProviders::Ec2.new(:image_id => "ami-abc123")
   end
+  
+  def test_setup
+    assert_not_nil clouds['app']
+    assert_not_nil clouds['app'].keypair
+  end
+  
   
   def test_initialize_with_options_set
     inst = CloudProviders::Ec2.new :image_id => "ami-abc123"
@@ -25,6 +37,7 @@ class Ec2ProviderTest < Test::Unit::TestCase
   
   def test_describe_instances
     assert_respond_to @provider, :describe_instances
+    assert_equal [], @provider.describe_instances
   end
   
   def test_basic_setup

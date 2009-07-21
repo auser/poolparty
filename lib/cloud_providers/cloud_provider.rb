@@ -11,15 +11,16 @@ module CloudProviders
       :image_id => nil
     )
     
-    def initialize(opts={}, &block)
-      set_vars_from_options(opts)
-    end
-    
     # All CloudProviders are added to the CloudProviders.all array
     def self.inherited(subclass)
       unless CloudProviders.all.include?(subclass)
         CloudProviders.all << subclass
       end
+    end
+    
+    def initialize(opts={}, &block)
+      set_vars_from_options(opts)
+      instance_eval(&block) if block
     end
     
     # Required methods

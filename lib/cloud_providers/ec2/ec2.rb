@@ -43,8 +43,9 @@ module CloudProviders
       ENV['EC2_USER_ID'] || load_keys_from_file[:user_id]
     end
     
+    # Load the yaml file containing keys.  If the file does not exist, return an empty hash
     def self.load_keys_from_file(filename='/etc/poolparty/aws.yml')
-      raise StandardError.new("#{filename} does not exist") if File.exists? filename
+      return {} unless File.exists?(filename)
       @keys ||= YAML::load( open(filename).read )
     end
     
@@ -98,6 +99,11 @@ module CloudProviders
       end
       #FIXME: This needs to deal with the case when an array is returned if max_instances > 1
       instances.first
+    end
+    
+    def describe_instances(o={})
+      #FIXME: in progress
+      ec2.describe_instances
     end
     
   end

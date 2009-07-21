@@ -9,7 +9,7 @@ class CloudTest < Test::Unit::TestCase
       @pool = PoolParty::Pool.load_from_file(@filepath)
       @cloud = @pool.clouds[@pool.clouds.keys.first]
     end
-
+    
     should "be able to set the dependency_resolver" do
       @cloud.dependency_resolver :chef
       assert_equal @cloud.dependency_resolver, DependencyResolvers::Chef
@@ -30,6 +30,16 @@ class CloudTest < Test::Unit::TestCase
     
     should "have a pool name" do
       assert_equal "poolparty", @cloud.pool.name
+    end
+    
+    should "have a keypair" do
+      assert_not_nil clouds['app'].keypair
+      assert_equal 'test_key', clouds['app'].keypair.basename
+    end
+    
+    should "be using ec2 cloud_provider by default" do
+      assert_equal :ec2, clouds['app'].cloud_provider_name
+      assert_kind_of ::CloudProviders::Ec2, clouds['app'].cloud_provider
     end
     
     should "have a temp path of the name: Default.tmp_path / pool_name / cloud_name" do
