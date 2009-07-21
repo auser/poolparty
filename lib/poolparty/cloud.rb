@@ -4,16 +4,25 @@ module PoolParty
     # Options we want on the output of the compiled script
     # but want to take the options from the parent if they
     # are nil on the cloud
-    additional_options  :expand_when,
-                        :contract_when,
-                        :keypair
-    
     default_options(
       :minimum_instances    => 2,     # minimum_instances default
       :maximum_instances    => 5,     # maximum_instances default
       :minimum_runtime      => 3600,  # minimum_instances default: 1 hour
-      :cloud_provider       => :ec2   # hardware_provider default: ec2
+      :contract_when        => nil,
+      :expand_when          => nil,
+      :cloud_provider_name  => 'ec2'
     )
+    
+    # returns an instance of Keypair
+    # You can pass either a filename which will be searched for in ~/.ec2/ and ~/.ssh/
+    # Or you can pass a full filepath
+    def keypair(n=nil)
+      @keypair ||= Keypair.new(n)
+    end
+    
+    def cloud_provider(opts={}, &block)
+      @cloud_provider ||= "::CloudProviders::#{cloud_provider_name}".classify.constantize.new(dsl_options.merge(opts), &block)
+    end
         
     # Define what gets run on the callbacks
     # This is where we can specify what gets called

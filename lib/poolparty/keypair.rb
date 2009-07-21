@@ -5,13 +5,14 @@ module PoolParty
   class Keypair < Base
     
     include SearchablePaths
-    has_searchable_paths(:dirs => ["/", "keys"], :prepend_paths => ["#{ENV["HOME"]}/.ssh"])
+    has_searchable_paths(:paths_override => ["#{ENV["HOME"]}/.ssh", "#{ENV["HOME"]}/.ec2"])
     
     attr_accessor :filepath
     
     # Create a new key that defaults to id_rsa as the name. 
     def initialize(fpath=nil)
-      @filepath = (fpath.nil? || fpath.empty?) ? "id_rsa" : fpath
+      @filepath = fpath
+      raise PoolPartyError.create('KeypairError', "#{fpath} key file cannot be found") unless full_filepath
     end
     
     # If the full_filepath is nil, then the key doesn't exist
@@ -27,7 +28,11 @@ module PoolParty
     # Returns the full_filepath of the key. If a full filepath is passed, we just return the expanded filepath
     # for the keypair, otherwise query where it is against known locations
     def full_filepath
-      @full_filepath ||= ::File.file?(::File.expand_path(filepath)) ? ::File.expand_path(filepath) : search_in_known_locations(filepath)
+      @full_filepath ||= if File.file?(::File.expand_path(filepath))
+        ::File.expand_path(filepath)
+        else
+          search_in_known_locations(filepath)
+        end
     end
     alias :to_s :full_filepath
     
@@ -49,7 +54,7 @@ module PoolParty
     
     # Basename of the keypair
     def basename
-      @basename ||= ::File.basename(full_filepath, ::File.extname(full_filepath)) rescue filepath
+      @basename ||= ::File.basename(full_filepath, ::File.extname(full_filepath))
     end
     
     # Just the filename of the keypair

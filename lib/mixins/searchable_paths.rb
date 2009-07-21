@@ -43,14 +43,12 @@ module PoolParty
       # 
       # * current working directory (Dir.pwd)
       # * ~/.poolparty
-      # * ~/.ec2
       # * /etc/poolparty
       # * /var/poolparty
       def default_paths
         [
           Dir.pwd,
           PoolParty::Default.poolparty_home_path,
-          PoolParty::Default.ec2_home,
           PoolParty::Default.poolparty_src_path,
           PoolParty::Default.poolparty_src_path/:lib/:poolparty,
           PoolParty::Default.base_config_directory,

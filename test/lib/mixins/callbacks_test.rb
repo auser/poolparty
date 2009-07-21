@@ -2,7 +2,7 @@ require "#{::File.dirname(__FILE__)}/../../test_helper"
 
 class CallbacksTestClass
   attr_accessor :configured, :current_callback
-  include PoolParty::Callbacks
+  include Callbacks
 
   callback_block do |inst, callback|
     inst.current_callback = callback
