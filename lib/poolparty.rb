@@ -29,7 +29,7 @@ end
 
 # PoolParty core
 %w( default pool_party_log base dsl_base cloud 
-    keypair plugin
+    keypair plugin installer
     pool resource ).each do |lib|
   require "poolparty/#{lib}"
 end

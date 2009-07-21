@@ -1,4 +1,4 @@
-require "#{File.dirname(__FILE__)}/../../test_helper"
+require "#{File.dirname(__FILE__)}/../../../test_helper"
 require 'installer'
 
 class VmwareInstallerTest < Test::Unit::TestCase
