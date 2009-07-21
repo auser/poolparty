@@ -8,7 +8,7 @@ class ChefTest < Test::Unit::TestCase
   
   context "chef dependency_resolver test" do
     setup do
-      @base = PoolParty::DependencyResolvers::Chef
+      @base = DependencyResolvers::Chef
       @base.compile_directory = test_dir
       
       @resources = {

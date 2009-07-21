@@ -7,7 +7,7 @@ class DirectoryResourceTest < Test::Unit::TestCase
     setup do
       PoolParty::Resource.define_resource_methods
       @res = PoolParty::Resources::Directory.new "/etc/poolparty"
-      @base = PoolParty::DependencyResolvers::Chef
+      @base = DependencyResolvers::Chef
       @base.compile_directory = test_dir
     end
     

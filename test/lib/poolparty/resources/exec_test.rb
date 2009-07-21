@@ -7,7 +7,7 @@ class ExecResourceTest < Test::Unit::TestCase
     setup do      
       PoolParty::Resource.define_resource_methods
       @res = PoolParty::Resources::Exec.new "/usr/sbin/mail -s 'hi' arilerner@mac.com"
-      @base = PoolParty::DependencyResolvers::Chef
+      @base = DependencyResolvers::Chef
       @base.compile_directory = test_dir
       
       @str = <<-EOE

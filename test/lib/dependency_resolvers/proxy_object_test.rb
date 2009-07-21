@@ -31,7 +31,7 @@ EOE
 end
 
 class ProxyObjectTest < Test::Unit::TestCase
-  include PoolParty::DependencyResolvers
+  include DependencyResolvers
   
   context "ProxyObject" do
     

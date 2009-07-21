@@ -7,7 +7,7 @@ class DirectoryResourceTest < Test::Unit::TestCase
     setup do
       PoolParty::Resource.define_resource_methods
       @res = PoolParty::Resources::Mount.new "/mnt/volume1", :device => "volume1", :device_type => :label, :fstype => "xfs", :options => "rw"
-      @base = PoolParty::DependencyResolvers::Chef
+      @base = DependencyResolvers::Chef
       @base.compile_directory = test_dir
     end
     

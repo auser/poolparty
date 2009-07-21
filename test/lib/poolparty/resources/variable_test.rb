@@ -7,7 +7,7 @@ class VariableResourceTest < Test::Unit::TestCase
     setup do
       PoolParty::Resource.define_resource_methods
       @res = PoolParty::Resources::Variable.new "files", ["a_file", "b_file"]
-      @base = PoolParty::DependencyResolvers::Chef
+      @base = DependencyResolvers::Chef
     end
     
     should "add the name and value as options on the variable instance" do

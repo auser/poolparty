@@ -9,7 +9,7 @@ class ServiceResourceTest < Test::Unit::TestCase
       @res = PoolParty::Resources::Service.new "example_service", 
                                                 :action => [:enable, :start],
                                                 :supports => {:reload => true}
-      @base = PoolParty::DependencyResolvers::Chef
+      @base = DependencyResolvers::Chef
       @base.compile_directory = test_dir
     end
     

@@ -11,7 +11,7 @@ class CloudTest < Test::Unit::TestCase
 
     should "be able to set the dependency_resolver" do
       @cloud.dependency_resolver :chef
-      assert_equal @cloud.dependency_resolver, PoolParty::DependencyResolvers::Chef
+      assert_equal @cloud.dependency_resolver, DependencyResolvers::Chef
     end
     
     should "raise an error if you cannot resolve_with the dependency resolver" do      

@@ -7,7 +7,7 @@ class UserResourceTest < Test::Unit::TestCase
     setup do
       PoolParty::Resource.define_resource_methods
       @res = PoolParty::Resources::User.new "random", :comment => "Random User", :uid => "1000", :gid => "users", :home => "/home/random", :shell => "/bin/zsh",  :password => "$1$JJsvHslV$szsCjVEroftprNn4JHtDi."
-      @base = PoolParty::DependencyResolvers::Chef
+      @base = DependencyResolvers::Chef
       @base.compile_directory = test_dir
     end
     

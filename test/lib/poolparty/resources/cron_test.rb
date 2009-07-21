@@ -7,7 +7,7 @@ class CronResourceTest < Test::Unit::TestCase
     setup do
       PoolParty::Resource.define_resource_methods
       @res = PoolParty::Resources::Cron.new "run root scripts", :command => "/bin/sh /usr/bin/root_scripts", :hour => [2,8,14], :weekday => [2,5]
-      @base = PoolParty::DependencyResolvers::Chef
+      @base = DependencyResolvers::Chef
       @base.compile_directory = test_dir
     end
     

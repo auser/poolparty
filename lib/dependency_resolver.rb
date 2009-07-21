@@ -1,10 +1,8 @@
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 
-module PoolParty
-  module DependencyResolvers
-    def self.all
-      @all ||= PoolParty::DependencyResolvers.constants - %w(Base ProxyObject)
-    end
+module DependencyResolvers
+  def self.all
+    @all ||= DependencyResolvers.constants - %w(Base ProxyObject)
   end
 end
 

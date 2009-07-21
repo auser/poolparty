@@ -5,7 +5,7 @@ PoolParty::Resource.define_resource_methods
 class BaseTest < Test::Unit::TestCase
   context "dependency_resolver test" do
     setup do
-      @base = PoolParty::DependencyResolvers::Base
+      @base = DependencyResolvers::Base
     end
     should "have compile_method_name" do
       assert @base.respond_to?(:compile_method_name)
@@ -15,7 +15,7 @@ class BaseTest < Test::Unit::TestCase
   
   context "resolving" do
     setup do
-      @base = PoolParty::DependencyResolvers::Chef
+      @base = DependencyResolvers::Chef
       @pool = pool :dummy do
         cloud "duh" do
           has_file "/etc/motd", :content => "piper"
