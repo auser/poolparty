@@ -16,6 +16,9 @@ using :provider_name
 EOM
 end
 
+require "#{File.dirname(__FILE__)}/ec2_response"
+require "#{File.dirname(__FILE__)}/ec2_instance"
+
 module CloudProviders
   class Ec2 < CloudProvider
     
