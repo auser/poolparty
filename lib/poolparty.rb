@@ -37,6 +37,6 @@ end
 # dependency_resolvers
 require "dependency_resolver"
 
-require "provision"
+require "provision/bootstrapper"
 
 vputs "PoolParty core loadtime: #{Time.now-t}"

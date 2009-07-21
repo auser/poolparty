@@ -46,6 +46,7 @@ gem source --add http://gems.github.com
 gem source --add http://gems.opscode.com
 
 # Get the PoolParty and friends gems
+gem install --no-ri --no-rdoc json
 gem install --no-ri --no-rdoc net-ssh
 gem install --no-ri --no-rdoc rake
 gem install --no-ri --no-rdoc chef
