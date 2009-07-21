@@ -75,6 +75,7 @@ module PoolParty
                   :if_not, 
                   :only_if, 
                   :calls,
+                  :ignore_failure,
                   :requires
       
       # This is set in order of descending precedence
