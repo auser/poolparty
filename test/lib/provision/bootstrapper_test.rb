@@ -18,7 +18,8 @@ class BootstrapperTest < Test::Unit::TestCase
   
   context "configure_script" do
     setup do
-      @filepath = File.join(File.dirname(__FILE__), "../../../", "examples/simple.rb")
+      clear!
+      @filepath = fixtures_dir/"clouds/simple_cloud.rb"
       @pool = PoolParty::Pool.load_from_file(@filepath)
       @cloud = @pool.clouds[@pool.clouds.keys.first]
       @outfile = test_dir/"configure_script.sh"

@@ -25,12 +25,15 @@ end
 
 def capture_stdout(&block)
    old_stdout = $stdout
+   old_stderr = $stderr
    out = StringIO.new
    $stdout = out
+   old_stderr = StringIO.new
    begin
       block.call if block
    ensure
       $stdout = old_stdout
+      $stderr = old_stderr
    end
    out.string
 end
