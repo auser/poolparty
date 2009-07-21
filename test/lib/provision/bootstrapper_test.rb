@@ -17,15 +17,25 @@ class BootstrapperTest < Test::Unit::TestCase
   end
   
   context "configure_script" do
+    setup do
+      @filepath = File.join(File.dirname(__FILE__), "../../../", "examples/simple.rb")
+      @pool = PoolParty::Pool.load_from_file(@filepath)
+      @cloud = @pool.clouds[@pool.clouds.keys.first]
+      @outfile = test_dir/"configure_script.sh"
+    end
+    
     should "get the script for ubuntu" do
-      bootstrap_dir = File.dirname(__FILE__)/"../../../lib/provision/configure_scripts"
-      ubuntu_script = File.expand_path(bootstrap_dir/"configure_ubuntu.sh")
-      assert_equal ubuntu_script, Provision::Bootstrapper.configure_script(:ubuntu)
+      assert_equal File.expand_path(@outfile), Provision::Bootstrapper.configure_script(@cloud, :ubuntu, @outfile)
+    end
+    
+    should "output some stuffies" do
+      assert_match /echo app > \/etc\/poolparty\/cloud_name/, open(@outfile).read
+      assert_match /echo poolparty > \/etc\/poolparty\/pool_name/, open(@outfile).read
     end
     
     should "raise an exception if the os isn't supported yet" do
       assert_raises StandardError do
-        Provision::Bootstrapper.configure_script(:non_existant_os)
+        Provision::Bootstrapper.configure_script(@cloud, :non_existant_os)
       end
     end
   end

@@ -9,6 +9,9 @@ mkdir -p /var/log/poolparty
 groupadd -f poolparty
 useradd poolparty  --home-dir /var/poolparty  --groups poolparty  --create-home
 
+# Setup the .ssh directory
+mkdir -p /var/poolparty/.ssh/
+
 # Move into a tmp directory
 cd /var/poolparty
 mkdir tmp
