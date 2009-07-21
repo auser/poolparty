@@ -70,8 +70,23 @@ module PoolParty
           
           add = []
           add << "  notifies :#{re.meta_notifies[0]}, resources(:#{re.meta_notifies[1].has_method_name} => \"#{re.meta_notifies[1].name}\")" if re.meta_notifies
+          add << "  subscribes :#{re.meta_subscribes[0]}, resources(:#{re.meta_subscribes[1].has_method_name} => \"#{re.meta_subscribes[1].name}\"), :#{re.meta_subscribes[2]}" if re.meta_subscribes
+  
+          if re.meta_not_if
+            tmp = "not_if "
+            tmp += re.meta_not_if[1] == :block ? "do #{re.meta_not_if[0]} end" : "\"#{re.meta_not_if[0]}\""
+            add << tmp
+          end
           
-                    
+          if re.meta_only_if
+            tmp = "only_if "
+            tmp += re.meta_only_if[1] == :block ? "do #{re.meta_only_if[0]} end" : "\"#{re.meta_only_if[0]}\""
+            add << tmp
+          end
+
+          add << "  ignore_failure #{re.print_variable(re.ignore_failure)}" if re.ignore_failure
+          add << "  provider #{re.print_variable(re.provider)}" if re.provider
+          
           return str if add.empty?
           newstr = str.chomp.gsub(regex, "\0")
           "#{newstr}#{add.join("\n")}\nend"

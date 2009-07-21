@@ -85,14 +85,48 @@ EOE
       setup do
         PoolParty::Resource.define_resource_methods
         @inst = FakeResource.new
+        @res = @resources[:link]
+        @inst.has_service("apache")
       end
 
-      should "Add meta notifies on the resource output" do
-        res = @resources[:link]
-        @inst.has_service("apache")        
-        res.notifies :reload, @inst.get_service("apache")
-        assert_match /notifies :reload, resources\(:service => "apache"\)/, @base.compile(res)
+      should "Add meta notifies on the resource output" do        
+        @res.notifies :reload, @inst.get_service("apache")
+        assert_match /notifies :reload, resources\(:service => "apache"\)/, @base.compile(@res)
       end
+      
+      should "Add meta subscribes on the resource output" do
+        @res.subscribes :reload, @inst.get_service("apache")
+        assert_match /subscribes :reload, resources\(:service => "apache"\), :delayed/, @base.compile(@res)
+      end
+            
+      should "Add meta ignore_failure on the resource output" do
+        @res.ignore_failure true
+        assert_match /ignore_failure true/, @base.compile(@res)
+      end
+      
+      should "Add meta provider on the resource output" do
+        @res.provider "http://google.com"
+        assert_match /provider "http:\/\/google\.com"/, @base.compile(@res)
+      end
+      
+      should "Add meta not_if on the resource output" do
+        @res.not_if "test -f /etc/passwd"
+        assert_match /not_if "test -f \/etc\/passwd"/, @base.compile(@res)
+        @res.not_if do
+File.file?("/etc/passwd")
+        end
+        assert_match /not_if do File.file\?\("\/etc\/passwd"\) end/, @base.compile(@res)
+      end
+      
+      should "Add meta only_if on the resource output" do
+        @res.only_if "test -f /var/poolparty/tmp"
+        assert_match /only_if "test -f \/var\/poolparty\/tmp"/, @base.compile(@res)
+        @res.only_if do
+File.file?("/etc/passwd")
+        end
+        assert_match /only_if do File.file\?\("\/etc\/passwd"\) end/, @base.compile(@res)
+      end
+      
     end
     
   end

@@ -18,8 +18,8 @@ class ProcTest < Test::Unit::TestCase
     end
     should "be able to grab the source of a block in an external file" do
       f = fixtures_dir/"resources"/"random_proc_file.rb"
-      instance_eval open(f).read
-      assert_equal "  @str = \"I have a bee\"", @b.code(f)
+      instance_eval open(f).read, f
+      assert_equal "  @str = \"I have a bee\"", @b.code
     end
   end
   

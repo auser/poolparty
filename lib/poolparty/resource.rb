@@ -2,14 +2,12 @@ module PoolParty
   class Resource < Base
     
     attr_reader :exists
-    attr_reader :meta_notifies, :meta_not_if, :meta_only_if
+    attr_reader :meta_notifies, :meta_not_if, :meta_only_if, :meta_subscribes
 
     default_options(
       :name     => to_s.top_level_class,
       :ignore_failure => nil,
-      :subscribes => nil,
-      :provider => nil,
-      :supports => nil
+      :provider => nil
     )
     
     def initialize(opts={}, extra_opts={}, &block)
@@ -39,16 +37,27 @@ module PoolParty
     end
     
     # META FUNCTIONS
+    # ALL RESOURCES HAVE THESE METHODS AVAILABLE
     def notifies(action_to_take, other_resource)
       @meta_notifies = [action_to_take, other_resource]
     end
     
-    def not_if(code_str, &block)
-      if block
-        
-      else
-        @meta_not_if = code_str
-      end
+    # Not if
+    # If a block is given with the not_if, we assume it is
+    # a proc object so we grab the proc source code
+    # on both not_if and only_if code
+    def not_if(code_str=nil, &block)
+      @meta_not_if = block ? [block.code, :block] : [code_str, :string]
+    end
+    
+    # Run only if
+    def only_if(code_str=nil, &block)
+      @meta_only_if = block ? [block.code, :block] : [code_str, :string]
+    end
+    
+    # Subscribes to changes
+    def subscribes(action_to_take, other_resource, at_time=:delayed)
+      @meta_subscribes = [action_to_take, other_resource, at_time]
     end
     
     # Should this resource exist on the remote systems
