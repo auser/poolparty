@@ -7,8 +7,8 @@ require 'fakeweb'
 FakeWeb.allow_net_connect=false
  
 FakeWeb.register_uri(:get, /.*Action=DescribeInstances.*/,
-                     # :body => open(fixtures_dir/"ec2/ec-describe-instances_response_body.xml").read,
-                     :body => 'fake response',
+                     :body => open(fixtures_dir/"ec2/ec2-describe-instances_response_body.xml").read,
+                     # :body => 'fake response',
                      :status => ["200", "OK"])
 
 
