@@ -36,7 +36,8 @@ module PoolParty
         :remoter_base         => Default.remoter_base,
         :keypair              => nil,
         :keypair_path         => nil,
-        :keypair_name         => nil
+        :keypair_name         => nil,
+        :os                   => nil
         }.merge(Remote::Ec2.default_options)
       )
 
