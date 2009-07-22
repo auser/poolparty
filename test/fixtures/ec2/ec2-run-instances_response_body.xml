@@ -17,7 +17,7 @@
       </instanceState>
       <privateDnsName>0.0.0.0</privateDnsName>
       <dnsName>0.0.0.0</dnsName>
-      <keyName>eucalyptus-sample</keyName>
+      <keyName>eucalyptus_sample</keyName>
       <amiLaunchIndex>0</amiLaunchIndex>
       <productCodes/>
       <instanceType>m1.small</instanceType>

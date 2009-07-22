@@ -21,7 +21,7 @@
           <privateDnsName>ip-10-250-46-144.ec2.internal</privateDnsName>
           <dnsName>ec2-75-101-141-103.compute-1.amazonaws.com</dnsName>
           <reason/>
-          <keyName>brighthouse_front</keyName>
+          <keyName>test_key</keyName>
           <amiLaunchIndex>0</amiLaunchIndex>
           <productCodes/>
           <instanceType>m1.small</instanceType>

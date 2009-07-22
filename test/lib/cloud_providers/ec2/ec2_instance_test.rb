@@ -29,4 +29,9 @@ class Ec2InstanceTest < Test::Unit::TestCase
     assert_equal  clouds['app'],  clouds['app'].cloud_provider.cloud
   end
   
+  def test_cloud_keypair
+    assert_equal  clouds['app'].keypair.to_s,  clouds['app'].cloud_provider.keypair.to_s
+    assert_equal  clouds['app'].keypair.to_s,  clouds['app'].cloud_provider.describe_instances.first.keypair.to_s
+  end
+  
 end

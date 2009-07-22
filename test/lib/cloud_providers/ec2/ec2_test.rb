@@ -51,11 +51,7 @@ class Ec2ProviderTest < Test::Unit::TestCase
   
   def test_describe_instance
     assert_respond_to @provider, :describe_instance
-    assert_equal ["i-7fd89416"], @provider.describe_instance(:instance_id => "i-7fd89416")
-  end
-  
-  def test_describe_instance
-    assert_respond_to @provider, :describe_instance
+
     inst = @provider.describe_instance(:instance_id => "i-7fd89416")
     assert_equal "i-7fd89416", inst.instance_id
     assert_kind_of CloudProviders::Ec2Instance, inst

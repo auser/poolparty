@@ -66,7 +66,7 @@ module CloudProviders
     # or you can pass a full filepath
     def keypair(n=keypair_name)
       @keypair ||= PoolParty::Keypair.new(n)
-      keypair_name = @keypair.basename
+      keypair_name @keypair.basename
       @keypair
     end
     def keypair=(n)
