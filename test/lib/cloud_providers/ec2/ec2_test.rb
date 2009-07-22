@@ -68,7 +68,7 @@ class Ec2ProviderTest < Test::Unit::TestCase
   
   def test_run_instances
     assert_respond_to @provider, :run_instance
-    inst = @provider.run_instance(:keypair_name => "eucalyptus_sample")
+    inst = @provider.run_instance(:keypair_name => "test_key")
     assert_kind_of CloudProviders::Ec2Instance, inst
     assert_equal "pending", inst.status
   end

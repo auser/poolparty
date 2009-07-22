@@ -53,7 +53,7 @@
           <privateDnsName>ip-10-251-74-198.ec2.internal</privateDnsName>
           <dnsName>ec2-67-202-10-73.compute-1.amazonaws.com</dnsName>
           <reason/>
-          <keyName>eucalyptus_sample</keyName>
+          <keyName>test_key</keyName>
           <amiLaunchIndex>0</amiLaunchIndex>
           <productCodes/>
           <instanceType>m1.small</instanceType>
