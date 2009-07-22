@@ -17,9 +17,10 @@ module PoolParty
     
     # Dependency resolver methods
     def compile(compiler)
-      @compiler = PoolParty.module_eval("DependencyResolvers::#{compiler.to_s.capitalize}")
+      @compiler ||= PoolParty.module_eval("DependencyResolvers::#{compiler.to_s.capitalize}")
       @compiler.compile(self)
     end
+    
     # print_to_chef
     # When the dependency resolver comes through and resolves
     # this resource, it will come through and check if it resolves
@@ -133,9 +134,12 @@ module PoolParty
           end
           alias :#{res.has_method_name} :has_#{res.has_method_name}
           
-          def get_#{res.has_method_name}(nm)
+          def get_#{res.has_method_name}(nm)            
             out_res = #{res.has_method_name}s.detect {|other| other.base_name == nm}
-            out_res ||= current_context.reverse.detect {|s| s.get_#{res.has_method_name}(nm) if s}
+            out_res ||= unless out_res
+              containing_resource = current_context.reverse.detect {|s| s.get_#{res.has_method_name}(nm) if s}
+              containing_resource.get_#{res.has_method_name}(nm) if containing_resource
+            end
             raise PoolParty::PoolPartyError.create("ResourceNotFound", "The #{res.has_method_name} \#{nm} was not found. Please make sure you've specified it") unless out_res
             out_res
           end          

@@ -17,6 +17,8 @@ module DependencyResolvers
     def self.compile(resources=[])
       before_compile
       o = case resources
+      when PoolParty::Cloud
+        compile(resources.resources)
       when Array
         compile_array(resources)
       when PoolParty::Resource

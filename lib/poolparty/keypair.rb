@@ -80,6 +80,7 @@ module PoolParty
       raise PoolPartyError.create("KeypairError", "Your keypair #{full_filepath} has improper file permissions. Keypairs must be 0600 permission. Please chmod your keypair file and try again") unless perm_truth
     end
     
+    # Has the keypair been found? Raise a KeypairError if it's not
     def keypair_found?
       raise PoolPartyError.create('KeypairError', "#{fpath} key file cannot be found") unless full_filepath
     end

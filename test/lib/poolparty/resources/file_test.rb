@@ -19,10 +19,17 @@ class DirectoryResourceTest < Test::Unit::TestCase
     end
     
     should "be able to use a template instead of content" do
-      @res.template = fixtures_dir/"templates"/"apache_conf.erb"
+      @res.template(fixtures_dir/"templates"/"apache_conf.erb")
       
       @base.compile(@res)
       assert_equal "# Apache conf file\napache <%= cloud.name %>", open(test_dir/"templates"/"default"/"etc"/"poolparty"/"lyrics.erb").read
+    end
+    
+    should "raise a TemplateNotFoundError if the template cannot be found" do
+      PoolParty::PoolPartyError.create("TemplateNotFound")
+      assert_raises TemplateNotFound do
+        @res.template(fixtures_dir/"templates"/"non_existant_template.erb")
+      end
     end
     
   end

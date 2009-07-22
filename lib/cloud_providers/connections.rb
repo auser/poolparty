@@ -29,7 +29,7 @@ module  CloudProviders
     def rsync( source_path, destination_path, rsync_opts=['-v -a'] )
       dputs "rsync -e 'ssh #{ssh_options}' #{rsync_opts.join(' ')} #{source_path}  root@#{host}:#{destination_path}"
       out = %x{ rsync -e 'ssh #{ssh_options}' #{rsync_opts.join(' ')} #{source_path}  root@#{host}:#{destination_path} }
-      puts out if debugging?
+      dputs out
     end
     
   end

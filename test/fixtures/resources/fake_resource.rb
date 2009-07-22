@@ -1,4 +1,8 @@
 class FakeResource < PoolParty::Resource
+  
+  default_options(
+    :name => nil
+  )
   def self.has_method_name
     "tester"
   end
