@@ -85,7 +85,6 @@ class String
     begin
       mod.module_eval(camelcased_word, __FILE__, __LINE__)
     rescue NameError
-      puts "#{camelcased_word} is not defined."
       nil
     end
   end

@@ -46,6 +46,19 @@ class CloudTest < Test::Unit::TestCase
       assert_kind_of ::CloudProviders::Ec2, clouds['app'].cloud_provider
     end
     
+    should "raise if the cloud_provider is not a known type" do
+      PoolParty::PoolPartyError.create("UnknownCloudProviderError")
+      assert_raises UnknownCloudProviderError do
+        clouds["app"].cloud_provider_name = :not_a_cloud_provider
+        clouds["app"].cloud_provider
+      end
+    end
+    
+    should "set the cloud_provider cloud and keypair with cloud_provider" do
+      assert_equal clouds["app"], clouds["app"].cloud_provider.cloud
+      assert_equal clouds["app"].keypair.to_s, clouds["app"].cloud_provider.keypair_name
+    end
+    
     should "set the cloud provider with a using block" do
       clouds["app"].instance_eval do
         using :ec2 do
