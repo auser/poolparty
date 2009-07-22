@@ -63,18 +63,24 @@ module CloudProviders
     # Nodes
     # returns nodes from the describe_instances array
     # These can be selected on by passing a hash
-    def nodes(selection_hash={})
+    def nodes(hsh={})
       unordered = begin
-        kname ||= selection_hash.delete(:keypair_name) || (clouds[o[:cloud_name]].keypair.basename if selection_hash.delete(:cloud_name))
-        # Added keypair to filter on either keypair_name or keypair response
-        key_condition = {:keypair_name => kname}
-
-        results = describe_instances.select_with_hash(key_condition)
-        results.select_with_hash(select_with_hash)
+        results = describe_instances.select_with_hash(hsh)
+        results.select_with_hash(hsh)
       end
       
-      unordered.sort_by(&:launch_time) # provide consistent sorting for nodes 
-      
+      # provide consistent sorting for nodes 
+      # TODO: Add back when cloud_instance
+      # unordered.sort_by(&:launch_time)
+    end
+    
+    private
+    
+    # Selection hash
+    # Used to select uniqueness
+    def selection_hash(o={})
+      kname ||= o.delete(:keypair_name) || (clouds[o[:cloud_name]].keypair.basename if o.delete(:cloud_name))
+      {:ssh_key_name => kname}
     end
     
   end
