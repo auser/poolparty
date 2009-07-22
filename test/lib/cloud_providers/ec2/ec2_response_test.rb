@@ -9,20 +9,9 @@ class Ec2ResponseTest < Test::Unit::TestCase
     @described = Ec2Response.describe_instances(@response)
   end
   
-  # def test_responds_to_core_methods
-  #   %w(describe_instance 
-  #      describe_instances
-  #      pp_format
-  #      convert_from_ec2_dns_to_ip
-  #      parse_datetime).each do |meth|
-  #        assert_respond_to CloudProviders::Ec2Response, meth
-  #      end
-  # end
-  
   def test_returns_pp_format
     inst = Ec2Response.pp_format(@response.first)
     assert_not_nil inst[:public_ip]
-    
   end
   
   def test_describe_instance
@@ -48,6 +37,5 @@ class Ec2ResponseTest < Test::Unit::TestCase
     assert_kind_of Time, Ec2Response.parse_datetime('2009-07-20T20:35:51.000Z')
     assert_equal 2009, @described.first.launch_time.year
   end
-  
   
 end

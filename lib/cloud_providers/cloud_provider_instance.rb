@@ -3,6 +3,7 @@ module CloudProviders
   class CloudProviderInstance
       include Dslify
       # include Enumerable
+      include Connections
       
       default_options(
         :name         => nil, # Name of the remote instance (internal usage)
