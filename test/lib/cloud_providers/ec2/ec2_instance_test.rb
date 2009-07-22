@@ -25,4 +25,8 @@ class Ec2InstanceTest < Test::Unit::TestCase
     #TODO
   end
   
+  def test_has_cloud_set_when_created_from_cloud
+    assert_equal  clouds['app'],  clouds['app'].cloud_provider.cloud
+  end
+  
 end

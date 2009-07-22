@@ -29,7 +29,8 @@ module CloudProviders
       
       def cloud_provider(opts={}, &block)
         raise StandardError.new("cloud_provider has not been implemented for this CloudProviderInstance ")
-        # @cloud_provider = CloudProvider.new(opts, &block)
+        # Can be implemented in the following way
+        # @cloud_provider ||= CloudProvider.new(opts, &block)
       end
       
       ## hash like methods

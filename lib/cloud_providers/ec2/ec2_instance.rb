@@ -52,6 +52,10 @@ module CloudProviders
       @cloud_provider ||= Ec2.new(dsl_options.merge(o), &block)
     end
     
+    def cloud(n=nil)
+      @cloud ||= n
+    end
+    
   end
 
 end

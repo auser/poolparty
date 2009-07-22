@@ -69,7 +69,7 @@ module CloudProviders
         :availability_zone      => nil,
         :block_device_mappings  => nil,
         :elastic_ips            => nil, # An array of the elastic ips
-        :ebs_volume_id          => nil  # The volume id of an ebs volume
+        :ebs_volume_id          => nil # The volume id of an ebs volume # TODO: ensure this is consistent with :block_device_mappings
       })
       
     def ec2(o={})
@@ -85,7 +85,7 @@ module CloudProviders
                                       min_count,
                                       max_count,
                                       security_group,
-                                      keypair_name,
+                                      keypair.basename,
                                       user_data,
                                       addressing_type,
                                       instance_type,
@@ -101,14 +101,15 @@ module CloudProviders
       instances.first
     end
     
-    def describe_instance(o={})
-      describe_instances.select_with_hash(o).first
+    # Will select the first instance matching the provided criteria hash
+    def describe_instance(hash_of_criteria_to_select_instance_against)
+      describe_instances(hash_of_criteria_to_select_instance_against).first
     end
     
     def describe_instances(o={})
       ec2_instants = Ec2Response.describe_instances(ec2.describe_instances)
       insts = ec2_instants.select_with_hash(o) if !o.empty?
-      ec2_instances = ec2_instants.collect{|i| Ec2Instance.new(i)}
+      ec2_instances = ec2_instants.collect{|i| Ec2Instance.new(dsl_options.merge(i))}
       ec2_instances.sort {|a,b| a[:launch_time].to_i <=> b[:launch_time].to_i }
     end
     
