@@ -5,12 +5,15 @@ PoolParty::Keypair.searchable_paths << fixtures_dir/"keys"
 require fixtures_dir/'clouds/fake_clouds'
 require 'fakeweb'
 FakeWeb.allow_net_connect=false
- 
-FakeWeb.register_uri(:get, /.*Action=DescribeInstances.*/,
-                     :body => open(fixtures_dir/"ec2/ec2-describe-instances_response_body.xml").read,
-                     # :body => 'fake response',
-                     :status => ["200", "OK"])
 
+FakeWeb.register_uri(:get, /.*Action=DescribeInstances.*/, :status => ["200", "OK"],
+                     :body => open(fixtures_dir/"ec2/ec2-describe-instances_response_body.xml").read)
+
+FakeWeb.register_uri(:get, /.*Action=RunInstances.*/, :status => ["200", "OK"],
+                    :body => open(fixtures_dir/"ec2/ec2-run-instances_response_body.xml").read)
+
+FakeWeb.register_uri(:get, /.*Action=TerminateInstances.*/, :status => ["200", "OK"],
+                     :body => open(fixtures_dir/"ec2/ec2-terminate-instances_response_body.xml").read)
 
 class Ec2ProviderTest < Test::Unit::TestCase
   
@@ -45,6 +48,16 @@ class Ec2ProviderTest < Test::Unit::TestCase
     assert_respond_to @provider, :describe_instances    
     assert_equal ["i-7fd89416", "i-7f000516"], @provider.describe_instances.map {|a| a[:aws_instance_id]}
     assert_equal ["ec2-75-101-141-103.compute-1.amazonaws.com","ec2-67-202-10-73.compute-1.amazonaws.com"], @provider.describe_instances.map {|a| a[:dns_name]}
+  end
+  
+  def test_run_instances
+    assert_respond_to @provider, :run_instance
+    assert_equal "pending", @provider.run_instance(:keypair_name => "eucalyptus-sample")[:aws_state]
+  end
+  
+  def test_terminate_instances
+    assert_respond_to @provider, :terminate_instance!
+    assert_equal ["shutting-down"], @provider.terminate_instance!(:instance_id => "i-3B3506A0").map {|a| a[:aws_shutdown_state] }
   end
   
   def test_basic_setup
