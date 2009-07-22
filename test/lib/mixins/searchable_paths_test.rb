@@ -5,12 +5,12 @@ PATH_ONE       = PATH_TEST_ROOT / "one"
 PATH_TWO       = PATH_TEST_ROOT / "two"
 
 class TestFile
-  include PoolParty::SearchablePaths
+  include SearchablePaths
   has_searchable_paths(:dir => "templates", :paths => [PATH_ONE, PATH_TWO])
 end
 
 class TestFile2
-  include PoolParty::SearchablePaths
+  include SearchablePaths
   has_searchable_paths(:dirs => ["clouds", "/"], :prepend_paths => [PATH_ONE, PATH_TWO])
 end
 

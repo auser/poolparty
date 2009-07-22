@@ -6,15 +6,18 @@ module CloudProviders
       include Connections
       
       default_options(
+        :cloud        => nil, # reference to cloud object this instance belongs to, if created by a cloud
         :name         => nil, # Name of the remote instance (internal usage)
         :internal_ip  => nil, # Internal ip of the remote instance
         :public_ip    => nil,
         :status       => nil, # Status of the remote instance
         :launch_time  => nil,
-        :keypair_name => nil
+        :keypair_name => nil,
+        :cloud_name   => nil
       )
       
       def initialize(opts={}, &block)
+        cloud_name = opts[:cloud].name if opts[:cloud]
         opts.choose{|k,v| dsl_options.has_key? k}
         set_vars_from_options(opts) if opts.is_a?(Hash)
         on_init
@@ -30,8 +33,6 @@ module CloudProviders
       
       def cloud_provider(opts={}, &block)
         raise StandardError.new("cloud_provider has not been implemented for this CloudProviderInstance ")
-        # Can be implemented in the following way
-        # @cloud_provider ||= CloudProvider.new(opts, &block)
       end
       
       ## hash like methods
@@ -61,6 +62,10 @@ module CloudProviders
          
       def values
         dsl_options.values
+      end
+      
+      def to_hash
+        dsl_options
       end
       ##end of hash like methods
       

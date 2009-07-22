@@ -32,10 +32,4 @@ class CloudProviderInstanceTest < Test::Unit::TestCase
     assert @inst.valid?
   end
   
-  def test_cloud_provider
-    assert_raise StandardError do
-      @inst.cloud_provider
-    end
-  end
-  
 end

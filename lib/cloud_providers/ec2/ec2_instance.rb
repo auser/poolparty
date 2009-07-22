@@ -15,7 +15,7 @@ module CloudProviders
         :instance_id      => nil,
         :launch_index     => nil,
         :public_ip        => nil,
-        :internal_ip      => nil
+        :internal_ip      => nil,
         }
       )
     )
@@ -36,24 +36,21 @@ module CloudProviders
     # Printing. This is how we extract the instances into the listing on the 
     # local side into the local listing file
     def to_s
-      "#{name}\t#{ip}\t#{instance_id}"
+      "#{name}\t#{dns_name}\t#{instance_id}"
     end
-    # 
-    # def self.to_s(hsh)
-    #   new(hsh).to_s
-    # end
     
+    #FIXME:
     def hosts_file_listing_for(cl)
       string = (cl.name == cloud.name) ? "#{name}.#{my_cloud.name}\t#{name}" : "#{name}.#{my_cloud.name}"
       "#{internal_ip}\t#{string}"
     end
     
     def cloud_provider(o={}, &block)
-      @cloud_provider ||= Ec2.new(dsl_options.merge(o), &block)
-    end
-    
-    def cloud(n=nil)
-      @cloud ||= n
+      @cloud_provider ||= if cloud
+        cloud.cloud_provider
+      else
+        Ec2.new(dsl_options.merge(o), &block)
+      end
     end
     
   end
