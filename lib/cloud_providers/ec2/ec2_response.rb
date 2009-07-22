@@ -53,11 +53,11 @@ module CloudProviders
     def self.pp_format(response_hash)
       munged = {}
       response_hash.each{|k,v| munged[k.to_s.gsub('aws_', '').to_sym] = v}
-      munged[:internal_ip]      = convert_from_ec2_dns_to_ip(munged[:private_dns_name])
-      munged[:public_ip]        = convert_from_ec2_dns_to_ip(munged[:dns_name])
-      munged[:launch_time]      = parse_datetime(munged[:launch_time])
-      munged[:ami_launch_index] = munged[:launch_index]  #TODO: deprecate ami_launch_index
-      munged[:key_name]         = munged.delete(:ssh_key_name)
+      munged[:internal_ip]      = convert_from_ec2_dns_to_ip(munged[:private_dns_name]) if munged[:private_dns_name]
+      munged[:public_ip]        = convert_from_ec2_dns_to_ip(munged[:dns_name]) if munged[:dns_name]
+      munged[:launch_time]      = parse_datetime(munged[:launch_time]) if munged[:launch_time]
+      munged[:ami_launch_index] = munged[:launch_index] if munged[:launch_index]  #TODO: deprecate ami_launch_index
+      munged[:keypair_name]     = munged.delete(:ssh_key_name)
       munged[:status]           = munged.delete(:state)
       munged
     end

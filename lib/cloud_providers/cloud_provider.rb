@@ -42,7 +42,7 @@ module CloudProviders
     end
     
     # Describe an instance's status.  Should return a hash like object
-    #Required keys are:
+    # Required keys are:
     # :image_id
     # :keypair_name
     # :instance_id
