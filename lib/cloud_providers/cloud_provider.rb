@@ -58,5 +58,24 @@ module CloudProviders
       raise StandardError.new("method_not_defined :describe_instances")
     end
     
+    # DSL and helpers
+    
+    # Nodes
+    # returns nodes from the describe_instances array
+    # These can be selected on by passing a hash
+    def nodes(selection_hash={})
+      unordered = begin
+        kname ||= selection_hash.delete(:keypair_name) || (clouds[o[:cloud_name]].keypair.basename if selection_hash.delete(:cloud_name))
+        # Added keypair to filter on either keypair_name or keypair response
+        key_condition = {:keypair_name => kname}
+
+        results = describe_instances.select_with_hash(key_condition)
+        results.select_with_hash(select_with_hash)
+      end
+      
+      unordered.sort_by(&:launch_time) # provide consistent sorting for nodes 
+      
+    end
+    
   end
 end
