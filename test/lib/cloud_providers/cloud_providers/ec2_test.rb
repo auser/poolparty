@@ -42,8 +42,9 @@ class Ec2ProviderTest < Test::Unit::TestCase
   def test_describe_instances
     assert_instance_of RightAws::Ec2, @provider.ec2
     
-    assert_respond_to @provider, :describe_instances
-    assert_equal [], @provider.describe_instances
+    assert_respond_to @provider, :describe_instances    
+    assert_equal ["i-7fd89416", "i-7f000516"], @provider.describe_instances.map {|a| a[:aws_instance_id]}
+    assert_equal ["ec2-75-101-141-103.compute-1.amazonaws.com","ec2-67-202-10-73.compute-1.amazonaws.com"], @provider.describe_instances.map {|a| a[:dns_name]}
   end
   
   def test_basic_setup
