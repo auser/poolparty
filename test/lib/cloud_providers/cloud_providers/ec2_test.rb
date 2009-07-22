@@ -46,18 +46,23 @@ class Ec2ProviderTest < Test::Unit::TestCase
     assert_instance_of RightAws::Ec2, @provider.ec2
     
     assert_respond_to @provider, :describe_instances    
-    assert_equal ["i-7fd89416", "i-7f000516"], @provider.describe_instances.map {|a| a[:aws_instance_id]}
+    assert_equal ["i-7fd89416", "i-7f000516"], @provider.describe_instances.map {|a| a[:instance_id]}
     assert_equal ["ec2-75-101-141-103.compute-1.amazonaws.com","ec2-67-202-10-73.compute-1.amazonaws.com"], @provider.describe_instances.map {|a| a[:dns_name]}
+  end
+  
+  def test_describe_instance
+    assert_respond_to @provider, :describe_instance
+    assert_equal ["i-7fd89416"], @provider.describe_instance(:instance_id => "i-7fd89416")
   end
   
   def test_run_instances
     assert_respond_to @provider, :run_instance
-    assert_equal "pending", @provider.run_instance(:keypair_name => "eucalyptus-sample")[:aws_state]
+    assert_equal "pending", @provider.run_instance(:keypair_name => "eucalyptus-sample")[:state]
   end
   
   def test_terminate_instances
     assert_respond_to @provider, :terminate_instance!
-    assert_equal ["shutting-down"], @provider.terminate_instance!(:instance_id => "i-3B3506A0").map {|a| a[:aws_shutdown_state] }
+    assert_equal ["shutting-down"], @provider.terminate_instance!(:instance_id => "i-3B3506A0").map {|a| a[:shutdown_state] }
   end
   
   def test_basic_setup

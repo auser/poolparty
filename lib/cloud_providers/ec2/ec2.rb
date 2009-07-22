@@ -101,6 +101,10 @@ module CloudProviders
       instances.first
     end
     
+    def describe_instance(o={})
+      describe_instances.select_with_hash(o)
+    end
+    
     def describe_instances(o={})
       ec2.describe_instances
     end
