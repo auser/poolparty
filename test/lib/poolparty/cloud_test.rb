@@ -1,5 +1,7 @@
 require "#{File.dirname(__FILE__)}/../../test_helper"
 
+stub_ec2_calls
+
 class CloudTest < Test::Unit::TestCase
 
   context "load_from_file" do
@@ -58,7 +60,7 @@ class CloudTest < Test::Unit::TestCase
       assert_equal clouds["app"], clouds["app"].cloud_provider.cloud
       assert_equal clouds["app"].keypair.to_s, clouds["app"].cloud_provider.keypair_name
     end
-    
+        
     should "set the cloud provider with a using block" do
       clouds["app"].instance_eval do
         using :ec2 do

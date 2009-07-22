@@ -47,3 +47,25 @@ end
 def include_chef_only_resources
   DependencyResolvers::Chef.send :require_chef_only_resources
 end
+
+def stub_keypair_searchable_paths
+  PoolParty::Keypair.searchable_paths << fixtures_dir/"keys"  
+end
+
+def stub_ec2_calls
+  stub_keypair_searchable_paths
+  
+  require fixtures_dir/'clouds/fake_clouds'
+  require 'fakeweb'
+  FakeWeb.allow_net_connect=false
+
+  FakeWeb.register_uri(:get, /.*Action=DescribeInstances.*/, :status => ["200", "OK"],
+                       :body => open(fixtures_dir/"ec2/ec2-describe-instances_response_body.xml").read)
+
+  FakeWeb.register_uri(:get, /.*Action=RunInstances.*/, :status => ["200", "OK"],
+                      :body => open(fixtures_dir/"ec2/ec2-run-instances_response_body.xml").read)
+
+  FakeWeb.register_uri(:get, /.*Action=TerminateInstances.*/, :status => ["200", "OK"],
+                       :body => open(fixtures_dir/"ec2/ec2-terminate-instances_response_body.xml").read)
+  
+end
