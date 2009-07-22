@@ -7,8 +7,9 @@ module CloudProviders
     include Callbacks
     
     default_options(
-      :keypair_name  => nil,
-      :image_id => nil
+      :cloud        => nil,
+      :keypair_name => nil,
+      :image_id     => nil
     )
     
     # All CloudProviders are added to the CloudProviders.all array
@@ -59,6 +60,18 @@ module CloudProviders
     end
     
     # DSL and helpers
+    
+    # Returns an instance of Keypair
+    # You can pass either a filename which will be searched for in ~/.ec2/ and ~/.ssh/
+    # or you can pass a full filepath
+    def keypair(n=keypair_name)
+      @keypair ||= PoolParty::Keypair.new(n)
+      keypair_name = @keypair.basename
+      @keypair
+    end
+    def keypair=(n)
+      @keypair = n
+    end
     
     # Nodes
     # returns nodes from the describe_instances array

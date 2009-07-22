@@ -54,9 +54,23 @@ class Ec2ProviderTest < Test::Unit::TestCase
     assert_equal ["i-7fd89416"], @provider.describe_instance(:instance_id => "i-7fd89416")
   end
   
+  def test_describe_instance
+    assert_respond_to @provider, :describe_instance
+    inst = @provider.describe_instance(:instance_id => "i-7fd89416")
+    assert_equal "i-7fd89416", inst.instance_id
+    assert_kind_of CloudProviders::Ec2Instance, inst
+  end
+  
+  def test_described_instances_are_sorted
+    assert @provider.describe_instances.size > 0
+    assert @provider.describe_instances.first.launch_time < @provider.describe_instances.last.launch_time
+  end
+  
   def test_run_instances
     assert_respond_to @provider, :run_instance
-    assert_equal "pending", @provider.run_instance(:keypair_name => "eucalyptus-sample")[:state]
+    inst = @provider.run_instance(:keypair_name => "eucalyptus_sample")
+    assert_kind_of CloudProviders::Ec2Instance, inst
+    assert_equal "pending", inst.status
   end
   
   def test_terminate_instances
@@ -82,7 +96,16 @@ class Ec2ProviderTest < Test::Unit::TestCase
   end
   
   def test_nodes
-    assert_equal ["i-7fd89416", "i-7f000516"], @provider.nodes(:aws_state => "running").map {|a| a[:aws_instance_id] }
+    assert_equal ["i-7fd89416", "i-7f000516"], @provider.nodes(:status => "running").map {|a| a[:instance_id] }
+  end
+  
+  def test_cloud_is_set_when_created_from_a_cloud
+    assert_equal clouds['app'], clouds['app'].cloud_provider.cloud
+  end
+  
+  def test_inherited_default_options
+    assert_respond_to CloudProviders::Ec2.new, :cloud
+    assert_nil CloudProviders::Ec2.new().cloud
   end
   
   # def test_bundle_instance

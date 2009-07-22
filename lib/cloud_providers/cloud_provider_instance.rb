@@ -2,6 +2,7 @@ module CloudProviders
   
   class CloudProviderInstance
       include Dslify
+      # include Enumerable
       
       default_options(
         :name         => nil, # Name of the remote instance (internal usage)
@@ -23,17 +24,15 @@ module CloudProviders
       # You can pass either a filename which will be searched for in ~/.ec2/ and ~/.ssh/
       # or you can pass a full filepath
       def keypair(n=keypair_name)
-        @keypair ||= PoolParty::Keypair.new(n)
-        keypair_name = @keypair.basename
-        @keypair
+        cloud_provider.keypair(n)
       end
       
       def cloud_provider(opts={}, &block)
         raise StandardError.new("cloud_provider has not been implemented for this CloudProviderInstance ")
-        @cloud_provider = CloudProvider.new(opts, &block)
+        # Can be implemented in the following way
+        # @cloud_provider ||= CloudProvider.new(opts, &block)
       end
       
-      # include Enumerable
       ## hash like methods
       def each
         dsl_options.each{ |k,v| yield k,v }

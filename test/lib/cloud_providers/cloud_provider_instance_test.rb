@@ -17,12 +17,6 @@ class CloudProviderInstanceTest < Test::Unit::TestCase
     assert_equal 'test_key', @inst.keypair_name
   end
   
-  def test_keypair
-    @inst.keypair(fixtures_dir/'keys/test_key')
-    assert_equal 'test_key', @inst.keypair_name
-    assert_kind_of PoolParty::Keypair, @inst.keypair
-  end
-  
   def test_pending_status
     assert 'pending', @inst.status
     assert @inst.pending?
