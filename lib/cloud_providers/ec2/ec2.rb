@@ -79,7 +79,6 @@ module CloudProviders
     # Start a new instance with the given options
     def run_instance(o={})
       set_vars_from_options o
-####REMOVE      # keypair_name ||= o[:keypair_name] || (clouds[o[:cloud_name]].keypair.basename if o[:cloud_name])
       raise StandardError.new("You must pass a keypair to launch an instance, or else you will not be able to login. options = #{o.inspect}") if !keypair_name
       response_array = ec2(o).run_instances(image_id,
                                       min_count,
