@@ -77,6 +77,10 @@ class Ec2ProviderTest < Test::Unit::TestCase
     assert_equal 'new_new_key', @provider.access_key='new_new_key'
   end
   
+  def test_nodes
+    assert_equal ["i-7fd89416", "i-7f000516"], @provider.nodes(:aws_state => "running").map {|a| a[:aws_instance_id] }
+  end
+  
   # def test_bundle_instance
   #   assert @cld.responds_to?(:bundle)
   # end
