@@ -2,11 +2,12 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 
 t=Time.now
 
-# Gems
+# Load system gems
 %w(rubygems json logger erb net/ssh).each do |lib|
   require lib
 end
 
+# Load local gems
 %w(dslify parenting right_aws).each do |dep|
   $LOAD_PATH.unshift(File.join(File.dirname(__FILE__),'..', 'vendor/gems', dep, 'lib'))
   require "#{dep}"
@@ -16,8 +17,14 @@ end
 require "poolparty/pool_party_error"
 
 # Core object overloads
-%w( object module string integer
-    array hash symbol proc
+%w( object
+    module
+    string
+    integer
+    array
+    hash
+    symbol
+    proc
     time).each do |lib|
   require "core/#{lib}"
 end

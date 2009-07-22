@@ -20,7 +20,6 @@ modify_env_with_hash(
 require 'poolparty'
 require "rubygems"
 require "test/unit"
-# require "context"
 require "matchy"
 require "shoulda"
  
