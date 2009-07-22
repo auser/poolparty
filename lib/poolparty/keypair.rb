@@ -12,7 +12,7 @@ module PoolParty
     # Create a new key that defaults to id_rsa as the name. 
     def initialize(fpath=nil)
       @filepath = fpath
-      raise PoolPartyError.create('KeypairError', "#{fpath} key file cannot be found") unless full_filepath
+      valid?
     end
     
     # If the full_filepath is nil, then the key doesn't exist
@@ -71,13 +71,17 @@ module PoolParty
     
     # Validations
     def validations
-      [:has_proper_permissions?]
+      [:keypair_found?, :has_proper_permissions?]
     end
     
     # Check the proper permissions
     def has_proper_permissions?
       perm_truth = [:readable?, :writable?, :executable?].map {|meth| File.send(meth, full_filepath)} == [true, true, false]
       raise PoolPartyError.create("KeypairError", "Your keypair #{full_filepath} has improper file permissions. Keypairs must be 0600 permission. Please chmod your keypair file and try again") unless perm_truth
+    end
+    
+    def keypair_found?
+      raise PoolPartyError.create('KeypairError', "#{fpath} key file cannot be found") unless full_filepath
     end
         
   end
