@@ -79,7 +79,7 @@ module CloudProviders
     # Start a new instance with the given options
     def run_instance(o={})
       set_vars_from_options o
-      keypair_name ||= o[:keypair_name] || (clouds[o[:cloud_name]].keypair.basename if o[:cloud_name])
+####REMOVE      # keypair_name ||= o[:keypair_name] || (clouds[o[:cloud_name]].keypair.basename if o[:cloud_name])
       raise StandardError.new("You must pass a keypair to launch an instance, or else you will not be able to login. options = #{o.inspect}") if !keypair_name
       response_array = ec2(o).run_instances(image_id,
                                       min_count,
@@ -94,21 +94,28 @@ module CloudProviders
                                       availability_zone,
                                       block_device_mappings
                                       )
-      instances = response_array# .collect do |aws_response_hash|
-      #          Ec2Instance.new( Ec2Response.pp_format(aws_response_hash) )
-      #       end
+      instances = response_array .collect do |aws_response_hash|
+        Ec2Instance.new( Ec2Response.pp_format(aws_response_hash) )
+      end
       #FIXME: This needs to deal with the case when an array is returned if max_instances > 1
       instances.first
     end
     
+    def describe_instance(o={})
+      describe_instances.select_with_hash(o).first
+    end
+    
     def describe_instances(o={})
-      ec2.describe_instances
+      ec2_instants = Ec2Response.describe_instances(ec2.describe_instances)
+      insts = ec2_instants.select_with_hash(o) if !o.empty?
+      ec2_instances = ec2_instants.collect{|i| Ec2Instance.new(i)}
+      ec2_instances.sort {|a,b| a[:launch_time].to_i <=> b[:launch_time].to_i }
     end
     
     def terminate_instance!(o={})
       raise StandardError.new("You must pass an instance_id when terminating an instance with ec2") unless o[:instance_id] || o[:instance_ids]
       instance_ids = o[:instance_ids] || [o[:instance_id]]
-      ec2.terminate_instances(instance_ids)
+       Ec2Response.describe_instances(ec2.terminate_instances(instance_ids))
     end
     
   end
