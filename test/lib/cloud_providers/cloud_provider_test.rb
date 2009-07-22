@@ -1,12 +1,12 @@
 require "#{File.dirname(__FILE__)}/../../test_helper"
 
-class CloudProvidersTest < Test::Unit::TestCase
+class CloudProviderTest < Test::Unit::TestCase
   
   def setup
     @provider = CloudProviders::CloudProvider.new
   end
   
-  def test_cloud_providers
+  def test_cloud_providers_are_included_in_all
     assert_respond_to CloudProviders, :all
     assert_respond_to CloudProviders.all, :each
     assert CloudProviders.all.include?(CloudProviders::Ec2)
