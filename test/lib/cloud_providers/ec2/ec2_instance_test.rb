@@ -8,10 +8,6 @@ class Ec2InstanceTest < Test::Unit::TestCase
     @provider = CloudProviders::Ec2.new(:image_id => "ami-abc123")
   end
   
-  def test_initialize
-    #TODO
-  end
-  
   def test_has_cloud_provider
     inst = @provider.describe_instances.first
     assert_kind_of CloudProviders::Ec2, inst.cloud_provider
@@ -22,16 +18,22 @@ class Ec2InstanceTest < Test::Unit::TestCase
   end
   
   def test_to_s
-    #TODO
+    vals = clouds['app'].cloud_provider.describe_instances.first.to_s.split("\t")
+    assert_equal 3, vals.size
+    assert_equal 'app', vals.first
   end
   
   def test_has_cloud_set_when_created_from_cloud
-    assert_equal  clouds['app'],  clouds['app'].cloud_provider.cloud
+    assert_equal clouds['app'], clouds['app'].cloud_provider.cloud
+    inst = clouds['app'].cloud_provider.describe_instances.first
+    assert_equal clouds['app'], inst.cloud
+    assert_equal clouds['app'], inst.dsl_options[:cloud]
+    assert_equal clouds['app'], inst.to_hash[:cloud]
   end
   
   def test_cloud_keypair
-    assert_equal  clouds['app'].keypair.to_s,  clouds['app'].cloud_provider.keypair.to_s
-    assert_equal  clouds['app'].keypair.to_s,  clouds['app'].cloud_provider.describe_instances.first.keypair.to_s
+    inst = clouds['app'].cloud_provider.describe_instances.first
+    assert_equal  clouds['app'].keypair.to_s,  inst.keypair.to_s
   end
   
 end

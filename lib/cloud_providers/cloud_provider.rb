@@ -65,7 +65,7 @@ module CloudProviders
     # You can pass either a filename which will be searched for in ~/.ec2/ and ~/.ssh/
     # or you can pass a full filepath
     def keypair(n=keypair_name)
-      @keypair ||= PoolParty::Keypair.new(n)
+      @keypair ||= Keypair.new(n)
       keypair_name @keypair.basename
       @keypair
     end

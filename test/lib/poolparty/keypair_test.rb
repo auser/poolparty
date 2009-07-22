@@ -2,12 +2,12 @@ require "#{File.dirname(__FILE__)}/../../test_helper"
 
 include_fixture_resources
 
-PoolParty::Keypair.searchable_paths << fixtures_dir/"keys"
+Keypair.searchable_paths << fixtures_dir/"keys"
 
 class KeypairTest < Test::Unit::TestCase
   context "Base" do
     setup do
-      @keypair = PoolParty::Keypair.new(fixtures_dir/"keys"/"test_key")
+      @keypair = Keypair.new(fixtures_dir/"keys"/"test_key")
     end
     
     should "set the file given as the file for the keypair" do
@@ -34,9 +34,8 @@ class KeypairTest < Test::Unit::TestCase
     end
     
     should "be invalid if the file permissions are executable" do
-      PoolParty::PoolPartyError.create("KeypairError", "")
-      assert_raises KeypairError do
-        PoolParty::Keypair.new(fixtures_dir/"bad_perms_test_key").valid?
+      assert_raises StandardError do
+        Keypair.new(fixtures_dir/"bad_perms_test_key").valid?
       end
     end
   end  

@@ -34,10 +34,12 @@ end
   require "mixins/#{lib}"
 end
 
+require "keypair"
+
 # PoolParty core
 $LOAD_PATH.unshift(File.dirname(__FILE__)/"poolparty")
 %w( default pool_party_log base dsl_base cloud 
-    keypair installer
+    installer
     pool resource plugin ).each do |lib|
   require "poolparty/#{lib}"
 end

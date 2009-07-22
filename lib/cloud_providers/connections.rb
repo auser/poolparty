@@ -11,11 +11,10 @@ module  CloudProviders
     end
     
     # Simply shell out and call ssh, simple, reliable and fewest dependencies, but slow
-    def simplest_run_remote( command=[], extra_ssh_ops={})
+    def ssh( command=[], extra_ssh_ops={})
       command = command.compact.join(' && ') if command.is_a? Array
       cmd = "ssh #{host} #{ssh_options(extra_ssh_ops)} '#{command}'"
-      puts "\n--------------------------------\nrunning_remote:\n #{cmd}\n"
-      puts %x{#{cmd}}
+      `#{cmd}`
     end
     
     def ssh_options(opts={})

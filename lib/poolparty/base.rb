@@ -15,9 +15,6 @@ module PoolParty
     include SearchablePaths
     include Callbacks
     
-    # Set the searchable paths to look in the default locations
-    has_searchable_paths
-    
     def initialize(opts={}, extra_opts={}, &block)
       @init_block = block
       @init_opts = compile_opts(opts, extra_opts)
@@ -117,6 +114,18 @@ module PoolParty
       else
         super
       end
+    end
+    
+    def has_searchable_paths(opts={})
+      default_searchable_paths = [
+        Dir.pwd,
+        PoolParty::Default.poolparty_home_path,
+        PoolParty::Default.poolparty_src_path,
+        PoolParty::Default.poolparty_src_path/:lib/:poolparty,
+        PoolParty::Default.base_config_directory,
+        PoolParty::Default.remote_storage_path
+      ]      
+      super(opts.merge(:paths => (opts.delete(:paths) || default_searchable_paths)))
     end
     
     private

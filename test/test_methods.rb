@@ -49,7 +49,7 @@ def include_chef_only_resources
 end
 
 def stub_keypair_searchable_paths
-  PoolParty::Keypair.searchable_paths << fixtures_dir/"keys"  
+  Keypair.searchable_paths << fixtures_dir/"keys"  
 end
 
 def stub_ec2_calls(&block)
