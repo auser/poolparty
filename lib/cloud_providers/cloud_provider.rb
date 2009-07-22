@@ -30,18 +30,14 @@ module CloudProviders
     # pieces. Don't forget to overwrite these methods
     
     # Launch a new instance
-    def self.run_instance(o={})
-      new(o).launch_new_instance!(o)
-    end
     def run_instance(o={})
       raise StandardError.new("method_not_defined :launch_new_instance")
     end
     
     # Terminate an instance by id
-    def self.terminate_instance!(o={})
-      new(o).terminate_instance!(o)
-    end
-    def terminate_instance!(o={})        
+    # Required params:
+    #   instance_id or instance_ids
+    def terminate_instance!(o={})
       raise StandardError.new("method_not_defined :terminate_instance!")
     end
     
@@ -51,9 +47,6 @@ module CloudProviders
     # :keypair_name
     # :instance_id
     # :status
-    def self.describe_instance(o={})
-      new(o).describe_instance(o) 
-    end
     def describe_instance(o={})
       raise StandardError.new("method_not_defined :describe_instance")
     end
@@ -61,9 +54,6 @@ module CloudProviders
     # Get instances
     # The instances must return an object responding to each
     # Each yielded object must respond to [:status]
-    def self.describe_instances(o={})
-      new(o).describe_instances(o)
-    end
     def describe_instances(o={})
       raise StandardError.new("method_not_defined :describe_instances")
     end
