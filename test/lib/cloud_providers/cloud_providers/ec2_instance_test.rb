@@ -9,7 +9,7 @@ class Ec2InstanceTest < Test::Unit::TestCase
   end
   
   def test_initialize
-    #TODO    
+    #TODO
   end
   
   def test_has_cloud_provider
@@ -25,5 +25,4 @@ class Ec2InstanceTest < Test::Unit::TestCase
     #TODO
   end
   
-
 end

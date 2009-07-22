@@ -71,7 +71,7 @@ module CloudProviders
         :elastic_ips            => nil, # An array of the elastic ips
         :ebs_volume_id          => nil  # The volume id of an ebs volume
       })
-
+      
     def ec2(o={})
       @ec2 ||= Rightscale::Ec2.new(access_key, secret_access_key, o.merge(:logger => PoolParty::PoolPartyLog))
     end

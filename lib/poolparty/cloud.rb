@@ -20,13 +20,30 @@ module PoolParty
       @keypair ||= Keypair.new(n)
     end
     
-    # Using
-    # Define the cloud provider with using
-    def using(provider_symbol, o={}, &block)
+    # Declare the CloudProvider for a cloud
+    #  Create an instance of the cloud provider this cloud is using
+    def using(t, o={}, &block)
       return @cloud_provider if @cloud_provider
-      self.cloud_provider_name = provider_symbol
-      cloud_provider(o, &block)
+      klass_string = "::CloudProviders::#{t.to_s.camelcase}"
+      cloud_provider_klass = klass_string.constantize
+      if CloudProviders.all.include?(cloud_provider_klass)
+        @cloud_provider = cloud_provider_klass.send(:new, o.merge(:cloud=>self), &block)
+        self.cloud_provider_name t.to_sym
+        @cloud_provider.keypair_name self.keypair.to_s
+        instance_eval "def #{t};@cloud_provider;end"
+        
+        instance_eval "def run_instance(o={}); cloud_provider.run_instance;end"
+        instance_eval "def terminate_instance!(o={}); cloud_provider.terminate_instance!(o);end"
+        instance_eval "def describe_instances(o={}); cloud_provider.describe_instances;end"
+        instance_eval "def describe_instance(o={}); cloud_provider.describe_instance(o);end"
+      else
+        raise "Unknown cloud_provider: #{t}"
+      end
     end
+    
+    
+    
+    
     
     # The actual cloud_provider instance
     def cloud_provider(opts={}, &block)
