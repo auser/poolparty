@@ -105,6 +105,7 @@ module CloudProviders
       describe_instances(hash_of_criteria_to_select_instance_against).first
     end
     
+    # Describe instances
     def describe_instances(o={})
       ec2_instants = Ec2Response.describe_instances(ec2.describe_instances)
       insts = ec2_instants.select_with_hash(o) if !o.empty?
@@ -112,10 +113,11 @@ module CloudProviders
       ec2_instances.sort {|a,b| a[:launch_time].to_i <=> b[:launch_time].to_i }
     end
     
+    # Terminate an instance (or instances) by passing :instance_id and :instance_ids
     def terminate_instance!(o={})
       raise StandardError.new("You must pass an instance_id when terminating an instance with ec2") unless o[:instance_id] || o[:instance_ids]
       instance_ids = o[:instance_ids] || [o[:instance_id]]
-       Ec2Response.describe_instances(ec2.terminate_instances(instance_ids))
+      Ec2Response.describe_instances(ec2.terminate_instances(instance_ids))
     end
     
   end

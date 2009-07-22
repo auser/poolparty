@@ -52,7 +52,7 @@ def stub_keypair_searchable_paths
   PoolParty::Keypair.searchable_paths << fixtures_dir/"keys"  
 end
 
-def stub_ec2_calls
+def stub_ec2_calls(&block)
   stub_keypair_searchable_paths
   
   require fixtures_dir/'clouds/fake_clouds'
@@ -63,9 +63,10 @@ def stub_ec2_calls
                        :body => open(fixtures_dir/"ec2/ec2-describe-instances_response_body.xml").read)
 
   FakeWeb.register_uri(:get, /.*Action=RunInstances.*/, :status => ["200", "OK"],
-                      :body => open(fixtures_dir/"ec2/ec2-run-instances_response_body.xml").read)
+                       :body => open(fixtures_dir/"ec2/ec2-run-instances_response_body.xml").read)
 
   FakeWeb.register_uri(:get, /.*Action=TerminateInstances.*/, :status => ["200", "OK"],
                        :body => open(fixtures_dir/"ec2/ec2-terminate-instances_response_body.xml").read)
   
+  instance_eval &block if block
 end

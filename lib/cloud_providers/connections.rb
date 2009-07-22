@@ -2,7 +2,7 @@ module  CloudProviders
   module Connections
     
     def user(n=nil)
-      @user ||= (n.nil? ? 'root' : n)
+      @user ||= (n.nil? ? 'poolparty' : n)
     end
     
     # hostname or ip to use when running remote commands
