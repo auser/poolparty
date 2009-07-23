@@ -82,10 +82,6 @@ class CloudTest < Test::Unit::TestCase
       assert cloud['app'].nodes.size>1
     end
     
-    should "compile with the dependency resolver"
-      # @cloud.compile
-    # end
-    
   end
   
 end
