@@ -48,7 +48,7 @@ module CloudProviders
     # :keypair_name
     # :instance_id
     # :status
-    def describe_instance(o={})
+    def describe_instance(hash_of_criteria_to_select_instance_against)
       raise StandardError.new("method_not_defined :describe_instance")
     end
     

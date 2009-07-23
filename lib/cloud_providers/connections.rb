@@ -2,12 +2,20 @@ module  CloudProviders
   module Connections
     
     def user(n=nil)
-      @user ||= (n.nil? ? 'poolparty' : n)
+      if n.nil? 
+        @user ||= 'poolparty'
+      else
+        @user = n
+      end
     end
     
     # hostname or ip to use when running remote commands
     def host(n=nil)
-      @host ||= (n.nil? ? dns_name : n)
+      if n.nil? 
+        @host ||= dns_name
+      else
+        @host = n
+      end
     end
     
     def run(commands, opts={})
