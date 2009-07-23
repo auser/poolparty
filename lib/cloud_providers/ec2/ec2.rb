@@ -2,7 +2,9 @@
   EC2 CloudProvider
   This serves as the basis for running PoolParty on Amazon's ec2 cloud.
 =end
-
+if  OpenSSL::OPENSSL_VERSION_NUMBER < 0x00908000
+  warn "the ec2 cloud provider may not work with your version of ruby and OpenSSL.  Consider upgrading if you encoutner authentication errors."
+end
 begin
   require 'right_aws'
 rescue LoadError
@@ -69,10 +71,11 @@ module CloudProviders
         :availability_zone      => nil,
         :block_device_mappings  => nil,
         :elastic_ips            => nil, # An array of the elastic ips
-        :ebs_volume_id          => nil # The volume id of an ebs volume # TODO: ensure this is consistent with :block_device_mappings
+        :ebs_volume_id          => nil  # The volume id of an ebs volume # TODO: ensure this is consistent with :block_device_mappings
       })
       
     def ec2(o={})
+      p o
       @ec2 ||= Rightscale::Ec2.new(access_key, secret_access_key, o.merge(:logger => PoolParty::PoolPartyLog))
     end
     
