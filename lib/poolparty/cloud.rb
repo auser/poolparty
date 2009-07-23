@@ -47,6 +47,23 @@ module PoolParty
       end
       @cloud_provider
     end
+    
+    # 1.) Launches a new instance,
+    # 2.) Waits for the instance to get an ip address
+    # 3.) Waits for port 22 to be open
+    # 4.) Calls call_after_launch_instance callbacks
+    # 5.) Executes passed &block, if any
+    def expand(opts={}, &block)
+      #FIXME: Not done yet
+      instance = cloud_provider.run_instance(opts)
+      if instance.wait_for_port(22, :timeout=>500)  # Wait up to 10Minutes for port 22 to be open
+        @cloud.callback :after_launch_instance
+        block.call(@inst) if block
+        instance
+      else
+        "Instance port not available"
+      end
+    end
         
     # Define what gets run on the callbacks
     # This is where we can specify what gets called
