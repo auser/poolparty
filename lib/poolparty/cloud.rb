@@ -29,6 +29,7 @@ module PoolParty
     end
 
     # Cloud provider methods
+    def nodes(o={}); cloud_provider.nodes(o); end
     def run_instance(o={}); cloud_provider.run_instance(o);end
     def terminate_instance!(o={}); cloud_provider.terminate_instance!(o);end
     def describe_instances(o={}); cloud_provider.describe_instances(o);end

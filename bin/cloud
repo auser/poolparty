@@ -27,7 +27,11 @@ EOS
     $DEBUGGING = true if command[:debug]
     
     @loaded_pool = PoolParty::Pool.find_and_load_default_clouds_dot_rb(command[:clouds_dot_rb])
-    @loaded_clouds = @loaded_pool.clouds
+    @loaded_clouds = @loaded_pool.clouds.map {|name, cld| cld }
+    @loaded_clouds.map do |cld| 
+      cld.verbose = command[:verbose]
+      cld.debug = command[:debug]
+    end
   end
   
   run do |command|

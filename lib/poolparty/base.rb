@@ -15,6 +15,8 @@ module PoolParty
     include SearchablePaths
     include Callbacks
     
+    default_options Default.default_options
+    
     def initialize(opts={}, extra_opts={}, &block)
       @init_block = block
       @init_opts = compile_opts(opts, extra_opts)
@@ -126,14 +128,6 @@ module PoolParty
         PoolParty::Default.remote_storage_path
       ]      
       super(opts.merge(:paths => (opts.delete(:paths) || default_searchable_paths)))
-    end
-    
-    private
-    
-    # Methods that can take a default, but otherwise return 
-    # the yielded block value
-    def self.default_method(meth, &block)
-      defain
     end
     
   end

@@ -36,7 +36,7 @@ class Object
   end
   # Debugging output helpers
   def vputs(m="", o=self)
-    puts "[INFO] -- #{m}" if verbose?
+    puts "[INFO] -- #{m}" if verbose?(o)
   end
   def dputs(m="", o=self)
     puts "[DEBUG] -- #{m.inspect}" if debugging?(o)

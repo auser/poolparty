@@ -19,7 +19,7 @@ module PoolParty
       :poolparty_log_path => "#{File.dirname(__FILE__)}/log/poolparty.log",
       :verbose        => false,
       :debug          => false,
-      :very_debugging => true
+      :very_debugging => false
     )
         
     # Method missing
