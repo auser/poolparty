@@ -26,21 +26,60 @@ module PoolParty
     # Singleton methods
     
     # Load a clouds.rb
-    # Call the prerequisites (before_specfile_load)
+    # Call the prerequisites (before_file_load)
     # and then instance_eval the contents
-    # finally, call after_specfile_load callback after the
+    # finally, call after_file_load callback after the
     # clouds.rb is loaded
     # Arguments:
     #   + file on the filesystem
     #   + open-uri url (http)
     def self.load_from_file(filename=nil)
+      raise PoolPartyError.create("CloudsDotRbLoadError", "Cannot load the specified clouds.rb: #{filename}. Check to make sure it exists") unless filename && File.file?(filename)
       require "open-uri"
       ddputs "Loading #{filename} from file in Pool"
       @clouds_dot_rb_file = filename
-      before_specfile_load(clouds_dot_rb_file)
+      before_file_load(clouds_dot_rb_file)
       o = instance_eval open(clouds_dot_rb_file).read, clouds_dot_rb_file
-      after_specfile_load(clouds_dot_rb_file)
+      after_file_load(clouds_dot_rb_file)
       o
+    end
+    
+    # Load the default clouds.rb file
+    # If a full filepath is given, then load the given path
+    # if it is given, but not found or is not given entirely, then search the
+    # following locations, in preferential order for the clouds_dot_rb_file and
+    # load the first one found
+    #   + CWD/clouds.rb
+    #   + ENV["CLOUDS_DOT_RB"]
+    #   + ENV["HOME"]/clouds.rb
+    #   + /etc/poolparty/clouds.rb
+    #   + /var/poolparty/clouds.rb
+    def self.find_and_load_default_clouds_dot_rb(filename="clouds.rb")
+      f = if File.file?(filename) 
+          filename
+        else
+          path = default_clouds_dot_rb_locations.detect do |dir|
+            File.file?(File.expand_path(dir / filename))
+          end
+          File.expand_path(path / filename)
+        end
+      load_from_file(f)
+    end
+    
+    # Default clouds_dot_rb_file locations
+    #   + CWD/clouds.rb
+    #   + ENV["CLOUDS_DOT_RB"]
+    #   + ENV["HOME"]/clouds.rb
+    #   + /etc/poolparty/clouds.rb
+    #   + /var/poolparty/clouds.rb
+    def self.default_clouds_dot_rb_locations
+      @default_clouds_dot_rb_locations ||= [
+        Dir.pwd,
+        ENV["CLOUDS_DOT_RB"],
+        PoolParty::Default.poolparty_home_path,
+        PoolParty::Default.base_config_directory,
+        PoolParty::Default.remote_storage_path
+      ].flatten.reject {|a| a.nil?}
     end
     
     # Before the specfile is loaded this method is called
@@ -48,15 +87,16 @@ module PoolParty
     #   + loads the plugin paths local to the clouds_dot_rb_file into the load_path
     #   + calls the resource define_resource_methods to define the resource methods
     #   + sets up the log
-    def self.before_specfile_load(filepath)      
+    def self.before_file_load(filepath)      
       $:.unshift(::File.dirname(filepath))
       Dir["#{::File.dirname(filepath)}/plugins/*"].each { |plugin_path| $:.unshift(plugin_path) }
       PoolParty::Resource.define_resource_methods
       PoolParty::PoolPartyLog.init
     end
     
+    # CALLBACKS
     # After the entire cloud is loaded
-    def self.after_specfile_load(filepath)
+    def self.after_file_load(filepath)
     end
     
   end

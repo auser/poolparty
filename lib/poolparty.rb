@@ -8,9 +8,12 @@ t=Time.now
 end
 
 # Load local gems
-%w(dslify parenting right_aws).each do |dep|
-  $LOAD_PATH.unshift(File.join(File.dirname(__FILE__),'..', 'vendor/gems', dep, 'lib'))
-  require "#{dep}"
+%w(dslify parenting git-style-binaries).each do |dep|
+  $LOAD_PATH.unshift(File.join(File.dirname(__FILE__),'..', 'vendor/gems', dep, 'lib'))  
+end
+
+%w(dslify parenting).each do |dep|
+  require dep
 end
 
 # Require the poolparty error so we can use it ubiquitously

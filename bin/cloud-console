@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 $:.unshift(File.dirname(__FILE__) + "/../lib")
 require "poolparty"
-# require "poolpartycl"
+
 require 'git-style-binary/command'
 
 GitStyleBinary.command do  
@@ -24,7 +24,6 @@ EOS
     # Perhaps use a console_lib to store any extra methods I may want available in the cosole
     # libs << " -r #{File.dirname(__FILE__) + '/../lib/console_lib/console_logger.rb'}"
     libs <<  " -r #{File.dirname(__FILE__) + '/../lib/poolparty.rb'}"
-    libs <<  " -r #{File.dirname(__FILE__) + '/../lib/poolpartycl.rb'}"
     libs <<  " -r #{$pool_specfile}" if $pool_specfile
     puts "Loading PoolParty console..."
 
