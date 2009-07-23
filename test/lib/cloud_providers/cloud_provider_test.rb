@@ -16,7 +16,8 @@ class CloudProviderTest < Test::Unit::TestCase
     %w(describe_instances 
        describe_instance
        terminate_instance!
-       run_instance).each do |meth|
+       run_instance
+       ).each do |meth|
          assert_respond_to @provider, meth
        end
   end

@@ -5,7 +5,10 @@ stub_ec2_calls
 class Ec2ProviderTest < Test::Unit::TestCase
   
   def setup
-    @provider = CloudProviders::Ec2.new(:image_id => "ami-abc123")
+    @provider = CloudProviders::Ec2.new(
+                  :image_id => "ami-abc123", 
+                  :keypair => fixtures_dir/'keys/test_key'
+                )
   end
   
   def test_setup
@@ -80,6 +83,7 @@ class Ec2ProviderTest < Test::Unit::TestCase
   
   def test_nodes
     assert_equal ["i-7fd89416", "i-7f000516"], @provider.nodes(:status => "running").map {|a| a[:instance_id] }
+    assert_equal ["i-7fd89416"], @provider.nodes(:instance_id => "i-7fd89416").map {|a| a[:instance_id] }
   end
   
   def test_cloud_is_set_when_created_from_a_cloud
@@ -90,7 +94,7 @@ class Ec2ProviderTest < Test::Unit::TestCase
     assert_respond_to CloudProviders::Ec2.new, :cloud
     assert_nil CloudProviders::Ec2.new().cloud
   end
-  
+   
   # def test_bundle_instance
   #   assert @cld.responds_to?(:bundle)
   # end
