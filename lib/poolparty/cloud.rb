@@ -58,7 +58,7 @@ module PoolParty
       instance = cloud_provider.run_instance(opts)
       if instance.wait_for_port(22, :timeout=>500)  # Wait up to 10Minutes for port 22 to be open
         @cloud.callback :after_launch_instance
-        block.call(@inst) if block
+        block.call(instance) if block
         instance
       else
         "Instance port not available"

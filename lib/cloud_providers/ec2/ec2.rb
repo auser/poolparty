@@ -2,7 +2,8 @@
   EC2 CloudProvider
   This serves as the basis for running PoolParty on Amazon's ec2 cloud.
 =end
-if  OpenSSL::OPENSSL_VERSION_NUMBER < 0x00908000
+require "openssl"
+if OpenSSL::OPENSSL_VERSION_NUMBER < 0x00908000
   warn "the ec2 cloud provider may not work with your version of ruby and OpenSSL.  Consider upgrading if you encoutner authentication errors."
 end
 begin

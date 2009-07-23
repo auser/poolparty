@@ -1,3 +1,6 @@
+require 'socket'
+require 'timeout'
+
 module CloudProviders
   
   class CloudProviderInstance
@@ -32,6 +35,24 @@ module CloudProviders
       
       def cloud_provider(opts={}, &block)
         raise StandardError.new("cloud_provider has not been implemented for this CloudProviderInstance ")
+      end
+
+      def wait_for_port(port, opts={})
+        timeout = opts[:timeout] || 1
+        ip      = opts[:public_ip] || public_ip
+        begin
+          Timeout::timeout(timeout) do
+            begin
+              s = TCPSocket.new(ip, port)
+              s.close
+              return true
+            rescue Errno::ECONNREFUSED, Errno::EHOSTUNREACH
+              return false
+            end
+          end
+        rescue Timeout::Error
+        end
+        return false
       end
       
       ## hash like methods

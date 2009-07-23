@@ -24,8 +24,9 @@ EOS
         
         cld.launch_instance!(:cloud_name => cld.name) do |node|
           
-          ::PoolParty::Provision::BootStrapper.new(node.ip, :cloud => cld)
-          ::PoolParty::Provision::DrConfigure.new(node.ip,  :cloud => cld)
+          inst = cld.expand do
+            
+          end
           
           puts <<-EOM
             Your cloud has started. Your ip is #{node.ip}

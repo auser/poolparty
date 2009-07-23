@@ -72,6 +72,11 @@ class CloudTest < Test::Unit::TestCase
       assert_equal "emi-39921602", clouds["app"].cloud_provider.image_id
     end
     
+    def test_expansion
+      cld = clouds["app"]      
+    end
+    
+    
     should "compile with the dependency resolver"
       # @cloud.compile
     # end

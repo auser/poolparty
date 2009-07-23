@@ -1,0 +1,14 @@
+/usr/local/bin/ruby extconf.rb install json
+creating Makefile
+
+make
+gcc -I. -I/usr/local/include/ruby-1.9.1/i686-linux -I/usr/local/include/ruby-1.9.1/ruby/backward -I/usr/local/include/ruby-1.9.1 -I. -D_FILE_OFFSET_BITS=64  -fPIC  -O2 -g -Wall -Wno-parentheses -Wall  -o unicode.o -c unicode.c
+gcc -I. -I/usr/local/include/ruby-1.9.1/i686-linux -I/usr/local/include/ruby-1.9.1/ruby/backward -I/usr/local/include/ruby-1.9.1 -I. -D_FILE_OFFSET_BITS=64  -fPIC  -O2 -g -Wall -Wno-parentheses -Wall  -o parser.o -c parser.c
+parser.rl:2:16: error: re.h: No such file or directory
+In file included from parser.rl:3:
+/usr/local/include/ruby-1.9.1/ruby/backward/st.h:2:2: warning: #warning use "ruby/st.h" instead of bare "st.h"
+parser.rl: In function ‘cParser_initialize’:
+parser.rl:499: error: ‘struct RHash’ has no member named ‘tbl’
+parser.rl:511: error: ‘struct RHash’ has no member named ‘tbl’
+parser.rl:518: error: ‘struct RHash’ has no member named ‘tbl’
+make: *** [parser.o] Error 1

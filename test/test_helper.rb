@@ -20,6 +20,7 @@ modify_env_with_hash(
 require 'poolparty'
 require "rubygems"
 require "test/unit"
+# TODO: Rip out shoulda and matchy
 require "matchy"
 require "shoulda"
  

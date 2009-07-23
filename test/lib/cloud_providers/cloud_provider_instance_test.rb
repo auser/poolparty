@@ -32,4 +32,8 @@ class CloudProviderInstanceTest < Test::Unit::TestCase
     assert @inst.valid?
   end
   
+  def test_wait_for_port
+    p @inst.wait_for_port(22)
+  end
+  
 end

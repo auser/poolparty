@@ -3,16 +3,15 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 t=Time.now
 
 # Load system gems
-%w(rubygems json logger erb net/ssh).each do |lib|
+%w(rubygems logger erb net/ssh).each do |lib|
   require lib
 end
 
-# Load local gems
-%w(dslify parenting git-style-binaries).each do |dep|
-  $LOAD_PATH.unshift(File.join(File.dirname(__FILE__),'..', 'vendor/gems', dep, 'lib'))  
-end
+# Add all vendor gems to the load paths
+Dir[File.dirname(__FILE__)+"/../vendor/gems/*"].each {|lib| $LOAD_PATH.unshift(File.expand_path("#{lib}/lib")) }
 
-%w(dslify parenting).each do |dep|
+# Load local gems
+%w(dslify parenting json).each do |dep|
   require dep
 end
 
