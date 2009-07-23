@@ -43,7 +43,7 @@ class ConnectionsTest < Test::Unit::TestCase
   
   def test_run
     assert_match /ssh bigboy .* -i (.*)test_key -l poolparty 'uptime'$/, inst.run('uptime')
-    assert_match /ssh bigboy --sshoptions foo .*'uptime'$/, inst.ssh('uptime', {'--sshoptions'=>'foo'})
+    assert_match /ssh bigboy (.*)--sshoptions foo (.*)'uptime'$/, inst.ssh('uptime', {'--sshoptions'=>'foo'})
   end
   
   def test_rsync

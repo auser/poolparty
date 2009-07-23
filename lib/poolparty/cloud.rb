@@ -37,9 +37,10 @@ module PoolParty
     # The actual cloud_provider instance
     def cloud_provider(opts={}, &block)
       return @cloud_provider if @cloud_provider
-      if CloudProviders.all.include?("::CloudProviders::#{cloud_provider_name}".constantize)
+      klass_name = "CloudProviders::#{cloud_provider_name}".classify
+      if provider_klass = CloudProviders.all.detect {|k| k.to_s == klass_name }
         opts.merge!(:cloud => self, :keypair_name => self.keypair.to_s)
-        @cloud_provider = "::CloudProviders::#{cloud_provider_name}".constantize.new(dsl_options.merge(opts), &block)
+        @cloud_provider = provider_klass.new(dsl_options.merge(opts), &block)
       else
         raise PoolParty::PoolPartyError.create("UnknownCloudProviderError", "Unknown cloud_provider: #{cloud_provider_name}")
       end
