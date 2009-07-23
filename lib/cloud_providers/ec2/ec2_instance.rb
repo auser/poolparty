@@ -7,7 +7,6 @@ module CloudProviders
     default_options(
       Ec2.default_options.merge({
         :launching_time   => nil,
-        :dns_name         => nil,
         :private_dns_name => nil,
         :kernel_id        => nil,
         :ramdisk_id       => nil,
@@ -29,7 +28,6 @@ module CloudProviders
     def initialize(opts={}, &block)
       opts.delete(:id)  # metavirt (in case your using it) passes an id that we do not want to set
       set_vars_from_options(opts)
-      # @target_host = public_ip || internal_ip || ip  #set this for the netssh commands
       super
     end
     

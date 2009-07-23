@@ -6,10 +6,10 @@ module CloudProviders
       include Connections
       
       default_options(
-        :cloud        => nil, # reference to cloud object this instance belongs to, if created by a cloud
         :name         => nil, # Name of the remote instance (internal usage)
         :internal_ip  => nil, # Internal ip of the remote instance
         :public_ip    => nil,
+        :dns_name     => nil,
         :status       => nil, # Status of the remote instance
         :launch_time  => nil,
         :keypair_name => nil,
@@ -17,11 +17,11 @@ module CloudProviders
       )
       
       def initialize(opts={}, &block)
-        cloud_name = opts[:cloud].name if opts[:cloud]
-        opts.choose{|k,v| dsl_options.has_key? k}
-        set_vars_from_options(opts) if opts.is_a?(Hash)
-        on_init
-        instance_eval(&block) if block_given?
+        self.cloud_name= opts[:cloud].name if opts[:cloud]
+        # Only set variables 
+        set_vars_from_options(opts)
+        instance_eval(&block) if block
+        loaded
       end
       
       # Returns an instance of Keypair
@@ -91,7 +91,11 @@ module CloudProviders
       end
       
       # Callback
-      def on_init
+      def loaded
+      end
+      
+      def cloud(n=nil)
+        @cloud ||= n
       end
       
       # The instances is only valid if there is an internal_ip and a name

@@ -27,8 +27,8 @@ class Ec2InstanceTest < Test::Unit::TestCase
     assert_equal clouds['app'], clouds['app'].cloud_provider.cloud
     inst = clouds['app'].cloud_provider.describe_instances.first
     assert_equal clouds['app'], inst.cloud
-    assert_equal clouds['app'], inst.dsl_options[:cloud]
-    assert_equal clouds['app'], inst.to_hash[:cloud]
+    assert_equal 'app', inst.dsl_options[:cloud_name]
+    assert_equal 'app', inst.to_hash[:cloud_name]
   end
   
   def test_cloud_keypair

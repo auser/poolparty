@@ -3,7 +3,7 @@ require "#{File.dirname(__FILE__)}/../../test_helper"
 class CloudProviderInstanceTest < Test::Unit::TestCase
   
   def setup
-    @inst = CloudProviders::CloudProviderInstance.new( 
+    @inst = CloudProviders::CloudProviderInstance.new(
               :keypair_name => 'test_key',
               :status=>'pending'
             )
