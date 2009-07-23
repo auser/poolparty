@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 $:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
 require "poolparty"
-require "poolpartycl"
+
 
 o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
   opts.on('-n name', '--name name', 'Host name')    { |h| optioner.hostname h }

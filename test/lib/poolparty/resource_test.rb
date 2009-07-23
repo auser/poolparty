@@ -33,6 +33,22 @@ class ResourceTest < Test::Unit::TestCase
       assert_equal true, @inst.testers[0].exists?
       assert_equal res, @inst.get_tester("hi")
     end
+    
+    should "be able to pull out a resource nested in another resource" do
+      @inst.has_tester "parent" do
+        has_tester "phony"
+        has_tester "real" do
+          self.class.send :attr_reader, :apples
+          @apples = get_tester("phony")
+        end
+      end
+      
+      parent = @inst.testers.first
+      assert_equal "parent", parent.name
+      assert_equal "phony", parent.testers.first.name
+      assert_equal "real", parent.testers[1].name
+      assert_equal parent.testers.first, parent.testers[1].apples
+    end
   end
   
   context "print_to methods" do

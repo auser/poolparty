@@ -33,7 +33,7 @@ module PoolParty
       
       
       def install_passenger# {{{
-        install 
+        base_install 
         enable_passenger
       end# }}}
 
@@ -96,18 +96,18 @@ module PoolParty
           has_file(:name => "/etc/apache2/apache2.conf") do
             mode 0644
             requires get_directory("/etc/apache2/conf.d")
-            template "apache2"/"apache2.conf"
+            template File.dirname(__FILE__)/"apache2"/"apache2.conf.erb"
           end
           # does_not_have_file(:name => "/etc/apache2/ports.conf")
 
-          has_exec(:command => "/usr/sbin/a2dissite default") do
+          has_exec("/usr/sbin/a2dissite default") do
             only_if "/usr/bin/test -L /etc/apache2/sites-enabled/000-default"
             notifies get_exec("reload-apache2")
           end
 
           # Base config
-          config("base", "apache2"/"base.conf.erb")
-          config("mime", "apache2"/"mime-minimal.conf.erb")
+          config("base",          "apache2"/"base.conf.erb")
+          config("mime",          "apache2"/"mime-minimal.conf.erb")
           config("browser_fixes", "apache2"/"browser_fixes.conf.erb")
 
           present_apache_module("mime", "rewrite")
@@ -124,7 +124,7 @@ module PoolParty
       
       def config(name, temp)
         has_file(:name => "/etc/apache2/conf.d/#{name}.conf") do
-          template temp
+          template File.dirname(__FILE__)/temp
           notifies get_exec("reload-apache2")
         end
       end

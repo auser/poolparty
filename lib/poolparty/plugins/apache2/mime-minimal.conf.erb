@@ -1,0 +1,15 @@
+# this is a very minimal mime configuration -- in particular, all
+# of the magical language/negotiation stuff that apache can do.  
+# has been stripped out, because we don't use apache for that.
+
+<IfModule mod_mime.c>
+
+    # Lookup mime types in the system-wide mime.types file first
+    TypesConfig /etc/mime.types
+
+    # for firefox extensions:
+    # this is in more recent mime.types files (feisty) but not older ones
+    # (sarge).  explicitly include it just to be safe.
+    AddType application/x-xpinstall .xpi
+    
+</IfModule>

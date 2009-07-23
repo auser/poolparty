@@ -2,7 +2,7 @@
 $:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
 require "rubygems"
 require "poolparty"
-require "poolpartycl"
+
 
 o = PoolParty::Optioner.new(ARGV) do |opts, optioner|
   opts.on('-n name', '--name name', 'Update hosts for local pool named [name]')    { |p| optioner.cloudname p }

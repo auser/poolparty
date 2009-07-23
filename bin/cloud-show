@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 $:.unshift(File.dirname(__FILE__) + "/../lib")
 require "poolparty"
-# require "poolpartycl"
+
 require 'git-style-binary/command'
 
 GitStyleBinary.command do

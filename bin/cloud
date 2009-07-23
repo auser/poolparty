@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
 $:.unshift(File.dirname(__FILE__) + "/../lib")
 require "poolparty"
-# require "poolpartycl"
 require 'git-style-binary/command'
 
 GitStyleBinary.primary do
@@ -18,21 +17,17 @@ See 'cloud help COMMAND' for more information on a specific command.
 EOS
   
   opt :debug, "Debug the output", :type => :boolean, :default => false
-  opt :spec, "Set the pool spec file", :type => String
+  opt :clouds_dot_rb, "Set the clouds.rb file", :type => String, :default => "clouds.rb"
   opt :testing, "Set testing mode on", :type => :boolean, :default => false
-  opt :cloud_name, "Name of the working cloud", :type => String, :default => nil
+  opt :name, "Name of the working cloud", :type => String, :default => nil
 
   before_run do |command|
     # Setup testing/debugging
     $TESTING = true if command[:testing]
     $DEBUGGING = true if command[:debug]
     
-    @loaded_pool = load_pool( command[:spec] ? command[:spec] : Binary.get_existing_spec_location)
-    @loaded_clouds = command[:cloud_name] ? [clouds[command[:cloud_name].to_sym]] : clouds.map {|k,c| c }
-    @loaded_clouds.each do |cld|
-      cld.verbose command[:verbose]
-      cld.debugging = command[:debug]
-    end
+    @loaded_pool = PoolParty::Pool.find_and_load_default_clouds_dot_rb(command[:clouds_dot_rb])
+    @loaded_clouds = @loaded_pool.clouds
   end
   
   run do |command|
@@ -43,6 +38,6 @@ EOS
     The cloud subcommands commands are:
       #{subcommands}
 
-    See 'cloud help COMMAND' for more information on a specific command."
+    See 'cloud help COMMAND' for more information on a specific command"
   end
 end

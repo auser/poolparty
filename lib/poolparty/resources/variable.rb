@@ -5,8 +5,12 @@ module PoolParty
       
       dsl_methods :name, :value
       
-      def initialize(key, value)
-        super(:name => key, :value => value)
+      def initialize(key, value=nil)
+        if key.is_a?(Hash)
+          super
+        else
+          super(:name => key, :value => value)
+        end        
       end
       
       # Chef uses separate files for variables, so we'll have to open the variable file 
