@@ -27,14 +27,16 @@ class ConnectionsTest < Test::Unit::TestCase
   end
   
   def test_default_user
-    assert 'poolparty', inst.user
-    assert 'fred', inst.user('fred')
+    assert_equal 'poolparty', inst.user
+    assert_equal 'fred', inst.user('fred')
+    assert_equal 'fred', inst.user
   end
   
   def test_host
-    assert 'bigboy', inst.host
-    assert inst.dns_name, inst.host
-    assert 'bigsite', inst.host('bigsite')
+    assert_equal 'bigboy', inst.host
+    assert_equal inst.dns_name, inst.host
+    assert_equal 'bigsite', inst.host('bigsite')
+    assert_equal 'bigsite', inst.host 
   end
   
   def test_ssh

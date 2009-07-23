@@ -18,7 +18,6 @@ module CloudProviders
       
       def initialize(opts={}, &block)
         self.cloud_name= opts[:cloud].name if opts[:cloud]
-        # Only set variables 
         set_vars_from_options(opts)
         instance_eval(&block) if block
         loaded
