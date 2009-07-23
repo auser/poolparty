@@ -76,6 +76,11 @@ class CloudTest < Test::Unit::TestCase
       cld = clouds["app"]
     end
     
+    def test_nodes
+      assert_respond_to cloud['app'], :nodes
+      assert_respond_to cloud['app'].nodes, :each
+      assert cloud['app'].nodes.size>1
+    end
     
     should "compile with the dependency resolver"
       # @cloud.compile
