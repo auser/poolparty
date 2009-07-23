@@ -37,6 +37,13 @@ module CloudProviders
         raise StandardError.new("cloud_provider has not been implemented for this CloudProviderInstance ")
       end
       
+      # CLOUD PROVIDER METHODS
+      
+      # Terminate self
+      def terminate!
+        cloud_provider.terminate_instance!(:instance_id => instance_id)
+      end
+      
       # Wait for port
       # Test if the port is open and catch failures in the connection
       # Options

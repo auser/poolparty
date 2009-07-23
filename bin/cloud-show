@@ -30,10 +30,7 @@ EOS
         "Running on: #{cld.cloud_provider_name}"
       ]
       
-      max_size = msg.sort {|a,b| a.size <=> b.size }.last.size
-      msg.each do |line|
-        puts line.ljust(max_size)
-      end
+      print_msg(msg)
       
     end
     

@@ -35,6 +35,11 @@ module PoolParty
     def describe_instances(o={}); cloud_provider.describe_instances(o);end
     def describe_instance(o={}); cloud_provider.describe_instance(o);end
     
+    # Terminate
+    def terminate!
+      nodes(:status => "running").each {|node| node.terminate!}        
+    end
+    
     # The actual cloud_provider instance
     def cloud_provider(opts={}, &block)
       return @cloud_provider if @cloud_provider
