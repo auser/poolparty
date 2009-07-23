@@ -73,7 +73,7 @@ class CloudTest < Test::Unit::TestCase
     end
     
     def test_expansion
-      cld = clouds["app"]      
+      cld = clouds["app"]
     end
     
     

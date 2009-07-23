@@ -32,8 +32,13 @@ class CloudProviderInstanceTest < Test::Unit::TestCase
     assert @inst.valid?
   end
   
+  # Not quite an amazing test, but better than nothing to share
+  # that the port is open.
   def test_wait_for_port
-    p @inst.wait_for_port(22)
+    @inst.class.send(:define_method, :is_port_open?) {false}
+    assert !@inst.wait_for_port(22, :timeout => 20, :retry_times => 1)
+    @inst.class.send(:define_method, :is_port_open?) {true}
+    assert @inst.wait_for_port(80)
   end
   
 end

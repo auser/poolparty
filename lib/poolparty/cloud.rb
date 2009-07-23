@@ -56,7 +56,7 @@ module PoolParty
     def expand(opts={}, &block)
       #FIXME: Not done yet
       instance = cloud_provider.run_instance(opts)
-      if instance.wait_for_port(22, :timeout=>500)  # Wait up to 10Minutes for port 22 to be open
+      if instance.wait_for_port(22, :timeout=>1000, :retry_times => 10)  # Wait up to 10Minutes for port 22 to be open
         @cloud.callback :after_launch_instance
         block.call(instance) if block
         instance

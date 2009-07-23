@@ -36,23 +36,18 @@ module CloudProviders
       def cloud_provider(opts={}, &block)
         raise StandardError.new("cloud_provider has not been implemented for this CloudProviderInstance ")
       end
-
-      def wait_for_port(port, opts={})
-        timeout = opts[:timeout] || 1
-        ip      = opts[:public_ip] || public_ip
-        begin
-          Timeout::timeout(timeout) do
-            begin
-              s = TCPSocket.new(ip, port)
-              s.close
-              return true
-            rescue Errno::ECONNREFUSED, Errno::EHOSTUNREACH
-              return false
-            end
-          end
-        rescue Timeout::Error
-        end
-        return false
+      
+      # Wait for port
+      # Test if the port is open and catch failures in the connection
+      # Options
+      #   public_ip || default public_ip
+      #   retry_times || 5
+      def wait_for_port(port, opts={})        
+        ip          = opts.delete(:public_ip) || public_ip
+        retry_times = opts.delete(:retry_times) || 5
+        
+        retry_times.times {|i| return is_port_open?(ip, port, opts)}
+        false
       end
       
       ## hash like methods
@@ -121,6 +116,28 @@ module CloudProviders
       # The instances is only valid if there is an internal_ip and a name
       def valid?
         (internal_ip.nil? || name.nil?) ? false : true
+      end
+      
+      private
+      
+      # Test for open port by opening a socket
+      # on the ip and closing the socket
+      def is_port_open?(ip, port, opts={})
+        timeout     = opts[:timeout] || 1
+        
+        begin
+          Timeout::timeout(timeout) do
+            begin
+              s = TCPSocket.new(ip, port)
+              s.close
+              return true
+            rescue Errno::ECONNREFUSED, Errno::EHOSTUNREACH
+              return false
+            end
+          end
+        rescue Timeout::Error
+        end
+        return false
       end
       
     end
