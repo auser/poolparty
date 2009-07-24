@@ -39,6 +39,11 @@ module CloudProviders
       
       # CLOUD PROVIDER METHODS
       
+      # Bootstrap self
+      def bootstrap!
+        
+      end
+      
       # Terminate self
       def terminate!
         cloud_provider.terminate_instance!(:instance_id => instance_id)
