@@ -38,6 +38,11 @@ class CloudTest < Test::Unit::TestCase
     assert_equal 'test_key', clouds['app'].keypair.basename
   end
   
+  def test_set_the_dependency_resolver
+    clouds['app'].dependency_resolver(:chef)
+    assert_equal DependencyResolvers::Chef, clouds['app'].dependency_resolver
+  end
+  
   def test_can_use_basic_resources
     clouds['app'].instance_eval do
       has_file "/etc/motd"
