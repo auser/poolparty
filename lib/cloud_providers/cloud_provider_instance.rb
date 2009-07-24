@@ -64,15 +64,18 @@ module CloudProviders
       
       # Wait for a public ip to be assigned, refreshing the instance data from the cloud provider on each query
       # Default timeout value of 60 seconds, can be overriden by passing {:timeout=>seconds}
-      def wait_for_public_ip(opts={})
-        # return public_ip if public_ip
-        timeout = opts.delete(:timeout) || 60
-        Timeout::timeout(timeout) do
-          loop do
-            refresh!
-            return public_ip if public_ip and public_ip != '0.0.0.0'
-            sleep 2
+      def wait_for_public_ip(timeout=60)
+        begin
+          Timeout::timeout(timeout) do
+            loop do
+              refresh!
+              return public_ip if public_ip and public_ip != '0.0.0.0'
+              print '.'
+              sleep 2
+            end
           end
+        rescue Timeout::Error
+          return false
         end
       end
       

@@ -47,7 +47,8 @@ module CloudProviders
       @cloud_provider ||= if cloud
         cloud.cloud_provider
       else
-        Ec2.new(dsl_options.merge(o), &block)
+        options_for_cloud_provider = o.choose{|k,v| Ec2.default_options.has_key?(k)}
+        Ec2.new( options_for_cloud_provider, &block)
       end
     end
     

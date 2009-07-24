@@ -13,6 +13,15 @@ module PoolParty
       :cloud_provider_name  => :ec2
     )
     
+    # Define what gets run on the callbacks
+    # This is where we can specify what gets called
+    # on callbacks
+    #   parameters: cld, time
+    #   cld - the cloud the callback came from
+    #   callback - the callback called (i.e. :after_provision)
+    callback_block do |cld, callback|
+    end
+    
     # returns an instance of Keypair
     # You can pass either a filename which will be searched for in ~/.ec2/ and ~/.ssh/
     # Or you can pass a full filepath
@@ -27,7 +36,7 @@ module PoolParty
       self.cloud_provider_name = provider_symbol
       cloud_provider(o, &block)
     end
-
+    
     # Cloud provider methods
     def nodes(o={}); cloud_provider.nodes(o); end
     def run_instance(o={}); cloud_provider.run_instance(o);end
@@ -60,25 +69,19 @@ module PoolParty
     # 5.) Executes passed &block, if any
     # 6.) Returns the new instance object
     def expand(opts={}, &block)
-      instance = cloud_provider.run_instance(opts)
+      timeout = opts.delete(:timeout) || 300
+      instance = cloud_provider.run_instance(options)
       callback :before_launch_instance
       #wait for an ip and then wait for ssh port, then configure instance
-      if  instance.wait_for_public_ip(:timeout=>1000) && instance.wait_for_port(22, :timeout=>1000)
+      if instance.wait_for_public_ip(timeout) && instance.wait_for_port(22, :timeout=>timeout)
         callback :after_launch_instance
         block.call(instance) if block
         instance
       else
         "Instance port not available"
       end
-      # Define what gets run on the callbacks
-      # This is where we can specify what gets called
-      # on callbacks
-      #   parameters: cld, time
-      # 
-      #   cld - the cloud the callback came from
-      #   callback - the callback called (i.e. :after_provision)
-      # callback_block do |cld, callback|
       instance.refresh!
+      p instance.run 'uptime'
       instance
     end
     

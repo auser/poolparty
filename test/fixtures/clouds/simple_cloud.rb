@@ -6,7 +6,6 @@ pool :poolparty do
     
   cloud :app do
     keypair File.dirname(__FILE__)+"/../keys/test_key"
-    
     has_file "/etc/motd", :content => "Simple"
   end
   
