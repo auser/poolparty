@@ -25,11 +25,6 @@ class DslBaseTest < Test::Unit::TestCase
       end
     end
     
-    should "set the dependency_resolver" do
-      @base.dependency_resolver(:chef)
-      assert_equal DependencyResolvers::Chef, @base.dependency_resolver
-    end
-    
   end  
   
 end

@@ -92,7 +92,7 @@ module PoolParty
     #   + loads the plugin paths local to the clouds_dot_rb_file into the load_path
     #   + calls the resource define_resource_methods to define the resource methods
     #   + sets up the log
-    def self.before_file_load(filepath)      
+    def self.before_file_load(filepath)
       $:.unshift(::File.dirname(filepath))
       Dir["#{::File.dirname(filepath)}/plugins/*"].each { |plugin_path| $:.unshift(plugin_path) }
       PoolParty::Resource.define_resource_methods
