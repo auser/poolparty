@@ -15,6 +15,14 @@ Dir[File.dirname(__FILE__)+"/../vendor/gems/*"].each {|lib| $LOAD_PATH.unshift(F
   require dep
 end
 
+module PoolParty
+  def self.version
+    return @version if @version
+    config = YAML.load(File.read('VERSION.yml'))
+    @version = "#{config[:major]}.#{config[:minor]}.#{config[:patch]}"
+  end
+end
+
 # Require the poolparty error so we can use it ubiquitously
 require "poolparty/pool_party_error"
 

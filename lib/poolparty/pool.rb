@@ -58,12 +58,17 @@ module PoolParty
       f = if File.file?(filename) 
           filename
         else
-          path = default_clouds_dot_rb_locations.detect do |dir|
-            File.file?(File.expand_path(dir / filename))
-          end
-          File.expand_path(path / filename)
+          find_default_clouds_dot_rb(filename)
         end
       load_from_file(f)
+    end
+    
+    # Look for the default clouds_dot_rb_file
+    def self.find_default_clouds_dot_rb(filename)
+      path = default_clouds_dot_rb_locations.detect do |dir|
+        File.file?(File.expand_path(dir / filename))
+      end
+      File.expand_path(path / filename)
     end
     
     # Default clouds_dot_rb_file locations

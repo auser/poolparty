@@ -10,7 +10,7 @@ GitStyleBinary.primary do
   
   @theme = :short
   
-  version "PoolParty cloud command"  
+  version "PoolParty release: #{PoolParty.version}"
   banner <<-EOS
 Usage: #{$0} #{all_options_string} COMMAND [ARGS]
 

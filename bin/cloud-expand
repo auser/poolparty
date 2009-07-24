@@ -5,7 +5,6 @@ require "poolparty"
 require 'git-style-binary/command'
 
 GitStyleBinary.command do  
-  version "PoolParty #{$0} command"  
   banner <<-EOS
 Usage: #{$0} #{all_options_string}
 

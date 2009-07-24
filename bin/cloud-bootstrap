@@ -4,8 +4,7 @@ require "poolparty"
 
 require 'git-style-binary/command'
 
-GitStyleBinary.command do  
-  version "PoolParty #{$0} command"  
+GitStyleBinary.command do
   banner <<-EOS
 Usage: #{$0} #{all_options_string}
 
@@ -15,7 +14,7 @@ EOS
   short_desc "Bootstrap a cloud instance"
   
   opt :inst_num, "The number of the instance to run bootstrap on", :type => :int
-  opt :force, "Force", :default => false
+  opt :force, "Force rebootstrapping (useful for upgrading)", :default => false
 
   run do |command|
     

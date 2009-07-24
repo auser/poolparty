@@ -4,8 +4,7 @@ $:.unshift(File.dirname(__FILE__) + "/../lib")
 require "poolparty"
 require 'git-style-binary/command'
 
-GitStyleBinary.command do  
-  version "PoolParty #{$0} command"  
+GitStyleBinary.command do
   banner <<-EOS
 Usage: #{$0} #{all_options_string}
 
@@ -23,15 +22,24 @@ EOS
         require 'pp'
         pp result = cld.nodes(:instance_id=>command[:instance_id])
       else
-        puts "Listing cloud #{cld.name}"
-        puts "Active instances"
-        puts cld.nodes(:status => "running").map{|a| "#{a[:instance_id] || a[:id]}\t#{a[:ip] ||a[:public_ip] }" }.join("\n")
-        
-        if cld.nodes(:status => "pending").size > 0
-          puts "Pending instances"
-          puts cld.nodes(:status => "pending").map{|a| "#{a[:instance_id] || a[:id]}\t#{a[:ip] ||a[:public_ip] }" }.join("\n")
+        msg = [
+          "Listing cloud #{cld.name}",
+          " <white>Active instances</white>",
+          "----------------------------"
+        ]
+        cld.nodes(:status => "running").each do |a| 
+          msg << "  #{a[:instance_id] || a[:id]}\t#{a[:ip] ||a[:public_ip] }"
         end
+        
+        if cld.describe_instances(:status => "pending").size > 0
+          msg << " Pending instances"
+          msg << "----------------------------"
+          msg << "  #{a[:instance_id] || a[:id]}\t#{a[:ip] ||a[:public_ip] }"
+        end
+        
+        print_msg(msg)
       end
+      
     end
   end
 end
