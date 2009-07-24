@@ -42,12 +42,37 @@ module CloudProviders
       # Options
       #   public_ip || default public_ip
       #   retry_times || 5
-      def wait_for_port(port, opts={})        
+      def wait_for_port(port, opts={})
         ip          = opts.delete(:public_ip) || public_ip
         retry_times = opts.delete(:retry_times) || 5
         
         retry_times.times {|i| return is_port_open?(ip, port, opts)}
         false
+      end
+      
+      # Wait for a public ip to be assigned, refreshing the instance data from the cloud provider on each query
+      # Default timeout value of 60 seconds, can be overriden by passing {:timeout=>seconds}
+      def wait_for_public_ip(opts={})
+        # return public_ip if public_ip
+        timeout = opts.delete(:timeout) || 60
+        Timeout::timeout(timeout) do
+          loop do
+            refresh!
+            return public_ip if public_ip and public_ip != '0.0.0.0'
+            sleep 2
+          end
+        end
+      end
+      
+      def terminate!
+        cloud_provider.terminate_instance!(:instance_id=>self.instance_id).first
+      end
+      
+      # Refresh the node with fresh data from the cloud provider.
+      # This is often usefully to update a recently launched instance, in case you want to trigger new behavior once the state changes ot 'running' and an ip is assigned
+      def refresh!
+        refreshed = cloud_provider.describe_instance(:instance_id => self.instance_id)
+        self.dsl_options.merge(refreshed.dsl_options)
       end
       
       ## hash like methods
@@ -123,8 +148,7 @@ module CloudProviders
       # Test for open port by opening a socket
       # on the ip and closing the socket
       def is_port_open?(ip, port, opts={})
-        timeout     = opts[:timeout] || 1
-        
+        timeout = opts[:timeout] || 1
         begin
           Timeout::timeout(timeout) do
             begin

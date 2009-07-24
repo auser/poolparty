@@ -35,6 +35,11 @@ module PoolParty
     def describe_instances(o={}); cloud_provider.describe_instances(o);end
     def describe_instance(o={}); cloud_provider.describe_instance(o);end
     
+    # Terminate all instances in the cloud
+    def terminate!
+      nodes.collect{|n| n.terminate! }
+    end
+    
     # The actual cloud_provider instance
     def cloud_provider(opts={}, &block)
       return @cloud_provider if @cloud_provider
@@ -53,26 +58,28 @@ module PoolParty
     # 3.) Waits for port 22 to be open
     # 4.) Calls call_after_launch_instance callbacks
     # 5.) Executes passed &block, if any
+    # 6.) Returns the new instance object
     def expand(opts={}, &block)
-      #FIXME: Not done yet
       instance = cloud_provider.run_instance(opts)
-      if instance.wait_for_port(22, :timeout=>1000, :retry_times => 10)  # Wait up to 10Minutes for port 22 to be open
-        @cloud.callback :after_launch_instance
+      callback :before_launch_instance
+      #wait for an ip and then wait for ssh port, then configure instance
+      if  instance.wait_for_public_ip(:timeout=>1000) && instance.wait_for_port(22, :timeout=>1000)
+        callback :after_launch_instance
         block.call(instance) if block
         instance
       else
         "Instance port not available"
       end
-    end
-        
-    # Define what gets run on the callbacks
-    # This is where we can specify what gets called
-    # on callbacks
-    #   parameters: cld, time
-    # 
-    #   cld - the cloud the callback came from
-    #   callback - the callback called (i.e. :after_provision)
-    callback_block do |cld, callback|
+      # Define what gets run on the callbacks
+      # This is where we can specify what gets called
+      # on callbacksgit clone git://github.com/btakita/rr.git  
+      #   parameters: cld, time
+      # 
+      #   cld - the cloud the callback came from
+      #   callback - the callback called (i.e. :after_provision)
+      # callback_block do |cld, callback|
+      instance.refresh!
+      instance
     end
     
     # Freeze the cloud_name so we can't modify it at all, set the plugin_directory

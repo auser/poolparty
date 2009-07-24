@@ -5,7 +5,7 @@ class CloudProviderInstanceTest < Test::Unit::TestCase
   def setup
     @inst = CloudProviders::CloudProviderInstance.new(
               :keypair_name => 'test_key',
-              :status=>'pending'
+              :status       => 'pending'
             )
   end
   
@@ -39,6 +39,10 @@ class CloudProviderInstanceTest < Test::Unit::TestCase
     assert !@inst.wait_for_port(22, :timeout => 20, :retry_times => 1)
     @inst.class.send(:define_method, :is_port_open?) {true}
     assert @inst.wait_for_port(80)
+  end
+  
+  def test_terminate!
+    assert_respond_to @inst, :terminate!
   end
   
 end

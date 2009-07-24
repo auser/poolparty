@@ -1,9 +1,9 @@
 require "#{File.dirname(__FILE__)}/../../test_helper"
-
+# require 'rr'
 stub_ec2_calls
 
 class CloudTest < Test::Unit::TestCase
-
+  # include RR::Adapters::TestUnit
   context "load_from_file" do
     setup do
       clear!
@@ -60,32 +60,39 @@ class CloudTest < Test::Unit::TestCase
       assert_equal clouds["app"], clouds["app"].cloud_provider.cloud
       assert_equal clouds["app"].keypair.to_s, clouds["app"].cloud_provider.keypair_name
     end
-        
-    should "set the cloud provider with a using block" do
-      clouds["app"].instance_eval do
-        using :ec2 do
-          image_id 'emi-39921602'
-        end
-      end
-      assert_equal :ec2, clouds["app"].cloud_provider_name
-      assert_equal CloudProviders::Ec2, clouds["app"].cloud_provider.class
-      assert_equal "emi-39921602", clouds["app"].cloud_provider.image_id
-    end
-    
-    def test_expansion
-      cld = clouds["app"]
-    end
-    
-    def test_nodes
-      assert_respond_to cloud['app'], :nodes
-      assert_respond_to cloud['app'].nodes, :each
-      assert cloud['app'].nodes.size>1
-    end
     
     should "compile with the dependency resolver"
       # @cloud.compile
     # end
     
+  end
+
+  def test_set_the_cloud_provider_with_a_using_block
+    clouds["app"].instance_eval do
+      using :ec2 do
+        image_id 'emi-39921602'
+      end
+    end
+    assert_equal :ec2, clouds["app"].cloud_provider_name
+    assert_equal CloudProviders::Ec2, clouds["app"].cloud_provider.class
+    assert_equal "emi-39921602", clouds["app"].cloud_provider.image_id
+  end
+  
+  def test_expansion
+    cld = clouds["app"]
+  end
+  
+  def test_nodes
+    assert_respond_to clouds['app'], :nodes
+    assert_respond_to clouds['app'].nodes, :each
+    assert clouds['app'].nodes.size>1
+  end
+  
+  def test_terminate!
+    assert clouds['app'].nodes.size > 0
+    result = clouds['app'].terminate!
+    assert_respond_to result, :each
+    assert_equal 'shutting-down', result.first.status
   end
   
 end

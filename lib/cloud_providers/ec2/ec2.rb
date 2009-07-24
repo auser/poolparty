@@ -120,8 +120,8 @@ module CloudProviders
     def terminate_instance!(o={})
       raise StandardError.new("You must pass an instance_id when terminating an instance with ec2") unless o[:instance_id] || o[:instance_ids]
       instance_ids = o[:instance_ids] || [o[:instance_id]]
-      Ec2Response.describe_instances(ec2.terminate_instances(instance_ids))
-    end
-    
+      response = ec2.terminate_instances(instance_ids)
+      response.collect{|i| Ec2Instance.new(Ec2Response.pp_format(i)) }
+    end    
   end
 end

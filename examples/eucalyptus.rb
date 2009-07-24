@@ -8,7 +8,7 @@ pool :eucalyptus do
     instances 2
     keypair "eucalyptus_sample"
     using :ec2 do
-      image_id 'emi-39921602'
+      image_id 'emi-39CA160F'
     end
   end
   
