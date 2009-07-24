@@ -53,6 +53,21 @@ module CloudProviders
         @user = old_user
       end
       
+      # Configure the node
+      def configure!(opts={})
+        raise StandardError.new("You must pass in a cloud to configure an instance") unless opts.has_key?(:cloud)
+        cld = opts[:cloud]
+        cld.compile
+        script_file = Provision::Bootstrapper.configure_script(cld, os)
+        
+        FileUtils.mkdir_p cld.tmp_path/"etc"/"poolparty" unless File.directory?(cld.tmp_path/"etc"/"poolparty")
+        FileUtils.cp script_file, cld.tmp_path/"etc"/"poolparty"
+        
+        puts rsync(:source => cld.tmp_path/"*", :destination => "/")
+        puts run("chmod +x /etc/poolparty/#{File.basename(script_file)}; /bin/sh /etc/poolparty/#{File.basename(script_file)}").chomp
+        puts run("/usr/bin/chef-solo -c /etc/chef/solo.rb -j /etc/chef/dna.json")
+      end
+      
       # Terminate self
       def terminate!
         cloud_provider.terminate_instance!(:instance_id => instance_id)
@@ -77,6 +92,7 @@ module CloudProviders
       def bootstrapped?
         @bootstrapped ||= !run('if [ -f /var/poolparty/bootstrapped ]; then echo "YES"; fi').chomp.empty?
       end
+      
       
       # Wait for port
       # Test if the port is open and catch failures in the connection

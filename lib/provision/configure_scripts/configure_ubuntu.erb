@@ -1,9 +1,10 @@
 #!/bin/sh -x
 
 # Set the cloudname and poolname
+
 echo <%= cloud.name %> > /etc/poolparty/cloud_name
 echo <%= pool.name %> > /etc/poolparty/pool_name
 
 # Copy ssh keys
-cp /var/poolparty/dependencies/keys/* /var/poolparty/.ssh/
-chmod 600 /root/.ssh/<%= cloud.keypair.basename %>
+# cp /var/poolparty/dependencies/keys/* /var/poolparty/.ssh/
+# chmod 600 /root/.ssh/<%= cloud.keypair.basename %>

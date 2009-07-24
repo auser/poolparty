@@ -5,12 +5,13 @@ module PoolParty
     # but want to take the options from the parent if they
     # are nil on the cloud
     default_options(
-      :minimum_instances    => 2,     # minimum_instances default
-      :maximum_instances    => 5,     # maximum_instances default
-      :minimum_runtime      => 3600,  # minimum_instances default: 1 hour
-      :contract_when        => nil,
-      :expand_when          => nil,
-      :cloud_provider_name  => :ec2
+      :minimum_instances        => 2,     # minimum_instances default
+      :maximum_instances        => 5,     # maximum_instances default
+      :minimum_runtime          => 3600,  # minimum_instances default: 1 hour
+      :contract_when            => nil,
+      :expand_when              => nil,
+      :cloud_provider_name      => :ec2,
+      :dependency_resolver_name => nil
     )
     
     # Define what gets run on the callbacks
@@ -110,17 +111,36 @@ module PoolParty
       parent
     end
     
-    ##### Internal methods #####
-    # Methods that only the cloud itself will use
-    # and thus are private
-    private
-    
     # compile
+    
+    # Resolve with the dependency resolver
+    def resolve_with(a)
+      if DependencyResolvers.const_defined?(a.classify)        
+        dependency_resolver DependencyResolvers.module_eval("#{a.classify}")
+      else
+        raise PoolParty::PoolPartyError.create("DependencyResolverError", "Undefined dependency resolver: #{a}. Please specify one of the following: #{DependencyResolvers.all.join(", ")}")
+      end
+    end
+    
+    # Set the dependency resolver
+    def dependency_resolver(sym=nil)
+      @dependency_resolver ||= case sym
+      when :chef, nil
+        dsl_options[:dependency_resolver_name] = :chef
+        DependencyResolvers::Chef
+      end
+    end
+    
     # Take the cloud's resources and compile them down using 
     # the defined (or the default dependency_resolver, chef)
     def compile
-      dependency_resolver.compile_to(resources, tmp_path/"var"/"poolparty")
+      dependency_resolver.compile_to(resources, tmp_path/"etc"/"#{dependency_resolver_name}")
     end
+    
+    
+    ##### Internal methods #####
+    # Methods that only the cloud itself will use
+    # and thus are private    
     
     # Form the cloud
     # Run the init block with the init_opts

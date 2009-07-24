@@ -10,6 +10,8 @@ pool :eucalyptus do
     using :ec2 do
       image_id 'emi-39CA160F'
     end
+    
+    has_file "/etc/motd", :content => "Welcome to your eucalyptus cloud!!!!!!!"
   end
   
 end

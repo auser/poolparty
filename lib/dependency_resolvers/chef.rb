@@ -6,19 +6,23 @@ module DependencyResolvers
   class Chef < Base
     
     class << self
-      attr_reader :meal
+      attr_reader :cookbook_directory
       
       def before_compile
+        @cookbook_directory = compile_directory/"cookbooks"/"poolparty"
         require_chef_only_resources
         raise PoolParty::PoolPartyError.create("ChefCompileError", "No compile_directory is specified. Please specify one.") unless compile_directory
-        FileUtils.mkdir_p compile_directory unless ::File.directory?(compile_directory)
+        FileUtils.mkdir_p cookbook_directory unless ::File.directory?(cookbook_directory)
       end
       
       def after_compile(o)
         compile_default_recipe(o)
         compile_variables
         compile_files
-        compile_recipes          
+        compile_recipes
+        
+        write_dna_json
+        write_solo_dot_rb
       end
          
       # compile the resources
@@ -93,8 +97,8 @@ module DependencyResolvers
       
       # Take the variables and compile them into the file attributes/poolparty.rb
       def compile_variables
-        FileUtils.mkdir_p compile_directory/"attributes" unless ::File.directory?(compile_directory/"attributes")
-        File.open(compile_directory/"attributes"/"poolparty.rb", "w") do |f|
+        FileUtils.mkdir_p cookbook_directory/"attributes" unless ::File.directory?(cookbook_directory/"attributes")
+        File.open(cookbook_directory/"attributes"/"poolparty.rb", "w") do |f|
           f << "# PoolParty variables\n"
           f << "poolparty Mash.new unless attribute?('poolparty')\n"
           variables.each do |var|
@@ -105,9 +109,9 @@ module DependencyResolvers
       
       # Compile the files
       def compile_files
-        FileUtils.mkdir_p compile_directory/"files" unless ::File.directory?(compile_directory/"files")
+        FileUtils.mkdir_p cookbook_directory/"files" unless ::File.directory?(cookbook_directory/"files")
         files.each do |fi|
-          fpath = compile_directory/"templates"/"default"/"#{fi.path}.erb"
+          fpath = cookbook_directory/"templates"/"default"/"#{fi.path}.erb"
           FileUtils.mkdir_p File.dirname(fpath) unless File.directory?(File.dirname(fpath))
           content = fi.template ? open(fi.template).read : fi.content
           File.open(fpath, "w") do |f|
@@ -121,15 +125,35 @@ module DependencyResolvers
       def compile_recipes
       end
       
+      def write_dna_json
+        File.open(compile_directory/"dna.json", "w") do |f|
+          f << JSON.generate({:recipes => ["poolparty"]})
+        end
+      end
+      
       def compile_default_recipe(content)
-        FileUtils.mkdir_p compile_directory/"recipes" unless ::File.directory?(compile_directory/"recipes")
-        File.open(compile_directory/"recipes"/"default.rb", "w") do |f|
+        FileUtils.mkdir_p cookbook_directory/"recipes" unless ::File.directory?(cookbook_directory/"recipes")
+        File.open(cookbook_directory/"recipes"/"default.rb", "w") do |f|
+          f << content
+        end
+      end
+      
+      def write_solo_dot_rb
+        content = <<-EOE
+cookbook_path     "/etc/chef/cookbooks"
+node_path         "/etc/chef/nodes"
+log_level         :info
+file_store_path  "/etc/chef"
+file_cache_path  "/etc/chef"
+        EOE
+        
+        File.open(compile_directory/"solo.rb", "w") do |f|
           f << content
         end
       end
       
     end
-          
+    
   end
   
 end

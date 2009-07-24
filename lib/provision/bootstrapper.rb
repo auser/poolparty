@@ -29,7 +29,7 @@ module Provision
       file = File.expand_path(File.dirname(__FILE__)/"configure_scripts"/"configure_#{os}.erb")
       raise StandardError.new("#{os} is not supported by PoolParty's Bootstrapper") unless File.file?(file)
       str = ERB.new(open(file).read).result(cloud.send(:binding))
-      outfile ||= cloud.tmp_path/"var"/"poolparty"/"configure_script.sh"
+      outfile ||= cloud.tmp_path/"configure_script.sh"
       File.open(outfile, "w") {|f| f << str }
       File.expand_path(outfile)
     end

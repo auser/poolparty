@@ -19,21 +19,9 @@ EOS
     
     @loaded_clouds.each do |cld|
         
-        # If an IP or DNS name is given, bootstrap that node, otherwise, bootstrap all running nodes.
-        if cld.nodes(:status => "running").empty?
-          puts "No nodes to bootstrap"
-        else
-          if command[:inst_num]
-            vputs "\nConfiguring: #{cld.nodes[o.inst_num]}\n--------------------"
-            address = cld.nodes(:status => "running")[ command[:inst_num] ]
-            ::PoolParty::Provision::DrConfigure.new( address[:ip], :cloud => cld )
-          else
-            cld.nodes(:status => "running").each do |address|
-              cld.vputs "\nConfiguring: #{address[:ip]}\n--------------------"      
-              ::PoolParty::Provision::DrConfigure.new address[:ip], :cloud => cld
-            end
-          end
-        end
+      cld.nodes.each do |node|
+        node.configure!(:cloud => cld)
+      end
       
     end
     
