@@ -18,22 +18,17 @@ EOS
 
   run do |command|    
     @loaded_clouds.each do |cld|
+      msg = [
+      "Shutting down #{cld.name} cloud",
+      "Are you sure? (Y/N)"
+      ]
       
-      cld.nodes(:status => "running").each do |inst|
-        msg = <<-EOM
-    Shutting down #{inst.instance_id}
-    Are you sure? (Y/N)
-        EOM
-        o = are_you_sure? msg || command[:yes]
-        if o
-          puts "Shutting down #{inst.instance_id}"
-          cld.terminate_instance!(:instance_id => inst.instance_id)
-        else
-          if are_you_sure?(msg)
-            puts "Shutting down #{inst.instance_id}"
-            cld.terminate_instance!(:instance_id => inst.instance_id)
-          end
-        end
+      o = are_you_sure? msg || command[:yes]
+      if o
+        vputs "Shutting down cloud"
+        cld.terminate!
+      else
+        
       end
       
     end    
