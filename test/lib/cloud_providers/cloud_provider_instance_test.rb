@@ -45,7 +45,4 @@ class CloudProviderInstanceTest < Test::Unit::TestCase
     assert_respond_to @inst, :terminate!
   end
   
-  def test_determine_os
-  end
-  
 end

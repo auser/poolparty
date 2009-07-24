@@ -16,8 +16,7 @@ module CloudProviders
         :status       => nil, # Status of the remote instance
         :launch_time  => nil,
         :keypair_name => nil,
-        :cloud_name   => nil,
-        :os           => nil
+        :cloud_name   => nil
       )
       
       def initialize(opts={}, &block)
@@ -41,7 +40,17 @@ module CloudProviders
       # CLOUD PROVIDER METHODS
       
       # Bootstrap self
-      def bootstrap!
+      def bootstrap!(force=false)
+        old_user = user
+        @user = "root"
+        
+        if !bootstrapped? || force
+          script_file = Provision::Bootstrapper.bootstrap_script(os)
+          scp(:source => script_file, :destination => "/tmp")
+          run("chmod +x /tmp/determine_os.sh; /bin/sh /tmp/#{File.basename(script_file)}").chomp
+        end
+        
+        @user = old_user
       end
       
       # Terminate self
@@ -54,14 +63,19 @@ module CloudProviders
         if sym
           dsl_options[:os] = sym
         else
-          dsl_options[:os] ||= determine_os
+          dsl_options[:os] ||= determine_os.to_sym
         end
       end
       
       # Determine the os
       def determine_os
         scp(:source => Provision::Bootstrapper.determine_os_script, :destination => "/tmp")
-        run("chmod +x /tmp/determine_os.sh; /bin/sh /tmp/determine_os.sh")
+        run("chmod +x /tmp/determine_os.sh; /bin/sh /tmp/determine_os.sh").chomp
+      end
+      
+      # Determine if the node is bootstrapped
+      def bootstrapped?
+        @bootstrapped ||= !run('if [ -f /var/poolparty/bootstrapped ]; then echo "YES"; fi').chomp.empty?
       end
       
       # Wait for port

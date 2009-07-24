@@ -3,7 +3,7 @@ module  CloudProviders
     
     def user(n=nil)
       if n.nil? 
-        @user ||= 'root'
+        @user ||= 'poolparty'
       else
         @user = n
       end
@@ -25,9 +25,12 @@ module  CloudProviders
     # Simply shell out and call ssh, simple, reliable and fewest dependencies, but slow
     def ssh( commands=[], extra_ssh_ops={})
       commands = commands.compact.join(' && ') if commands.is_a?(Array)
-      command_string = commands.empty? ? nil : "'#{commands}'"
-      cmd_string = "ssh #{user}@#{host} #{ssh_options(extra_ssh_ops)} #{command_string}"
-      system_run(cmd_string)
+      cmd_string = "ssh #{user}@#{host} #{ssh_options(extra_ssh_ops)} "
+      if commands.empty?
+        Kernel.system(cmd_string)
+      else
+        system_run(cmd_string+"'#{commands}'")
+      end
     end
     
     # Take a hash of options and join them into a string, combined with default options.
@@ -56,9 +59,8 @@ module  CloudProviders
       destination_path = opts[:destination] || opts[:source]
       raise StandardError.new("You must pass a local_file to scp") unless source
       scp_opts = opts[:scp_opts] || ""
-      cmd_string = "scp #{source} #{user}@#{host}:#{destination_path} #{ssh_options(scp_opts)}"
+      cmd_string = "scp #{ssh_options(scp_opts)} #{source} #{user}@#{host}:#{destination_path}"
       out = system_run(cmd_string)
-      dputs(out)
       out
     end
     
@@ -66,7 +68,7 @@ module  CloudProviders
     # Execute command locally.
     # This method is mainly broken out to ease testing in the other methods
     def system_run(cmd)
-      Kernel.system("#{cmd}")
+      `#{cmd}`
     end
     
   end

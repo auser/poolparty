@@ -18,7 +18,7 @@ EOS
     cloud = @loaded_clouds.first
     
     if !cloud.nodes.empty?
-      cloud.nodes(:status => "running").first.ssh
+      cloud.nodes.first.ssh
     else
       puts "No running instances can be found"
     end

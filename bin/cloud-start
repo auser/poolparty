@@ -22,13 +22,13 @@ EOS
         puts "Starting cloud #{cld.name} (#{cld.keypair})"
         puts "#{cld.nodes(:status => "running").size} running instances (#{cld.minimum_instances} - #{cld.maximum_instances})"
         
-        inst = cld.expand do
-          puts "TODO: Add bootstrapping and configuring back in"
-        end
+        inst = cld.expand
+        cld.nodes.each {|node| node.bootstrap!}
         
         msg = [
           "Your cloud has started with the following public_ips:"
         ]
+        
         cld.nodes(:status => "running").each {|node| msg << "#{node.public_ip}"}
         
         print_msg(msg)

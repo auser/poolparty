@@ -81,7 +81,6 @@ module PoolParty
         "Instance port not available"
       end
       instance.refresh!
-      p instance.run 'uptime'
       instance
     end
     
