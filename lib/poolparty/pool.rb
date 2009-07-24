@@ -5,6 +5,8 @@ module PoolParty
     # Freeze the pool_name so we can't modify it at all
     # call and run instance_eval on the block and then call the after_create callback
     def initialize(n, &block)
+      PoolParty::Pool.init
+      
       context_stack.clear
       
       @pool_name = n.to_s
@@ -35,7 +37,6 @@ module PoolParty
     #   + open-uri url (http)
     def self.load_from_file(filename=nil)
       raise PoolPartyError.create("CloudsDotRbLoadError", "Cannot load the specified clouds.rb: #{filename}. Check to make sure it exists") unless filename && File.file?(filename)
-      require "open-uri"
       ddputs "Loading #{filename} from file in Pool"
       @clouds_dot_rb_file = filename
       before_file_load(clouds_dot_rb_file)
@@ -95,6 +96,10 @@ module PoolParty
     def self.before_file_load(filepath)
       $:.unshift(::File.dirname(filepath))
       Dir["#{::File.dirname(filepath)}/plugins/*"].each { |plugin_path| $:.unshift(plugin_path) }
+      init
+    end
+    
+    def self.init
       PoolParty::Resource.define_resource_methods
       PoolParty::PoolPartyLog.init
     end

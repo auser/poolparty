@@ -3,7 +3,7 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 t=Time.now
 
 # Load system gems
-%w(rubygems logger erb net/ssh).each do |lib|
+%w(rubygems logger erb net/ssh open-uri).each do |lib|
   require lib
 end
 
