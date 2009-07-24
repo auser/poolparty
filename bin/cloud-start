@@ -17,7 +17,7 @@ EOS
     
     @loaded_clouds.each do |cld|
 
-      if cld.nodes(:status => "running").size.zero?
+      if cld.nodes.size.zero?
         puts "Starting cloud #{cld.name} (#{cld.keypair})"
         puts "#{cld.nodes(:status => "running").size} running instances (#{cld.minimum_instances} - #{cld.maximum_instances})"
         
@@ -28,7 +28,7 @@ EOS
           "Your cloud has started with the following public_ips:"
         ]
         
-        cld.nodes(:status => "running").each {|node| msg << "#{node.public_ip}"}
+        cld.nodes.each {|node| msg << "#{node.public_ip}"}
         
         print_msg(msg)
       else

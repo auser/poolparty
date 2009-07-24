@@ -84,6 +84,11 @@ module PoolParty
       instance
     end
     
+    # Contract the cloud
+    def contract(hsh={})
+      nodes(hsh).last.terminate!
+    end
+    
     # Freeze the cloud_name so we can't modify it at all, set the plugin_directory
     # call and run instance_eval on the block and then call the after_create callback
     def initialize(n, o={}, &block)

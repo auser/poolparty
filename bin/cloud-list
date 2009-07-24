@@ -22,19 +22,21 @@ EOS
         require 'pp'
         pp result = cld.nodes(:instance_id=>command[:instance_id])
       else
-        msg = [
-          "Listing cloud #{cld.name}",
-          " <white>Active instances</white>",
-          "----------------------------"
-        ]
-        cld.nodes(:status => "running").each do |a| 
-          msg << "  #{a[:instance_id] || a[:id]}\t#{a[:ip] ||a[:public_ip] }"
+        line = "-----------------------------"
+        msg = ["Listing cloud #{cld.name}"]
+
+        hsh = {}
+        cld.describe_instances.each do |n| 
+          (hsh[n.status] ||= []) << n
         end
         
-        if cld.describe_instances(:status => "pending").size > 0
-          msg << " Pending instances"
-          msg << "----------------------------"
-          msg << "  #{a[:instance_id] || a[:id]}\t#{a[:ip] ||a[:public_ip] }"
+        hsh.each do |k,v|
+          msg << "#{k.capitalize} nodes"
+          msg << line
+          v.each do |a|
+            msg << "  #{a[:instance_id] || a[:id]}\t#{a[:ip] || a[:public_ip] }"
+          end
+          msg << ""
         end
         
         print_msg(msg)
