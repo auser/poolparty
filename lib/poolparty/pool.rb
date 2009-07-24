@@ -5,6 +5,8 @@ module PoolParty
     # Freeze the pool_name so we can't modify it at all
     # call and run instance_eval on the block and then call the after_create callback
     def initialize(n, &block)
+      PoolParty::Pool.init
+      
       context_stack.clear
       
       @pool_name = n.to_s
