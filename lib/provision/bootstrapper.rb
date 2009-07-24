@@ -15,6 +15,11 @@ module Provision
       file
     end
     
+    # Get the determine os bootstrap script
+    def self.determine_os_script
+      File.expand_path(File.dirname(__FILE__)/"bootstrap_scripts"/"determine_os.sh")
+    end
+    
     # configure_script
     # Find the configure script that corresponds to the os given.
     # Raise an exception if the configure_script does not exist (of the format: configure_<os>.sh)

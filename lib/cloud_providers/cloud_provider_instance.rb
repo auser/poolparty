@@ -16,7 +16,8 @@ module CloudProviders
         :status       => nil, # Status of the remote instance
         :launch_time  => nil,
         :keypair_name => nil,
-        :cloud_name   => nil
+        :cloud_name   => nil,
+        :os           => nil
       )
       
       def initialize(opts={}, &block)
@@ -41,12 +42,26 @@ module CloudProviders
       
       # Bootstrap self
       def bootstrap!
-        
       end
       
       # Terminate self
       def terminate!
         cloud_provider.terminate_instance!(:instance_id => instance_id)
+      end
+      
+      # get the os, if it's not declared
+      def os(sym=nil)
+        if sym
+          dsl_options[:os] = sym
+        else
+          dsl_options[:os] ||= determine_os
+        end
+      end
+      
+      # Determine the os
+      def determine_os
+        scp(:source => Provision::Bootstrapper.determine_os_script, :destination => "/tmp")
+        run("chmod +x /tmp/determine_os.sh; /bin/sh /tmp/determine_os.sh")
       end
       
       # Wait for port

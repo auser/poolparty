@@ -3,7 +3,7 @@ module  CloudProviders
     
     def user(n=nil)
       if n.nil? 
-        @user ||= 'poolparty'
+        @user ||= 'root'
       else
         @user = n
       end
@@ -25,7 +25,8 @@ module  CloudProviders
     # Simply shell out and call ssh, simple, reliable and fewest dependencies, but slow
     def ssh( commands=[], extra_ssh_ops={})
       commands = commands.compact.join(' && ') if commands.is_a?(Array)
-      cmd_string = "ssh #{host} #{ssh_options(extra_ssh_ops)} '#{commands}'"
+      command_string = commands.empty? ? nil : "'#{commands}'"
+      cmd_string = "ssh #{user}@#{host} #{ssh_options(extra_ssh_ops)} #{command_string}"
       system_run(cmd_string)
     end
     
@@ -35,7 +36,6 @@ module  CloudProviders
     # "-i keyfile -o StrictHostKeyChecking=no -i keypair.to_s -l fred"
     def ssh_options(opts={})
       o = {"-i" => keypair.full_filepath,
-           "-l" => user,
            "-o" =>"StrictHostKeyChecking=no"
            }.merge(opts)
       o.collect{ |k,v| "#{k} #{v}"}.join(' ')
@@ -45,9 +45,20 @@ module  CloudProviders
       raise StandardError.new("You must pass a :source=>uri option to rsync") unless opts[:source]
       destination_path = opts[:destination] || opts[:source]
       rsync_opts = opts[:rsync_opts] || '-va'
-      cmd_string =  "rsync -e 'ssh #{ssh_options}' #{rsync_opts} #{opts[:source]}  root@#{host}:#{destination_path}"
+      cmd_string =  "rsync -e 'ssh #{ssh_options}' #{rsync_opts} #{opts[:source]}  #{user}@#{host}:#{destination_path}"
       out = system_run(cmd_string)
-      puts out if debugging?
+      dputs(out)
+      out
+    end
+    
+    def scp(opts={})
+      source = opts[:source]
+      destination_path = opts[:destination] || opts[:source]
+      raise StandardError.new("You must pass a local_file to scp") unless source
+      scp_opts = opts[:scp_opts] || ""
+      cmd_string = "scp #{source} #{user}@#{host}:#{destination_path} #{ssh_options(scp_opts)}"
+      out = system_run(cmd_string)
+      dputs(out)
       out
     end
     
@@ -55,7 +66,7 @@ module  CloudProviders
     # Execute command locally.
     # This method is mainly broken out to ease testing in the other methods
     def system_run(cmd)
-      `#{cmd}`
+      Kernel.system("#{cmd}")
     end
     
   end

@@ -87,7 +87,7 @@ class Keypair
   end
   
   def keypair_found?
-    raise StandardError.new("#{filepath} key file cannot be found") unless full_filepath
+    raise StandardError.new("#{filepath} key file cannot be found") unless exists?
   end
   
 end

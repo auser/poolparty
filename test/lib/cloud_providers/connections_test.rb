@@ -1,6 +1,8 @@
 require "#{File.dirname(__FILE__)}/../../test_helper"
 require File.dirname(__FILE__)+"/cloud_provider_instance_test.rb"
 
+stub_keypair_searchable_paths
+
 module  CloudProviders
   module Connections
     def system_run(cmds, opts={})
@@ -40,12 +42,12 @@ class ConnectionsTest < Test::Unit::TestCase
   end
   
   def test_ssh
-    assert_match /ssh bigboy .* -i (.*)test_key -l poolparty 'uptime'$/, inst.ssh('uptime')
+    assert_match /ssh poolparty@bigboy .* -i (.*)test_key 'uptime'$/, inst.ssh('uptime')
   end
   
   def test_run
-    assert_match /ssh bigboy .* -i (.*)test_key -l poolparty 'uptime'$/, inst.run('uptime')
-    assert_match /ssh bigboy (.*)--sshoptions foo (.*)'uptime'$/, inst.ssh('uptime', {'--sshoptions'=>'foo'})
+    assert_match /ssh poolparty@bigboy .* -i (.*)test_key 'uptime'$/, inst.run('uptime')
+    assert_match /ssh poolparty@bigboy (.*)--sshoptions foo (.*)'uptime'$/, inst.ssh('uptime', {'--sshoptions'=>'foo'})
   end
   
   def test_rsync
@@ -53,14 +55,17 @@ class ConnectionsTest < Test::Unit::TestCase
   end
   
   def test_ssh_options
-    assert_match /-o StrictHostKeyChecking=no -i (.*)keys\/test_key -l poolparty/, inst.ssh_options
+    assert_match /-o StrictHostKeyChecking=no -i (.*)keys\/test_key/, inst.ssh_options
   end
   
   def test_simplest_run_remote
   end
   
-  def test_rsync_to
-    
+  def test_rsync_to    
+  end
+  
+  def test_scp
+    assert_match /scp (.*)\/templates\/script poolparty@bigboy/, inst.scp(:source=>fixtures_dir/'templates/script')
   end
   
 end
