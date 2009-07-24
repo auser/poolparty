@@ -61,4 +61,5 @@ require "dependency_resolver"
 
 require "provision/bootstrapper"
 
+PoolParty::Pool.init
 vputs "PoolParty core loadtime: #{Time.now-t}"
