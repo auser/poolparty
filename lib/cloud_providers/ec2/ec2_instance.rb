@@ -37,11 +37,11 @@ module CloudProviders
       "#{name}\t#{dns_name}\t#{instance_id}"
     end
     
-    #FIXME:
-    def hosts_file_listing_for(cl)
-      string = (cl.name == cloud.name) ? "#{name}.#{my_cloud.name}\t#{name}" : "#{name}.#{my_cloud.name}"
-      "#{internal_ip}\t#{string}"
-    end
+    # #TODO: test
+    # def hosts_file_listing_for(cl)
+    #   string = (cl.name == cloud.name) ? "#{name}.#{my_cloud.name}\t#{name}" : "#{name}.#{my_cloud.name}"
+    #   "#{internal_ip}\t#{string}"
+    # end
     
     def cloud_provider(o={}, &block)
       @cloud_provider ||= if cloud

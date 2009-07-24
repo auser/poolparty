@@ -77,7 +77,7 @@ module CloudProviders
     # returns nodes from the describe_instances array
     # These can be selected on by passing a hash
     def nodes(hsh={})
-      results = describe_instances.select_with_hash({:keypair_name => keypair.basename})
+      results = describe_instances(:status=>'running').select_with_hash({:keypair_name => keypair.basename})
       results.select_with_hash(hsh)
     end
     

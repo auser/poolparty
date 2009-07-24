@@ -58,7 +58,7 @@ module CloudProviders
       munged[:launch_time]      = parse_datetime(munged[:launch_time]) if munged[:launch_time]
       munged[:ami_launch_index] = munged[:launch_index] if munged[:launch_index]  #TODO: deprecate ami_launch_index
       munged[:keypair_name]     = munged.delete(:ssh_key_name)
-      munged[:status]           = munged.delete(:state)
+      munged[:status]           = munged.delete(:state) || munged[:shutdown_state]
       munged
     end
     
