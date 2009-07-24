@@ -116,7 +116,7 @@ module PoolParty
     def self.define_resource_methods
       ddputs "Defining resources..."
       defined_resources.each do |res|
-        ddputs "Defining resource: #{res}"
+        ddputs "Defining resource: #{res} as #{res.has_method_name}"
         Base.class_eval <<-EOE
           def has_#{res.has_method_name}(a={},b={},&block)
             obj = #{res}.new(a,b,&block)

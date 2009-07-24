@@ -37,7 +37,14 @@ class CloudTest < Test::Unit::TestCase
     assert_not_nil clouds['app'].keypair
     assert_equal 'test_key', clouds['app'].keypair.basename
   end
-      
+  
+  def test_can_use_basic_resources
+    clouds['app'].instance_eval do
+      has_file "/etc/motd"
+    end
+    assert_equal "/etc/motd", clouds['app'].files.first.name
+  end
+  
   def test_have_a_temp_path_of_the_name_as_Default_tmp_path_pool_name_cloud_name
     assert_equal PoolParty::Default.tmp_path/"poolparty"/"app", @cloud.tmp_path
   end

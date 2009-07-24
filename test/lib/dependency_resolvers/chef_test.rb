@@ -21,7 +21,7 @@ class ChefTest < Test::Unit::TestCase
     end
     
     teardown do
-      FileUtils.rm_rf test_dir
+      # FileUtils.rm_rf test_dir
     end
     
     should "have compile to chef" do
@@ -31,24 +31,24 @@ class ChefTest < Test::Unit::TestCase
     
     should "be able to compile a variable" do
       @base.compile_to(@resources[:variables], test_dir)
-      cont = open(test_dir/"attributes"/"poolparty.rb").read
+      cont = open(test_dir/"cookbooks"/"poolparty"/"attributes"/"poolparty.rb").read
       assert_match /# PoolParty variables\npoolparty Mash\.new unless attribute\?\('poolparty'\)/, cont
       assert_match /poolparty\[:animal\] = \"Duck\"\n/, cont
     end
     
     should "be able to compile a file" do
       @base.compile_to(@resources[:files], test_dir)
-      assert_equal "Welcome to a fake file", open(test_dir/"templates"/"default"/"etc"/"motd.erb").read
+      assert_equal "Welcome to a fake file", open(test_dir/"cookbooks"/"poolparty"/"templates"/"default"/"etc"/"motd.erb").read
     end
     
     should "be able to compile an http_request" do
       @base.compile_to(@resources[:http_request], test_dir)
-      assert_equal "http_request \"posting data\" do\n  action :post\n  url \"http://check.in\"\n  message :some => \"data\"\nend\n", open(test_dir/"recipes"/"default.rb").read
+      assert_equal "http_request \"posting data\" do\n  action :post\n  url \"http://check.in\"\n  message :some => \"data\"\nend\n", open(test_dir/"cookbooks"/"poolparty"/"recipes"/"default.rb").read
     end
     
     should "compile to the recipes" do
       @base.compile_to(@resources[:files], test_dir)
-      assert_equal "template \"/etc/motd\" do\n  source \"/etc/motd.erb\"\n  action :create\n  backup 5\n  mode 0644\n  owner \"root\"\nend\n", open(test_dir/"recipes"/"default.rb").read
+      assert_equal "template \"/etc/motd\" do\n  source \"/etc/motd.erb\"\n  action :create\n  backup 5\n  mode 0644\n  owner \"root\"\nend\n", open(test_dir/"cookbooks"/"poolparty"/"recipes"/"default.rb").read
     end
     
     should "compile all the resources when passed the entire array" do
@@ -58,7 +58,7 @@ class ChefTest < Test::Unit::TestCase
       resources << @resources[:variables]
       @base.compile(resources)
       ["recipes"/"default.rb", "templates"/"default"/"etc"/"motd.erb"].each do |fi|
-        assert File.file?(test_dir/fi)
+        assert File.file?(test_dir/"cookbooks"/"poolparty"/fi)
       end
       
       output =<<-EOE
@@ -80,7 +80,7 @@ end
 
 EOE
       
-      assert_equal output, open(test_dir/"recipes"/"default.rb").read
+      assert_equal output, open(test_dir/"cookbooks"/"poolparty"/"recipes"/"default.rb").read
     end
     
     context "meta functions" do
