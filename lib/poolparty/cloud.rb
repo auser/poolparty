@@ -72,7 +72,7 @@ module PoolParty
       end
       # Define what gets run on the callbacks
       # This is where we can specify what gets called
-      # on callbacksgit clone git://github.com/btakita/rr.git  
+      # on callbacks
       #   parameters: cld, time
       # 
       #   cld - the cloud the callback came from
