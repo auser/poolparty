@@ -39,12 +39,13 @@ class Ec2InstanceTest < Test::Unit::TestCase
   end
 
   def test_refresh!
-    inst.status = 'running'
-    assert_equal 'running',  inst.status
+    inst.status = 'testing'
     inst.public_ip = 'notanip'
+    assert_equal 'testing',  inst.status
     assert_equal 'notanip', inst.public_ip
-    assert_equal '192', inst.public_ip
-    assert_equal 'pending', inst.status
+    inst.refresh!
+    assert_equal '75.101.141.103', inst.public_ip
+    assert_equal 'running', inst.status
   end
   
   def test_terminate!

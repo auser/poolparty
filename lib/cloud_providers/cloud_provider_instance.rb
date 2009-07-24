@@ -72,7 +72,8 @@ module CloudProviders
       # This is often usefully to update a recently launched instance, in case you want to trigger new behavior once the state changes ot 'running' and an ip is assigned
       def refresh!
         refreshed = cloud_provider.describe_instance(:instance_id => self.instance_id)
-        self.dsl_options.merge(refreshed.dsl_options)
+        self.dsl_options.merge!(refreshed.dsl_options)
+        self
       end
       
       ## hash like methods
