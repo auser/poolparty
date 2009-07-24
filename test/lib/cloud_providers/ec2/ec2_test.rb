@@ -34,14 +34,14 @@ class Ec2ProviderTest < Test::Unit::TestCase
   
   def test_describe_instances
     assert_instance_of RightAws::Ec2, @provider.ec2
-    
-    assert_respond_to @provider, :describe_instances    
     assert_equal ["i-7fd89416", "i-7f000516"], @provider.describe_instances.map {|a| a[:instance_id]}
+    result = @provider.describe_instances(:instance_id => "i-7fd89416")
+    assert_equal 1, result.size
+    assert_equal "i-7fd89416", result.first.instance_id
   end
   
   def test_describe_instance
-    assert_respond_to @provider, :describe_instance
-
+    assert_raises ArgumentError do ;@provider.describe_instance(); end
     inst = @provider.describe_instance(:instance_id => "i-7fd89416")
     assert_equal "i-7fd89416", inst.instance_id
     assert_kind_of CloudProviders::Ec2Instance, inst
@@ -53,14 +53,12 @@ class Ec2ProviderTest < Test::Unit::TestCase
   end
   
   def test_run_instances
-    assert_respond_to @provider, :run_instance
     inst = @provider.run_instance(:keypair_name => "test_key")
     assert_kind_of CloudProviders::Ec2Instance, inst
     assert_equal "pending", inst.status
   end
   
   def test_terminate_instances
-    assert_respond_to @provider, :terminate_instance!
     assert_equal ["shutting-down"], @provider.terminate_instance!(:instance_id => "i-3B3506A0").map {|a| a[:shutdown_state] }
   end
   

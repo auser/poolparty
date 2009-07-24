@@ -110,9 +110,9 @@ module CloudProviders
     
     # Describe instances
     def describe_instances(o={})
-      ec2_instants = Ec2Response.describe_instances(ec2.describe_instances)
-      insts = ec2_instants.select_with_hash(o) if !o.empty?
-      ec2_instances = ec2_instants.collect{|i| Ec2Instance.new(dsl_options.merge(i))}
+      instants = Ec2Response.describe_instances(ec2.describe_instances).select_with_hash(o)
+      return [] if instants.empty?
+      ec2_instances = instants.collect{|i| Ec2Instance.new(dsl_options.merge(i))}
       ec2_instances.sort {|a,b| a[:launch_time].to_i <=> b[:launch_time].to_i }
     end
     

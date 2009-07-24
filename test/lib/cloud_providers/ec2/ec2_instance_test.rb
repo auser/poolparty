@@ -5,15 +5,11 @@ class Ec2InstanceTest < Test::Unit::TestCase
   include CloudProviders
 
   def inst
-    @inst ||= clouds['app'].cloud_provider.describe_instances.first
-  end
-  
-  def setup
-    @provider = CloudProviders::Ec2.new(:image_id => "ami-abc123")
+    @inst ||= clouds['app'].describe_instances.first
   end
   
   def test_has_cloud_provider
-    inst = @provider.describe_instances.first
+    inst = CloudProviders::Ec2.new(:image_id => "ami-abc123").describe_instances.first
     assert_kind_of CloudProviders::Ec2, inst.cloud_provider
   end
   
@@ -55,9 +51,9 @@ class Ec2InstanceTest < Test::Unit::TestCase
   end
   
   
+  #TODO: this needs better tests
   def test_wait_for_public_ip
     assert inst.wait_for_public_ip
-    # cloudsd['app'].
   end
   
 end
