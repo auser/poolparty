@@ -35,7 +35,6 @@ module PoolParty
     #   + open-uri url (http)
     def self.load_from_file(filename=nil)
       raise PoolPartyError.create("CloudsDotRbLoadError", "Cannot load the specified clouds.rb: #{filename}. Check to make sure it exists") unless filename && File.file?(filename)
-      require "open-uri"
       ddputs "Loading #{filename} from file in Pool"
       @clouds_dot_rb_file = filename
       before_file_load(clouds_dot_rb_file)
