@@ -26,7 +26,7 @@ EOS
         msg = ["Listing cloud #{cld.name}"]
 
         hsh = {}
-        cld.describe_instances(:keypair_name => cld.keypair.to_s).each do |n| 
+        cld.describe_instances(:keypair_name => cld.keypair.basename).each do |n| 
           (hsh[n.status] ||= []) << n
         end
         

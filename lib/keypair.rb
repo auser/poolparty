@@ -9,7 +9,7 @@ class Keypair
   attr_accessor :filepath
   
   # Create a new key that defaults to id_rsa as the name. 
-  def initialize(fpath=nil)
+  def initialize(fpath)
     @filepath = fpath
     valid?
   end
@@ -53,7 +53,7 @@ class Keypair
   
   # Basename of the keypair
   def basename
-    @basename ||= ::File.basename(full_filepath, ::File.extname(full_filepath))
+    @basename ||= ::File.basename(filepath, ::File.extname(filepath))
   end
   
   # Just the filename of the keypair

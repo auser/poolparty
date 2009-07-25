@@ -69,7 +69,7 @@ class CloudTest < Test::Unit::TestCase
     
   def test_set_the_cloud_provider_cloud_and_keypair_with_cloud_provider
     assert_equal clouds["app"], clouds["app"].cloud_provider.cloud
-    assert_equal clouds["app"].keypair.to_s, clouds["app"].cloud_provider.keypair_name
+    assert_equal clouds["app"].keypair.basename, clouds["app"].cloud_provider.keypair_name
   end
   
   def test_set_the_cloud_provider_with_a_using_block

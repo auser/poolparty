@@ -83,14 +83,16 @@ module CloudProviders
       end
       
       # Determine the os
+      # Default to ubuntu
+      # Send the determine_os.sh script to the node and run it remotely
       def determine_os
         scp(:source => Provision::Bootstrapper.determine_os_script, :destination => "/tmp")
-        run("chmod +x /tmp/determine_os.sh; /bin/sh /tmp/determine_os.sh").chomp
+        run("chmod +x /tmp/determine_os.sh; /bin/sh /tmp/determine_os.sh").chomp || :ubuntu
       end
       
       # Determine if the node is bootstrapped
       def bootstrapped?
-        @bootstrapped ||= !run('if [ -f /var/poolparty/bootstrapped ]; then echo "YES"; fi').chomp.empty?
+        @bootstrapped ||= !run('if [ -f /var/poolparty/bootstrapped ]; then echo "YES"; fi').chomp.empty? || false
       end
       
       

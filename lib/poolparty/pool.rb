@@ -69,7 +69,7 @@ module PoolParty
       path = default_clouds_dot_rb_locations.detect do |dir|
         File.file?(File.expand_path(dir / filename))
       end
-      File.expand_path(path / filename)
+      File.expand_path(File.join(path, filename))
     end
     
     # Default clouds_dot_rb_file locations

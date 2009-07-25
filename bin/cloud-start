@@ -36,6 +36,7 @@ EOS
         print_msg(msg)
       else
         puts <<-EOE
+          #{cld.nodes}
           Your cloud is already running.
         EOE
       end

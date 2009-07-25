@@ -18,7 +18,7 @@ end
 module PoolParty
   def self.version
     return @version if @version
-    config = YAML.load(File.read('VERSION.yml'))
+    config = YAML.load(File.read(File.expand_path("#{File.dirname(__FILE__)}/../VERSION.yml")))
     @version = "#{config[:major]}.#{config[:minor]}.#{config[:patch]}"
   end
 end
