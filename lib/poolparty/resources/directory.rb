@@ -4,14 +4,14 @@ module PoolParty
     class Directory < Resource
       
       default_options(
-        :recursive => true,
-        :mode => "0644",
-        :owner => "root",
-        :group => "root",
-        :recursive => false
+        :recursive  => true,
+        :mode       => "0644",
+        :owner      => "root",
+        :group      => "root",
+        :recursive  => false
       )
-            
-      def print_to_chef        
+      
+      def print_to_chef
         <<-EOE
 directory "<%= name %>" do
   action :<%= exists ? :create : :delete %>

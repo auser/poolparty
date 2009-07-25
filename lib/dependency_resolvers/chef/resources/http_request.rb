@@ -2,14 +2,14 @@ module PoolParty
   module Resources
     
     class HttpRequest < Resource
-            
+      
       default_options(
-        :action => :get,
-        :message => nil,
-        :url => nil
+        :action   => :get,
+        :message  => nil,
+        :url      => nil
       )
-            
-      def print_to_chef        
+      
+      def print_to_chef
         <<-EOE
 http_request "<%= name %>" do
   action :<%= action ? action : (exists ? :get : :delete) %>

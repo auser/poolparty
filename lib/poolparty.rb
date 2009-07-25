@@ -39,8 +39,8 @@ require "poolparty/pool_party_error"
   require "core/#{lib}"
 end
 
-# Features
-%w(callbacks pinger searchable_paths).each do |lib|
+# Mixins
+%w(callbacks pinger searchable_paths).each do |lib| 
   require "mixins/#{lib}"
 end
 

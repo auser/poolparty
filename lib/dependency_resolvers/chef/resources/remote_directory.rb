@@ -2,22 +2,22 @@ module PoolParty
   module Resources
     
     class RemoteDirectory < Directory
-            
+      
       default_options(
-        :cookbook => nil,
+        :cookbook     => nil,
         :files_backup => 5,
-        :files_owner => nil,
-        :files_group => nil,
-        :files_mode => "0644",
-        :recursive => true,
-        :mode => "0644",
-        :owner => "root",
-        :group => "root",
-        :recursive => false,
-        :source => nil
+        :files_owner  => nil,
+        :files_group  => nil,
+        :files_mode   => "0644",
+        :recursive    => true,
+        :mode         => "0644",
+        :owner        => "root",
+        :group        => "root",
+        :recursive    => false,
+        :source       => nil
       )
-            
-      def print_to_chef        
+      
+      def print_to_chef
         str = <<-EOE
 remote_directory "<%= name %>" do
   source <%= print_variable(source) %>

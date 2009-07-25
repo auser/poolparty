@@ -10,7 +10,7 @@ module PoolParty
           super
         else
           super(:name => key, :value => value)
-        end        
+        end
       end
       
       # Chef uses separate files for variables, so we'll have to open the variable file 

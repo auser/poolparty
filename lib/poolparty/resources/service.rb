@@ -4,18 +4,18 @@ module PoolParty
     class Service < Resource
       
       default_options(
-        :action => nil,
-        :enabled => nil,
-        :running => nil,
-        :pattern => nil,
-        :start_command => nil,
-        :stop_command => nil,
-        :status_command => nil,
-        :restart_command => nil,
-        :reload_command => nil,
-        :supports => nil
+        :action           => nil,
+        :enabled          => nil,
+        :running          => nil,
+        :pattern          => nil,
+        :start_command    => nil,
+        :stop_command     => nil,
+        :status_command   => nil,
+        :restart_command  => nil,
+        :reload_command   => nil,
+        :supports         => nil
       )
-            
+      
       def print_to_chef
 str = 'service "<%= name %>" do
   pattern <%= print_variable(pattern || name) %>
@@ -28,7 +28,7 @@ str = 'service "<%= name %>" do
         str << "  restart_command <%= print_variable(restart_command) %>\n" if restart_command
         str << "  reload_command <%= print_variable(reload_command) %>\n" if reload_command
         str << "  supports <%= print_variable(supports) %>\n" if supports
-
+        
         str << "end"
       end
       

@@ -4,11 +4,11 @@ module PoolParty
     class Link < Resource
       
       default_options(
-        :link_type => :symbolic,
-        :to => nil
+        :link_type  => :symbolic,
+        :to         => nil
       )
-            
-      def print_to_chef        
+      
+      def print_to_chef
         <<-EOE
 link "<%= name %>" do
   link_type <%= print_variable(link_type) %>

@@ -20,7 +20,7 @@ class ApacheTest < Test::Unit::TestCase
   def teardown
     FileUtils.rm_rf test_dir
   end
-
+  
   def test_have_apache_in_the_resources
     assert !@cloud.apaches.empty?
     assert_equal 8080, @cloud.apaches.first.port

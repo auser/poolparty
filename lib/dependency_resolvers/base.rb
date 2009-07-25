@@ -56,7 +56,7 @@ module DependencyResolvers
     # Compile an array of resources
     def self.compile_array(array_of_resources=[])
       out = []
-      array_of_resources.each do |res|                    
+      array_of_resources.each do |res|
         out << compile_resource(res)
       end
       out.join("\n")
@@ -79,7 +79,7 @@ module DependencyResolvers
           "0#{obj.to_i}"
         else
           "#{obj.to_i}"
-        end        
+        end
       when String
         case obj
         when /^\d{4}$/
