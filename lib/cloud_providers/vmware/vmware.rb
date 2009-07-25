@@ -72,9 +72,9 @@ module CloudProviders
       if output.first =~ /Total running VMs: 0/
         []
       else
-        output.shift
+        output.shift if output.first =~ /Total running/
         output.map do |line|
-          vmware_instance
+          vmware_instance(:vmx_file => line)
         end
       end
     end
@@ -91,8 +91,8 @@ module CloudProviders
     end
     
     # Basic vmware_instance
-    def vmware_instance
-      VmwareInstance.new( :instance_id => vmx_file, :public_ip => public_ip, :dns_name => public_ip,
+    def vmware_instance(o={})
+      VmwareInstance.new( :instance_id => o[:vmx_file], :public_ip => public_ip, :dns_name => public_ip,
                           :cloud_provider => self.dsl_options, :keypair_name => keypair.basename)
     end
     
@@ -108,17 +108,18 @@ module CloudProviders
         $stderr.puts "FAILED: #{cmd}\n code = #{$?}"
         raise StandardError.new("ERROR: vmrun") if o.delete(:raise_on_error)
       end
-      stdout.readlines.map {|l| l.chomp }
+      stdout.readlines
     end
         
     # Search for the vmx_file
     def vmx_file
+      return @vmx_file if @vmx_file
       o = if File.file?(f = File.expand_path(image_id))
         f
       elsif File.file?(f = File.expand_path(images_repo_path, image_id))
         f
       end
-      "'#{o}'"
+      @vmx_file = "'#{o}'"
     end
     
   end

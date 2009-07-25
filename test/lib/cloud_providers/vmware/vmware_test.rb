@@ -24,15 +24,16 @@ class VmwareProviderTest < Test::Unit::TestCase
     stub_vmrun_call("list", ["Total running VMs: 0"])
     assert_equal [], @provider.describe_instances
     stub_vmrun_call("list", ["Total running VMs: 1", "#{ENV["HOME"]}/Documents/Virtual\ Machines\.localized/ubuntu.vmwarevm/ubuntu.vmx"])
-    assert_equal CloudProviders::VmwareInstance, @provider.describe_instances.first.class
-    assert_equal "#{ENV["HOME"]}/Documents/Virtual\ Machines\.localized/ubuntu.vmwarevm/ubuntu.vmx", @provider.describe_instances.first.instance_id
+    inst = @provider.describe_instances.first
+    assert_equal CloudProviders::VmwareInstance, inst.class
+    assert_equal "#{ENV["HOME"]}/Documents/Virtual\ Machines\.localized/ubuntu.vmwarevm/ubuntu.vmx", inst.instance_id
   end
   
   def test_run_instances
     vmx_path = "#{ENV["HOME"]}/Documents/Virtual\ Machines\.localized/ubuntu.vmwarevm/ubuntu.vmx"
     stub_vmrun_call("list", ["Total running VMs: 0"])
     stub_vmrun_call("run #{vmx_path}", [])
-    assert_equal [], @provider.run_instance(:image_id => vmx_path)
+    assert_equal CloudProviders::VmwareInstance, @provider.run_instance(:image_id => vmx_path).class
   end
     
     

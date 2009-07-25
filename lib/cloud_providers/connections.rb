@@ -3,7 +3,7 @@ module  CloudProviders
     
     def user(n=nil)
       if n.nil? 
-        @user ||= 'root'
+        @user ||= 'poolparty'
       else
         @user = n
       end
