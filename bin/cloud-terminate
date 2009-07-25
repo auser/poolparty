@@ -22,7 +22,7 @@ EOS
       "Are you sure? (Y/N)"
       ]
       
-      o = are_you_sure? msg || command[:yes]
+      o = command[:yes] || are_you_sure?(msg)
       if o
         vputs "Shutting down cloud"
         cld.terminate!

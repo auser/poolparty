@@ -69,11 +69,11 @@ module DependencyResolvers
       # If there are no meta functions on the resource, do not touch the resulting
       # string
       def apply_meta_functions(re, str)
-        regex = /[(.*)do(\w*)?(.*)]?[\w+]*end$/
+        regex = /[(.*)do(\w*)?(.*)]?(\w)*end$/
         
         add = []
-        add << "  notifies :#{re.meta_notifies[0]}, resources(:#{re.meta_notifies[1].has_method_name} => \"#{re.meta_notifies[1].name}\")" if re.meta_notifies
-        add << "  subscribes :#{re.meta_subscribes[0]}, resources(:#{re.meta_subscribes[1].has_method_name} => \"#{re.meta_subscribes[1].name}\"), :#{re.meta_subscribes[2]}" if re.meta_subscribes
+        add << "notifies :#{re.meta_notifies[0]}, resources(:#{chef_safe_resource(re.meta_notifies[1].has_method_name)} => \"#{re.meta_notifies[1].name}\")" if re.meta_notifies
+        add << "subscribes :#{re.meta_subscribes[0]}, resources(:#{chef_safe_resource(re.meta_subscribes[1].has_method_name)} => \"#{re.meta_subscribes[1].name}\"), :#{re.meta_subscribes[2]}" if re.meta_subscribes
 
         if re.meta_not_if
           tmp = "not_if "
@@ -91,8 +91,21 @@ module DependencyResolvers
         add << "  provider #{re.print_variable(re.provider)}" if re.provider
         
         return str if add.empty?
-        newstr = str.chomp.gsub(regex, "\0")
+        newstr = str.chomp.gsub(regex, "")
         "#{newstr}#{add.join("\n")}\nend"
+      end
+      
+      # Cleanup for chef resource output
+      # Not particularly clean, but a necessary evil because
+      # certain resources don't reflect the chef output
+      # such as has_exec corresponds to execute
+      def chef_safe_resource(name)
+        case name
+        when "exec"
+          "execute"
+        else
+          name
+        end
       end
       
       # Take the variables and compile them into the file attributes/poolparty.rb
