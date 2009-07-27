@@ -16,7 +16,7 @@ pool :eucalyptus do
     has_group 'partiers'
     has_user 'fred'
     
-    has_cron :minute=>'*', :command => 'touch /tmp/touched'
+    has_cron :minute=>'5', :command => 'touch /tmp/touched'
     has_line_in_file '/tmp/touched', :line => 'lined up HERE!'
     
     has_package 'vim'

@@ -76,13 +76,13 @@ module DependencyResolvers
         add << "  subscribes :#{resource.meta_subscribes[0]}, resources(:#{chef_safe_resource(resource.meta_subscribes[1].has_method_name)} => \"#{resource.meta_subscribes[1].name}\"), :#{resource.meta_subscribes[2]}" if resource.meta_subscribes
 
         if resource.meta_not_if
-          tmp = "not_if "
+          tmp = "  not_if "
           tmp += resource.meta_not_if[1] == :block ? "do #{resource.meta_not_if[0]} end" : "\"#{resource.meta_not_if[0]}\""
           add << tmp
         end
         
         if resource.meta_only_if
-          tmp = "only_if "
+          tmp = "   only_if "
           tmp += resource.meta_only_if[1] == :block ? "do #{resource.meta_only_if[0]} end" : "\"#{resource.meta_only_if[0]}\""
           add << tmp
         end
