@@ -7,11 +7,11 @@ http://poolpartyrb.com
 PoolParty makes it easy and simple to configure any cloud of computers. In clear language, describe your cloud
 with language such as:
 
-pool :cloud do
- cloud :app do
-   instances 2..10
- end
-end
+  pool :cloud do
+    cloud :app do
+      instances 2..10
+    end
+  end
 
 == SYNOPSIS:
 
@@ -39,6 +39,10 @@ Erlang
 == INSTALL:
 
 sudo gem install auser-poolparty
+
+== TODO:
+
+Update readme
 
 == LICENSE:
 
