@@ -110,14 +110,24 @@ module DependencyResolvers
       
       # Take the variables and compile them into the file attributes/poolparty.rb
       def compile_variables
+        # Make sure the attributes/ directory is there
         FileUtils.mkdir_p cookbook_directory/"attributes" unless ::File.directory?(cookbook_directory/"attributes")
-        File.open(cookbook_directory/"attributes"/"poolparty.rb", "w") do |f|
-          f << "# PoolParty variables\n"
-          f << "poolparty Mash.new unless attribute?('poolparty')\n"
-          variables.each do |var|
-            f << "poolparty[:#{var.name}] = #{handle_print_variable(var.value)}\n"
+        # Collect the file pointers that will be using to print out the attributes
+        file_pointers = {:poolparty => File.open(cookbook_directory/"attributes"/"poolparty.rb", "w")}
+        variables.each do |var|
+          file_pointers[var.parent.has_method_name] = File.open(cookbook_directory/"attributes"/"#{var.parent.has_method_name}.rb", "w") if var.parent
+        end
+        # Make sure the attribute exists in each file
+        file_pointers.each {|n,f| f << "#{n} Mash.new unless attribute?('#{n}')\n"}
+        variables.each do |var|
+          if var.parent
+            file_pointers[var.parent.has_method_name] << "#{var.parent.has_method_name}[:#{var.name}] = #{handle_print_variable(var.value)}\n"
+          else
+            file_pointers[:poolparty] << "poolparty[:#{var.name}] = #{handle_print_variable(var.value)}\n"
           end
         end
+        # Close the files
+        file_pointers.each {|k,v| v.close }
       end
       
       # Compile the files

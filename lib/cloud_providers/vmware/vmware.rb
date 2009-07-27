@@ -86,13 +86,14 @@ module CloudProviders
       describe_instances
     end
     
+    # The nodes in the cloud_provider
     def nodes(hsh={})
       describe_instances
     end
     
     # Basic vmware_instance
     def vmware_instance(o={})
-      VmwareInstance.new( :instance_id => o[:vmx_file], :public_ip => public_ip, :dns_name => public_ip,
+      VmwareInstance.new( :instance_id => (o[:vmx_file] || vmx_file), :public_ip => public_ip, :dns_name => public_ip,
                           :cloud_provider => self.dsl_options, :keypair_name => keypair.basename)
     end
     
@@ -101,7 +102,7 @@ module CloudProviders
       @path_to_binary ||= search_in_known_locations("vmrun")
     end
     
-    # Run vmrun
+    # Run vmrun on the command-line
     def vmrun(cmd, o={})
       stdin, stdout, stderr = Open3.popen3("'#{path_to_binary}' #{cmd}")
       unless $?.success?

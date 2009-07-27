@@ -32,6 +32,16 @@ module CloudProviders
       "running"
     end
     
+    # Since we aren't actually getting any ips from a list, only using 
+    # the one vmx file, we don't actually need to refresh anything
+    def wait_for_public_ip(timeout=60)
+      public_ip      
+    end
+    
+    def refresh!
+      self
+    end
+    
     def cloud_provider(o={}, &block)
       @cloud_provider ||= if cloud
         cloud.cloud_provider
