@@ -137,7 +137,7 @@ module PoolParty
       end
       
       def listen(p="80")
-        has_variable(:name => "port", :value => p)
+        has_variable(:name => "port", :value => [p])
         self.port = p
         @listen = true
       end
