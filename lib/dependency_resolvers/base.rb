@@ -49,8 +49,11 @@ module DependencyResolvers
     # Compile a resource directly
     def self.compile_resource(res)
       return "" unless res.respond_to?(compile_method_name)
+      res.before_compile
       po = ProxyObject.new(res)
-      po.compile(compile_method_name)
+      out = po.compile(compile_method_name)
+      res.after_compile
+      out
     end
     
     # Compile an array of resources

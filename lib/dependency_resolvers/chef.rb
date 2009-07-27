@@ -34,7 +34,7 @@ module DependencyResolvers
       # be turned into a .erb template file in the compile_directory
       # Otherwise just run the output to get the default.rb recipe
       def compile_resource(res)
-        # Apply meta_functions here
+        # Apply meta_functions here        
         o = case res
         when PoolParty::Resources::Variable
           # do variable stuff
@@ -43,6 +43,9 @@ module DependencyResolvers
         when PoolParty::Resources::FileResource
           files << res
           super
+        when PoolParty::Resources::ChefAttributesFile
+          attribute_files << res
+          ""
         else
           super
         end
@@ -52,6 +55,7 @@ module DependencyResolvers
       
       default_attr_reader :variables, []
       default_attr_reader :files, []
+      default_attr_reader :attribute_files, []
       
       private
       
@@ -59,9 +63,10 @@ module DependencyResolvers
         # Require the chef-only resources
         $:.unshift("#{File.dirname(__FILE__)}/chef")
         
-        %w( http_request remote_directory remote_file 
-            route script).each do |res|
+        to_define_resoures = []
+        %w( http_request remote_directory remote_file route script chef_attributes_file).each do |res|
           require "resources/#{res}"
+          PoolParty::Resource.define_resource("PoolParty::Resources::#{res.classify}".constantize)
         end
       end
       
@@ -113,7 +118,7 @@ module DependencyResolvers
         # Make sure the attributes/ directory is there
         FileUtils.mkdir_p cookbook_directory/"attributes" unless ::File.directory?(cookbook_directory/"attributes")
         # Collect the file pointers that will be using to print out the attributes
-        file_pointers = {:poolparty => File.open(cookbook_directory/"attributes"/"poolparty.rb", "w")}
+        file_pointers = {:poolparty => File.open(cookbook_directory/"attributes"/"poolparty.rb", "w+")}
         variables.each do |var|
           if var.parent && !var.parent.is_a?(PoolParty::Cloud)
             file_pointers[var.parent.has_method_name] = File.open(cookbook_directory/"attributes"/"#{var.parent.has_method_name}.rb", "w")
@@ -141,6 +146,15 @@ module DependencyResolvers
           content = fi.template ? open(fi.template).read : fi.content
           File.open(fpath, "w") do |f|
             f << content
+          end
+        end
+        
+        # Compile the attribute files
+        attribute_files.each do |res|
+          fpath = cookbook_directory/"attributes"/"#{File.basename(res.path)}"
+          FileUtils.mkdir_p File.dirname(fpath) unless File.directory?(File.dirname(fpath))
+          File.open(fpath, "w") do |f|
+            f << res.content
           end
         end
       end

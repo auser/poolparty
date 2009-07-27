@@ -22,6 +22,7 @@ pool :eucalyptus do
     has_package 'vim'
     has_variable "hookie", "pookie"
     
+    apache
   end
   
 end

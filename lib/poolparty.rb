@@ -21,6 +21,9 @@ module PoolParty
     config = YAML.load(File.read(File.expand_path("#{File.dirname(__FILE__)}/../VERSION.yml")))
     @version = "#{config[:major]}.#{config[:minor]}.#{config[:patch]}"
   end
+  def self.lib_dir
+  File.join(File.dirname(__FILE__), "..")
+  end
 end
 
 # Require the poolparty error so we can use it ubiquitously
