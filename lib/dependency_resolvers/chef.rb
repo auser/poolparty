@@ -65,30 +65,30 @@ module DependencyResolvers
         end
       end
       
-      # Take this string and apply metafunctions to the string on the resource
+      # Take the print_to_chef string and apply metafunctions to the string on the resource
       # If there are no meta functions on the resource, do not touch the resulting
       # string
-      def apply_meta_functions(re, str)
+      def apply_meta_functions(resource, str)
         regex = /[(.*)do(\w*)?(.*)]?(\w)*end$/
         
         add = []
-        add << "  notifies :#{re.meta_notifies[0]}, resources(:#{chef_safe_resource(re.meta_notifies[1].has_method_name)} => \"#{re.meta_notifies[1].name}\")" if re.meta_notifies
-        add << "  subscribes :#{re.meta_subscribes[0]}, resources(:#{chef_safe_resource(re.meta_subscribes[1].has_method_name)} => \"#{re.meta_subscribes[1].name}\"), :#{re.meta_subscribes[2]}" if re.meta_subscribes
+        add << "  notifies :#{resource.meta_notifies[0]}, resources(:#{chef_safe_resource(resource.meta_notifies[1].has_method_name)} => \"#{resource.meta_notifies[1].name}\")" if resource.meta_notifies
+        add << "  subscribes :#{resource.meta_subscribes[0]}, resources(:#{chef_safe_resource(resource.meta_subscribes[1].has_method_name)} => \"#{resource.meta_subscribes[1].name}\"), :#{resource.meta_subscribes[2]}" if resource.meta_subscribes
 
-        if re.meta_not_if
+        if resource.meta_not_if
           tmp = "not_if "
-          tmp += re.meta_not_if[1] == :block ? "do #{re.meta_not_if[0]} end" : "\"#{re.meta_not_if[0]}\""
+          tmp += resource.meta_not_if[1] == :block ? "do #{resource.meta_not_if[0]} end" : "\"#{resource.meta_not_if[0]}\""
           add << tmp
         end
         
-        if re.meta_only_if
+        if resource.meta_only_if
           tmp = "only_if "
-          tmp += re.meta_only_if[1] == :block ? "do #{re.meta_only_if[0]} end" : "\"#{re.meta_only_if[0]}\""
+          tmp += resource.meta_only_if[1] == :block ? "do #{resource.meta_only_if[0]} end" : "\"#{resource.meta_only_if[0]}\""
           add << tmp
         end
         
-        add << "  ignore_failure #{re.print_variable(re.ignore_failure)}" if re.ignore_failure
-        add << "  provider #{re.print_variable(re.provider)}" if re.provider
+        add << "  ignore_failure #{resource.print_variable(resource.ignore_failure)}" if resource.ignore_failure
+        add << "  provider #{resource.print_variable(resource.provider)}" if resource.provider
         
         return str if add.empty?
         newstr = str.chomp.gsub(regex, "")
@@ -115,12 +115,14 @@ module DependencyResolvers
         # Collect the file pointers that will be using to print out the attributes
         file_pointers = {:poolparty => File.open(cookbook_directory/"attributes"/"poolparty.rb", "w")}
         variables.each do |var|
-          file_pointers[var.parent.has_method_name] = File.open(cookbook_directory/"attributes"/"#{var.parent.has_method_name}.rb", "w") if var.parent
+          if var.parent && !var.parent.is_a?(PoolParty::Cloud)
+            file_pointers[var.parent.has_method_name] = File.open(cookbook_directory/"attributes"/"#{var.parent.has_method_name}.rb", "w")
+          end
         end
         # Make sure the attribute exists in each file
         file_pointers.each {|n,f| f << "#{n} Mash.new unless attribute?('#{n}')\n"}
         variables.each do |var|
-          if var.parent
+          if var.parent && !var.parent.is_a?(PoolParty::Cloud)
             file_pointers[var.parent.has_method_name] << "#{var.parent.has_method_name}[:#{var.name}] = #{handle_print_variable(var.value)}\n"
           else
             file_pointers[:poolparty] << "poolparty[:#{var.name}] = #{handle_print_variable(var.value)}\n"

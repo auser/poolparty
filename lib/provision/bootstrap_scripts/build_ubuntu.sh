@@ -38,6 +38,7 @@ fi
 # Install ruby and the build essential packages
 echo "Installing ruby"
 apt-get update
+apt-get install cron
 apt-get install -y ruby ruby1.8-dev libopenssl-ruby1.8 build-essential wget rsync
 
 # Install rubygems

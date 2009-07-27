@@ -15,7 +15,7 @@ module PoolParty
       
       def print_to_chef
         <<-EOE
-cron "<%= name %>" do
+cron "<%= name || command %>" do
   command "<%= command || name %>"
   action :<%= exists? ? :create : :delete %>
   minute <%= print_variable(minute) %>
