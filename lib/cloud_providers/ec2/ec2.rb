@@ -46,10 +46,22 @@ module CloudProviders
       ENV['EC2_USER_ID'] || load_keys_from_file[:user_id]
     end
     
+    def self.default_ec2_url
+      ENV['EC2_URL'] || load_keys_from_file[:ec2_url]
+    end
+    
+    def self.default_s3_url
+      ENV['S3_URL'] || load_keys_from_file[:s3_url]
+    end
+    
+    def self.default_eucalyptus_cert
+      ENV['EUCALYPTUS_CERT'] || load_keys_from_file[:eucalyptus_cert]
+    end
+    
     # Load the yaml file containing keys.  If the file does not exist, return an empty hash
     def self.load_keys_from_file(filename='/etc/poolparty/aws.yml')
       return {} unless File.exists?(filename)
-      @keys ||= YAML::load( open(filename).read )
+      YAML::load( open(filename).read )
     end
     
     default_options({
@@ -63,6 +75,8 @@ module CloudProviders
         :cert                   => default_cert,
         :access_key             => default_access_key,
         :secret_access_key      => default_secret_access_key,
+        :ec2_url                => default_ec2_url,
+        :s3_url                 => default_s3_url,
         :min_count              => 1,
         :max_count              => 1,
         :user_data              => '',
@@ -122,6 +136,7 @@ module CloudProviders
       instance_ids = o[:instance_ids] || [o[:instance_id]]
       response = ec2.terminate_instances(instance_ids)
       response.collect{|i| Ec2Instance.new(Ec2Response.pp_format(i)) }
-    end    
+    end
+    
   end
 end

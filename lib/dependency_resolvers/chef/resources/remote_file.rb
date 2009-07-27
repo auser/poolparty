@@ -2,17 +2,17 @@ module PoolParty
   module Resources
     
     class RemoteFile < FileResource
-            
+      
       default_options(
         :cookbook => nil,
-        :source => nil,
+        :source   => nil,
         :checksum => nil,
-        :mode => "0644",
-        :backup => 5,
-        :owner => "root"
+        :mode     => "0644",
+        :backup   => 5,
+        :owner    => "root"
       )
-            
-      def print_to_chef        
+      
+      def print_to_chef
         str = <<-EOE
 remote_file "<%= name %>" do
   source <%= print_variable(source) %>

@@ -15,10 +15,10 @@ EOS
   
   opt :inst_num, "The number of the instance to run bootstrap on", :type => :int
 
-  run do |command|    
+  run do |command|
     
     @loaded_clouds.each do |cld|
-        
+      
       cld.nodes.each do |node|
         node.configure!(:cloud => cld)
       end

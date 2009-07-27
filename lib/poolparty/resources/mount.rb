@@ -4,16 +4,16 @@ module PoolParty
     class Mount < Resource
       
       default_options(
-        :action => :mount,
-        :device => nil,
-        :device_type => :device,
-        :fstype => nil,
-        :options => "rw",
-        :dump => 0,
-        :pass => 2
+        :action       => :mount,
+        :device       => nil,
+        :device_type  => :device,
+        :fstype       => nil,
+        :options      => "rw",
+        :dump         => 0,
+        :pass         => 2
       )
-            
-      def print_to_chef        
+      
+      def print_to_chef
         str = <<-EOE
 mount "<%= name %>" do
   action :<%= (action ? action : (exists ? :mount : :unmount)) %>

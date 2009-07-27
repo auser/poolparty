@@ -2,18 +2,18 @@ module PoolParty
   module Resources
     
     class Cron < Resource
-            
+      
       default_options(
-        :minute => "*",
-        :hour => "*",
-        :day => "*",
-        :month => "*",
-        :weekday => "*",
-        :user => "root",
-        :command => nil
+        :minute   => "*",
+        :hour     => "*",
+        :day      => "*",
+        :month    => "*",
+        :weekday  => "*",
+        :user     => "root",
+        :command  => nil
       )
-            
-      def print_to_chef        
+      
+      def print_to_chef
         <<-EOE
 cron "<%= name %>" do
   command "<%= command || name %>"

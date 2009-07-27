@@ -28,8 +28,8 @@ module PoolParty
 # line in file: <%= filepath %>
 #   <%= line %>
 <% ordered_resources.each do |res| %>
-<%= res.compile(:chef) %>
-<% end %>        
+  <%= res.compile(:chef) %>
+<% end %>
         EOE
       end
       

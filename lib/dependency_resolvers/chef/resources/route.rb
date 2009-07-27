@@ -2,16 +2,16 @@ module PoolParty
   module Resources
     
     class Route < Directory
-            
-      default_options(        
-        :gateway => nil,
-        :metric => nil,        
+      
+      default_options(
+        :gateway    => nil,
+        :metric     => nil,
         :route_type => :host,
-        :netmask => nil,
-        :device => nil
+        :netmask    => nil,
+        :device     => nil
       )
-            
-      def print_to_chef        
+      
+      def print_to_chef
         str = <<-EOE
 route "<%= name %>" do
   gateway <%= print_variable(gateway) %>

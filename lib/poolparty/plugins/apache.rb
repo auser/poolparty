@@ -2,7 +2,7 @@ module PoolParty
   module Resources
     
     class Apache < Resource
-            
+      
       default_options :port               => 80,
                       :www_user           => 'www-data',
                       :passenger_version  => nil
@@ -16,12 +16,12 @@ module PoolParty
       def installed_as_worker
         unless @installed_as_worker
           has_package("apache2")
-
+          
           base_install
           @installed_as_worker = true
         end
       end
-
+      
       def base_install
         unless @base_install
           has_exec({:name => "restart-apache2", :command => "/etc/init.d/apache2 restart", :action => :nothing})
@@ -36,7 +36,7 @@ module PoolParty
         base_install 
         enable_passenger
       end# }}}
-
+      
       def enable_passenger
         unless @enable_passenger
           installed_as_worker
@@ -45,7 +45,7 @@ module PoolParty
           has_gem_package "fastthread"
           has_gem_package "passenger"
           passenger_configs
-
+          
           has_exec(:name => "install_passenger_script", 
             :command => 'echo -en \"\\\\n\\\\n\\\\n\\\\n\" | passenger-install-apache2-module',
             :not_if => "test -f /etc/apache2/conf.d/passenger.conf && test -s /etc/apache2/conf.d/passenger.conf",
@@ -56,31 +56,31 @@ module PoolParty
           @enable_passenger = true
         end
       end
-
+      
       def passenger_configs
         unless @passenger_configs
           has_variable "gems_path", :value => lambda { "`gem env gemdir`.chomp!" }
           has_variable "ruby_path", :value => lambda { "`which ruby`.chomp!" }
           
           passenger_version ||= "2.2.2"
-
+          
           has_variable("passenger_version",     :value => passenger_version)
           has_variable("passenger_root_path",   :value => "\#{poolparty[:gems_path]}/gems/passenger-#{passenger_version}")
           has_variable("passenger_module_path", :value => "\#{poolparty[:passenger_root_path]}/ext/apache2/mod_passenger.so")
-
+          
           has_file(:name => "/etc/apache2/mods-available/passenger.load") do
             content <<-eof
               LoadModule passenger_module <%= @node[:poolparty][:passenger_module_path] %>
             eof
           end
-
+          
           has_file(:name => "/etc/apache2/mods-available/passenger.conf") do
             content <<-eof
               PassengerRoot <%= @node[:poolparty][:passenger_root_path] %>
               PassengerRuby <%= @node[:poolparty][:ruby_path] %>
             eof
           end
-
+          
           present_apache_module(:passenger)
           @passenger_configs = true
         end
@@ -92,35 +92,34 @@ module PoolParty
           has_directory("/etc/apache2")
           has_directory("/etc/apache2/conf.d")
           has_directory("/etc/apache2/site-includes")
-
+          
           has_file(:name => "/etc/apache2/apache2.conf") do
             mode 0644
             requires get_directory("/etc/apache2/conf.d")
             template File.dirname(__FILE__)/"apache2"/"apache2.conf.erb"
           end
           # does_not_have_file(:name => "/etc/apache2/ports.conf")
-
+          
           has_exec("/usr/sbin/a2dissite default") do
             only_if "/usr/bin/test -L /etc/apache2/sites-enabled/000-default"
             notifies get_exec("reload-apache2")
           end
-
+          
           # Base config
           config("base",          "apache2"/"base.conf.erb")
           config("mime",          "apache2"/"mime-minimal.conf.erb")
           config("browser_fixes", "apache2"/"browser_fixes.conf.erb")
-
+          
           present_apache_module("mime", "rewrite")
         # end
           @configs = true
         end
       end
-
+      
       def enable_default
         listen 80 # assumes no haproxy
         site "default-site", :template => :apache2/"default-site.conf.erb"
       end
-
       
       def config(name, temp)
         has_file(:name => "/etc/apache2/conf.d/#{name}.conf") do

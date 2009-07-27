@@ -35,7 +35,11 @@ module DependencyResolvers
       else
         raise PoolParty::PoolPartyError.create("ProxyObjectError", "Compilation of #{proxy.inspect} error. Strings and symbols are supported")
       end
-      ERB.new(str).result(self.send(:binding))
+      begin
+        ERB.new(str).result(self.send(:binding))
+      rescue Exception => e
+        p [:error, e, str]
+      end      
     end
     
     # Print the dsl options in the Erb string format

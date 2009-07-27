@@ -2,18 +2,18 @@ module PoolParty
   module Resources
     
     class Exec < Resource
-            
+      
       default_options(
-        :path => ["/usr/bin:/bin:/usr/local/bin:$PATH"],
-        :command => nil,
-        :creates => nil,
-        :cwd => nil,
-        :environment => nil,
-        :group => nil,
-        :returns => nil,
-        :user => nil
+        :path         => ["/usr/bin:/bin:/usr/local/bin:$PATH"],
+        :command      => nil,
+        :creates      => nil,
+        :cwd          => nil,
+        :environment  => nil,
+        :group        => nil,
+        :returns      => nil,
+        :user         => nil
       )
-            
+      
       def print_to_chef
 str = 'execute "<%= name %>" do
   command <%= print_variable(command || name) %>

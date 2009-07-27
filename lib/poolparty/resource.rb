@@ -3,11 +3,11 @@ module PoolParty
     
     attr_reader :exists
     attr_reader :meta_notifies, :meta_not_if, :meta_only_if, :meta_subscribes
-
+    
     default_options(
-      :name     => to_s.top_level_class,
+      :name           => to_s.top_level_class,
       :ignore_failure => nil,
-      :provider => nil
+      :provider       => nil
     )
     
     def initialize(opts={}, extra_opts={}, &block)

@@ -11,6 +11,14 @@ pool :eucalyptus do
     end
     
     has_file "/etc/motd", :content => "Welcome to your eucalyptus cloud!!!!!!!"
+    has_directory '/mnt/ebs', :owner => 'poolparty'
+    has_exec 'touch /tmp/touched'
+    has_group 'partiers'
+    has_user 'fred'
+    # has_cron :minute=>'*', :command => 'touch /tmp/touched'
+    # has_line_in_file '/tmp/touched', :line => 'lined up'
+    has_package 'vim'
+    
   end
   
 end
