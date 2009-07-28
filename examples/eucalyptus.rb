@@ -22,12 +22,21 @@ pool :eucalyptus do
     has_package 'vim'
     has_variable "hookie", "pookie"
     
-    apache do
-      enable_passenger
-      
-      site "poolpartyrb.com"
-      
-      has_virtual_host "poolpartyrb.com"
+    describe_instances(:keypair_name => "ari").each do |n|
+      has_directory "/etc/poolparty/nodes"
+      has_file "/etc/poolparty/nodes/#{n.image_id}", :content => "#{n.public_ip}"
+    end
+  end
+  
+  cloud :bab do
+    keypair "ari"
+    using :ec2 do
+      image_id 'emi-39CA160F'
+    end
+    
+    describe_instances(:keypair_name => "eucalyptus_sample").each do |n|
+      has_directory "/etc/poolparty/nodes"
+      has_file "/etc/poolparty/nodes/#{n.image_id}", :content => "#{n.public_ip}"
     end
   end
   

@@ -50,7 +50,7 @@ module SearchablePaths
     # returns the full set of valid searchable paths, given the options
     def searchable_paths
       return @paths_override if @paths_override && @paths_override.size > 0
-      @paths_prepend + default_paths + @paths_append
+      @searchable_paths ||= @paths_prepend + default_paths + @paths_append
     end
   end
 
