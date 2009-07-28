@@ -8,6 +8,7 @@ class VirtualHostTest < Test::Unit::TestCase
     clear!
     @pool = pool :apache_test_pool do
       cloud :httpd do
+        apache
         virtual_host "poolpartyrb.com"
       end
     end

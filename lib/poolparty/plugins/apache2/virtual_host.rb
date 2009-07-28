@@ -2,9 +2,14 @@ module PoolParty
   module Resources
     class VirtualHost < Resource
       
+      default_options(
+        :port     => 80,
+        :www_user => "www"
+      )
+      
       def listen(port="80")
         has_variable(:name => "port", :value => port)
-        port port
+        self.port = port
       end
 
       def virtual_host_entry(file)
@@ -21,7 +26,8 @@ module PoolParty
       end
 
 
-      def after_loaded(opts={}, parent=self)
+      def before_compile(opts={}, parent=self)
+        self.www_user "www"
         has_directory(:name => "/var/www", :owner => www_user, :mode=>'0744')
         has_directory(:name => "/var/www/#{name}", :owner => www_user, :mode=>'0744')
         has_directory(:name => "/var/www/#{name}/logs", :owner => www_user, :mode=>'0744')
