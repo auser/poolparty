@@ -13,6 +13,7 @@ module PoolParty
     def initialize(opts={}, extra_opts={}, &block)
       @exists = true
       super
+      valid?
     end
     
     # Dependency resolver methods
@@ -85,6 +86,13 @@ module PoolParty
       false
     end
     
+    # CALLBACKS
+    def before_compile
+    end
+    
+    def after_compile
+    end
+    
     # Singleton methods
     # has_name
     # The has_ and does_not_have methods names
@@ -117,34 +125,40 @@ module PoolParty
       ddputs "Defining resources..."
       defined_resources.each do |res|
         ddputs "Defining resource: #{res} as #{res.has_method_name}"
-        Base.class_eval <<-EOE
-          def has_#{res.has_method_name}(a={},b={},&block)
-            obj = #{res}.new(a,b,&block)
-            obj.exists!
-            ordered_resources << obj
-            obj
-          end
-          def does_not_have_#{res.has_method_name}(a={},b={},&block)
-            obj = has_#{res.has_method_name}(a,b,&block)
-            obj.does_not_exist!
-            obj
-          end
-          def #{res.has_method_name}s
-            ordered_resources.select {|q| q if q.class.to_s =~ /#{res.to_s.classify}/ }
-          end
-          alias :#{res.has_method_name} :has_#{res.has_method_name}
-          
-          def get_#{res.has_method_name}(nm)            
-            out_res = #{res.has_method_name}s.detect {|other| other.base_name == nm}
-            out_res ||= unless out_res
-              containing_resource = current_context.reverse.detect {|s| s.get_#{res.has_method_name}(nm) if s}
-              containing_resource.get_#{res.has_method_name}(nm) if containing_resource
-            end
-            raise PoolParty::PoolPartyError.create("ResourceNotFound", "The #{res.has_method_name} \#{nm} was not found. Please make sure you've specified it") unless out_res
-            out_res
-          end          
-        EOE
+        define_resource(res)
       end
+    end
+    
+    # Define the resource on the base class so it's available across all
+    # PoolParty classes that use Base
+    def self.define_resource(res)
+      Base.class_eval <<-EOE
+        def has_#{res.has_method_name}(a={},b={},&block)
+          obj = #{res}.new(a,b,&block)
+          obj.exists!
+          ordered_resources << obj
+          obj
+        end
+        def does_not_have_#{res.has_method_name}(a={},b={},&block)
+          obj = has_#{res.has_method_name}(a,b,&block)
+          obj.does_not_exist!
+          obj
+        end
+        def #{res.has_method_name}s
+          ordered_resources.select {|q| q if q.class.to_s =~ /#{res.to_s.classify}/ }
+        end
+        alias :#{res.has_method_name} :has_#{res.has_method_name}
+        
+        def get_#{res.has_method_name}(nm)            
+          out_res = #{res.has_method_name}s.detect {|other| other.base_name == nm}
+          out_res ||= unless out_res
+            containing_resource = current_context.reverse.detect {|s| s.get_#{res.has_method_name}(nm) if s}
+            containing_resource.get_#{res.has_method_name}(nm) if containing_resource
+          end
+          raise PoolParty::PoolPartyError.create("ResourceNotFound", "The #{res.has_method_name} \#{nm} was not found. Please make sure you've specified it") unless out_res
+          out_res
+        end          
+      EOE
     end
     
     # When a new resource is created, the class gets stored as a defined resource

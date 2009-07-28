@@ -81,6 +81,7 @@ module CloudProviders
           dsl_options[:os] ||= determine_os.to_sym
         end
       end
+      alias :platform :os
       
       # Determine the os
       # Default to ubuntu

@@ -13,6 +13,10 @@ module PoolParty
         has_service("apache2", :requires => get_package("apache2"))
       end
       
+      def before_compile
+        apache_configs
+      end
+      
       def installed_as_worker
         unless @installed_as_worker
           has_package("apache2")
@@ -116,6 +120,10 @@ module PoolParty
         end
       end
       
+      def apache_configs
+        has_chef_attributes_file PoolParty.lib_dir/"vendor"/"chef"/"apache2"/"attributes"/"apache.rb"
+      end
+      
       def enable_default
         listen 80 # assumes no haproxy
         site "default-site", :template => :apache2/"default-site.conf.erb"
@@ -129,7 +137,7 @@ module PoolParty
       end
       
       def listen(p="80")
-        has_variable(:name => "port", :value => p)
+        has_variable(:name => "port", :value => [p])
         self.port = p
         @listen = true
       end

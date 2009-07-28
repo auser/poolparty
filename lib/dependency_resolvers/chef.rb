@@ -17,8 +17,8 @@ module DependencyResolvers
       
       def after_compile(o)
         compile_default_recipe(o)
-        compile_variables
         compile_files
+        compile_variables
         compile_recipes
         
         write_dna_json
@@ -34,7 +34,7 @@ module DependencyResolvers
       # be turned into a .erb template file in the compile_directory
       # Otherwise just run the output to get the default.rb recipe
       def compile_resource(res)
-        # Apply meta_functions here
+        # Apply meta_functions here        
         o = case res
         when PoolParty::Resources::Variable
           # do variable stuff
@@ -43,6 +43,9 @@ module DependencyResolvers
         when PoolParty::Resources::FileResource
           files << res
           super
+        when PoolParty::Resources::ChefAttributesFile
+          attribute_files << res
+          ""
         else
           super
         end
@@ -52,6 +55,7 @@ module DependencyResolvers
       
       default_attr_reader :variables, []
       default_attr_reader :files, []
+      default_attr_reader :attribute_files, []
       
       private
       
@@ -59,9 +63,10 @@ module DependencyResolvers
         # Require the chef-only resources
         $:.unshift("#{File.dirname(__FILE__)}/chef")
         
-        %w( http_request remote_directory remote_file 
-            route script).each do |res|
+        to_define_resoures = []
+        %w( http_request remote_directory remote_file route script chef_attributes_file).each do |res|
           require "resources/#{res}"
+          PoolParty::Resource.define_resource("PoolParty::Resources::#{res.classify}".constantize)
         end
       end
       
@@ -76,13 +81,13 @@ module DependencyResolvers
         add << "  subscribes :#{resource.meta_subscribes[0]}, resources(:#{chef_safe_resource(resource.meta_subscribes[1].has_method_name)} => \"#{resource.meta_subscribes[1].name}\"), :#{resource.meta_subscribes[2]}" if resource.meta_subscribes
 
         if resource.meta_not_if
-          tmp = "not_if "
+          tmp = "  not_if "
           tmp += resource.meta_not_if[1] == :block ? "do #{resource.meta_not_if[0]} end" : "\"#{resource.meta_not_if[0]}\""
           add << tmp
         end
         
         if resource.meta_only_if
-          tmp = "only_if "
+          tmp = "   only_if "
           tmp += resource.meta_only_if[1] == :block ? "do #{resource.meta_only_if[0]} end" : "\"#{resource.meta_only_if[0]}\""
           add << tmp
         end
@@ -116,11 +121,11 @@ module DependencyResolvers
         file_pointers = {:poolparty => File.open(cookbook_directory/"attributes"/"poolparty.rb", "w")}
         variables.each do |var|
           if var.parent && !var.parent.is_a?(PoolParty::Cloud)
-            file_pointers[var.parent.has_method_name] = File.open(cookbook_directory/"attributes"/"#{var.parent.has_method_name}.rb", "w")
+            file_pointers[var.parent.has_method_name] = File.open(cookbook_directory/"attributes"/"#{var.parent.has_method_name}.rb", "a")
           end
         end
         # Make sure the attribute exists in each file
-        file_pointers.each {|n,f| f << "#{n} Mash.new unless attribute?('#{n}')\n"}
+        file_pointers.each {|n,f| f << "\n#{n} Mash.new unless attribute?('#{n}')\n"}
         variables.each do |var|
           if var.parent && !var.parent.is_a?(PoolParty::Cloud)
             file_pointers[var.parent.has_method_name] << "#{var.parent.has_method_name}[:#{var.name}] = #{handle_print_variable(var.value)}\n"
@@ -141,6 +146,15 @@ module DependencyResolvers
           content = fi.template ? open(fi.template).read : fi.content
           File.open(fpath, "w") do |f|
             f << content
+          end
+        end
+        
+        # Compile the attribute files
+        attribute_files.each do |res|
+          fpath = cookbook_directory/"attributes"/"#{File.basename(res.path)}"
+          FileUtils.mkdir_p File.dirname(fpath) unless File.directory?(File.dirname(fpath))
+          File.open(fpath, "w") do |f|
+            f << res.content
           end
         end
       end
