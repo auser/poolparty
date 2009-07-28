@@ -29,7 +29,7 @@ class ConnectionsTest < Test::Unit::TestCase
   end
   
   def test_default_user
-    assert_equal 'poolparty', inst.user
+    assert_equal 'root', inst.user
     assert_equal 'fred', inst.user('fred')
     assert_equal 'fred', inst.user
   end
@@ -42,12 +42,12 @@ class ConnectionsTest < Test::Unit::TestCase
   end
   
   def test_ssh
-    assert_match /ssh poolparty@bigboy .* -i (.*)test_key 'uptime'$/, inst.ssh('uptime')
+    assert_match /ssh root@bigboy .* -i (.*)test_key 'uptime'$/, inst.ssh('uptime')
   end
   
   def test_run
-    assert_match /ssh poolparty@bigboy .* -i (.*)test_key 'uptime'$/, inst.run('uptime')
-    assert_match /ssh poolparty@bigboy (.*)--sshoptions foo (.*)'uptime'$/, inst.ssh('uptime', {'--sshoptions'=>'foo'})
+    assert_match /ssh root@bigboy .* -i (.*)test_key 'uptime'$/, inst.run('uptime')
+    assert_match /ssh root@bigboy (.*)--sshoptions foo (.*)'uptime'$/, inst.ssh('uptime', {'--sshoptions'=>'foo'})
   end
   
   def test_rsync
@@ -65,7 +65,7 @@ class ConnectionsTest < Test::Unit::TestCase
   end
   
   def test_scp
-    assert_match /scp (.*)\/templates\/script poolparty@bigboy/, inst.scp(:source=>fixtures_dir/'templates/script')
+    assert_match /scp (.*)\/templates\/script root@bigboy/, inst.scp(:source=>fixtures_dir/'templates/script')
   end
   
 end

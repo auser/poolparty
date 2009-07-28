@@ -22,7 +22,11 @@ pool :eucalyptus do
     has_package 'vim'
     has_variable "hookie", "pookie"
     
-    apache
+    apache do
+      enable_passenger
+      
+      site "poolpartyrb.com"
+    end
   end
   
 end

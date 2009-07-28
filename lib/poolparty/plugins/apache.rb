@@ -36,10 +36,9 @@ module PoolParty
       end
       
       
-      def install_passenger# {{{
-        base_install 
+      def install_passenger
         enable_passenger
-      end# }}}
+      end
       
       def enable_passenger
         unless @enable_passenger
@@ -50,12 +49,12 @@ module PoolParty
           has_gem_package "passenger"
           passenger_configs
           
-          has_exec(:name => "install_passenger_script", 
-            :command => 'echo -en \"\\\\n\\\\n\\\\n\\\\n\" | passenger-install-apache2-module',
-            :not_if => "test -f /etc/apache2/conf.d/passenger.conf && test -s /etc/apache2/conf.d/passenger.conf",
-            :creates => lambda { "node[:poolparty][:passenger_module_path]" },
-            :notifies => [get_exec("restart-apache2"), :run]
-            )
+          has_exec "install_passenger_script" do
+            command 'echo -en \"\\\\n\\\\n\\\\n\\\\n\" | passenger-install-apache2-module'
+            notifies get_exec("restart-apache2"), :run
+            not_if "test -f /etc/apache2/conf.d/passenger.conf && test -s /etc/apache2/conf.d/passenger.conf"
+            creates lambda { "node[:apache][:passenger_module_path]" }
+            end
           
           @enable_passenger = true
         end
@@ -63,25 +62,25 @@ module PoolParty
       
       def passenger_configs
         unless @passenger_configs
-          has_variable "gems_path", :value => lambda { "`gem env gemdir`.chomp!" }
-          has_variable "ruby_path", :value => lambda { "`which ruby`.chomp!" }
+          has_variable "gems_path", lambda { "`gem env gemdir`.chomp!" }
+          has_variable "ruby_path", lambda { "`which ruby`.chomp!" }
           
-          passenger_version ||= "2.2.2"
+          passenger_version ||= "2.2.4"
           
-          has_variable("passenger_version",     :value => passenger_version)
-          has_variable("passenger_root_path",   :value => "\#{poolparty[:gems_path]}/gems/passenger-#{passenger_version}")
-          has_variable("passenger_module_path", :value => "\#{poolparty[:passenger_root_path]}/ext/apache2/mod_passenger.so")
+          has_variable("passenger_version",     passenger_version)
+          has_variable("passenger_root_path",   "\#{apache[:gems_path]}/gems/passenger-#{passenger_version}")
+          has_variable("passenger_module_path", "\#{apache[:passenger_root_path]}/ext/apache2/mod_passenger.so")
           
           has_file(:name => "/etc/apache2/mods-available/passenger.load") do
             content <<-eof
-              LoadModule passenger_module <%= @node[:poolparty][:passenger_module_path] %>
+LoadModule passenger_module <%= @node[:apache][:passenger_module_path] %>
             eof
           end
           
           has_file(:name => "/etc/apache2/mods-available/passenger.conf") do
             content <<-eof
-              PassengerRoot <%= @node[:poolparty][:passenger_root_path] %>
-              PassengerRuby <%= @node[:poolparty][:ruby_path] %>
+PassengerRoot <%= @node[:apache][:passenger_root_path] %>
+PassengerRuby <%= @node[:apache][:ruby_path] %>
             eof
           end
           

@@ -38,7 +38,7 @@ module DependencyResolvers
       begin
         ERB.new(str).result(self.send(:binding))
       rescue Exception => e
-        p [:error, e, str]
+        p [:error, e.inspect, str]
       end      
     end
     

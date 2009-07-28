@@ -195,8 +195,17 @@ module CloudProviders
         Time.now.to_i - launching_time.to_time.to_i
       end
       
-      # Callback
+      # Callbacks
       def loaded
+      end
+      
+      def before_bootstrap
+      end
+      def after_bootstrap
+      end
+      def before_configure
+      end
+      def after_configure
       end
       
       def cloud(n=nil)

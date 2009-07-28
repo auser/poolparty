@@ -76,6 +76,12 @@ module PoolParty
       #wait for an ip and then wait for ssh port, then configure instance
       if instance.wait_for_public_ip(timeout) && instance.wait_for_port(22, :timeout=>timeout)
         callback :after_launch_instance
+        instance.before_bootstrap
+        instance.bootstrap!
+        instance.after_bootstrap
+        instance.before_configure
+        instance.configure!(:cloud => self)
+        instance.after_configure
         block.call(instance) if block
         instance
       else
@@ -87,6 +93,7 @@ module PoolParty
     
     # Contract the cloud
     def contract(hsh={})
+      instance.before_terminate
       nodes(hsh).last.terminate!
     end
     
