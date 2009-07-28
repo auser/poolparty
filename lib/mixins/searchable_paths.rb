@@ -23,19 +23,16 @@ module SearchablePaths
     # * <tt>:prepend_paths</tt>: prepend these paths to any existing paths
     def has_searchable_paths(opts={})
       class_eval do
-        extend SearchablePaths::SingletonMethods
-
         @searchable_paths_dirs = [opts[:dir]] if opts[:dir]
         @searchable_paths_dirs = opts[:dirs]  if opts[:dirs]
         @paths_override        = opts[:paths] if opts[:paths]
         @paths_prepend         = opts[:prepend_paths] || []
         @paths_append          = opts[:append_paths]  || []
       end
+      extend SearchablePaths::SingletonMethods
       include SearchablePaths::InstanceMethods
     end
-  end
-
-  module SingletonMethods
+    
     def searchable_paths_dir;  @searchable_paths_dirs.first; end
     def searchable_paths_dirs
       @searchable_paths_dirs && @searchable_paths_dirs.size > 0 ? @searchable_paths_dirs : ["/"]
@@ -57,6 +54,9 @@ module SearchablePaths
     end
   end
 
+  module SingletonMethods
+  end
+
   module InstanceMethods
 
     # Searches for +filepath+ in the <tt>searchable_paths</tt> iff +filepath+
@@ -72,7 +72,7 @@ module SearchablePaths
         return full_path if File.exists?(full_path)
       end
       self.class.searchable_paths.each do |path|
-        self.class.searchable_paths_dirs.each do |dir|            
+        self.class.searchable_paths_dirs.each do |dir|
           full_path = File.expand_path(path / dir / filepath)
           return full_path if File.exists?(full_path)
         end

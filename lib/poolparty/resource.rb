@@ -160,7 +160,7 @@ module PoolParty
         end
         alias :#{res.has_method_name} :has_#{res.has_method_name}
         
-        def get_#{res.has_method_name}(nm)            
+        def get_#{res.has_method_name}(nm)
           out_res = #{res.has_method_name}s.detect {|other| other.base_name == nm}
           out_res ||= unless out_res
             containing_resource = current_context.reverse.detect {|s| s.get_#{res.has_method_name}(nm) if s}
@@ -168,14 +168,19 @@ module PoolParty
           end
           raise PoolParty::PoolPartyError.create("ResourceNotFound", "The #{res.has_method_name} \#{nm} was not found. Please make sure you've specified it") unless out_res
           out_res
-        end          
+        end
       EOE
     end
     
     # When a new resource is created, the class gets stored as a defined resource
     # in the defined_resources resources class variable
-    def self.inherited(bclass)
-      defined_resources << bclass
+    def self.inherited(subclass)
+      # templates_dir = File.expand_path(File.join(subclass.pwd, 'templates'))
+      # if File.directory?(templates_dir)
+      #   p templates_dir
+      #   subclass.has_searchable_paths(:prepend_paths=>[templates_dir]) 
+      # end
+      defined_resources << subclass
     end
     
     # Storage of defined resources that are stored when

@@ -4,7 +4,7 @@
 class Keypair
   
   include SearchablePaths
-  has_searchable_paths(:paths => ["#{ENV["HOME"]}/.ssh/", "#{ENV["HOME"]}/.ec2/"])
+  has_searchable_paths(:prepend_paths => ["#{ENV["HOME"]}/.ssh/", "#{ENV["HOME"]}/.ec2/"])
   
   attr_accessor :filepath
   
