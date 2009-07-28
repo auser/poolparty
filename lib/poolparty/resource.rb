@@ -5,6 +5,7 @@ module PoolParty
     attr_reader :meta_notifies, :meta_not_if, :meta_only_if, :meta_subscribes
     
     default_options(
+      :cloud          => nil,
       :name           => to_s.top_level_class,
       :ignore_failure => nil,
       :provider       => nil
@@ -111,6 +112,16 @@ module PoolParty
     # so that there is access to the has_method_name on the instance
     def has_method_name
       self.class.has_method_name
+    end
+    
+    def cloud
+      if parent.is_a? ::PoolParty::Cloud
+        parent
+      elsif parent
+        parent.cloud
+      else
+        nil
+      end
     end
     
     # Define the resource methods for all the resources sublcassed by Resource

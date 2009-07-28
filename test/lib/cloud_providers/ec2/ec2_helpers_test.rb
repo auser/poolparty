@@ -11,13 +11,6 @@ class Ec2HelpersTest < Test::Unit::TestCase
     @inst ||= clouds['app'].describe_instances.first
   end
   
-  def amazon?
-    stub(clouds['app'].cloud_provider).ec2_url  {'http://example.com'}
-    assert clouds['app'].cloud_provider.eucalyptus?
-    stub(clouds['app'].cloud_provider).ec2_url  {'https://ec2.amazonaws.com'}
-    assert !clouds['app'].cloud_provider.eucalyptus?
-  end
-  
   def test_associate_address
   end
   

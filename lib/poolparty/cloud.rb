@@ -141,13 +141,13 @@ module PoolParty
     # Take the cloud's resources and compile them down using 
     # the defined (or the default dependency_resolver, chef)
     def compile
-      dependency_resolver.compile_to(resources, tmp_path/"etc"/"#{dependency_resolver_name}")
+      dependency_resolver.compile_to(self, tmp_path/"etc"/"#{dependency_resolver_name}")
     end
     
     
     ##### Internal methods #####
     # Methods that only the cloud itself will use
-    # and thus are private    
+    # and thus are private
     
     # Form the cloud
     # Run the init block with the init_opts
