@@ -193,3 +193,8 @@ PassengerRuby <%= @node[:apache][:ruby_path] %>
     
   end
 end
+
+$:.unshift(File.dirname(__FILE__))
+%w(php5).each do |lib|
+  require "apache2/#{lib}"
+end
