@@ -12,7 +12,14 @@ module PoolParty
       @pool_name = n.to_s
       @pool_name.freeze
       
-      super
+      super do
+        instance_eval &block
+        form_clouds
+        clouds.each do |name, cld|
+          cld.after_all_loaded
+        end
+        
+      end
     end
     
     # cloud
@@ -22,6 +29,23 @@ module PoolParty
         clouds[name.to_s] ||= PoolParty::Cloud.new(name, o, &block)
       else
         raise PoolPartyError.new("CloudError", "You must pass a block when defining a cloud")
+      end
+    end
+    
+    # Run twice to catch the errors on the first run
+    # TODO: CHANGE ME!
+    def form_clouds
+      failed_clouds = []
+      clouds.each do |name, cld|
+        begin
+          clouds[name].form_clouds
+        rescue Exception => e
+          failed_clouds << [name, cld]
+          next
+        end
+      end
+      failed_clouds.each do |name, cld|
+        clouds[name].form_clouds
       end
     end
     

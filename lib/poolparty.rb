@@ -43,7 +43,7 @@ require "poolparty/pool_party_error"
 end
 
 # Mixins
-%w(callbacks pinger searchable_paths).each do |lib| 
+%w(callbacks pinger searchable_paths delayed).each do |lib| 
   require "mixins/#{lib}"
 end
 

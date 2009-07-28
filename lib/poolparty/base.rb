@@ -14,6 +14,7 @@ module PoolParty
     include Parenting, Dslify
     include SearchablePaths
     include Callbacks
+    include Delayed
     
     default_options Default.default_options
     

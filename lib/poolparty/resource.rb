@@ -115,13 +115,11 @@ module PoolParty
     end
     
     def cloud
-      if parent.is_a? ::PoolParty::Cloud
-        parent
-      elsif parent && !parent.is_a?(PoolParty::Pool)
-        parent.cloud
-      else
-        nil
-      end
+      get_parent_of_class(PoolParty::Cloud)
+    end
+    
+    def pool
+      get_parent_of_class(PoolParty::Pool)
     end
     
     # Define the resource methods for all the resources sublcassed by Resource
@@ -243,6 +241,18 @@ module PoolParty
       end
     end
     
+    
+    private
+    # Get parent of class
+    def get_parent_of_class(klass)
+      if parent.is_a? klass
+        parent
+      elsif parent && !parent.is_a?(PoolParty::Pool)
+        parent.cloud
+      else
+        nil
+      end      
+    end
   end
 end
 

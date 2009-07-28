@@ -23,12 +23,22 @@ module PoolParty
     callback_block do |cld, callback|
     end
     
-    def initialize(opts={}, extra_opts={}, &block)
-      @init_block = block
-      @init_opts = compile_opts(opts, extra_opts)
+    # Freeze the cloud_name so we can't modify it at all, set the plugin_directory
+    # call and run instance_eval on the block and then call the after_create callback
+    def initialize(n, o={}, &block)
+      @cloud_name = n
+      @cloud_name.freeze
       
-      @base_name = self.name
+      # super(n,o,&block)
+      # @init_block = block
+      @init_opts = compile_opts(o)
+      
+      @init_block = Proc.new do
+        super(n,o,&block)
+      end
+      
     end
+    
     
     # returns an instance of Keypair
     # You can pass either a filename which will be searched for in ~/.ec2/ and ~/.ssh/
@@ -46,7 +56,7 @@ module PoolParty
     end
     
     # Cloud provider methods
-    def nodes(o={}); cloud_provider.nodes(o); end
+    def nodes(o={}); delayed_action {cloud_provider.nodes(o)}; end
     def run_instance(o={}); cloud_provider.run_instance(o);end
     def terminate_instance!(o={}); cloud_provider.terminate_instance!(o);end
     def describe_instances(o={}); cloud_provider.describe_instances(o);end
@@ -104,15 +114,6 @@ module PoolParty
       nodes(hsh).last.terminate!
     end
     
-    # Freeze the cloud_name so we can't modify it at all, set the plugin_directory
-    # call and run instance_eval on the block and then call the after_create callback
-    def initialize(n, o={}, &block)
-      @cloud_name = n
-      @cloud_name.freeze
-      
-      super(n,o,&block)
-    end
-    
     # Temporary path
     # Starts at the global default tmp path and appends the pool name
     # and the cloud name
@@ -148,6 +149,7 @@ module PoolParty
     # Take the cloud's resources and compile them down using 
     # the defined (or the default dependency_resolver, chef)
     def compile
+      FileUtils.mkdir_p tmp_path unless File.directory?(tmp_path)
       dependency_resolver.compile_to(self, tmp_path/"etc"/"#{dependency_resolver_name}")
     end
     
@@ -159,8 +161,16 @@ module PoolParty
     # Form the cloud
     # Run the init block with the init_opts
     # on the cloud
-    def cloud_form
+    # This is run after the cloud.rb file has been consumed
+    def form_clouds
       run_with_callbacks(@init_opts, &@init_block)
+      loaded!
+    end
+    
+    def after_all_loaded
+      run_after_loaded do |b|
+        run_in_context(&b)
+      end
     end
     
   end

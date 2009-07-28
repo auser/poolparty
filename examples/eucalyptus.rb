@@ -22,10 +22,15 @@ pool :eucalyptus do
     has_package 'vim'
     has_variable "hookie", "pookie"
     
-    describe_instances(:keypair_name => "ari").each do |n|
-      has_directory "/etc/poolparty/nodes"
-      has_file "/etc/poolparty/nodes/#{n.image_id}", :content => "#{n.public_ip}"
-    end
+    has_directory "/etc/poolparty/nodes"
+
+    # clouds.each do |oname, cld|
+      # has_directory "/etc/poolparty/nodes/#{oname}"
+      clouds["bab"].nodes.each do |n|
+        has_file "/etc/poolparty/nodes/bab/#{n.image_id}", :content => "#{n.public_ip}"
+      end
+    # end
+    
   end
   
   cloud :bab do
@@ -34,10 +39,15 @@ pool :eucalyptus do
       image_id 'emi-39CA160F'
     end
     
-    describe_instances(:keypair_name => "eucalyptus_sample").each do |n|
-      has_directory "/etc/poolparty/nodes"
-      has_file "/etc/poolparty/nodes/#{n.image_id}", :content => "#{n.public_ip}"
+    has_directory "/etc/poolparty/nodes"
+    
+    clouds.each do |oname, cld|
+      has_directory "/etc/poolparty/nodes/#{oname}"
+      cld.nodes.each do |n|
+        has_file "/etc/poolparty/nodes/#{oname}/#{n.image_id}", :content => "#{n.public_ip}"
+      end
     end
+    
   end
   
 end

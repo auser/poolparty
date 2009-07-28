@@ -78,5 +78,21 @@ class ResourceTest < Test::Unit::TestCase
     end
   end
   
+  def test_access_to_the_pool_and_cloud
+    pool :box do
+      cloud :semaphore do
+        has_file :name => "pool_name", :content => pool.name
+        has_variable "pool", pool.name
+      end
+    end
+    
+    # Purely for testing purposes
+    assert_equal "box", clouds["semaphore"].files.first.content
+    assert_equal "box", clouds["semaphore"].variables.first.value
+    
+    assert_equal "box", clouds["semaphore"].variables.first.cloud.files.first.content
+    assert_equal "semaphore", clouds["semaphore"].variables.first.cloud.name
+  end
+  
   
 end

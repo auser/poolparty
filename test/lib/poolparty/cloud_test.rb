@@ -8,7 +8,7 @@ class CloudTest < Test::Unit::TestCase
     clear!
     @filepath = fixtures_dir/"clouds/simple_cloud.rb"
     @pool = PoolParty::Pool.load_from_file(@filepath)
-    @cloud = @pool.clouds[@pool.clouds.keys.first]    
+    @cloud = @pool.clouds[@pool.clouds.keys.first]
   end
     
   def test_be_able_to_set_the_dependency_resolver

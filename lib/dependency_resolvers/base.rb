@@ -10,7 +10,7 @@ module DependencyResolvers
     end
     
     def self.compile_to(resources=[], outdir=Dir.pwd)
-      @compile_directory ||= outdir
+      @compile_directory = outdir
       compile(resources)
     end
     
