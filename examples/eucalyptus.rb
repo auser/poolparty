@@ -26,6 +26,8 @@ pool :eucalyptus do
       enable_passenger
       
       site "poolpartyrb.com"
+      
+      has_virtual_host "poolpartyrb.com"
     end
   end
   

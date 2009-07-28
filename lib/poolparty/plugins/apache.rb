@@ -195,6 +195,6 @@ PassengerRuby <%= @node[:apache][:ruby_path] %>
 end
 
 $:.unshift(File.dirname(__FILE__))
-%w(php5).each do |lib|
+%w(php5 virtual_host).each do |lib|
   require "apache2/#{lib}"
 end
