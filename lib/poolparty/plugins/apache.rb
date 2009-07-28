@@ -36,10 +36,9 @@ module PoolParty
       end
       
       
-      def install_passenger# {{{
-        base_install 
+      def install_passenger
         enable_passenger
-      end# }}}
+      end
       
       def enable_passenger
         unless @enable_passenger
@@ -50,12 +49,12 @@ module PoolParty
           has_gem_package "passenger"
           passenger_configs
           
-          has_exec(:name => "install_passenger_script", 
-            :command => 'echo -en \"\\\\n\\\\n\\\\n\\\\n\" | passenger-install-apache2-module',
-            :not_if => "test -f /etc/apache2/conf.d/passenger.conf && test -s /etc/apache2/conf.d/passenger.conf",
-            :creates => lambda { "node[:poolparty][:passenger_module_path]" },
-            :notifies => get_exec("restart-apache2")
-            )
+          has_exec "install_passenger_script" do
+            command 'echo -en \"\\\\n\\\\n\\\\n\\\\n\" | passenger-install-apache2-module'
+            notifies get_exec("restart-apache2"), :run
+            not_if "test -f /etc/apache2/conf.d/passenger.conf && test -s /etc/apache2/conf.d/passenger.conf"
+            creates lambda { "node[:apache][:passenger_module_path]" }
+            end
           
           @enable_passenger = true
         end
@@ -63,25 +62,25 @@ module PoolParty
       
       def passenger_configs
         unless @passenger_configs
-          has_variable "gems_path", :value => lambda { "`gem env gemdir`.chomp!" }
-          has_variable "ruby_path", :value => lambda { "`which ruby`.chomp!" }
+          has_variable "gems_path", lambda { "`gem env gemdir`.chomp!" }
+          has_variable "ruby_path", lambda { "`which ruby`.chomp!" }
           
-          passenger_version ||= "2.2.2"
+          passenger_version ||= "2.2.4"
           
-          has_variable("passenger_version",     :value => passenger_version)
-          has_variable("passenger_root_path",   :value => "\#{poolparty[:gems_path]}/gems/passenger-#{passenger_version}")
-          has_variable("passenger_module_path", :value => "\#{poolparty[:passenger_root_path]}/ext/apache2/mod_passenger.so")
+          has_variable("passenger_version",     passenger_version)
+          has_variable("passenger_root_path",   "\#{apache[:gems_path]}/gems/passenger-#{passenger_version}")
+          has_variable("passenger_module_path", "\#{apache[:passenger_root_path]}/ext/apache2/mod_passenger.so")
           
           has_file(:name => "/etc/apache2/mods-available/passenger.load") do
             content <<-eof
-              LoadModule passenger_module <%= @node[:poolparty][:passenger_module_path] %>
+LoadModule passenger_module <%= @node[:apache][:passenger_module_path] %>
             eof
           end
           
           has_file(:name => "/etc/apache2/mods-available/passenger.conf") do
             content <<-eof
-              PassengerRoot <%= @node[:poolparty][:passenger_root_path] %>
-              PassengerRuby <%= @node[:poolparty][:ruby_path] %>
+PassengerRoot <%= @node[:apache][:passenger_root_path] %>
+PassengerRuby <%= @node[:apache][:ruby_path] %>
             eof
           end
           
@@ -106,7 +105,7 @@ module PoolParty
           
           has_exec("/usr/sbin/a2dissite default") do
             only_if "/usr/bin/test -L /etc/apache2/sites-enabled/000-default"
-            notifies get_exec("reload-apache2")
+            notifies get_exec("reload-apache2"), :run
           end
           
           # Base config
@@ -132,7 +131,7 @@ module PoolParty
       def config(name, temp)
         has_file(:name => "/etc/apache2/conf.d/#{name}.conf") do
           template File.dirname(__FILE__)/temp
-          notifies get_exec("reload-apache2")
+          notifies get_exec("reload-apache2"), :run
         end
       end
       
@@ -147,8 +146,9 @@ module PoolParty
         when "present", "installed"
           install_site(name, opts)
         when "absent"
-          has_exec(:command => "/usr/sbin/a2dissite #{name}", :notifies => get_exec("reload-apache2")) do
-          requires get_package("apache2")
+          has_exec(:command => "/usr/sbin/a2dissite #{name}") do
+            notifies get_exec("reload-apache2"), :run
+            requires get_package("apache2")
             only_if "/bin/sh -c \"[ -L /etc/apache2/sites-enabled/#{name} ] && [ /etc/apache2/sites-enabled/#{name} -ef /etc/apache2/sites-available/#{name}]\""
           end
         end
@@ -158,7 +158,8 @@ module PoolParty
         opts.merge!(:name => "/etc/apache2/sites-available/#{name}")
         has_directory(:name => "/etc/apache2/sites-available")
         has_file(opts) unless opts[:no_file]
-        has_exec(:name => "/usr/sbin/a2ensite #{name}", :notifies => get_exec("reload-apache2")) do
+        has_exec(:name => "/usr/sbin/a2ensite #{name}") do
+          notifies get_exec("reload-apache2"), :run
           requires get_package("apache2")
           not_if "/bin/sh -c '[ -L /etc/apache2/sites-enabled/#{name} ] && [ /etc/apache2/sites-enabled/#{name} -ef /etc/apache2/sites-available/#{name} ]'"
         end
@@ -173,7 +174,7 @@ module PoolParty
           has_exec(:name => "mod-#{name}", :command => "/usr/sbin/a2enmod #{name}") do
             requires get_package("apache2")
             not_if "/bin/sh -c \'[ -L /etc/apache2/mods-enabled/#{name}.load ] && [ /etc/apache2/mods-enabled/#{name}.load -ef /etc/apache2/mods-available/#{name}.load ]\'"
-            notifies get_exec("force-reload-apache2")            
+            notifies get_exec("force-reload-apache2"), :run
           end
         end
       end
@@ -183,7 +184,7 @@ module PoolParty
           has_exec({:name => "no-mod-#{name}"}, :command => "/usr/sbin/a2dismod #{name}") do
             requires get_package("apache2")
             not_if "/bin/sh -c \'[ -L /etc/apache2/mods-enabled/#{name}.load ] && [ /etc/apache2/mods-enabled/#{name}.load -ef /etc/apache2/mods-available/#{name}.load ]\'"
-            notifies get_exec("force-reload-apache2")
+            notifies get_exec("force-reload-apache2"), :run
           end
         end
       end

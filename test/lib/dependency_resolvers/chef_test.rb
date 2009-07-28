@@ -33,7 +33,7 @@ class ChefTest < Test::Unit::TestCase
     should "be able to compile a variable" do
       @base.compile_to(@resources[:variables], test_dir)
       cont = open(@cookboox_directory/"attributes"/"poolparty.rb").read
-      assert_match /poolparty Mash\.new unless attribute\?\('poolparty'\)/, cont
+      assert_match /poolparty Mash\.new unless attribute\?\("poolparty"\)/, cont
       assert_match /poolparty\[:animal\] = \"Duck\"\n/, cont
     end
     

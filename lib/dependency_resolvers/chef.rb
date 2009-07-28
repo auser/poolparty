@@ -125,7 +125,7 @@ module DependencyResolvers
           end
         end
         # Make sure the attribute exists in each file
-        file_pointers.each {|n,f| f << "\n#{n} Mash.new unless attribute?('#{n}')\n"}
+        file_pointers.each {|n,f| f << "\n#{n} Mash.new unless attribute?(\"#{n}\")\n"}
         variables.each do |var|
           if var.parent && !var.parent.is_a?(PoolParty::Cloud)
             file_pointers[var.parent.has_method_name] << "#{var.parent.has_method_name}[:#{var.name}] = #{handle_print_variable(var.value)}\n"
