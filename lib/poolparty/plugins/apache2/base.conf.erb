@@ -164,6 +164,8 @@ LogFormat "%{User-agent}i" agent
 
 DocumentRoot /var/www
 
-Listen <%= @node[:apache][:port] %>
-NameVirtualHost *:<%= @node[:poolparty][:port] %>
-<%= @node[:apache][:timeout] %>
+# Listen <%= @node[:apache][:port] %>
+NameVirtualHost *:<%= @node[:apache][:port] %>
+
+
+# NEW CONFIG FILE

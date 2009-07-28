@@ -54,7 +54,7 @@ module PoolParty
             :command => 'echo -en \"\\\\n\\\\n\\\\n\\\\n\" | passenger-install-apache2-module',
             :not_if => "test -f /etc/apache2/conf.d/passenger.conf && test -s /etc/apache2/conf.d/passenger.conf",
             :creates => lambda { "node[:poolparty][:passenger_module_path]" },
-            :notifies => get_exec("restart-apache2")
+            :notifies => [get_exec("restart-apache2"), :run]
             )
           
           @enable_passenger = true
@@ -106,7 +106,7 @@ module PoolParty
           
           has_exec("/usr/sbin/a2dissite default") do
             only_if "/usr/bin/test -L /etc/apache2/sites-enabled/000-default"
-            notifies get_exec("reload-apache2")
+            notifies get_exec("reload-apache2"), :run
           end
           
           # Base config
@@ -132,7 +132,7 @@ module PoolParty
       def config(name, temp)
         has_file(:name => "/etc/apache2/conf.d/#{name}.conf") do
           template File.dirname(__FILE__)/temp
-          notifies get_exec("reload-apache2")
+          notifies get_exec("reload-apache2"), :run
         end
       end
       
@@ -147,8 +147,9 @@ module PoolParty
         when "present", "installed"
           install_site(name, opts)
         when "absent"
-          has_exec(:command => "/usr/sbin/a2dissite #{name}", :notifies => get_exec("reload-apache2")) do
-          requires get_package("apache2")
+          has_exec(:command => "/usr/sbin/a2dissite #{name}") do
+            notifies get_exec("reload-apache2"), :run
+            requires get_package("apache2")
             only_if "/bin/sh -c \"[ -L /etc/apache2/sites-enabled/#{name} ] && [ /etc/apache2/sites-enabled/#{name} -ef /etc/apache2/sites-available/#{name}]\""
           end
         end
@@ -158,7 +159,8 @@ module PoolParty
         opts.merge!(:name => "/etc/apache2/sites-available/#{name}")
         has_directory(:name => "/etc/apache2/sites-available")
         has_file(opts) unless opts[:no_file]
-        has_exec(:name => "/usr/sbin/a2ensite #{name}", :notifies => get_exec("reload-apache2")) do
+        has_exec(:name => "/usr/sbin/a2ensite #{name}") do
+          notifies get_exec("reload-apache2"), :run
           requires get_package("apache2")
           not_if "/bin/sh -c '[ -L /etc/apache2/sites-enabled/#{name} ] && [ /etc/apache2/sites-enabled/#{name} -ef /etc/apache2/sites-available/#{name} ]'"
         end
@@ -173,7 +175,7 @@ module PoolParty
           has_exec(:name => "mod-#{name}", :command => "/usr/sbin/a2enmod #{name}") do
             requires get_package("apache2")
             not_if "/bin/sh -c \'[ -L /etc/apache2/mods-enabled/#{name}.load ] && [ /etc/apache2/mods-enabled/#{name}.load -ef /etc/apache2/mods-available/#{name}.load ]\'"
-            notifies get_exec("force-reload-apache2")            
+            notifies get_exec("force-reload-apache2"), :run
           end
         end
       end
@@ -183,7 +185,7 @@ module PoolParty
           has_exec({:name => "no-mod-#{name}"}, :command => "/usr/sbin/a2dismod #{name}") do
             requires get_package("apache2")
             not_if "/bin/sh -c \'[ -L /etc/apache2/mods-enabled/#{name}.load ] && [ /etc/apache2/mods-enabled/#{name}.load -ef /etc/apache2/mods-available/#{name}.load ]\'"
-            notifies get_exec("force-reload-apache2")
+            notifies get_exec("force-reload-apache2"), :run
           end
         end
       end
