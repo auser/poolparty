@@ -93,6 +93,13 @@ class Ec2ProviderTest < Test::Unit::TestCase
     assert_nil CloudProviders::Ec2.new().cloud
   end
    
+   def amazon?
+     stub(clouds['app'].cloud_provider).ec2_url  {'http://example.com'}
+     assert clouds['app'].cloud_provider.eucalyptus?
+     stub(clouds['app'].cloud_provider).ec2_url  {'https://ec2.amazonaws.com'}
+     assert !clouds['app'].cloud_provider.eucalyptus?
+   end
+   
   # def test_bundle_instance
   #   assert @cld.responds_to?(:bundle)
   # end

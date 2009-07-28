@@ -138,5 +138,46 @@ module CloudProviders
       response.collect{|i| Ec2Instance.new(Ec2Response.pp_format(i)) }
     end
     
+    
+=begin rdoc
+  Helper methods for the Ec2 Cloud Provider. Helpers are not necessarily supported across all CloudProviders
+=end
+    # Are we running on amazon?
+    def amazon?
+      !['https://ec2.amazonaws.com', 
+       'https://us-east-1.ec2.amazonaws.com', 
+       'https://eu-west-1.ec2.amazonaws.com'
+       ].include?(ec2_url)
+    end
+    
+    # Read  yaml file and use it to set environment variables and local variables.
+    def set_aws_env_from_yml_file(filename='/etc/poolparty/env.yml')
+      aws = self.class.load_keys_from_file(filename)
+      aws.each{|k,v| ENV[k.upcase]=v.to_s}
+      set_vars_from_options aws
+    end
+    
+    # Save aws keys and env variables to a yaml file
+    def save_aws_env_to_yml(filename='/etc/poolparty/aws.yml')
+      aws_values = {
+        :user_id            => user_id,
+        :private_key        => private_key,
+        :cert               => cert,
+        :access_key         => access_key,
+        :secret_access_key  => secret_access_key,
+        :ec2_url            => ec2_url,
+        :s3_url             => s3_url,
+        :eucalyptus_cert    => eucalyptus_cert
+      }
+      File.open(filename, 'w') {|f| f<<YAML::dump(aws_values) }
+    end
+    
+    # shortcut to 
+    # ec2-add-keypair name > ~./.ec2/kname
+    def create_keypair(kname, path='~/.ec2')
+      ` ec2-add-keypair #{kname} > #{path}/#{kname} &&  chmod 600 #{path}/#{kname}`
+    end
+    
+    
   end
 end
