@@ -23,6 +23,13 @@ module PoolParty
     callback_block do |cld, callback|
     end
     
+    def initialize(opts={}, extra_opts={}, &block)
+      @init_block = block
+      @init_opts = compile_opts(opts, extra_opts)
+      
+      @base_name = self.name
+    end
+    
     # returns an instance of Keypair
     # You can pass either a filename which will be searched for in ~/.ec2/ and ~/.ssh/
     # Or you can pass a full filepath
