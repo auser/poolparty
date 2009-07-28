@@ -33,6 +33,8 @@ end
           file = arg.first
           @template = if File.file?(b = File.expand_path(file))
             b
+          elsif f = search_in_known_locations(file)
+            f
           else
             raise PoolParty::PoolPartyError.create("TemplateNotFound", "The template #{file} could not be found when creating the file #{name}. Please check that it exists")
           end

@@ -117,7 +117,7 @@ module PoolParty
     def cloud
       if parent.is_a? ::PoolParty::Cloud
         parent
-      elsif parent
+      elsif parent && !parent.is_a?(PoolParty::Pool)
         parent.cloud
       else
         nil
