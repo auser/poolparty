@@ -115,6 +115,15 @@ module PoolParty
       nodes(hsh).last.terminate!
     end
     
+    # Run command/s on all nodes in the cloud.
+    # Returns a hash of instance_id=>result pairs
+    def run(commands, opts={})
+      nodes.inject({})do |results, n|
+        results[n.instance_id] = n.run(commands, opts)
+        results
+    end
+    end
+    
     # Temporary path
     # Starts at the global default tmp path and appends the pool name
     # and the cloud name
