@@ -11,14 +11,15 @@ module PoolParty
         :environment  => nil,
         :group        => nil,
         :returns      => nil,
-        :user         => nil
+        :user         => nil,
+        :action       => :run
       )
       
       def print_to_chef
 str = 'execute "<%= name %>" do
   command <%= print_variable(command || name) %>
   path <%= print_variable(path) %>
-  action :<%= exists ? :run : :nothing %>
+  action :<%= action ? action : (exists ? :run : :nothing) %>
 '
       str << "  creates <%= print_variable(creates) %>\n" if creates
       str << "  cwd <%= print_variable(cwd) %>\n" if cwd

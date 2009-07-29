@@ -26,7 +26,6 @@ module PoolParty
       def print_to_chef
         <<-EOE
 # line in file: <%= filepath %>
-#   <%= line %>
 <% ordered_resources.each do |res| %>
 <%= res.compile(:chef) %>
 <% end %>

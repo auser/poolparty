@@ -3,13 +3,21 @@ module PoolParty
     
     class Variable < Resource
       
-      dsl_methods :name, :value
+      default_options(
+        :name => nil, 
+        :value => nil
+      )
       
-      def initialize(key, value=nil)
-        if key.is_a?(Hash)
+      def initialize(k, v=nil)
+        case k
+        when Hash
           super
         else
-          super(:name => key, :value => value)
+          if value.is_a?(Hash)
+            super(v.merge(:name => k))
+          else
+            super(:name => k, :value => v)
+          end
         end
       end
       
