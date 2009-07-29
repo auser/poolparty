@@ -100,4 +100,9 @@ class CloudTest < Test::Unit::TestCase
     assert_equal 'shutting-down', result.first.status
   end
   
+  def test_run
+    result = clouds['app'].run('uptime')
+    assert_match /uptime/, result["i-7f000516"]    
+  end
+  
 end
