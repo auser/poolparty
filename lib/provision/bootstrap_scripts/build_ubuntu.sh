@@ -14,6 +14,12 @@ if [ ! "$(egrep "poolparty" /etc/passwd)" ]; then
   useradd poolparty  --home-dir /var/poolparty  -g poolparty  --create-home
 fi
 
+# Set a hostname
+if [ -z `hostname` ]; then
+  hostname "poolparty"
+  echo poolparty > /etc/hostname
+fi
+
 # Setup the .ssh directory
 mkdir -p /var/poolparty/.ssh/
 mkdir -p /var/poolparty/tmp

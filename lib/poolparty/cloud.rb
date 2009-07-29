@@ -89,6 +89,7 @@ module PoolParty
     def expand(opts={}, &block)
       timeout = opts.delete(:timeout) || 300
       instance = cloud_provider.run_instance(opts.merge(:cloud => self))
+      @instance = instance
       callback :before_launch_instance
       #wait for an ip and then wait for ssh port, then configure instance
       if instance.wait_for_public_ip(timeout) && instance.wait_for_port(22, :timeout=>timeout)
@@ -157,11 +158,10 @@ module PoolParty
     
     # Take the cloud's resources and compile them down using 
     # the defined (or the default dependency_resolver, chef)
-    def compile
+    def compile(caller=nil)
       FileUtils.mkdir_p tmp_path unless File.directory?(tmp_path)
-      dependency_resolver.compile_to(self, tmp_path/"etc"/"#{dependency_resolver_name}")
+      dependency_resolver.compile_to(self, tmp_path/"etc"/"#{dependency_resolver_name}", caller)
     end
-    
     
     ##### Internal methods #####
     # Methods that only the cloud itself will use

@@ -17,8 +17,8 @@ module DependencyResolvers
       
       def after_compile(o)
         compile_default_recipe(o)
-        compile_files
         compile_variables
+        compile_files
         compile_recipes
         
         write_dna_json
@@ -116,21 +116,29 @@ module DependencyResolvers
       # Take the variables and compile them into the file attributes/poolparty.rb
       def compile_variables
         # Make sure the attributes/ directory is there
-        FileUtils.mkdir_p cookbook_directory/"attributes" unless ::File.directory?(cookbook_directory/"attributes")
+        FileUtils.mkdir_p cookbook_directory/"attributes" unless ::File.directory?(cookbook_directory/"attributes")        
+        
+        f = cookbook_directory/"attributes"/"poolparty.rb"
         # Collect the file pointers that will be using to print out the attributes
-        file_pointers = {:poolparty => File.open(cookbook_directory/"attributes"/"poolparty.rb", "w")}
+        file_pointers = {:poolparty => File.open(f, "w")}
         variables.each do |var|
           if var.parent && !var.parent.is_a?(PoolParty::Cloud)
-            file_pointers[var.parent.has_method_name] = File.open(cookbook_directory/"attributes"/"#{var.parent.has_method_name}.rb", "a")
+            f = cookbook_directory/"attributes"/"#{var.parent.has_method_name}.rb"
+            File.unlink f if File.file?(f)
+            file_pointers[var.parent.has_method_name] = File.open(f, "w+")
           end
         end
         # Make sure the attribute exists in each file
-        file_pointers.each {|n,f| f << "\n#{n} Mash.new unless attribute?(\"#{n}\")\n"}
+        file_pointers.each do |n,f|
+          f << "\n#{n} Mash.new unless attribute?(\"#{n}\")\n"
+        end
         variables.each do |var|
+          
+          var_val = handle_print_variable(ProxyObject.new(var, @caller).compile(:value))
           if var.parent && !var.parent.is_a?(PoolParty::Cloud)
-            file_pointers[var.parent.has_method_name] << "#{var.parent.has_method_name}[:#{var.name}] = #{handle_print_variable(var.value)}\n"
+            file_pointers[var.parent.has_method_name] << "#{var.parent.has_method_name}[:#{var.name}] = #{var_val}\n"
           else
-            file_pointers[:poolparty] << "poolparty[:#{var.name}] = #{handle_print_variable(var.value)}\n"
+            file_pointers[:poolparty] << "poolparty[:#{var.name}] = #{var_val}\n"
           end
         end
         # Close the files

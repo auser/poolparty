@@ -73,7 +73,7 @@ end
 
 directory "/etc/poolparty" do
   action :create
-  recursive false
+  recursive true
   mode 0644
   owner "root"
   group "root"

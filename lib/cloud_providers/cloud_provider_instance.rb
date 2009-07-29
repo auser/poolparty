@@ -57,7 +57,7 @@ module CloudProviders
       def configure!(opts={})
         raise StandardError.new("You must pass in a cloud to configure an instance") unless opts.has_key?(:cloud)
         cld = opts[:cloud]
-        cld.compile
+        cld.compile(self)
         script_file = Provision::Bootstrapper.configure_script(cld, os)
         
         FileUtils.mkdir_p cld.tmp_path/"etc"/"poolparty" unless File.directory?(cld.tmp_path/"etc"/"poolparty")

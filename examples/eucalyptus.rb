@@ -23,13 +23,15 @@ pool :eucalyptus do
     has_variable "hookie", "pookie"
     
     has_directory "/etc/poolparty/nodes"
-
-    # clouds.each do |oname, cld|
-      # has_directory "/etc/poolparty/nodes/#{oname}"
-      clouds["bab"].nodes.each do |n|
-        has_file "/etc/poolparty/nodes/bab/#{n.image_id}", :content => "#{n.public_ip}"
+    
+    clouds.each do |oname, cld|
+      has_directory "/etc/poolparty/nodes/#{oname}"
+      cld.nodes.each do |n|
+        has_file "/etc/poolparty/nodes/#{oname}/#{n.instance_id}", :content => "#{n.public_ip}"
       end
-    # end
+    end
+    
+    
     
   end
   
@@ -44,7 +46,7 @@ pool :eucalyptus do
     clouds.each do |oname, cld|
       has_directory "/etc/poolparty/nodes/#{oname}"
       cld.nodes.each do |n|
-        has_file "/etc/poolparty/nodes/#{oname}/#{n.image_id}", :content => "#{n.public_ip}"
+        has_file "/etc/poolparty/nodes/#{oname}/#{n.instance_id}", :content => "#{n.public_ip}"
       end
     end
     

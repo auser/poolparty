@@ -9,10 +9,11 @@ module DependencyResolvers
   
   class ProxyObject
     attr_accessor :proxy
-    attr_reader :current_printing_method
+    attr_reader :current_printing_method, :caller
     
-    def initialize(proxy)
+    def initialize(proxy, caller=nil)
       @proxy = proxy
+      @caller = caller
     end
     
     # <tt>Compile</tt>
@@ -31,14 +32,14 @@ module DependencyResolvers
         meth_name
       when Symbol
         @current_printing_method = meth_name
-        self.send(meth_name)
+        self.send(meth_name).to_s
       else
         raise PoolParty::PoolPartyError.create("ProxyObjectError", "Compilation of #{proxy.inspect} error. Strings and symbols are supported")
       end
       begin
         ERB.new(str).result(self.send(:binding))
       rescue Exception => e
-        p [:error, e.inspect, str]
+        p [:error, e, str]
       end      
     end
     
@@ -70,6 +71,10 @@ module DependencyResolvers
       ordered_resources.map do |res|
         ProxyObject.new(res).compile(current_printing_method)
       end.join("\n")
+    end
+    
+    def instance
+      @caller
     end
     
     # method_missing

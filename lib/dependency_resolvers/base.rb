@@ -9,9 +9,14 @@ module DependencyResolvers
       DependencyResolvers.all << subclass unless DependencyResolvers.all.include?(subclass)
     end
     
-    def self.compile_to(resources=[], outdir=Dir.pwd)
+    def self.compile_to(resources=[], outdir=Dir.pwd, caller=nil)
       @compile_directory = outdir
+      @caller = caller
       compile(resources)
+    end
+    
+    def self.caller
+      @caller
     end
     
     def self.compile(resources=[])
@@ -50,7 +55,7 @@ module DependencyResolvers
     def self.compile_resource(res)
       return "" unless res.respond_to?(compile_method_name)
       res.before_compile
-      po = ProxyObject.new(res)
+      po = ProxyObject.new(res, @caller)
       out = po.compile(compile_method_name)
       res.after_compile
       out

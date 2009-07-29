@@ -8,7 +8,7 @@ module PoolParty
         :mode       => "0644",
         :owner      => "root",
         :group      => "root",
-        :recursive  => false
+        :recursive  => true
       )
       
       def print_to_chef
