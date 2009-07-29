@@ -89,10 +89,11 @@ module PoolParty
     end
     
     # Look for the default clouds_dot_rb_file
-    def self.find_default_clouds_dot_rb(filename)
+    def self.find_default_clouds_dot_rb(filename)      
       path = default_clouds_dot_rb_locations.detect do |dir|
         File.file?(File.expand_path(dir / filename))
       end
+      raise PoolPartyError.create("CloudsConfigFile", "Cannot find your config file") unless path && filename
       File.expand_path(File.join(path, filename))
     end
     
