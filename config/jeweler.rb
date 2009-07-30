@@ -8,7 +8,7 @@ class Array
     Regexp.new "(#{option_list})"
   end
 end
-
+  require 'rubygems'
   require 'jeweler'
   Jeweler::Tasks.new do |s|
     s.name = "poolparty"
@@ -19,14 +19,14 @@ end
     EOM
     
     s.homepage = "http://poolpartyrb.com"
-    s.email = "ari.lerner@citrusbyte.com"
-    s.authors = ["Ari Lerner"]
+    s.email = "arilerner@mac.com"
+    s.authors = ["Ari Lerner", "Michael Fairchild", "Nate Murray"]
     
     s.test_files = Dir["test/**/test_*.rb"]
     excludes_regexp = ["lib/erlang"].one_of_regex
 
     s.files = (%w(Rakefile History.txt README.txt PostInstall.txt License.txt VERSION.yml) + 
-              Dir["{config,examples,lib,spec,test,tasks,script,generators,bin,vendor}/**/*"]).delete_if{|f| f =~ excludes_regexp}
+              Dir["{config,examples,lib,test,tasks,script,generators,bin,vendor}/**/*"]).delete_if{|f| f =~ excludes_regexp}
     
     s.has_rdoc = true
     s.extra_rdoc_files = ["README.txt", "License.txt", 'History.txt']
