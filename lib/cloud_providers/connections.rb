@@ -27,6 +27,7 @@ module  CloudProviders
       commands = commands.compact.join(' && ') if commands.is_a?(Array)
       cmd_string = "ssh #{user}@#{host} #{ssh_options(extra_ssh_ops)} "
       if commands.empty?
+        #TODO: replace this with a IO.popen call with read_nonblocking to show progress, and accept input
         Kernel.system(cmd_string)
       else
         system_run(cmd_string+"'#{commands}'")

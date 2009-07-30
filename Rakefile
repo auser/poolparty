@@ -2,7 +2,7 @@ require 'config/requirements'
 
 begin
   require 'hanna/rdoctask'
-rescue Exception => e
+rescue LoadError => e
   require "rake/rdoctask"
 end
 
@@ -42,11 +42,11 @@ end
 namespace :gem do
   task(:build).prerequisites.unshift :gemspec # Prepend the gemspec generation
   
-  desc "Build the gem only if the specs pass"
-  task :test_then_build => [:spec, :build]
+  desc "Build the gem only if the tests pass"
+  task :test_then_build => [:test, :build]
   
-  desc "Build and install the gem only if the specs pass"
-  task :test_then_install => [:spec, :install]
+  desc "Build and install the gem only if the tests pass"
+  task :test_then_install => [:test, :install]
 end
 
 task :release => [:update_timestamp]

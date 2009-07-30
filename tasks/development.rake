@@ -2,14 +2,14 @@ namespace :poolparty do
   namespace(:ec2) do
     
     task :initialize do
-      Kernel.system"mkdir ~/.ec2 >/dev/null 2>/dev/null" unless File.directory?("~/.ec2")      
+      Kernel.system("mkdir -p ~/.ec2") unless File.directory?("~/.ec2")
     end
     # Setup a basic development environment for the user 
     
     desc "Setup development environment specify the config_file"
     task :setup => [:initialize, :setup_keypair] do    
-      certloc = "#{Default.ec2_dir}/#{Default.keypair}/cert-*.pem 2>/dev/null"
-      pkloc = "#{Default.ec2_dir}/#{Default.keypair}/pk-*.pem 2>/dev/null"
+      certloc = "#{Default.ec2_home}/#{Default.keypair}/cert-*.pem 2>/dev/null"
+      pkloc = "#{Default.ec2_home}/#{Default.keypair}/pk-*.pem 2>/dev/null"
       unless `ls #{certloc}`.length > 1 && `ls #{pkloc}`.length > 1
         puts <<-EOM
   Make sure you run rake dev:setup_pemkeys before you run this command
@@ -23,7 +23,7 @@ namespace :poolparty do
       run <<-EOR
         echo 'export AWS_ACCESS_KEY=\"#{Default.access_key}\"' > $HOME/#{keyfilename}
         echo 'export AWS_SECRET_ACCESS=\"#{Default.secret_access_key}\"' >> $HOME/#{keyfilename}
-        echo 'export EC2_HOME=\"#{Default.ec2_dir}\"' >> $HOME/#{keyfilename}
+        echo 'export EC2_HOME=\"#{Default.ec2_home}\"' >> $HOME/#{keyfilename}
         echo 'export KEYPAIR_NAME=\"#{Default.keypair}\"' >> $HOME/#{keyfilename}
         echo 'export EC2_PRIVATE_KEY=`ls ~/.ec2/#{Default.keypair}/pk-*.pem`;' >> $HOME/#{keyfilename}
         echo 'export EC2_CERT=`ls ~/.ec2/#{Default.keypair}/cert-*.pem`;' >> $HOME/#{keyfilename}
@@ -53,8 +53,8 @@ namespace :poolparty do
       puts "Setting up stubbed pem keys in ~/.ec2/#{Default.keypair}"
       run <<-EOR
         mkdir -p ~/.ec2/#{Default.keypair} 2>/dev/null
-        echo 'UPDATE ME' > #{Default.ec2_dir}/#{Default.keypair}/cert-UPDATEME.pem
-        echo 'UPDATE ME' > #{Default.ec2_dir}/#{Default.keypair}/pk-UPDATEME.pem
+        echo 'UPDATE ME' > #{Default.ec2_home}/#{Default.keypair}/cert-UPDATEME.pem
+        echo 'UPDATE ME' > #{Default.ec2_home}/#{Default.keypair}/pk-UPDATEME.pem
       EOR
       puts "Don't forget to replace your ~/.ec2/#{Default.keypair}/*.pem keys with the real amazon keys"
     end
