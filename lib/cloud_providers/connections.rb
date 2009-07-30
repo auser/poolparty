@@ -65,6 +65,7 @@ module  CloudProviders
     end
     
     private
+    
     # Execute command locally.
     # This method is mainly broken out to ease testing in the other methods
     def system_run(cmd)
