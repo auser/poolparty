@@ -61,14 +61,11 @@ module PoolParty
       end
       
       def passenger_configs
-        unless @passenger_configs
-          has_variable "gems_path", lambda { "`gem env gemdir`.chomp!" }
-          has_variable "ruby_path", lambda { "`which ruby`.chomp!" }
-          
+        unless @passenger_configs          
           passenger_version ||= "2.2.4"
           
           has_variable("passenger_version",     passenger_version)
-          has_variable("passenger_root_path",   "\#{apache[:gems_path]}/gems/passenger-#{passenger_version}")
+          has_variable("passenger_root_path",   "\#{@node['ruby'][:gems_dir]}/gems/passenger-#{passenger_version}")
           has_variable("passenger_module_path", "\#{apache[:passenger_root_path]}/ext/apache2/mod_passenger.so")
           
           has_file(:name => "/etc/apache2/mods-available/passenger.load") do
@@ -80,7 +77,7 @@ LoadModule passenger_module <%= @node[:apache][:passenger_module_path] %>
           has_file(:name => "/etc/apache2/mods-available/passenger.conf") do
             content <<-eof
 PassengerRoot <%= @node[:apache][:passenger_root_path] %>
-PassengerRuby <%= @node[:apache][:ruby_path] %>
+PassengerRuby <%= @node["ruby"]["ruby_dir"] %>
             eof
           end
           
@@ -195,6 +192,6 @@ PassengerRuby <%= @node[:apache][:ruby_path] %>
 end
 
 $:.unshift(File.dirname(__FILE__))
-%w(php5 virtual_host).each do |lib|
+%w(php5 virtual_host passenger_site).each do |lib|
   require "apache2/#{lib}"
 end

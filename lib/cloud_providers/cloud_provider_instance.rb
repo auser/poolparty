@@ -63,9 +63,9 @@ module CloudProviders
         FileUtils.mkdir_p cld.tmp_path/"etc"/"poolparty" unless File.directory?(cld.tmp_path/"etc"/"poolparty")
         FileUtils.cp script_file, cld.tmp_path/"etc"/"poolparty"
         
-        puts rsync(:source => cld.tmp_path/"*", :destination => "/")
-        puts run("chmod +x /etc/poolparty/#{File.basename(script_file)}; /bin/sh /etc/poolparty/#{File.basename(script_file)}").chomp
-        puts run("/usr/bin/chef-solo -c /etc/chef/solo.rb -j /etc/chef/dna.json")
+        rsync(:source => cld.tmp_path/"*", :destination => "/")
+        run("chmod +x /etc/poolparty/#{File.basename(script_file)}; /bin/sh /etc/poolparty/#{File.basename(script_file)}").chomp
+        run(cld.dependency_resolver.compile_command)
       end
       
       # Terminate self

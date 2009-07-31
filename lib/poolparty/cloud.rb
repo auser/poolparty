@@ -121,7 +121,7 @@ module PoolParty
       nodes.inject({})do |results, n|
         results[n.instance_id] = n.run(commands, opts)
         results
-    end
+      end
     end
     
     # Temporary path
