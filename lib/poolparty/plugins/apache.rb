@@ -122,7 +122,7 @@ PassengerRuby <%= @node[:languages][:ruby][:ruby_path] %>
       
       def enable_default
         listen 80 # assumes no haproxy
-        site "default-site", :template => :apache2/"default-site.conf.erb"
+        site "default-site", :template => File.dirname(__FILE__)/:apache2/"default-site.conf.erb"
       end
       
       def config(name, temp)

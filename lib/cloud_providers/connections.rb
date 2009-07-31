@@ -77,11 +77,11 @@ module  CloudProviders
       buf = ""
       Open3.popen3(cmd) do |stdout, stdin, stderr|
         begin 
-          while (block = stdin.sysread(opts[:sysread]))
-            puts stderr.readlines
+          while (block = stdin.sysread(opts[:sysread]))            
             buf << block
             $stdout.write_nonblock(block) if block
           end
+          puts stderr.readlines
         rescue SystemCallError => error
           $stderr.syswrite(stderr)
         rescue EOFError => error

@@ -102,10 +102,11 @@ class ResourceTest < Test::Unit::TestCase
       end
     end
     
-    assert_equal [  clouds["semaphore"].ordered_resources, 
-                    clouds["semaphore"].files.first, 
+    assert_equal [  clouds["semaphore"].files.first,
+                    clouds["semaphore"].ordered_resources, 
                     0 
                  ], clouds["semaphore"].get_file_info("pool_name")
+    assert_equal  clouds["semaphore"].files.first, clouds["semaphore"].get_file("pool_name")
   end
   
 end
