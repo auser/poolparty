@@ -167,6 +167,16 @@ module PoolParty
           raise PoolParty::PoolPartyError.create("ResourceNotFound", "The #{res.has_method_name} \#{nm} was not found. Please make sure you've specified it") unless out_res
           out_res
         end
+        
+        def get_#{res.has_method_name}_info(nm)
+          found_res = #{res.has_method_name}s.detect {|other| other.base_name == nm}
+          out_res = [self.ordered_resources, found_res, #{res.has_method_name}s.index(found_res)]
+          out_res ||= unless out_res
+            containing_resource = current_context.reverse.detect {|s| s.get_#{res.has_method_name}(nm) if s}
+            containing_resource.get_#{res.has_method_name}_info(nm) if containing_resource
+          end
+          out_res
+        end
       EOE
     end
     

@@ -94,5 +94,18 @@ class ResourceTest < Test::Unit::TestCase
     assert_equal "semaphore", clouds["semaphore"].variables.first.cloud.name
   end
   
+  def test_get_resource_info
+    pool :box do
+      cloud :semaphore do
+        has_file "pool_name", :content => pool.name
+        has_variable "pool", pool.name
+      end
+    end
+    
+    assert_equal [  clouds["semaphore"].ordered_resources, 
+                    clouds["semaphore"].files.first, 
+                    0 
+                 ], clouds["semaphore"].get_file_info("pool_name")
+  end
   
 end

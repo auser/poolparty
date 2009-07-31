@@ -22,5 +22,11 @@ class Array
     raise "Element #{id} not in array" unless index(id)
     index(id) >= size-1 ? at(0) : at(index(id)+1)
   end
+  
+  # Swap elements of an array
+  def swap!(a,b)
+    self[a], self[b] = self[b], self[a]
+    self
+  end
     
 end

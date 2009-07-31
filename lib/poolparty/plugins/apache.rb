@@ -53,7 +53,7 @@ module PoolParty
             command 'echo -en \"\\\\n\\\\n\\\\n\\\\n\" | passenger-install-apache2-module'
             notifies get_exec("restart-apache2"), :run
             not_if "test -f /etc/apache2/conf.d/passenger.conf && test -s /etc/apache2/conf.d/passenger.conf"
-            creates lambda { "node[:apache][:passenger_module_path]" }
+            creates lambda { "@node[:apache][:passenger_module_path]" }
             end
           
           @enable_passenger = true
@@ -65,7 +65,7 @@ module PoolParty
           passenger_version ||= "2.2.4"
           
           has_variable("passenger_version",     passenger_version)
-          has_variable("passenger_root_path",   "\#{@node['ruby'][:gems_dir]}/gems/passenger-#{passenger_version}")
+          has_variable("passenger_root_path",   "\#{languages[:ruby][:gems_dir]}/gems/passenger-#{passenger_version}")
           has_variable("passenger_module_path", "\#{apache[:passenger_root_path]}/ext/apache2/mod_passenger.so")
           
           has_file(:name => "/etc/apache2/mods-available/passenger.load") do
@@ -77,7 +77,7 @@ LoadModule passenger_module <%= @node[:apache][:passenger_module_path] %>
           has_file(:name => "/etc/apache2/mods-available/passenger.conf") do
             content <<-eof
 PassengerRoot <%= @node[:apache][:passenger_root_path] %>
-PassengerRuby <%= @node["ruby"]["ruby_dir"] %>
+PassengerRuby <%= @node[:languages][:ruby][:ruby_path] %>
             eof
           end
           
