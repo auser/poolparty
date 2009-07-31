@@ -8,8 +8,9 @@ class VirtualHostTest < Test::Unit::TestCase
     clear!
     @pool = pool :apache_test_pool do
       cloud :httpd do
-        apache
-        virtual_host "poolpartyrb.com"
+        apache do
+          has_virtual_host "poolpartyrb.com"
+        end
       end
     end
     @cloud = clouds[clouds.keys.first]
@@ -21,7 +22,7 @@ class VirtualHostTest < Test::Unit::TestCase
   end
   
   def test_have_apache_in_the_resources
-    assert !@cloud.virtual_hosts.empty?
+    assert !@cloud.apaches.first.virtual_hosts.empty?
   end
   
 end

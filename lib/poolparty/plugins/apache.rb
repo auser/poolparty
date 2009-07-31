@@ -7,10 +7,11 @@ module PoolParty
                       :www_user           => 'www-data',
                       :passenger_version  => nil
       
-      def after_loaded
+      def before_load
         installed_as_worker
         configs
         has_service("apache2", :requires => get_package("apache2"))
+        has_user "www"
       end
       
       def before_compile

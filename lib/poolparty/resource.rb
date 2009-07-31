@@ -159,17 +159,20 @@ module PoolParty
         alias :#{res.has_method_name} :has_#{res.has_method_name}
         
         def get_#{res.has_method_name}(nm)
-          get_#{res.has_method_name}_info(nm)[0]
+          begin
+            get_#{res.has_method_name}_info(nm)[0]
+          rescue Exception => e
+            raise PoolParty::PoolPartyError.create("ResourceNotFound", "The #{res.has_method_name} \#{nm} was not found. Please make sure you've specified it")
+          end
         end
         
         def get_#{res.has_method_name}_info(nm)
           found_res = #{res.has_method_name}s.detect {|other| other.base_name == nm}
           out_res = [found_res, self.ordered_resources, #{res.has_method_name}s.index(found_res)] if found_res
-          out_res ||= unless out_res
+          unless out_res            
             containing_resource = current_context.reverse.detect {|s| s.get_#{res.has_method_name}(nm) if s}
-            containing_resource.get_#{res.has_method_name}_info(nm) if containing_resource
+            out_res = containing_resource.get_#{res.has_method_name}_info(nm) if containing_resource
           end
-          raise PoolParty::PoolPartyError.create("ResourceNotFound", "The #{res.has_method_name} \#{nm} was not found. Please make sure you've specified it") unless out_res
           out_res
         end
       EOE
