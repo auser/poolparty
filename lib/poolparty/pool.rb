@@ -69,6 +69,10 @@ module PoolParty
       o
     end
     
+    def self.clouds_dot_rb_file
+      @clouds_dot_rb_file
+    end
+    
     # Load the default clouds.rb file
     # If a full filepath is given, then load the given path
     # if it is given, but not found or is not given entirely, then search the
