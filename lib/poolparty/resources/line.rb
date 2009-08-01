@@ -1,3 +1,18 @@
+=begin rdoc
+
+
+== Line in File
+
+Ensures that the line given is in the file
+
+== Usage
+
+  has_line_in_file('line', '/full/file/path.ext')
+
+== Examples
+
+  has_line_in_file("ENABLED=1", "/etc/default/haproxy")
+=end
 module PoolParty
   module Resources
     

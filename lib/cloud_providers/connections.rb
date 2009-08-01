@@ -84,7 +84,7 @@ module  CloudProviders
           end
           puts stderr.readlines
         rescue SystemCallError => error
-          $stderr.syswrite(stderr)
+          $stderr.write_nonblock(stderr)
         rescue EOFError => error
            # nothing
         ensure

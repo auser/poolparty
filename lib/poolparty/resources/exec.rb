@@ -1,3 +1,27 @@
+=begin rdoc rdoc
+== Exec
+ 
+Ensure a command is run on the instances
+ 
+== Usage
+ 
+  has_exec(:name => '...') do
+    # More options. 
+    # This block is optional
+  end
+ 
+== Options
+ 
+* <tt>name</tt> The name of your exec. This is optional, but nice for debugging purposes
+* <tt>cwd</tt> Current working directory to execute the command (optional)
+* <tt>command</tt> This describes the command to run
+* <tt>path</tt> The path to run the command with (optional)
+ 
+== Examples
+  has_exec 'ps aux | grep erl | mail -s "running commands" root@root.com' do
+    onlyif => 'ps aux | grep beam'
+  end
+=end
 module PoolParty
   module Resources
     

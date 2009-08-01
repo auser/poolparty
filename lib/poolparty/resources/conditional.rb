@@ -1,3 +1,21 @@
+=begin rdoc
+  Gives access to conditional statements
+  
+  == Usage
+    has_case "os" do
+      when_is :ubuntu, "git-core"
+      else_is "git"
+    end
+  
+  translates to:
+  
+    case "os"
+    when :ubuntu
+      "git-core"
+    else
+      "git"
+    end
+=end
 module PoolParty
   module Resources
     
