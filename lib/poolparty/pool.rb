@@ -69,6 +69,7 @@ module PoolParty
       o
     end
     
+    # Store the clouds_dot_rb_file
     def self.clouds_dot_rb_file
       @clouds_dot_rb_file
     end
