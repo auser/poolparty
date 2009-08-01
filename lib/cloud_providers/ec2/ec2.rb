@@ -113,7 +113,7 @@ module CloudProviders
                                       block_device_mappings
                                       )
       instances = response_array .collect do |aws_response_hash|
-        Ec2Instance.new( Ec2Response.pp_format(aws_response_hash) )
+        Ec2Instance.new( Ec2Response.pp_format(aws_response_hash).merge(o) )
       end
       #FIXME: This needs to deal with the case when an array is returned if max_instances > 1
       instances.first
