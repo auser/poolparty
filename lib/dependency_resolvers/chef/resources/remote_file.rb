@@ -2,11 +2,11 @@
 
 == Remote File
 
-The remotefile resource is used to describe a file that is hosted on the master instance and propagated to the other instances
+The remote_file resource is used to describe a file that is hosted on the master instance and propagated to the other instances
 
 == Usage
 
-  has_remotefile(:name => '...') do
+  has_remote_file(:name => '...') do
     # More options. 
     # This block is optional
   end
@@ -25,7 +25,7 @@ To write a file to the template directory, use:
     copy_template_to_storage_directory(filepath)
 
 == Example
-  has_remotefile(:name => "/etc/haproxy.cfg") do
+  has_remote_file(:name => "/etc/haproxy.cfg") do
     mode 644
     template File.join(File.dirname(__FILE__), "..", "templates/haproxy.conf")
   end

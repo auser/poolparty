@@ -1,3 +1,27 @@
+=begin rdoc
+== Script
+  Execute a script using the specified interpreter. Includes actions/attributes available to Execute resources. Predefined available script interpreters are bash, csh, perl, python and ruby.
+
+== Usage
+  has_script "install_something" do
+    interpreter "bash"
+    user "root"
+    cwd "/tmp"
+    code <<-EOH 
+wget http://www.example.com/tarball.tar.gz
+tar -zxf tarball.tar.gz
+cd tarball
+./configure
+make
+make install
+EOH
+  end
+  
+== Options
+* <tt>code</tt> Quoted script of code to execute.
+* <tt>interpreter</tt> The interpreter to use to run the script
+  
+=end
 module PoolParty
   module Resources
     

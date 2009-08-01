@@ -1,3 +1,17 @@
+=begin rdoc
+== HttpRequest
+  
+  Allows you to send an http request to a url
+ 
+== Usage
+  
+  has_http_request "http://google.com/", :message => "{q : 'search term'}"
+  
+== Options
+* <tt>url</tt> The url to send the request to (this can also be the name)
+* <tt>message</tt> The payload to deliver with the http_request
+  
+=end
 module PoolParty
   module Resources
     

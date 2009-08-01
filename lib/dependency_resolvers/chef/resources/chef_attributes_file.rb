@@ -1,3 +1,20 @@
+=begin rdoc
+== ChefAttributesFile
+
+Allows for an attributes file to be added to the chef recipe.
+
+== Usage
+
+  has_chef_attributes_file "full_path_to_attributes_file"
+
+== Options
+
+* <tt>file</tt> The location of the attributes file
+
+== Examples
+
+  has_chef_attributes_file PoolParty.lib_dir/"vendor"/"chef"/"apache2"/"attributes"/"apache.rb"
+=end
 module PoolParty
   module Resources
     

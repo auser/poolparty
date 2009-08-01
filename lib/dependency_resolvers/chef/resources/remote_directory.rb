@@ -1,3 +1,17 @@
+=begin rdoc
+
+== Remote Directory
+
+The remote_directory resource is used to describe a file that is hosted on the master instance and propagated to the other instances
+
+== Usage
+
+  has_remote_directory(:name => '...') do
+    # More options. 
+    # This block is optional
+  end
+
+=end
 module PoolParty
   module Resources
     
