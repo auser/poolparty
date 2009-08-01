@@ -114,12 +114,17 @@ module PoolParty
       self.class.has_method_name
     end
     
+    # DSL METHODS
+    # Get access to the cloud that contains this resource
     def cloud
       get_parent_of_class(PoolParty::Cloud)
     end
-    
+    # Get access to the pool that contains this resource
     def pool
       get_parent_of_class(PoolParty::Pool)
+    end
+    
+    def case_of(var, &block)
     end
     
     # Define the resource methods for all the resources sublcassed by Resource

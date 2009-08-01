@@ -7,6 +7,6 @@ module PoolParty
   end
 end
 
-%w(apache).each do |plugin|
+%w(apache git).each do |plugin|
   require "plugins/#{plugin}"
 end
