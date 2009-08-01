@@ -87,8 +87,10 @@ module PoolParty
     # 6.) Returns the new instance object
     def expand(opts={}, &block)
       timeout = opts.delete(:timeout) || 300
-      instance = cloud_provider.run_instance(opts.merge(:cloud => self))
+
+      instance = cloud_provider.run_instance(opts)
       instance.cloud = self
+      @instance = instance
       callback :before_launch_instance
       #wait for an ip and then wait for ssh port, then configure instance
       if instance.wait_for_public_ip(timeout) && instance.wait_for_port(22, :timeout=>timeout)
@@ -97,12 +99,12 @@ module PoolParty
         instance.bootstrap!
         instance.callback :after_bootstrap
         instance.callback :before_configure
-        instance.configure!(:cloud => self)
+        instance.configure!
         instance.callback :after_configure
         block.call(instance) if block
         instance
       else
-        "Instance port 22 not available"
+         raise StandardError.new("Instance port 22 not available")
       end
       instance.refresh!
       instance

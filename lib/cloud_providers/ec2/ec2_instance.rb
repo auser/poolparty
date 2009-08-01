@@ -35,7 +35,7 @@ module CloudProviders
       "#{name}\t#{dns_name}\t#{instance_id}"
     end
     
-    # #TODO: test
+    # #TODO: test or remove
     # def hosts_file_listing_for(cl)
     #   string = (cl.name == cloud.name) ? "#{name}.#{my_cloud.name}\t#{name}" : "#{name}.#{my_cloud.name}"
     #   "#{internal_ip}\t#{string}"
@@ -75,20 +75,6 @@ module CloudProviders
       super opts
       vputs "completed configuring instance  #{instance_id}."
     end
-    
-=begin rdoc
-  The following methods are used to setup the instance for poolparty
-=end
-    
-    # Send the ec2 specific config information for PoolParty
-    # def before_configure
-    #   has_directory '/etc/poolparty/ec2'
-    #   rsync :source => keypair.full_filepath, :destination => '/etc/poolparty/ec2'
-    #   rsync :source => cloud_provider.private_key, :destination => '/etc/poolparty/ec2'
-    #   has_file '/etc/poolparty/ec2/aws.yml' do
-    #     content YAML::dump(cloud_provider.aws_hash)
-    #   end
-    # end
     
   end
 
