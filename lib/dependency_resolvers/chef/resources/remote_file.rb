@@ -12,6 +12,10 @@ module PoolParty
         :owner    => "root"
       )
       
+      def self.has_method_name
+        "remote_file"
+      end
+      
       def print_to_chef
         str = <<-EOE
 remote_file "<%= name %>" do

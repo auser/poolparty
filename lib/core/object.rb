@@ -34,25 +34,7 @@ class Object
     block.call
     puts "#{msg}: #{Time.now-t}"
   end
-  # Debugging output helpers
-  def vputs(m="", o=self)
-    puts "[INFO] -- #{m}" if verbose?(o)
-  end
-  def dputs(m="", o=self)
-    puts "[DEBUG] -- #{m.inspect}" if debugging?(o)
-  end
-  def ddputs(m="", o=self)
-    puts "[DEBUG] -- #{m.inspect}" if very_debugging?(o)
-  end
-  def verbose?(o=self)
-    o.respond_to?(:verbose) ? o.verbose : (debugging? || $TESTING || false)
-  end
-  def debugging?(o=self)
-    o.respond_to?(:debug) ? o.debug : ($DEBUGGING ||= false)
-  end
-  def very_debugging?(o=self)
-    o.respond_to?(:very_debugging) ? o.very_debugging : ($VERY_DEBUGGING ||= false)
-  end
+
   # Do once.
   # Takes a block. IF this block has already been run (from the run_procs array),
   # then run it and store the block unique id in the run_procs array so
@@ -68,6 +50,30 @@ class Object
   # This is just a container array of procs
   def run_procs
     @run_procs ||= []
+  end
+  
+  # MESSAGES
+  # Debugging output helpers
+  def vputs(m="")
+    puts "[INFO] -- #{m}" if verbose?
+  end
+  def dputs(m="")
+    puts "[DEBUG] -- #{m.inspect}" if debugging?
+  end
+  def ddputs(m="")
+    puts "[VERY DEBUG] -- #{m.inspect}" if very_debugging?
+  end
+  def verbose?
+    $TESTING ||= false
+  end
+  def very_verbose?
+    ($VERY_VERBOSE ||= false)
+  end
+  def debugging?
+    ($DEBUGGING ||= false)
+  end
+  def very_debugging?
+    ($VERY_DEBUGGING ||= false)
   end
   
 end

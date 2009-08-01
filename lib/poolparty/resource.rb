@@ -114,12 +114,17 @@ module PoolParty
       self.class.has_method_name
     end
     
+    # DSL METHODS
+    # Get access to the cloud that contains this resource
     def cloud
       get_parent_of_class(PoolParty::Cloud)
     end
-    
+    # Get access to the pool that contains this resource
     def pool
       get_parent_of_class(PoolParty::Pool)
+    end
+    
+    def case_of(var, &block)
     end
     
     # Define the resource methods for all the resources sublcassed by Resource
@@ -131,10 +136,14 @@ module PoolParty
     # The has_ method calls exists! on the resource, then places the resource
     # in the ordered_resources array
     def self.define_resource_methods
-      ddputs "Defining resources..."
       defined_resources.each do |res|
+        next if res.method_defined?
         ddputs "Defining resource: #{res} as #{res.has_method_name}"
         define_resource(res)
+        res.method_defined!
+        unless res.defined_resources.empty?
+          res.define_resource_methods
+        end
       end
     end
     
@@ -181,12 +190,21 @@ module PoolParty
     # When a new resource is created, the class gets stored as a defined resource
     # in the defined_resources resources class variable
     def self.inherited(subclass)
-      # templates_dir = File.expand_path(File.join(subclass.pwd, 'templates'))
-      # if File.directory?(templates_dir)
-      #   p templates_dir
-      #   subclass.has_searchable_paths(:prepend_paths=>[templates_dir]) 
-      # end
       defined_resources << subclass
+    end
+    
+    # Note that this resource has been defined already
+    def self.method_defined!
+      @defined = true
+    end
+    
+    # Query if this resource has been defined yet
+    def self.method_defined?
+      defined
+    end
+    
+    def self.defined
+      @defined ||= false
     end
     
     # Storage of defined resources that are stored when

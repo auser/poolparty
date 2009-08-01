@@ -184,6 +184,13 @@ module PoolParty
       dependency_resolver.compile_to(self, tmp_path/"etc"/"#{dependency_resolver_name}", caller)
     end
     
+    # Get the os of the first node, we'll assume they are
+    # all homogenous
+    def os
+      nodes.first.os
+    end
+    alias :platform :os
+    
     ##### Internal methods #####
     # Methods that only the cloud itself will use
     # and thus are private

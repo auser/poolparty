@@ -103,9 +103,10 @@ module PoolParty
     alias :resources :ordered_resources
     
     # The clouds.rb file
+    def clouds_dot_rb_file; self.class.clouds_dot_rb_file; end
     def self.clouds_dot_rb_file
-      @clouds_dot_rb_file
-    end    
+      Pool.clouds_dot_rb_file
+    end
     
     # If the method is missing from ourself, check the Default
     # class for the corresponding method.

@@ -1,6 +1,6 @@
 module PoolParty
   module Resources
-    class VirtualHost < Resource
+    class VirtualHost < Apache
       
       default_options(
         :port     => 80,
@@ -26,8 +26,8 @@ module PoolParty
       end
 
 
-      def after_loaded(opts={}, parent=self)
-        self.www_user "www"
+      def before_load(opts={}, parent=self)
+        self.www_user "www-data"
         has_directory(:name => "/var/www", :owner => www_user, :mode=>'0744')
         has_directory(:name => "/var/www/#{name}", :owner => www_user, :mode=>'0744')
         has_directory(:name => "/var/www/#{name}/logs", :owner => www_user, :mode=>'0744')

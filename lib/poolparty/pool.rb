@@ -69,6 +69,11 @@ module PoolParty
       o
     end
     
+    # Store the clouds_dot_rb_file
+    def self.clouds_dot_rb_file
+      @clouds_dot_rb_file
+    end
+    
     # Load the default clouds.rb file
     # If a full filepath is given, then load the given path
     # if it is given, but not found or is not given entirely, then search the
@@ -121,9 +126,9 @@ module PoolParty
     def self.before_file_load(filepath)
       $:.unshift(::File.dirname(filepath))
       Dir["#{::File.dirname(filepath)}/plugins/*"].each { |plugin_path| $:.unshift(plugin_path) }
-      init
     end
     
+    # Call init to the resource methods and init the log
     def self.init
       PoolParty::Resource.define_resource_methods
       PoolParty::PoolPartyLog.init

@@ -75,10 +75,11 @@ module  CloudProviders
     def system_run(cmd, o={})
       opts = {:quiet => false, :sysread => 1024}.merge(o)
       buf = ""
+      ddputs("Running command: #{cmd}")
       Open3.popen3(cmd) do |stdout, stdin, stderr|
-        begin 
-          while (block = stdin.sysread(opts[:sysread]))            
-            buf << block
+        begin
+          while (block = stdin.sysread(opts[:sysread]))
+            buf << block            
             $stdout.write_nonblock(block) if block
           end
           puts stderr.readlines

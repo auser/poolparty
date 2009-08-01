@@ -19,16 +19,19 @@ The cloud subcommands commands are:
 
 See 'cloud help COMMAND' for more information on a specific command.
 EOS
-  
-  opt :debug, "Debug the output", :type => :boolean, :default => false
+    
   opt :clouds_dot_rb, "Set the clouds.rb file", :type => String, :default => "clouds.rb"
-  opt :testing, "Set testing mode on", :type => :boolean, :default => false
+  opt :very_verbose, "Set very verbose mode on", :type => :boolean, :default => false
+  opt :debug, "Debug the output", :type => :boolean, :default => false
+  opt :very_debug, "Set very debug mode on", :type => :boolean, :default => false
   opt :name, "Name of the working cloud", :type => String, :default => nil
 
   before_run do |command|
     # Setup testing/debugging
-    $TESTING = true if command[:testing]
-    $DEBUGGING = true if command[:debug]
+    $TESTING        = true if command[:verbose]
+    $VERY_VERBOSE   = true if command[:very_verbose]
+    $DEBUGGING      = true if command[:debug]
+    $VERY_DEBUGGING = true if command[:very_debug]
     
     @loaded_pool = PoolParty::Pool.find_and_load_default_clouds_dot_rb(command[:clouds_dot_rb])
     @loaded_clouds = command[:name] ? [clouds[command[:name]]] : @loaded_pool.clouds.map {|name,cld|cld}
