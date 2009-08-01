@@ -121,9 +121,9 @@ module PoolParty
     def self.before_file_load(filepath)
       $:.unshift(::File.dirname(filepath))
       Dir["#{::File.dirname(filepath)}/plugins/*"].each { |plugin_path| $:.unshift(plugin_path) }
-      init
     end
     
+    # Call init to the resource methods and init the log
     def self.init
       PoolParty::Resource.define_resource_methods
       PoolParty::PoolPartyLog.init
