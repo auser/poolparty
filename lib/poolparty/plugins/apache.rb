@@ -7,10 +7,11 @@ module PoolParty
                       :www_user           => 'www-data',
                       :passenger_version  => nil
       
-      def after_loaded
+      def before_load
         installed_as_worker
         configs
         has_service("apache2", :requires => get_package("apache2"))
+        has_user "www"
       end
       
       def before_compile
@@ -53,7 +54,7 @@ module PoolParty
             command 'echo -en \"\\\\n\\\\n\\\\n\\\\n\" | passenger-install-apache2-module'
             notifies get_exec("restart-apache2"), :run
             not_if "test -f /etc/apache2/conf.d/passenger.conf && test -s /etc/apache2/conf.d/passenger.conf"
-            creates lambda { "node[:apache][:passenger_module_path]" }
+            creates lambda { "@node[:apache][:passenger_module_path]" }
             end
           
           @enable_passenger = true
@@ -61,14 +62,11 @@ module PoolParty
       end
       
       def passenger_configs
-        unless @passenger_configs
-          has_variable "gems_path", lambda { "`gem env gemdir`.chomp!" }
-          has_variable "ruby_path", lambda { "`which ruby`.chomp!" }
-          
+        unless @passenger_configs          
           passenger_version ||= "2.2.4"
           
           has_variable("passenger_version",     passenger_version)
-          has_variable("passenger_root_path",   "\#{apache[:gems_path]}/gems/passenger-#{passenger_version}")
+          has_variable("passenger_root_path",   "\#{languages[:ruby][:gems_dir]}/gems/passenger-#{passenger_version}")
           has_variable("passenger_module_path", "\#{apache[:passenger_root_path]}/ext/apache2/mod_passenger.so")
           
           has_file(:name => "/etc/apache2/mods-available/passenger.load") do
@@ -80,7 +78,7 @@ LoadModule passenger_module <%= @node[:apache][:passenger_module_path] %>
           has_file(:name => "/etc/apache2/mods-available/passenger.conf") do
             content <<-eof
 PassengerRoot <%= @node[:apache][:passenger_root_path] %>
-PassengerRuby <%= @node[:apache][:ruby_path] %>
+PassengerRuby <%= @node[:languages][:ruby][:ruby_path] %>
             eof
           end
           
@@ -125,7 +123,7 @@ PassengerRuby <%= @node[:apache][:ruby_path] %>
       
       def enable_default
         listen 80 # assumes no haproxy
-        site "default-site", :template => :apache2/"default-site.conf.erb"
+        site "default-site", :template => File.dirname(__FILE__)/:apache2/"default-site.conf.erb"
       end
       
       def config(name, temp)
@@ -195,6 +193,6 @@ PassengerRuby <%= @node[:apache][:ruby_path] %>
 end
 
 $:.unshift(File.dirname(__FILE__))
-%w(php5 virtual_host).each do |lib|
+%w(php5 virtual_host passenger_site).each do |lib|
   require "apache2/#{lib}"
 end

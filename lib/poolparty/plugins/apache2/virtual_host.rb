@@ -15,18 +15,18 @@ module PoolParty
       def virtual_host_entry(file)
         @virtual_host_entry = true
         if File.file?(file)
-          has_file(dsl_options.merge({:name => "/etc/apache2/sites-available/#{name}", 
-                                  :template => file, 
-                                  :requires => get_package("apache2")}))
+          has_file( :name => "/etc/apache2/sites-available/#{name}", 
+                    :template => file, 
+                    :requires => get_package("apache2"))
         else          
-          has_file(dsl_options.merge(:content => file, 
-                                  :name => "/etc/apache2/sites-available/#{name}", 
-                                  :requires => get_package("apache2")))
+          has_file( :name => "/etc/apache2/sites-available/#{name}", 
+                    :content => file, 
+                    :requires => get_package("apache2"))
         end
       end
 
 
-      def before_compile(opts={}, parent=self)
+      def after_loaded(opts={}, parent=self)
         self.www_user "www"
         has_directory(:name => "/var/www", :owner => www_user, :mode=>'0744')
         has_directory(:name => "/var/www/#{name}", :owner => www_user, :mode=>'0744')
@@ -35,12 +35,13 @@ module PoolParty
         has_variable(:name => "sitename", :value => "#{name}")
 
         unless @virtual_host_entry
-          virtual_host_entry <<-eof
+          vf = <<-eof
   <VirtualHost *:#{port}> 
   ServerName     #{name}
   DocumentRoot   /var/www/#{name}
   </VirtualHost>
   eof
+        virtual_host_entry vf
         end
 
         has_exec(:name => "insert-site-#{name}", 

@@ -1,3 +1,5 @@
+require "open3"
+
 module  CloudProviders
   module Connections
     
@@ -18,8 +20,8 @@ module  CloudProviders
       end
     end
     
-    def run(commands, opts={})
-      ssh(commands, opts)
+    def run(commands, o={})
+      ssh(commands)
     end
     
     # Simply shell out and call ssh, simple, reliable and fewest dependencies, but slow
@@ -51,7 +53,6 @@ module  CloudProviders
       rsync_opts = opts[:rsync_opts] || '-va'
       cmd_string =  "rsync -e 'ssh #{ssh_options}' #{rsync_opts} #{opts[:source]}  #{user}@#{host}:#{destination_path}"
       out = system_run(cmd_string)
-      dputs(out)
       out
     end
     
@@ -66,10 +67,32 @@ module  CloudProviders
     end
     
     private
+    
     # Execute command locally.
     # This method is mainly broken out to ease testing in the other methods
-    def system_run(cmd)
-      `#{cmd}`
+    # It opens the 3 IO outputs (stdin, stdout, stderr) and print the output out
+    # as the command runs, unless the quiet option is passed in
+    def system_run(cmd, o={})
+      opts = {:quiet => false, :sysread => 1024}.merge(o)
+      buf = ""
+      Open3.popen3(cmd) do |stdout, stdin, stderr|
+        begin 
+          while (block = stdin.sysread(opts[:sysread]))            
+            buf << block
+            $stdout.write_nonblock(block) if block
+          end
+          puts stderr.readlines
+        rescue SystemCallError => error
+          $stderr.syswrite(stderr)
+        rescue EOFError => error
+           # nothing
+        ensure
+          stdout.close
+          stderr.close
+          stdin.close
+        end
+      end
+      buf
     end
     
   end

@@ -18,6 +18,7 @@ fi
 if [ -z `hostname` ]; then
   hostname "poolparty"
   echo poolparty > /etc/hostname
+  /etc/init.d/hostname.sh start 2>/dev/null
 fi
 
 # Setup the .ssh directory

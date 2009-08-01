@@ -32,4 +32,10 @@ class ArrayTest < Test::Unit::TestCase
     assert_equal @arr.wrapping_next("d"), "a"
   end
   
+  def test_swap
+    assert_equal %w(a c b d), @arr.swap!(1,2)
+    assert_equal %w(d c b a), @arr.swap!(0,3)
+    assert_equal %w(d c a b), @arr.swap!(2,3)
+  end
+  
 end

@@ -24,6 +24,10 @@ module DependencyResolvers
         write_dna_json
         write_solo_dot_rb
       end
+      
+      def compile_command
+        "/usr/bin/chef-solo -c /etc/chef/solo.rb -j /etc/chef/dna.json"
+      end
          
       # compile the resources
       # Compiles the resource appropriately against the type
@@ -161,7 +165,7 @@ module DependencyResolvers
         attribute_files.each do |res|
           fpath = cookbook_directory/"attributes"/"#{File.basename(res.path)}"
           FileUtils.mkdir_p File.dirname(fpath) unless File.directory?(File.dirname(fpath))
-          File.open(fpath, "w") do |f|
+          File.open(fpath, "a") do |f|
             f << res.content
           end
         end
