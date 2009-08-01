@@ -1,5 +1,4 @@
 require 'rake'
-require 'spec/rake/spectask'
 require 'rake/testtask'
 require 'rake/rdoctask'
 

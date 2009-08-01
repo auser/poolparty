@@ -39,7 +39,6 @@ module PoolParty
       
     end
     
-    
     # returns an instance of Keypair
     # You can pass either a filename which will be searched for in ~/.ec2/ and ~/.ssh/
     # Or you can pass a full filepath
@@ -94,34 +93,56 @@ module PoolParty
       #wait for an ip and then wait for ssh port, then configure instance
       if instance.wait_for_public_ip(timeout) && instance.wait_for_port(22, :timeout=>timeout)
         callback :after_launch_instance
-        instance.before_bootstrap
+        instance.callback :before_bootstrap
         instance.bootstrap!
-        instance.after_bootstrap
-        instance.before_configure
+        instance.callback :after_bootstrap
+        instance.callback :before_configure
         instance.configure!(:cloud => self)
-        instance.after_configure
+        instance.callback :after_configure
         block.call(instance) if block
         instance
       else
-        "Instance port not available"
+        "Instance port 22 not available"
       end
       instance.refresh!
       instance
     end
     
     # Contract the cloud
-    def contract(hsh={})
-      instance.before_terminate
-      nodes(hsh).last.terminate!
+    def contract!(hsh={})
+      inst=nodes(hsh).last
+      inst.callback :before_terminate
+      inst.terminate!
+      inst.callback :after_terminate
+      inst
+    end
+    
+    # convenience method to loop thru all the nodes and configure them
+    def configure!(opts={}, threaded=true)
+      if threaded==false
+        nodes.collect{|n| n.configure!} 
+      else
+        threads = nodes.collect do |n|
+           Thread.new{ n.configure!  }
+        end
+        threads.each{ |aThread|  aThread.join }
+      end
     end
     
     # Run command/s on all nodes in the cloud.
     # Returns a hash of instance_id=>result pairs
     def run(commands, opts={})
-      nodes.inject({})do |results, n|
-        results[n.instance_id] = n.run(commands, opts)
-        results
+      results = {}
+      threads = nodes.collect do |n|
+         Thread.new{ results[n.instance_id] = n.run(commands, opts)  }
       end
+      threads.each{ |aThread|  aThread.join }
+      results
+      # serial implementation
+      # nodes.inject({})do |results, n|
+      #   results[n.instance_id] = n.run(commands, opts)
+      #   results
+      # end
     end
     
     # Temporary path

@@ -31,8 +31,6 @@ pool :eucalyptus do
       end
     end
     
-    
-    
   end
   
   cloud :bab do

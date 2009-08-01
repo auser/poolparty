@@ -83,10 +83,6 @@ class CloudTest < Test::Unit::TestCase
     assert_equal "emi-39921602", clouds["app"].cloud_provider.image_id
   end
   
-  def test_expansion
-    cld = clouds["app"]
-  end
-  
   def test_nodes
     assert_respond_to clouds['app'], :nodes
     assert_respond_to clouds['app'].nodes, :each
@@ -102,7 +98,24 @@ class CloudTest < Test::Unit::TestCase
   
   def test_run
     result = clouds['app'].run('uptime')
-    assert_match /uptime/, result["i-7f000516"]    
+    assert_match /uptime/, result["i-7f000516"]
   end
+  
+  def test_expansion
+    #TODO: improve this test
+    # size = clouds["app"].nodes.size
+    # assert_equal size+1, clouds["app"].expand.nodes.size
+    # assert_nothing_raised clouds['app'].expand
+  end
+  
+  def test_contract!
+    #TODO: need to better mock the terminate! ec2 call
+    # size = clouds['app'].nodes.size
+    # result = clouds['app'].contract!
+    # assert_equal 'shuttin-down',  result.status
+    # assert_equal size-1, clouds['app'].nodes.size
+  end
+  
+  
   
 end

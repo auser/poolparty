@@ -22,5 +22,5 @@ EOS
       puts "No running instances can be found"
     end
     
-  end    
+  end
 end

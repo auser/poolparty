@@ -19,8 +19,6 @@ module CloudProviders
       )
     )
     
-    @uniquely_identifiable_by = [:ip, :name, :dns_name, :instance_id]
-    
     # A new instance will be created from a hash.
     # The parent clouds describe_instances list will be searched for the first one matching any of this instance's provided unique identifiers.
     # If an instance is found, this instance's properties will be set to the properties provided
@@ -51,6 +49,46 @@ module CloudProviders
         Ec2.new( options_for_cloud_provider, &block)
       end
     end
+    
+    # Access the right_aws instance directly
+    def right_aws
+      cloud_provider.ec2.describe_instances instance_id
+    end
+    
+    # add ec2 specific configuration steps
+    def configure!(opts={})
+      cloud opts[:cloud] if opts[:cloud]
+      raise StandardError.new("cloud is not defined.  It must be defined to run configure on the instance") unless cloud
+      vputs "configuring ec2 instance #{instance_id}."
+      ec2_dir = "/etc/poolparty/ec2"
+      FileUtils.mkdir_p(cloud.tmp_path/ec2_dir) unless File.directory?(cloud.tmp_path/ec2_dir)
+      run ["mkdir -p #{ec2_dir}"]
+      # Save a yaml file of aws varibles and send to the instance
+      File.open(cloud.tmp_path/ec2_dir/'aws.yml', 'w') do |f|
+        f<<YAML::dump(cloud_provider.aws_hash(ec2_dir))  #TODO: don't save sensitive info in /tmp
+      end
+      # We scp these files directly to the instance so to reduce the risk of accidentally leaving them in an insecure location
+      scp(:source=>cert, :destination=>ec2_dir/File.basename(cert)) if cert
+      scp(:source=>private_key, :destination=>ec2_dir/File.basename(private_key)) if private_key
+      scp(:source=>cloud_cert, :destination=>ec2_dir/File.basename(cloud_cert)) if cloud_cert
+      # TODO: install_ec2_tools
+      super opts
+      vputs "completed configuring instance  #{instance_id}."
+    end
+    
+=begin rdoc
+  The following methods are used to setup the instance for poolparty
+=end
+    
+    # Send the ec2 specific config information for PoolParty
+    # def before_configure
+    #   has_directory '/etc/poolparty/ec2'
+    #   rsync :source => keypair.full_filepath, :destination => '/etc/poolparty/ec2'
+    #   rsync :source => cloud_provider.private_key, :destination => '/etc/poolparty/ec2'
+    #   has_file '/etc/poolparty/ec2/aws.yml' do
+    #     content YAML::dump(cloud_provider.aws_hash)
+    #   end
+    # end
     
   end
 
