@@ -39,7 +39,6 @@ module PoolParty
       
     end
     
-    
     # returns an instance of Keypair
     # You can pass either a filename which will be searched for in ~/.ec2/ and ~/.ssh/
     # Or you can pass a full filepath
@@ -118,13 +117,32 @@ module PoolParty
       inst
     end
     
+    # convenience method to loop thru all the nodes and configure them
+    def configure!(opts={}, threaded=true)
+      if threaded==false
+        nodes.collect{|n| n.configure!} 
+      else
+        threads = nodes.collect do |n|
+           Thread.new{ n.configure!  }
+        end
+        threads.each{ |aThread|  aThread.join }
+      end
+    end
+    
     # Run command/s on all nodes in the cloud.
     # Returns a hash of instance_id=>result pairs
     def run(commands, opts={})
-      nodes.inject({})do |results, n|
-        results[n.instance_id] = n.run(commands, opts)
-        results
+      results = {}
+      threads = nodes.collect do |n|
+         Thread.new{ results[n.instance_id] = n.run(commands, opts)  }
       end
+      threads.each{ |aThread|  aThread.join }
+      results
+      # serial implementation
+      # nodes.inject({})do |results, n|
+      #   results[n.instance_id] = n.run(commands, opts)
+      #   results
+      # end
     end
     
     # Temporary path

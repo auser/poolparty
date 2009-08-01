@@ -54,8 +54,8 @@ module CloudProviders
       ENV['S3_URL'] || load_keys_from_file[:s3_url]
     end
     
-    def self.default_eucalyptus_cert
-      ENV['EUCALYPTUS_CERT'] || load_keys_from_file[:eucalyptus_cert]
+    def self.default_cloud_cert
+     ENV['CLOUD_CERT'] || ENV['EUCALYPTUS_CERT'] || load_keys_from_file[:cloud_cert]
     end
     
     # Load the yaml file containing keys.  If the file does not exist, return an empty hash
@@ -73,7 +73,7 @@ module CloudProviders
         :user_id                => default_user_id,
         :private_key            => default_private_key,
         :cert                   => default_cert,
-        :eucalyptus_cert        => default_eucalyptus_cert,
+        :cloud_cert             => default_cloud_cert,
         :access_key             => default_access_key,
         :secret_access_key      => default_secret_access_key,
         :ec2_url                => default_ec2_url,
@@ -176,14 +176,14 @@ module CloudProviders
         :secret_access_key  => secret_access_key,
         :ec2_url            => ec2_url,
         :s3_url             => s3_url,
-        :eucalyptus_cert    => eucalyptus_cert
+        :cloud_cert    => cloud_cert
       }.merge(opts)
       if base_dir
         aws[:cert] = "#{base_dir}/#{File.basename(cert)}" if cert
         aws[:private_key] = "#{base_dir}/#{File.basename(private_key)}" if private_key
-        aws[:eucalyptus_cert] = "#{base_dir}/#{File.basename(eucalyptus_cert)}" if eucalyptus_cert
+        aws[:cloud_cert] = "#{base_dir}/#{File.basename(cloud_cert)}" if cloud_cert
       end
-      aws
+      aws.reject{|k,v| v.nil?}
     end
     
     # shortcut to 

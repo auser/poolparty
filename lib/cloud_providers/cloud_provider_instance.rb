@@ -7,8 +7,10 @@ module CloudProviders
       include Dslify
       # include Enumerable
       include Connections
+      include Callbacks
       
       default_options(
+        :cloud        => nil, # The cloud this instance belongs to, set automaticly if node is created thru cloud expansion
         :name         => nil, # Name of the remote instance (internal usage)
         :internal_ip  => nil, # Internal ip of the remote instance
         :public_ip    => nil,
@@ -39,7 +41,7 @@ module CloudProviders
       
       # CLOUD PROVIDER METHODS
       
-      # Bootstrap self
+      # Bootstrap self.  Bootstrap runs as root, even if user is set
       def bootstrap!(force=false)
         old_user = user
         @user = "root"
@@ -47,7 +49,8 @@ module CloudProviders
         if !bootstrapped? || force
           script_file = Provision::Bootstrapper.bootstrap_script(os)
           scp(:source => script_file, :destination => "/tmp")
-          run("chmod +x /tmp/determine_os.sh; /bin/sh /tmp/#{File.basename(script_file)}").chomp
+          output = run("chmod +x /tmp/determine_os.sh; /bin/sh /tmp/#{File.basename(script_file)}")
+          output.chomp if output
         end
         
         @user = old_user
@@ -55,17 +58,19 @@ module CloudProviders
       
       # Configure the node
       def configure!(opts={})
-        raise StandardError.new("You must pass in a cloud to configure an instance") unless opts.has_key?(:cloud)
-        cld = opts[:cloud]
-        cld.compile(self)
-        script_file = Provision::Bootstrapper.configure_script(cld, os)
+        bootstrap! unless bootstrapped?
+        set_vars_from_options opts
+        raise StandardError.new("You must pass in a cloud to configure an instance") unless cloud
+        cloud.compile(self)
+        scp :source=>keypair.full_filepath, :destination => "/etc/poolparty/keys/#{keypair.basename}"
+        script_file = Provision::Bootstrapper.configure_script(cloud, os)
         
-        FileUtils.mkdir_p cld.tmp_path/"etc"/"poolparty" unless File.directory?(cld.tmp_path/"etc"/"poolparty")
-        FileUtils.cp script_file, cld.tmp_path/"etc"/"poolparty"
+        FileUtils.mkdir_p cloud.tmp_path/"etc"/"poolparty" unless File.directory?(cloud.tmp_path/"etc"/"poolparty")
+        FileUtils.cp script_file, cloud.tmp_path/"etc"/"poolparty"
         
-        rsync(:source => cld.tmp_path/"*", :destination => "/")
+        rsync(:source => cloud.tmp_path/"*", :destination => "/")
         run("chmod +x /etc/poolparty/#{File.basename(script_file)}; /bin/sh /etc/poolparty/#{File.basename(script_file)}").chomp
-        run(cld.dependency_resolver.compile_command)
+        run(cloud.dependency_resolver.compile_command)
       end
       
       # Terminate self
@@ -81,7 +86,7 @@ module CloudProviders
           dsl_options[:os] ||= determine_os.to_sym
         end
       end
-      alias :platform :os
+      alias :platform :os  # Chef uses platform, aliased for conveneince
       
       # Determine the os
       # Default to ubuntu
@@ -94,9 +99,8 @@ module CloudProviders
       
       # Determine if the node is bootstrapped
       def bootstrapped?
-        @bootstrapped ||= !run('if [ -f /var/poolparty/bootstrapped ]; then echo "YES"; fi').chomp.empty? || false
+        @bootstrapped ||= !run('if [ -f /var/poolparty/bootstrapped ]; then echo "YES"; fi').match(/YES/).nil?
       end
-      
       
       # Wait for port
       # Test if the port is open and catch failures in the connection
@@ -117,7 +121,7 @@ module CloudProviders
         begin
           Timeout::timeout(timeout) do
             loop do
-              refresh!
+              self.refresh!
               return public_ip if public_ip and public_ip != '0.0.0.0'
               print '.'
               sleep 2
@@ -206,10 +210,6 @@ module CloudProviders
       def before_configure
       end
       def after_configure
-      end
-      
-      def cloud(n=nil)
-        @cloud ||= n
       end
       
       # The instances is only valid if there is an internal_ip and a name

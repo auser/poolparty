@@ -8,7 +8,7 @@ module Callbacks
     end
   end
   
-  module InstanceMethods            
+  module InstanceMethods
     # Callbacks on bootstrap and configuration
     # Defines the callback accessors:
     #   call_before/after_bootstrap/configure_callbacks
@@ -39,14 +39,14 @@ module Callbacks
           self.send(call_time, *args)
         else
           self.send(call_time, *args, &block)
-        end          
+        end
       end
     end
-
+    
   end
   
   def self.included(receiver)
     receiver.extend         ClassMethods
-    receiver.send :include, InstanceMethods      
+    receiver.send :include, InstanceMethods
   end
 end
