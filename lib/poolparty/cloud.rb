@@ -119,14 +119,7 @@ module PoolParty
     
     # convenience method to loop thru all the nodes and configure them
     def configure!(opts={}, threaded=true)
-      if threaded==false
-        nodes.collect{|n| n.configure!} 
-      else
-        threads = nodes.collect do |n|
-           Thread.new{ n.configure!  }
-        end
-        threads.each{ |aThread|  aThread.join }
-      end
+      nodes.collect{|n| n.configure!}
     end
     
     # Run command/s on all nodes in the cloud.
@@ -138,7 +131,7 @@ module PoolParty
       end
       threads.each{ |aThread|  aThread.join }
       results
-      # serial implementation
+      # Serial implementation #
       # nodes.inject({})do |results, n|
       #   results[n.instance_id] = n.run(commands, opts)
       #   results
