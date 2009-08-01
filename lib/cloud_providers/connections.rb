@@ -81,11 +81,11 @@ module  CloudProviders
           while (chunk = stdin.readpartial(opts[:sysread]))
             buf << chunk
             unless chunk.nil? || chunk.empty?
-              $stdout.write_nonblock(chunk) if debugging? || verbose?
+              $stdout.write(chunk) if debugging? || verbose?
             end
           end
           err = stderr.readlines
-          $stderr.write_nonblock(err) unless err.empty?
+          $stderr.write(err) unless err.empty?
         rescue SystemCallError => error
           $stderr.write_nonblock(stderr)
         rescue EOFError => error
