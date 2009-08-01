@@ -11,7 +11,7 @@ module PoolParty
         installed_as_worker
         configs
         has_service("apache2", :requires => get_package("apache2"))
-        has_user "www"
+        has_user "www-data"
       end
       
       def before_compile
