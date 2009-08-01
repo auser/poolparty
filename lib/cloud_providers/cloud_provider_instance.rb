@@ -58,7 +58,7 @@ module CloudProviders
       
       # Configure the node
       def configure!(opts={})
-        bootstrap! unless bootstrapped?
+        # bootstrap! unless bootstrapped?
         set_vars_from_options opts
         raise StandardError.new("You must pass in a cloud to configure an instance") unless cloud
         cloud.compile(self)
@@ -99,7 +99,8 @@ module CloudProviders
       
       # Determine if the node is bootstrapped
       def bootstrapped?
-        @bootstrapped ||= !run('if [ -f /var/poolparty/bootstrapped ]; then echo "YES"; fi').match(/YES/).nil?
+        # @bootstrapped ||= !run('if [ -f /var/poolparty/bootstrapped ]; then echo "YES"; fi').match(/YES/).nil?
+        @bootstrapped ||= !run('if [ -f /var/poolparty/bootstrapped ]; then echo "YES"; fi').chomp.empty? || false
       end
       
       # Wait for port

@@ -95,6 +95,7 @@ module PoolParty
         callback :after_launch_instance
         instance.callback :before_bootstrap
         instance.bootstrap!
+        instance.run("uptime")
         instance.callback :after_bootstrap
         instance.callback :before_configure
         instance.configure!(:cloud => self)

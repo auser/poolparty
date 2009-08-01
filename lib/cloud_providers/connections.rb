@@ -78,19 +78,18 @@ module  CloudProviders
       ddputs("Running command: #{cmd}")
       Open3.popen3(cmd) do |stdout, stdin, stderr|
         begin
-          while (block = stdin.sysread(opts[:sysread]))
-            buf << block            
-            $stdout.write_nonblock(block) if block
+          while (chunk = stdin.readpartial(opts[:sysread]))
+            buf << chunk
+            unless chunk.nil? || chunk.empty?
+              $stdout.write_nonblock(chunk) if debugging? || verbose?
+            end
           end
-          puts stderr.readlines
+          err = stderr.readlines
+          $stderr.write_nonblock(err) unless err.empty?
         rescue SystemCallError => error
           $stderr.write_nonblock(stderr)
         rescue EOFError => error
            # nothing
-        ensure
-          stdout.close
-          stderr.close
-          stdin.close
         end
       end
       buf
