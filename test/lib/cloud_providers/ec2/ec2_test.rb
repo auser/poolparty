@@ -4,6 +4,10 @@ stub_ec2_calls
 
 class Ec2ProviderTest < Test::Unit::TestCase
   
+  def ec2
+    @ec2 ||= clouds['app'].cloud_provider
+  end
+  
   def setup
     @provider = CloudProviders::Ec2.new(
                   :image_id => "ami-abc123", 
@@ -98,6 +102,12 @@ class Ec2ProviderTest < Test::Unit::TestCase
      assert clouds['app'].cloud_provider.eucalyptus?
      stub(clouds['app'].cloud_provider).ec2_url  {'https://ec2.amazonaws.com'}
      assert !clouds['app'].cloud_provider.eucalyptus?
+   end
+   
+   def test_aws_hash
+     assert_kind_of Hash, ec2.aws_hash
+     assert_match /fixtures\/keys\/test_key/, ec2.aws_hash[:private_key]
+     assert_match /pappy\/test_key/, ec2.aws_hash({}, 'pappy')[:private_key]
    end
    
   # def test_bundle_instance

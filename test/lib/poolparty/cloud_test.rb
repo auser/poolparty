@@ -102,7 +102,12 @@ class CloudTest < Test::Unit::TestCase
   
   def test_run
     result = clouds['app'].run('uptime')
-    assert_match /uptime/, result["i-7f000516"]    
+    assert_match /uptime/, result["i-7f000516"]
+  end
+  
+  def test_contract!
+    result = clouds['app'].contract!
+    assert_equal '', result
   end
   
 end

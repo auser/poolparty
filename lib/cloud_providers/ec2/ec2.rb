@@ -73,6 +73,7 @@ module CloudProviders
         :user_id                => default_user_id,
         :private_key            => default_private_key,
         :cert                   => default_cert,
+        :eucalyptus_cert        => default_eucalyptus_cert,
         :access_key             => default_access_key,
         :secret_access_key      => default_secret_access_key,
         :ec2_url                => default_ec2_url,
@@ -88,6 +89,7 @@ module CloudProviders
         :elastic_ips            => nil, # An array of the elastic ips
         :ebs_volume_id          => nil  # The volume id of an ebs volume # TODO: ensure this is consistent with :block_device_mappings
       })
+      
       
     def ec2(o={})
       @ec2 ||= Rightscale::Ec2.new(access_key, secret_access_key, o.merge(:logger => PoolParty::PoolPartyLog))
@@ -159,7 +161,14 @@ module CloudProviders
     
     # Save aws keys and env variables to a yaml file
     def save_aws_env_to_yml(filename='/etc/poolparty/aws.yml')
-      aws_values = {
+      File.open(filename, 'w') {|f| f<<YAML::dump(aws_hash) }
+    end
+    
+    # Return a hash of the aws keys and environment variables
+    # If base_dir string is provided as second argument, replace path to 
+    # file based variables, such as cert, with the base_dir.
+    def aws_hash(opts={}, base_dir=nil)
+      aws={
         :user_id            => user_id,
         :private_key        => private_key,
         :cert               => cert,
@@ -168,8 +177,13 @@ module CloudProviders
         :ec2_url            => ec2_url,
         :s3_url             => s3_url,
         :eucalyptus_cert    => eucalyptus_cert
-      }
-      File.open(filename, 'w') {|f| f<<YAML::dump(aws_values) }
+      }.merge(opts)
+      if base_dir
+        aws[:cert] = "#{base_dir}/#{File.basename(cert)}" if cert
+        aws[:private_key] = "#{base_dir}/#{File.basename(private_key)}" if private_key
+        aws[:eucalyptus_cert] = "#{base_dir}/#{File.basename(eucalyptus_cert)}" if eucalyptus_cert
+      end
+      aws
     end
     
     # shortcut to 
@@ -177,7 +191,6 @@ module CloudProviders
     def create_keypair(kname, path='~/.ec2')
       ` ec2-add-keypair #{kname} > #{path}/#{kname} &&  chmod 600 #{path}/#{kname}`
     end
-    
     
   end
 end
