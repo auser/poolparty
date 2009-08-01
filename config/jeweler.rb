@@ -25,7 +25,7 @@ end
     s.test_files = Dir["test/**/test_*.rb"]
     excludes_regexp = ["lib/erlang"].one_of_regex
 
-    s.files = (%w(Rakefile History.txt README.txt PostInstall.txt License.txt VERSION.yml) + 
+    s.files = (%w(Rakefile README.rdoc License.txt VERSION.yml) + 
               Dir["{config,examples,lib,test,tasks,script,generators,bin,vendor}/**/*"]).delete_if{|f| f =~ excludes_regexp}
     
     s.has_rdoc = true
