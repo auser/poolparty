@@ -77,6 +77,8 @@ module PoolParty
       case o
       when Symbol, String
         extra.merge(:name => o.to_s)
+      when NilClass
+        extra
       else
         extra.merge(o)
       end
@@ -101,6 +103,12 @@ module PoolParty
       @ordered_resources ||= []
     end
     alias :resources :ordered_resources
+    
+    # Danging resources are resources that have been defined such that they require
+    # another resource, but that resources has not been defined quite yet
+    def dangling_resources
+      @dangling_resources ||= []
+    end
     
     # The clouds.rb file
     def clouds_dot_rb_file; self.class.clouds_dot_rb_file; end

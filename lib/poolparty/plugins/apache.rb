@@ -5,7 +5,7 @@ module PoolParty
       
       default_options :port               => 80,
                       :www_user           => 'www-data',
-                      :passenger_version  => nil
+                      :passenger_version  => "2.2.4"
       
       def before_load
         installed_as_worker
@@ -53,7 +53,7 @@ module PoolParty
           has_exec "install_passenger_script" do
             command 'echo -en \"\\\\n\\\\n\\\\n\\\\n\" | passenger-install-apache2-module'
             notifies get_exec("restart-apache2"), :run
-            not_if "test -f /etc/apache2/conf.d/passenger.conf && test -s /etc/apache2/conf.d/passenger.conf"
+            not_if "test -f /etc/apache2/mods-available/passenger.conf && test -s /etc/apache2/mods-available/passenger.conf"
             creates lambda { "@node[:apache][:passenger_module_path]" }
             end
           
@@ -62,23 +62,22 @@ module PoolParty
       end
       
       def passenger_configs
-        unless @passenger_configs          
-          passenger_version ||= "2.2.4"
+        unless @passenger_configs
           
           has_variable("passenger_version",     passenger_version)
           has_variable("passenger_root_path",   "\#{languages[:ruby][:gems_dir]}/gems/passenger-#{passenger_version}")
-          has_variable("passenger_module_path", "\#{apache[:passenger_root_path]}/ext/apache2/mod_passenger.so")
+          has_variable("passenger_module_path", "\#{passenger_site[:passenger_root_path]}/ext/apache2/mod_passenger.so")
           
           has_file(:name => "/etc/apache2/mods-available/passenger.load") do
             content <<-eof
-LoadModule passenger_module <%= @node[:apache][:passenger_module_path] %>
+LoadModule passenger_module <%= @node[:passenger_site][:passenger_module_path] %>
             eof
           end
           
           has_file(:name => "/etc/apache2/mods-available/passenger.conf") do
             content <<-eof
-PassengerRoot <%= @node[:apache][:passenger_root_path] %>
-PassengerRuby <%= @node[:languages][:ruby][:ruby_path] %>
+PassengerRoot <%= @node[:passenger_site][:passenger_root_path] %>
+PassengerRuby <%= @node[:languages][:ruby][:ruby_bin] %>
             eof
           end
           

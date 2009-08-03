@@ -111,6 +111,17 @@ class ResourceTest < Test::Unit::TestCase
                  ], clouds["semaphore"].get_file_info("pool_name")
     assert_equal  clouds["semaphore"].files.first, clouds["semaphore"].get_file("pool_name")
   end
-
+  
+  # def test_required_resourcing
+  #   pool :box do
+  #     cloud :semaphore do
+  #       has_file "/etc/my_configs" do
+  #         has_directory "/etc/my_configs", :requires => get_file("/etc/my_configs")
+  #       end
+  #     end
+  #   end
+  #   
+  #   clouds["semaphore"].get_file_info("/etc/my_configs")
+  # end
   
 end

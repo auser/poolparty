@@ -37,6 +37,7 @@ module PoolParty
           cwd "#{dir if dir}"          
           requires get_directory("#{dir}")
         end
+        
         has_exec(:name => "update-#{name}") do
           command "cd #{::File.dirname( creates_dir )} && git pull"
         end
@@ -61,7 +62,11 @@ module PoolParty
       end
             
       def creates_dir
-        "#{File.join( dir, File.basename(source, File.extname(source)) )}/.git"
+        @creates_dir = if source.include?(".git")
+          "#{File.join( dir, File.basename(source, File.extname(source)) )}/.git"
+        else
+          "#{File.join( dir, File.basename(source) )}/.git"
+        end
       end
       
       def repository(n=nil)

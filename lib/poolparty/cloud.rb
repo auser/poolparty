@@ -182,9 +182,13 @@ module PoolParty
     # Get the os of the first node, we'll assume they are
     # all homogenous
     def os
-      nodes.first.os
+      nodes.size > 0 ? nodes.first.os : dsl_options[:os]
     end
     alias :platform :os
+    
+    def public_ip
+      nodes.first.public_ip
+    end
     
     ##### Internal methods #####
     # Methods that only the cloud itself will use

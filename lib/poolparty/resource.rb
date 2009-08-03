@@ -65,7 +65,7 @@ module PoolParty
     
     # Requires
     def requires(other_resource)
-      @meta_requires = other_resource
+      p [:todo, :implement, :requires]
     end
     
     # Should this resource exist on the remote systems
@@ -171,7 +171,9 @@ module PoolParty
           begin
             get_#{res.has_method_name}_info(nm)[0]
           rescue Exception => e
-            raise PoolParty::PoolPartyError.create("ResourceNotFound", "The #{res.has_method_name} \#{nm} was not found. Please make sure you've specified it")
+            exception = PoolParty::PoolPartyError.create("ResourceNotFound", "The #{res.has_method_name} \#{nm} was not found. Please make sure you've specified it")
+            dangling_resources << [:#{res.has_method_name}, nm, exception]
+            raise exception
           end
         end
         

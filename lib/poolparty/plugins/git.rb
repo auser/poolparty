@@ -3,7 +3,7 @@ module PoolParty
     
     class Git < Resource
       
-      def after_loaded
+      def before_load
         case cloud.platform
         when :ubuntu
           has_package "git-core"
