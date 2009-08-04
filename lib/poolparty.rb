@@ -15,6 +15,11 @@ Dir[File.dirname(__FILE__)+"/../vendor/gems/*"].each {|lib| $LOAD_PATH.unshift(F
   require dep
 end
 
+# Rgl dependencies
+%w(adjacency dot topsort).each do |sublib|
+  require "rgl/#{sublib}"
+end
+
 module PoolParty
   def self.version
     return @version if @version

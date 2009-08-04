@@ -99,16 +99,59 @@ module PoolParty
     
     # Ordered resources
     # are the resources associated with this base
-    def ordered_resources
-      @ordered_resources ||= []
-    end
-    alias :resources :ordered_resources
     
-    # Danging resources are resources that have been defined such that they require
-    # another resource, but that resources has not been defined quite yet
-    def dangling_resources
-      @dangling_resources ||= []
+    # Resources are all the resources attached to this resource
+    def resources
+      @resources ||= []
     end
+    
+    # Order the resources_graph using a top-sort iterator
+    def ordered_resources
+      resources_graph.topsort_iterator.to_a.reverse
+    end
+    
+    # Get a resource, based on it's type
+    # Used for INTERNAL use
+    def get_resource(ty, nm)
+      o = self.send "#{ty}s".to_sym
+      o.detect {|r| r.name == nm }
+    end
+    
+    def inspect
+      [self.class.to_s.top_level_class, name].inspect
+    end
+    
+    def to_s
+      "#{self.class.to_s.top_level_class}:#{name}"
+    end
+    
+    # Create a directed adjacency graph of each of the dependencies
+    def resources_graph
+      result = RGL::DirectedAdjacencyGraph.new
+      resources.each do |res|
+        res.dependencies.each do |dep_type, deps|
+          deps.each do |dep_name|
+            dep = get_resource(dep_type, dep_name)
+            result.add_edge(res, dep)
+          end
+        end
+      end
+      result
+    end
+
+    # Write the cloud dependency graph
+    def output_resources_graph(fmt='png', dotfile="graph",params={})
+      src = dotfile + ".dot"
+      dot = dotfile + "." + fmt
+
+      File.open(src, 'w') do |f|
+        f << resources_graph.to_dot_graph(params).to_s << "\n"
+      end
+
+      system( "dot -T#{fmt} #{src} -o #{dot}" )
+      dot
+    end
+    
     
     # The clouds.rb file
     def clouds_dot_rb_file; self.class.clouds_dot_rb_file; end

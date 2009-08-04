@@ -39,6 +39,20 @@ module PoolParty
       EOE
     end
     
+    # All the dependencies that are required by this resource
+    # This is a hash of the dependencies required by the resource
+    def dependencies
+      @dependencies ||= {}
+    end
+    
+    # Add to the dependencies list
+    def add_to_dependencies(hsh)
+      hsh.each do |k,v|
+        current_deps = (dependencies[k] ||= [])
+        current_deps << v unless current_deps.include?(v)
+      end
+    end
+    
     # META FUNCTIONS
     # ALL RESOURCES HAVE THESE METHODS AVAILABLE
     def notifies(other_resource, action_to_take=:reload)
@@ -65,6 +79,7 @@ module PoolParty
     
     # Requires
     def requires(other_resource)
+      add_to_dependencies other_resource
     end
     
     # Should this resource exist on the remote systems
@@ -153,7 +168,7 @@ module PoolParty
         def has_#{res.has_method_name}(a={},b={},&block)
           obj = #{res}.new(a,b,&block)
           obj.exists!
-          ordered_resources << obj
+          resources << obj
           obj
         end
         def does_not_have_#{res.has_method_name}(a={},b={},&block)
@@ -162,28 +177,12 @@ module PoolParty
           obj
         end
         def #{res.has_method_name}s
-          ordered_resources.select {|q| q if q.class.to_s =~ /#{res.to_s.classify}/ }
+          resources.select {|q| q if q.class.to_s =~ /#{res.to_s.classify}/ }
         end
         alias :#{res.has_method_name} :has_#{res.has_method_name}
         
         def get_#{res.has_method_name}(nm)
-          begin
-            get_#{res.has_method_name}_info(nm)[0]
-          rescue Exception => e
-            exception = PoolParty::PoolPartyError.create("ResourceNotFound", "The #{res.has_method_name} \#{nm} was not found. Please make sure you've specified it")
-            dangling_resources << [:#{res.has_method_name}, nm, exception]
-            raise exception
-          end
-        end
-        
-        def get_#{res.has_method_name}_info(nm)
-          found_res = #{res.has_method_name}s.detect {|other| other.base_name == nm}
-          out_res = [found_res, self.ordered_resources, #{res.has_method_name}s.index(found_res)] if found_res
-          unless out_res            
-            containing_resource = current_context.reverse.detect {|s| s.get_#{res.has_method_name}(nm) if s}
-            out_res = containing_resource.get_#{res.has_method_name}_info(nm) if containing_resource
-          end
-          out_res
+          {:#{res.has_method_name} => nm}
         end
       EOE
     end
