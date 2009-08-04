@@ -22,4 +22,4 @@ module PoolParty
   end
 end
 
-require "#{File.dirname(__FILE__)}/rails/site"
+require "#{File.dirname(__FILE__)}/rails/app"
