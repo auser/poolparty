@@ -65,7 +65,6 @@ module PoolParty
     
     # Requires
     def requires(other_resource)
-      p [:todo, :implement, :requires]
     end
     
     # Should this resource exist on the remote systems
