@@ -176,6 +176,7 @@ module PoolParty
     # the defined (or the default dependency_resolver, chef)
     def compile(caller=nil)
       FileUtils.mkdir_p tmp_path unless File.directory?(tmp_path)
+      ddputs("Compiling cloud #{self.name} to #{tmp_path/"etc"/"#{dependency_resolver_name}"}")
       dependency_resolver.compile_to(self, tmp_path/"etc"/"#{dependency_resolver_name}", caller)
     end
     

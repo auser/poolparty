@@ -1,7 +1,7 @@
 module PoolParty
   module Resources
     
-    class Site < Rails
+    class App < Rails
       
       default_options(
         :rails_version => "2.3.3",

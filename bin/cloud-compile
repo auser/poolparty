@@ -1,0 +1,27 @@
+#!/usr/bin/env ruby
+$:.unshift(File.dirname(__FILE__) + "/../lib")
+require "poolparty"
+
+require 'git-style-binary/command'
+
+GitStyleBinary.command do
+  banner <<-EOS
+Usage: #{$0} #{all_options_string}
+
+  Configure a cloud instance
+EOS
+
+  short_desc "Configure a cloud instance"
+  
+  opt :inst_num, "The number of the instance to run bootstrap on", :type => :int
+
+  run do |command|
+    
+    @loaded_clouds.each do |cld|
+      
+      cld.compile
+      
+    end
+    
+  end
+end

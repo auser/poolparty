@@ -16,7 +16,6 @@ module PoolParty
       )
       
       def after_loaded(opts={})
-        set_vars_from_options(opts)
         enable_passenger
         port "80" unless self.port
         

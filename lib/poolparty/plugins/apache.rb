@@ -139,10 +139,9 @@ PassengerRuby <%= @node[:languages][:ruby][:ruby_bin] %>
       end
       
       def site(name, opts={})
-        case opts[:ensure] || "present"
-        when "present", "installed"
+        if exists?
           install_site(name, opts)
-        when "absent"
+        else
           has_exec(:command => "/usr/sbin/a2dissite #{name}") do
             notifies get_exec("reload-apache2"), :run
             requires get_package("apache2")
