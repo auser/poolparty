@@ -89,6 +89,7 @@ PassengerRuby <%= @node[:languages][:ruby][:ruby_bin] %>
       def configs
         unless @configs
           listen(port) unless @listen
+          has_directory("/var/www")
           has_directory("/etc/apache2")
           has_directory("/etc/apache2/conf.d")
           has_directory("/etc/apache2/site-includes")
@@ -160,6 +161,7 @@ PassengerRuby <%= @node[:languages][:ruby][:ruby_bin] %>
         has_exec(:name => "/usr/sbin/a2ensite #{name}") do
           notifies get_exec("reload-apache2"), :run
           requires get_exec("reload-apache2")
+          requires get_file("/etc/apache2/sites-available/#{name}")
           not_if "/bin/sh -c '[ -L /etc/apache2/sites-enabled/#{name} ] && [ /etc/apache2/sites-enabled/#{name} -ef /etc/apache2/sites-available/#{name} ]'"
         end
       end

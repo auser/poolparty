@@ -38,6 +38,13 @@ class ArrayTest < Test::Unit::TestCase
     assert_equal %w(d c a b), @arr.swap!(2,3)
   end
   
+  def test_zip_offset
+    arr = %w(a b c d e f)
+    assert_equal [["a","b"],["b","c"],["c","d"],["d","e"],["e","f"]], arr.zip_offset(1)
+    assert_equal [["a","b"],["b","c"],["c","d"],["d","e"]], arr.zip_offset(2)
+    assert_equal [["a","b"]], arr.zip_offset(5)
+  end
+  
   def test_rotate
     arr = %w(a b c d e)
     assert_equal %w(b c d e a), arr.rotate

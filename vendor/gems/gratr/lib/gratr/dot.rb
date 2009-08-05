@@ -87,7 +87,6 @@ module GRATR
       
       File.open(src, 'w') {|f| f << self.to_dot(params) << "\n"}
       
-      p "dot -T#{fmt} #{src} -o #{dot}"
       system( "dot -T#{fmt} #{src} -o #{dot}" )
       dot
     end

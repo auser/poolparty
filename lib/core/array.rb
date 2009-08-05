@@ -39,5 +39,16 @@ class Array
   def rotate
     push shift
   end
+  
+  def zip_offset(offset=0)
+    arr2 = self.dup
+    
+    out = []
+    self.each_with_index do |ele,i|
+      break if i == (self.size - offset)
+      out[i] = [ele, arr2[i+1]]
+    end
+    out
+  end
     
 end

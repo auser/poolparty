@@ -126,7 +126,13 @@ module PoolParty
     def resources_graph(force=false)
       return @resources_graph if @resources_graph && !force
       result = Digraph.new
-
+      
+      arr_of_resources = resources.zip_offset(1)
+      
+      arr_of_resources.each do |first, second|
+        result.add_edge!(first, second)
+      end
+      
       create_graph(resources, nil, result)
       
       @resources_graph = result
