@@ -122,6 +122,9 @@ module PoolParty
     end
     
     # Create a directed adjacency graph of each of the dependencies
+    # Add all the resources in order and their resources as well
+    # and then create the graph from the rest of the resources
+    # to create edges on the graph
     def resources_graph(force=false)
       return @resources_graph if @resources_graph && !force
       result = Digraph.new
@@ -133,6 +136,7 @@ module PoolParty
       @resources_graph = result
     end
     
+    # Add all the resources as edges of each other
     def add_ordered_resources_to_result(resources, result)
       arr_of_resources = resources.zip_offset(1)
       
@@ -142,6 +146,9 @@ module PoolParty
       end
     end
     
+    # Create the graph of resources. Blow up if a resource isn't found
+    # that is required. If it is found, add it as an edge to the 
+    # dependency graph
     def create_graph(resources, on, result)
       resources.each_with_index do |resource, idx|
         

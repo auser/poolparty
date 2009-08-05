@@ -21,7 +21,9 @@ EOS
         puts "Starting cloud #{cld.name} (#{cld.keypair})"
         puts "#{cld.nodes(:status => "running").size} running instances (#{cld.minimum_instances} - #{cld.maximum_instances})"
         
-        inst = cld.expand
+        cld.minimum_instances.times do |i|
+          cld.expand
+        end        
         # cld.nodes.each do |node|
         #   vputs "Bootstrapping: #{node.instance_id}"
         #   node.bootstrap!
