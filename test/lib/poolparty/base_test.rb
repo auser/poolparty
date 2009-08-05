@@ -28,8 +28,8 @@ class BaseTest < Test::Unit::TestCase
   end
   
   def test_resource_graph
-    assert_equal RGL::DirectedAdjacencyGraph, inst.resources_graph.class
-    assert_equal %w(c b a), inst.ordered_resources.map {|a| a.name }
+    assert_equal GRATR::Digraph, inst.resources_graph.class
+    assert_equal ["PoolParty::Default", "a", "b", "c"], inst.ordered_resources.map {|a| a.name }
   end
   
 end

@@ -12,7 +12,7 @@ module PoolParty
         has_package "libsqlite3-dev"
 
         has_gem_package "rails", :version => rails_version
-        has_gem_package "sqlite3-ruby"
+        has_gem_package "sqlite3-ruby", :requires => get_package("libsqlite3-dev")
         
         has_user deployer_user, :home => "/home/#{deployer_user}" if deployer_user
       end

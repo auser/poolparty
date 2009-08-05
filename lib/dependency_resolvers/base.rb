@@ -65,7 +65,7 @@ module DependencyResolvers
     def self.compile_array(array_of_resources=[])
       out = []
       array_of_resources.each do |res|
-        out << compile_resource(res) if res.is_a?(PoolParty::Resource)
+        out << compile_resource(res)
       end
       out.join("\n")
     end

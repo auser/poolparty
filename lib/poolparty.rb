@@ -20,6 +20,10 @@ end
   require "rgl/#{sublib}"
 end
 
+%w(import dot).each do |sublib|
+  require "gratr/#{sublib}"
+end
+
 module PoolParty
   def self.version
     return @version if @version

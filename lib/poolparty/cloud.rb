@@ -176,7 +176,7 @@ module PoolParty
     def compile(caller=nil)
       FileUtils.mkdir_p tmp_path unless File.directory?(tmp_path)
       ddputs("Compiling cloud #{self.name} to #{tmp_path/"etc"/"#{dependency_resolver_name}"}")
-      dependency_resolver.compile_to(self, tmp_path/"etc"/"#{dependency_resolver_name}", caller)
+      dependency_resolver.compile_to(ordered_resources, tmp_path/"etc"/"#{dependency_resolver_name}", caller)
     end
     
     # Get the os of the first node, we'll assume they are

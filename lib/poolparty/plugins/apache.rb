@@ -51,6 +51,8 @@ module PoolParty
             command 'echo -en \"\\\\n\\\\n\\\\n\\\\n\" | passenger-install-apache2-module'
             notifies get_exec("restart-apache2"), :run
             requires get_exec("restart-apache2")
+            requires get_package("apache2")
+            requires get_gem_package("passenger")
             not_if "test -f /etc/apache2/mods-available/passenger.conf && test -s /etc/apache2/mods-available/passenger.conf"
             creates lambda { "@node[:apache][:passenger_module_path]" }
             end
@@ -102,6 +104,7 @@ PassengerRuby <%= @node[:languages][:ruby][:ruby_bin] %>
           has_exec("/usr/sbin/a2dissite default") do
             only_if "/usr/bin/test -L /etc/apache2/sites-enabled/000-default"
             notifies get_exec("reload-apache2"), :run
+            requires get_exec("reload-apache2")
           end
           
           # Base config

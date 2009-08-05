@@ -107,7 +107,8 @@ module PoolParty
     
     # Order the resources_graph using a top-sort iterator
     def ordered_resources
-      resources_graph.topsort_iterator.to_a
+      resources_graph.topsort.to_a.each do |res|
+      end
     end
     
     # Get a resource, based on it's type
@@ -124,37 +125,28 @@ module PoolParty
     # Create a directed adjacency graph of each of the dependencies
     def resources_graph(force=false)
       return @resources_graph if @resources_graph && !force
-      result = RGL::DirectedAdjacencyGraph.new
-      # res = resources.TODOODOODODOD
-      
-      resources.each do |res|
-        result.add_vertex(res)
-        add_resource_to_resources_graph(res, nil, result)
-      end
+      result = Digraph.new
 
+      create_graph(resources, Resource.new("cloud:#{name}"), result)
+      
       @resources_graph = result
     end
     
-    # First, add this resource to the dependency tree
-    def add_resource_to_resources_graph(resource, on, rgraph)
-      
-      # Add the dependencies if they are not already on the graph
-      resource.dependencies.each do |dep_type, deps|
-        deps.each do |dep_name|
-          dep = get_resource(dep_type, dep_name)
-          add_resource_to_resources_graph(dep, resource, rgraph)
+    def create_graph(resources, on, result)
+      resources.each_with_index do |resource, idx|
+        
+        resource.dependencies.each do |dep_type, deps_array|
+          deps_array.each do |dep_name|
+            dep = get_resource(dep_type, dep_name)
+            raise PoolPartyError.create("ResourceNotFound", "A resource required for #{resource.has_method_name}(#{resource.name}) was not found: #{dep_type}(#{dep_name}). Please make sure you've specified this in your configuration.") unless dep
+            result.add_edge!(dep, resource, dep.name) unless result.edge?(dep, resource)
+          end
         end
-      end # end resource filtering
-      
-      # Add this resource to the graph
-      rgraph.add_edge(resource, on) unless on.nil? || rgraph.has_edge?(resource, on)
-      
-      # Add all the resources this resource has to the graph
-      resource.resources.each do |r|
-         add_resource_to_resources_graph(r, resource, rgraph) if !resource.resources.empty?
+        
+        result.add_edge!(resource, on, resource.name) unless result.edge?(resource, on)
+        
+        create_graph(resource.resources, resource, result)
       end
-      
-      resource
     end
     
     # All the dependencies that are required by this resource
@@ -170,25 +162,19 @@ module PoolParty
     end    
 
     # Write the cloud dependency graph
-    def output_resources_graph(fmt='png', dotfile="graph",params={})
-      src = dotfile + ".dot"
-      dot = dotfile + "." + fmt
-
-      File.open(src, 'w') do |f|
-        f << resources_graph.to_dot_graph({
-          'bgcolor' => 'white',
-          'pad'     => '0.5',
+    def output_resources_graph(fmt='png', dotfile=name, params={})
+        p = {
+          # 'bgcolor' => 'white',
+          'label'   => "HI",
+          # 'pad'     => '0.5',
           'rankdir' => 'LR',
           'ordering' => 'out',
           'overlap' => 'false',
           'node_params' => {
-            'color' => "#000000"
+            'color' => '"#111111"'
           }
-        }.merge(params)).to_s << "\n"
-      end
-
-      system( "dot -T#{fmt} #{src} -o #{dot}" )
-      dot
+        }.merge(params)
+        resources_graph.write_to_graphic_file(fmt, dotfile, p)
     end
     
     # The clouds.rb file
