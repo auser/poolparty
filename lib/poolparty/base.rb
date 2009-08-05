@@ -126,15 +126,20 @@ module PoolParty
       return @resources_graph if @resources_graph && !force
       result = Digraph.new
       
-      arr_of_resources = resources.zip_offset(1)
-      
-      arr_of_resources.each do |first, second|
-        result.add_edge!(first, second)
-      end
+      add_ordered_resources_to_result(resources, result)
       
       create_graph(resources, nil, result)
       
       @resources_graph = result
+    end
+    
+    def add_ordered_resources_to_result(resources, result)
+      arr_of_resources = resources.zip_offset(1)
+      
+      arr_of_resources.each do |first, second|
+        result.add_edge!(first, second)
+        add_ordered_resources_to_result(first.resources, result)
+      end
     end
     
     def create_graph(resources, on, result)
@@ -179,7 +184,8 @@ module PoolParty
           'rankdir' => 'LR',
           'overlap' => 'false',
           'node_params' => {
-            'color' => '"#111111"'
+            'color' => '"#111111"',
+            'style' => "rounded"
           }
         }.merge(params)
         resources_graph.write_to_graphic_file(fmt, dotfile, p)

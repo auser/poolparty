@@ -4,7 +4,8 @@ module PoolParty
       
       default_options(
         :port     => 80,
-        :www_user => "www"
+        :www_dir  => "/var/www",
+        :www_user => "www-data"
       )
       
       def listen(port="80")
@@ -26,11 +27,9 @@ module PoolParty
       end
 
 
-      def before_load(opts={}, parent=self)
-        self.www_user "www-data"
-        has_directory(:name => "/var/www", :owner => www_user, :mode=>'0744')
-        has_directory(:name => "/var/www/#{name}", :owner => www_user, :mode=>'0744')
-        has_directory(:name => "/var/www/#{name}/logs", :owner => www_user, :mode=>'0744')
+      def after_loaded(opts={}, parent=self)
+        has_directory(:name => "#{www_dir}/#{name}", :owner => www_user, :mode=>'0744')
+        has_directory(:name => "#{www_dir}/#{name}/logs", :owner => www_user, :mode=>'0744')
 
         has_variable(:name => "sitename", :value => "#{name}")
 

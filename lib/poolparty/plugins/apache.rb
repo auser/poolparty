@@ -5,6 +5,7 @@ module PoolParty
       
       default_options :port               => 80,
                       :www_user           => 'www-data',
+                      :www_dir            => "/var/www",                      
                       :passenger_version  => "2.2.4"
       
       def before_load
@@ -89,7 +90,7 @@ PassengerRuby <%= @node[:languages][:ruby][:ruby_bin] %>
       def configs
         unless @configs
           listen(port) unless @listen
-          has_directory("/var/www")
+          has_directory("#{www_dir}", :mode => "0755")
           has_directory("/etc/apache2")
           has_directory("/etc/apache2/conf.d")
           has_directory("/etc/apache2/site-includes")
