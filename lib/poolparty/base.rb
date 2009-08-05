@@ -107,7 +107,7 @@ module PoolParty
     
     # Order the resources_graph using a top-sort iterator
     def ordered_resources
-      resources_graph.to_a#topsort_iterator.to_a
+      resources_graph.topsort_iterator.to_a
     end
     
     # Get a resource, based on it's type
@@ -126,13 +126,10 @@ module PoolParty
       return @resources_graph if @resources_graph && !force
       result = RGL::DirectedAdjacencyGraph.new
       # res = resources.TODOODOODODOD
-      result.add_vertex(self)
       
       resources.each do |res|
-        result.add_edge(res,self)
-        res.resources.each do |r|
-          add_resource_to_resources_graph(r, res, result)
-        end
+        result.add_vertex(res)
+        add_resource_to_resources_graph(res, nil, result)
       end
 
       @resources_graph = result
@@ -141,18 +138,16 @@ module PoolParty
     # First, add this resource to the dependency tree
     def add_resource_to_resources_graph(resource, on, rgraph)
       
-      unless resource.dependencies.empty?
-        # Add the dependencies if they are not already on the graph
-        resource.dependencies.each do |dep_type, deps|
-          deps.each do |dep_name|
-            dep = get_resource(dep_type, dep_name)
-            add_resource_to_resources_graph(dep, resource, rgraph)
-          end
-        end # end resource filtering
-      end
+      # Add the dependencies if they are not already on the graph
+      resource.dependencies.each do |dep_type, deps|
+        deps.each do |dep_name|
+          dep = get_resource(dep_type, dep_name)
+          add_resource_to_resources_graph(dep, resource, rgraph)
+        end
+      end # end resource filtering
       
       # Add this resource to the graph
-      rgraph.add_edge(resource, on) unless rgraph.has_edge?(resource, on)
+      rgraph.add_edge(resource, on) unless on.nil? || rgraph.has_edge?(resource, on)
       
       # Add all the resources this resource has to the graph
       resource.resources.each do |r|
@@ -160,6 +155,12 @@ module PoolParty
       end
       
       resource
+    end
+    
+    # All the dependencies that are required by this resource
+    # This is a hash of the dependencies required by the resource
+    def dependencies
+      @dependencies ||= {}
     end
     
     def all_resources

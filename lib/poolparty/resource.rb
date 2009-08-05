@@ -36,12 +36,6 @@ module PoolParty
       EOE
     end
     
-    # All the dependencies that are required by this resource
-    # This is a hash of the dependencies required by the resource
-    def dependencies
-      @dependencies ||= {}
-    end
-    
     # META FUNCTIONS
     # ALL RESOURCES HAVE THESE METHODS AVAILABLE
     def notifies(other_resources_hash, action_to_take=:reload)

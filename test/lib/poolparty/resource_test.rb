@@ -140,7 +140,7 @@ class ResourceTest < Test::Unit::TestCase
       File.unlink("#{File.dirname(__FILE__)}/graph.png")
       File.unlink("#{File.dirname(__FILE__)}/graph.dot")
     end
-    assert_equal ["file:/etc/my_configs", "user:ari", "directory:/etc/dir", "cloud:fighting"], 
+    assert_equal ["file:/etc/my_configs", "user:ari", "directory:/etc/dir"], 
       clouds["fighting"].ordered_resources.map {|a| a.to_s }.flatten
   end
   
