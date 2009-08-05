@@ -20,6 +20,7 @@ EOS
     @loaded_clouds.each do |cld|
       
       cld.compile
+      cld.output_resources_graph('png', "graph", {"fontsize" => 30})          
       
     end
     

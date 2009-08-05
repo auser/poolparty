@@ -10,7 +10,6 @@ module DependencyResolvers
       
       def before_compile
         @cookbook_directory = compile_directory/"cookbooks"/"poolparty"
-        require_chef_only_resources
         raise PoolParty::PoolPartyError.create("ChefCompileError", "No compile_directory is specified. Please specify one.") unless compile_directory
         FileUtils.mkdir_p cookbook_directory unless ::File.directory?(cookbook_directory)
       end
@@ -61,8 +60,6 @@ module DependencyResolvers
       default_attr_reader :files, []
       default_attr_reader :attribute_files, []
       
-      private
-      
       def require_chef_only_resources
         # Require the chef-only resources
         $:.unshift("#{File.dirname(__FILE__)}/chef")
@@ -74,6 +71,8 @@ module DependencyResolvers
         end
       end
       
+      private
+      
       # Take the print_to_chef string and apply metafunctions to the string on the resource
       # If there are no meta functions on the resource, do not touch the resulting
       # string
@@ -81,8 +80,8 @@ module DependencyResolvers
         regex = /[(.*)do(\w*)?(.*)]?(\w)*end$/
         
         add = []
-        add << "  notifies :#{resource.meta_notifies[0]}, resources(:#{chef_safe_resource(resource.meta_notifies[1].has_method_name)} => \"#{resource.meta_notifies[1].name}\")" if resource.meta_notifies
-        add << "  subscribes :#{resource.meta_subscribes[0]}, resources(:#{chef_safe_resource(resource.meta_subscribes[1].has_method_name)} => \"#{resource.meta_subscribes[1].name}\"), :#{resource.meta_subscribes[2]}" if resource.meta_subscribes
+        apply_meta_notifies(resource, add) if resource.meta_notifies
+        apply_meta_subscribes(resource, add) if resource.meta_subscribes
 
         if resource.meta_not_if
           tmp = "  not_if "
@@ -104,13 +103,32 @@ module DependencyResolvers
         "#{newstr}#{add.join("\n")}\nend"
       end
       
+      def apply_meta_notifies(resource, add)
+        # The meta_notifies is a hash that looks like: {:file => [["pool_name", :reload]]}
+        resource.meta_notifies.each do |ty, arr|
+          arr.each do |nm, action|
+            add << "  notifies :#{action}, resources(:#{chef_safe_resource(ty)} => \"#{nm}\")"
+          end
+        end
+      end
+      
+      def apply_meta_subscribes(resource, add)
+        # The meta_subscribes is a hash that looks like: {:file=>[["pool_name", :reload, :immediately]]
+        resource.meta_subscribes.each do |ty, arr|
+          arr.each do |nm, action, at_time|
+            # subscribes :reload, resources\(:service => "apache"\), :delayed
+            add << "  subscribes :#{action}, resources(:#{chef_safe_resource(ty)} => \"#{nm}\"), :#{at_time}"
+          end
+        end
+      end
+      
       # Cleanup for chef resource output
       # Not particularly clean, but a necessary evil because
       # certain resources don't reflect the chef output
       # such as has_exec corresponds to execute
       def chef_safe_resource(name)
         case name
-        when "exec"
+        when :exec
           "execute"
         else
           name

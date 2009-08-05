@@ -68,7 +68,7 @@ module DependencyResolvers
     # :compile with the current printing method, collects the output
     # and joins them with a newline
     def print_resources
-      ordered_resources.map do |res|
+      resources.map do |res|
         ProxyObject.new(res).compile(current_printing_method)
       end.join("\n")
     end

@@ -16,21 +16,24 @@ module RGL
   # undirected Graph.  _params_ can contain any graph property specified in
   # rdot.rb.
 
-  def to_dot_graph (params = {})
+  def to_dot_graph (params = {} )
+    node_params = params["node_params"] || {}
+    edge_params = params["edge_params"] || {}
+    
     params['name'] ||= self.class.name.gsub(/:/,'_')
     fontsize   = params['fontsize'] ? params['fontsize'] : '8'
     graph      = (directed? ? DOT::Digraph : DOT::Subgraph).new(params)
     edge_class = directed? ? DOT::DirectedEdge : DOT::Edge
     each_vertex do |v|
       name = v.to_s
-      graph << DOT::Node.new('name'     => name,
+      graph << DOT::Node.new({'name'     => name,
                              'fontsize' => fontsize,
-                             'label'    => name)
+                             'label'    => name}.merge(node_params))
     end
     each_edge do |u,v|
-      graph << edge_class.new('from'     => u.to_s,
+      graph << edge_class.new({'from'     => u.to_s,
                               'to'       => v.to_s,
-                              'fontsize' => fontsize)
+                              'fontsize' => fontsize}.merge(edge_params))
       end
       graph
     end

@@ -12,9 +12,6 @@ module PoolParty
         configs
         has_service("apache2", :requires => get_package("apache2"))
         has_user "www-data"
-      end
-      
-      def before_compile
         apache_configs
       end
       
@@ -30,7 +27,7 @@ module PoolParty
       def base_install
         unless @base_install
           has_exec({:name => "restart-apache2", :command => "/etc/init.d/apache2 restart", :action => :nothing})
-          has_exec({:name => "reload-apache2", :command => "/etc/init.d/apache2 reload", :action => :nothing})
+          has_exec({:name => "reload-apache2", :command => "/etc/init.d/apache2 reload", :action => :nothing, :requires => get_package("apache2")})
           has_exec({:name => "force-reload-apache2", :command => "/etc/init.d/apache2 force-reload", :action => :nothing})
           @base_install = true
         end
@@ -53,6 +50,7 @@ module PoolParty
           has_exec "install_passenger_script" do
             command 'echo -en \"\\\\n\\\\n\\\\n\\\\n\" | passenger-install-apache2-module'
             notifies get_exec("restart-apache2"), :run
+            requires get_exec("restart-apache2")
             not_if "test -f /etc/apache2/mods-available/passenger.conf && test -s /etc/apache2/mods-available/passenger.conf"
             creates lambda { "@node[:apache][:passenger_module_path]" }
             end
@@ -93,9 +91,10 @@ PassengerRuby <%= @node[:languages][:ruby][:ruby_bin] %>
           has_directory("/etc/apache2/conf.d")
           has_directory("/etc/apache2/site-includes")
           
-          has_file(:name => "/etc/apache2/apache2.conf") do
+          has_file("/etc/apache2/apache2.conf") do
             mode 0644
             requires get_directory("/etc/apache2/conf.d")
+            requires get_package("apache2")
             template File.dirname(__FILE__)/"apache2"/"apache2.conf.erb"
           end
           # does_not_have_file(:name => "/etc/apache2/ports.conf")
@@ -129,6 +128,7 @@ PassengerRuby <%= @node[:languages][:ruby][:ruby_bin] %>
         has_file(:name => "/etc/apache2/conf.d/#{name}.conf") do
           template File.dirname(__FILE__)/temp
           notifies get_exec("reload-apache2"), :run
+          requires get_exec("reload-apache2")
         end
       end
       
@@ -156,7 +156,7 @@ PassengerRuby <%= @node[:languages][:ruby][:ruby_bin] %>
         has_file(opts) unless opts[:no_file]
         has_exec(:name => "/usr/sbin/a2ensite #{name}") do
           notifies get_exec("reload-apache2"), :run
-          requires get_package("apache2")
+          requires get_exec("reload-apache2")
           not_if "/bin/sh -c '[ -L /etc/apache2/sites-enabled/#{name} ] && [ /etc/apache2/sites-enabled/#{name} -ef /etc/apache2/sites-available/#{name} ]'"
         end
       end
@@ -167,10 +167,11 @@ PassengerRuby <%= @node[:languages][:ruby][:ruby_bin] %>
       
       def present_apache_module(*names)
         names.each do |name|
-          has_exec(:name => "mod-#{name}", :command => "/usr/sbin/a2enmod #{name}") do
-            requires get_package("apache2")
+          has_exec(:name => "mod-#{name}", :command => "/usr/sbin/a2enmod #{name}") do            
             not_if "/bin/sh -c \'[ -L /etc/apache2/mods-enabled/#{name}.load ] && [ /etc/apache2/mods-enabled/#{name}.load -ef /etc/apache2/mods-available/#{name}.load ]\'"
+            requires get_package("apache2")
             notifies get_exec("force-reload-apache2"), :run
+            requires get_exec("force-reload-apache2")
           end
         end
       end
@@ -181,6 +182,7 @@ PassengerRuby <%= @node[:languages][:ruby][:ruby_bin] %>
             requires get_package("apache2")
             not_if "/bin/sh -c \'[ -L /etc/apache2/mods-enabled/#{name}.load ] && [ /etc/apache2/mods-enabled/#{name}.load -ef /etc/apache2/mods-available/#{name}.load ]\'"
             notifies get_exec("force-reload-apache2"), :run
+            requires get_exec("force-reload-apache2")
           end
         end
       end

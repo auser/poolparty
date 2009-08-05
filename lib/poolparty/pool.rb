@@ -129,7 +129,10 @@ module PoolParty
     end
     
     # Call init to the resource methods and init the log
+    # It pulls the requires for chef
+    # TODO: Pull require_chef_only_resources out
     def self.init
+      DependencyResolvers::Chef.require_chef_only_resources
       PoolParty::Resource.define_resource_methods
       PoolParty::PoolPartyLog.init
     end

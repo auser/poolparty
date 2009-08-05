@@ -28,5 +28,16 @@ class Array
     self[a], self[b] = self[b], self[a]
     self
   end
+  
+  # Rotate an array
+  # Example:
+  #   arr = %w(a b c d e f)
+  #   arr2 = arr.clone.rotate
+  # 
+  #   arr.zip(arr2) => 
+  #   [["a", "b"], ["b", "c"], ["c", "d"], ["d", "e"], ["e", "f"], ["f", "a"]]  
+  def rotate
+    push shift
+  end
     
 end

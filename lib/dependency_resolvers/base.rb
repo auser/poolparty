@@ -23,7 +23,7 @@ module DependencyResolvers
       before_compile
       o = case resources
       when PoolParty::Cloud
-        compile(resources.resources)
+        compile(resources.ordered_resources)
       when Array
         compile_array(resources)
       when PoolParty::Resource
@@ -65,7 +65,7 @@ module DependencyResolvers
     def self.compile_array(array_of_resources=[])
       out = []
       array_of_resources.each do |res|
-        out << compile_resource(res)
+        out << compile_resource(res) if res.is_a?(PoolParty::Resource)
       end
       out.join("\n")
     end

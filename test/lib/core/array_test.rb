@@ -38,4 +38,9 @@ class ArrayTest < Test::Unit::TestCase
     assert_equal %w(d c a b), @arr.swap!(2,3)
   end
   
+  def test_rotate
+    arr = %w(a b c d e)
+    assert_equal %w(b c d e a), arr.rotate
+  end
+  
 end

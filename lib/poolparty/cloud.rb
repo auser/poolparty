@@ -29,7 +29,6 @@ module PoolParty
       @cloud_name = n
       @cloud_name.freeze
       
-      # super(n,o,&block)
       # @init_block = block
       @init_opts = compile_opts(o)
       

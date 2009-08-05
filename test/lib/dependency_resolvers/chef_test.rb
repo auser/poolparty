@@ -98,7 +98,7 @@ EOE
       end
       
       should "Add meta subscribes on the resource output" do
-        @res.subscribes :reload, @inst.get_service("apache")
+        @res.subscribes @inst.get_service("apache"), :reload
         assert_match /subscribes :reload, resources\(:service => "apache"\), :delayed/, @base.compile(@res)
       end
             

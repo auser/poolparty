@@ -95,24 +95,52 @@ class ResourceTest < Test::Unit::TestCase
     assert_equal "box", clouds["semaphore"].variables.first.cloud.files.first.content
     assert_equal "semaphore", clouds["semaphore"].variables.first.cloud.name
   end
+  
+  def test_notifies
+    pool :testing do
+      cloud :in_a_box do
+        has_file :name => "pool_name", :content => pool.name
+        has_exec "echo 'hello'", :notifies => get_file("pool_name")
+      end
+    end
+    
+    assert_equal({:file => [["pool_name", :reload]]}, clouds["in_a_box"].execs.first.meta_notifies)
+  end
+  
+  def test_subscribes_hash
+    clear!
+    pool :testing do
+      cloud :in_a_box_for_subscribes do
+        has_file :name => "pool_name", :content => pool.name
+        has_exec "echo 'hello'" do
+          subscribes get_file("pool_name"), :reload, :immediately
+        end
+      end
+    end
+    
+    assert_equal({:file=>[["pool_name", :reload, :immediately]]}, clouds["in_a_box_for_subscribes"].execs.first.meta_subscribes)
+    
+  end
     
   def test_required_resourcing
     pool :square do
       cloud :fighting do
         has_user "ari", :requires => get_file("/etc/my_configs")
-        has_file "/etc/my_configs"
         has_directory "/etc/dir", :requires => {:user => "ari", :file => "/etc/my_configs"}
+        has_file "/etc/my_configs"
       end
     end
     
     # p clouds["semaphore"].files
     assert_equal clouds["fighting"].get_resource(:file, "/etc/my_configs"), clouds["fighting"].files.first
     
-    clouds["fighting"].output_resources_graph('png', "graph", {"fontsize" => 30})
-    assert File.file?("#{File.dirname(__FILE__)}/graph.dot")
-    # File.unlink("#{File.dirname(__FILE__)}/graph.png")
-    File.unlink("#{File.dirname(__FILE__)}/graph.dot")
-    assert_equal ["file_resource:/etc/my_configs", "user:ari", "directory:/etc/dir"], 
+    if verbose?
+      clouds["fighting"].output_resources_graph('png', "graph", {"fontsize" => 30})
+      assert File.file?("#{File.dirname(__FILE__)}/graph.dot")
+      File.unlink("#{File.dirname(__FILE__)}/graph.png")
+      File.unlink("#{File.dirname(__FILE__)}/graph.dot")
+    end
+    assert_equal ["file:/etc/my_configs", "user:ari", "directory:/etc/dir", "cloud:fighting"], 
       clouds["fighting"].ordered_resources.map {|a| a.to_s }.flatten
   end
   

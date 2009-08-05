@@ -33,9 +33,6 @@ module PoolParty
     def print_to_chef
       <<-EOE
 # <%= has_method_name %>
-<% ordered_resources.each do |res| %>
-<%= res.compile(:chef) %>
-<% end %>
       EOE
     end
     
@@ -45,19 +42,31 @@ module PoolParty
       @dependencies ||= {}
     end
     
-    # Add to the dependencies list
-    def add_to_dependencies(hsh)
-      hsh.each do |k,v|
-        current_deps = (dependencies[k] ||= [])
-        current_deps << v unless current_deps.include?(v)
+    # META FUNCTIONS
+    # ALL RESOURCES HAVE THESE METHODS AVAILABLE
+    def notifies(other_resources_hash, action_to_take=:reload)
+      @meta_notifies ||= {}
+      other_resources_hash.each do |k,v|
+        notifies_array = (@meta_notifies[k] ||= [])
+        notifies_array << [v, action_to_take] unless notifies_array.include?([v, action_to_take])
+      end      
+    end
+    
+    def subscribes(other_resources_hash, action_to_take=:reload, at_time=:delayed)
+      @meta_subscribes ||= {}
+      other_resources_hash.each do |k,v|
+        subscribes_array = (@meta_subscribes[k] ||= [])
+        subscribes_array << [v, action_to_take, at_time] unless subscribes_array.include?([v, action_to_take, at_time])
       end
     end
     
-    # META FUNCTIONS
-    # ALL RESOURCES HAVE THESE METHODS AVAILABLE
-    def notifies(other_resource, action_to_take=:reload)
-      @meta_notifies = [action_to_take, other_resource]
-    end
+    # Requires
+    def requires(other_resources_hsh)
+      other_resources_hsh.each do |k,v|
+        current_deps = (dependencies[k] ||= [])
+        current_deps << v unless current_deps.include?(v)
+      end
+    end    
     
     # Not if
     # If a block is given with the not_if, we assume it is
@@ -71,17 +80,7 @@ module PoolParty
     def only_if(code_str=nil, &block)
       @meta_only_if = block ? [block.code, :block] : [code_str, :string]
     end
-    
-    # Subscribes to changes
-    def subscribes(action_to_take, other_resource, at_time=:delayed)
-      @meta_subscribes = [action_to_take, other_resource, at_time]
-    end
-    
-    # Requires
-    def requires(other_resource)
-      add_to_dependencies other_resource
-    end
-    
+        
     # Should this resource exist on the remote systems
     # which is a lookup of the instance variable 
     # on the instance of the resource
@@ -177,7 +176,7 @@ module PoolParty
           obj
         end
         def #{res.has_method_name}s
-          resources.select {|q| q if q.class.to_s =~ /#{res.to_s.classify}/ }
+          all_resources.select {|q| q if q.class.to_s =~ /#{res.to_s.classify}/ }
         end
         alias :#{res.has_method_name} :has_#{res.has_method_name}
         

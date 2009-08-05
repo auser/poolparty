@@ -107,7 +107,7 @@ module PoolParty
     
     # Order the resources_graph using a top-sort iterator
     def ordered_resources
-      resources_graph.topsort_iterator.to_a.reverse
+      resources_graph.to_a#topsort_iterator.to_a
     end
     
     # Get a resource, based on it's type
@@ -117,27 +117,56 @@ module PoolParty
       o.detect {|r| r.name == nm }
     end
     
-    def inspect
-      [self.class.to_s.top_level_class, name].inspect
-    end
-    
     def to_s
-      "#{self.class.to_s.top_level_class}:#{name}"
+      "#{self.respond_to?(:has_method_name) ? self.has_method_name : self.class.to_s.top_level_class}:#{name}"
     end
     
     # Create a directed adjacency graph of each of the dependencies
-    def resources_graph
+    def resources_graph(force=false)
+      return @resources_graph if @resources_graph && !force
       result = RGL::DirectedAdjacencyGraph.new
+      # res = resources.TODOODOODODOD
+      result.add_vertex(self)
+      
       resources.each do |res|
-        res.dependencies.each do |dep_type, deps|
-          deps.each do |dep_name|
-            dep = get_resource(dep_type, dep_name)
-            result.add_edge(res, dep)
-          end
+        result.add_edge(res,self)
+        res.resources.each do |r|
+          add_resource_to_resources_graph(r, res, result)
         end
       end
-      result
+
+      @resources_graph = result
     end
+    
+    # First, add this resource to the dependency tree
+    def add_resource_to_resources_graph(resource, on, rgraph)
+      
+      unless resource.dependencies.empty?
+        # Add the dependencies if they are not already on the graph
+        resource.dependencies.each do |dep_type, deps|
+          deps.each do |dep_name|
+            dep = get_resource(dep_type, dep_name)
+            add_resource_to_resources_graph(dep, resource, rgraph)
+          end
+        end # end resource filtering
+      end
+      
+      # Add this resource to the graph
+      rgraph.add_edge(resource, on) unless rgraph.has_edge?(resource, on)
+      
+      # Add all the resources this resource has to the graph
+      resource.resources.each do |r|
+         add_resource_to_resources_graph(r, resource, rgraph) if !resource.resources.empty?
+      end
+      
+      resource
+    end
+    
+    def all_resources
+      resources.map do |res|
+        [res, res.all_resources ]
+      end.flatten
+    end    
 
     # Write the cloud dependency graph
     def output_resources_graph(fmt='png', dotfile="graph",params={})
@@ -145,13 +174,21 @@ module PoolParty
       dot = dotfile + "." + fmt
 
       File.open(src, 'w') do |f|
-        f << resources_graph.to_dot_graph(params).to_s << "\n"
+        f << resources_graph.to_dot_graph({
+          'bgcolor' => 'white',
+          'pad'     => '0.5',
+          'rankdir' => 'LR',
+          'ordering' => 'out',
+          'overlap' => 'false',
+          'node_params' => {
+            'color' => "#000000"
+          }
+        }.merge(params)).to_s << "\n"
       end
 
       system( "dot -T#{fmt} #{src} -o #{dot}" )
       dot
     end
-    
     
     # The clouds.rb file
     def clouds_dot_rb_file; self.class.clouds_dot_rb_file; end
