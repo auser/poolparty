@@ -53,7 +53,7 @@ module DependencyResolvers
           super
         end
         
-        apply_meta_functions(res, o)
+        apply_meta_functions(res, o) if res.is_a?(PoolParty::Resource)
       end
       
       default_attr_reader :variables, []

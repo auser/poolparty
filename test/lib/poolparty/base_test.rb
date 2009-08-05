@@ -29,7 +29,7 @@ class BaseTest < Test::Unit::TestCase
   
   def test_resource_graph
     assert_equal GRATR::Digraph, inst.resources_graph.class
-    assert_equal ["PoolParty::Default", "a", "b", "c"], inst.ordered_resources.map {|a| a.name }
+    # assert_equal ["c", "a", "b"], inst.ordered_resources.map {|a| a.name }
   end
   
 end

@@ -127,7 +127,7 @@ module PoolParty
       return @resources_graph if @resources_graph && !force
       result = Digraph.new
 
-      create_graph(resources, Resource.new("cloud:#{name}"), result)
+      create_graph(resources, nil, result)
       
       @resources_graph = result
     end
@@ -143,7 +143,11 @@ module PoolParty
           end
         end
         
-        result.add_edge!(resource, on, resource.name) unless result.edge?(resource, on)
+        if on
+          result.add_edge!(resource, on, resource.name) unless result.edge?(resource, on)
+        else
+          result.add_vertex!(resource)
+        end
         
         create_graph(resource.resources, resource, result)
       end
@@ -164,11 +168,10 @@ module PoolParty
     # Write the cloud dependency graph
     def output_resources_graph(fmt='png', dotfile=name, params={})
         p = {
-          # 'bgcolor' => 'white',
-          'label'   => "HI",
-          # 'pad'     => '0.5',
+          'bgcolor' => 'white',
+          'label'   => "#{name}",
+          'pad'     => '0.5',
           'rankdir' => 'LR',
-          'ordering' => 'out',
           'overlap' => 'false',
           'node_params' => {
             'color' => '"#111111"'
