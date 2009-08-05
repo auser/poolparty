@@ -15,11 +15,7 @@ Dir[File.dirname(__FILE__)+"/../vendor/gems/*"].each {|lib| $LOAD_PATH.unshift(F
   require dep
 end
 
-# Rgl dependencies
-%w(adjacency dot topsort).each do |sublib|
-  require "rgl/#{sublib}"
-end
-
+# Gratr dependencies
 %w(import dot).each do |sublib|
   require "gratr/#{sublib}"
 end
