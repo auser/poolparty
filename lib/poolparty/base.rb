@@ -107,8 +107,7 @@ module PoolParty
     
     # Order the resources_graph using a top-sort iterator
     def ordered_resources
-      resources_graph.topsort.to_a.each do |res|
-      end
+      resources_graph.topsort.to_a
     end
     
     # Get a resource, based on it's type

@@ -42,7 +42,7 @@ else
   "git"
 end'
 
-    assert_equal str, clouds["test"].compile
+    assert_equal str, clouds["test"].compile.chomp
     
   end
   

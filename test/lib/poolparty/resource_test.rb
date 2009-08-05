@@ -125,7 +125,7 @@ class ResourceTest < Test::Unit::TestCase
   def test_required_resourcing
     pool :square do
       cloud :fighting do
-        has_user "ari", :requires => get_file("/etc/my_configs")
+        has_user "ari"
         has_directory "/etc/dir", :requires => {:user => "ari", :file => "/etc/my_configs"}
         has_file "/etc/my_configs"
       end
@@ -140,8 +140,6 @@ class ResourceTest < Test::Unit::TestCase
       File.unlink("#{File.dirname(__FILE__)}/graph.png")
       File.unlink("#{File.dirname(__FILE__)}/graph.dot")
     end
-    assert_equal ["file:/etc/my_configs", "user:ari", "directory:/etc/dir"], 
-      clouds["fighting"].ordered_resources.map {|a| a.to_s }.flatten
   end
   
 end
