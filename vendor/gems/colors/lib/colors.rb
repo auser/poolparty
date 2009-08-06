@@ -36,6 +36,7 @@ class Colors
     	end
 
     	data.gsub!(%r{<b>(.*?)</b>}m, "\e[1m\\1#{default_terminal_colors}")
+    	data.gsub!(%r{<line>}m, "------------------------------")
     	data.gsub!(%r{<banner>(.*?)</banner>}m, "\e[33m\e[44m\e[1m\\1#{default_terminal_colors}")
     	return data
     end

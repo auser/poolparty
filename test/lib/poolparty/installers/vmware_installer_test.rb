@@ -4,7 +4,7 @@ require 'installer'
 class VmwareInstallerTest < Test::Unit::TestCase
   context "vmware installer" do
     setup do
-      @installer = PoolParty::Installers::Vmware.new
+      @installer = PoolParty::Installers::Vmware
       
     end
     should "have the meta-data setup" do

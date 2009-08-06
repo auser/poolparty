@@ -4,22 +4,52 @@ http://poolpartyrb.com
 
 == DESCRIPTION:
 
-PoolParty makes it easy and simple to configure any cloud of computers. In clear language, describe your cloud
-with language such as:
+PoolParty makes cloud provisioning and management easy. PoolParty provides a unified interface for provisioning, management and cloud life-cycle on many different cloud providers, such as EC2 and vmware.
 
-  pool :cloud do
-    cloud :app do
-      instances 2..10
-    end
-  end
+Code your cloud! 
 
 == SYNOPSIS:
 
 PoolParty is written with the intention of being as application-agnostic as possible. It installs only the basic 
 required software to glue the cloud together on the instances as listed below.
 
-PoolParty is easily configuration. In fact, it makes little assumptions about your development environment and allows 
-several options on how to begin configuring the cloud.
+== Quickstart
+
+For instance, to start a basic cloud, let's write one:
+
+  pool "demo" do
+    cloud "app" do
+      instances 2..10
+      keypair "cloud_demo"
+      
+      using :ec2
+      
+      has_file "/etc/motd", :content => "Hello from your cloud"
+    end
+  end
+  
+Simply by issuing the command:
+  
+  cloud start
+  
+The app cloud in the demo pool will be started, bootstrapped and provisioned to your liking. We can change the cloud provider simply by changing the using line. For instance
+
+  pool "demo" do
+    cloud "app" do
+      #...
+      using :rackspace # coming soon
+      #...
+
+Clouds are distinguished by keypairs, so to create multiple clouds, create a new keypair. For instance:
+
+  pool "demo" do
+    cloud "app" do
+      #...
+    end
+    cloud "db" do
+      #...
+
+
 
 == WHAT NEXT:
 * PoolParty::Resources - learn how to use resources in your <tt>clouds.rb</tt>

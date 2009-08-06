@@ -1,6 +1,6 @@
 module PoolParty
   module Installers
-    class Vmware < Base
+    class Vmware < Installer
       
       def steps
         [
@@ -11,11 +11,11 @@ module PoolParty
         ]
       end
       
-      def name
+      def self.name
         "Vmware"
       end
       
-      def description
+      def self.description
         "Vmware Fusion installer"
       end
       
@@ -30,19 +30,17 @@ module PoolParty
       end
       
       def show_menu_for_vmrun_files
-        colored_say "We found the following vmware files in the default vmware directory.\nChoose one of these to use as your vmrun file or select other\n<line>"
-        base = ask [default_vmrun_files, :other].flatten
+        msg = "We found the following vmware files in the default vmware directory.\nChoose one of these to use as your vmrun file or select other\n<line>"
+        
+        providers = {}
+        default_vmrun_files.each_with_index do |file,idx|
+          providers.merge!(idx+1 => file)
+        end
+        
+        base = choose(msg, providers)
         @vmrun_file = base == :other ? ask_for_vmrun_path : base
         
         puts "Chose: #{@vmrun_file}"
-          # menu.prompt = "Vmware file > "
-          # .each do |base|
-          #   menu.choice base do 
-          #     
-          #     @vmrun_file = base == :other ? ask_for_vmrun_path : base
-          #   end
-          # end
-        # end
       end
       
       def ask_for_vmrun_path
