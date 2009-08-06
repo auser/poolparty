@@ -36,21 +36,21 @@ The app cloud in the demo pool will be started, bootstrapped and provisioned to 
 
 There are a number of commands PoolParty offers to interact with your cloud. They include:
 
-<tt>cloud start</tt>
-<tt>cloud terminate</tt>
-<tt>cloud bootstrap</tt>
-<tt>cloud configure</tt>
-<tt>cloud compile</tt>
-<tt>cloud console</tt>
-<tt>cloud expand</tt>
-<tt>cloud contract</tt>
-<tt>cloud list</tt>
-<tt>cloud show</tt>
-<tt>cloud ssh</tt>
+* <tt>cloud start</tt>
+* <tt>cloud terminate</tt>
+* <tt>cloud bootstrap</tt>
+* <tt>cloud configure</tt>
+* <tt>cloud compile</tt>
+* <tt>cloud console</tt>
+* <tt>cloud expand</tt>
+* <tt>cloud contract</tt>
+* <tt>cloud list</tt>
+* <tt>cloud show</tt>
+* <tt>cloud ssh</tt>
 
 There is also a helper installer script. This is an easy way to get started bootstrapping your environment:
 
-<tt>install-poolparty</tt>
+* <tt>install-poolparty</tt>
 
 We can change the cloud provider simply by changing the using line. For instance:
 
@@ -77,27 +77,27 @@ Clouds are distinguished by keypairs, so to create multiple clouds, create a new
 
 As you probably noticed from above, you provision your system with resources. There are native resources, plugins (which are basically resources) and you can write your own. The base resources included in PoolParty are as follows:
 
-<tt>file</tt>
-<tt>directory</tt>
-<tt>exec</tt>
-<tt>variable</tt>
-<tt>service</tt>
-<tt>package</tt>
-<tt>user</tt>
-<tt>group</tt>
-<tt>link (symlink)</tt>
-<tt>line (line in file)</tt>
-<tt>gem_package</tt>
-<tt>cron</tt>
+* <tt>file</tt>
+* <tt>directory</tt>
+* <tt>exec</tt>
+* <tt>variable</tt>
+* <tt>service</tt>
+* <tt>package</tt>
+* <tt>user</tt>
+* <tt>group</tt>
+* <tt>link (symlink)</tt>
+* <tt>line (line in file)</tt>
+* <tt>gem_package</tt>
+* <tt>cron</tt>
 
 There are also dependency_resolver specific resources. For instance, **chef** specific resources are as follows:
 
-<tt>chef_attribute</tt>
-<tt>http_request</tt>
-<tt>remote_directory</tt>
-<tt>remote_file</tt>
-<tt>route</tt>
-<tt>script</tt>
+* <tt>chef_attribute</tt>
+* <tt>http_request</tt>
+* <tt>remote_directory</tt>
+* <tt>remote_file</tt>
+* <tt>route</tt>
+* <tt>script</tt>
 
 To use these resources in your config file (clouds.rb), simply "assert" (call) the method with has_ or does_not_have prepended. For instance:
 
@@ -140,9 +140,9 @@ Resources can be built on top of other resources as well. This is the definition
 
 There are currently several plugins that ship with PoolParty. Those include:
 
-<tt>apache (this includes passenger, virtual_hosts, php5)</tt>
-<tt>git</tt>
-<tt>rails</tt>
+* <tt>apache (this includes passenger, virtual_hosts, php5)</tt>
+* <tt>git</tt>
+* <tt>rails</tt>
 
 This is list likely to expand as plugins are simply resources built on top of other resources. There is an external project called poolparty-extensions (<a href="http://github.com/auser/poolparty-extensions/tree/master">http://github.com/auser/poolparty-extensions/tree/master</a>) that has quite a few external plugins, including hadoop, ganglia and more.
 
@@ -150,10 +150,10 @@ This is list likely to expand as plugins are simply resources built on top of ot
 
 To add a cloud_provider, there are four methods that need to be implemented. Simply sublcass the CloudProviders module and require it in your clouds.rb (or commit it back to PoolParty). Those four methods are:
 
-<tt>run_instance</tt>
-<tt>terminate_instance</tt>
-<tt>describe_instances</tt>
-<tt>describe_instance</tt>
+* <tt>run_instance</tt>
+* <tt>terminate_instance</tt>
+* <tt>describe_instances</tt>
+* <tt>describe_instance</tt>
 
 That's it!
 
@@ -168,22 +168,18 @@ Each resource is documented in the code and more documentation can be found at t
 
 == REQUIREMENTS:
 
-Ruby
-Erlang
+* Ruby
+* Erlang
 
 == INSTALL:
 
 sudo gem install auser-poolparty
 
-== TODO:
-
-Update readme
-
 == LICENSE:
 
 (The MIT License)
 
-Copyright (c) 2008 Ari Lerner, CloudTeam
+Copyright (c) 2009 Ari Lerner, CloudTeam
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
