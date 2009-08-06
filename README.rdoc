@@ -32,7 +32,27 @@ Simply by issuing the command:
   
   cloud start
   
-The app cloud in the demo pool will be started, bootstrapped and provisioned to your liking. We can change the cloud provider simply by changing the using line. For instance
+The app cloud in the demo pool will be started, bootstrapped and provisioned to your liking. If the platform is not specified, then it's assumed to be ubuntu. However, if a node is running, then PoolParty will introspect the node and determine the operating system. This can be specified in the clouds.rb.
+
+There are a number of commands PoolParty offers to interact with your cloud. They include:
+
+<tt>cloud start</tt>
+<tt>cloud terminate</tt>
+<tt>cloud bootstrap</tt>
+<tt>cloud configure</tt>
+<tt>cloud compile</tt>
+<tt>cloud console</tt>
+<tt>cloud expand</tt>
+<tt>cloud contract</tt>
+<tt>cloud list</tt>
+<tt>cloud show</tt>
+<tt>cloud ssh</tt>
+
+There is also a helper installer script. This is an easy way to get started bootstrapping your environment:
+
+<tt>install-poolparty</tt>
+
+We can change the cloud provider simply by changing the using line. For instance:
 
   pool "demo" do
     cloud "app" do
@@ -44,19 +64,104 @@ Clouds are distinguished by keypairs, so to create multiple clouds, create a new
 
   pool "demo" do
     cloud "app" do
+      keypair "demo_app"
       #...
     end
     cloud "db" do
+      keypair "demo_db"
       #...
+    end
+  end
+  
+== Resources
 
+As you probably noticed from above, you provision your system with resources. There are native resources, plugins (which are basically resources) and you can write your own. The base resources included in PoolParty are as follows:
 
+<tt>file</tt>
+<tt>directory</tt>
+<tt>exec</tt>
+<tt>variable</tt>
+<tt>service</tt>
+<tt>package</tt>
+<tt>user</tt>
+<tt>group</tt>
+<tt>link (symlink)</tt>
+<tt>line (line in file)</tt>
+<tt>gem_package</tt>
+<tt>cron</tt>
 
-== WHAT NEXT:
-* PoolParty::Resources - learn how to use resources in your <tt>clouds.rb</tt>
+There are also dependency_resolver specific resources. For instance, **chef** specific resources are as follows:
+
+<tt>chef_attribute</tt>
+<tt>http_request</tt>
+<tt>remote_directory</tt>
+<tt>remote_file</tt>
+<tt>route</tt>
+<tt>script</tt>
+
+To use these resources in your config file (clouds.rb), simply "assert" (call) the method with has_ or does_not_have prepended. For instance:
+
+  pool "demo" do
+    cloud "app" do
+      has_file "/etc/motd", :requires => get_package("apache2")
+      has_package "apache2" do
+        action :install
+      end
+    end
+  end
+  
+As you can see, there are many different ways to call a resource. All the following resource calls are identical:
+
+  has_file "/etc/motd", :content => "Hello world", :owner => "ari"
+  has_file :name => "/etc/motd", :content => "Hello world", :owner => "ari"
+  has_file "/etc/motd" do
+    content "Hello world"
+    owner "ari"
+  end
+  has_file "/etc/motd", :content => "Hello world" do
+    owner "ari"
+  end
+  
+All resources can contain their own resources as well. This sets up a dependency on the parent dependency. For instance
+
+  has_directory "/etc/configs" do
+    has_file "/etc/configs/configger", :content => "Stuff"
+  end
+
+This says that the directory must exist before the file can be created.
+
+You can see the dependency graph setup by your clouds.rb by calling
+
+  cloud compile -g output
+  
+That will generate a output.dot and output.png in the current directory. For this to work, you must have dot installed. Try it!
+
+Resources can be built on top of other resources as well. This is the definition of a resource plugin. This is covered more in-depth on the homepage. For the curious, take a look at lib/poolparty/plugins/apache.rb for an example plugin. 
+
+There are currently several plugins that ship with PoolParty. Those include:
+
+<tt>apache (this includes passenger, virtual_hosts, php5)</tt>
+<tt>git</tt>
+<tt>rails</tt>
+
+This is list likely to expand as plugins are simply resources built on top of other resources. There is an external project called poolparty-extensions (<a href="http://github.com/auser/poolparty-extensions/tree/master">http://github.com/auser/poolparty-extensions/tree/master</a>) that has quite a few external plugins, including hadoop, ganglia and more.
+
+== Extending
+
+To add a cloud_provider, there are four methods that need to be implemented. Simply sublcass the CloudProviders module and require it in your clouds.rb (or commit it back to PoolParty). Those four methods are:
+
+<tt>run_instance</tt>
+<tt>terminate_instance</tt>
+<tt>describe_instances</tt>
+<tt>describe_instance</tt>
+
+That's it!
+
+Each resource is documented in the code and more documentation can be found at the site: <a href="http://poolpartyrb.com">http://poolpartyrb.com</a>.
 
 == FEATURES/PROBLEMS:
 
-* Written in Ruby and Erlang
+* Written in Ruby and Erlang (Internal node communication handled by <a href="https://github.com/auser/hermes/tree/master">Hermes</a>)
 * Written from the ground up to be extensible with plugins
 * Easy git-style commands to communicate with your clouds
 * Much much more
