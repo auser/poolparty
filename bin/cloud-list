@@ -34,7 +34,7 @@ EOS
           msg << "#{k.capitalize} nodes"
           msg << line
           v.each do |a|
-            msg << "  #{a[:instance_id] || a[:id]}\t#{a[:ip] || a[:public_ip] }"
+            msg << "  #{a[:instance_id] || a[:id]}\t#{a[:ip] || a[:public_ip] || a[:name]}"
           end
           msg << ""
         end

@@ -14,6 +14,6 @@ require File.dirname(__FILE__)+"/cloud_providers/connections"
 require File.dirname(__FILE__)+"/cloud_providers/cloud_provider"
 require File.dirname(__FILE__)+"/cloud_providers/cloud_provider_instance"
 
-%w(ec2 vmware).each do |lib|
+%w(ec2 vmware ssh).each do |lib|
   require "cloud_providers/#{lib}/#{lib}"
 end
