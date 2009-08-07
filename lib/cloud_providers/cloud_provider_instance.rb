@@ -109,10 +109,17 @@ module CloudProviders
       #   public_ip || default public_ip
       #   retry_times || 5
       def wait_for_port(port, opts={})
-        ip          = opts.delete(:public_ip) || public_ip
-        retry_times = opts.delete(:retry_times) || 5
+        ip          = opts.delete(:public_ip)   || public_ip
+        retry_times = opts.delete(:retry_times) || 10
+        pause_time  = opts.delete(:pause_time)  || 2
         
-        retry_times.times {|i| return is_port_open?(ip, port, opts)}
+        retry_times.times do |i| 
+          if is_port_open?(ip, port, opts)
+            return true
+          else
+            sleep pause_time
+          end
+        end
         false
       end
       
