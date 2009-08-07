@@ -59,9 +59,10 @@ module CloudProviders
     end
     
     # Load the yaml file containing keys.  If the file does not exist, return an empty hash
-    def self.load_keys_from_file(filename='/etc/poolparty/aws.yml')
+    def self.load_keys_from_file(filename='/etc/poolparty/ec2/aws.yml', caching=true)
+      return @aws_yml if @aws_yml && caching==true
       return {} unless File.exists?(filename)
-      YAML::load( open(filename).read )
+      @aws_yml = YAML::load( open(filename).read )
     end
     
     default_options({

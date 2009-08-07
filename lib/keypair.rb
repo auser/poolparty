@@ -4,7 +4,7 @@
 class Keypair
   
   include SearchablePaths
-  has_searchable_paths(:prepend_paths => ["#{ENV["HOME"]}/.ssh/", "#{ENV["HOME"]}/.ec2/"])
+  has_searchable_paths(:prepend_paths => [Dir.cwd, '/etc/poolparty/keys', "#{ENV["HOME"]}/.ssh/", "#{ENV["HOME"]}/.ec2/", ENV['EC2_CONFIG_DIR']])
   
   attr_accessor :filepath
   

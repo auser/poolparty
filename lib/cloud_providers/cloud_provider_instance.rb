@@ -58,11 +58,11 @@ module CloudProviders
       
       # Configure the node
       def configure!(opts={})
-        # bootstrap! unless bootstrapped?
-        set_vars_from_options opts
+        bootstrap! unless bootstrapped?
         raise StandardError.new("You must pass in a cloud to configure an instance") unless cloud
         cloud.compile(self)
-        scp :source=>keypair.full_filepath, :destination => "/etc/poolparty/keys/#{keypair.basename}"
+        scp(:source       => keypair.full_filepath, 
+            :destination  => "/etc/poolparty/keys/#{keypair.basename}")
         script_file = Provision::Bootstrapper.configure_script(cloud, os)
         
         FileUtils.mkdir_p cloud.tmp_path/"etc"/"poolparty" unless File.directory?(cloud.tmp_path/"etc"/"poolparty")
@@ -230,6 +230,7 @@ module CloudProviders
               s = TCPSocket.new(ip, port)
               s.close
               return true
+              puts ','
             rescue Errno::ECONNREFUSED, Errno::EHOSTUNREACH
               return false
             end

@@ -68,12 +68,51 @@ module CloudProviders
         f<<YAML::dump(cloud_provider.aws_hash(ec2_dir))  #TODO: don't save sensitive info in /tmp
       end
       # We scp these files directly to the instance so to reduce the risk of accidentally leaving them in an insecure location
-      scp(:source=>cert, :destination=>ec2_dir/File.basename(cert)) if cert
+      scp(:source=>cert,        :destination=>ec2_dir/File.basename(cert)) if cert
       scp(:source=>private_key, :destination=>ec2_dir/File.basename(private_key)) if private_key
-      scp(:source=>cloud_cert, :destination=>ec2_dir/File.basename(cloud_cert)) if cloud_cert
+      scp(:source=>cloud_cert,  :destination=>ec2_dir/File.basename(cloud_cert)) if cloud_cert
       # TODO: install_ec2_tools
       super opts
       vputs "completed configuring instance  #{instance_id}."
+    end
+    
+    def rsync_excludes(array_of_abs_paths_to_exclude=nil)
+      array_of_abs_paths_to_exclude ||= %w( /sys
+                             /proc
+                             /dev/pts
+                             /dev
+                             /media
+                             /mnt
+                             /proc
+                             /sys
+                             /etc/udev/rules.d/70-persistent-net.rules
+                             /etc/udev/rules.d/z25_persistent-net.rules
+                            )
+      array_of_abs_paths_to_exclude.inject(''){|str, path| str<<"--exclude=#{path}"; str}
+    end
+    
+    # create an image file and copy this instance to the image file.
+    def make_image(opts={})
+      opts = {:volume       => '/',
+              :size         => 6000,
+              :destination  => '/mnt/bundle',
+              :prefix       => image_id,
+              :cert         => cert,
+              :exclude      => nil,
+              :kernel       => kernel_id,
+              :ramdisk      => ramdisk_id,
+              :ec2cert      => cloud_cert
+              }.merge(opts)
+      image_file = File.join(opts[:destination], opts[:prefix] )
+      cmds = ["mkdir -p #{opts[:destination]}"]
+      cmds << "dd if=/dev/zero of=#{image_file} bs=1M count=#{opts[:size]}"
+      cmds << "mkfs.ext3 -F -j  #{image_file}"
+      cmds << "mkdir -p #{opts[:destination]}/loop"
+      cmds << "mount -o loop #{image_file} #{opts[:destination]}/loop"
+      cmds << "rsync -ax #{rsync_excludes(opts[:exclude])} #{opts[:volume]}/ #{opts[:destination]}/loop/"
+      cmds << "umount #{opts[:destination]}/loop"
+      self.run cmds
+      image_file
     end
     
   end
