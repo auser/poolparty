@@ -111,7 +111,7 @@ module CloudProviders
       def wait_for_port(port, opts={})
         ip          = opts.delete(:public_ip)   || public_ip
         retry_times = opts.delete(:retry_times) || 10
-        pause_time  = opts.delete(:pause_time)  || 2
+        pause_time  = opts.delete(:pause_time)  || 1
         
         retry_times.times do |i| 
           if is_port_open?(ip, port, opts)
@@ -126,6 +126,7 @@ module CloudProviders
       # Wait for a public ip to be assigned, refreshing the instance data from the cloud provider on each query
       # Default timeout value of 60 seconds, can be overriden by passing {:timeout=>seconds}
       def wait_for_public_ip(timeout=60)
+        ddputs("Waiting for public ip")
         begin
           Timeout::timeout(timeout) do
             loop do
@@ -236,14 +237,17 @@ module CloudProviders
             begin
               s = TCPSocket.new(ip, port)
               s.close
+              ddputs("Connected to #{ip}:#{port} - Port is open and good to go")
               return true
               puts ','
             rescue Errno::ECONNREFUSED, Errno::EHOSTUNREACH
+              ddputs("Port #{port} on #{ip} is not accessible (yet)")
               return false
             end
           end
         rescue Timeout::Error
         end
+        ddputs("Port #{port} on #{ip} is not accessible")
         return false
       end
       
