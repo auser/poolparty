@@ -1,0 +1,44 @@
+%w[rubygems rake rake/clean fileutils newgem rubigen].each { |f| require f }
+require File.dirname(__FILE__) + '/lib/parenting'
+
+# Generate all the Rake tasks
+# Run 'rake -T' to see list of generated tasks (from gem root directory)
+$hoe = Hoe.new('parenting', Parenting::VERSION) do |p|
+  p.developer('Ari Lerner', 'arilerner@mac.com')
+  p.changes              = p.paragraphs_of("History.txt", 0..1).join("\n\n")
+  p.post_install_message = "
+  Get ready to jump in the pool, you just installed PoolParty!
+
+  Please check out the documentation for any questions or check out the google groups at
+    http://groups.google.com/group/poolpartyrb
+
+  More tutorials can be found at 
+    http://poolpartyrb.com
+
+  Don't forget to check out the plugin tutorial @ http://poolpartyrb.com to extend PoolParty for your needs!
+
+  For more information, check http://PoolPartyrb.com or visit us on IRC at:
+    irc.freenode.net
+    #poolpartyrb
+
+  *** CloudTeam ***
+  " # TODO remove if post-install message not required
+  p.rubyforge_name       = p.name # TODO this is default value
+  # p.extra_deps         = [
+  #   ['activesupport','>= 2.0.2'],
+  # ]
+  p.extra_dev_deps = [
+    ['newgem', ">= #{::Newgem::VERSION}"]
+  ]
+  
+  p.clean_globs |= %w[**/.DS_Store tmp *.log]
+  path = (p.rubyforge_name == p.name) ? p.rubyforge_name : "\#{p.rubyforge_name}/\#{p.name}"
+  p.remote_rdoc_dir = File.join(path.gsub(/^#{p.rubyforge_name}\/?/,''), 'rdoc')
+  p.rsync_args = '-av --delete --ignore-errors'
+end
+
+require 'newgem/tasks' # load /tasks/*.rake
+Dir['tasks/**/*.rake'].each { |t| load t }
+
+# TODO - want other tests/tasks run by default? Add them to the list
+# task :default => [:spec, :features]

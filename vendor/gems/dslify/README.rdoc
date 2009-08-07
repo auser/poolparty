@@ -1,0 +1,33 @@
+= dslify
+
+Dslify, born out of a need for improvement on Dslify
+
+Add dsl accessors to any class.
+
+Usage:
+  class MyClass
+    include Dslify
+    
+    dsl_methods :award, :people
+  end
+  
+  mc = MyClass.new
+  mc.award "Tony Award"
+  mc.people ["Bob", "Frank", "Ben"]
+  
+You can set defaults as well:
+  class MyClass
+    default_options :award => "Tony Award"
+  end
+
+Finally, if your tree of available accessors runs higher and longer than
+just 1 file, for instance, if you use Parenting, you can set forwarders to 
+forward the query up the chain
+
+class MyClass
+  forwards_to :parent
+end
+
+== Copyright
+
+Copyright (c) 2009 Ari Lerner. See LICENSE for details.
