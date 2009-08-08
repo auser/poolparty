@@ -73,6 +73,7 @@ module SearchablePaths
       end
       self.class.searchable_paths.each do |path|
         self.class.searchable_paths_dirs.each do |dir|
+          next if path.nil?
           full_path = File.expand_path(path / dir / filepath)
           return full_path if File.exists?(full_path)
         end
