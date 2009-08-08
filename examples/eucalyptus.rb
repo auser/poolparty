@@ -1,10 +1,19 @@
 $:.unshift File.dirname(__FILE__)+'/../lib/'
 require "poolparty"
-
+# $DEBUGGING=true
+# $VERBOSE=true
 pool :eucalyptus do
+  clouds_dot_rb_file File.expand_path(__FILE__)
     
   cloud :sample do
-    instances 2
+    instances 1..2
+    os :ubuntu
+    bootstrap_script File.expand_path(File.dirname(__FILE__)/'custom_bootstrap.sh')
+    
+    # monitor :load do |l|
+    #   vote_for(:expand) if l > 0.9
+    # end
+    
     keypair "eucalyptus_sample"
     using :ec2 do
       image_id 'emi-39CA160F'
@@ -34,6 +43,7 @@ pool :eucalyptus do
   end
   
   cloud :bab do
+    instances 1
     keypair "ari"
     using :ec2 do
       image_id 'emi-39CA160F'

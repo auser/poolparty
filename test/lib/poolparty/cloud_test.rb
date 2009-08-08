@@ -101,6 +101,10 @@ class CloudTest < Test::Unit::TestCase
     assert_match /uptime/, result["i-7f000516"]
   end
   
+  def test_os
+    assert_equal :centos, clouds['app'].os
+  end
+  
   def test_expansion
     #TODO: improve this test
     # size = clouds["app"].nodes.size

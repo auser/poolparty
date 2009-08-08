@@ -42,18 +42,20 @@ module CloudProviders
       # CLOUD PROVIDER METHODS
       
       # Bootstrap self.  Bootstrap runs as root, even if user is set
-      def bootstrap!(force=false)
-        old_user = user
-        @user = "root"
-        
-        if !bootstrapped? || force
-          script_file = Provision::Bootstrapper.bootstrap_script(os)
+      def bootstrap!(opts={})        
+         if !bootstrapped? || opts[:force]
+           old_user = user
+           @user = "root"
+           opts[:os] ||= os || determine_os
+           if cloud && cloud.bootstrap_script
+             opts[:filename] = cloud.bootstrap_script
+           end
+          script_file = Provision::Bootstrapper.bootstrap_script(opts)
           scp(:source => script_file, :destination => "/tmp")
           output = run("chmod +x /tmp/determine_os.sh; /bin/sh /tmp/#{File.basename(script_file)}")
+          @user = old_user
           output.chomp if output
         end
-        
-        @user = old_user
       end
       
       # Configure the node

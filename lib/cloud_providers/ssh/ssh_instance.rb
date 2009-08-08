@@ -27,18 +27,6 @@ module CloudProviders
         end
       end
       
-      # Bootstrap self.  Bootstrap runs as root, even if user is set
-      def bootstrap!(force=false)
-        #add any CloudProvider bootstrapping specific code before or after super
-        super
-      end
-      
-      # Configure the node
-      def configure!(opts={})
-        #add any CloudProvider configure specific code before or after super
-        super
-      end
-      
       def refresh!
         run 'uptime'
         name(run('hostname'))

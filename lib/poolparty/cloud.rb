@@ -1,5 +1,6 @@
 module PoolParty  
   class Cloud < DslBase
+    has_searchable_paths
     
     # Options we want on the output of the compiled script
     # but want to take the options from the parent if they
@@ -11,7 +12,9 @@ module PoolParty
       :contract_when            => nil,
       :expand_when              => nil,
       :cloud_provider_name      => :ec2,
-      :dependency_resolver_name => nil
+      :dependency_resolver_name => nil,
+      :os                       => nil,
+      :bootstrap_script         => nil
     )
     
     # Define what gets run on the callbacks
@@ -86,11 +89,10 @@ module PoolParty
     # 6.) Returns the new instance object
     def expand(opts={}, &block)
       timeout = opts.delete(:timeout) || 300
-
+      callback :before_launch_instance
       instance = cloud_provider.run_instance(opts)
       instance.cloud = self
       @instance = instance
-      callback :before_launch_instance
       #wait for an ip and then wait for ssh port, then configure instance
       if instance.wait_for_public_ip(timeout) && instance.wait_for_port(22, :timeout=>timeout)
         callback :after_launch_instance
@@ -128,7 +130,7 @@ module PoolParty
     def run(commands, opts={})
       results = {}
       threads = nodes.collect do |n|
-         Thread.new{ results[n.instance_id] = n.run(commands, opts)  }
+         Thread.new{ results[n.name] = n.run(commands, opts)  }
       end
       threads.each{ |aThread|  aThread.join }
       results
@@ -179,10 +181,14 @@ module PoolParty
       dependency_resolver.compile_to(ordered_resources, tmp_path/"etc"/"#{dependency_resolver_name}", caller)
     end
     
-    # Get the os of the first node, we'll assume they are
+    # Get the os of the first node if it was not explicity defined, we'll assume they are
     # all homogenous
-    def os
-      nodes.size > 0 ? nodes.first.os : dsl_options[:os]
+    def os(sym=nil)
+      if sym
+        dsl_options[:os] = sym
+      else
+        nodes.size > 0 ? nodes.first.os : dsl_options[:os]
+      end
     end
     alias :platform :os
     
