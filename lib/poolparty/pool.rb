@@ -69,9 +69,17 @@ module PoolParty
       o
     end
     
-    # Store the clouds_dot_rb_file
-    def self.clouds_dot_rb_file
-      @clouds_dot_rb_file
+    # Store the clouds_dot_rb_file location
+    def self.clouds_dot_rb_file(n=nil)
+      if n
+        @clouds_dot_rb_file = n
+      else
+        @clouds_dot_rb_file
+      end
+    end
+    
+    def self.clouds_dot_rb_dir
+      File.dirname(self.clouds_dot_rb_file) if self.clouds_dot_rb_file
     end
     
     # Load the default clouds.rb file

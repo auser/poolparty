@@ -25,8 +25,8 @@ module CloudProviders
     end
     
     # Required methods
-    # The next methods are required on all RemoteInstance types
-    # If your RemoteInstance type does not overwrite the following methods
+    # The next methods are required on all CloudProviderInstance types
+    # If your CloudProviderInstance type does not overwrite the following methods
     # An exception will be raised and poolparty will explode into tiny little 
     # pieces. Don't forget to overwrite these methods
     

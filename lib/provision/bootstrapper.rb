@@ -9,10 +9,16 @@ module Provision
     # in the PoolParty provision/bootstrap_scripts directory
     # If there is no bootstrap script (of the format: build_<os>.sh), then we raise an 
     # exception to notify that the os is not yet supported
-    def self.bootstrap_script(os=:ubuntu)
-      file = File.expand_path(File.dirname(__FILE__)/"bootstrap_scripts"/"build_#{os}.sh")
-      raise StandardError.new("#{os} is not supported by PoolParty's Bootstrapper") unless File.file?(file)
-      file
+    def self.bootstrap_script(opts={})
+      if opts[:filename]
+        raise StandardError.new("Could not find bootstrap file #{opts[:filename]}") unless File.file?(opts[:filename])
+        File.expand_path(opts[:filename])
+      else
+        os = opts[:os] || :ubuntu
+        file = File.expand_path(File.dirname(__FILE__)/"bootstrap_scripts"/"build_#{os}.sh")
+        raise StandardError.new("#{os} is not supported by PoolParty's Bootstrapper") unless File.file?(file)
+        file
+      end
     end
     
     # Get the determine os bootstrap script

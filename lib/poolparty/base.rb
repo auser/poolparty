@@ -199,9 +199,9 @@ module PoolParty
     end
     
     # The clouds.rb file
-    def clouds_dot_rb_file; self.class.clouds_dot_rb_file; end
-    def self.clouds_dot_rb_file
-      Pool.clouds_dot_rb_file
+    def clouds_dot_rb_file(n=nil); self.class.clouds_dot_rb_file(n); end
+    def self.clouds_dot_rb_file(n=nil)
+        Pool.clouds_dot_rb_file(n)
     end
     
     # If the method is missing from ourself, check the Default
@@ -224,7 +224,7 @@ module PoolParty
         PoolParty::Default.poolparty_src_path/:lib/:poolparty,
         PoolParty::Default.base_config_directory,
         PoolParty::Default.remote_storage_path
-      ]      
+      ]
       super(opts.merge(:paths => (opts.delete(:paths) || default_searchable_paths)))
     end
     
