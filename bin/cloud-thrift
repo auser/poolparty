@@ -53,7 +53,7 @@ EOS
 
     puts "Starting the cloud server..."
     # Become a daemon
-    Daemons.daemonize(:keep_pid_files => true, :dir_mode => :system)
+    Daemons.daemonize(:keep_pid_files => true, :dir_mode => :script, :backtrace => true)
     server.serve()
     puts "done."
     
