@@ -11,7 +11,7 @@ end
 Dir[File.dirname(__FILE__)+"/../vendor/gems/*"].each {|lib| $LOAD_PATH.unshift(File.expand_path("#{lib}/lib")) }
 
 # Load local gems
-%w(dslify parenting json).each do |dep|
+%w(dslify parenting json daemons).each do |dep|
   require dep
 end
 
