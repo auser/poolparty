@@ -2,33 +2,17 @@
 $:.unshift(File.dirname(__FILE__) + "/../lib")
 require "poolparty"
 require "daemons"
+
+$:.unshift("#{File.dirname(__FILE__)}/../lib/proto")
 $:.unshift("#{File.dirname(__FILE__)}/../lib/proto/gen-rb")
 
 require "thrift"
 require "command_interface"
 require "poolparty_constants"
 require "poolparty_types"
+require "command_interface_handler"
 
 require 'git-style-binary/command'
-
-class CommandInterfaceHandler
-  def run_command(cld, command, argv)
-    puts "thrift client connected"
-    args = *(argv.split(" "))
-    cr = CloudThrift::CloudResponse.new
-    cr.name = cld.name
-    cr.command = command
-    begin
-      the_cloud = clouds[cld.name]
-      raise Exception.new("Cloud not found") unless the_cloud
-    rescue Exception => e
-      cr.response = "Error: #{e.inspect}"
-      return cr
-    end
-    cr.response = the_cloud.send(command.to_sym, *args).to_s
-    return cr
-  end
-end
 
 GitStyleBinary.command do
   banner <<-EOS
@@ -40,22 +24,46 @@ EOS
   short_desc "Start the cloud thrift interface"
   opt :port, "Start a port", :type => :integer, :default => 11223
   opt :cloud_config, "Cloud to load", :type => :string, :default => "#{File.dirname(__FILE__)}/../examples/simple"
+  opt :dir, "Pid directory", :type => :string, :default => "/tmp/pids"
 
   run do |command|
     
+    cmd = ARGV.shift
+    cmd = ARGV.shift if cmd == "thrift"
+
+    if %w(run start restart stop).include?(cmd)
+      args = [cmd, '-f']
+      args << ["--", command.argv] unless command.argv.empty?
+      args.flatten!
+    else
+      puts "You must pass one of the following: #{%w(run start restart stop).join(", ")}"
+      args = ["--help"]
+    end
+    
     require command[:cloud_config]
     
-    handler = CommandInterfaceHandler.new
-    processor = CloudThrift::CommandInterface::Processor.new(handler)
-    transport = Thrift::ServerSocket.new( command[:port] )
-    transportFactory = Thrift::BufferedTransportFactory.new()
-    server = Thrift::SimpleServer.new(processor, transport, transportFactory)
-
-    puts "Starting the cloud server..."
-    # Become a daemon
-    Daemons.daemonize(:keep_pid_files => true, :dir_mode => :script, :backtrace => true)
-    server.serve()
-    puts "done."
+    options = {
+      :app_name   => "cloud-thrift",
+      :ARGV       => args,
+      :dir        => File.expand_path(command[:dir]),
+      :mode       => :load,
+      :dir_mode   => :normal,
+      :log_output => true,
+      :monitor    => true
+    }.merge(command.opts)
+    
+    # Run daemon
+    Daemons.run_proc("cloud-thrift", options) do
+      handler = CommandInterfaceHandler.new
+      processor = CloudThrift::CommandInterface::Processor.new(handler)
+      transport = Thrift::ServerSocket.new( options[:port] )
+      transportFactory = Thrift::BufferedTransportFactory.new()
+      server = Thrift::SimpleServer.new(processor, transport, transportFactory)
+      
+      puts "Starting the cloud server..."
+      server.serve()
+      puts "done."
+    end
     
   end
 end
