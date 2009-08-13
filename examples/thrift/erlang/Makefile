@@ -14,7 +14,7 @@ compile:
 	@$(ERL) -pa $(EBIN_DIRS) -noinput +B -eval 'case make:all() of up_to_date -> halt(0); error -> halt(1) end.'
 
 run:
-	@$(ERL) -pa ./ebin -pa $(EBIN_DIRS) -s -s thrift_example run
+	@$(ERL) -pa ./ebin -pa $(EBIN_DIRS) -s -s thrift_example run -s init stop
 
 ebin:
 	@mkdir ebin
