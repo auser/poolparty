@@ -10,6 +10,18 @@ task :slow_spec do
   end
   puts "#{stats[:failures]} total errors"
 end
+
+desc "Generate thrift docs"
+task :thrift do
+  [
+    "cd #{File.dirname(__FILE__)}/../lib/proto && thrift --gen rb --gen py --gen erl poolparty.thrift",
+    "cp -R #{File.dirname(__FILE__)}/../lib/proto/gen-erl/*.hrl #{File.dirname(__FILE__)}/../examples/thrift/erlang/include",
+    "cp -R #{File.dirname(__FILE__)}/../lib/proto/gen-erl/*.erl #{File.dirname(__FILE__)}/../examples/thrift/erlang/src"
+  ].each do |cmd|
+    `#{cmd}`
+  end
+end
+
 namespace(:pp) do
   task :build_gem => ["poolparty:vendor:setup", "poolparty:vendor:update", :gemspec, :build]
   
