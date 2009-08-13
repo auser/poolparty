@@ -25,7 +25,7 @@ EOS
   opt :port, "Start a port", :type => :integer, :default => 11223
   opt :cloud_config, "Cloud to load", :type => :string, :default => "#{File.dirname(__FILE__)}/../examples/simple"
   opt :dir, "Pid directory", :type => :string, :default => "/tmp/pids"
-  opt :daemon, "Daemonize (default true)", :type => :bool, :default => true
+  opt :daemon, "Daemonize", :type => :bool, :default => true
 
   run do |command|
     

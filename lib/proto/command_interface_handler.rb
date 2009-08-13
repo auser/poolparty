@@ -10,7 +10,11 @@ class CommandInterfaceHandler
       cr.response = "Error: #{e.inspect}"
       return cr
     end
-    resp = the_cloud.send(command.to_sym, *args)
+    resp = begin
+      the_cloud.send(command.to_sym, *args)
+    rescue
+      "undefined method"
+    end
     
     cr.response = case resp
     when Array
@@ -18,6 +22,7 @@ class CommandInterfaceHandler
     else
       [resp]
     end.map {|ele| ele.to_s }
+
     return cr
   end
 end
