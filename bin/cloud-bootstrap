@@ -21,7 +21,7 @@ EOS
     @loaded_clouds.each do |cld|
       
       cld.nodes.each do |node|
-        node.bootstrap!(command[:force])
+        node.bootstrap!(:force=>command[:force])
       end
       
     end

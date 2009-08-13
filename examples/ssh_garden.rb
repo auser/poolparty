@@ -4,13 +4,17 @@ require "poolparty"
 pool :acres do
   
   cloud :garden do
-    instances 2
-    keypair 'id_rsa'
+    os :centos
+    instances 1 #this should equal the number of hosts listed below
+    keypair 'id_rsa'  # this keypair must be in /root/.ssh/authorized_keys on each host
+    has_file '/etc/motd', :content=>"Welcome to the #{self.name} cloud"
+    has_file '/touhced'
+    has_directory '/mnt/ebs', :owner => 'poolparty'
+    has_exec 'touch /tmp/touched'
+    
     using :ssh do
-      user 'fairchild'  #default is root
-      hosts %w(beet squash)
+      hosts %w(67.23.21.192)  #the hosts to use in this cloud
     end
-    has_file '/etc/poolparty/welcome', :content=>"Welcome to the #{self.name} cloud"
     
   end
   
