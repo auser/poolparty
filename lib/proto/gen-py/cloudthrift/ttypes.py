@@ -82,7 +82,7 @@ class CloudResponse:
     None, # 0
     (1, TType.STRING, 'name', None, None, ), # 1
     (2, TType.STRING, 'command', None, None, ), # 2
-    (3, TType.STRING, 'response', None, None, ), # 3
+    (3, TType.LIST, 'response', (TType.STRING,None), None, ), # 3
   )
 
   def __init__(self, name=None, command=None, response=None,):
@@ -110,8 +110,13 @@ class CloudResponse:
         else:
           iprot.skip(ftype)
       elif fid == 3:
-        if ftype == TType.STRING:
-          self.response = iprot.readString();
+        if ftype == TType.LIST:
+          self.response = []
+          (_etype3, _size0) = iprot.readListBegin()
+          for _i4 in xrange(_size0):
+            _elem5 = iprot.readString();
+            self.response.append(_elem5)
+          iprot.readListEnd()
         else:
           iprot.skip(ftype)
       else:
@@ -133,8 +138,11 @@ class CloudResponse:
       oprot.writeString(self.command)
       oprot.writeFieldEnd()
     if self.response != None:
-      oprot.writeFieldBegin('response', TType.STRING, 3)
-      oprot.writeString(self.response)
+      oprot.writeFieldBegin('response', TType.LIST, 3)
+      oprot.writeListBegin(TType.STRING, len(self.response))
+      for iter6 in self.response:
+        oprot.writeString(iter6)
+      oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()

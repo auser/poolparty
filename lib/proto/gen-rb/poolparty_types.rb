@@ -32,7 +32,7 @@ module CloudThrift
       FIELDS = {
         NAME => {:type => ::Thrift::Types::STRING, :name => 'name'},
         COMMAND => {:type => ::Thrift::Types::STRING, :name => 'command'},
-        RESPONSE => {:type => ::Thrift::Types::STRING, :name => 'response'}
+        RESPONSE => {:type => ::Thrift::Types::LIST, :name => 'response', :element => {:type => ::Thrift::Types::STRING}}
       }
 
       def struct_fields; FIELDS; end

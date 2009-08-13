@@ -1,6 +1,5 @@
 class CommandInterfaceHandler
-  def run_command(cld, command, argv)
-    args = *(argv.split(" "))
+  def run_command(cld, command, args)
     cr = CloudThrift::CloudResponse.new
     cr.name = cld.name
     cr.command = command
@@ -11,7 +10,14 @@ class CommandInterfaceHandler
       cr.response = "Error: #{e.inspect}"
       return cr
     end
-    cr.response = the_cloud.send(command.to_sym, *args).to_s
+    resp = the_cloud.send(command.to_sym, *args)
+    
+    cr.response = case resp
+    when Array
+      resp
+    else
+      [resp]
+    end.map {|ele| ele.to_s }
     return cr
   end
 end

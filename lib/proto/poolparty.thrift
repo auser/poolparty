@@ -9,9 +9,9 @@ struct CloudQuery {
 struct CloudResponse {
   1: string name
   2: string command
-  3: string response
+  3: list<string> response
 }
 
 service CommandInterface {
-  CloudResponse run_command(1:CloudQuery cld, 2:string command, 3:string arglist)
+  CloudResponse run_command(1:CloudQuery cld, 2:string command, 3:list<string> arglist)
 }

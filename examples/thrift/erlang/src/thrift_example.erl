@@ -19,9 +19,14 @@ run() ->
   O1 = cloud_query(P, "app", "name"),
   io:format("Name: ~p~n", [O1]),
   O2 = cloud_query(P, "app", "maximum_instances"),
-  io:format("maximum_instances: ~p~n", [O2]).
+  io:format("maximum_instances: ~p~n", [O2]),
+  O3 = cloud_query(P, "app", "take_args", ["a", "b"]),
+  io:format("cloud_provider: ~p~n", [O3]).
 
 cloud_query(P, Name, Meth) ->
+  cloud_query(P, Name, Meth, "").
+  
+cloud_query(P, Name, Meth, Args) ->
   Query = #cloudQuery{name=Name},
-  io:format("Query: ~p~n", [Query]),
-  thrift_client:call(P, run_command, [Query, Meth, ""]).
+  io:format("Query: ~p, ~p, ~p~n", [Query, Meth, Args]),
+  thrift_client:call(P, run_command, [Query, Meth, Args]).

@@ -53,7 +53,7 @@ require 'poolparty_types'
           FIELDS = {
             CLD => {:type => ::Thrift::Types::STRUCT, :name => 'cld', :class => CloudThrift::CloudQuery},
             COMMAND => {:type => ::Thrift::Types::STRING, :name => 'command'},
-            ARGLIST => {:type => ::Thrift::Types::STRING, :name => 'arglist'}
+            ARGLIST => {:type => ::Thrift::Types::LIST, :name => 'arglist', :element => {:type => ::Thrift::Types::STRING}}
           }
 
           def struct_fields; FIELDS; end

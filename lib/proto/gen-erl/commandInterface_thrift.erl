@@ -18,7 +18,7 @@ struct_info('i am a dummy struct') -> undefined.
 function_info('run_command', params_type) ->
   {struct, [{1, {struct, {'poolparty_types', 'cloudQuery'}}},
   {2, string},
-  {3, string}]}
+  {3, {list, string}}]}
 ;
 function_info('run_command', reply_type) ->
   {struct, {'poolparty_types', 'cloudResponse'}};

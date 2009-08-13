@@ -23,8 +23,8 @@ transport.open()
 cld = CloudThrift::CloudQuery.new
 cld.name = 'app'
 
-resp = client.run_command(cld, "name", "")
+resp = client.run_command(cld, "name", [])
 puts resp.response
 
-resp = client.run_command(cld, "maximum_instances", "")
+resp = client.run_command(cld, "maximum_instances", [])
 puts resp.response

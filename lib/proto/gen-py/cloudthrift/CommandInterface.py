@@ -115,7 +115,7 @@ class run_command_args:
     None, # 0
     (1, TType.STRUCT, 'cld', (CloudQuery, CloudQuery.thrift_spec), None, ), # 1
     (2, TType.STRING, 'command', None, None, ), # 2
-    (3, TType.STRING, 'arglist', None, None, ), # 3
+    (3, TType.LIST, 'arglist', (TType.STRING,None), None, ), # 3
   )
 
   def __init__(self, cld=None, command=None, arglist=None,):
@@ -144,8 +144,13 @@ class run_command_args:
         else:
           iprot.skip(ftype)
       elif fid == 3:
-        if ftype == TType.STRING:
-          self.arglist = iprot.readString();
+        if ftype == TType.LIST:
+          self.arglist = []
+          (_etype10, _size7) = iprot.readListBegin()
+          for _i11 in xrange(_size7):
+            _elem12 = iprot.readString();
+            self.arglist.append(_elem12)
+          iprot.readListEnd()
         else:
           iprot.skip(ftype)
       else:
@@ -167,8 +172,11 @@ class run_command_args:
       oprot.writeString(self.command)
       oprot.writeFieldEnd()
     if self.arglist != None:
-      oprot.writeFieldBegin('arglist', TType.STRING, 3)
-      oprot.writeString(self.arglist)
+      oprot.writeFieldBegin('arglist', TType.LIST, 3)
+      oprot.writeListBegin(TType.STRING, len(self.arglist))
+      for iter13 in self.arglist:
+        oprot.writeString(iter13)
+      oprot.writeListEnd()
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()

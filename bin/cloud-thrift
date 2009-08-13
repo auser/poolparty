@@ -25,6 +25,7 @@ EOS
   opt :port, "Start a port", :type => :integer, :default => 11223
   opt :cloud_config, "Cloud to load", :type => :string, :default => "#{File.dirname(__FILE__)}/../examples/simple"
   opt :dir, "Pid directory", :type => :string, :default => "/tmp/pids"
+  opt :daemon, "Daemonize (default true)", :type => :bool, :default => true
 
   run do |command|
     
@@ -48,12 +49,12 @@ EOS
       :dir        => File.expand_path(command[:dir]),
       :mode       => :load,
       :dir_mode   => :normal,
+      :ontop      => true,
       :log_output => true,
       :monitor    => true
     }.merge(command.opts)
     
-    # Run daemon
-    Daemons.run_proc("cloud-thrift", options) do
+    block = Proc.new do
       handler = CommandInterfaceHandler.new
       processor = CloudThrift::CommandInterface::Processor.new(handler)
       transport = Thrift::ServerSocket.new( options[:port] )
@@ -63,6 +64,12 @@ EOS
       puts "Starting the cloud server..."
       server.serve()
       puts "done."
+    end
+    
+    if command[:daemon]
+      Daemons.run_proc("cloud-thrift", options, &block)
+    else
+      block.call
     end
     
   end

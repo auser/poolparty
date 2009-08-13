@@ -24,7 +24,7 @@ struct_info('cloudQuery') ->
 struct_info('cloudResponse') ->
   {struct, [{1, string},
   {2, string},
-  {3, string}]}
+  {3, {list, string}}]}
 ;
 
 struct_info('i am a dummy struct') -> undefined.
