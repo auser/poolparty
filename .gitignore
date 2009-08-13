@@ -25,3 +25,5 @@ tags
 .session
 clouds.rb
 test/test_dir/
+examples/thrift/erlang/deps/thrift/ebin/*
+examples/thrift/erlang/ebin/*
