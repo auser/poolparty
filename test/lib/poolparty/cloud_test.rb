@@ -120,6 +120,20 @@ class CloudTest < Test::Unit::TestCase
     # assert_equal size-1, clouds['app'].nodes.size
   end
   
-  
-  
+  def test_monitor_dsl
+    clear!
+    pool "monitoring" do
+      cloud "monitor_app" do
+        monitor :cpu do |v|
+          configure if v < 0.2
+          vote_for(:expand) if v > 1.1
+        end
+      end
+    end
+    
+    assert_equal 1, clouds["monitor_app"].monitors.size
+    assert_equal [:cpu], clouds["monitor_app"].monitors.map {|m,v| v.name }
+    assert_equal({:configure => []}, clouds["monitor_app"].run_monitor("cpu", "0.1"))
+    assert_equal({:vote_for => [:expand]}, clouds["monitor_app"].run_monitor("cpu", "1.4"))
+  end
 end

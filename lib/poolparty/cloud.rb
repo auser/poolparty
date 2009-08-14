@@ -192,8 +192,30 @@ module PoolParty
     end
     alias :platform :os
     
+    # The public_ip of the cloud is equivalent to the public_ip
+    # of the cloud's oldest node
     def public_ip
       nodes.first.public_ip
+    end
+    
+    ### MONITORS ###
+    # Create a new monitor on the cloud
+    # == Usage
+    #   monitor :cpu do |v|
+    #     vote_for(:expand) if v > 0.8
+    #   end
+    def monitor(monitor_symbol, &block)
+      monitors[monitor_symbol] ||= PoolParty::Monitor.new(monitor_symbol, &block)
+    end
+    
+    # Run the monitor logic
+    def run_monitor(monitor_name, value)
+      monitors[monitor_name.to_sym].run(value.to_f)
+    end
+    
+    # Store the monitors in an array
+    def monitors
+      @monitors ||= {}
     end
     
     ##### Internal methods #####
