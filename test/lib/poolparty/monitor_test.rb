@@ -16,7 +16,6 @@ class MonitorTest < Test::Unit::TestCase
   
   def test_monitor_run_and_method_rettrieval    
     assert_equal({:vote_for => [:expand]}, @mon.run(0.9))
-    @mon.run(0.3)
     assert_equal({}, @mon.run(0.3))
     assert_equal({:configure => []}, @mon.run(0.04))
   end

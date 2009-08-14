@@ -23,25 +23,24 @@ EOS
 
   short_desc "Start the cloud thrift interface"
   opt :port, "Start a port", :type => :integer, :default => 11223
-  opt :cloud_config, "Cloud to load", :type => :string, :default => "#{File.dirname(__FILE__)}/../examples/simple"
   opt :dir, "Pid directory", :type => :string, :default => "/tmp/pids"
   opt :daemon, "Daemonize", :type => :bool, :default => true
 
   run do |command|
     
+    command.process_args(ARGV)
+    
     cmd = ARGV.shift
     cmd = ARGV.shift if cmd == "thrift"
-
+    
     if %w(run start restart stop).include?(cmd)
-      args = [cmd, '-f']
+      args = [cmd]
       args << ["--", command.argv] unless command.argv.empty?
       args.flatten!
     else
       puts "You must pass one of the following: #{%w(run start restart stop).join(", ")}"
       args = ["--help"]
     end
-    
-    require command[:cloud_config]
     
     options = {
       :app_name   => "cloud-thrift",

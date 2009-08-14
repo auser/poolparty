@@ -21,7 +21,7 @@ client = CloudThrift::CommandInterface::Client.new(protocol)
 transport.open()
 
 cld = CloudThrift::CloudQuery.new
-cld.name = 'app'
+cld.name = 'basic_app'
 
 resp = client.run_command(cld, "name", [])
 puts resp.response
@@ -29,5 +29,8 @@ puts resp.response
 resp = client.run_command(cld, "maximum_instances", [])
 puts resp.response
 
-resp = client.run_command(cld, "run_monitor", ["cpu", "0.1"])
-puts resp.response
+resp = client.run_command(cld, "run_monitor", ["cpu", "0.91"])
+p resp.response
+
+resp = client.run_command(cld, "run_monitor", ["cpu", "0.01"])
+p resp.response

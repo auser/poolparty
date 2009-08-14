@@ -48,7 +48,8 @@ You must pass a block with your monitor
     # methods, so we'll store them in a hash with the method as the key
     # and the value of the method as the value in an array
     def method_missing(meth,*a,&block)
-      methods[meth] = a
+      (methods[meth] ||= []) << a
+      methods[meth].flatten!
     end
     
     # Local storage for the methods
