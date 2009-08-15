@@ -21,7 +21,7 @@ client = CloudThrift::CommandInterface::Client.new(protocol)
 transport.open()
 
 cld = CloudThrift::CloudQuery.new
-cld.name = 'basic_app'
+cld.name = 'simple_app'
 
 resp = client.run_command(cld, "name", [])
 puts resp.response

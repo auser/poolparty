@@ -23,7 +23,7 @@ EOS
 
   short_desc "Start the cloud thrift interface"
   opt :port, "Start a port", :type => :integer, :default => 11223
-  opt :dir, "Pid directory", :type => :string, :default => "/tmp/pids"
+  opt :dir, "Pid directory", :type => :string, :default => "/tmp"
   opt :daemon, "Daemonize", :type => :bool, :default => true
 
   run do |command|
@@ -41,6 +41,8 @@ EOS
       puts "You must pass one of the following: #{%w(run start restart stop).join(", ")}"
       args = ["--help"]
     end
+    
+    require PoolParty::Pool.clouds_dot_rb_file
     
     options = {
       :app_name   => "cloud-thrift",

@@ -210,7 +210,12 @@ module PoolParty
     
     # Run the monitor logic
     def run_monitor(monitor_name, value)
-      monitors[monitor_name.to_sym].run(value.to_f)
+      mon = monitors[monitor_name.to_sym]
+      if mon
+        mon.run(value.to_f)
+      else
+        "unhandled monitor"
+      end
     end
     
     # Store the monitors in an array

@@ -5,7 +5,7 @@ class CommandInterfaceHandler
     cr.name = cld.name
     cr.command = command
     resp = begin
-      the_cloud = clouds[cld.name]      
+      the_cloud = clouds[cld.name]
       the_cloud ? the_cloud.send(command.to_sym, *args) : "Cloud not found: #{cld.name}"
     rescue Exception => e
       cr.response = "Error: #{e.inspect}"

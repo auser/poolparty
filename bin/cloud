@@ -32,7 +32,7 @@ EOS
     $VERY_VERBOSE   = true if command[:very_verbose]
     $DEBUGGING      = true if command[:debug]
     $VERY_DEBUGGING = true if command[:very_debug]
-        
+    
     @loaded_pool = PoolParty::Pool.find_and_load_default_clouds_dot_rb(command[:clouds_dot_rb])
     @loaded_clouds = command[:name] ? [clouds[command[:name]]] : @loaded_pool.clouds.map {|name,cld|cld}
     @loaded_clouds.map do |cld| 
