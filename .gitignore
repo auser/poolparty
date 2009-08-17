@@ -11,15 +11,11 @@ pkg/poolparty*/*
 log/
 log/*
 test_manifest.pp
-# erl_crash.dump
-*erl_crash.dump*
+**/*/erl_crash.dump
 log
 *.beam
 ri/
 doc/
-config/manifest.pp
-vendor/dependencies/cache
-vendor/dependencies/packages
 .autosession.vim
 tags
 .session
