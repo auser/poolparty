@@ -162,7 +162,7 @@ Each resource is documented in the code and more documentation can be found at t
 == FEATURES/PROBLEMS:
 
 * Written in Ruby and Erlang (Internal node communication handled by <a href="https://github.com/auser/hermes/tree/master">Hermes</a>)
-* Thrift interface
+* Thrift interface (Connect to your cloud in ANY language supported by <a href="http://incubator.apache.org/thrift/">Thrift</a>)
 * Written from the ground up to be extensible with plugins
 * Easy git-style commands to communicate with your clouds
 * Much much more
