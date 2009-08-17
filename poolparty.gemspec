@@ -89,7 +89,6 @@ Gem::Specification.new do |s|
      "examples/thrift/erlang/deps/thrift/src/thrift_sup.erl",
      "examples/thrift/erlang/deps/thrift/src/thrift_transport.erl",
      "examples/thrift/erlang/deps/thrift/vsn.mk",
-     "examples/thrift/erlang/erl_crash.dump",
      "examples/thrift/erlang/include/commandInterface_thrift.hrl",
      "examples/thrift/erlang/include/poolparty_constants.hrl",
      "examples/thrift/erlang/include/poolparty_types.hrl",

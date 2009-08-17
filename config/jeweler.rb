@@ -29,6 +29,7 @@ end
               Dir["{config,examples,lib,test,tasks,script,generators,bin,vendor}/**/*"]).delete_if{|f| f =~ excludes_regexp}
     
     s.files.exclude '**/*.beam'
+    s.files.exclude "**/*/erl_crash.dump"
     
     s.has_rdoc = true
     s.extra_rdoc_files = ["README.txt", "License.txt", 'History.txt']
