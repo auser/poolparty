@@ -1,0 +1,13 @@
+Just a few simple steps to make a new release.
+
+vi lib/trollop.rb # and bump version number
+vi History.txt    # and describe changes
+git-rank-contributors -o -h >> www/index.html
+vi www/index.html # and integrate contributors
+rake upload_webpage
+rake upload_docs
+rake release VERSION=<releasename>
+git commit -a -m "bump to..."
+git tag release-<releasename>
+git push
+git push --tags
