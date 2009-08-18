@@ -17,12 +17,31 @@
 # under the License.
 #
 
-ACLOCAL_AMFLAGS = -I ./aclocal
+EXTRA_DIST = \
+	CHANGELOG \
+	Rakefile \
+	Manifest \
+	setup.rb \
+	lib \
+	ext \
+	benchmark \
+	script \
+	spec
 
-SUBDIRS = compiler/cpp lib test
+all-local:
+	$(RUBY) setup.rb config
+	$(RUBY) setup.rb setup
 
-dist-hook:
-	find $(distdir) -name '.[a-zA-Z0-9]*' | xargs rm -rf
+install-exec-hook:
+	$(RUBY) setup.rb install
 
-EXTRA_DIST = bootstrap.sh cleanup.sh print_version.sh doc tutorial contrib \
-             CONTRIBUTORS LICENSE CHANGES DISCLAIMER NOTICE
+# Make sure this doesn't fail if Ruby is not configured.
+clean-local:
+	RUBY=$(RUBY) ; if test -z "$$RUBY" ; then RUBY=: ; fi ; \
+	$$RUBY setup.rb clean
+
+check-local: all
+if HAVE_RSPEC
+	rake spec
+endif
+
