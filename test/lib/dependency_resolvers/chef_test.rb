@@ -17,7 +17,8 @@ class ChefTest < Test::Unit::TestCase
         :files => Resources::FileResource.new(:name => "/etc/motd", :content => "Welcome to a fake file"),
         :directories => Resources::Directory.new("/etc/poolparty"),
         :http_request => PoolParty::Resources::HttpRequest.new("posting data", :url => "http://check.in", :message => {:some => "data"}, :action => :post),
-        :link => PoolParty::Resources::Link.new("/tmp/passwd", :to => "/etc/passwd")
+        :link => PoolParty::Resources::Link.new("/tmp/passwd", :to => "/etc/passwd"),
+        :chef_recipe => PoolParty::Resources::ChefRecipe.new(fixtures_dir/"chef"/"recipes"/"sudo")
       }
     end
     
@@ -50,6 +51,12 @@ class ChefTest < Test::Unit::TestCase
     should "compile to the recipes" do
       @base.compile_to(@resources[:files], test_dir)
       assert_equal "template \"/etc/motd\" do\n  source \"/etc/motd.erb\"\n  action :create\n  backup 5\n  mode 0644\n  owner \"root\"\nend\n", open(@cookboox_directory/"recipes"/"default.rb").read
+    end
+    
+    should "compile the recipes" do
+      @base.compile_to(@resources[:chef_recipe], test_dir)
+      assert_equal open(fixtures_dir/"chef"/"recipes"/"sudo"/"recipes"/"default.rb").read, open(@cookboox_directory/".."/"sudo"/"recipes"/"default.rb").read
+      assert_equal "recipe \"sudo\"", open(@cookboox_directory/"recipes"/"default.rb").read
     end
     
     should "compile all the resources when passed the entire array" do
