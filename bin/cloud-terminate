@@ -1,11 +1,10 @@
 #!/usr/bin/env ruby
 $:.unshift(File.dirname(__FILE__) + "/../lib")
 require "poolparty"
-require "poolpartycl"
+
 require 'git-style-binary/command'
 
-GitStyleBinary.command do  
-  version "PoolParty #{$0} command"  
+GitStyleBinary.command do
   banner <<-EOS
 Usage: #{$0} #{all_options_string} COMMAND [ARGS]
 
@@ -18,22 +17,17 @@ EOS
 
   run do |command|    
     @loaded_clouds.each do |cld|
+      msg = [
+      "Shutting down #{cld.name} cloud",
+      "Are you sure? (Y/N)"
+      ]
       
-      cld.nodes(:status => "running").each do |inst|
-        msg = <<-EOM
-    Shutting down #{inst.instance_id}
-    Are you sure? (Y/N)
-        EOM
-        o = are_you_sure? msg || command[:yes]
-        if o
-          puts "Shutting down #{inst.instance_id}"
-          cld.terminate_instance!(:instance_id => inst.instance_id)
-        else
-          if are_you_sure?(msg)
-            puts "Shutting down #{inst.instance_id}"
-            cld.terminate_instance!(:instance_id => inst.instance_id)
-          end
-        end
+      o = command[:yes] || are_you_sure?(msg)
+      if o
+        vputs "Shutting down cloud"
+        cld.terminate!
+      else
+        
       end
       
     end    

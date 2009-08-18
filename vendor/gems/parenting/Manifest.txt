@@ -1,0 +1,14 @@
+History.txt
+Manifest.txt
+PostInstall.txt
+README.rdoc
+Rakefile
+lib/parenting.rb
+lib/parenting/parenting.rb
+parenting.gemspec
+script/console
+script/destroy
+script/generate
+test/file_to_eval.rb
+test/test_helper.rb
+test/test_parenting.rb

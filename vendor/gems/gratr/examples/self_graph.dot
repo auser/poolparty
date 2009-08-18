@@ -1,0 +1,117 @@
+digraph GRATR__Digraph {
+    label = "GRATR__Digraph"
+    "Labels.edge_label" [
+        fontsize = 8,
+        label = "Labels.edge_label"
+    ]
+
+    "Arc.[]" [
+        fontsize = 8,
+        label = "Arc.[]"
+    ]
+
+    "AdjacencyGraph.vertices" [
+        fontsize = 8,
+        label = "AdjacencyGraph.vertices"
+    ]
+
+    "Labels.edge_label_dict" [
+        fontsize = 8,
+        label = "Labels.edge_label_dict"
+    ]
+
+    "Arc.hash" [
+        fontsize = 8,
+        label = "Arc.hash"
+    ]
+
+    "Arc.eql?" [
+        fontsize = 8,
+        label = "Arc.eql?"
+    ]
+
+    "Arc.initialize" [
+        fontsize = 8,
+        label = "Arc.initialize"
+    ]
+
+    "Graph.dijkstras_algorithm" [
+        fontsize = 8,
+        label = "Graph.dijkstras_algorithm"
+    ]
+
+    "Digraph.edge_class" [
+        fontsize = 8,
+        label = "Digraph.edge_class"
+    ]
+
+    "Graph.edge_convert" [
+        fontsize = 8,
+        label = "Graph.edge_convert"
+    ]
+
+    "Labels.[]" [
+        fontsize = 8,
+        label = "Labels.[]"
+    ]
+
+    "Labels.cost" [
+        fontsize = 8,
+        label = "Labels.cost"
+    ]
+
+    "AdjacencyGraph.adjacent" [
+        fontsize = 8,
+        label = "AdjacencyGraph.adjacent"
+    ]
+
+    "Labels.edge_label" -> "Arc.eql?" [
+        fontsize = 8
+    ]
+
+    "Labels.[]" -> "Labels.edge_label" [
+        fontsize = 8
+    ]
+
+    "Graph.dijkstras_algorithm" -> "AdjacencyGraph.adjacent" [
+        fontsize = 8
+    ]
+
+    "Labels.cost" -> "Labels.[]" [
+        fontsize = 8
+    ]
+
+    "Labels.edge_label" -> "Graph.edge_convert" [
+        fontsize = 8
+    ]
+
+    "Labels.cost" -> "Digraph.edge_class" [
+        fontsize = 8
+    ]
+
+    "Labels.cost" -> "Arc.[]" [
+        fontsize = 8
+    ]
+
+    "Graph.dijkstras_algorithm" -> "AdjacencyGraph.vertices" [
+        fontsize = 8
+    ]
+
+    "Graph.dijkstras_algorithm" -> "Labels.cost" [
+        fontsize = 8
+    ]
+
+    "Arc.[]" -> "Arc.initialize" [
+        fontsize = 8
+    ]
+
+    "Labels.edge_label" -> "Arc.hash" [
+        fontsize = 8
+    ]
+
+    "Labels.edge_label" -> "Labels.edge_label_dict" [
+        fontsize = 8
+    ]
+
+}
+

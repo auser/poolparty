@@ -1,146 +1,72 @@
-$LOAD_PATH<< File.dirname(__FILE__)
-# Load required gems
-#TODO: remove activesupport
-@required_software = Array.new
-%w(rubygems fileutils resolv digest/sha2 json pp).each do |lib|
-  begin
-    require lib
-  rescue Exception => e
-    @required_software << lib
-  end  
-end
-
-require "#{File.dirname(__FILE__)}/poolparty/helpers/nice_printer"
-
-unless @required_software.empty?
-  @np = NicePrinter.new(45)
-
-  # error_initializing_message.txt
-  @np.header
-  @np.center("Error")
-  @np.left("Missing required software")
-  @required_software.map {|a| @np << "  #{a}" }  
-  @np << "Please install the required software"
-  @np << "and try again"
-  @np.empty
-  @np << "Try installing #{@required_software.size == 1 ? "it" : "them"} with"
-  @required_software.map {|a| @np << "  gem install #{a}" }
-  @np.empty
-  @np.footer
-  
-  @np.print
-  exit(0)
-end
-
-Dir.glob(File.join(File.dirname(__FILE__),'..', 'vendor/gems/*/lib')).each do |d|
-  $LOAD_PATH.unshift(d)
-end
-
-require "dslify"
-require "parenting"
-require "suitcase"
+$LOAD_PATH.unshift(File.dirname(__FILE__))
 
 t=Time.now
-## Load PoolParty
-module PoolParty
+
+# Load system gems
+%w(rubygems logger erb net/ssh open-uri).each do |lib|
+  require lib
 end
 
-def PoolParty.require_directory(dir)
-  if ::File.file?(dir)
-    require dir
-  else
-    Dir["#{dir}/*.rb"].sort.each do |file|
-       require "#{file}" if ::File.file?(file)
-    end
-    Dir["#{dir}/*"].sort.each do |dir|
-      require_directory(dir) if ::File.directory?(dir)
-    end
-  end
+# Add all vendor gems to the load paths
+Dir[File.dirname(__FILE__)+"/../vendor/gems/*"].each {|lib| $LOAD_PATH.unshift(File.expand_path("#{lib}/lib")) }
+
+# Load local gems
+%w(dslify parenting json daemons).each do |dep|
+  require dep
 end
 
-#load poolparty framework in specific order
-$_poolparty_load_directories = [
-  "core",
-  "dependencies.rb",
-  "modules/searchable_paths.rb",
-  "modules/pinger.rb",
-  "modules",
-  "poolparty/key.rb",
-  "dependency_resolver/dependency_resolver_cloud_extensions.rb",
-  "dependency_resolver/dependency_resolver.rb",
-  "poolparty/poolparty_base_class.rb",
-  "poolparty/default.rb",
-  "exceptions",
-  'poolparty/key.rb',
-  "dependency_resolver",
-  "aska.rb",
-  "config",
-  "monitors/monitor_rack.rb", 
-  "capistrano.rb",
-  'provisioners/provisioner_base.rb',
-  'provisioners/capistrano/capistrano.rb',
-  'provision',
-  "extra",
-  "net",
-  "helpers",
-  "verification",
-  "poolparty/resource.rb",
-  "poolparty/service.rb",
-  "resources",
-  "services",
-  "poolparty/cloud.rb",
-  "poolparty",
-  "templates"
-  ]
-manifest_file_location = ::File.join(::File.dirname(__FILE__), '../config/manifest.pp')
-
-if ::File.file?(manifest_file_location)
-  ::File.readlines(manifest_file_location).each do |line| 
-    dputs "#{::File.expand_path(line)}"
-    require "#{line.gsub(/\n/, '')}"
-  end
-else
-  $_poolparty_load_directories.each do |dir|
-    PoolParty.require_directory(::File.join(::File.dirname(__FILE__),'poolparty', dir))
-  end  
+# Gratr dependencies
+%w(import dot).each do |sublib|
+  require "gratr/#{sublib}"
 end
-
-# Logging.init :debug, :info, :warn, :error, :fatal
 
 module PoolParty
-  include FileWriter
-  
-  def log
-    @logger ||= make_new_logger rescue STDOUT
+  def self.version
+    return @version if @version
+    config = YAML.load(File.read(File.expand_path("#{File.dirname(__FILE__)}/../VERSION.yml")))
+    @version = "#{config[:major]}.#{config[:minor]}.#{config[:patch]}"
   end
-  def reset!
-    $pools = $clouds = $plugins = @describe_instances = nil
-  end
-  
-  class PoolParty
-  end
-  
-  private
-  #:nodoc:#
-  def make_new_logger
-    FileUtils.mkdir_p ::File.dirname(Default.pool_logger_location) unless ::File.directory?(::File.dirname(Default.pool_logger_location))
-    Loggable.new
+  def self.lib_dir
+  File.join(File.dirname(__FILE__), "..")
   end
 end
 
-class Object
-  include PoolParty
-  include PoolParty::Pool
-  include PoolParty::Cloud
-  include PoolParty::DefinableResource
+# Require the poolparty error so we can use it ubiquitously
+require "poolparty/pool_party_error"
+
+# Core object overloads
+%w( object
+    module
+    string
+    integer
+    array
+    hash
+    symbol
+    proc
+    time).each do |lib|
+  require "core/#{lib}"
 end
 
-## Load PoolParty Plugins and package
-module PoolParty
-  %w(plugins base_packages).each do |dir|
-    require_directory(::File.join(::File.dirname(__FILE__), 'poolparty', dir))
-  end
+# Mixins
+%w(callbacks pinger searchable_paths delayed askable).each do |lib| 
+  require "mixins/#{lib}"
 end
 
-PoolParty.reset!
-dputs "duration = #{Time.now-t}"
+require "keypair"
+
+# PoolParty core
+$LOAD_PATH.unshift(File.dirname(__FILE__)/"poolparty")
+%w( default pool_party_log base dsl_base cloud 
+    installer monitor
+    pool resource plugin ).each do |lib|
+  require "poolparty/#{lib}"
+end
+
+require 'cloud_providers'
+
+# dependency_resolvers
+require "dependency_resolver"
+
+require "provision/bootstrapper"
+
+vputs "PoolParty core loadtime: #{Time.now-t}"

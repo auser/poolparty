@@ -1,11 +1,10 @@
 #!/usr/bin/env ruby
 $:.unshift(File.dirname(__FILE__) + "/../lib")
+
 require "poolparty"
-# require "poolpartycl"
 require 'git-style-binary/command'
 
-GitStyleBinary.command do  
-  version "PoolParty #{$0} command"  
+GitStyleBinary.command do
   banner <<-EOS
 Usage: #{$0} #{all_options_string}
 
@@ -14,7 +13,6 @@ Usage: #{$0} #{all_options_string}
 EOS
 
   opt :instance_id, "Describe a specific instance", :type => String, :default => nil
-  opt :short, "show a short description rather than a long one", :default => false
 
   short_desc "show a list of the current instances on the clouds"
 
@@ -24,26 +22,26 @@ EOS
         require 'pp'
         pp result = cld.nodes(:instance_id=>command[:instance_id])
       else
-        if command[:short]
-          %w{running pending}.each do |status|
-            nodes = cld.nodes(:status => status)
-            if nodes.size > 0
-              puts nodes.map{|a| 
-                "%-15s [%s]: #{a[:instance_id] || a[:id]}\t#{a[:ip] ||a[:public_ip] }" % [cld.name, status] 
-              }.join("\n")
-            end
-          end
-        else
-          puts "Listing cloud #{cld.name}"
-          puts "Active instances"
-          puts cld.nodes(:status => "running").map{|a| "#{a[:instance_id] || a[:id]}\t#{a[:ip] ||a[:public_ip] }" }.join("\n")
-          
-          if cld.nodes(:status => "pending").size > 0
-            puts "Pending instances"
-            puts cld.nodes(:status => "pending").map{|a| "#{a[:instance_id] || a[:id]}\t#{a[:ip] ||a[:public_ip] }" }.join("\n")
-          end
+        line = "-----------------------------"
+        msg = ["Listing cloud #{cld.name}"]
+
+        hsh = {}
+        cld.describe_instances(:keypair_name => cld.keypair.basename).each do |n| 
+          (hsh[n.status] ||= []) << n
         end
+        
+        hsh.each do |k,v|
+          msg << "#{k.capitalize} nodes"
+          msg << line
+          v.each do |a|
+            msg << "  #{a[:instance_id] || a[:id]}\t#{a[:ip] || a[:public_ip] || a[:name]}"
+          end
+          msg << ""
+        end
+        
+        print_msg(msg)
       end
+      
     end
   end
 end

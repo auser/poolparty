@@ -1,22 +1,20 @@
 #!/usr/bin/env ruby
 $:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
 require "poolparty"
-require "poolpartycl"
-require "poolparty/installers/base_installer"
-require "highline/import"
+require "poolparty/installer"
 
-say("\nWhat remoter base would you like to use?")
-choose do |menu|
-  menu.prompt = "> "
+msg = "\nWhat remoter base would you like to use?"
 
-  PoolParty::Remote::RemoterBase.available_bases.each do |base|
-    menu.choice base.to_sym do 
-      
-      say "Great, we'll be using #{base}"
-      
-      klass = "::PoolParty::Installers::#{base.to_s.capitalize}".constantize
-      klass.send :new
-    end
-  end
+providers = {}
+PoolParty::Installer.all.each_with_index do |installer,idx|
+  providers.merge!(idx+1 => installer)
+end
+
+o = {}
+PoolParty::Installer.choose(msg, providers, o) do |output|
+  PoolParty::Installer.colored_say "Great, we'll be using #{output.to_s.top_level_class}"
   
+  klass = output
+  inst = klass.send :new
+  inst.run
 end

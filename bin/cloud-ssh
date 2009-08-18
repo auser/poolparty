@@ -1,11 +1,10 @@
 #!/usr/bin/env ruby
 $:.unshift(File.dirname(__FILE__) + "/../lib")
 require "poolparty"
-# require "poolpartycl"
+
 require 'git-style-binary/command'
 
-GitStyleBinary.command do  
-  version "PoolParty #{$0} command"  
+GitStyleBinary.command do
   banner <<-EOS
 Usage: #{$0} #{all_options_string}
 
@@ -13,18 +12,15 @@ Usage: #{$0} #{all_options_string}
 EOS
 
   short_desc "ssh into an instance of the cloud"
-  opt :inst_num, "The number of the instance to ssh to, starts at 0.", :type => :int
   
-  run do |command|    
-    @cloud = @loaded_clouds.first
-    nodes = @cloud.nodes(:status => "running")
+  run do |command|
+    cloud = @loaded_clouds.first
     
-    if !nodes.empty?
-      n = command[:inst_num] ? command[:inst_num].to_i : 0
-      @cloud.ssh_into( nodes[n].ip || nodes[n].public_ip ) if @cloud
+    if !cloud.nodes.empty?
+      cloud.nodes.first.ssh
     else
       puts "No running instances can be found"
     end
     
-  end    
+  end
 end

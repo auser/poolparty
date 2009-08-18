@@ -1,30 +1,31 @@
-require File.dirname(__FILE__)+'/apache'
 module PoolParty
-  module Plugin
+  module Resources
     # Usage: 
     # 
     # enable_php5 do
     #   extras :cli, :pspell, :mysql
     # end
-    class EnablePhp5 < Plugin
+    class Php < Resource
       def loaded(opts={}, parent=self)
         has_package(:name => "php5")
         has_package(:name => "libapache2-mod-php5")
         present_apache_module("php5")
-        has_file({:name => "/etc/php5/apache2/php.ini",
+        has_file( "/etc/php5/apache2/php.ini",
                 :template => "apache2/php.ini.erb",
                 :mode => 755,
-                :requires => get_package("libapache2-mod-php5"),
-                :calls => get_exec("reload-apache2")})
+                :requires => get_package("libapache2-mod-php5")) do
+                  notifies get_exec("reload-apache2"), :run
+                end
 
-        has_file(:name => "/etc/apache2/conf.d/enable-php.conf", 
-                 :mode => 755,
-                 :calls => get_exec("reload-apache2"),
+        has_file("/etc/apache2/conf.d/enable-php.conf", 
+                 :mode => 755,                 
                  :content => <<-eos 
                  AddHandler php5-script php
                  AddType text/html       php
                  eos
-                 )
+                 ) do
+                  notifies get_exec("reload-apache2"), :run
+                 end
       end
 
       def extras(*names)

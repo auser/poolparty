@@ -1,11 +1,10 @@
 #!/usr/bin/env ruby
 $:.unshift(File.dirname(__FILE__) + "/../lib")
 require "poolparty"
-# require "poolpartycl"
+
 require 'git-style-binary/command'
 
-GitStyleBinary.command do  
-  version "PoolParty #{$0} command"  
+GitStyleBinary.command do
   banner <<-EOS
 Usage: #{$0} #{all_options_string}
 
@@ -24,10 +23,13 @@ EOS
     # Perhaps use a console_lib to store any extra methods I may want available in the cosole
     # libs << " -r #{File.dirname(__FILE__) + '/../lib/console_lib/console_logger.rb'}"
     libs <<  " -r #{File.dirname(__FILE__) + '/../lib/poolparty.rb'}"
-    libs <<  " -r #{File.dirname(__FILE__) + '/../lib/poolpartycl.rb'}"
-    libs <<  " -r #{$pool_specfile}" if $pool_specfile
+    f = command[:clouds_dot_rb]
+    libs <<  " -r " + if File.file?(f)
+      f
+    else
+      "#{PoolParty::Pool.find_default_clouds_dot_rb('clouds.rb')}"
+    end
     puts "Loading PoolParty console..."
-
     exec "#{irb} #{libs} --simple-prompt"
     
   end

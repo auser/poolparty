@@ -1,11 +1,10 @@
 #!/usr/bin/env ruby
 $:.unshift(File.dirname(__FILE__) + "/../lib")
 require "poolparty"
-# require "poolpartycl"
+
 require 'git-style-binary/command'
 
 GitStyleBinary.command do  
-  version "PoolParty #{$0} command"  
   banner <<-EOS
 Usage: #{$0} #{all_options_string}
 
@@ -16,18 +15,23 @@ EOS
 
   run do |command|    
     @loaded_clouds.each do |cld|
-
-      puts "Contracting cloud #{cld.name}"
-      puts "#{cld.nodes(:status => "running").size} running instances (#{cld.minimum_instances} minimum instances)"
-      puts testing ? "Not contracting (test mode)" : "Contracting the cloud if possible"
       
-      if cld.minimum_instances < cld.nodes(:status => "running").size
-        last_instance_id = cld.nodes(:status => "running").last[:instance_id]
-        cld.remote_base.terminate_instance! cld.dsl_options.merge(:instance_id => last_instance_id)
-      else
-        puts "The cloud #{cld.name} is running minimum instances (#{cld.nodes(:status => "running").size})"
-      end
-
+      node_to_terminate = cld.nodes.last
+      
+      msg = [
+        "Contracting cloud #{cld.name} (#{cld.keypair}) by 1",
+        " node: #{node_to_terminate.public_ip}"
+      ]
+      
+      print_msg(msg)
+      
+      node_to_terminate.terminate!
+      
+      msg = [
+        "#{node_to_terminate.public_ip} has been terminated"
+      ]
+      
+      print_msg(msg)
     end    
   end
 end

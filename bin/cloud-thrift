@@ -1,0 +1,77 @@
+#!/usr/bin/env ruby
+$:.unshift(File.dirname(__FILE__) + "/../lib")
+require "poolparty"
+require "daemons"
+
+$:.unshift("#{File.dirname(__FILE__)}/../lib/proto")
+$:.unshift("#{File.dirname(__FILE__)}/../lib/proto/gen-rb")
+
+require "thrift"
+require "command_interface"
+require "poolparty_constants"
+require "poolparty_types"
+require "command_interface_handler"
+
+require 'git-style-binary/command'
+
+GitStyleBinary.command do
+  banner <<-EOS
+Usage: #{$0} #{all_options_string}
+
+  Start cloud thrift interface
+EOS
+
+  short_desc "Start the cloud thrift interface"
+  opt :port, "Start a port", :type => :integer, :default => 11223
+  opt :dir, "Pid directory", :type => :string, :default => "/tmp"
+  opt :daemon, "Daemonize", :type => :bool, :default => true
+
+  run do |command|
+    
+    command.process_args(ARGV)
+    
+    cmd = ARGV.shift
+    cmd = ARGV.shift if cmd == "thrift"
+    
+    if %w(run start restart stop).include?(cmd)
+      args = [cmd]
+      args << ["--", command.argv] unless command.argv.empty?
+      args.flatten!
+    else
+      puts "You must pass one of the following: #{%w(run start restart stop).join(", ")}"
+      args = ["--help"]
+    end
+    
+    require PoolParty::Pool.clouds_dot_rb_file
+    
+    options = {
+      :app_name   => "cloud-thrift",
+      :ARGV       => args,
+      :dir        => File.expand_path(command[:dir]),
+      :mode       => :load,
+      :dir_mode   => :normal,
+      :ontop      => true,
+      :log_output => true,
+      :monitor    => true
+    }.merge(command.opts)
+    
+    block = Proc.new do
+      handler = CommandInterfaceHandler.new
+      processor = CloudThrift::CommandInterface::Processor.new(handler)
+      transport = Thrift::ServerSocket.new( options[:port] )
+      transportFactory = Thrift::BufferedTransportFactory.new()
+      server = Thrift::SimpleServer.new(processor, transport, transportFactory)
+      
+      puts "Starting the cloud server..."
+      server.serve()
+      puts "done."
+    end
+    
+    if command[:daemon]
+      Daemons.run_proc("cloud-thrift", options, &block)
+    else
+      block.call
+    end
+    
+  end
+end

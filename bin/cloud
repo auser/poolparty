@@ -1,13 +1,16 @@
 #!/usr/bin/env ruby
 $:.unshift(File.dirname(__FILE__) + "/../lib")
 require "poolparty"
-# require "poolpartycl"
+require "colors"
+require "mixins/printing"
 require 'git-style-binary/command'
 
 GitStyleBinary.primary do
+  self.class.send :include, Printing
+  
   @theme = :short
   
-  version "PoolParty cloud command"  
+  version "PoolParty release: #{PoolParty.version}"
   banner <<-EOS
 Usage: #{$0} #{all_options_string} COMMAND [ARGS]
 
@@ -16,22 +19,25 @@ The cloud subcommands commands are:
 
 See 'cloud help COMMAND' for more information on a specific command.
 EOS
-  
+    
+  opt :clouds_dot_rb, "Set the clouds.rb file", :type => String, :default => "clouds.rb"
+  opt :very_verbose, "Set very verbose mode on", :type => :boolean, :default => false
   opt :debug, "Debug the output", :type => :boolean, :default => false
-  opt :spec, "Set the pool spec file", :type => String
-  opt :testing, "Set testing mode on", :type => :boolean, :default => false
-  opt :cloud_name, "Name of the working cloud", :type => String, :default => nil
+  opt :very_debug, "Set very debug mode on", :type => :boolean, :default => false
+  opt :name, "Name of the working cloud", :type => String, :default => nil
 
   before_run do |command|
     # Setup testing/debugging
-    $TESTING = true if command[:testing]
-    $DEBUGGING = true if command[:debug]
+    $TESTING        = true if command[:verbose]
+    $VERY_VERBOSE   = true if command[:very_verbose]
+    $DEBUGGING      = true if command[:debug]
+    $VERY_DEBUGGING = true if command[:very_debug]
     
-    @loaded_pool = load_pool( command[:spec] ? command[:spec] : Binary.get_existing_spec_location)
-    @loaded_clouds = command[:cloud_name] ? [clouds[command[:cloud_name].to_sym]] : clouds.map {|k,c| c }
-    @loaded_clouds.each do |cld|
-      cld.verbose command[:verbose]
-      cld.debugging = command[:debug]
+    @loaded_pool = PoolParty::Pool.find_and_load_default_clouds_dot_rb(command[:clouds_dot_rb])
+    @loaded_clouds = command[:name] ? [clouds[command[:name]]] : @loaded_pool.clouds.map {|name,cld|cld}
+    @loaded_clouds.map do |cld| 
+      cld.verbose = command[:verbose]
+      cld.debug = command[:debug]
     end
   end
   
@@ -43,6 +49,6 @@ EOS
     The cloud subcommands commands are:
       #{subcommands}
 
-    See 'cloud help COMMAND' for more information on a specific command."
+    See 'cloud help COMMAND' for more information on a specific command"
   end
 end

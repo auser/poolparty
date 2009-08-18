@@ -1,11 +1,10 @@
-require File.dirname(__FILE__)+'/apache'
 module PoolParty
-  module Plugin
+  module Resources
     # Usage:
     #
-    # passengersite do
+    # passenger_site do
     # end
-    class PassengerSite < Apache
+    class PassengerSite < Resource
       
       default_options(
         :dir            => "/var/www",
@@ -16,7 +15,7 @@ module PoolParty
         :deploy_dirs    => false
       )
       
-      def loaded(opts={}, prnt=nil)
+      def after_loaded(opts={})
         enable_passenger
         port "80" unless self.port
         
@@ -24,19 +23,18 @@ module PoolParty
         has_directory(:name => "#{site_directory}", :owner => www_user, :mode => '0744')
         has_site_directory 'logs'
         
-        if deploy_dirs || opts[:with_deployment_directories]
+        if dsl_options[:deploy_dirs] || opts[:with_deployment_directories]
           has_site_directory "shared"
           has_site_directory "shared/public"
           has_site_directory "shared/config"
           has_site_directory "shared/log"
           has_site_directory "releases"
-          if !::File.exists?("#{dir}/#{name}/current")
+          if !File.exists?("#{dir}/#{name}/current")
           
           # setup an initial symlink so apache will start even if there have not been any deploys yet
             has_site_directory "releases/initial/public"
             #FIXME  the following line is chef specific.  It will fail with puppet
-            has_symlink({:target_file => "#{dir}/#{name}/current",
-                        :to => "#{dir}/#{name}/releases/initial"})
+            # has_symlink(:target_file => "#{dir}/#{name}/current", :to => "#{dir}/#{name}/releases/initial")
           end
           log_dir = "#{site_directory}/shared/log"
           appended_path "current"
@@ -45,7 +43,7 @@ module PoolParty
           log_dir = "#{site_directory}/log"
         end
         
-        passenger_entry <<-EOE
+        pass_entry = <<-EOE
   <VirtualHost *:#{port}>
       ServerName #{name}
       DocumentRoot #{site_directory}/public
@@ -55,10 +53,9 @@ module PoolParty
   </VirtualHost>
         EOE
         
-        # has_directory(:name => "/var/www")
-        # has_directory(:name => "/var/www/#{name}")
-        # has_directory(:name => "/var/www/#{name}/log")
-        parent.install_site(name, :no_file => true) # we already created the file with #passenger_entry
+        passenger_entry(pass_entry)
+        
+        install_site(name, :no_file => true) # we already created the file with #passenger_entry
       end
       
       def passenger_entry(file)

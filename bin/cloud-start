@@ -1,11 +1,10 @@
 #!/usr/bin/env ruby
 $:.unshift(File.dirname(__FILE__) + "/../lib")
 require "poolparty"
-# require "poolpartycl"
+
 require 'git-style-binary/command'
 
-GitStyleBinary.command do  
-  version "PoolParty #{$0} command"  
+GitStyleBinary.command do
   banner <<-EOS
 Usage: #{$0} #{all_options_string}
 
@@ -13,28 +12,34 @@ Usage: #{$0} #{all_options_string}
 EOS
 
   short_desc "starts a single instance in your cloud"
-  opt :skip_bootstrap, "Skip bootstrapping. This is useful if you are starting with an AMI with PoolParty already installed"
 
   run do |command|    
     
     @loaded_clouds.each do |cld|
 
-      if cld.nodes(:status => "running").size.zero?
+      if cld.nodes.size.zero?
         puts "Starting cloud #{cld.name} (#{cld.keypair})"
         puts "#{cld.nodes(:status => "running").size} running instances (#{cld.minimum_instances} - #{cld.maximum_instances})"
         
-        cld.launch_instance!(:cloud_name => cld.name) do |node|
-          
-          ::PoolParty::Provision::BootStrapper.new(node.ip, :cloud => cld) unless command[:skip_bootstrap]
-          ::PoolParty::Provision::DrConfigure.new(node.ip,  :cloud => cld)
-          
-          puts <<-EOM
-            Your cloud has started. Your ip is #{node.ip}
-          EOM
-        end
-      
+        cld.minimum_instances.times do |i|
+          cld.expand
+        end        
+        # cld.nodes.each do |node|
+        #   vputs "Bootstrapping: #{node.instance_id}"
+        #   node.bootstrap!
+        #   node.configure!(:cloud => cld)
+        # end
+        
+        msg = [
+          "Your cloud has started with the following public_ips:"
+        ]
+        
+        cld.nodes.each {|node| msg << "#{node.public_ip}"}
+        
+        print_msg(msg)
       else
         puts <<-EOE
+          #{cld.nodes}
           Your cloud is already running.
         EOE
       end

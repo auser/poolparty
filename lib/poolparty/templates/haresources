@@ -1,3 +1,0 @@
-<% @node[:poolparty][:ha_nodenames].split(/\t/).each_with_index do |name, index| -%>
-<%= name -%>       <%= @node[:poolparty][:ha_nodenames][index] -%>/eth0:0
-<% end %>

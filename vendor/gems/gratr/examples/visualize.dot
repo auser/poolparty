@@ -1,0 +1,58 @@
+digraph GRATR__Digraph {
+    label = "GRATR__Digraph"
+    "5" [
+        fontsize = 8,
+        label = "5"
+    ]
+
+    "6" [
+        fontsize = 8,
+        label = "6"
+    ]
+
+    "1" [
+        fontsize = 8,
+        label = "1"
+    ]
+
+    "2" [
+        fontsize = 8,
+        label = "2"
+    ]
+
+    "3" [
+        fontsize = 8,
+        label = "3"
+    ]
+
+    "4" [
+        fontsize = 8,
+        label = "4"
+    ]
+
+    "2" -> "3" [
+        fontsize = 8
+    ]
+
+    "1" -> "6" [
+        fontsize = 8
+    ]
+
+    "2" -> "4" [
+        fontsize = 8
+    ]
+
+    "4" -> "5" [
+        fontsize = 8
+    ]
+
+    "1" -> "2" [
+        fontsize = 8
+    ]
+
+    "6" -> "4" [
+        fontsize = 8
+    ]
+
+}
+

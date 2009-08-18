@@ -2,7 +2,7 @@ require 'config/requirements'
 
 begin
   require 'hanna/rdoctask'
-rescue Exception => e
+rescue LoadError => e
   require "rake/rdoctask"
 end
 
@@ -26,30 +26,16 @@ task :clean_pkg do |t|
   end
 end
 
-desc "Packge with timestamp"
-task :update_timestamp do
-  data = open("PostInstall.txt").read
-  str = "Updated at #{Time.now.strftime("%H:%M %D")}"
-  
-  if data.scan(/Updated at/).empty?
-    data = data ^ {:updated_at => str}    
-  else
-    data = data.gsub(/just installed PoolParty\!(.*)$/, "just installed PoolParty! (#{str})")
-  end
-  ::File.open("PostInstall.txt", "w+") {|f| f << data }
-end
 
 namespace :gem do
   task(:build).prerequisites.unshift :gemspec # Prepend the gemspec generation
   
-  desc "Build the gem only if the specs pass"
-  task :test_then_build => [:spec, :build]
+  desc "Build the gem only if the tests pass"
+  task :test_then_build => [:test, :build]
   
-  desc "Build and install the gem only if the specs pass"
-  task :test_then_install => [:spec, :install]
+  desc "Build and install the gem only if the tests pass"
+  task :test_then_install => [:test, :install]
 end
-
-task :release => [:update_timestamp]
 
 # Generate documentation
 Rake::RDocTask.new do |rd|
