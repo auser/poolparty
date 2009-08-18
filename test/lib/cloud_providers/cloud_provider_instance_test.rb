@@ -31,6 +31,26 @@ class CloudProviderInstanceTest < Test::Unit::TestCase
     @inst.name = 'fruby'
     assert @inst.valid?
   end
+
+  def test_blank_public_ip_is_invalid
+    @inst.public_ip = ''
+    assert ! @inst.wait_for_public_ip(1)
+  end
+
+  def test_zero_public_ip_is_invalid
+    @inst.public_ip = '0.0.0.0'
+    assert ! @inst.wait_for_public_ip(1)
+  end
+
+  def test_nil_public_ip_is_invalid
+    @inst.public_ip = nil
+    assert ! @inst.wait_for_public_ip(1)
+  end
+
+  def test_wait_for_public_ip
+    @inst.public_ip = '10.0.0.1'
+    assert @inst.wait_for_public_ip(1)
+  end
   
   # Not quite an amazing test, but better than nothing to share
   # that the port is open.
