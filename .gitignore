@@ -15,7 +15,6 @@ test_manifest.pp
 log
 *.beam
 ri/
-doc/
 .autosession.vim
 tags
 .session
