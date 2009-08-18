@@ -23,7 +23,7 @@ EOS
         
         cld.minimum_instances.times do |i|
           cld.expand
-        end        
+        end
         # cld.nodes.each do |node|
         #   vputs "Bootstrapping: #{node.instance_id}"
         #   node.bootstrap!

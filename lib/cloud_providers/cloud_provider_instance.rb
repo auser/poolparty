@@ -133,6 +133,7 @@ module CloudProviders
           Timeout::timeout(timeout) do
             loop do
               self.refresh!
+              ddputs("After refreshing, the public_ip is: #{public_ip}")
               return public_ip if public_ip and public_ip != '0.0.0.0'
               print '.'
               sleep 2

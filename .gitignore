@@ -8,7 +8,6 @@ pkg/*.tgz
 pkg/*.gem
 pkg/poolparty*/*
 .git/
-log/
 log/*
 test_manifest.pp
 **/*/erl_crash.dump
