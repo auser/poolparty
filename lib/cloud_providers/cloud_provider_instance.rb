@@ -149,8 +149,9 @@ module CloudProviders
       
       # Refresh the node with fresh data from the cloud provider.
       # This is often usefully to update a recently launched instance, in case you want to trigger new behavior once the state changes ot 'running' and an ip is assigned
+      # Added rescue, but not sure if this is a proper fix yet. Will need to test on live instances to ensure
       def refresh!
-        refreshed = cloud_provider.describe_instance(:instance_id => self.instance_id)
+        refreshed = cloud_provider.describe_instance(:instance_id => self.instance_id) rescue {}
         self.dsl_options.merge!(refreshed.dsl_options)
         self
       end
