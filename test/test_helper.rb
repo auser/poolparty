@@ -2,7 +2,7 @@ $:.unshift(::File.dirname(__FILE__))
 $:.unshift(::File.dirname(__FILE__) + "/../lib")
 
 # Test dependencies
-%w(fakeweb right_http_connection).each do |dep|
+%w(fakeweb right_http_connection matchy shoulda).each do |dep|
   $LOAD_PATH.unshift(File.join(File.dirname(__FILE__),'..', 'vendor/gems', dep, 'lib'))
   # require "#{dep}"
 end
