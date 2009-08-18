@@ -1,6 +1,6 @@
 class CommandInterfaceHandler
   def run_command(cld, command, args)
-
+        
     cr = CloudThrift::CloudResponse.new
     cr.name = cld.name
     cr.command = command

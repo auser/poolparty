@@ -12,7 +12,7 @@ pool "poolparty" do
     
     monitor :cpu do |c|
       vote_for(:expand) if c > 0.9
-      vote_for(:contract) if c < 0.5
+      vote_for(:contract) if c < 0.1
     end
         
     has_file "/etc/motd", :content => "Simple"
