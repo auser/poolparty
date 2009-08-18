@@ -6,7 +6,7 @@ require "daemons"
 $:.unshift("#{File.dirname(__FILE__)}/../lib/proto")
 $:.unshift("#{File.dirname(__FILE__)}/../lib/proto/gen-rb")
 
-require "thrift"
+require "rb/lib/thrift"
 require "command_interface"
 require "poolparty_constants"
 require "poolparty_types"
