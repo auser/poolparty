@@ -195,7 +195,6 @@ module DependencyResolvers
       end
       
       # compile the recipes
-      # TODO
       def compile_recipes
         recipes.each do |recipe|
           ddputs("[Chef recipe] Copying #{recipe.full_path} into the chef directory: #{base_cookbook_directory}")
@@ -203,6 +202,7 @@ module DependencyResolvers
         end
       end
       
+      # Write the dna.json out
       def write_dna_json
         File.open(compile_directory/"dna.json", "w") do |f|
           f << JSON.generate({:recipes => ["poolparty"]})
