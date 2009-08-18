@@ -1,0 +1,172 @@
+<html>
+<head>
+<title>Trollop</title>
+<style type="text/css">
+.ruby { background: #111122; padding: 10px; color: #228822; width: 70em; }
+.ruby .normal { color: #fff; }
+.ruby .comment { color: #99f }
+.ruby .keyword { color: #A44; font-weight: bold; }
+.ruby .method { color: #44f; }
+.ruby .class { color: #0c4; }
+.ruby .module { color: #050; }
+.ruby .punct { color: #FF0; font-weight: bold; }
+.ruby .symbol { color: #ff0; }
+.ruby .string { color: #4f4 }
+.ruby .char { color: #F07; }
+.ruby .ident { color: #fff; }
+.ruby .constant { color: #0c4; }
+.ruby .regex { color: #B66; background: #444; }
+.ruby .number { color: #F99; }
+.ruby .attribute { color: #fc4; }
+.ruby .global { color: #7FB; }
+.ruby .expr { color: #827; }
+.ruby .escape { color: #277; }
+</style>
+</head>
+
+<body>
+
+<h1>Trollop</h1>
+
+<p style="border: solid 1px black; background: #ccc; padding: 0.5em;">
+Current project news: see the <a href="http://all-thing.net/label/trollop">blog</a>.
+</p>
+
+<p>Trollop is a commandline option parser for Ruby that <i>gets out of your
+way</i>. One line of code per option is all you need to write. For that, you get
+a nice automatically-generated help page (fit to your screen size!), robust
+option parsing, command subcompletion, and sensible defaults for everything you
+don't specify.</p>
+
+<p> Reasons to use Trollop:
+<ol>
+<li> It requires <i>fewer lines of code</i> than any other option out there. </li>
+<li> It doesn't require you to subclass some shit just to use a damn option parser.</li>
+</li>
+<li> It's a single file. You don't even need to make it a dependency. Just throw it in <code>lib/</code>.</li>
+<li> This gradient-free webpage. Fight the candy! </li>
+</ol>
+</p>
+
+<p> To install, you have three options:
+<ul>
+<li>Trollop is a single file with no dependencies. You can <a href="http://gitorious.org/trollop/mainline/blobs/raw/master/lib/trollop.rb">just download it</a> and throw it in your code directory.</li>
+<li>You can use rubygems and command your computer to <code>gem install trollop</gem>.</li>
+<li>You can download the tarball (why?) from the <a href="http://rubyforge.org/projects/trollop/">Trollop Rubyforge page</a>.</p>
+</ul>
+
+<p> To hack, command your computer to <code>git clone git://gitorious.org/trollop/mainline.git</code>, or see the <a href="http://gitorious.org/projects/trollop">Trollop Gitorious page</a>.</p>
+
+<p>To understand, read the examples below, the <a href="FAQ.txt">FAQ</a>, and the <a href="trollop/">API docs</a>.
+
+<h2>Examples</h2>
+<h3>Simple</h3>
+<pre class="ruby"><span class="ident">require</span> <span class="punct">'</span><span class="string">trollop</span><span class="punct">'</span>
+<span class="ident">opts</span> <span class="punct">=</span> <span class="constant">Trollop</span><span class="punct">::</span><span class="ident">options</span> <span class="keyword">do</span>
+  <span class="ident">opt</span> <span class="symbol">:monkey</span><span class="punct">,</span> <span class="punct">&quot;</span><span class="string">Use monkey mode</span><span class="punct">&quot;</span>                     <span class="comment"># a flag --monkey, defaulting to false</span>
+  <span class="ident">opt</span> <span class="symbol">:goat</span><span class="punct">,</span> <span class="punct">&quot;</span><span class="string">Use goat mode</span><span class="punct">&quot;,</span> <span class="symbol">:default</span> <span class="punct">=&gt;</span> <span class="constant">true</span>       <span class="comment"># a flag --goat, defaulting to true</span>
+  <span class="ident">opt</span> <span class="symbol">:num_limbs</span><span class="punct">,</span> <span class="punct">&quot;</span><span class="string">Number of limbs</span><span class="punct">&quot;,</span> <span class="symbol">:default</span> <span class="punct">=&gt;</span> <span class="number">4</span>   <span class="comment"># an integer --num-limbs &lt;i&gt;, defaulting to 4</span>
+  <span class="ident">opt</span> <span class="symbol">:num_thumbs</span><span class="punct">,</span> <span class="punct">&quot;</span><span class="string">Number of thumbs</span><span class="punct">&quot;,</span> <span class="symbol">:type</span> <span class="punct">=&gt;</span> <span class="symbol">:int</span> <span class="comment"># an integer --num-thumbs &lt;i&gt;, defaulting to nil</span>
+<span class="keyword">end</span>
+
+<span class="ident">p</span> <span class="ident">opts</span> <span class="comment"># a hash: { :monkey =&gt; false, :goat =&gt; true, :num_limbs =&gt; 4, :num_thumbs =&gt; nil }</span>
+</pre>
+
+<p>
+<ul>
+<li><tt>Trollop::options</tt> returns a hash of values. That's all the output you get.</li>
+<li>Underscores are converted to dashes. <tt>opt :hello_there</tt> corresponds to an option <tt>--hello-there</tt>.
+<li>All options are taken to be boolean flags, defaulting to false, unless you specify a default or a type. The type will be inferred from the default if given, so no need to specify both.</li>
+<li>Short (one-character) option names are created automatically. You can set them manually with <tt>:short</tt>.
+</ul>
+</p>
+
+<h3>Medium</h3>
+<pre class="ruby">
+<span class="ident">require</span> <span class="punct">'</span><span class="string">trollop</span><span class="punct">'</span>
+<span class="ident">opts</span> <span class="punct">=</span> <span class="constant">Trollop</span><span class="punct">::</span><span class="ident">options</span> <span class="keyword">do</span>
+  <span class="ident">version</span> <span class="punct">&quot;</span><span class="string">test 1.2.3 (c) 2008 William Morgan</span><span class="punct">&quot;</span>
+  <span class="ident">banner</span> <span class="punct">&lt;&lt;-</span><span class="constant">EOS</span><span class="string">
+Test is an awesome program that does something very, very important.
+
+Usage:
+       test [options] &lt;filenames&gt;+
+where [options] are:
+</span><span class="constant">EOS</span>
+
+  <span class="ident">opt</span> <span class="symbol">:ignore</span><span class="punct">,</span> <span class="punct">&quot;</span><span class="string">Ignore incorrect values</span><span class="punct">&quot;</span>
+  <span class="ident">opt</span> <span class="symbol">:file</span><span class="punct">,</span> <span class="punct">&quot;</span><span class="string">Extra data filename to read in, with a very long option description like this one</span><span class="punct">&quot;,</span> <span class="symbol">:type</span> <span class="punct">=&gt;</span> <span class="constant">String</span>
+  <span class="ident">opt</span> <span class="symbol">:volume</span><span class="punct">,</span> <span class="punct">&quot;</span><span class="string">Volume level</span><span class="punct">&quot;,</span> <span class="symbol">:default</span> <span class="punct">=&gt;</span> <span class="number">3.0</span>
+  <span class="ident">opt</span> <span class="symbol">:iters</span><span class="punct">,</span> <span class="punct">&quot;</span><span class="string">Number of iterations</span><span class="punct">&quot;,</span> <span class="symbol">:default</span> <span class="punct">=&gt;</span> <span class="number">5</span>
+<span class="keyword">end</span>
+<span class="constant">Trollop</span><span class="punct">::</span><span class="ident">die</span> <span class="symbol">:volume</span><span class="punct">,</span> <span class="punct">&quot;</span><span class="string">must be non-negative</span><span class="punct">&quot;</span> <span class="keyword">if</span> <span class="ident">opts</span><span class="punct">[</span><span class="symbol">:volume</span><span class="punct">]</span> <span class="punct">&lt;</span> <span class="number">0</span>
+<span class="constant">Trollop</span><span class="punct">::</span><span class="ident">die</span> <span class="symbol">:file</span><span class="punct">,</span> <span class="punct">&quot;</span><span class="string">must exist</span><span class="punct">&quot;</span> <span class="keyword">unless</span> <span class="constant">File</span><span class="punct">.</span><span class="ident">exist?</span><span class="punct">(</span><span class="ident">opts</span><span class="punct">[</span><span class="symbol">:file</span><span class="punct">])</span> <span class="keyword">if</span> <span class="ident">opts</span><span class="punct">[</span><span class="symbol">:file</span><span class="punct">]</span>
+</pre>
+
+<p>
+<ul>
+<li>You can specify a version and some banner text for the help message. <tt>--help</tt> and <tt>--version</tt> are defined for you.</li>
+<li>Any special error-checking is done by you, on the option hash. You can call <tt>Trollop::die</tt> to die with a nice message.</li>
+</ul>
+</p>
+
+<h3>Sub-commands, a la SVN and Git</h3>
+<pre class="ruby"><span class="ident">require</span> <span class="punct">'</span><span class="string">trollop</span><span class="punct">'</span>
+
+<span class="comment">## Here's a program called &quot;magic&quot;. We want this behavior:</span>
+<span class="comment">##</span>
+<span class="comment">##   magic delete &lt;fn&gt; =&gt; deletes a file</span>
+<span class="comment">##   magic copy &lt;fn&gt;   =&gt; copies a file</span>
+<span class="comment">##</span>
+<span class="comment">## So 'delete' and 'copy' are subcommands.</span>
+<span class="comment">##</span>
+<span class="comment">## There are some global options, which appear to the left of the subcommand.</span>
+<span class="comment">## There are some subcommand options, which appear to the right.</span>
+<span class="comment">##</span>
+<span class="comment">## Subcommand options can be specific to the subcommand. 'delete' might take</span>
+<span class="comment">## different options from 'copy'.</span>
+<span class="comment">##</span>
+<span class="comment">## We do this by calling Trollop twice; one for the global options and once for</span>
+<span class="comment">## the subcommand options. We need to tell Trollop what the subcommands are, so</span>
+<span class="comment">## that it stops processing the global options when it encounters one of them.</span>
+
+<span class="constant">SUB_COMMANDS</span> <span class="punct">=</span> <span class="punct">%w(</span><span class="string">delete copy</span><span class="punct">)</span>
+<span class="ident">global_opts</span> <span class="punct">=</span> <span class="constant">Trollop</span><span class="punct">::</span><span class="ident">options</span> <span class="keyword">do</span>
+  <span class="ident">banner</span> <span class="punct">&quot;</span><span class="string">magic file deleting and copying utility</span><span class="punct">&quot;</span>
+  <span class="ident">opt</span> <span class="symbol">:dry_run</span><span class="punct">,</span> <span class="punct">&quot;</span><span class="string">Don't actually do anything</span><span class="punct">&quot;,</span> <span class="symbol">:short</span> <span class="punct">=&gt;</span> <span class="punct">&quot;</span><span class="string">-n</span><span class="punct">&quot;</span>
+  <span class="ident">stop_on</span> <span class="constant">SUB_COMMANDS</span>
+<span class="keyword">end</span>
+
+<span class="ident">cmd</span> <span class="punct">=</span> <span class="constant">ARGV</span><span class="punct">.</span><span class="ident">shift</span> <span class="comment"># get the subcommand</span>
+<span class="ident">cmd_opts</span> <span class="punct">=</span> <span class="keyword">case</span> <span class="ident">cmd</span>
+  <span class="keyword">when</span> <span class="punct">&quot;</span><span class="string">delete</span><span class="punct">&quot;</span> <span class="comment"># parse delete options</span>
+    <span class="constant">Trollop</span><span class="punct">::</span><span class="ident">options</span> <span class="keyword">do</span>
+      <span class="ident">opt</span> <span class="symbol">:force</span><span class="punct">,</span> <span class="punct">&quot;</span><span class="string">Force deletion</span><span class="punct">&quot;</span>
+    <span class="keyword">end</span>
+  <span class="keyword">when</span> <span class="punct">&quot;</span><span class="string">copy</span><span class="punct">&quot;</span>  <span class="comment"># parse copy options</span>
+    <span class="constant">Trollop</span><span class="punct">::</span><span class="ident">options</span> <span class="keyword">do</span>
+      <span class="ident">opt</span> <span class="symbol">:double</span><span class="punct">,</span> <span class="punct">&quot;</span><span class="string">Copy twice for safety's sake</span><span class="punct">&quot;</span>
+    <span class="keyword">end</span>
+  <span class="keyword">else</span>
+    <span class="constant">Trollop</span><span class="punct">::</span><span class="ident">die</span> <span class="punct">&quot;</span><span class="string">unknown subcommand <span class="expr">#{cmd.inspect}</span></span><span class="punct">&quot;</span>
+  <span class="keyword">end</span>
+
+<span class="ident">puts</span> <span class="punct">&quot;</span><span class="string">Global options: <span class="expr">#{global_opts.inspect}</span></span><span class="punct">&quot;</span>
+<span class="ident">puts</span> <span class="punct">&quot;</span><span class="string">Subcommand: <span class="expr">#{cmd.inspect}</span></span><span class="punct">&quot;</span>
+<span class="ident">puts</span> <span class="punct">&quot;</span><span class="string">Subcommand options: <span class="expr">#{cmd_opts.inspect}</span></span><span class="punct">&quot;</span>
+<span class="ident">puts</span> <span class="punct">&quot;</span><span class="string">Remaining arguments: <span class="expr">#{ARGV.inspect}</span></span><span class="punct">&quot;</span>
+
+</pre>
+
+<h2> Contributors </h2>
+
+<p>Trollop is brought to you by <a href="http://cs.stanford.edu/~ruby/">William Morgan</a> and by:
+<ul>
+<li>Tuomas Kareinen &lt;tkareine at the gmail dot coms&gt;</li>
+<li>Ohad Lutzky &lt;ohad at the lutzky dot nets&gt;</li>
+<li>Erik Ostrom &lt;erik at the echographia dot coms&gt;</li>
+</ul>
+</p>
+
+</body>
+</html>

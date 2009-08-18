@@ -133,7 +133,8 @@ module CloudProviders
           Timeout::timeout(timeout) do
             loop do
               self.refresh!
-              return public_ip if public_ip and public_ip != '0.0.0.0'
+              ddputs("After refreshing, the public_ip is: #{public_ip}")
+              return public_ip if valid_ip?(public_ip)
               print '.'
               sleep 2
             end
@@ -151,8 +152,8 @@ module CloudProviders
       # This is often usefully to update a recently launched instance, in case you want to trigger new behavior once the state changes ot 'running' and an ip is assigned
       # Added rescue, but not sure if this is a proper fix yet. Will need to test on live instances to ensure
       def refresh!
-        refreshed = cloud_provider.describe_instance(:instance_id => self.instance_id) rescue {}
-        self.dsl_options.merge!(refreshed.dsl_options)
+        dsl_options = cloud_provider.describe_instance(:instance_id => self.instance_id).dsl_options rescue {}
+        self.dsl_options.merge!(dsl_options)
         self
       end
       
@@ -231,6 +232,10 @@ module CloudProviders
       
       private
       
+      def valid_ip?(ip)
+        ip && ip != '0.0.0.0' && ip != ''
+      end
+
       # Test for open port by opening a socket
       # on the ip and closing the socket
       def is_port_open?(ip, port, opts={})

@@ -6,10 +6,11 @@ module DependencyResolvers
   class Chef < Base
     
     class << self
-      attr_reader :cookbook_directory
+      attr_reader :cookbook_directory, :base_cookbook_directory
       
       def before_compile
         @cookbook_directory = compile_directory/"cookbooks"/"poolparty"
+        @base_cookbook_directory = compile_directory/"cookbooks"
         raise PoolParty::PoolPartyError.create("ChefCompileError", "No compile_directory is specified. Please specify one.") unless compile_directory
         FileUtils.mkdir_p cookbook_directory unless ::File.directory?(cookbook_directory)
       end
@@ -49,6 +50,9 @@ module DependencyResolvers
         when PoolParty::Resources::ChefAttributesFile
           attribute_files << res
           ""
+        when PoolParty::Resources::ChefRecipe
+          recipes << res
+          super
         else
           super
         end
@@ -59,13 +63,14 @@ module DependencyResolvers
       default_attr_reader :variables, []
       default_attr_reader :files, []
       default_attr_reader :attribute_files, []
+      default_attr_reader :recipes, []
       
       def require_chef_only_resources
         # Require the chef-only resources
         $:.unshift("#{File.dirname(__FILE__)}/chef")
         
         to_define_resoures = []
-        %w( http_request remote_directory remote_file route script chef_attributes_file).each do |res|
+        %w( http_request remote_directory remote_file route script chef_attributes_file chef_recipe).each do |res|
           require "resources/#{res}"
           PoolParty::Resource.define_resource("PoolParty::Resources::#{res.classify}".constantize)
         end
@@ -190,10 +195,14 @@ module DependencyResolvers
       end
       
       # compile the recipes
-      # TODO
       def compile_recipes
+        recipes.each do |recipe|
+          ddputs("[Chef recipe] Copying #{recipe.full_path} into the chef directory: #{base_cookbook_directory}")
+          FileUtils.cp_r recipe.full_path, base_cookbook_directory
+        end
       end
       
+      # Write the dna.json out
       def write_dna_json
         File.open(compile_directory/"dna.json", "w") do |f|
           f << JSON.generate({:recipes => ["poolparty"]})

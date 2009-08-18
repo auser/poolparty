@@ -1,0 +1,7 @@
+FAQ.txt
+History.txt
+Manifest.txt
+README.txt
+Rakefile
+lib/trollop.rb
+test/test_trollop.rb
