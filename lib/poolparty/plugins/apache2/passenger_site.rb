@@ -11,7 +11,7 @@ module PoolParty
         :appended_path  => nil,
         :owner          => 'www-data', 
         :mode           =>'0744',
-        :enviornment    => 'production',
+        :environment    => 'production',
         :deploy_dirs    => false
       )
       
@@ -47,7 +47,7 @@ module PoolParty
   <VirtualHost *:#{port}>
       ServerName #{name}
       DocumentRoot #{site_directory}/public
-      RailsEnv #{enviornment}
+      RailsEnv #{environment}
       ErrorLog #{log_dir}/error_log
       CustomLog #{log_dir}/access_log common
   </VirtualHost>
