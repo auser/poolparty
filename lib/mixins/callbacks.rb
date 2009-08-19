@@ -4,7 +4,7 @@ module Callbacks
       @additional_callbacks ||= arr
     end
     def callback_block(&block)
-      @callback_block ||= (block ? block : nil)
+      @callback_block ||= block
     end
   end
   
@@ -18,12 +18,16 @@ module Callbacks
     # The method (before/after_bootstrap/configure) is called
     # on self if the callback method is defined on self
     def callback(call_time, *args, &block)
-      self.class.callback_block.call(self, call_time) if self.class.callback_block
+      on_all_callbacks(call_time, *args, &block)
       callback_on_self(call_time, *args, &block)
     end
     
     def callbacks
       @callbacks ||= []
+    end
+    
+    def on_all_callbacks(call_time, *args, &block)
+      self.class.callback_block.call(self, call_time) if self.class.callback_block
     end
     
     private

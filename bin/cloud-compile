@@ -14,13 +14,18 @@ EOS
   short_desc "Configure a cloud instance"
   
   opt :inst_num, "The number of the instance to run bootstrap on", :type => :int
+  opt :generate_graph, "Generate the dependency tree graph", :type => :string, :default => nil
 
   run do |command|
     
     @loaded_clouds.each do |cld|
       
       cld.compile
-      cld.output_resources_graph('png', "graph", {"fontsize" => 30})
+      
+      if command[:generate_graph]
+        vputs "Generating dependency graph at: #{command[:generate_graph]}"
+        cld.output_resources_graph('png', command[:generate_graph], {"fontsize" => 30})
+      end
       
     end
     
