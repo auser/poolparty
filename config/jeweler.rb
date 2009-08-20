@@ -31,6 +31,7 @@ end
     
     s.has_rdoc = true
     s.extra_rdoc_files = ["README.txt", "License.txt", 'History.txt']
+    s.require_paths = ["lib"]
     s.rdoc_options = ['--quiet', '--title', 'PoolParty documentation',
         # "index.html",
         "--line-numbers",
