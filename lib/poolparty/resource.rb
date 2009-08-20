@@ -45,7 +45,7 @@ module PoolParty
         notifies_array = (@meta_notifies[k] ||= [])
         notifies_array << [v, action_to_take] unless notifies_array.include?([v, action_to_take])
         # Implicitly add a require
-        requires(k => v)
+        # requires(k => v)
       end
     end
     
