@@ -2,7 +2,7 @@ module PoolParty
   class Resource < Base
     
     attr_reader :exists
-    attr_reader :meta_notifies, :meta_not_if, :meta_only_if, :meta_subscribes
+    attr_accessor :meta_notifies, :meta_not_if, :meta_only_if, :meta_subscribes
     attr_accessor :graph_index
     
     default_options(

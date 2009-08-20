@@ -43,6 +43,10 @@ module PoolParty
         requires get_user(owner) if owner && owner != "root"
       end
       
+      def after_loaded
+        requires get_user(owner) if owner != "root"
+      end
+      
       def self.has_method_name
         "file"
       end
