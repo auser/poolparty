@@ -23,10 +23,8 @@ end
     s.authors = ["Ari Lerner", "Michael Fairchild", "Nate Murray"]
     
     s.test_files = Dir["test/**/test_*.rb"]
-    excludes_regexp = ["lib/erlang"].one_of_regex    
 
-    s.files = (%w(Rakefile README.rdoc License.txt VERSION.yml) + 
-              Dir["{config,examples,lib,test,tasks,script,generators,bin,vendor}/**/*"]).delete_if{|f| f =~ excludes_regexp}
+    s.files = (%w(Rakefile README.rdoc License.txt VERSION.yml) + Dir["{config,examples,lib,test,tasks,script,generators,bin,vendor}/**/*"])
     
     s.files.exclude '**/*.beam'
     s.files.exclude "**/*/erl_crash.dump"
