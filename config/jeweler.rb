@@ -38,11 +38,6 @@ end
         "--main", "README"
         ]
     
-    s.add_dependency 'activesupport'
-    s.add_dependency 'logging'
-    s.add_dependency 'right_aws'
-    s.add_dependency 'rubigen', ">=1.5.2"
-    
   end
 rescue LoadError
   puts "Jeweler not available. Install it with: sudo gem install technicalpickles-jeweler -s http://gems.github.com"
