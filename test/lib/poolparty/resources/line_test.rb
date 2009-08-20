@@ -14,7 +14,7 @@ class LineResourceTest < Test::Unit::TestCase
     should "have the method denoted by has_method_name" do
       assert_match %r{# line in file: /etc/poolparty\n}, @res.compile(:chef)
     end
-    
+        
   end
   
 end

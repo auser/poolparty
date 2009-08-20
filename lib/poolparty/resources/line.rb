@@ -32,9 +32,16 @@ module PoolParty
       end
       
       def after_loaded
-        has_exec "line_in_#{filepath}" do
-          command "grep -q \'#{line.safe_quote}\' #{filepath} || echo \'#{line.safe_quote}\' >> #{filepath}"
-          not_if "grep -q \'#{line.safe_quote}\' #{filepath}"
+        if exists?
+          has_exec "line_in_#{filepath}" do
+            command "grep -q \'#{line.safe_quote}\' #{filepath} || echo \'#{line.safe_quote}\' >> #{filepath}"
+            not_if "grep -q \'#{line.safe_quote}\' #{filepath}"
+          end
+        else
+          has_exec "does_not_have_line_in_#{filepath}" do
+            command "cat #{filepath} | grep -v \'#{line.safe_quote}\' > temptfile && mv tempfile #{filepath}"
+            only_if "grep -q \'#{line.safe_quote}\' #{filepath}"
+          end
         end
       end
       
