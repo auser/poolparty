@@ -57,7 +57,7 @@ module DependencyResolvers
           super
         end
         
-        apply_meta_functions(res, o) if res.is_a?(PoolParty::Resource)
+        apply_meta_functions(res, o) if res.is_a?(PoolParty::Resource) && res.print_to_chef != :no_print
       end
       
       default_attr_reader :variables, []

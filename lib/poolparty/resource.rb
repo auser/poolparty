@@ -44,7 +44,9 @@ module PoolParty
       other_resources_hash.each do |k,v|
         notifies_array = (@meta_notifies[k] ||= [])
         notifies_array << [v, action_to_take] unless notifies_array.include?([v, action_to_take])
-      end      
+        # Implicitly add a require
+        requires(k => v)
+      end
     end
     
     def subscribes(other_resources_hash, action_to_take=:reload, at_time=:delayed)
@@ -56,12 +58,19 @@ module PoolParty
     end
     
     # Requires
-    def requires(other_resources_hsh)
-      other_resources_hsh.each do |k,v|
-        current_deps = (dependencies[k] ||= [])
-        current_deps << v unless current_deps.include?(v)
+    def requires(other_resources_obj)
+      case other_resources_obj
+      when Hash
+        other_resources_obj.each do |k,v|
+          dependencies[k] ||= []
+          dependencies[k] << v unless dependencies[k].include?(v)
+        end
+      when Array
+        other_resources_obj.each do |obj|
+          requires(obj)
+        end
       end
-    end    
+    end
     
     # Not if
     # If a block is given with the not_if, we assume it is

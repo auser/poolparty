@@ -71,10 +71,10 @@ class Object
     puts "[INFO] -- #{m}" if verbose?
   end
   def dputs(m="")
-    puts "[DEBUG] -- #{m.inspect}" if debugging?
+    puts "[DEBUG] -- #{m.is_a?(String) ? m : m.inspect}" if debugging?
   end
   def ddputs(m="")
-    puts "[VERY DEBUG] -- #{m.inspect}" if very_debugging?
+    puts "[VERY DEBUG] -- #{m.is_a?(String) ? m : m.inspect}" if very_debugging?
   end
   def verbose?
     $TESTING ||= false
