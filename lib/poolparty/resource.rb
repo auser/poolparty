@@ -111,6 +111,10 @@ module PoolParty
     def after_compile
     end
     
+    def after_loaded
+      requires parent if parent && !parent.is_a?(PoolParty::Cloud) && !parent.is_a?(PoolParty::Pool)
+    end
+    
     # Singleton methods
     # has_name
     # The has_ and does_not_have methods names
