@@ -137,7 +137,6 @@ module PoolParty
         if File.directory?(plugin_path)
           $:.unshift(plugin_path)
           require "#{plugin_path}/#{File.basename(plugin_path)}"
-          
         elsif File.file?(plugin_path) && plugin_path.match(/.rb$/)
           require plugin_path
         end

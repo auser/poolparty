@@ -18,7 +18,7 @@ class ServiceResourceTest < Test::Unit::TestCase
 str = <<-EOS
 service "example_service" do
   pattern "example_service"
-  action :[ :enable, :start ]
+  action [ :enable, :start ]
   supports :reload => true
 end
 EOS
