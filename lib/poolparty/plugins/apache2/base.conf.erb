@@ -162,10 +162,10 @@ LogFormat "%h %l %u %t \"%r\" %>s %b" common
 LogFormat "%{Referer}i -> %U" referer
 LogFormat "%{User-agent}i" agent
 
-DocumentRoot /var/www
+#DocumentRoot /var/www
 
 # Listen <%= @node[:apache][:port] %>
-NameVirtualHost *:<%= @node[:apache][:port] %>
+#NameVirtualHost *:<%= @node[:apache][:port] %>
 
 
 # NEW CONFIG FILE
