@@ -151,7 +151,7 @@ module Askable
     end
     
     def ask_hash
-      @question.each do |k,v|
+      @question.sort.each do |k,v|
         colored_say("#{k}) #{v}")
       end
       colored_print((@opts[:prompt] || "> "))

@@ -78,7 +78,7 @@ module PoolParty
       end
     end
     
-    def self.clouds_dot_rb_dir
+    def self.clouds_dot_rb_dir(n=nil)
       File.dirname(self.clouds_dot_rb_file) if self.clouds_dot_rb_file
     end
     

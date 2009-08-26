@@ -15,7 +15,7 @@ module PoolParty
         steps.each {|c| self.__send__ c.to_sym }
         self.__send__ :closing_message
       rescue Exception => e
-        # colored_say e.inspect
+        colored_say e.inspect
         colored_say exit_msg
       ensure
         Colors.reset!

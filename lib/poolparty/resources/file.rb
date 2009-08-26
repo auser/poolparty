@@ -64,8 +64,11 @@ end
           @template
         else
           file = arg.first
+          ddputs [:file, :template_looking_in, File.expand_path(file), File.expand_path(File.join(clouds_dot_rb_dir, file))]
           @template = if File.file?(b = File.expand_path(file))
             b
+          elsif File.file?(c = File.expand_path(File.join(clouds_dot_rb_dir, file)))
+            c
           elsif f = search_in_known_locations(file)
             f
           else

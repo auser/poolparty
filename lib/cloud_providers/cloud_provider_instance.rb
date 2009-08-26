@@ -222,7 +222,7 @@ module CloudProviders
       end
             
       def on_all_callbacks(call_time, *args, &block)
-        cloud.callback call_time
+        cloud.callback call_time if cloud
         super
       end
       
