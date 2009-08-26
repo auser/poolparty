@@ -50,7 +50,7 @@ module PoolParty
           passenger_configs
           
           has_exec "install_passenger_script" do
-            command "passenger-install-apache2-module -auto"
+            command "passenger-install-apache2-module --auto"
             notifies get_exec("restart-apache2"), :run
             requires get_exec("restart-apache2")
             requires get_package("apache2")
