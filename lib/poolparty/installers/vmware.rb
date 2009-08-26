@@ -59,9 +59,14 @@ Awesome. What's the path to your vmwarevm file?
         ip_help =<<-EOV
 Right now, vmrun, the remoter base needs an explicitly set ip. Log into your vm and type ifconfig. Copy and paste that here.
         EOV
-        @ip = ask_with_help :message => "Now, what's the ip of your vm?", :help => ip_help
+        @ip = ask_with_help :message => "what's the ip of your vm?", :help => ip_help
         
-        puts @ip
+        if @ip =~ /\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b/
+          @ip
+        else
+          colored_say "<red>You must enter a valid ip</red>"
+          get_vm_ip
+        end
       end
       
       def get_key
@@ -70,9 +75,16 @@ Finally, we'll set somethings up here shortly, but first we'll need to know wher
 at ~/.ssh/id_rsa.pub. If this is true, then just press enter. Otherwise, enter the path of your public key.        
         EOV
         
-        ask_with_help :message => "What keypair would you like to use? (default: ~/.ssh/id_rsa.pub)",
-                      :help => key_help do |k|
-          @key = k.empty? ? ::File.expand_path("~/.ssh/id_rsa.pub") : k
+        ask_with_help :message => "What keypair would you like to use? (default: ~/.ssh/id_rsa.pub)", :help => key_help do |responded_key|
+          responded_key = "~/.ssh/id_rsa.pub" if responded_key.empty?
+
+          @key = File.expand_path(responded_key)
+          if File.file?(@key)
+            @key
+          else
+            colored_say "<red>You must enter a valid path to a keyfile</red>"
+            get_key
+          end
         end
       end
       

@@ -3,18 +3,34 @@ $:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
 require "poolparty"
 require "poolparty/installer"
 
-msg = "\nWhat remoter base would you like to use?"
+require 'git-style-binary/command'
 
-providers = {}
-PoolParty::Installer.all.each_with_index do |installer,idx|
-  providers.merge!(idx+1 => installer)
-end
+GitStyleBinary.command do
+  banner <<-EOS
+Usage: #{$0} #{all_options_string}
 
-o = {}
-PoolParty::Installer.choose(msg, providers, o) do |output|
-  PoolParty::Installer.colored_say "Great, we'll be using #{output.to_s.top_level_class}"
+  Sets up a basic clouds.rb file and carries through the steps to bootstrap a new cloud
+EOS
+
+  short_desc "Setup a new clouds.rb file"
   
-  klass = output
-  inst = klass.send :new
-  inst.run
+  providers = {}
+  PoolParty::Installer.all.each_with_index do |installer,idx|
+    providers.merge!(idx+1 => installer)
+  end
+  
+  str = ["The cloud_provider you'd like to set your clouds.rb for. The available clouds include:"]
+  PoolParty::Installer.all.each do |provider|
+    str << "\t\t\t\t\t\t\t\t#{provider.name} - #{provider.description}"
+  end
+  opt :type, str.join("\n"), :type => :string, :default => "ec2"
+
+  run do |command|
+    
+    klass = PoolParty::Installer.find_by_name(command[:type])
+    puts "Great, we'll be using #{klass}"
+    inst = klass.send :new
+    inst.run
+    
+  end
 end

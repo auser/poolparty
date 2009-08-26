@@ -35,7 +35,7 @@ First, we'll setup your environment so using PoolParty will be a <blue>breeze</b
 <yellow>Cancelled PoolParty installation</yellow>
 
 You can always restart this by typing:
-<blue>install-poolparty</blue>
+<blue>cloud setup</blue>
 
 <line>
 EOE
@@ -97,8 +97,12 @@ irc.freenode.net / #poolpartyrb
     def self.all
       @all ||= []
     end
-
-
+    
+    def self.find_by_name(nm)
+      all.detect do |i|
+        i.name =~ /#{nm}/i
+      end
+    end
   end
 end
 
