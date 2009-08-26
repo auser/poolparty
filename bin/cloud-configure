@@ -26,6 +26,7 @@ EOS
       end
       
       cld.nodes.each do |node|
+        node.cloud = cld # ?
         node.configure!(:cloud => cld)
       end
       
