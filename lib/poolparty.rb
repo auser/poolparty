@@ -3,7 +3,7 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 t=Time.now
 
 # Load system gems
-%w(rubygems logger erb net/ssh open-uri).each do |lib|
+%w(rubygems logger erb open-uri).each do |lib|
   require lib
 end
 
@@ -11,7 +11,7 @@ end
 Dir[File.dirname(__FILE__)+"/../vendor/gems/*"].each {|lib| $LOAD_PATH.unshift(File.expand_path("#{lib}/lib")) }
 
 # Load local gems
-%w(dslify parenting json daemons).each do |dep|
+%w(dslify parenting json daemons net/ssh).each do |dep|
   require dep
 end
 
