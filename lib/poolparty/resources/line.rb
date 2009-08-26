@@ -32,16 +32,33 @@ module PoolParty
       end
       
       def after_loaded
-        has_exec "line_in_#{filepath}" do
-          command "grep -q \'#{line.safe_quote}\' #{filepath} || echo \'#{line.safe_quote}\' >> #{filepath}"
-          not_if "grep -q \'#{line.safe_quote}\' #{filepath}"
+        opts = if exists?
+          {:command => "grep -q \'#{line.safe_quote}\' #{filepath} || echo \'#{line.safe_quote}\' >> #{filepath}",
+          :not_if => "grep -q \'#{line.safe_quote}\' #{filepath}"}
+        else
+          {:command => "cat #{filepath} | grep -v \'#{line.safe_quote}\' > temptfile && mv tempfile #{filepath}",
+          :only_if => "grep -q \'#{line.safe_quote}\' #{filepath}"}
+        end        
+        
+        opts.merge!(:name => exists? ? "line in #{filepath}" : "no line in #{filepath}")
+        
+        e = has_exec opts
+        
+        # Not incredibly pretty. 
+        # {:file => [["pool_name", :reload]]}
+        # TODO: Find an alternative
+        e.meta_notifies = meta_notifies if meta_notifies
+        e.meta_subscribes = meta_subscribes if meta_subscribes
+        
+        # TODO: Figure out better solution
+        deps = @dependencies
+        e.instance_eval do
+          @dependencies = deps
         end
       end
       
       def print_to_chef
-        <<-EOE
-# line in file: <%= filepath %>
-        EOE
+        :no_print
       end
       
     end

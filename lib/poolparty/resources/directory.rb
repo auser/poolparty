@@ -31,6 +31,10 @@ module PoolParty
         :group      => "root",
         :recursive  => true
       )
+
+      def after_loaded
+        requires get_user(owner) if owner && owner != "root"
+      end
       
       def print_to_chef
         <<-EOE

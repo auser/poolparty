@@ -40,7 +40,7 @@ module PoolParty
       def print_to_chef
         str = <<-EOE
 mount "<%= name %>" do
-  action :<%= (action ? action : (exists ? :mount : :unmount)) %>
+  action <%= print_variable(action ? action : (exists ? :mount : :unmount)) %>
   device_type <%= print_variable(device_type) %>
 EOE
         str << "  device <%= print_variable(device) %>\n" if device

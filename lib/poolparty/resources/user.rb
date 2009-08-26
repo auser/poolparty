@@ -44,7 +44,7 @@ module PoolParty
       
       def print_to_chef
 str = 'user "<%= name %>" do
-  action :<%= action ? print_variable(action) : (exists ? :create : :remove) %>
+  action <%= print_variable(action ? action : (exists ? :create : :remove)) %>
 '
         str << "  comment <%= print_variable(comment) %>\n" if comment
         str << "  uid <%= print_variable(uid) %>\n" if uid

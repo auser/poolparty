@@ -43,7 +43,7 @@ module PoolParty
 str = 'execute "<%= name %>" do
   command <%= print_variable(command || name) %>
   path <%= print_variable(path) %>
-  action :<%= action ? action : (exists ? :run : :nothing) %>
+  action <%= print_variable(action ? action : (exists ? :run : :nothing)) %>
 '
       str << "  creates <%= print_variable(creates) %>\n" if creates
       str << "  cwd <%= print_variable(cwd) %>\n" if cwd

@@ -42,7 +42,8 @@ module CloudProviders
       # CLOUD PROVIDER METHODS
       
       # Bootstrap self.  Bootstrap runs as root, even if user is set
-      def bootstrap!(opts={})        
+      def bootstrap!(opts={})
+        callback :before_bootstrap
          if !bootstrapped? || opts[:force]
            old_user = user
            @user = "root"
@@ -56,11 +57,14 @@ module CloudProviders
           @user = old_user
           output.chomp if output
         end
+        callback :after_bootstrap
       end
       
       # Configure the node
       def configure!(opts={})
+        ddputs("Configuring: #{self.name}")
         bootstrap! unless bootstrapped?
+        callback :before_configure
         raise StandardError.new("You must pass in a cloud to configure an instance") unless cloud
         cloud.compile(self)
         scp(:source       => keypair.full_filepath, 
@@ -73,6 +77,7 @@ module CloudProviders
         rsync(:source => cloud.tmp_path/"*", :destination => "/")
         run("chmod +x /etc/poolparty/#{File.basename(script_file)}; /bin/sh /etc/poolparty/#{File.basename(script_file)}").chomp
         run(cloud.dependency_resolver.compile_command)
+        callback :after_configure
       end
       
       # Terminate self
@@ -214,6 +219,11 @@ module CloudProviders
       
       # Callbacks
       def loaded
+      end
+            
+      def on_all_callbacks(call_time, *args, &block)
+        cloud.callback call_time
+        super
       end
       
       def before_bootstrap

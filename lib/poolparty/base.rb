@@ -127,11 +127,11 @@ module PoolParty
     # to create edges on the graph
     def resources_graph(force=false)
       return @resources_graph if @resources_graph && !force
-      result = Digraph.new
-      
-      add_ordered_resources_to_result(resources, result)
+      result = Digraph.new      
       
       create_graph(resources, nil, result)
+      
+      add_ordered_resources_to_result(resources, result)
       
       @resources_graph = result
     end
@@ -141,7 +141,7 @@ module PoolParty
       arr_of_resources = resources.zip_offset(1)
       
       arr_of_resources.each do |first, second|
-        result.add_edge!(first, second)
+        result.add_edge!(first, second) unless result.edge?(first, second) or result.edge?(second, first)
         add_ordered_resources_to_result(first.resources, result)
       end
     end

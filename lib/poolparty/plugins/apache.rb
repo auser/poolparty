@@ -1,4 +1,5 @@
 module PoolParty
+  
   module Resources
     
     class Apache < Resource
@@ -49,12 +50,12 @@ module PoolParty
           passenger_configs
           
           has_exec "install_passenger_script" do
-            command 'echo -en \"\\\\n\\\\n\\\\n\\\\n\" | passenger-install-apache2-module'
+            command "passenger-install-apache2-module -auto"
             notifies get_exec("restart-apache2"), :run
             requires get_exec("restart-apache2")
             requires get_package("apache2")
             requires get_gem_package("passenger")
-            not_if "test -f /etc/apache2/mods-available/passenger.conf && test -s /etc/apache2/mods-available/passenger.conf"
+            not_if "test -f /etc/apache2/mods-available/passenger.conf && test -s /etc/apache2/mods-available/passenger.conf "
             creates lambda { "@node[:apache][:passenger_module_path]" }
             end
           

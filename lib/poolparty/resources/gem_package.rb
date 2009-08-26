@@ -40,7 +40,7 @@ module PoolParty
       def print_to_chef
         str = <<-EOE
 gem_package "<%= name %>" do
-  action :<%= (action ? action : (exists ? :install : :remove)) %>
+  action <%= print_variable(action ? action : (exists ? :install : :remove)) %>
 EOE
         str << "  options <%= print_variable(options) %>\n" if options
         str << "  version <%= print_variable(version) %>\n" if version

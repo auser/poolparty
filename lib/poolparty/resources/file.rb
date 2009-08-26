@@ -38,7 +38,11 @@ module PoolParty
         :backup   => 5,
         :owner    => "root"
       )
-      
+
+      def after_loaded
+        requires get_user(owner) if owner && owner != "root"
+      end
+            
       def self.has_method_name
         "file"
       end

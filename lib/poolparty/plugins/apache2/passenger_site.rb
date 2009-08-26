@@ -11,7 +11,7 @@ module PoolParty
         :appended_path  => nil,
         :owner          => 'www-data', 
         :mode           =>'0744',
-        :enviornment    => 'production',
+        :environment    => 'production',
         :deploy_dirs    => false
       )
       
@@ -32,9 +32,9 @@ module PoolParty
           if !File.exists?("#{dir}/#{name}/current")
           
           # setup an initial symlink so apache will start even if there have not been any deploys yet
-            has_site_directory "releases/initial/public"
+            #has_site_directory "releases/initial/public"
             #FIXME  the following line is chef specific.  It will fail with puppet
-            # has_symlink(:target_file => "#{dir}/#{name}/current", :to => "#{dir}/#{name}/releases/initial")
+            has_link(:target_file => "#{dir}/#{name}/current", :to => "#{dir}/#{name}/releases/initial")
           end
           log_dir = "#{site_directory}/shared/log"
           appended_path "current"
@@ -47,7 +47,7 @@ module PoolParty
   <VirtualHost *:#{port}>
       ServerName #{name}
       DocumentRoot #{site_directory}/public
-      RailsEnv #{enviornment}
+      RailsEnv #{environment}
       ErrorLog #{log_dir}/error_log
       CustomLog #{log_dir}/access_log common
   </VirtualHost>

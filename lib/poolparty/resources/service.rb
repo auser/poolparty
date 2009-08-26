@@ -39,7 +39,7 @@ module PoolParty
       def print_to_chef
 str = 'service "<%= name %>" do
   pattern <%= print_variable(pattern || name) %>
-  action :<%= action ? print_variable(action) : (exists ? :enable : :disable) %>
+  action <%= print_variable(action ? action : (exists ? :enable : :disable)) %>
 '
         str << "  running <%= print_variable(running) %>\n" if running
         str << "  start_command <%= print_variable(start_command) %>\n" if start_command
