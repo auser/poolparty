@@ -26,7 +26,7 @@ module DependencyResolvers
       end
       
       def compile_command
-        "/usr/bin/chef-solo -c /etc/chef/solo.rb -j /etc/chef/dna.json"
+        "/usr/bin/chef-solo -c /etc/chef/solo.rb -j /etc/chef/dna.json#{ " -l debug" if very_debugging?}"
       end
          
       # compile the resources
