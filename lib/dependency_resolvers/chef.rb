@@ -159,13 +159,15 @@ module DependencyResolvers
         file_pointers.each do |n,f|
           f << "\n#{n} Mash.new unless attribute?(\"#{n}\")\n"
         end
-        variables.each do |var|
-          
-          var_val = handle_print_variable(ProxyObject.new(var, @caller).compile(:value))
+        variables.each do |var|          
           if var.parent && !var.parent.is_a?(PoolParty::Cloud)
-            file_pointers[var.parent.has_method_name] << "#{var.parent.has_method_name}[:#{var.name}] = #{var_val}\n"
+            file_pointers[var.parent.has_method_name] << "#{var.parent.has_method_name}[:#{var.name}] ="
+            file_pointers[var.parent.has_method_name] << ProxyObject.new(var, @caller).compile(:value)
+            file_pointers[var.parent.has_method_name] << "\n"
           else
-            file_pointers[:poolparty] << "poolparty[:#{var.name}] = #{var_val}\n"
+            file_pointers[:poolparty] << "poolparty[:#{var.name}] = "
+            file_pointers[:poolparty] << ProxyObject.new(var, @caller).compile(:value)
+            file_pointers[:poolparty] << "\n"
           end
         end
         # Close the files

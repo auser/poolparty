@@ -49,6 +49,7 @@ module PoolParty
       # Chef uses separate files for variables, so we'll have to open the variable file 
       # and set the variable there
       def print_to_chef
+        p [:print_to_chef, :variable]
         # Variable
         # TODO: Variable => <%= name %>
         "poolparty[:#{name}] = #{value}"

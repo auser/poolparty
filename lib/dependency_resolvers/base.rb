@@ -111,7 +111,7 @@ module DependencyResolvers
       when Symbol
         ":#{obj}"
       when Hash
-        "#{obj.map {|k,v| ":#{k} => #{handle_print_variable(v)}" unless v == obj }.compact.join(",\n")}"
+        "{#{obj.map {|k,v| ":#{k} => #{handle_print_variable(v)}" unless v == obj }.compact.join(",")}}"
       else
         "#{obj}"
       end
