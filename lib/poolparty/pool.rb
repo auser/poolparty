@@ -116,6 +116,7 @@ module PoolParty
         else
           find_default_clouds_dot_rb(filename)
         end
+      ENV["CLOUDS_DOT_RB"] = f
       load_from_file(f)
     end
     
