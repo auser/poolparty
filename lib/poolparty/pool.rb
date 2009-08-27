@@ -2,6 +2,11 @@ module PoolParty
     
   class Pool < DslBase
     
+    default_options(
+      :minimum_instances        => nil,     # minimum_instances default
+      :maximum_instances        => nil     # maximum_instances default
+    )
+    
     # Freeze the pool_name so we can't modify it at all
     # call and run instance_eval on the block and then call the after_create callback
     def initialize(n, &block)
@@ -26,10 +31,23 @@ module PoolParty
     # Define a cloud by a name and a block
     def cloud(name, o={}, &block)
       if block
-        clouds[name.to_s] ||= PoolParty::Cloud.new(name, o, &block)
+        clouds[name.to_s] ||= PoolParty::Cloud.new(name, soakable_options.merge(o), &block)
       else
         raise PoolPartyError.new("CloudError", "You must pass a block when defining a cloud")
       end
+    end
+    
+    # Soaked options
+    # These are options that can be set on the pool that will be grabbed from the pool
+    # that can be set to the cloud. 
+    # Soakable options:
+    #   minimum_instances
+    #   maximum_instances
+    def soakable_options
+      soaked_options = {}
+      soaked_options.merge!(:minimum_instances => minimum_instances) if minimum_instances
+      soaked_options.merge!(:maximum_instances => maximum_instances) if maximum_instances
+      soaked_options
     end
     
     # Run twice to catch the errors on the first run

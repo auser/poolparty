@@ -37,8 +37,7 @@ module PoolParty
     # - stack
     def run_in_context(o={}, &block)
       proc = Proc.new do
-        # Name MUST be set first
-        set_vars_from_options(:name => o[:name]) if o.has_key?(:name)
+        set_vars_from_options(:name => o[:name]) if o.has_key?(:name) # Name MUST be set first
         set_vars_from_options(o)
         instance_eval &block if block
       end
