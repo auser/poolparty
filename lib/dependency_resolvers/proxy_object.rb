@@ -42,8 +42,8 @@ module DependencyResolvers
       begin
         ERB.new(str).result(self.send(:binding))
       rescue Exception => e
-        p [:error, e, str]
-      end      
+        ""
+      end
     end
     
     # Print the dsl options in the Erb string format
