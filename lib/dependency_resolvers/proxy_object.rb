@@ -32,15 +32,18 @@ module DependencyResolvers
         meth_name
       when Symbol
         @current_printing_method = meth_name
-        self.send(meth_name).to_s
+        self.send(meth_name)
       else
         raise PoolParty::PoolPartyError.create("ProxyObjectError", "Compilation of #{proxy.inspect} error. Strings and symbols are supported")
       end
+      
+      str = handle_print_variable(str) if proxy.class == PoolParty::Resources::Variable
+      
       begin
         ERB.new(str).result(self.send(:binding))
       rescue Exception => e
-        p [:error, e, str]
-      end      
+        ""
+      end
     end
     
     # Print the dsl options in the Erb string format
@@ -71,6 +74,11 @@ module DependencyResolvers
       resources.map do |res|
         ProxyObject.new(res).compile(current_printing_method)
       end.join("\n")
+    end
+    
+    # Print variables
+    def handle_print_variable(var)
+      DependencyResolvers::Base.handle_print_variable(var)
     end
     
     def instance
