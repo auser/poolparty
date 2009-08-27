@@ -19,7 +19,14 @@ EOS
   run do |command|
     @loaded_clouds.each do |cld|
       cld.nodes.each do |node|
-        p node.cloud
+
+        case command.argv.shift
+        when "deploy_hermes"
+          hermesdir = File.dirname(__FILE__) + "/../vendor/erlang/hermes"
+          release = `#{hermesdir}/scripts/most_recent_release tar.gz`.strip
+          node.scp(:source => release, :destination => "/var/poolparty/tmp")
+          node.scp(:source => "#{hermesdir}/scripts/target_system", :destination => "/var/poolparty/tmp")
+        end
 
       end
     end
