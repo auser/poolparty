@@ -37,6 +37,7 @@ module PoolParty
     # - stack
     def run_in_context(o={}, &block)
       proc = Proc.new do
+        set_vars_from_options(:name => o[:name]) if o.has_key?(:name) # Name MUST be set first
         set_vars_from_options(o)
         instance_eval &block if block
       end
@@ -200,9 +201,9 @@ module PoolParty
     
     # The clouds.rb file
     def clouds_dot_rb_file(n=nil); self.class.clouds_dot_rb_file(n); end
-    def self.clouds_dot_rb_file(n=nil)
-        Pool.clouds_dot_rb_file(n)
-    end
+    def self.clouds_dot_rb_file(n=nil);Pool.clouds_dot_rb_file(n);end
+    def clouds_dot_rb_dir(n=nil); self.class.clouds_dot_rb_dir(n);end
+    def self.clouds_dot_rb_dir(n=nil); Pool.clouds_dot_rb_dir(n);end
     
     # If the method is missing from ourself, check the Default
     # class for the corresponding method.

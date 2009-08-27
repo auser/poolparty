@@ -15,6 +15,7 @@ module Askable
         colored_say e.inspect
         exit 0
       end
+      answer
     end
 
     def ask_with_help(opts={}, &block)
@@ -56,13 +57,9 @@ module Askable
     
     def choose(str, choices={}, opts={}, &block)
       colored_say(str)
-      choices.each do |k,v|
-        colored_say("#{k}) #{v}")
-      end
-      colored_print((opts[:prompt] || "> "))
-      pick = gets.chomp.to_i
-      yield choices[pick] if block
-      choices[pick]
+      answer = ask(choices)
+      yield answer if block
+      answer
     end
     
     def wait
@@ -130,6 +127,8 @@ module Askable
       case @question
       when String
         ask_string
+      when Hash
+        ask_hash
       when Array
         ask_array
       end
@@ -150,5 +149,15 @@ module Askable
       num = (@input.gets).to_i rescue colored_say("<red>Invalid input, must be a number between 1 and #{@question.size + 1}")
       @answer = @question[num-1]
     end
+    
+    def ask_hash
+      @question.sort.each do |k,v|
+        colored_say("#{k}) #{v}")
+      end
+      colored_print((@opts[:prompt] || "> "))
+      pick = @input.gets.to_i
+      @answer = @question[pick]
+    end
+    
   end
 end

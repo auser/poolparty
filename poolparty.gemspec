@@ -9,10 +9,10 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Ari Lerner", "Michael Fairchild", "Nate Murray"]
-  s.date = %q{2009-08-25}
+  s.date = %q{2009-08-26}
   s.description = %q{PoolParty: The easy, open-source, cross-cloud management solution}
   s.email = %q{arilerner@mac.com}
-  s.executables = ["cloud", "cloud-bootstrap", "cloud-compile", "cloud-configure", "cloud-console", "cloud-contract", "cloud-expand", "cloud-list", "cloud-osxcopy", "cloud-setup", "cloud-show", "cloud-ssh", "cloud-start", "cloud-terminate", "cloud-thrift", "cloud-verify"]
+  s.executables = ["cloud", "cloud-bootstrap", "cloud-compile", "cloud-configure", "cloud-console", "cloud-contract", "cloud-expand", "cloud-list", "cloud-osxcopy", "cloud-show", "cloud-ssh", "cloud-start", "cloud-terminate", "cloud-thrift", "cloud-verify", "poolparty-setup"]
   s.extra_rdoc_files = [
     "License.txt"
   ]
@@ -30,13 +30,13 @@ Gem::Specification.new do |s|
      "bin/cloud-expand",
      "bin/cloud-list",
      "bin/cloud-osxcopy",
-     "bin/cloud-setup",
      "bin/cloud-show",
      "bin/cloud-ssh",
      "bin/cloud-start",
      "bin/cloud-terminate",
      "bin/cloud-thrift",
      "bin/cloud-verify",
+     "bin/poolparty-setup",
      "config/jeweler.rb",
      "config/requirements.rb",
      "examples/basic.rb",
@@ -97,6 +97,7 @@ Gem::Specification.new do |s|
      "examples/thrift/erlang/src/thrift_example.erl",
      "examples/thrift/thrift_example.py",
      "examples/thrift/thrift_example.rb",
+     "examples/vmware.rb",
      "lib/cloud_providers.rb",
      "lib/cloud_providers/cloud_provider.rb",
      "lib/cloud_providers/cloud_provider_instance.rb",

@@ -97,6 +97,7 @@ class CloudTest < Test::Unit::TestCase
   end
   
   def test_run
+    # WHAT?
     result = clouds['app'].run('uptime')
     assert_match /uptime/, result["app"]
   end
@@ -118,6 +119,22 @@ class CloudTest < Test::Unit::TestCase
     # result = clouds['app'].contract!
     # assert_equal 'shuttin-down',  result.status
     # assert_equal size-1, clouds['app'].nodes.size
+  end
+  
+  def test_children_getting_parent_options
+    clear!
+    pool "outside" do
+      minimum_instances 1
+      maximum_instances 10
+      cloud "inside" do
+        maximum_instances 100
+      end
+    end
+    
+    assert_equal 1, pools["outside"].minimum_instances
+    assert_equal 10, pools["outside"].maximum_instances
+    assert_equal 100, clouds["inside"].maximum_instances
+    assert_equal 1, clouds["inside"].minimum_instances
   end
   
   def test_monitor_dsl

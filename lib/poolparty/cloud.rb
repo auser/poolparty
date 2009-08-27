@@ -126,7 +126,7 @@ module PoolParty
     
     # convenience method to loop thru all the nodes and configure them
     def configure!(opts={}, threaded=true)
-      nodes.collect{|n| n.configure!}
+      nodes.collect{|n| n.configure! }
     end
     
     # Run command/s on all nodes in the cloud.

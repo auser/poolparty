@@ -51,7 +51,8 @@ module PoolParty
       def print_to_chef
         # Variable
         # TODO: Variable => <%= name %>
-        "poolparty[:#{name}] = #{value}"
+        # "poolparty[:#{name}] = #{value}"
+        :no_print
       end
       
     end

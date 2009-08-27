@@ -17,6 +17,7 @@ EOS
     @loaded_clouds.each do |cld|
       
       node_to_terminate = cld.nodes.last
+      node_to_terminate.cloud = cld
       
       msg = [
         "Contracting cloud #{cld.name} (#{cld.keypair}) by 1",

@@ -1,5 +1,7 @@
 require "#{File.dirname(__FILE__)}/../../test_helper"
 
+include_fixture_resources
+
 class BaseTestClass < PoolParty::Base  
   default_options :a => "a", :d => "dump"
 end
@@ -29,6 +31,17 @@ class BaseTest < Test::Unit::TestCase
   
   def test_resource_graph
     assert_equal GRATR::Digraph, inst.resources_graph.class
+  end
+  
+  def test_instantiation
+    PoolParty::Resource.define_resource_methods
+    assert_equal "string_name", FakeResource.new.has_tester("string_name").name
+    assert_equal "opts_name", FakeResource.new.has_tester(:name => "opts_name").name
+    i = FakeResource.new
+    i.has_tester do 
+      self.name "block_name"
+    end
+    assert_equal "block_name", i.testers.first.name
   end
   
 end
