@@ -102,7 +102,7 @@ module CloudProviders
             FileUtils.cp_r d, cloud.tmp_path/cloud.base_config_directory
           end
         end
-        FileUtils.cp cloud.clouds_dot_rb_file, cloud.tmp_path/"/etc/poolparty/"
+        FileUtils.cp cloud.clouds_dot_rb_file, cloud.tmp_path/"/etc/poolparty/clouds.rb"
       end
       # Determine the os
       # Default to ubuntu

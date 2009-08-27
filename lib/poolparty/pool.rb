@@ -152,7 +152,7 @@ module PoolParty
     #   + sets up the log
     def self.before_file_load(filepath)
       $:.unshift(::File.dirname(filepath))
-      Dir["#{ ::File.dirname(filepath)}/plugins/*"].each do |plugin_path| 
+      Dir["#{ ::File.dirname(filepath)}/{plugins,lib}/**/*"].each do |plugin_path| 
         if File.directory?(plugin_path)
           $:.unshift(plugin_path)
           require "#{plugin_path}/#{File.basename(plugin_path)}"
