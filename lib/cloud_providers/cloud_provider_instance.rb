@@ -66,13 +66,15 @@ module CloudProviders
         bootstrap! unless bootstrapped?
         callback :before_configure
         raise StandardError.new("You must pass in a cloud to configure an instance") unless cloud
-        cloud.compile(self)
+        cloud.compile(self)        
+        
         scp(:source       => keypair.full_filepath, 
             :destination  => "/etc/poolparty/keys/#{keypair.basename}")
-        script_file = Provision::Bootstrapper.configure_script(cloud, os)
+        # script_file = Provision::Bootstrapper.configure_script(cloud, os)
         
         FileUtils.mkdir_p cloud.tmp_path/"etc"/"poolparty" unless File.directory?(cloud.tmp_path/"etc"/"poolparty")
-        FileUtils.cp script_file, cloud.tmp_path/"etc"/"poolparty"
+        pack_clouds_dot_rb_and_expected_directories
+        # FileUtils.cp script_file, cloud.tmp_path/"etc"/"poolparty"
         
         rsync(:source => cloud.tmp_path/"*", :destination => "/")
         run("chmod +x /etc/poolparty/#{File.basename(script_file)}; /bin/sh /etc/poolparty/#{File.basename(script_file)}").chomp
@@ -95,6 +97,16 @@ module CloudProviders
       end
       alias :platform :os  # Chef uses platform, aliased for conveneince
       
+      def pack_clouds_dot_rb_and_expected_directories
+        %w(lib plugins).each do |dir|
+          if File.directory?(d = cloud.clouds_dot_rb_dir/dir)
+            path = cloud.tmp_path/cloud.base_config_directory/"#{dir}"
+            FileUtils.mkdir_p path
+            FileUtils.cp_r d, path
+          end
+        end
+        FileUtils.cp cloud.clouds_dot_rb_file, cloud.tmp_path/"/etc/poolparty/"
+      end
       # Determine the os
       # Default to ubuntu
       # Send the determine_os.sh script to the node and run it remotely
