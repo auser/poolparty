@@ -16,3 +16,12 @@ pool "poolparty" do
   end
 
 end
+
+# hermes
+# want to be able to run cloud configure to update it
+# but want to be able to pull from locally to configure it
+# submodules?  
+# node name
+# install path
+# how to upload the escript target system
+# how to upload the tar.gz of the release
