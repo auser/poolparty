@@ -157,14 +157,16 @@ PassengerRuby <%= @node[:languages][:ruby][:ruby_bin] %>
       end
       
       def install_site(name, opts={})
-        opts.merge!(:name => "/etc/apache2/sites-available/#{name}")
+        sitename = name
+
+        opts.merge!(:name => "/etc/apache2/sites-available/#{sitename}")
         has_directory(:name => "/etc/apache2/sites-available")
         has_file(opts) unless opts[:no_file]
-        has_exec(:name => "/usr/sbin/a2ensite #{name}") do
+        has_exec(:name => "/usr/sbin/a2ensite #{sitename}") do
           notifies get_exec("reload-apache2"), :run
           requires get_exec("reload-apache2")
-          requires get_file("/etc/apache2/sites-available/#{name}")
-          not_if "/bin/sh -c '[ -L /etc/apache2/sites-enabled/#{name} ] && [ /etc/apache2/sites-enabled/#{name} -ef /etc/apache2/sites-available/#{name} ]'"
+          requires get_file("/etc/apache2/sites-available/#{sitename}")
+          not_if "/bin/sh -c '[ -L /etc/apache2/sites-enabled/#{sitename} ] && [ /etc/apache2/sites-enabled/#{sitename} -ef /etc/apache2/sites-available/#{sitename} ]'"
         end
       end
       
