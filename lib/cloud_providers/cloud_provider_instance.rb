@@ -70,14 +70,12 @@ module CloudProviders
         
         scp(:source       => keypair.full_filepath, 
             :destination  => "/etc/poolparty/keys/#{keypair.basename}")
-        # script_file = Provision::Bootstrapper.configure_script(cloud, os)
         
         FileUtils.mkdir_p cloud.tmp_path/"etc"/"poolparty" unless File.directory?(cloud.tmp_path/"etc"/"poolparty")
         pack_clouds_dot_rb_and_expected_directories
-        # FileUtils.cp script_file, cloud.tmp_path/"etc"/"poolparty"
         
+        dputs("Rsyncing #{cloud.tmp_path/"*"}")
         rsync(:source => cloud.tmp_path/"*", :destination => "/")
-        run("chmod +x /etc/poolparty/#{File.basename(script_file)}; /bin/sh /etc/poolparty/#{File.basename(script_file)}").chomp
         run(cloud.dependency_resolver.compile_command)
         callback :after_configure
       end
@@ -100,9 +98,8 @@ module CloudProviders
       def pack_clouds_dot_rb_and_expected_directories
         %w(lib plugins).each do |dir|
           if File.directory?(d = cloud.clouds_dot_rb_dir/dir)
-            path = cloud.tmp_path/cloud.base_config_directory/"#{dir}"
-            FileUtils.mkdir_p path
-            FileUtils.cp_r d, path
+            dputs("Adding local path: #{d}")
+            FileUtils.cp_r d, cloud.tmp_path/cloud.base_config_directory
           end
         end
         FileUtils.cp cloud.clouds_dot_rb_file, cloud.tmp_path/"/etc/poolparty/"
