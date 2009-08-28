@@ -36,7 +36,7 @@ module PoolParty
           {:command => "grep -q \'#{line.safe_quote}\' #{filepath} || echo \'#{line.safe_quote}\' >> #{filepath}",
           :not_if => "grep -q \'#{line.safe_quote}\' #{filepath}"}
         else
-          {:command => "cat #{filepath} | grep -v \'#{line.safe_quote}\' > temptfile && mv tempfile #{filepath}",
+          {:command => "cat #{filepath} | grep -v \'#{line.safe_quote}\' > tempfile && mv tempfile #{filepath}",
           :only_if => "grep -q \'#{line.safe_quote}\' #{filepath}"}
         end        
         
