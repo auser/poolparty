@@ -33,7 +33,7 @@ module PoolParty
         :value => nil
       )
       
-      def initialize(k, v=nil)
+      def initialize(k, v=nil, exists=true)
         case k
         when Hash
           super
@@ -41,7 +41,7 @@ module PoolParty
           if value.is_a?(Hash)
             super(v.merge(:name => k))
           else
-            super(:name => k, :value => v)
+            super({:name => k, :value => v})
           end
         end
       end

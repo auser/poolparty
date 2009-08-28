@@ -1,7 +1,7 @@
 module PoolParty
   class Resource < Base
     
-    attr_reader :exists
+    attr_accessor :exists
     attr_accessor :meta_notifies, :meta_not_if, :meta_only_if, :meta_subscribes
     attr_accessor :graph_index
     
@@ -12,9 +12,9 @@ module PoolParty
       :provider       => nil
     )
     
-    def initialize(opts={}, extra_opts={}, &block)
-      @exists = true
-      super
+    def initialize(opts={}, extra_opts={}, exists=true, &block)
+      @exists ||= exists
+      super(opts, extra_opts, &block)
       valid?
     end
     
@@ -88,7 +88,10 @@ module PoolParty
     # Should this resource exist on the remote systems
     # which is a lookup of the instance variable 
     # on the instance of the resource
-    # The default is that the resource DOES exist    
+    # The default is that the resource DOES exist
+    def exists(n=nil)
+      @exists
+    end
     alias :exists? :exists
     
     # The resource exists in the output and should be created
@@ -172,15 +175,13 @@ module PoolParty
     # PoolParty classes that use Base
     def self.define_resource(res)
       Base.class_eval <<-EOE
-        def has_#{res.has_method_name}(a={},b={},&block)
-          obj = #{res}.new(a,b,&block)
-          obj.exists!
+        def has_#{res.has_method_name}(a={},b={},e=true, &block)
+          obj = #{res}.new(a,b,e,&block)
           resources << obj
           obj
         end
         def does_not_have_#{res.has_method_name}(a={},b={},&block)
-          obj = has_#{res.has_method_name}(a,b,&block)
-          obj.does_not_exist!
+          obj = has_#{res.has_method_name}(a,b,false,&block)
           obj
         end
         def #{res.has_method_name}s

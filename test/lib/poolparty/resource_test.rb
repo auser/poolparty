@@ -48,6 +48,11 @@ class ResourceTest < Test::Unit::TestCase
     assert_equal "real", parent.testers[1].name
   end
   
+  def test_does_not_have_a_resource_call
+    o = @inst.does_not_have_tester "bob"
+    assert !@inst.testers.last.exists?
+  end
+  
   context "print_to methods" do
     setup do
       @inst = FakeResource.new
