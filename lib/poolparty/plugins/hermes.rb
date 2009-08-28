@@ -53,7 +53,7 @@ module PoolParty
       end
 
       def run_if_needed
-        has_exec "#{remote_hermes_deployed_dir}/bin/erl -boot #{remote_hermes_deployed_dir}/releases/#{hermes_release_version}/start -noshell -detached", 
+        has_exec "env GEN_CLUSTER_SEED_CONFIG=/etc/poolparty/seeds.conf #{remote_hermes_deployed_dir}/bin/erl -boot #{remote_hermes_deployed_dir}/releases/#{hermes_release_version}/start -noshell -detached", 
           :not_if => "ps aux | grep -v grep | grep hermes | grep beam"
       end
 

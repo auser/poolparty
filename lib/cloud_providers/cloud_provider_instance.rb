@@ -99,7 +99,7 @@ module CloudProviders
         %w(lib plugins).each do |dir|
           if File.directory?(d = cloud.clouds_dot_rb_dir/dir)
             dputs("Adding local path: #{d}")
-            FileUtils.cp_r d, cloud.tmp_path/cloud.base_config_directory
+            FileUtils.cp_r d, cloud.tmp_path/cloud.base_config_directory, :verbose => true, :remove_destination => true # req'd for symlinks
           end
         end
         FileUtils.cp cloud.clouds_dot_rb_file, cloud.tmp_path/"/etc/poolparty/clouds.rb"
