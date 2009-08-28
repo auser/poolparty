@@ -155,7 +155,11 @@ module PoolParty
       Dir["#{ ::File.dirname(filepath)}/{plugins,lib}/**/*"].each do |plugin_path| 
         if File.directory?(plugin_path)
           $:.unshift(plugin_path)
-          require "#{plugin_path}/#{File.basename(plugin_path)}"
+
+          ["#{plugin_path}/#{File.basename(plugin_path)}", "#{plugin_path}/lib/#{File.basename(plugin_path)}"].each do |potential|
+            require potential if File.exists?(potential)
+          end
+
         elsif File.file?(plugin_path) && plugin_path.match(/.rb$/)
           require plugin_path
         end
