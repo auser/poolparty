@@ -9,20 +9,6 @@ module PoolParty
       default_options(
         :name => nil
       )
-      
-      # def after_loaded
-        # has_exec(:name => "git-#{name}", :creates => creates_dir ) do
-        #   # Cloud, GitRepos, Exec
-        #   if requires_user
-        #     command("git clone #{requires_user}@#{repository} #{dir}")
-        #   else
-        #     command("cd #{dir} && git clone #{repository}")
-        #   end
-        #
-        #   cwd "#{dir if dir}"          
-        #   requires get_directory("#{dir}")
-        # end
-      # end
 
       def after_loaded
         add_unpack
@@ -45,11 +31,20 @@ module PoolParty
       end
 
       def build_rsync_directory
-        p cloud.tmp_path
         hermes_dir = cloud.tmp_path + "/tmp/hermes"
         FileUtils.mkdir_p(hermes_dir)
         FileUtils.cp(hermes_release_tar_gz, hermes_dir)
         FileUtils.cp(target_system_file, hermes_dir)
+        build_nodes_config
+      end
+
+      # write out a conf file listing all of the seed nodes based on the nodes in the cluster
+      def build_nodes_config
+        etc_poolparty = cloud.tmp_path + "/etc/poolparty"
+        FileUtils.mkdir_p(etc_poolparty)
+        node_names = cloud.nodes.collect{|n| n.internal_ip || n.dns_name}.compact.collect{|n| "hermes@#{n}"}
+        contents = node_names.collect{|n| %Q{"#{n}".}}.join("\n")
+        File.open(etc_poolparty + "/seeds.conf", "w") {|f| f.puts contents}
       end
 
       def add_unpack
