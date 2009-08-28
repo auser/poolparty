@@ -30,7 +30,7 @@ end
     s.files.exclude "**/*/erl_crash.dump"
     
     s.has_rdoc = true
-    s.extra_rdoc_files = ["README.txt", "License.txt", 'History.txt']
+    s.extra_rdoc_files = ["README.rdoc", "License.txt", 'History.txt']
     s.require_paths = ["lib"]
     s.rdoc_options = ['--quiet', '--title', 'PoolParty documentation',
         # "index.html",
