@@ -39,8 +39,8 @@ end
 
 # Generate documentation
 Rake::RDocTask.new do |rd|
-  rd.main = "Readme.txt"
-  rd.rdoc_files.include("Readme.txt", "lib/**/*.rb")
+  rd.main = "README.rdoc"
+  rd.rdoc_files.include("README.rdoc", "lib/**/*.rb")
   rd.rdoc_dir = "rdoc"
   # rd.template = "hanaa"
 end
