@@ -10,7 +10,7 @@ pool "poolparty" do
       image_id 'emi-39CA160F'
     end
     
-    monitor :cpu do |c|
+    monitor :'cpu-idle' do |c|
       vote_for(:expand) if c > 0.9
       vote_for(:contract) if c < 0.1
     end

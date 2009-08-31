@@ -27,6 +27,8 @@ module PoolParty
     end
     
     def before_compile
+      add_monitoring_stack_if_needed
+      
       validate_all_resources
     end
     
@@ -174,6 +176,19 @@ module PoolParty
       when :chef, nil
         dsl_options[:dependency_resolver_name] = :chef
         DependencyResolvers::Chef
+      end
+    end
+    
+    # Add the monitoring stack
+    def add_monitoring_stack_if_needed
+      if monitors.size > 0
+        
+        run_in_context do
+          %w(collectd hermes).each do |m|
+            self.send m.to_sym
+          end
+        end
+        
       end
     end
     

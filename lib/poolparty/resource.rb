@@ -180,8 +180,8 @@ module PoolParty
           resources << obj
           obj
         end
-        def does_not_have_#{res.has_method_name}(a={},b={},&block)
-          obj = has_#{res.has_method_name}(a,b,false,&block)
+        def does_not_have_#{res.has_method_name}(a={},b={},e=false,&block)
+          obj = has_#{res.has_method_name}(a,b,e,&block)
           obj
         end
         def #{res.has_method_name}s

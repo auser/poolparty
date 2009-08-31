@@ -3,7 +3,7 @@ module PoolParty
   
     class Collectd < Resource
       
-      PoolParty::Resources::FileResource.has_searchable_paths(:prepend_paths=> [File.dirname(__FILE__)+'/templates'])
+      PoolParty::Resources::FileResource.has_searchable_paths(:prepend_paths=> [File.dirname(__FILE__)+'/collectd/templates'])
       
       def after_loaded
         has_package 'collectd'
@@ -12,7 +12,7 @@ module PoolParty
         }
         has_gem_package "astro-collectd"
         
-        has_variable 'server', cloud.nodes.first.name
+        has_variable 'server', "localhost"
         has_file '/etc/collectd/collectd.conf' do
           template 'collectd.conf.erb'
         end
