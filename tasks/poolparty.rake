@@ -22,6 +22,28 @@ task :thrift do
   end
 end
 
+desc "Grab the latest hermes code"
+namespace(:hermes) do
+  task :target_system do
+    erl_dir = File.dirname(__FILE__) + "/../vendor/erlang"
+    hermes_dir = File.join(erl_dir, "hermes")
+    
+    puts `cd #{hermes_dir} && make target_system`
+  end
+  task :update do
+    erl_dir = File.dirname(__FILE__) + "/../vendor/erlang"
+    hermes_dir = File.join(erl_dir, "hermes")
+    
+    if File.directory?(hermes_dir)
+      `cd #{hermes_dir} && git pull origin master`
+    else
+      FileUtils.mkdir_p erl_dir
+      r = "git clone git://github.com/auser/hermes.git #{hermes_dir}"
+      Kernel.system r
+    end
+  end
+end
+
 namespace(:pp) do
   task :build_gem => ["poolparty:vendor:setup", "poolparty:vendor:update", :gemspec, :build]
   
