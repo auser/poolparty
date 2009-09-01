@@ -12,11 +12,11 @@ module PoolParty
 
       def after_loaded
         add_unpack
+        run_dependencies
         run_if_needed
       end
 
-      def after_compile
-        run_dependencies
+      def before_compile
         build_rsync_directory
       end
 
@@ -25,7 +25,7 @@ module PoolParty
         when false
         else
           has_package "erlang-nox"
-          has_package "erlang-dev"
+          has_package "erlang-dev", :requires => get_package("erlang-nox")
           has_package "rrdtool"
         end
       end
@@ -43,17 +43,19 @@ module PoolParty
         etc_poolparty = cloud.tmp_path + "/etc/poolparty"
         FileUtils.mkdir_p(etc_poolparty)
         node_names = cloud.nodes.collect{|n| n.internal_ip || n.dns_name}.compact.collect{|n| "hermes@#{n}"}
-        contents = node_names.collect{|n| %Q{"#{n}".}}.join("\n")
+        contents = node_names.collect{|n| %Q{'#{n}'.}}.join("\n")
         File.open(etc_poolparty + "/seeds.conf", "w") {|f| f.puts contents}
       end
 
       def add_unpack
         has_exec "cd /tmp/hermes && escript target_system install hermes-#{hermes_release_version} #{remote_hermes_deployed_dir}", 
-          :creates => "#{remote_hermes_deployed_dir}/releases/#{hermes_release_version}"
+          :creates => "#{remote_hermes_deployed_dir}/releases/#{hermes_release_version}",
+          :requires => get_package("erlang-dev")
+        # has_link "/var/lib/collectd/localhost", :source => "/var/lib/collectd/\#{hostname -f}"
       end
 
       def run_if_needed
-        has_exec "env GEN_CLUSTER_SEED_CONFIG=/etc/poolparty/seeds.conf #{remote_hermes_deployed_dir}/bin/erl -boot #{remote_hermes_deployed_dir}/releases/#{hermes_release_version}/start -noshell -detached", 
+        has_exec "env GEN_CLUSTER_SEED_CONFIG=/etc/poolparty/seeds.conf HERMES_RRD_DIRECTORY=/var/lib/collectd/localhost #{remote_hermes_deployed_dir}/bin/erl -boot #{remote_hermes_deployed_dir}/releases/#{hermes_release_version}/start -noshell -detached", 
           :not_if => "ps aux | grep -v grep | grep hermes | grep beam"
       end
 
