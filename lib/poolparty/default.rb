@@ -11,6 +11,7 @@ module PoolParty
     default_options(
       :user => "root",
       :os => :ubuntu,
+      :ssh_port => 22,
       :tmp_path => "/tmp/poolparty",
       :poolparty_home_path => "#{ENV["HOME"]}/.poolparty",
       :ec2_home => "#{ENV["HOME"]}/.ec2",

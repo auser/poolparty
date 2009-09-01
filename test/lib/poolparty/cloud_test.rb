@@ -121,6 +121,20 @@ class CloudTest < Test::Unit::TestCase
     # assert_equal size-1, clouds['app'].nodes.size
   end
   
+  def test_change_ssh_port
+    clear!
+    pool "ssh_port" do
+      cloud "babity" do
+        ssh_port 1922
+      end
+      cloud "noneity" do
+      end
+    end
+    assert_equal 1922, clouds["babity"].ssh_port
+    assert_equal 22, clouds["noneity"].ssh_port
+  end
+  
+  
   def test_children_getting_parent_options
     clear!
     pool "outside" do
