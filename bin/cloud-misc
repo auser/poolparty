@@ -1,0 +1,34 @@
+#!/usr/bin/env ruby
+$:.unshift(File.dirname(__FILE__) + "/../lib")
+require "poolparty"
+
+require 'git-style-binary/command'
+
+GitStyleBinary.command do
+  banner <<-EOS
+Usage: #{$0} #{all_options_string}
+
+  read the code 
+EOS
+
+  short_desc "various cloud development tasks"
+  
+  opt :inst_num, "The number of the instance to run bootstrap on", :type => :int
+  opt :force, "Force rebootstrapping (useful for upgrading)", :default => false
+
+  run do |command|
+    @loaded_clouds.each do |cld|
+      cld.nodes.each do |node|
+
+        case command.argv.shift
+        when "deploy_hermes"
+          hermesdir = File.dirname(__FILE__) + "/../vendor/erlang/hermes"
+          release = `#{hermesdir}/scripts/most_recent_release tar.gz`.strip
+          node.scp(:source => release, :destination => "/var/poolparty/tmp")
+          node.scp(:source => "#{hermesdir}/scripts/target_system", :destination => "/var/poolparty/tmp")
+        end
+
+      end
+    end
+  end
+end

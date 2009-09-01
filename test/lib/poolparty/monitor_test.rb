@@ -3,14 +3,14 @@ require "#{File.dirname(__FILE__)}/../../test_helper"
 class MonitorTest < Test::Unit::TestCase
   
   def setup
-    @mon = PoolParty::Monitor.new(:cpu) do |c|
+    @mon = PoolParty::Monitor.new(:'cpu-idle') do |c|
       vote_for(:expand) if c > 0.8
       configure if c < 0.1
     end
   end
   
   def test_monitor_initialize    
-    assert_equal @mon.name, :cpu
+    assert_equal @mon.name, :'cpu-idle'
     assert_equal Proc, @mon.monitor_block.class
   end
   

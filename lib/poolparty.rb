@@ -43,7 +43,9 @@ require "poolparty/pool_party_error"
     hash
     symbol
     proc
-    time).each do |lib|
+    time
+    file
+  ).each do |lib|
   require "core/#{lib}"
 end
 

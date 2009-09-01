@@ -3,7 +3,7 @@
 $:.unshift(File.dirname(__FILE__) + "/../../lib")
 $:.unshift(File.dirname(__FILE__) + "/../../examples")
 require "poolparty"
-require "simple"
+# require "simple"
 
 $:.unshift("#{File.dirname(__FILE__)}/../../lib/proto/gen-rb")
 
@@ -15,6 +15,7 @@ require "poolparty_types"
 port = ARGV.pop || 11223
 
 transport = Thrift::BufferedTransport.new(Thrift::Socket.new('localhost', port))
+# transport = Thrift::BufferedTransport.new(Thrift::Socket.new('vm', port))
 protocol = Thrift::BinaryProtocol.new(transport)
 
 client = CloudThrift::CommandInterface::Client.new(protocol)
@@ -22,6 +23,7 @@ transport.open()
 
 cld = CloudThrift::CloudQuery.new
 cld.name = 'monitored_app'
+# cld.name = 'vmware'
 
 resp = client.run_command(cld, "name", [])
 puts resp.response
@@ -29,8 +31,8 @@ puts resp.response
 resp = client.run_command(cld, "maximum_instances", [])
 puts resp.response
 
-resp = client.run_command(cld, "run_monitor", ["cpu", "0.91"])
+resp = client.run_command(cld, "run_monitor", ["cpu-idle", "0.91"])
 p resp.response
 
-resp = client.run_command(cld, "run_monitor", ["cpu", "0.01"])
+resp = client.run_command(cld, "run_monitor", ["cpu-idle", "0.01"])
 p resp.response

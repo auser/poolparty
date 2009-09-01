@@ -27,6 +27,8 @@ module PoolParty
     end
     
     def before_compile
+      add_monitoring_stack_if_needed
+      
       validate_all_resources
     end
     
@@ -61,7 +63,7 @@ module PoolParty
     end
     
     # Cloud provider methods
-    def nodes(o={}); delayed_action {cloud_provider.nodes(o)}; end
+    def nodes(o={}); delayed_action {cloud_provider.nodes(o).collect{|n| n.cloud = self; n}}; end
     def run_instance(o={}); cloud_provider.run_instance(o);end
     def terminate_instance!(o={}); cloud_provider.terminate_instance!(o);end
     def describe_instances(o={}); cloud_provider.describe_instances(o);end
@@ -87,7 +89,7 @@ module PoolParty
     
     # 1.) Launches a new instance,
     # 2.) Waits for the instance to get an ip address
-    # 3.) Waits for port 22 to be open
+    # 3.) Waits for port ssh_port to be open
     # 4.) Calls call_after_launch_instance callbacks
     # 5.) Executes passed &block, if any
     # 6.) Returns the new instance object
@@ -98,7 +100,7 @@ module PoolParty
       instance.cloud = self
       @instance = instance
       #wait for an ip and then wait for ssh port, then configure instance
-      if instance.wait_for_public_ip(timeout) && instance.wait_for_port(22, :timeout=>timeout)
+      if instance.wait_for_public_ip(timeout) && instance.wait_for_port(ssh_port, :timeout=>timeout)
         callback :after_launch_instance
         instance.callback :before_bootstrap
         instance.bootstrap!
@@ -109,7 +111,7 @@ module PoolParty
         block.call(instance) if block
         instance
       else
-         raise StandardError.new("Instance port 22 not available")
+         raise StandardError.new("Instance port #{ssh_port} not available")
       end
       instance.refresh!
       instance
@@ -174,6 +176,19 @@ module PoolParty
       when :chef, nil
         dsl_options[:dependency_resolver_name] = :chef
         DependencyResolvers::Chef
+      end
+    end
+    
+    # Add the monitoring stack
+    def add_monitoring_stack_if_needed
+      if monitors.size > 0
+        
+        run_in_context do
+          %w(collectd hermes).each do |m|
+            self.send m.to_sym
+          end
+        end
+        
       end
     end
     
