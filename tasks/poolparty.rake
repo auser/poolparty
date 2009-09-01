@@ -22,14 +22,16 @@ task :thrift do
   end
 end
 
-desc "Grab the latest hermes code"
 namespace(:hermes) do
+  
+  desc "Pack for distribution"
   task :target_system do
     erl_dir = File.dirname(__FILE__) + "/../vendor/erlang"
     hermes_dir = File.join(erl_dir, "hermes")
     
     puts `cd #{hermes_dir} && make target_system`
   end
+  desc "Update hermes code"
   task :update do
     erl_dir = File.dirname(__FILE__) + "/../vendor/erlang"
     hermes_dir = File.join(erl_dir, "hermes")

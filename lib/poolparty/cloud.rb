@@ -100,7 +100,7 @@ module PoolParty
       instance.cloud = self
       @instance = instance
       #wait for an ip and then wait for ssh port, then configure instance
-      if instance.wait_for_public_ip(timeout) && instance.wait_for_port(22, :timeout=>timeout)
+      if instance.wait_for_public_ip(timeout) && instance.wait_for_port(ssh_port, :timeout=>timeout)
         callback :after_launch_instance
         instance.callback :before_bootstrap
         instance.bootstrap!
@@ -196,12 +196,14 @@ module PoolParty
     # the defined (or the default dependency_resolver, chef)
     def compile(caller=nil)
       callback :before_compile
+      cloud_provider.before_compile(self)
       FileUtils.mkdir_p tmp_path unless File.directory?(tmp_path)
       ddputs <<-EOE
 Compiling cloud #{self.name} to #{tmp_path/"etc"/"#{dependency_resolver_name}"} 
   number of resources: #{ordered_resources.size}
       EOE
       out = dependency_resolver.compile_to(ordered_resources, tmp_path/"etc"/"#{dependency_resolver_name}", caller)
+      cloud_provider.after_compile(self)
       callback :after_compile
       out
     end

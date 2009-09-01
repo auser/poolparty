@@ -75,7 +75,7 @@ module CloudProviders
         FileUtils.mkdir_p cloud.tmp_path/"etc"/"poolparty"/"keys" unless File.directory?(cloud.tmp_path/"etc"/"poolparty"/"keys")
         
         FileUtils.cp keypair.full_filepath, cloud.tmp_path/"etc"/"poolparty"/"keys"/keypair.basename
-        save_aws_env_to_yml(cloud.tmp_path/"etc"/"poolparty")
+        File.open(cloud.tmp_path/"etc"/"poolparty"/"cloud_name", "w") {|f| f << cloud.name }
         
         pack_clouds_dot_rb_and_expected_directories
         

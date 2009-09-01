@@ -62,6 +62,7 @@ module CloudProviders
     def self.load_keys_from_file(filename='/etc/poolparty/ec2/aws.yml', caching=true)
       return @aws_yml if @aws_yml && caching==true
       return {} unless File.exists?(filename)
+      ddputs("Reading keys from file: #{filename}")
       @aws_yml = YAML::load( open(filename).read )
     end
     
@@ -93,7 +94,7 @@ module CloudProviders
       
       
     def ec2(o={})
-      @ec2 ||= Rightscale::Ec2.new(access_key, secret_access_key, o.merge(:logger => PoolParty::PoolPartyLog))
+      @ec2 ||= Rightscale::Ec2.new(access_key, secret_access_key, o.merge(:logger => PoolParty::PoolPartyLog, :default_host => ec2_url))
     end
     
     # Start a new instance with the given options
@@ -153,16 +154,24 @@ module CloudProviders
        ].include?(ec2_url)
     end
     
+    # Callbacks
+    def before_compile(cld)
+    end
+    
+    def after_compile(cld)
+      save_aws_env_to_yml(cld.tmp_path/"etc"/"poolparty"/"ec2"/"aws.yml")
+    end
+    
     # Read  yaml file and use it to set environment variables and local variables.
-    def set_aws_env_from_yml_file(filename='/etc/poolparty/env.yml')
+    def set_aws_env_from_yml_file(filename='/etc/poolparty/ec2/aws.yml')
       aws = self.class.load_keys_from_file(filename)
       aws.each{|k,v| ENV[k.upcase]=v.to_s}
       set_vars_from_options aws
     end
     
     # Save aws keys and env variables to a yaml file
-    def save_aws_env_to_yml(filename='/etc/poolparty/aws.yml')
-      File.open(filename, 'w') {|f| f<<YAML::dump(aws_hash) }
+    def save_aws_env_to_yml(filename='/etc/poolparty/ec2/aws.yml')
+      File.open(filename, 'w') {|f| f<<YAML::dump(aws_hash) } rescue nil
     end
     
     # Return a hash of the aws keys and environment variables
