@@ -38,7 +38,11 @@ module PoolParty
         else
           {:command => "cat #{filepath} | grep -v \'#{line.safe_quote}\' > tempfile && mv tempfile #{filepath}",
           :only_if => "grep -q \'#{line.safe_quote}\' #{filepath}"}
-        end        
+        end
+        
+        if f = get_file(filepath)
+          opts.merge!(:requires => f)
+        end
         
         opts.merge!(:name => exists? ? "line in #{filepath}" : "no line in #{filepath}")
         
