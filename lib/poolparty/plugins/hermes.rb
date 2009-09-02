@@ -43,7 +43,7 @@ module PoolParty
         etc_poolparty = cloud.tmp_path + "/etc/poolparty"
         FileUtils.mkdir_p(etc_poolparty)
         node_names = cloud.nodes.collect{|n| n.internal_ip || n.dns_name}.compact.collect{|n| "hermes@#{n}"}
-        contents = node_names.collect{|n| %Q{"#{n}".}}.join("\n")
+        contents = node_names.collect{|n| %Q{'#{n}'.}}.join("\n")
         File.open(etc_poolparty + "/seeds.conf", "w") {|f| f.puts contents}
       end
 
