@@ -8,13 +8,13 @@ class CommandInterfaceHandler
       the_cloud = clouds[cld.name]
       if the_cloud
         if command.include?(".")
-          command.split(".").inject([]) do |sum, cmd|
+          command.split(".").inject(the_cloud) do |curr_cloud, cmd|
             if cmd.match(/\((.*)\)/)
               args = $1
               new_cmd = cmd.gsub(args, '').gsub(/\(\)/, '')
-              sum = arr.send(new_cmd.to_sym, *args)
+              curr_cloud = curr_cloud.send(new_cmd.to_sym, *args)
             else
-              sum = arr.send(cmd)
+              curr_cloud = curr_cloud.send(cmd)
             end
           end
         else
