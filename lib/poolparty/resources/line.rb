@@ -40,10 +40,6 @@ module PoolParty
           :only_if => "grep -q \'#{line.safe_quote}\' #{filepath}"}
         end
         
-        if f = get_file(filepath)
-          opts.merge!(:requires => f)
-        end
-        
         opts.merge!(:name => exists? ? "line in #{filepath}" : "no line in #{filepath}")
         
         e = has_exec opts
