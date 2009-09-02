@@ -171,7 +171,7 @@ module CloudProviders
     
     # Save aws keys and env variables to a yaml file
     def save_aws_env_to_yml(filename='/etc/poolparty/env.yml')
-      File.open(filename, 'w') {|f| f<<YAML::dump(aws_hash) } rescue nil
+      File.open(filename, 'w') {|f| f<<YAML::dump(aws_hash(dsl_options, "/etc/poolparty/ec2")) } rescue nil
     end
     
     # Return a hash of the aws keys and environment variables

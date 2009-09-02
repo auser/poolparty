@@ -60,11 +60,11 @@ module CloudProviders
       cloud opts[:cloud] if opts[:cloud]
       raise StandardError.new("cloud is not defined.  It must be defined to run configure on the instance") unless cloud
       vputs "configuring ec2 instance #{instance_id}."
-      ec2_dir = "/etc/poolparty"
+      ec2_dir = "/etc/poolparty/ec2"
       FileUtils.mkdir_p(cloud.tmp_path/ec2_dir) unless File.directory?(cloud.tmp_path/ec2_dir)
       run ["mkdir -p #{ec2_dir}"]
       # Save a yaml file of aws varibles and send to the instance
-      File.open(cloud.tmp_path/ec2_dir/'env.yml', 'w') do |f|
+      File.open(cloud.tmp_path/"etc"/"poolparty"/'env.yml', 'w') do |f|
         f<<YAML::dump(cloud_provider.aws_hash(ec2_dir))  #TODO: don't save sensitive info in /tmp
       end
       # We scp these files directly to the instance so to reduce the risk of accidentally leaving them in an insecure location
