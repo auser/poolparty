@@ -25,13 +25,13 @@ require "#{File.dirname(__FILE__)}/ec2_instance"
 module CloudProviders
   class Ec2 < CloudProvider
     
-    # Set the aws keys from the environment, or load from /etc/poolparty/aws.yml if the environment variable is not set
+    # Set the aws keys from the environment, or load from /etc/poolparty/env.yml if the environment variable is not set
     def self.default_access_key
       ENV['EC2_ACCESS_KEY'] || load_keys_from_file[:access_key]
     end
     
     def self.default_secret_access_key
-      ENV['EC2_SECRET_KEY'] || load_keys_from_file[:access_key]
+      ENV['EC2_SECRET_KEY'] || load_keys_from_file[:secret_access_key]
     end
     
     def self.default_private_key
@@ -59,7 +59,7 @@ module CloudProviders
     end
     
     # Load the yaml file containing keys.  If the file does not exist, return an empty hash
-    def self.load_keys_from_file(filename='/etc/poolparty/ec2/aws.yml', caching=true)
+    def self.load_keys_from_file(filename='/etc/poolparty/env.yml', caching=true)
       return @aws_yml if @aws_yml && caching==true
       return {} unless File.exists?(filename)
       ddputs("Reading keys from file: #{filename}")
@@ -159,18 +159,18 @@ module CloudProviders
     end
     
     def after_compile(cld)
-      save_aws_env_to_yml(cld.tmp_path/"etc"/"poolparty"/"ec2"/"aws.yml")
+      save_aws_env_to_yml(cld.tmp_path/"etc"/"poolparty"/"env.yml")
     end
     
     # Read  yaml file and use it to set environment variables and local variables.
-    def set_aws_env_from_yml_file(filename='/etc/poolparty/ec2/aws.yml')
+    def set_aws_env_from_yml_file(filename='/etc/poolparty/env.yml')
       aws = self.class.load_keys_from_file(filename)
       aws.each{|k,v| ENV[k.upcase]=v.to_s}
       set_vars_from_options aws
     end
     
     # Save aws keys and env variables to a yaml file
-    def save_aws_env_to_yml(filename='/etc/poolparty/ec2/aws.yml')
+    def save_aws_env_to_yml(filename='/etc/poolparty/env.yml')
       File.open(filename, 'w') {|f| f<<YAML::dump(aws_hash) } rescue nil
     end
     
