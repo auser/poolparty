@@ -52,13 +52,13 @@ module PoolParty
           :command => "cd /tmp/hermes && escript target_system install hermes-#{hermes_release_version} #{remote_hermes_deployed_dir}", 
           :creates => "#{remote_hermes_deployed_dir}/releases/#{hermes_release_version}",
           :requires => get_package("erlang-dev")
-        # has_link "/var/lib/collectd/localhost", :source => "/var/lib/collectd/\#{hostname -f}"
+        has_link :name => "collectd_dir", :source => "/var/lib/collectd/rrd/\#{`hostname -f`}", :to => "/var/lib/collectd/localhost/"
       end
 
       def run_if_needed
         has_exec "env GEN_CLUSTER_SEED_CONFIG=/etc/poolparty/seeds.conf HERMES_RRD_DIRECTORY=/var/lib/collectd/localhost #{remote_hermes_deployed_dir}/bin/erl -boot #{remote_hermes_deployed_dir}/releases/#{hermes_release_version}/start -noshell -detached", 
           :not_if => "ps aux | grep -v grep | grep hermes | grep beam",
-          :requires => get_exec("install_hermes")
+          :requires => [get_exec("install_hermes"), get_link("collectd_dir")]
       end
 
       private
