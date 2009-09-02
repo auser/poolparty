@@ -1,0 +1,40 @@
+8
+
+dir
+102
+http://mochiweb.googlecode.com/svn/trunk/support
+http://mochiweb.googlecode.com/svn
+
+
+
+2009-02-16T07:12:02.315957Z
+92
+bob.ippolito
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+583d1f64-3c3e-0410-8459-0f15fcd77d59
+
+include.mk
+file
+
+
+
+
+2009-07-01T18:47:05.000000Z
+41a315c3ade22cdc474299552b018f8c
+2009-02-16T07:12:02.315957Z
+92
+bob.ippolito
+
