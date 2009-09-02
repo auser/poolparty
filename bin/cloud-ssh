@@ -13,11 +13,14 @@ EOS
 
   short_desc "ssh into an instance of the cloud"
   
+  opt :instance_number, "Ssh into the instance number", :type => :integer, :default => 0
+  
   run do |command|
     cloud = @loaded_clouds.first
     
     if !cloud.nodes.empty?
-      cloud.nodes.first.ssh
+      inst = cloud.nodes[command[:instance_number]]
+      inst ? inst.ssh : puts("Error: The instance number (#{command[:instance_number]}) is too high for the current number of instances")
     else
       puts "No running instances can be found"
     end
