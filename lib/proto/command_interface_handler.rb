@@ -6,7 +6,23 @@ class CommandInterfaceHandler
     cr.command = command
     resp = begin
       the_cloud = clouds[cld.name]
-      the_cloud ? the_cloud.send(command.to_sym, *args) : "Cloud not found: #{cld.name}"
+      if the_cloud
+        if command.include?(".")
+          command.split(".").inject(the_cloud) do |curr_cloud, cmd|
+            if cmd.match(/\((.*)\)/)
+              args = $1
+              new_cmd = cmd.gsub(args, '').gsub(/\(\)/, '')
+              curr_cloud = curr_cloud.send(new_cmd.to_sym, *args)
+            else
+              curr_cloud = curr_cloud.send(cmd)
+            end
+          end
+        else
+          the_cloud.send(command.to_sym, *args)
+        end
+      else
+        "Cloud not found: #{cld.name}"
+      end
     rescue Exception => e
       cr.response = "Error: #{e.inspect}"
     end
