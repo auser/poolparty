@@ -26,7 +26,7 @@ end
 
     s.files = (%w(Rakefile README.rdoc License.txt VERSION.yml) + Dir["{config,examples,lib,test,tasks,script,generators,bin,vendor}/**/*"])
     
-    s.files.exclude '**/*.beam'
+    # s.files.exclude '**/*.beam'
     s.files.exclude "**/*/erl_crash.dump"
     
     s.has_rdoc = true
