@@ -89,7 +89,7 @@ module PoolParty
     
     # 1.) Launches a new instance,
     # 2.) Waits for the instance to get an ip address
-    # 3.) Waits for port 22 to be open
+    # 3.) Waits for port ssh_port to be open
     # 4.) Calls call_after_launch_instance callbacks
     # 5.) Executes passed &block, if any
     # 6.) Returns the new instance object
@@ -111,7 +111,7 @@ module PoolParty
         block.call(instance) if block
         instance
       else
-         raise StandardError.new("Instance port 22 not available")
+         raise StandardError.new("Instance port #{ssh_port} not available")
       end
       instance.refresh!
       instance

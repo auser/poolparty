@@ -27,7 +27,7 @@ You must pass a block with your monitor
     end
       EOE
       raise PoolPartyError.create("MonitorDefinitionError", msg) unless block
-      @name = monitor_name
+      @name = monitor_name.to_sym
       @monitor_block = block
     end
     
