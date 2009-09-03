@@ -151,17 +151,16 @@ module PoolParty
     #   + calls the resource define_resource_methods to define the resource methods
     #   + sets up the log
     def self.before_file_load(filepath)
-      $:.unshift(::File.dirname(filepath))
-      Dir["#{ ::File.dirname(filepath)}/{plugins,lib}/**/*"].each do |plugin_path| 
+      $:.unshift(File.dirname(filepath))
+      $:.unshift("#{File.dirname(filepath)}/lib")
+      $:.unshift("#{File.dirname(filepath)}/plugins")
+      
+      Dir["#{File.dirname(filepath)}/lib/*"].each {|lib_path| require lib_path }
+      Dir["#{File.dirname(filepath)}/plugins/*"].each do |plugin_path|
         if File.directory?(plugin_path)
           $:.unshift(plugin_path)
-
-          ["#{plugin_path}/#{File.basename(plugin_path)}", "#{plugin_path}/lib/#{File.basename(plugin_path)}"].each do |potential|
-            require potential if File.exists?(potential)
-          end
-
-        elsif File.file?(plugin_path) && plugin_path.match(/.rb$/)
-          require plugin_path
+        else
+          require plugin_path if File.file?(plugin_path) && plugin_path.match(/.rb$/)
         end
       end
     end
