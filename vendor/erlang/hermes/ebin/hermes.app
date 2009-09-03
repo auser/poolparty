@@ -38,6 +38,7 @@
           {monitors, [cpu, memory]},
           {clouds_config, undefined},
           {cloud_name, undefined},
+          {log_path, undefined},
           {no_nag, false},
           {no_ambassador, false}
         ]},

@@ -112,18 +112,11 @@ handle_info({nag, Interval}, #state{sleep_delay = SleepDelay} = State) ->
               ?INFO("Calling action ~p for ~p~n", [Action, erlang:atom_to_list(Mon)]),
               ElectionValue = athens:call_ambassador_election(Mon, Action),
               case ElectionValue > 0.5 of
-                true ->
-                  ?INFO("Won the election for ~p. Get the lock on the system and call the action!~n", [Action]),
-                  ElectionName2 = erlang:list_to_atom(lists:append(["run_action_", Action])),
-                  case stoplight_client:lock(ElectionName2, ?LOCK_TIMOUT) of
-                    {no, _} -> ok;
-                    {crit, _} -> 
-                      ?INFO("Got the lock on the system for ~p~n", [Action]),
-                      ambassador:ask(Action, []);
-                    _ -> ok
-                  end;
+                true -> get_lock_and_call_action(Action);
                 _ -> ok
-              end
+              end;
+            Else ->
+              ?INFO("Got other response for the election: ~p => ~p~n", [Action, Else])
           end;
           [Action]              -> ambassador:ask(Action, []);
           _Else                  -> ok % ?INFO("Unhandled Event: ~p~n", [Else])
@@ -163,3 +156,15 @@ code_change(_OldVsn, State, _Extra) ->
 %%--------------------------------------------------------------------
 
 start_nag_timer(SleepDelay) -> timer:send_after(SleepDelay, {nag, 600}).
+
+
+get_lock_and_call_action(Action) ->
+  ?INFO("Won the election for ~p. Get the lock on the system and call the action!~n", [Action]),
+  ElectionName2 = erlang:list_to_atom(lists:append(["run_action_", Action])),
+  case stoplight_client:lock(ElectionName2, ?LOCK_TIMOUT) of
+    {no, _} -> ok;
+    {crit, _} -> 
+      ?INFO("Got the lock on the system for ~p~n", [Action]),
+      ambassador:ask(Action, []);
+    _ -> ok
+  end.

@@ -29,7 +29,7 @@ end).
           {port, 8642},
           {module, hermes},
           {proto_port, 11223},
-          {log_path, "logs/hermes.log"},
+          {log_path, "/var/log/hermes.log"},
           {rrd_directory, "/var/lib/collectd"},
           {cloud_name, "/etc/poolparty/cloud_name"},
           {clouds_config, "/etc/poolparty/clouds.rb"}

@@ -11,22 +11,27 @@ module PoolParty
       )
 
       def after_loaded
+        run_dependencies
+        build_rsync_directory
         add_unpack
         run_if_needed
       end
 
       def after_compile
-        run_dependencies
-        build_rsync_directory
       end
 
       def run_dependencies
-        case cloud.platform
+        install_packages = case cloud.platform
         when false
         else
-          has_package "erlang-nox"
-          has_package "erlang-dev"
-          has_package "rrdtool"
+          ["erlang-nox", "erlang-dev"]
+        end
+        has_package "rrdtool"
+        has_exec "install_erlang" do
+          command "echo ''"
+          install_packages.each do |pkg|
+            has_package pkg
+          end
         end
       end
 
@@ -48,13 +53,16 @@ module PoolParty
       end
 
       def add_unpack
-        has_exec "cd /tmp/hermes && escript target_system install hermes-#{hermes_release_version} #{remote_hermes_deployed_dir}", 
-          :creates => "#{remote_hermes_deployed_dir}/releases/#{hermes_release_version}"
+        has_exec "install_hermes", 
+          :command => "cd /tmp/hermes && escript target_system install hermes-#{hermes_release_version} #{remote_hermes_deployed_dir}", 
+          :creates => "#{remote_hermes_deployed_dir}/releases/#{hermes_release_version}",
+          :requires => get_exec("install_erlang")
       end
 
       def run_if_needed
         has_exec "env GEN_CLUSTER_SEED_CONFIG=/etc/poolparty/seeds.conf #{remote_hermes_deployed_dir}/bin/erl -boot #{remote_hermes_deployed_dir}/releases/#{hermes_release_version}/start -noshell -detached", 
-          :not_if => "ps aux | grep -v grep | grep hermes | grep beam"
+          :not_if => "ps aux | grep -v grep | grep hermes | grep beam",
+          :requires => get_exec("install_hermes")
       end
 
       private

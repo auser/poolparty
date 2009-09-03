@@ -47,6 +47,6 @@ merge_unless_true(Param, Merge, Into) ->
     undefined -> lists:append([Merge, Into]);
     {ok, CC} -> case CC of
       true -> Into;
-      _ -> lists:append([Merge, Into])
+      _ -> lists:append([Into, Merge])
     end
   end.
