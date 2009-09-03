@@ -26,10 +26,8 @@ end
 
     s.files = (%w(Rakefile README.rdoc License.txt VERSION.yml) + Dir["{config,examples,lib,test,tasks,script,generators,bin,vendor}/**/*"])
     
-    %w(rel boot beam script .tar.gz).each do |f|
-      s.files.exclude "vendor/erlang/hermes/ebin/*#{f}"
-    end
-    s.files.exclude 'vendor/erlang/hermes/deps/**/*.beam'
+    s.files += ["vendor/erlang/hermes/ebin/*.tar.gz"]
+    # s.files.exclude 'vendor/erlang/hermes/deps/**/*.beam'
     s.files.exclude 'examples/thrift/**/*.beam'
     # s.files.exclude "**/*/erl_crash.dump"
     
