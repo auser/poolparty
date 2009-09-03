@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Ari Lerner", "Michael Fairchild", "Nate Murray"]
-  s.date = %q{2009-09-02}
+  s.date = %q{2009-09-03}
   s.description = %q{PoolParty: The easy, open-source, cross-cloud management solution}
   s.email = %q{arilerner@mac.com}
   s.executables = ["cloud", "cloud-bootstrap", "cloud-compile", "cloud-configure", "cloud-console", "cloud-contract", "cloud-expand", "cloud-list", "cloud-misc", "cloud-osxcopy", "cloud-setup", "cloud-show", "cloud-ssh", "cloud-start", "cloud-terminate", "cloud-thrift", "cloud-verify"]
@@ -790,8 +790,8 @@ Gem::Specification.new do |s|
      "vendor/erlang/hermes/src/athens/athens_sup.erl",
      "vendor/erlang/hermes/src/athens/ballots/mapreduce.erl",
      "vendor/erlang/hermes/src/hermes.erl",
-     "vendor/erlang/hermes/src/hermes_logger.erl",
      "vendor/erlang/hermes/src/hermes_sup.erl",
+     "vendor/erlang/hermes/src/log/hermes_logger.erl",
      "vendor/erlang/hermes/src/mon/erlrrd/erlrrd.erl",
      "vendor/erlang/hermes/src/mon/erlrrd/erlrrd_app.erl",
      "vendor/erlang/hermes/src/mon/erlrrd/erlrrd_sup.erl",
