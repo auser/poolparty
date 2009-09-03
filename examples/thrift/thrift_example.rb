@@ -15,6 +15,7 @@ require "poolparty_types"
 port = ARGV.pop || 11223
 
 transport = Thrift::BufferedTransport.new(Thrift::Socket.new('localhost', port))
+# transport = Thrift::BufferedTransport.new(Thrift::Socket.new('192.168.2.31', port))
 # transport = Thrift::BufferedTransport.new(Thrift::Socket.new('vm', port))
 protocol = Thrift::BinaryProtocol.new(transport)
 
