@@ -22,9 +22,11 @@ Usage: #{$0} #{all_options_string}
 EOS
 
   short_desc "Start the cloud thrift interface"
-  opt :port, "Start a port", :type => :integer, :default => 11223
+  opt :port, "Start on port", :type => :integer, :default => 11223
   opt :dir, "Pid directory", :type => :string, :default => "/tmp"
   opt :daemon, "Daemonize", :type => :bool, :default => true
+  # Query params
+  opt :host, "Query on host", :type => :string, :default => "localhost"
 
   run do |command|
     
@@ -55,22 +57,30 @@ EOS
       :monitor    => true
     }.merge(command.opts)
     
-    block = Proc.new do
-      handler = CommandInterfaceHandler.new
-      processor = CloudThrift::CommandInterface::Processor.new(handler)
-      transport = Thrift::ServerSocket.new( options[:port] )
-      transportFactory = Thrift::BufferedTransportFactory.new()
-      server = Thrift::SimpleServer.new(processor, transport, transportFactory)
+    if cmd == "query"
+      require "command_query_handler"
       
-      puts "Starting the cloud server..."
-      server.serve()
-      puts "done."
-    end
-    
-    if command[:daemon]
-      Daemons.run_proc("cloud-thrift", options, &block)
-    else
-      block.call
+      @loaded_clouds.map do |cld|
+        CommandQueryHandler.run_query(cld, ARGV.shift, ARGV, options)
+      end
+    else      
+      block = Proc.new do
+        handler = CommandInterfaceHandler.new
+        processor = CloudThrift::CommandInterface::Processor.new(handler)
+        transport = Thrift::ServerSocket.new( options[:port] )
+        transportFactory = Thrift::BufferedTransportFactory.new()
+        server = Thrift::SimpleServer.new(processor, transport, transportFactory)
+
+        puts "Starting the cloud server..."
+        server.serve()
+        puts "done."
+      end
+
+      if command[:daemon]
+        Daemons.run_proc("cloud-thrift", options, &block)
+      else
+        block.call
+      end
     end
     
   end
