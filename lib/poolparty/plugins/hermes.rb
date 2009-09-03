@@ -58,7 +58,10 @@ module PoolParty
           :command => "cd /tmp/hermes && escript target_system install hermes-#{hermes_release_version} #{remote_hermes_deployed_dir}", 
           :creates => "#{remote_hermes_deployed_dir}/releases/#{hermes_release_version}",
           :requires => get_package("erlang-dev")
-        has_link :name => "collectd_dir", :source => "/var/lib/collectd/rrd/\#{`hostname -f`}", :to => "/var/lib/collectd/localhost/"
+          
+        has_link  :name => "collectd_dir", 
+                  :source => "/var/lib/collectd/rrd/\#{`hostname -f`.chomp}", :to => "/var/lib/collectd/localhost",
+                  :requires => [get_package("collectd")]
       end
 
       def run_if_needed

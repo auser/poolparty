@@ -33,12 +33,12 @@ EOS
     cmd = ARGV.shift
     cmd = ARGV.shift if cmd == "thrift"
     
-    if %w(run start restart stop).include?(cmd)
+    if %w(run start restart stop query).include?(cmd)
       args = [cmd]
       args << ["--", command.argv] unless command.argv.empty?
       args.flatten!
     else
-      puts "You must pass one of the following: #{%w(run start restart stop).join(", ")}"
+      puts "You must pass one of the following: #{%w(run start restart stop query).join(", ")}"
       args = ["--help"]
     end
     
