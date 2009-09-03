@@ -11,22 +11,28 @@ module PoolParty
       )
 
       def after_loaded
+        run_dependencies
+        build_rsync_directory
         add_unpack
         run_dependencies
         run_if_needed
       end
 
-      def before_compile
-        build_rsync_directory
+      def after_compile
       end
 
       def run_dependencies
-        case cloud.platform
+        install_packages = case cloud.platform
         when false
         else
-          has_package "erlang-nox"
-          has_package "erlang-dev", :requires => get_package("erlang-nox")
-          has_package "rrdtool"
+          ["erlang-nox", "erlang-dev"]
+        end
+        has_package "rrdtool"
+        has_exec "install_erlang" do
+          command "echo ''"
+          install_packages.each do |pkg|
+            has_package pkg
+          end
         end
       end
 
