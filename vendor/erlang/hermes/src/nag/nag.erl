@@ -165,6 +165,8 @@ get_lock_and_call_action(Action) ->
     {no, _} -> ok;
     {crit, _} -> 
       ?INFO("Got the lock on the system for ~p~n", [Action]),
-      ambassador:ask(Action, []);
+      O = ambassador:ask(Action, []),
+      ?INFO("Ambassador response from ~p: ~p~n", [Action, O]),
+      O;
     _ -> ok
   end.

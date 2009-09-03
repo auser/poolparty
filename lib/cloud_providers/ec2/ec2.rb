@@ -63,7 +63,7 @@ module CloudProviders
       return @aws_yml if @aws_yml && caching==true
       return {} unless File.exists?(filename)
       ddputs("Reading keys from file: #{filename}")
-      @aws_yml = YAML::load( open(filename).read )
+      @aws_yml = YAML::load( open(filename).read ) || {}
     end
     
     default_options({
