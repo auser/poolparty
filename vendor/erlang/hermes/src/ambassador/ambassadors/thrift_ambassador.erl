@@ -131,8 +131,8 @@ handle_call(_Request, _From, State) ->
 %%                                      {stop, Reason, State}
 %% Description: Handling cast messages
 %%--------------------------------------------------------------------
-handle_cast({cloud_run, CloudName, Fun, [Args]}, #state{start_args = StartArgs} = State) ->
-  cloud_run(CloudName, Fun, Args, StartArgs),
+handle_cast({cloud_run, CloudName, Fun, [Args]}, #state{thrift_pid = P} = State) ->
+  cloud_run(P, CloudName, Fun, Args),
   {noreply, State};
   
 handle_cast(_Msg, State) ->
@@ -203,26 +203,24 @@ start_thrift_server(Args) ->
 
 start_thrift_cloud_server(Args) ->  
   StartCmd = build_start_command("run", Args),
-  % case whereis(cloud_thrift_server) of
-    % undefined -> 
-    start_and_link_thrift_server(StartCmd).
-  %   Node -> Node
-  % end.  
+  case whereis(cloud_thrift_server) of
+    undefined -> start_and_link_thrift_server(StartCmd);
+    Node -> Node
+  end.  
   
 start_and_link_thrift_server(StartCmd) ->
   ?INFO("Starting ~p: ~p~n", [?MODULE, StartCmd]),
-  case os:cmd(StartCmd) of
+  case (fun() -> os:cmd(StartCmd) end) of
     {error, Reason} ->
       ?INFO("Assuming the thrift_client is already started error: ~p~n", [Reason]),
       ok;
     Pid ->
-      ?TRACE("Got back: ~p~n", [Pid]),
-      % case utils:is_process_alive(Pid) of
-      %   true -> 
-      %     erlang:register(cloud_thrift_server, Pid),
-      %     erlang:monitor(process, Pid);
-      %   _ -> ok
-      % end,
+      case utils:is_process_alive(Pid) of
+        true -> 
+          erlang:register(cloud_thrift_server, Pid),
+          erlang:monitor(process, Pid);
+        _ -> ok
+      end,
       Pid
   end.
   
@@ -266,8 +264,14 @@ cloud_query(P, Name, Meth, Args) ->
   end.
   
 
-cloud_run(Name, Meth, Args, StartArgs) ->
-  ThriftPort = proplists:get_value(proto_port, StartArgs),
-  NewStartArgs = utils:append({proto_port, ThriftPort+1}),
-  P = start_thrift_cloud_server(NewStartArgs),
-  cloud_query(P, Name, Meth, Args).
+cloud_run(P, Name, Meth, Args) ->
+  Query = #cloudQuery{name=Name},
+  case catch thrift_client:call(P, cast_command, [Query, Meth, Args]) of % infinite timeout
+    {'EXIT', R} -> 
+      case R of
+        {timeout, _} -> {error, timeout};
+        E -> {error, E}
+      end;
+    E -> E
+  end.
+  
