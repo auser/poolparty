@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{poolparty}
-  s.version = "1.3.10"
+  s.version = "1.3.11"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Ari Lerner", "Michael Fairchild", "Nate Murray"]
