@@ -3,7 +3,7 @@ require "#{File.dirname(__FILE__)}/../../test_helper"
 class MonitorTest < Test::Unit::TestCase
   
   def setup
-    @mon = PoolParty::Monitor.new(:'cpu-idle') do |c|
+    @mon = PoolParty::Monitor.new("cpu-idle") do |c|
       vote_for(:expand) if c > 0.8
       configure if c < 0.1
     end

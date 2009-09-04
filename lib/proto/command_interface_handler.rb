@@ -4,7 +4,31 @@ class CommandInterfaceHandler
     cr = CloudThrift::CloudResponse.new
     cr.name = cld.name
     cr.command = command
-    resp = begin
+    
+    cr.response = format_response(get_response(cld, command, args))
+
+    return cr
+  end
+  
+  def cast_command(cld, command, args)
+        
+    cr = CloudThrift::CloudResponse.new
+    cr.name = cld.name
+    cr.command = command
+    cr.response = format_response("Running command: #{command}(#{args})")
+    
+    fork do
+      get_response(cld, command, args)
+    end
+
+    return cr
+  end
+  
+  
+  private
+  
+  def get_response(cld, command, args)
+    begin
       the_cloud = clouds[cld.name]
       if the_cloud
         if command.include?(".")
@@ -25,14 +49,8 @@ class CommandInterfaceHandler
       end
     rescue Exception => e
       cr.response = "Error: #{e.inspect}"
-    end
-    
-    cr.response = format_response(resp)
-
-    return cr
+    end    
   end
-  
-  private
   
   def format_response(resp)
     case resp
@@ -44,4 +62,5 @@ class CommandInterfaceHandler
       [resp]
     end.map {|ele| ele.to_s }
   end
+  
 end

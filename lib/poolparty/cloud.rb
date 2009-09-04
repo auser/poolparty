@@ -196,12 +196,14 @@ module PoolParty
     # the defined (or the default dependency_resolver, chef)
     def compile(caller=nil)
       callback :before_compile
+      cloud_provider.before_compile(self)
       FileUtils.mkdir_p tmp_path unless File.directory?(tmp_path)
       ddputs <<-EOE
 Compiling cloud #{self.name} to #{tmp_path/"etc"/"#{dependency_resolver_name}"} 
   number of resources: #{ordered_resources.size}
       EOE
       out = dependency_resolver.compile_to(ordered_resources, tmp_path/"etc"/"#{dependency_resolver_name}", caller)
+      cloud_provider.after_compile(self)
       callback :after_compile
       out
     end

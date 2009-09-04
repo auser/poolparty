@@ -27,6 +27,7 @@ end'
     pool "conditional_cloud" do
       cloud "test" do
         
+        keypair "test_key"
         has_case "os" do
           when_is :ubuntu, "git-core"
           else_is "git"

@@ -1,0 +1,17 @@
+.autosession.vim
+.DS_Store
+*.beam
+pkg/*
+pkg
+erl_crash.dump
+logs
+userapp.mnesia
+test/include
+ebin/*.boot
+ebin/*.rel
+ebin/*.script
+web/
+*.rrd
+deps/stoplight
+include/stoplight
+ebin/hermes-*.tar.gz

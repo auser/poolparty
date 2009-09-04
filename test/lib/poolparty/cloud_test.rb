@@ -134,7 +134,6 @@ class CloudTest < Test::Unit::TestCase
     assert_equal 22, clouds["noneity"].ssh_port
   end
   
-  
   def test_children_getting_parent_options
     clear!
     pool "outside" do
@@ -183,5 +182,11 @@ class CloudTest < Test::Unit::TestCase
     assert_equal 1, clouds["app_cloud"].monitors.size
     
     clouds["app_cloud"].compile
+    
+    compile_dir = clouds["app_cloud"].tmp_path/"etc"/"chef"/"cookbooks"/"poolparty"
+    recipe_file = compile_dir/"recipes"/"default.rb"
+    recipe_contents = open(recipe_file).read
+    
+    assert_match /install hermes/, recipe_contents
   end
 end

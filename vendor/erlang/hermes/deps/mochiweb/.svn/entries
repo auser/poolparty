@@ -1,0 +1,88 @@
+8
+
+dir
+102
+http://mochiweb.googlecode.com/svn/trunk
+http://mochiweb.googlecode.com/svn
+
+
+
+2009-06-25T19:57:08.656793Z
+102
+andrew.r.gross
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+583d1f64-3c3e-0410-8459-0f15fcd77d59
+
+priv
+dir
+
+LICENSE
+file
+
+
+
+
+2009-07-01T18:47:05.000000Z
+5e0144b1f4eb0e6001053e5e37e97db2
+2007-11-06T06:40:02.469198Z
+2
+matthew.dempsky
+
+include
+dir
+
+doc
+dir
+
+src
+dir
+
+scripts
+dir
+
+deps
+dir
+
+support
+dir
+
+ebin
+dir
+
+README
+file
+
+
+
+
+2009-07-01T18:47:05.000000Z
+9b8b48298c58b6c18cc6d9fbefcbe7cc
+2007-11-06T06:40:02.469198Z
+2
+matthew.dempsky
+
+Makefile
+file
+
+
+
+
+2009-07-01T18:47:05.000000Z
+3d41d7808664fabb1e53dfb2158c9d8d
+2009-02-16T07:12:02.315957Z
+92
+bob.ippolito
+

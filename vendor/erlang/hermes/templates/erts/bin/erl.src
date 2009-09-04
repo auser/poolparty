@@ -1,0 +1,10 @@
+#!/bin/sh
+ROOTDIR=%FINAL_ROOTDIR%
+BINDIR=%FINAL_BINDIR%/erts-5.6.5/bin
+EMU=beam
+PROGNAME=`echo $0 | sed 's/.*\///'`
+export EMU
+export ROOTDIR
+export BINDIR
+export PROGNAME
+exec $BINDIR/erlexec ${1+"$@"}

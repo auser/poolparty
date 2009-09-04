@@ -68,10 +68,15 @@ module CloudProviders
         raise StandardError.new("You must pass in a cloud to configure an instance") unless cloud
         cloud.compile(self)        
         
-        scp(:source       => keypair.full_filepath, 
-            :destination  => "/etc/poolparty/keys/#{keypair.basename}")
+        # scp(:source       => keypair.full_filepath, 
+        #     :destination  => "/etc/poolparty/keys/#{keypair.basename}")
         
         FileUtils.mkdir_p cloud.tmp_path/"etc"/"poolparty" unless File.directory?(cloud.tmp_path/"etc"/"poolparty")
+        FileUtils.mkdir_p cloud.tmp_path/"etc"/"poolparty"/"keys" unless File.directory?(cloud.tmp_path/"etc"/"poolparty"/"keys")
+        
+        FileUtils.cp keypair.full_filepath, cloud.tmp_path/"etc"/"poolparty"/"keys"/keypair.basename
+        File.open(cloud.tmp_path/"etc"/"poolparty"/"cloud_name", "w") {|f| f << cloud.name }
+        
         pack_clouds_dot_rb_and_expected_directories
         
         dputs("Rsyncing #{cloud.tmp_path/"*"}")
