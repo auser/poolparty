@@ -197,7 +197,7 @@ code_change(_OldVsn, State, _Extra) ->
 %% JoiningPid.
 %%--------------------------------------------------------------------
 handle_join(JoiningPid, Pidlist, State) ->
-    io:format(user, "~p:~p handle join called: ~p Pidlist: ~p~n", [?MODULE, ?LINE, JoiningPid, Pidlist]),
+    ?INFO("~p:~p handle join called: ~p Pidlist: ~p~n", [?MODULE, ?LINE, JoiningPid, Pidlist]),
     {ok, State}.
 
 %%--------------------------------------------------------------------
@@ -209,11 +209,11 @@ handle_join(JoiningPid, Pidlist, State) ->
 %%--------------------------------------------------------------------
 
 handle_node_joined(JoiningPid, Pidlist, State) ->
-    io:format(user, "~p:~p handle node_joined called: ~p Pidlist: ~p~n", [?MODULE, ?LINE, JoiningPid, Pidlist]),
+    ?INFO("~p:~p handle node_joined called: ~p Pidlist: ~p~n", [?MODULE, ?LINE, JoiningPid, Pidlist]),
     {ok, State}.
 
 handle_leave(LeavingPid, Pidlist, Info, State) ->
-    io:format(user, "~p:~p handle leave called: ~p, Info: ~p Pidlist: ~p~n", [?MODULE, ?LINE, LeavingPid, Info, Pidlist]),
+    ?INFO("~p:~p handle leave called: ~p, Info: ~p Pidlist: ~p~n", [?MODULE, ?LINE, LeavingPid, Info, Pidlist]),
     {ok, State}.
     
 %%--------------------------------------------------------------------

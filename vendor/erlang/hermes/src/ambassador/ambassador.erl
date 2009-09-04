@@ -14,6 +14,7 @@
 -export([start_link/0]).
 -export ([
           ask/1, ask/2,
+          run/1, run/2,
           handle_function/2,
           get/1
           ]).
@@ -37,6 +38,9 @@
 %%====================================================================
 ask(Fun)        -> gen_server:call(?MODULE, {ask, Fun}).
 ask(Fun, Args)  -> gen_server:call(?MODULE, {ask, Fun, Args}).
+
+run(Fun)        -> gen_server:cast(?MODULE, {run, Fun}).
+run(Fun, Args)  -> gen_server:cast(?MODULE, {run, Fun, Args}).
 
 %%--------------------------------------------------------------------
 %% Function: start_link() -> {ok,Pid} | ignore | {error,Error}
@@ -63,7 +67,7 @@ handle_function(Function, Args) when is_atom(Function), is_tuple(Args) ->
     end.
 
 get(Key) ->
-  io:format("Get ~p in ~p~n", [Key, ?MODULE]),
+  ?INFO("Get ~p in ~p~n", [Key, ?MODULE]),
   {ok, <<"Nice">>}.
   
 
@@ -153,6 +157,14 @@ handle_call(_Request, _From, State) ->
 %%                                      {stop, Reason, State}
 %% Description: Handling cast messages
 %%--------------------------------------------------------------------
+handle_cast({run, Function}, #state{cloud_name = CloudName} = State) ->
+  ?PROTO:run(CloudName, Function, ""),
+  {noreply, State};
+  
+handle_cast({run, Function, Args}, #state{cloud_name = CloudName} = State) ->
+  ?PROTO:run(CloudName, Function, [Args]),
+  {noreply, State};
+
 handle_cast(_Msg, State) ->
   {noreply, State}.
 
@@ -172,7 +184,8 @@ handle_info(_Info, State) ->
 %% cleaning up. When it returns, the gen_server terminates with Reason.
 %% The return value is ignored.
 %%--------------------------------------------------------------------
-terminate(_Reason, _State) ->
+terminate(Reason, _State) ->
+  ?INFO("Terminating ambassador because: ~p~n", [Reason]),
   ok.
 
 %%--------------------------------------------------------------------

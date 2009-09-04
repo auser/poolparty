@@ -24,7 +24,7 @@ EOS
   short_desc "Start the cloud thrift interface"
   opt :port, "Start on port", :type => :integer, :default => 11223
   opt :dir, "Pid directory", :type => :string, :default => "/tmp"
-  opt :daemon, "Daemonize", :type => :bool, :default => true
+  opt :daemon, "Daemonize", :type => :bool, :default => false
   # Query params
   opt :host, "Query on host", :type => :string, :default => "localhost"
 
@@ -60,8 +60,8 @@ EOS
     if cmd == "query"
       require "command_query_handler"
       
-      @loaded_clouds.map do |cld|
-        CommandQueryHandler.run_query(cld, ARGV.shift, ARGV, options)
+      @loaded_clouds.each do |cld|
+        puts CommandQueryHandler.run_query(cld, ARGV.shift, ARGV, options)
       end
     else      
       block = Proc.new do

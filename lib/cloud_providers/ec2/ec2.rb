@@ -159,7 +159,7 @@ module CloudProviders
     end
     
     def after_compile(cld)
-      save_aws_env_to_yml(cld.tmp_path/"etc"/"poolparty"/"env.yml")
+      save_aws_env_to_yml(cld.tmp_path/"etc"/"poolparty"/"env.yml") rescue nil
     end
     
     # Read  yaml file and use it to set environment variables and local variables.
@@ -171,7 +171,8 @@ module CloudProviders
     
     # Save aws keys and env variables to a yaml file
     def save_aws_env_to_yml(filename='/etc/poolparty/env.yml')
-      File.open(filename, 'w') {|f| f<<YAML::dump(aws_hash(dsl_options, "/etc/poolparty/ec2")) } rescue nil
+      hsh = aws_hash(default_options, "/etc/poolparty/ec2")
+      File.open(filename, 'w') {|f| f<<YAML::dump(hsh) }
     end
     
     # Return a hash of the aws keys and environment variables

@@ -36,10 +36,10 @@ module PoolParty
       
       def print_to_chef
         <<-EOE
-link "<%= to || name %>" do
+link "<%= source || name %>" do
   link_type <%= print_variable(link_type) %>
   action :<%= exists? ? :create : :delete %>
-  to <%= print_variable(source) %>
+  to <%= print_variable(to) %>
 end
         EOE
       end

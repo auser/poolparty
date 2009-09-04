@@ -1,4 +1,5 @@
 -module (ambassador_sup).
+-include ("hermes.hrl").
 
 -export([start_link/0, stop/1]).
 
@@ -40,7 +41,7 @@ init([]) ->
 %% Internal functions
 %%====================================================================
 stop(Args) ->
-  io:format("Stopping ambassador~n"),
+  ?INFO("Stopping ambassador~n", []),
   ambassador:stop(Args),
   supervisor:terminate_child(?MODULE, ambassador),
   ok.

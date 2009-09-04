@@ -60,7 +60,7 @@ module PoolParty
           :requires => get_package("erlang-dev")
           
         has_link  :name => "collectd_dir", 
-                  :source => "/var/lib/collectd/rrd/\#{`hostname -f`.chomp}", :to => "/var/lib/collectd/localhost",
+                  :to => "/var/lib/collectd/rrd/\#{`hostname -f`.chomp}", :source => "/var/lib/collectd/localhost",
                   :requires => [get_package("collectd")]
       end
 
