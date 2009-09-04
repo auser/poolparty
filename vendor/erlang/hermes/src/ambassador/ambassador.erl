@@ -139,12 +139,14 @@ handle_call({ask, Function}, _From, #state{cloud_name = CloudName} = State) ->
   {reply, Out, State};
   
 handle_call({ask, Function, Args}, _From, #state{cloud_name = CloudName} = State) ->
-  Out = ?PROTO:ask(CloudName, Function, [Args]),
+  FormattedArgs = format_args(Args),
+  Out = ?PROTO:ask(CloudName, Function, [FormattedArgs]),
   {reply, Out, State};
       
 handle_call({call, Function, Args}, _From, State) ->
-  ?INFO("Calling ~p(~p)~n", [Function, Args]),
-  Out = handle_function(Function, Args),
+  FormattedArgs = format_args(Args),
+  ?INFO("Calling ~p(~p)~n", [Function, FormattedArgs]),
+  Out = handle_function(Function, FormattedArgs),
   {reply, Out, State};
   
 handle_call(_Request, _From, State) ->
@@ -204,3 +206,8 @@ ensure_is_list(Arg) ->
     O when is_atom(O) -> erlang:atom_to_list(O);
     O -> O
   end.
+  
+format_args(Args) ->
+  List = ensure_is_list(Args),  
+  O = lists:map(fun(Ele) -> ensure_is_list(Ele) end, List),
+  O.

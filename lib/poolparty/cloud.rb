@@ -239,7 +239,7 @@ Compiling cloud #{self.name} to #{tmp_path/"etc"/"#{dependency_resolver_name}"}
     def run_monitor(monitor_name, value)
       mon = monitors[monitor_name.to_sym]
       if mon
-        mon.run(value.to_f)
+        mon.run(value)
       else
         "unhandled monitor"
       end
@@ -248,6 +248,16 @@ Compiling cloud #{self.name} to #{tmp_path/"etc"/"#{dependency_resolver_name}"}
     # Store the monitors in an array
     def monitors
       @monitors ||= {}
+    end
+    
+    def monitor_format(mon_name, meth, &block)
+      delayed_action do
+        if monitors.has_key?(mon_name)
+          monitors[mon_name].format(meth, &block)
+        else
+          raise PoolPartyError.create("MonitorsFormattingError", "You created a monitor format for an unknown monitor. Please check and try again!")
+        end
+      end
     end
     
     ##### Internal methods #####

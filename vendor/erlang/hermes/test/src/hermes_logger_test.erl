@@ -4,8 +4,9 @@
 -define(TRACE(X, M),  io:format(user, "TRACE ~p:~p ~p ~p~n", [?MODULE, ?LINE, X, M])).
 
 setup() ->
-  {ok, Pid} = hermes_logger:start_link([{tty, false}]),
-  [Pid].
+  % {ok, Pid} = hermes_logger:start_link([{tty, false}, {log_path, "logs/hermes.log"}]),
+  % [Pid].
+  ok.
 
 teardown(_S) ->
   hermes_logger:stop([]),

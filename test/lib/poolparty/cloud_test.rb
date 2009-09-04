@@ -158,13 +158,18 @@ class CloudTest < Test::Unit::TestCase
           configure if v < 0.2
           vote_for(:expand) if v > 1.1
         end
+        monitor :load do |a|
+          # [0.42 0.43 0.37]
+          vote_for(:expand) if a > 0.8
+        end
       end
     end
     
-    assert_equal 1, clouds["monitor_app"].monitors.size
-    assert_equal [:cpu], clouds["monitor_app"].monitors.map {|m,v| v.name }
+    assert_equal 2, clouds["monitor_app"].monitors.size
+    assert_equal [:cpu, :load], clouds["monitor_app"].monitors.map {|m,v| v.name }
     assert_equal({:configure => []}, clouds["monitor_app"].run_monitor("cpu", "0.1"))
     assert_equal({:vote_for => [:expand]}, clouds["monitor_app"].run_monitor("cpu", "1.4"))
+    assert_equal({:vote_for => [:expand]}, clouds["monitor_app"].run_monitor("load", "0.98, 0.23, 0.1"))
   end
   
   def test_add_monitoring_stack_if_needed

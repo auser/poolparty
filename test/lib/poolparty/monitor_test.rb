@@ -27,4 +27,32 @@ class MonitorTest < Test::Unit::TestCase
     end
   end
   
+  def test_formatting_input
+    mon = PoolParty::Monitor.new("memory-used") {|c| long if c.length > 2}
+    mon.format(:to_s)
+    assert_equal({:long => []}, mon.run("hellllllllooooo world"))
+    
+    mon = PoolParty::Monitor.new("memory-used") do |c| 
+      long if c.length > 2
+      short if c.length < 2
+    end
+    mon.format(:to_a)
+    assert_equal({:long => []}, mon.run(%w(1 2 3 4)))
+    assert_equal({:short => []}, mon.run(%w(1)))
+    
+    mon = PoolParty::Monitor.new("memory-used") do |saying, to| 
+      if saying == "hello"
+        hello
+      else
+        goodbye
+      end
+    end
+    
+    mon.format do |d|
+      return *d.split(",")
+    end
+    assert_equal({:hello => []}, mon.run("hello, world"))
+    assert_equal({:short => []}, mon.run("good day"))
+  end
+  
 end

@@ -20,10 +20,17 @@ function_info('run_command', params_type) ->
   {2, string},
   {3, {list, string}}]}
 ;
-function_info('run_command', reply_type) ->
-  {struct, {'poolparty_types', 'cloudResponse'}};
-function_info('run_command', exceptions) ->
-  {struct, []}
+function_info('run_command', reply_type) -> {struct, {'poolparty_types', 'cloudResponse'}};
+function_info('run_command', exceptions) -> {struct, []};
+
+% cast_command
+function_info('cast_command', params_type) ->
+  {struct, [{1, {struct, {'poolparty_types', 'cloudQuery'}}},
+  {2, string},
+  {3, {list, string}}]}
 ;
+function_info('cast_command', reply_type) -> {struct, {'poolparty_types', 'cloudResponse'}};
+function_info('cast_command', exceptions) -> {struct, []};
+
 function_info(xxx, dummy) -> dummy.
 

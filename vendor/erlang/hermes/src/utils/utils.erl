@@ -51,25 +51,40 @@ turn_to_atom(Arg) when is_atom(Arg) -> Arg;
 turn_to_atom(Arg) when is_integer(Arg) -> erlang:list_to_atom(erlang:integer_to_list(Arg));
 turn_to_atom(Arg) when is_list(Arg) -> erlang:list_to_atom(Arg).
 
-turn_to_list(Arg) when is_list(Arg) -> [ turn_to_list(A) || A <- Arg ];
 turn_to_list(Bin) when is_binary(Bin) -> erlang:binary_to_list(Bin);
-turn_to_list(Arg) -> erlang:atom_to_list(Arg).
+turn_to_list(Ato) when is_atom(Ato)   -> erlang:atom_to_list(Ato);
+turn_to_list(Arg) when is_list(Arg)   -> [ turn_to_list(A) || A <- Arg ];
+turn_to_list(Arg)                     -> Arg.
 
 turn_to_float("nan") -> 0.0;
 turn_to_float(Arg) when is_list(Arg) -> 
   case catch erlang:list_to_float(Arg) of
-    {'EXIT',{badarg, Reason}} ->
-      case regexp:match(Arg, " ") of
-        {match, _, _} ->           
-          {ok, Floats} = regexp:split(Arg, " "),
-          turn_to_float_from_list(Floats, []);
-        _ -> ?TRACE("Uh oh. Error with float", [Arg, Reason])
+    {'EXIT', _} ->
+      case split_on_and_run(Arg, " ", fun turn_to_float_from_list/1) of
+        false -> 
+          case split_on_and_run(Arg, ",", fun turn_to_float_from_list/1) of
+            false -> Arg;
+            E -> erlang:list_to_float(E)
+          end;
+        F -> F
       end;
     F -> F
   end;
+    
+turn_to_float(Float) when is_float(Float) -> Float;
 turn_to_float(Arg) -> Arg.
 
+split_on_and_run(Arg, Token, F) ->
+  case regexp:match(Arg, Token) of
+    {match, _, _} ->           
+      {ok, Floats} = regexp:split(Arg, Token),
+      F(Floats);
+    _ -> false
+  end.
+
 % Turn list
+turn_to_float_from_list(A)          -> turn_to_float_from_list(A, []).
+
 turn_to_float_from_list([], Acc)    -> lists:reverse(Acc);
 turn_to_float_from_list([H|T], Acc) -> turn_to_float_from_list(T, [turn_to_float(H)|Acc]).
 
@@ -90,11 +105,6 @@ jsonify(Body) ->
       Body
     })
   ].
-
-
-change_to_float("nan")  -> 0;
-change_to_float(Int)      -> erlang:float_to_list(Int).
-
 
 %%====================================================================
 %% LISTS
