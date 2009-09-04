@@ -77,14 +77,7 @@ init([Args]) ->
   stop_thrift_client(Args),
   timer:sleep(500),
   
-  case start_thrift_cloud_server(Args) of
-    {error, Reason} ->
-      ?INFO("Assuming the thrift_client is already started error: ~p~n", [Reason]),
-      ok;
-    Pid ->
-      erlang:monitor(process, Pid),
-      Pid
-  end,
+  start_thrift_cloud_server(Args),
   
   {ok, HostName} = get_hostname(),
   BannerArr = [
@@ -97,6 +90,7 @@ init([Args]) ->
 
   % O = thrift_client:start_link(HostName, ThriftPort, commandInterface_thrift),
   timer:sleep(1000),
+  ?INFO("Connecting with thrift_client on ~p:~p~n", [HostName, ThriftPort]),
   P = case thrift_client:start_link(HostName, ThriftPort, commandInterface_thrift) of
     {error, R} ->
       ?ERROR("Thrift client could not connect to: ~p, ~p, ~p = ~p~n", [HostName, ThriftPort, commandInterface_thrift, R]),
@@ -137,8 +131,8 @@ handle_call(_Request, _From, State) ->
 %%                                      {stop, Reason, State}
 %% Description: Handling cast messages
 %%--------------------------------------------------------------------
-handle_cast({cloud_run, CloudName, Fun, [Args]}, #state{thrift_pid = P} = State) ->
-  cloud_query(P, CloudName, Fun, Args),
+handle_cast({cloud_run, CloudName, Fun, [Args]}, #state{start_args = StartArgs} = State) ->
+  cloud_run(CloudName, Fun, Args, StartArgs),
   {noreply, State};
   
 handle_cast(_Msg, State) ->
@@ -152,17 +146,7 @@ handle_cast(_Msg, State) ->
 %%--------------------------------------------------------------------
 handle_info({'DOWN',Ref,process, _Pid, normal}, #state{start_args = Args} = State) -> 
   erlang:demonitor(Ref),
-  case start_thrift_cloud_server(Args) of
-    {error, Reason} ->
-      ?INFO("Assuming the thrift_client is already started error: ~p~n", [Reason]),
-      ok;
-    P ->
-      case utils:is_process_alive(P) of
-        true -> erlang:monitor(process, P);
-        _ -> ok
-      end,
-      P
-  end,
+  start_thrift_cloud_server(Args),
   {noreply, State};
   
 handle_info(Info, State) ->
@@ -205,7 +189,7 @@ get_hostname() ->
 %%====================================================================
 % Start thrift server (in erlang) 
 %%====================================================================
-
+% thrift_server
 start_thrift_server(Args) ->
   ThriftPort  = proplists:get_value(proto_port, Args),
   Module      = proplists:get_value(module, Args),
@@ -218,12 +202,30 @@ start_thrift_server(Args) ->
   ok.
 
 start_thrift_cloud_server(Args) ->  
-  StartCmd = build_start_command("start", Args),  
-  spawn_link(fun() -> 
-    O = os:cmd(StartCmd),
-    ?INFO("Starting ~p: ~p => ~p~n", [?MODULE, StartCmd, O]),
-    O
-  end).
+  StartCmd = build_start_command("run", Args),
+  % case whereis(cloud_thrift_server) of
+    % undefined -> 
+    start_and_link_thrift_server(StartCmd).
+  %   Node -> Node
+  % end.  
+  
+start_and_link_thrift_server(StartCmd) ->
+  ?INFO("Starting ~p: ~p~n", [?MODULE, StartCmd]),
+  case os:cmd(StartCmd) of
+    {error, Reason} ->
+      ?INFO("Assuming the thrift_client is already started error: ~p~n", [Reason]),
+      ok;
+    Pid ->
+      ?TRACE("Got back: ~p~n", [Pid]),
+      % case utils:is_process_alive(Pid) of
+      %   true -> 
+      %     erlang:register(cloud_thrift_server, Pid),
+      %     erlang:monitor(process, Pid);
+      %   _ -> ok
+      % end,
+      Pid
+  end.
+  
   
 stop_thrift_client(Args) ->
   StopCmd = build_start_command("stop", Args),
@@ -262,3 +264,10 @@ cloud_query(P, Name, Meth, Args) ->
       end;
     E -> E
   end.
+  
+
+cloud_run(Name, Meth, Args, StartArgs) ->
+  ThriftPort = proplists:get_value(proto_port, StartArgs),
+  NewStartArgs = utils:append({proto_port, ThriftPort+1}),
+  P = start_thrift_cloud_server(NewStartArgs),
+  cloud_query(P, Name, Meth, Args).

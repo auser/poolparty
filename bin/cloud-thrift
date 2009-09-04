@@ -24,7 +24,7 @@ EOS
   short_desc "Start the cloud thrift interface"
   opt :port, "Start on port", :type => :integer, :default => 11223
   opt :dir, "Pid directory", :type => :string, :default => "/tmp"
-  opt :daemon, "Daemonize", :type => :bool, :default => false
+  opt :daemon, "Daemonize", :type => :bool, :default => true
   # Query params
   opt :host, "Query on host", :type => :string, :default => "localhost"
 

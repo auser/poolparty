@@ -14,8 +14,7 @@ get_rrd_location() ->
   end.
 
 
-is_process_alive(Pid) 
-  when is_pid(Pid) ->
+is_process_alive(Pid) when is_pid(Pid) ->
 	rpc:call(node(Pid), erlang, is_process_alive, [Pid]).
 
 
