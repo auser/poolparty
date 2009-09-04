@@ -118,7 +118,7 @@ handle_info({nag, Interval}, #state{sleep_delay = SleepDelay} = State) ->
             Else ->
               ?INFO("Got other response for the election: ~p => ~p~n", [Action, Else])
           end;
-          [Action]              -> ambassador:ask(Action, []);
+          [Action]              -> ambassador:run(Action, []);
           _Else                  -> ok % ?INFO("Unhandled Event: ~p~n", [Else])
         end,
         % ?INFO("VOTE ACTION!: ~p (Load: ~p)~n", [Resp, Float]),
@@ -166,7 +166,7 @@ get_lock_and_call_action(Action) ->
     {crit, _} -> 
       F = fun() ->
         ?INFO("Got the lock on the system for ~p (~p)~n", [Action, ElectionName2]),
-        O = ambassador:ask(Action, []),
+        O = ambassador:run(Action, []),
         ?INFO("Ambassador response from ~p: ~p~n", [Action, O]),
         O
       end,

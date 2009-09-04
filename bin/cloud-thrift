@@ -72,7 +72,11 @@ EOS
         server = Thrift::SimpleServer.new(processor, transport, transportFactory)
 
         puts "Starting the cloud server..."
-        server.serve()
+        begin
+          server.serve()
+        rescue
+          exit 10
+        end
         puts "done."
       end
 

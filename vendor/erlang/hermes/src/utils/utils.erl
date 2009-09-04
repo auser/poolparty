@@ -15,7 +15,8 @@ get_rrd_location() ->
 
 
 is_process_alive(Pid) when is_pid(Pid) ->
-	rpc:call(node(Pid), erlang, is_process_alive, [Pid]).
+	rpc:call(node(Pid), erlang, is_process_alive, [Pid]);
+is_process_alive(_Pid) -> false.
 
 
 % utils:delete(a, [{port, "90"}, {a, "danger"}]). => [{port,"90"}]
