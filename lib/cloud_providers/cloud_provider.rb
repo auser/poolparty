@@ -81,5 +81,14 @@ module CloudProviders
       results.select_with_hash(hsh)
     end
     
+    def before_compile(cld)
+    end
+    
+    def after_compile(cld)
+    end
+    
+    
+    
+    
   end
 end
