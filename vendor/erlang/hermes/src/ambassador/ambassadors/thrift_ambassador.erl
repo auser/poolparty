@@ -117,10 +117,12 @@ init([Args]) ->
 %% Description: Handling call messages
 %%--------------------------------------------------------------------
 handle_call({cloud_query, CloudName, Fun, [Args]}, _From, #state{thrift_pid = P} = State) ->
-  Reply = case cloud_query(P, CloudName, Fun, Args) of
+  Reply = case catch cloud_query(P, CloudName, Fun, Args) of
     {ok, {cloudResponse, _BinCloudName, _BinFun, [<<"unhandled monitor">>]}} -> {error, unhandled_monitor};
     {ok, {cloudResponse, _BinCloudName, _BinFun, BinResponse}} -> {ok, utils:turn_to_list(BinResponse)};
-    Else -> {error, Else}
+    Else -> 
+      ?ERROR("There was an error: ~p~n", [Else]),
+      {error, Else}
   end,
   {reply, Reply, State};
   
@@ -147,9 +149,10 @@ handle_cast(_Msg, State) ->
 %%                                       {stop, Reason, State}
 %% Description: Handling all non call/cast messages
 %%--------------------------------------------------------------------
-handle_info({'EXIT', _Pid, _Reason}, #state{start_args = _Args} = State) ->
+handle_info({'EXIT', _Pid, Reason}, #state{start_args = _Args} = State) ->
   % Port = start_thrift_cloud_server(Args),
   % NewState = State#state{port = Port},
+  ?INFO("Received Exit in ~p: ~p~n", [?MODULE, Reason]),
   {noreply, State};
 
 % The process could not be started, because of some foreign error
@@ -173,9 +176,8 @@ handle_info(Info, State) ->
 %% cleaning up. When it returns, the gen_server terminates with Reason.
 %% The return value is ignored.
 %%--------------------------------------------------------------------
-terminate(Reason, #state{start_args = Args} = _State) ->
+terminate(Reason, #state{start_args = _Args} = _State) ->
   ?ERROR("~p terminating: ~p~n", [?MODULE, Reason]),
-  build_start_command("stop", Args),
   ok.
 
 %%--------------------------------------------------------------------
@@ -281,14 +283,18 @@ cloud_query(P, Name, Meth, Args) ->
   end.
   
 
-cloud_run(P, Name, Meth, Args) ->
+cloud_run(P, Name, Meth, Args) ->  
   Query = #cloudQuery{name=Name},
+  ?INFO("Casting the command ~p through ~p~n", [Meth, ?MODULE]),
   case catch thrift_client:call(P, cast_command, [Query, Meth, Args]) of % infinite timeout
     {'EXIT', R} -> 
+      ?ERROR("Got back an EXIT error: ~p~n", [R]),
       case R of
         {timeout, _} -> {error, timeout};
         E -> {error, E}
       end;
-    E -> E
+    E -> 
+      ?INFO("Received ~p from cloud_run~n", [E]),
+      E
   end.
   
