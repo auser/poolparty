@@ -31,10 +31,12 @@
 -record(state, {
           start_args,   % args to start with
           thrift_pid,   % thrift client pid
+          port,         % port
           retry_times   % times to retry
        }).
                  
 -define(SERVER, ?MODULE).
+-define(PORT_OPTIONS, [stream, {line, 1024}, binary, exit_status, hide]).
 
 %%====================================================================
 %% API
@@ -77,7 +79,7 @@ init([Args]) ->
   stop_thrift_client(Args),
   timer:sleep(500),
   
-  start_thrift_cloud_server(Args),
+  Port = start_thrift_cloud_server(Args),
   
   {ok, HostName} = get_hostname(),
   BannerArr = [
@@ -101,6 +103,7 @@ init([Args]) ->
   {ok, #state{
     start_args = Args,
     thrift_pid = P,
+    port = Port,
     retry_times = 0
   }}.
 
@@ -144,11 +147,21 @@ handle_cast(_Msg, State) ->
 %%                                       {stop, Reason, State}
 %% Description: Handling all non call/cast messages
 %%--------------------------------------------------------------------
-handle_info({'DOWN',Ref,process, _Pid, normal}, #state{start_args = Args} = State) -> 
-  erlang:demonitor(Ref),
-  start_thrift_cloud_server(Args),
+handle_info({'EXIT', _Pid, _Reason}, #state{start_args = _Args} = State) ->
+  % Port = start_thrift_cloud_server(Args),
+  % NewState = State#state{port = Port},
   {noreply, State};
-  
+
+% The process could not be started, because of some foreign error
+handle_info({_Port,{exit_status,10}}, State) -> {noreply, State};
+handle_info({Port, {exit_status, Status}}, #state{port=Port}=State) ->
+    ?ERROR("OS Process died with status: ~p", [Status]),
+    {stop, {exit_status, Status}, State};
+
+handle_info({_Port, {data, {eol, Data}}}, State) ->
+  ?INFO("~p~n", [Data]),
+  {noreply, State};
+    
 handle_info(Info, State) ->
   ?INFO("Received info in ~p: ~p~n", [?MODULE, Info]),
   {noreply, State}.
@@ -202,11 +215,15 @@ start_thrift_server(Args) ->
   ok.
 
 start_thrift_cloud_server(Args) ->  
-  StartCmd = build_start_command("run", Args),
-  case whereis(cloud_thrift_server) of
-    undefined -> start_and_link_thrift_server(StartCmd);
-    Node -> Node
-  end.  
+  process_flag(trap_exit, true),
+  StartCmd = build_start_command("start", Args),
+  Port = open_port({spawn, StartCmd ++ " "}, ?PORT_OPTIONS),
+  Port.
+  % start_and_link_thrift_server(StartCmd).
+  % case whereis(cloud_thrift_server) of
+  %   undefined -> start_and_link_thrift_server(StartCmd);
+  %   Node -> Node
+  % end.  
   
 start_and_link_thrift_server(StartCmd) ->
   ?INFO("Starting ~p: ~p~n", [?MODULE, StartCmd]),
@@ -215,12 +232,12 @@ start_and_link_thrift_server(StartCmd) ->
       ?INFO("Assuming the thrift_client is already started error: ~p~n", [Reason]),
       ok;
     Pid ->
-      case utils:is_process_alive(Pid) of
-        true -> 
-          erlang:register(cloud_thrift_server, Pid),
-          erlang:monitor(process, Pid);
-        _ -> ok
-      end,
+      % case utils:is_process_alive(Pid) of
+      %   true -> 
+          % erlang:register(cloud_thrift_server, Pid),
+          % erlang:monitor(process, Pid),
+        % _ -> ok
+      % end,
       Pid
   end.
   
