@@ -1094,7 +1094,7 @@ Gem::Specification.new do |s|
   s.rdoc_options = ["--quiet", "--title", "PoolParty documentation", "--line-numbers", "--main", "README"]
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.4}
-  s.summary = %q{Self-healing, auto-scaling system administration, provisioning and maintaining tool that makes cloud computing easy and fun}
+  s.summary = %q{Self-healing, auto-scaling system administration, provisioning and maintaining tool that makes cloud computing easier.}
   s.test_files = [
     "test/test_helper.rb",
      "test/test_methods.rb"
