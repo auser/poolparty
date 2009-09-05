@@ -41,6 +41,12 @@ You must pass a block with your monitor
       methods
     end
     
+    # Format the monitor values
+    # Set the monitor format here.
+    # The default will be to turn the value into a float
+    # but to allow other formats, call the value here, for instance:
+    #   mon.format :to_s
+    # Blocks are also permitted
     def format(meth=nil, &block)
       @value_format ||= (meth ? meth : block)
     end
