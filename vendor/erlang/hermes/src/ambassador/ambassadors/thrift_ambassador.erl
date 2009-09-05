@@ -127,7 +127,8 @@ handle_call({cloud_query, CloudName, Fun, [Args]}, _From, #state{thrift_pid = P,
     % Errors
     {error, {noproc, Reason}} ->
       ?ERROR("Cloud thrift server died. Restarting it: ~p~n", [Reason]),
-      start_thrift_cloud_server(StartArgs);
+      start_thrift_cloud_server(StartArgs),
+      {error, Reason};
     Else -> 
       ?ERROR("There was an error: ~p~n", [Else]),
       {error, Else}

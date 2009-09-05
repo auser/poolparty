@@ -232,7 +232,7 @@ Compiling cloud #{self.name} to #{tmp_path/"etc"/"#{dependency_resolver_name}"}
     #     vote_for(:expand) if v > 0.8
     #   end
     def monitor(monitor_symbol, &block)
-      monitors[monitor_symbol] ||= PoolParty::Monitor.new(monitor_symbol, &block)
+      monitors[monitor_symbol.to_sym] ||= PoolParty::Monitor.new(monitor_symbol, &block)
     end
     
     # Run the monitor logic
@@ -250,13 +250,11 @@ Compiling cloud #{self.name} to #{tmp_path/"etc"/"#{dependency_resolver_name}"}
       @monitors ||= {}
     end
     
-    def monitor_format(mon_name, meth, &block)
-      delayed_action do
-        if monitors.has_key?(mon_name)
-          monitors[mon_name].format(meth, &block)
-        else
-          raise PoolPartyError.create("MonitorsFormattingError", "You created a monitor format for an unknown monitor. Please check and try again!")
-        end
+    def monitor_format(mon_name, meth=nil, &block)
+      if monitors.has_key?(mon_name.to_sym)
+        monitors[mon_name.to_sym].format(meth, &block)
+      else
+        raise PoolPartyError.create("MonitorsFormattingError", "You created a monitor format for an unknown monitor. Please check and try again!")
       end
     end
     

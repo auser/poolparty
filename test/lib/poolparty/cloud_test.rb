@@ -158,10 +158,16 @@ class CloudTest < Test::Unit::TestCase
           configure if v < 0.2
           vote_for(:expand) if v > 1.1
         end
+        
         monitor :load do |a|
           # [0.42 0.43 0.37]
-          vote_for(:expand) if a > 0.8
+          vote_for(:expand) if a[0] > 0.8
         end
+        
+        monitor_format :load do |d|
+          d.split(",").map {|ele| ele.to_f }
+        end
+        
       end
     end
     

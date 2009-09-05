@@ -48,9 +48,8 @@ class MonitorTest < Test::Unit::TestCase
       end
     end
     
-    mon.format do |d|
-      return *d.split(",")
-    end
+    mon.format {|d|return *d.split(",")}
+
     assert_equal({:hello => []}, mon.run("hello, world"))
     assert_equal({:short => []}, mon.run("good day"))
   end
