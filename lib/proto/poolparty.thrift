@@ -14,4 +14,5 @@ struct CloudResponse {
 
 service CommandInterface {
   CloudResponse run_command(1:CloudQuery cld, 2:string command, 3:list<string> arglist)
+  CloudResponse cast_command(1:CloudQuery cld, 2:string command, 3:list<string> arglist)
 }

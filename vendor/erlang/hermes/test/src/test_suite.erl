@@ -4,7 +4,7 @@
 
 all_test_() ->
   [
-    {module, hermes_logger_test},
+    % {module, hermes_logger_test},
     {module, config_test},
     {module, rest_server_test},
     {module, utils_test},

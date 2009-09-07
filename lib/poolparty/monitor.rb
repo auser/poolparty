@@ -15,7 +15,7 @@
 module PoolParty
   class Monitor
     
-    attr_reader :name, :monitor_block
+    attr_reader :name, :monitor_block, :value_format
     
     def initialize(monitor_name, &block)
       msg =<<-EOE
@@ -37,11 +37,33 @@ You must pass a block with your monitor
     # retrieved and return the methods available.
     def run(val)
       @methods = nil
-      instance_exec val, &monitor_block
+      instance_exec format_value(val), &monitor_block
       methods
     end
     
+    # Format the monitor values
+    # Set the monitor format here.
+    # The default will be to turn the value into a float
+    # but to allow other formats, call the value here, for instance:
+    #   mon.format :to_s
+    # Blocks are also permitted
+    def format(meth=nil, &block)
+      @value_format ||= (meth ? meth : block)
+    end
+    
     private
+    
+    # Format the value of the monitor
+    def format_value(value)
+      case value_format
+      when Proc
+        value_format.call(value)
+      when nil
+        value.to_f
+      else
+        value.send value_format
+      end
+    end
 
     # We don't want the methods actually executing since we are executing the methods 
     # in a cloud, we just want to store the output values of the

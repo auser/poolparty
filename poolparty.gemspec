@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{poolparty}
-  s.version = "1.3.11"
+  s.version = "1.3.13"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Ari Lerner", "Michael Fairchild", "Nate Murray"]
-  s.date = %q{2009-09-03}
+  s.date = %q{2009-09-04}
   s.description = %q{PoolParty: The easy, open-source, cross-cloud management solution}
   s.email = %q{arilerner@mac.com}
   s.executables = ["cloud", "cloud-bootstrap", "cloud-compile", "cloud-configure", "cloud-console", "cloud-contract", "cloud-expand", "cloud-list", "cloud-misc", "cloud-osxcopy", "cloud-setup", "cloud-show", "cloud-ssh", "cloud-start", "cloud-terminate", "cloud-thrift", "cloud-verify"]
@@ -1094,7 +1094,7 @@ Gem::Specification.new do |s|
   s.rdoc_options = ["--quiet", "--title", "PoolParty documentation", "--line-numbers", "--main", "README"]
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.4}
-  s.summary = %q{Self-healing, auto-scaling system administration, provisioning and maintaining tool that makes cloud computing easy and fun}
+  s.summary = %q{Self-healing, auto-scaling system administration, provisioning and maintaining tool that makes cloud computing easier.}
   s.test_files = [
     "test/test_helper.rb",
      "test/test_methods.rb"

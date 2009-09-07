@@ -90,19 +90,23 @@ handle_info({nag, Interval}, #state{sleep_delay = SleepDelay} = State) ->
       E           -> E
     end,
     utils:turn_to_atom(LocalMon)
-  end, MonReturn),
-  % ?INFO("Time to nag: ~p~n", [Monitors]),
+  end, utils:turn_to_list(MonReturn)),
+  
   lists:map(fun(Mon) ->
     Float = mon_server:get_latest_average_for(Mon, Interval),
-    % ?TRACE("Asking", [erlang:atom_to_list(Mon), erlang:float_to_list(Float)]),
+    
+    ?INFO("format_args_for_thrift(utils:turn_binary(Float)): ~p~n", [format_args_for_thrift(utils:turn_binary(Float))]),
+    
     Out = ambassador:ask("run_monitor", [
                                           erlang:atom_to_list(Mon),
-                                          erlang:float_to_list(Float)
+                                          format_args_for_thrift(utils:turn_binary(Float))
                                         ]),
     
-    case Out of
+    ?INFO("Got back from ambassador: ~p~n", [Out]),
+    case catch Out of
+      {'EXIT', _} -> ok;
       {ok, [Resp]} ->
-        % ?TRACE("Resp", [Resp]),
+        ?INFO("Resp", [Resp]),
         case string:tokens(Resp, ":") of
           ["vote_for", Action]  -> 
           ElectionName = erlang:list_to_atom(lists:append(["hold_election_", Action])),
@@ -173,3 +177,14 @@ get_lock_and_call_action(Action) ->
       spawn(F);
     _ -> ok
   end.
+  
+format_args_for_thrift(Args) when is_list(Args) ->
+  [FirstElement|_] = Args,
+  Out = case FirstElement of
+    O when is_binary(O) ->
+      StringElements = lists:map(fun(Bin) -> erlang:binary_to_list(Bin) end, Args),
+      string:join(StringElements, ", ");
+    O -> O
+  end;
+  
+format_args_for_thrift(Args) -> Args.

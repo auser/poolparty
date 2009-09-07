@@ -232,14 +232,14 @@ Compiling cloud #{self.name} to #{tmp_path/"etc"/"#{dependency_resolver_name}"}
     #     vote_for(:expand) if v > 0.8
     #   end
     def monitor(monitor_symbol, &block)
-      monitors[monitor_symbol] ||= PoolParty::Monitor.new(monitor_symbol, &block)
+      monitors[monitor_symbol.to_sym] ||= PoolParty::Monitor.new(monitor_symbol, &block)
     end
     
     # Run the monitor logic
     def run_monitor(monitor_name, value)
       mon = monitors[monitor_name.to_sym]
       if mon
-        mon.run(value.to_f)
+        mon.run(value)
       else
         "unhandled monitor"
       end
@@ -248,6 +248,14 @@ Compiling cloud #{self.name} to #{tmp_path/"etc"/"#{dependency_resolver_name}"}
     # Store the monitors in an array
     def monitors
       @monitors ||= {}
+    end
+    
+    def monitor_format(mon_name, meth=nil, &block)
+      if monitors.has_key?(mon_name.to_sym)
+        monitors[mon_name.to_sym].format(meth, &block)
+      else
+        raise PoolPartyError.create("MonitorsFormattingError", "You created a monitor format for an unknown monitor. Please check and try again!")
+      end
     end
     
     ##### Internal methods #####

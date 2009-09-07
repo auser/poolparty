@@ -100,6 +100,7 @@ init([Args]) ->
       self();
     {ok, C} -> C
   end,
+  ?INFO("Connected! Ready to go!~n~n", []),
   {ok, #state{
     start_args = Args,
     thrift_pid = P,
@@ -116,11 +117,21 @@ init([Args]) ->
 %%                                      {stop, Reason, State}
 %% Description: Handling call messages
 %%--------------------------------------------------------------------
-handle_call({cloud_query, CloudName, Fun, [Args]}, _From, #state{thrift_pid = P} = State) ->
-  Reply = case cloud_query(P, CloudName, Fun, Args) of
+handle_call({cloud_query, CloudName, Fun, [Args]}, _From, #state{thrift_pid = P, start_args = StartArgs} = State) ->
+  ?INFO("Calling cloud_query: ~p ~p(~p)~n", [CloudName, Fun, Args]),
+  Reply = case catch cloud_query(P, CloudName, Fun, Args) of
     {ok, {cloudResponse, _BinCloudName, _BinFun, [<<"unhandled monitor">>]}} -> {error, unhandled_monitor};
-    {ok, {cloudResponse, _BinCloudName, _BinFun, BinResponse}} -> {ok, utils:turn_to_list(BinResponse)};
-    Else -> {error, Else}
+    {ok, {cloudResponse, _BinCloudName, _BinFun, BinResponse}} -> 
+      ?INFO("Got back: ~p~n", [utils:turn_to_list(BinResponse)]),
+      {ok, utils:turn_to_list(BinResponse)};
+    % Errors
+    {error, {noproc, Reason}} ->
+      ?ERROR("Cloud thrift server died. Restarting it: ~p~n", [Reason]),
+      start_thrift_cloud_server(StartArgs),
+      {error, Reason};
+    Else -> 
+      ?ERROR("There was an error: ~p~n", [Else]),
+      {error, Else}
   end,
   {reply, Reply, State};
   
@@ -147,13 +158,16 @@ handle_cast(_Msg, State) ->
 %%                                       {stop, Reason, State}
 %% Description: Handling all non call/cast messages
 %%--------------------------------------------------------------------
-handle_info({'EXIT', _Pid, _Reason}, #state{start_args = _Args} = State) ->
+handle_info({'EXIT', _Pid, Reason}, #state{start_args = _Args} = State) ->
   % Port = start_thrift_cloud_server(Args),
   % NewState = State#state{port = Port},
+  ?INFO("Received Exit in ~p: ~p~n", [?MODULE, Reason]),
   {noreply, State};
 
 % The process could not be started, because of some foreign error
 handle_info({_Port,{exit_status,10}}, State) -> {noreply, State};
+handle_info({_Port,{exit_status,0}}, #state{start_args = Args} = State) -> {noreply, State};
+    
 handle_info({Port, {exit_status, Status}}, #state{port=Port}=State) ->
     ?ERROR("OS Process died with status: ~p", [Status]),
     {stop, {exit_status, Status}, State};
@@ -173,9 +187,8 @@ handle_info(Info, State) ->
 %% cleaning up. When it returns, the gen_server terminates with Reason.
 %% The return value is ignored.
 %%--------------------------------------------------------------------
-terminate(Reason, #state{start_args = Args} = _State) ->
+terminate(Reason, #state{start_args = _Args} = _State) ->
   ?ERROR("~p terminating: ~p~n", [?MODULE, Reason]),
-  build_start_command("stop", Args),
   ok.
 
 %%--------------------------------------------------------------------
@@ -225,21 +238,21 @@ start_thrift_cloud_server(Args) ->
   %   Node -> Node
   % end.  
   
-start_and_link_thrift_server(StartCmd) ->
-  ?INFO("Starting ~p: ~p~n", [?MODULE, StartCmd]),
-  case (fun() -> os:cmd(StartCmd) end) of
-    {error, Reason} ->
-      ?INFO("Assuming the thrift_client is already started error: ~p~n", [Reason]),
-      ok;
-    Pid ->
-      % case utils:is_process_alive(Pid) of
-      %   true -> 
-          % erlang:register(cloud_thrift_server, Pid),
-          % erlang:monitor(process, Pid),
-        % _ -> ok
-      % end,
-      Pid
-  end.
+% start_and_link_thrift_server(StartCmd) ->
+%   ?INFO("Starting ~p: ~p~n", [?MODULE, StartCmd]),
+%   case (fun() -> os:cmd(StartCmd) end) of
+%     {error, Reason} ->
+%       ?INFO("Assuming the thrift_client is already started error: ~p~n", [Reason]),
+%       ok;
+%     Pid ->
+%       % case utils:is_process_alive(Pid) of
+%       %   true -> 
+%           % erlang:register(cloud_thrift_server, Pid),
+%           % erlang:monitor(process, Pid),
+%         % _ -> ok
+%       % end,
+%       Pid
+%   end.
   
   
 stop_thrift_client(Args) ->
@@ -281,14 +294,18 @@ cloud_query(P, Name, Meth, Args) ->
   end.
   
 
-cloud_run(P, Name, Meth, Args) ->
+cloud_run(P, Name, Meth, Args) ->  
   Query = #cloudQuery{name=Name},
-  case catch thrift_client:call(P, cast_command, [Query, Meth, Args]) of % infinite timeout
+  ?INFO("Casting the command ~p through ~p~n", [Meth, ?MODULE]),
+  case catch thrift_client:cast(P, run_command, [Query, Meth, Args]) of % infinite timeout
     {'EXIT', R} -> 
+      ?ERROR("Got back an EXIT error: ~p~n", [R]),
       case R of
         {timeout, _} -> {error, timeout};
         E -> {error, E}
       end;
-    E -> E
+    E -> 
+      ?INFO("Received ~p from cloud_run~n", [E]),
+      E
   end.
   
