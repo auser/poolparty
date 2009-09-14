@@ -22,7 +22,7 @@ remote_file "/tmp/testfile" do
   source "http://www.example.com/tempfiles/testfile"
   action :create
   backup 5
-  mode 0644
+  mode "0644"
   owner "root"
   checksum "08da002l"
 end

@@ -16,7 +16,7 @@ str = <<-EOS
 user "random" do
   action :create
   comment "Random User"
-  uid 1000
+  uid \"1000\"
   gid "users"
   home "/home/random"
   shell "/bin/zsh"

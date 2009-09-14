@@ -97,7 +97,7 @@ module PoolParty
     end
     
     def self.clouds_dot_rb_dir(n=nil)
-      File.dirname(self.clouds_dot_rb_file) if self.clouds_dot_rb_file
+      self.clouds_dot_rb_file ? File.dirname(self.clouds_dot_rb_file) : "./"
     end
     
     # Load the default clouds.rb file

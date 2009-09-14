@@ -30,7 +30,7 @@ template "/etc/motd" do
   source "/etc/motd.erb"
   action :create
   backup 5
-  mode 0644
+  mode "0644"
   owner "root"
 end
       EOE

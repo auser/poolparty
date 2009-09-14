@@ -26,10 +26,10 @@ class RemoteDirectoryResourceTest < Test::Unit::TestCase
 remote_directory "/tmp/remote_something" do
   source "something"
   files_backup 10
-  files_mode 0644
+  files_mode "0644"
   action :create
   recursive false
-  mode 0755
+  mode "0755"
   owner "nobody"
   group "nobody"
   files_owner "root"
