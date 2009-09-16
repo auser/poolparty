@@ -157,12 +157,12 @@ module PoolParty
           deps_array.each do |dep_name|
             dep = get_resource(dep_type, dep_name)
             raise PoolPartyError.create("ResourceNotFound", "A resource required for #{resource.has_method_name}(#{resource.name}) was not found: #{dep_type}(#{dep_name}). Please make sure you've specified this in your configuration.") unless dep
-            result.add_edge!(dep, resource, dep.name) unless result.edge?(dep, resource)
+            result.add_edge!(dep, resource, dep.name) unless result.edge?(dep, resource) or result.edge?(resource, dep)
           end
         end
         
         if on
-          result.add_edge!(resource, on, resource.name) unless result.edge?(resource, on)
+          result.add_edge!(resource, on, resource.name) unless result.edge?(resource, on) or result.edge?(on, resource)
         else
           result.add_vertex!(resource)
         end

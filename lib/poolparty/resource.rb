@@ -15,6 +15,7 @@ module PoolParty
     def initialize(opts={}, extra_opts={}, exists=true, &block)
       @exists ||= exists
       super(opts, extra_opts, &block)
+      after_loaded_requires_parent
       valid?
     end
     
@@ -69,6 +70,11 @@ module PoolParty
         other_resources_obj.each do |obj|
           requires(obj)
         end
+      else
+        # When is an object
+        k = other_resources_obj.has_method_name
+        dependencies[k] ||= []
+        dependencies[k] << other_resources_obj.name
       end
     end
     
@@ -114,7 +120,7 @@ module PoolParty
     def after_compile
     end
     
-    def after_loaded
+    def after_loaded_requires_parent
       requires parent if parent && !parent.is_a?(PoolParty::Cloud) && !parent.is_a?(PoolParty::Pool)
     end
     
