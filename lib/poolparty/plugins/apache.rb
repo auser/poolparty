@@ -74,6 +74,7 @@ module PoolParty
             content <<-eof
 LoadModule passenger_module <%= @node[:passenger_site][:passenger_module_path] %>
             eof
+            requires get_package("apache2")
           end
           
           has_file(:name => "/etc/apache2/mods-available/passenger.conf") do
@@ -81,6 +82,7 @@ LoadModule passenger_module <%= @node[:passenger_site][:passenger_module_path] %
 PassengerRoot <%= @node[:passenger_site][:passenger_root_path] %>
 PassengerRuby <%= @node[:languages][:ruby][:ruby_bin] %>
             eof
+            requires get_package("apache2")
           end
           
           present_apache_module(:passenger)
@@ -159,7 +161,7 @@ PassengerRuby <%= @node[:languages][:ruby][:ruby_bin] %>
       def install_site(name, opts={})
         sitename = name
 
-        opts.merge!(:name => "/etc/apache2/sites-available/#{sitename}")
+        opts.merge!(:name => "/etc/apache2/sites-available/#{sitename}", :requires => get_package("apache2"))
         has_directory(:name => "/etc/apache2/sites-available")
         has_file(opts) unless opts[:no_file]
         has_exec(:name => "/usr/sbin/a2ensite #{sitename}") do

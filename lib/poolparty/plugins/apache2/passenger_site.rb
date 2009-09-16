@@ -34,7 +34,7 @@ module PoolParty
           # setup an initial symlink so apache will start even if there have not been any deploys yet
             #has_site_directory "releases/initial/public"
             #FIXME  the following line is chef specific.  It will fail with puppet
-            has_link(:target_file => "#{dir}/#{name}/current", :to => "#{dir}/#{name}/releases/initial")
+            has_link(:target_file => "#{dir}/#{name}/current", :to => "#{dir}/#{name}/releases/initial", :requires => get_directory(site_directory))
           end
           log_dir = "#{site_directory}/shared/log"
           appended_path "current"
