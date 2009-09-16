@@ -162,8 +162,8 @@ module PoolParty
     def self.define_resource_methods
       defined_resources.each do |res|
         next if res.method_defined?
-        ddputs "Defining resource: #{res} as #{res.has_method_name}"
-        define_resource(res)
+        ddputs "Defining resource: #{res} as #{res.has_method_name} on #{self}"
+        define_resource(res, is_base_resource_class? ? Base : self)
         res.method_defined!
         unless res.defined_resources.empty?
           res.define_resource_methods
@@ -171,10 +171,14 @@ module PoolParty
       end
     end
     
+    def self.is_base_resource_class?
+      self.to_s == PoolParty::Resource.to_s
+    end
+    
     # Define the resource on the base class so it's available across all
     # PoolParty classes that use Base
-    def self.define_resource(res)
-      Base.class_eval <<-EOE
+    def self.define_resource(res, base_klass=Base)
+      base_klass.class_eval <<-EOE
         def has_#{res.has_method_name}(a={},b={},e=true, &block)
           obj = #{res}.new(a,b,e,&block)
           resources << obj
