@@ -89,14 +89,7 @@ module DependencyResolvers
           "#{obj.to_i}"
         end
       when String
-        case obj
-        when /^\d{4}$/
-          "#{obj}"
-        when /^\d{3}$/
-          "0#{obj}"
-        else
-          "\"#{obj}\""
-        end
+        "\"#{obj}\""
       when Proc
         obj.call # eh
       when Array

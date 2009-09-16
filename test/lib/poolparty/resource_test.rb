@@ -73,8 +73,6 @@ class ResourceTest < Test::Unit::TestCase
       assert_equal @inst.print_variable(:a), ":a"
       assert_equal @inst.print_variable({:a => "a"}), ":a => \"a\""
       assert_equal @inst.print_variable(644), "644"
-      assert_equal @inst.print_variable("0755"), "0755"
-      assert_equal @inst.print_variable("755"), "0755"
       assert_equal @inst.print_variable(@inst), @inst.to_s
       assert_equal @inst.print_variable(nil), nil
     end

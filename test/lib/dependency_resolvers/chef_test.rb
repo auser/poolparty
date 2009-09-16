@@ -54,7 +54,7 @@ class ChefTest < Test::Unit::TestCase
     
   def test_compile_to_the_recipes
     @base.compile_to(@resources[:files], test_dir)
-    assert_equal "template \"/etc/motd\" do\n  source \"/etc/motd.erb\"\n  action :create\n  backup 5\n  mode 0644\n  owner \"root\"\nend\n", open(@cookboox_directory/"recipes"/"default.rb").read
+    assert_equal "template \"/etc/motd\" do\n  source \"/etc/motd.erb\"\n  action :create\n  backup 5\n  mode \"0644\"\n  owner \"root\"\nend\n", open(@cookboox_directory/"recipes"/"default.rb").read
   end
     
   def test_compile_the_recipes
@@ -78,14 +78,14 @@ template "/etc/motd" do
   source "/etc/motd.erb"
   action :create
   backup 5
-  mode 0644
+  mode "0644"
   owner "root"
 end
 
 directory "/etc/poolparty" do
   action :create
   recursive true
-  mode 0644
+  mode "0644"
   owner "root"
   group "root"
 end
