@@ -155,7 +155,7 @@ module PoolParty
       $:.unshift("#{File.dirname(filepath)}/lib")
       $:.unshift("#{File.dirname(filepath)}/plugins")
       
-      Dir["#{File.dirname(filepath)}/lib/*"].each {|lib_path| require lib_path }
+      Dir["#{File.dirname(filepath)}/lib/*.rb"].each {|lib_path| require lib_path }
       Dir["#{File.dirname(filepath)}/plugins/*"].each do |plugin_path|
         if File.directory?(plugin_path)
           $:.unshift(plugin_path)
