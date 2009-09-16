@@ -3,6 +3,7 @@
 # Build the directories
 # Make the /etc/poolparty directory to hold poolparty configuration
 mkdir -p /etc/poolparty
+mkdir -p /etc/poolparty/keys
 mkdir -p /var/log/poolparty
 
 # Build the user groups

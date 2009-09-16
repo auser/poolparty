@@ -4,6 +4,8 @@
 # Make the /etc/poolparty directory to hold poolparty configuration
 mkdir -p /etc/poolparty
 mkdir -p /var/log/poolparty
+mkdir -p /etc/poolparty/keys
+
 
 # Build the user groups
 if [ ! "$(egrep "poolparty" /etc/group)" ]; then

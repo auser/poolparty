@@ -15,6 +15,7 @@ module PoolParty
     def initialize(opts={}, extra_opts={}, exists=true, &block)
       @exists ||= exists
       super(opts, extra_opts, &block)
+      after_loaded_requires_parent
       valid?
     end
     
@@ -69,6 +70,11 @@ module PoolParty
         other_resources_obj.each do |obj|
           requires(obj)
         end
+      else
+        # When is an object
+        k = other_resources_obj.has_method_name
+        dependencies[k] ||= []
+        dependencies[k] << other_resources_obj.name
       end
     end
     
@@ -114,7 +120,7 @@ module PoolParty
     def after_compile
     end
     
-    def after_loaded
+    def after_loaded_requires_parent
       requires parent if parent && !parent.is_a?(PoolParty::Cloud) && !parent.is_a?(PoolParty::Pool)
     end
     
@@ -162,8 +168,8 @@ module PoolParty
     def self.define_resource_methods
       defined_resources.each do |res|
         next if res.method_defined?
-        ddputs "Defining resource: #{res} as #{res.has_method_name}"
-        define_resource(res)
+        ddputs "Defining resource: #{res} as #{res.has_method_name} on #{self}"
+        define_resource(res, is_base_resource_class? ? Base : self)
         res.method_defined!
         unless res.defined_resources.empty?
           res.define_resource_methods
@@ -171,10 +177,14 @@ module PoolParty
       end
     end
     
+    def self.is_base_resource_class?
+      self.to_s == PoolParty::Resource.to_s
+    end
+    
     # Define the resource on the base class so it's available across all
     # PoolParty classes that use Base
-    def self.define_resource(res)
-      Base.class_eval <<-EOE
+    def self.define_resource(res, base_klass=Base)
+      base_klass.class_eval <<-EOE
         def has_#{res.has_method_name}(a={},b={},e=true, &block)
           obj = #{res}.new(a,b,e,&block)
           resources << obj
