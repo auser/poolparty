@@ -122,6 +122,9 @@ module CloudProviders
       end
       @vmx_file = "'#{o}'"
     end
+
+    def before_compile(args); end
+    def after_compile(args); end
     
   end
 end
