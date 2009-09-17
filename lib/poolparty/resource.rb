@@ -72,9 +72,9 @@ module PoolParty
         end
       else
         # When is an object
-        k = other_resources_obj.has_method_name
-        dependencies[k] ||= []
-        dependencies[k] << other_resources_obj.name
+        # k = other_resources_obj.has_method_name
+        # dependencies[k] ||= []
+        # dependencies[k] << other_resources_obj.name
       end
     end
     
