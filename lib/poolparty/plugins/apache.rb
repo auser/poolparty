@@ -7,7 +7,7 @@ module PoolParty
       default_options :port               => 80,
                       :www_user           => 'www-data',
                       :www_dir            => "/var/www",                      
-                      :passenger_version  => "2.2.4"
+                      :passenger_version  => "2.2.5"
       
       def before_load
         installed_as_worker
@@ -39,6 +39,13 @@ module PoolParty
       def install_passenger
         enable_passenger
       end
+
+
+   # LoadModule passenger_module /usr/lib/ruby/gems/1.8/gems/passenger-2.2.5/ext/apache2/mod_passenger.so
+   # PassengerRoot /usr/lib/ruby/gems/1.8/gems/passenger-2.2.5
+   # PassengerRuby /usr/bin/ruby1.8
+   #
+   # creating this thing below may not be being run b/c it checks for the passenger.conf which isn't really a good test
       
       def enable_passenger
         unless @enable_passenger
@@ -46,7 +53,7 @@ module PoolParty
           has_package     "build-essential"
           has_package     "apache2-prefork-dev"
           has_gem_package "fastthread"
-          has_gem_package "passenger"
+          has_gem_package "passenger", :version => passenger_version
           passenger_configs
           
           has_exec "install_passenger_script" do
@@ -55,8 +62,8 @@ module PoolParty
             requires get_exec("restart-apache2")
             requires get_package("apache2")
             requires get_gem_package("passenger")
-            not_if "test -f /etc/apache2/mods-available/passenger.conf && test -s /etc/apache2/mods-available/passenger.conf "
-            creates lambda { "@node[:apache][:passenger_module_path]" }
+            not_if "test -e \#{node[:passenger_site][:passenger_module_path]}"
+            # creates lambda { "passenger_site[:passenger_module_path]" }
             end
           
           @enable_passenger = true
@@ -65,16 +72,26 @@ module PoolParty
       
       def passenger_configs
         unless @passenger_configs
+
+          # requires doesn't work for has_variable?
           
+          # has_variable("passenger_version",     passenger_version)
+          # has_variable("passenger_root_path",   "\#{languages[:ruby][:gems_dir]}/gems/passenger-#{passenger_version}",
+          #             :requires => get_variable("passenger_version"))
+          # has_variable("passenger_module_path", "\#{passenger_site[:passenger_root_path]}/ext/apache2/mod_passenger.so", 
+          #              :requires => get_variable("passenger_root_path"))
+
           has_variable("passenger_version",     passenger_version)
-          has_variable("passenger_root_path",   "\#{languages[:ruby][:gems_dir]}/gems/passenger-#{passenger_version}")
-          has_variable("passenger_module_path", "\#{passenger_site[:passenger_root_path]}/ext/apache2/mod_passenger.so")
+          has_variable("passenger_root_path",   "\#{languages[:ruby][:gems_dir]}/gems/passenger-#{passenger_version}",
+                      :requires => get_variable("passenger_version"))
+          has_variable("passenger_module_path", "\#{languages[:ruby][:gems_dir]}/gems/passenger-#{passenger_version}/ext/apache2/mod_passenger.so", 
+                       :requires => get_variable("passenger_root_path"))
           
           has_file(:name => "/etc/apache2/mods-available/passenger.load") do
             content <<-eof
 LoadModule passenger_module <%= @node[:passenger_site][:passenger_module_path] %>
             eof
-            requires get_package("apache2")
+            requires get_exec("install_passenger_script")
           end
           
           has_file(:name => "/etc/apache2/mods-available/passenger.conf") do
@@ -82,10 +99,10 @@ LoadModule passenger_module <%= @node[:passenger_site][:passenger_module_path] %
 PassengerRoot <%= @node[:passenger_site][:passenger_root_path] %>
 PassengerRuby <%= @node[:languages][:ruby][:ruby_bin] %>
             eof
-            requires get_package("apache2")
+            requires get_exec("install_passenger_script")
           end
           
-          present_apache_module(:passenger)
+          present_apache_module(:passenger, {:requires => get_file("/etc/apache2/mods-available/passenger.load")})
           @passenger_configs = true
         end
       end
@@ -163,7 +180,7 @@ PassengerRuby <%= @node[:languages][:ruby][:ruby_bin] %>
 
         opts.merge!(:name => "/etc/apache2/sites-available/#{sitename}", :requires => get_package("apache2"))
         has_directory(:name => "/etc/apache2/sites-available")
-        has_file(opts) unless opts[:no_file]
+        has_file(opts, :requires => get_package("apache2")) unless opts[:no_file]
         has_exec(:name => "/usr/sbin/a2ensite #{sitename}") do
           notifies get_exec("reload-apache2"), :run
           requires get_exec("reload-apache2")
@@ -177,12 +194,14 @@ PassengerRuby <%= @node[:languages][:ruby][:ruby_bin] %>
       end
       
       def present_apache_module(*names)
+        opts = names.pop if names.last.kind_of?(::Hash)
         names.each do |name|
           has_exec(:name => "mod-#{name}", :command => "/usr/sbin/a2enmod #{name}") do            
             not_if "/bin/sh -c \'[ -L /etc/apache2/mods-enabled/#{name}.load ] && [ /etc/apache2/mods-enabled/#{name}.load -ef /etc/apache2/mods-available/#{name}.load ]\'"
             requires get_package("apache2")
             notifies get_exec("force-reload-apache2"), :run
             requires get_exec("force-reload-apache2")
+            requires opts[:requires] if opts && opts[:requires]
           end
         end
       end
