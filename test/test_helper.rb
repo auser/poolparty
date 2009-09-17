@@ -27,4 +27,3 @@ require "shoulda"
 require 'git-style-binary/command'
 
 GitStyleBinary.run = true
-

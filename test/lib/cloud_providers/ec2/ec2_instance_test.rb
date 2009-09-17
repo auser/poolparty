@@ -1,11 +1,20 @@
 require "#{File.dirname(__FILE__)}/../../../test_helper"
 require File.dirname(__FILE__)+"/ec2_test.rb"
 
+stub_keypair_searchable_paths
+
 class Ec2InstanceTest < Test::Unit::TestCase
   include CloudProviders
-
+  
+  def setup
+    clear!
+    @filepath = fixtures_dir/"clouds/simple_cloud.rb"
+    @pool = PoolParty::Pool.load_from_file(@filepath)
+    @cloud = @pool.clouds[@pool.clouds.keys.first]
+  end
+  
   def inst
-    @inst ||= clouds['app'].describe_instances.first
+    @inst ||= @cloud.describe_instances.first
   end
   
   def test_has_cloud_provider
@@ -20,18 +29,18 @@ class Ec2InstanceTest < Test::Unit::TestCase
   def test_to_s
     vals = inst.to_s.split("\t")
     assert_equal 3, vals.size
-    assert_equal 'app', vals.first
+    assert_equal 'simple_cloud', vals.first
   end
   
   def test_has_cloud_set_when_created_from_cloud
-    assert_equal clouds['app'], clouds['app'].cloud_provider.cloud
-    assert_equal clouds['app'], inst.cloud
-    assert_equal 'app', inst.dsl_options[:cloud_name]
-    assert_equal 'app', inst.to_hash[:cloud_name]
+    assert_equal @cloud, @cloud.cloud_provider.cloud
+    assert_equal @cloud, inst.cloud
+    assert_equal 'simple_cloud', inst.dsl_options[:cloud_name]
+    assert_equal 'simple_cloud', inst.to_hash[:cloud_name]
   end
   
   def test_cloud_keypair
-    assert_equal  clouds['app'].keypair.to_s,  inst.keypair.to_s
+    assert_equal  @cloud.keypair.to_s,  inst.keypair.to_s
   end
 
   def test_refresh!

@@ -11,9 +11,9 @@ class PoolTest < Test::Unit::TestCase
     should "load the file with load_from_file on Pool" do
       PoolParty::Pool.load_from_file(@filepath)
       assert_equal PoolParty::Pool, pools["poolparty"].class
-      assert_equal PoolParty::Cloud, pools["poolparty"].clouds["app"].class
-      assert_equal "test_key", pools["poolparty"].clouds["app"].keypair.basename
-      assert_equal "/etc/motd", pools["poolparty"].clouds["app"].files.first.name
+      assert_equal PoolParty::Cloud, pools["poolparty"].clouds["simple_cloud"].class
+      assert_equal "test_key", pools["poolparty"].clouds["simple_cloud"].keypair.basename
+      assert_equal "/etc/motd", pools["poolparty"].clouds["simple_cloud"].files.first.name
     end
     
     should "find_and_load_default_clouds_dot_rb in Pool" do

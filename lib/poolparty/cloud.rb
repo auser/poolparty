@@ -14,7 +14,8 @@ module PoolParty
       :cloud_provider_name      => :ec2,
       :dependency_resolver_name => nil,
       :os                       => nil,
-      :bootstrap_script         => nil
+      :bootstrap_script         => nil,
+      :ssh_options              => {}
     )
     
     # Define what gets run on the callbacks
@@ -59,7 +60,8 @@ module PoolParty
     def using(provider_symbol, o={}, &block)
       return @cloud_provider if @cloud_provider
       self.cloud_provider_name = provider_symbol
-      cloud_provider(o, &block)
+      cloud_provider(ssh_options.merge(o), &block)
+      cloud_provider.keypair(keypair)
     end
     
     # Cloud provider methods
