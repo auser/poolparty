@@ -19,6 +19,7 @@ EOS
   run do |command|
     
     @loaded_clouds.each do |cld|
+      ENV["POOLPARTY_NO_VALIDATION"] = "true"
       
       cld.compile
       

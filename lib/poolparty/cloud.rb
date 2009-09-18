@@ -30,7 +30,7 @@ module PoolParty
     def before_compile
       add_monitoring_stack_if_needed
       
-      validate_all_resources
+      validate_all_resources unless ENV["POOLPARTY_NO_VALIDATION"]
     end
     
     # Freeze the cloud_name so we can't modify it at all, set the plugin_directory
