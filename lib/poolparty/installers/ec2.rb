@@ -4,7 +4,7 @@ module PoolParty
       
       def steps
         [
-          :find_ec2_directory, :ask_for_access_key, :ask_for_private_access_key,
+          :ask_for_ec2_directory, :ask_for_access_key, :ask_for_private_access_key,
           :show_env_setup
         ]
       end
@@ -16,19 +16,7 @@ module PoolParty
       def self.description
         "Ec2 installer"
       end
-      
-      def find_ec2_directory
-        msg = "We found the following vmware files in the default vmware directory.\nChoose one of these to use as your vmrun file or select other\n<line>"
-        
-        directories = {}
-        default_ec2_directories.each_with_index do |file,idx|
-          directories.merge!(idx+1 => file)
-        end
-        
-        base = choose(msg, directories)
-        @ec2_directory = base == :other ? ask_for_ec2_directory : base
-      end
-      
+            
       def ask_for_access_key
         access_key_help =<<-EOV
 EC2 uses an access key to identify you and allows you to start and stop instances.

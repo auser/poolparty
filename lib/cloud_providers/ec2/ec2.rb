@@ -124,7 +124,6 @@ module CloudProviders
       
       after_run_instance(instances)
       
-      #FIXME: This needs to deal with the case when an array is returned if max_instances > 1
       instances.first
     end
     
