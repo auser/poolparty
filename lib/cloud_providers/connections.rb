@@ -87,9 +87,12 @@ module  CloudProviders
           err = stderr.readlines
           $stderr.write_nonblock(err)
         rescue SystemCallError => error
-          $stderr.write_nonblock(stderr)
+          err = stderr.readlines
+          $stderr.write_nonblock(err)
         rescue EOFError => error
-           # nothing
+          err = stderr.readlines
+          $stderr.write_nonblock(err)
+          # used to do nothing
         end
       end
       buf
