@@ -156,7 +156,6 @@ Gem::Specification.new do |s|
      "lib/poolparty/plugins/apache2/browser_fixes.conf.erb",
      "lib/poolparty/plugins/apache2/default-site.conf.erb",
      "lib/poolparty/plugins/apache2/mime-minimal.conf.erb",
-     "lib/poolparty/plugins/apache2/mongrel.rb",
      "lib/poolparty/plugins/apache2/passenger_site.rb",
      "lib/poolparty/plugins/apache2/php5.rb",
      "lib/poolparty/plugins/apache2/virtual_host.rb",
