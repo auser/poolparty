@@ -81,7 +81,7 @@ module PoolParty
       return @cloud_provider if @cloud_provider
       klass_name = "CloudProviders::#{cloud_provider_name}".classify
       if provider_klass = CloudProviders.all.detect {|k| k.to_s == klass_name }
-        opts.merge!(:cloud => self, :keypair_name => self.keypair.full_filepath)
+        opts.merge!(:cloud => self, :keypair_name => self.keypair.basename)
         @cloud_provider = provider_klass.new(dsl_options.merge(opts), &block)
       else
         raise PoolParty::PoolPartyError.create("UnknownCloudProviderError", "Unknown cloud_provider: #{cloud_provider_name}")
