@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{poolparty}
-  s.version = "1.3.13"
+  s.version = "1.3.14"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Ari Lerner", "Michael Fairchild", "Nate Murray"]
-  s.date = %q{2009-09-04}
+  s.date = %q{2009-09-18}
   s.description = %q{PoolParty: The easy, open-source, cross-cloud management solution}
   s.email = %q{arilerner@mac.com}
   s.executables = ["cloud", "cloud-bootstrap", "cloud-compile", "cloud-configure", "cloud-console", "cloud-contract", "cloud-expand", "cloud-list", "cloud-misc", "cloud-osxcopy", "cloud-setup", "cloud-show", "cloud-ssh", "cloud-start", "cloud-terminate", "cloud-thrift", "cloud-verify"]
@@ -156,6 +156,7 @@ Gem::Specification.new do |s|
      "lib/poolparty/plugins/apache2/browser_fixes.conf.erb",
      "lib/poolparty/plugins/apache2/default-site.conf.erb",
      "lib/poolparty/plugins/apache2/mime-minimal.conf.erb",
+     "lib/poolparty/plugins/apache2/mongrel.rb",
      "lib/poolparty/plugins/apache2/passenger_site.rb",
      "lib/poolparty/plugins/apache2/php5.rb",
      "lib/poolparty/plugins/apache2/virtual_host.rb",
@@ -253,6 +254,7 @@ Gem::Specification.new do |s|
      "test/fixtures/keys/test_pub_key",
      "test/fixtures/resources/fake_plugin.rb",
      "test/fixtures/resources/fake_resource.rb",
+     "test/fixtures/resources/fake_subclassed_plugin.rb",
      "test/fixtures/resources/random_proc_file.rb",
      "test/fixtures/templates/apache_conf.erb",
      "test/fixtures/test_template.erb",
