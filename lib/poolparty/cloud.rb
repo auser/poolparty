@@ -60,7 +60,7 @@ module PoolParty
     def using(provider_symbol, o={}, &block)
       return @cloud_provider if @cloud_provider
       self.cloud_provider_name = provider_symbol
-      cloud_provider(ssh_options.merge(o), &block)
+      cloud_provider(o, &block)
       cloud_provider.keypair(keypair.full_filepath)
     end
     
