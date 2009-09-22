@@ -1,6 +1,7 @@
 require "#{File.dirname(__FILE__)}/../../test_helper"
 # require 'rr'
 stub_ec2_calls
+include_fixture_resources
 
 class CloudTest < Test::Unit::TestCase
   # include RR::Adapters::TestUnit
@@ -127,13 +128,16 @@ class CloudTest < Test::Unit::TestCase
         
         keypair "test_key", fixtures_dir/"keys"
         
-        has_file "a", :content => "a", :requires => get_file("b")
+        has_fake_plugin do
+          has_exec "a", :requires => get_file("b")
+        end
+        has_exec "c", :requires => get_exec("a")
         has_file "b", :content => "b"
 
       end
     end
     
-    assert ["b", "a"], clouds["graph2"].ordered_resources.map {|a| a.name}
+    assert_equal ["b", "a", "c"], clouds["graph2"].ordered_resources.map {|a| a.name}
   end
   
   def test_run
