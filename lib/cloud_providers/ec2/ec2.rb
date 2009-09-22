@@ -105,6 +105,12 @@ module CloudProviders
       number_of_instances = o[:number_of_instances] || 1
       set_vars_from_options o
       raise StandardError.new("You must pass a keypair to launch an instance, or else you will not be able to login. options = #{o.inspect}") if !keypair_name
+      vputs("--- Launching ec2 instances")
+      vputs({
+        "image_id" => image_id,
+        "security_group" => security_group,
+        "keypair" => keypair.basename
+      })
       response_array = ec2(o).run_instances(image_id,
                                       min_count,
                                       number_of_instances,

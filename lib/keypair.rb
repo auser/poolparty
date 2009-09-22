@@ -7,10 +7,12 @@ class Keypair
   has_searchable_paths(:prepend_paths => [Dir.pwd, '/etc/poolparty/keys', "#{ENV["HOME"]}/.ssh/", "#{ENV["HOME"]}/.ec2/", ENV['EC2_CONFIG_DIR']])
   
   attr_accessor :filepath
+  attr_reader :extra_paths
   
   # Create a new key that defaults to id_rsa as the name. 
-  def initialize(fpath)
+  def initialize(fpath, extra_paths=[])
     @filepath = fpath
+    @extra_paths = extra_paths.map {|a| File.expand_path(a) }
     valid?
   end
   
@@ -27,10 +29,10 @@ class Keypair
   # Returns the full_filepath of the key. If a full filepath is passed, we just return the expanded filepath
   # for the keypair, otherwise query where it is against known locations
   def full_filepath
-    @full_filepath ||= if File.file?(::File.expand_path(filepath))
+    @full_filepath ||= if File.file?(File.expand_path(filepath))
       ::File.expand_path(filepath)
       else
-        search_in_known_locations(filepath)
+        search_in_known_locations(filepath, extra_paths)
       end
   end
   alias :to_s :full_filepath

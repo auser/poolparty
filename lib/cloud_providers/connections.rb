@@ -42,10 +42,10 @@ module  CloudProviders
     # "-i keyfile -o StrictHostKeyChecking=no -i keypair.to_s -l fred"
     def ssh_options(opts={})
       return @ssh_options if @ssh_options && opts.empty?
-      ssh_options = {"-i" => keypair.full_filepath,
+      ssh_opts = {"-i" => keypair.full_filepath,
            "-o" =>"StrictHostKeyChecking=no"
            }.merge(opts)
-      @ssh_options = ssh_options.collect{ |k,v| "#{k} #{v}"}.join(' ')
+      @ssh_options = ssh_opts.collect{ |k,v| "#{k} #{v}"}.join(' ')
     end
     
     def rsync( opts={} )
@@ -88,9 +88,12 @@ module  CloudProviders
           err = stderr.readlines
           $stderr.write_nonblock(err)
         rescue SystemCallError => error
-          $stderr.write_nonblock(stderr)
+          err = stderr.readlines
+          $stderr.write_nonblock(err)
         rescue EOFError => error
-           # nothing
+          err = stderr.readlines
+          $stderr.write_nonblock(err)
+          # used to do nothing
         end
       end
       buf

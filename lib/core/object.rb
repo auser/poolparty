@@ -68,7 +68,7 @@ class Object
   # MESSAGES
   # Debugging output helpers
   def vputs(m="")
-    puts "[INFO] -- #{m}" if verbose?
+    puts "[INFO] -- #{m.is_a?(String) ? m : m.inspect}" if verbose?
   end
   def dputs(m="")
     puts "[DEBUG] -- #{m.is_a?(String) ? m : m.inspect}" if debugging?

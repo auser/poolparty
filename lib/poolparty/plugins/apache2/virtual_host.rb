@@ -3,6 +3,7 @@ module PoolParty
     class VirtualHost < Apache
       
       default_options(
+        :name     => nil,
         :port     => 80,
         :www_dir  => "/var/www",
         :www_user => "www-data"

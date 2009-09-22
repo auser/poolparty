@@ -6,7 +6,7 @@ pool :poolparty do
     
   cloud :simple_cloud do
     os :centos
-    keypair File.dirname(__FILE__)+"/../keys/test_key"
+    keypair "test_key", PoolParty.lib_dir+"/../test/fixtures/keys"
     has_file "/etc/motd", :content => "Simple"
   end
   
