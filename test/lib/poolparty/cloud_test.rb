@@ -34,105 +34,159 @@ class CloudTest < Test::Unit::TestCase
   end
   
   def test_have_a_keypair
-    assert_not_nil clouds['app'].keypair
-    assert_equal 'test_key', clouds['app'].keypair.basename
+    assert_not_nil @cloud.keypair
+    assert_equal 'test_key', @cloud.keypair.basename
   end
   
   def test_set_the_dependency_resolver
-    clouds['app'].dependency_resolver(:chef)
-    assert_equal DependencyResolvers::Chef, clouds['app'].dependency_resolver
+    @cloud.dependency_resolver(:chef)
+    assert_equal DependencyResolvers::Chef, @cloud.dependency_resolver
   end
   
   def test_can_use_basic_resources
-    clouds['app'].instance_eval do
+    @cloud.instance_eval do
       has_file "/etc/motd"
     end
-    assert_equal "/etc/motd", clouds['app'].files.first.name
+    assert_equal "/etc/motd", @cloud.files.first.name
   end
   
   def test_have_a_temp_path_of_the_name_as_Default_tmp_path_pool_name_cloud_name
-    assert_equal PoolParty::Default.tmp_path/"poolparty"/"app", @cloud.tmp_path
+    assert_equal PoolParty::Default.tmp_path/"poolparty"/"simple_cloud", @cloud.tmp_path
   end
   
   def test_be_using_ec2_cloud_provider_by_default
-    assert_equal :ec2, clouds['app'].cloud_provider_name
-    assert_kind_of ::CloudProviders::Ec2, clouds['app'].cloud_provider
+    assert_equal :ec2, @cloud.cloud_provider_name
+    assert_kind_of ::CloudProviders::Ec2, @cloud.cloud_provider
   end
   
   def test_raise_if_the_cloud_provider_is_not_a_known_type
     PoolParty::PoolPartyError.create("UnknownCloudProviderError")
     assert_raises UnknownCloudProviderError do
-      clouds["app"].cloud_provider_name = :not_a_cloud_provider
-      clouds["app"].cloud_provider
+      @cloud.cloud_provider_name = :not_a_cloud_provider
+      @cloud.cloud_provider
     end
   end
     
   def test_set_the_cloud_provider_cloud_and_keypair_with_cloud_provider
-    assert_equal clouds["app"], clouds["app"].cloud_provider.cloud
-    assert_equal clouds["app"].keypair.basename, clouds["app"].cloud_provider.keypair_name
+    assert_equal @cloud, @cloud.cloud_provider.cloud
+    assert_equal @cloud.keypair.basename, @cloud.cloud_provider.keypair_name
   end
   
   def test_set_the_cloud_provider_with_a_using_block
-    clouds["app"].instance_eval do
+    @cloud.instance_eval do
+      keypair "test_key"
       using :ec2 do
         image_id 'emi-39921602'
       end
     end
-    assert_equal :ec2, clouds["app"].cloud_provider_name
-    assert_equal CloudProviders::Ec2, clouds["app"].cloud_provider.class
-    assert_equal "emi-39921602", clouds["app"].cloud_provider.image_id
+    assert_equal :ec2, @cloud.cloud_provider_name
+    assert_equal CloudProviders::Ec2, @cloud.cloud_provider.class
+    assert_equal "emi-39921602", @cloud.cloud_provider.image_id
   end
   
   def test_nodes
-    assert_respond_to clouds['app'], :nodes
-    assert_respond_to clouds['app'].nodes, :each
-    assert clouds['app'].nodes.size>1
+    assert_respond_to @cloud, :nodes
+    assert_respond_to @cloud.nodes, :each
+    assert @cloud.nodes.size>1
   end
   
   def test_terminate!
-    assert clouds['app'].nodes.size > 0
-    result = clouds['app'].terminate!
+    assert @cloud.nodes.size > 0
+    result = @cloud.terminate!
     assert_respond_to result, :each
     assert_equal 'shutting-down', result.first.status
   end
   
+  def test_resource_graph_generation
+    pool "resource" do
+      cloud "graph" do
+        
+        has_file "a", :content => "a"
+        has_file "g", :content => "g", :requires => get_file("c")
+        has_file "b", :content => "b"
+        has_file "c", :content => "c"
+        has_file "d", :content => "d"
+        has_file "e", :content => "e"
+        has_file "f", :content => "f"
+
+      end
+    end
+    
+    # p clouds["graph"].ordered_resources.map {|a| a.name }
+    assert_equal %w(g), clouds["graph"].resources_with_dependencies.map {|a| a.name}
+    assert_equal %w(a b c d e f), clouds["graph"].resources_without_dependencies.map {|a| a.name }
+    assert_equal %w(a b c g d e f), clouds["graph"].ordered_resources.map {|a| a.name }
+    
+  end
+  
+  def test_deep_resources_graph_generation
+    pool "resource" do
+      cloud "graph2" do
+        
+        os :ubuntu
+        
+        keypair "test_key", fixtures_dir/"keys"
+        
+        has_file "a", :content => "a", :requires => get_file("b")
+        has_file "b", :content => "b"
+
+      end
+    end
+    
+    assert ["b", "a"], clouds["graph2"].ordered_resources.map {|a| a.name}
+  end
+  
   def test_run
     # WHAT?
-    # result = clouds['app'].run('uptime')
+    # result = @cloud.run('uptime')
     # assert_match /uptime/, result["app"]
   end
   
   def test_os
-    assert_equal :centos, clouds['app'].os
+    assert_equal :centos, @cloud.os
   end
   
   def test_expansion
     #TODO: improve this test
-    # size = clouds["app"].nodes.size
-    # assert_equal size+1, clouds["app"].expand.nodes.size
-    # assert_nothing_raised clouds['app'].expand
+    # size = @cloud.nodes.size
+    # assert_equal size+1, @cloud.expand.nodes.size
+    # assert_nothing_raised @cloud.expand
   end
   
   def test_contract!
     #TODO: need to better mock the terminate! ec2 call
-    # size = clouds['app'].nodes.size
-    # result = clouds['app'].contract!
+    # size = @cloud.nodes.size
+    # result = @cloud.contract!
     # assert_equal 'shuttin-down',  result.status
-    # assert_equal size-1, clouds['app'].nodes.size
+    # assert_equal size-1, @cloud.nodes.size
   end
   
   def test_change_ssh_port
     clear!
     pool "ssh_port" do
       cloud "babity" do
+        keypair "test_key"
         ssh_port 1922
-      end
-      cloud "noneity" do
       end
     end
     assert_equal 1922, clouds["babity"].ssh_port
     assert_equal 22, clouds["noneity"].ssh_port
   end
+  
+  def test_change_ssh_port
+    clear!
+    pool "ssher" do
+      cloud "custom" do
+        keypair "test_key"
+        # ssh_options("-P" => "1992")
+      end
+      cloud "noneity" do
+        keypair "test_key"
+      end
+    end
+    # assert_equal "1992", clouds["custom"].ssh_options["-P"]
+  end
+  
   
   def test_children_getting_parent_options
     clear!
@@ -182,7 +236,7 @@ class CloudTest < Test::Unit::TestCase
     clear!
     pool "monitoring2" do
       cloud "app_cloud" do
-        keypair "test_key"
+        keypair "test_key", fixtures_dir/"keys"
         platform :ubuntu
         monitor "cpu-idle" do |c|
           vote_for(:expand) if c > 0.8
@@ -198,6 +252,6 @@ class CloudTest < Test::Unit::TestCase
     recipe_file = compile_dir/"recipes"/"default.rb"
     recipe_contents = open(recipe_file).read
     
-    assert_match /install hermes/, recipe_contents
+    assert_match /install_hermes/, recipe_contents
   end
 end

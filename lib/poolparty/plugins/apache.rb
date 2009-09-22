@@ -9,6 +9,11 @@ module PoolParty
                       :www_dir            => "/var/www",                      
                       :passenger_version  => "2.2.5"
       
+      
+      def name
+        "apache"
+      end
+      
       def before_load
         installed_as_worker
         configs

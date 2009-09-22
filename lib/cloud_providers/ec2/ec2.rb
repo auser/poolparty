@@ -19,11 +19,14 @@ using :provider_name
 EOM
 end
 
+require "#{File.dirname(__FILE__)}/ec2_helpers"
 require "#{File.dirname(__FILE__)}/ec2_response"
 require "#{File.dirname(__FILE__)}/ec2_instance"
 
 module CloudProviders
   class Ec2 < CloudProvider
+    
+    include CloudProviders::Ec2Helpers
     
     # Set the aws keys from the environment, or load from /etc/poolparty/env.yml if the environment variable is not set
     def self.default_access_key
@@ -88,8 +91,8 @@ module CloudProviders
         :ramdisk_id             => nil,
         :availability_zone      => nil,
         :block_device_mappings  => nil,
-        :elastic_ips            => nil, # An array of the elastic ips
-        :ebs_volume_id          => nil  # The volume id of an ebs volume # TODO: ensure this is consistent with :block_device_mappings
+        :elastic_ips            => [],  # An array of the elastic ips
+        :ebs_volumes            => []   # The volume id of an ebs volume # TODO: ensure this is consistent with :block_device_mappings
       })
       
       
@@ -99,11 +102,18 @@ module CloudProviders
     
     # Start a new instance with the given options
     def run_instance(o={})
+      number_of_instances = o[:number_of_instances] || 1
       set_vars_from_options o
       raise StandardError.new("You must pass a keypair to launch an instance, or else you will not be able to login. options = #{o.inspect}") if !keypair_name
+      vputs("--- Launching ec2 instances")
+      vputs({
+        "image_id" => image_id,
+        "security_group" => security_group,
+        "keypair" => keypair.basename
+      })
       response_array = ec2(o).run_instances(image_id,
                                       min_count,
-                                      max_count,
+                                      number_of_instances,
                                       security_group,
                                       keypair.basename,
                                       user_data,
@@ -114,10 +124,12 @@ module CloudProviders
                                       availability_zone,
                                       block_device_mappings
                                       )
-      instances = response_array .collect do |aws_response_hash|
+      instances = response_array.collect do |aws_response_hash|
         Ec2Instance.new( Ec2Response.pp_format(aws_response_hash).merge(o) )
       end
-      #FIXME: This needs to deal with the case when an array is returned if max_instances > 1
+      
+      after_run_instance(instances)
+      
       instances.first
     end
     
@@ -160,6 +172,14 @@ module CloudProviders
     
     def after_compile(cld)
       save_aws_env_to_yml(cld.tmp_path/"etc"/"poolparty"/"env.yml") rescue nil
+    end
+    
+    # Run after all the instances are run
+    def after_run_instance(instances_list)
+      instances_list.each do |inst|
+        associate_address(inst.instance_id) if next_unused_elastic_ip
+        attach_volume(inst.instance_id) if next_unused_volume
+      end
     end
     
     # Read  yaml file and use it to set environment variables and local variables.

@@ -15,6 +15,7 @@ module PoolParty
       :dependency_resolver_name => nil,
       :os                       => nil,
       :bootstrap_script         => nil
+      # :ssh_options              => {}
     )
     
     # Define what gets run on the callbacks
@@ -50,8 +51,8 @@ module PoolParty
     # returns an instance of Keypair
     # You can pass either a filename which will be searched for in ~/.ec2/ and ~/.ssh/
     # Or you can pass a full filepath
-    def keypair(n=nil)
-      @keypair ||= Keypair.new(n)
+    def keypair(n=nil, extra_paths=[])
+      @keypair ||= Keypair.new(n, extra_paths)
     end
     
     # Declare the CloudProvider for a cloud
@@ -60,6 +61,7 @@ module PoolParty
       return @cloud_provider if @cloud_provider
       self.cloud_provider_name = provider_symbol
       cloud_provider(o, &block)
+      cloud_provider.keypair(keypair.full_filepath)
     end
     
     # Cloud provider methods

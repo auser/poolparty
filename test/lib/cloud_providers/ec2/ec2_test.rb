@@ -5,7 +5,7 @@ stub_ec2_calls
 class Ec2ProviderTest < Test::Unit::TestCase
   
   def ec2
-    @ec2 ||= clouds['app'].cloud_provider
+    @ec2 ||= @cloud.cloud_provider
   end
   
   def setup
@@ -13,11 +13,15 @@ class Ec2ProviderTest < Test::Unit::TestCase
                   :image_id => "ami-abc123", 
                   :keypair => fixtures_dir/'keys/test_key'
                 )
+                
+    @filepath = fixtures_dir/"clouds/simple_cloud.rb"
+    @pool = PoolParty::Pool.load_from_file(@filepath)
+    @cloud = @pool.clouds[@pool.clouds.keys.first]
   end
   
   def test_setup
-    assert_not_nil clouds['app']
-    assert_not_nil clouds['app'].keypair
+    assert_not_nil @cloud
+    assert_not_nil @cloud.keypair
   end
   
   
@@ -67,9 +71,9 @@ class Ec2ProviderTest < Test::Unit::TestCase
   end
   
   def test_basic_setup
-    assert_equal :ec2, clouds['app'].cloud_provider_name
-    assert_instance_of CloudProviders::Ec2, clouds['app'].cloud_provider
-    assert_instance_of RightAws::Ec2, clouds['app'].cloud_provider.ec2
+    assert_equal :ec2, @cloud.cloud_provider_name
+    assert_instance_of CloudProviders::Ec2, @cloud.cloud_provider
+    assert_instance_of RightAws::Ec2, @cloud.cloud_provider.ec2
   end
   
   def test_that_test_ec2_env_variables_are_set
@@ -89,7 +93,7 @@ class Ec2ProviderTest < Test::Unit::TestCase
   end
   
   def test_cloud_is_set_when_created_from_a_cloud
-    assert_equal clouds['app'], clouds['app'].cloud_provider.cloud
+    assert_equal @cloud, @cloud.cloud_provider.cloud
   end
   
   def test_inherited_default_options
@@ -98,10 +102,10 @@ class Ec2ProviderTest < Test::Unit::TestCase
   end
    
    def amazon?
-     stub(clouds['app'].cloud_provider).ec2_url  {'http://example.com'}
-     assert clouds['app'].cloud_provider.eucalyptus?
-     stub(clouds['app'].cloud_provider).ec2_url  {'https://ec2.amazonaws.com'}
-     assert !clouds['app'].cloud_provider.eucalyptus?
+     stub(@cloud.cloud_provider).ec2_url  {'http://example.com'}
+     assert @cloud.cloud_provider.eucalyptus?
+     stub(@cloud.cloud_provider).ec2_url  {'https://ec2.amazonaws.com'}
+     assert !@cloud.cloud_provider.eucalyptus?
    end
    
    def test_aws_hash

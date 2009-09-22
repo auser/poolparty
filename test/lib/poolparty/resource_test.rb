@@ -145,4 +145,18 @@ class ResourceTest < Test::Unit::TestCase
     end
   end
   
+  def test_a_subclassed_resource_has_the_method_of_the_subclassed_resource
+    pool "oblong" do
+      cloud "piece" do
+        fake_plugin do
+          has_subclassed "box"
+        end
+      end
+    end
+    
+    assert_equal PoolParty::Resources::FakePlugin, clouds["piece"].resources.first.class
+    assert_equal PoolParty::Resources::FakeSubclassedPlugin, clouds["piece"].resources.first.resources[0].class
+    assert_equal 1, clouds["piece"].resources.first.resources[0].resources.size
+  end
+  
 end

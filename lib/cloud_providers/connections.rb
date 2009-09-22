@@ -41,10 +41,11 @@ module  CloudProviders
     # {'-i'=>'keyfile, '-l' => 'fred' } would become
     # "-i keyfile -o StrictHostKeyChecking=no -i keypair.to_s -l fred"
     def ssh_options(opts={})
-      o = {"-i" => keypair.full_filepath,
+      return @ssh_options if @ssh_options && opts.empty?
+      ssh_opts = {"-i" => keypair.full_filepath,
            "-o" =>"StrictHostKeyChecking=no"
            }.merge(opts)
-      o.collect{ |k,v| "#{k} #{v}"}.join(' ')
+      @ssh_options = ssh_opts.collect{ |k,v| "#{k} #{v}"}.join(' ')
     end
     
     def rsync( opts={} )
