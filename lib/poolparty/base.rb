@@ -171,7 +171,6 @@ module PoolParty
         create_graph(resource.resources, resource, result)
       end
       result
-      
     end
     
     # Add all the resources as edges of each other
@@ -184,11 +183,11 @@ module PoolParty
       end
     end
         
-    def resources_without_dependencies(r=resources)
+    def resources_without_dependencies(r=all_resources)
       r.reject {|a| !a.dependencies.empty? }
     end
     
-    def resources_with_dependencies(r=resources)
+    def resources_with_dependencies(r=all_resources)
       r - resources_without_dependencies(r)
     end
     
