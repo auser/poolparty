@@ -132,9 +132,46 @@ module PoolParty
       
       create_graph(resources, nil, result)
       
-      add_ordered_resources_to_result(resources, result)
-      
       @resources_graph = result
+    end
+    
+    # Create the graph of resources. Blow up if a resource isn't found
+    # that is required. If it is found, add it as an edge to the 
+    # dependency graph
+    def create_graph(resources, on, result)
+      # add_ordered_resources_to_result(without_dependencies, result)
+      first_layer_of_ordered_resources = resources_without_dependencies.zip_offset(1)
+      first_layer_of_ordered_resources.each do |first, second|
+        result.add_edge!(first, second) unless result.edge?(first, second) or result.edge?(second, first)
+      end
+      
+      resources_with_dependencies.each do |r|
+        
+        r.dependencies.each do |dep_type, deps_array|
+          deps_array.each do |dep_name|
+            dep = get_resource(dep_type, dep_name)
+            raise PoolPartyError.create("ResourceNotFound", "A resource required for #{resource.has_method_name}(#{resource.name}) was not found: #{dep_type}(#{dep_name}). Please make sure you've specified this in your configuration.") unless dep
+
+            existing_connections = result.adjacent(dep)
+            existing_connections.each {|c| result.remove_edge(dep, c) }
+            
+            result.add_edge!(dep, r, dep.name) unless result.edge?(dep, r) or result.edge?(r, dep)
+            
+            existing_connections.each {|c| result.add_edge!(r, c) }
+          end
+        end
+      end
+      
+      resources.each_with_index do |resource, idx|
+        if on
+          result.add_edge!(resource, on, resource.name) unless result.edge?(resource, on) or result.edge?(on, resource)
+        else
+          result.add_vertex!(resource) unless result.vertex?(resource)
+        end
+        create_graph(resource.resources, resource, result)
+      end
+      result
+      
     end
     
     # Add all the resources as edges of each other
@@ -146,29 +183,13 @@ module PoolParty
         add_ordered_resources_to_result(first.resources, result)
       end
     end
+        
+    def resources_without_dependencies(r=resources)
+      r.reject {|a| !a.dependencies.empty? }
+    end
     
-    # Create the graph of resources. Blow up if a resource isn't found
-    # that is required. If it is found, add it as an edge to the 
-    # dependency graph
-    def create_graph(resources, on, result)
-      resources.each_with_index do |resource, idx|
-        
-        resource.dependencies.each do |dep_type, deps_array|
-          deps_array.each do |dep_name|
-            dep = get_resource(dep_type, dep_name)
-            raise PoolPartyError.create("ResourceNotFound", "A resource required for #{resource.has_method_name}(#{resource.name}) was not found: #{dep_type}(#{dep_name}). Please make sure you've specified this in your configuration.") unless dep
-            result.add_edge!(dep, resource, dep.name) unless result.edge?(dep, resource) or result.edge?(resource, dep)
-          end
-        end
-        
-        if on
-          result.add_edge!(resource, on, resource.name) unless result.edge?(resource, on) or result.edge?(on, resource)
-        else
-          result.add_vertex!(resource)
-        end
-        
-        create_graph(resource.resources, resource, result)
-      end
+    def resources_with_dependencies(r=resources)
+      r - resources_without_dependencies(r)
     end
     
     # All the dependencies that are required by this resource

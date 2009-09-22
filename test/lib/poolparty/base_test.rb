@@ -29,7 +29,7 @@ class BaseTest < Test::Unit::TestCase
     assert_equal %w(c), @b.all_resources.map {|r| r.name }
   end
   
-  def test_resource_graph
+  def test_resource_graph_generation
     assert_equal GRATR::Digraph, inst.resources_graph.class
   end
   

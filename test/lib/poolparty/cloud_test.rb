@@ -97,6 +97,45 @@ class CloudTest < Test::Unit::TestCase
     assert_equal 'shutting-down', result.first.status
   end
   
+  def test_resource_graph_generation
+    pool "resource" do
+      cloud "graph" do
+        
+        has_file "a", :content => "a"
+        has_file "g", :content => "g", :requires => get_file("c")
+        has_file "b", :content => "b"
+        has_file "c", :content => "c"
+        has_file "d", :content => "d"
+        has_file "e", :content => "e"
+        has_file "f", :content => "f"
+
+      end
+    end
+    
+    # p clouds["graph"].ordered_resources.map {|a| a.name }
+    assert_equal %w(g), clouds["graph"].resources_with_dependencies.map {|a| a.name}
+    assert_equal %w(a b c d e f), clouds["graph"].resources_without_dependencies.map {|a| a.name }
+    assert_equal %w(a b c g d e f), clouds["graph"].ordered_resources.map {|a| a.name }
+    
+  end
+  
+  def test_deep_resources_graph_generation
+    pool "resource" do
+      cloud "graph2" do
+        
+        os :ubuntu
+        
+        keypair "test_key", fixtures_dir/"keys"
+        
+        has_file "a", :content => "a", :requires => get_file("b")
+        has_file "b", :content => "b"
+
+      end
+    end
+    
+    assert ["b", "a"], clouds["graph2"].ordered_resources.map {|a| a.name}
+  end
+  
   def test_run
     # WHAT?
     # result = @cloud.run('uptime')
@@ -139,13 +178,13 @@ class CloudTest < Test::Unit::TestCase
     pool "ssher" do
       cloud "custom" do
         keypair "test_key"
-        ssh_options("-P" => "1992")
+        # ssh_options("-P" => "1992")
       end
       cloud "noneity" do
         keypair "test_key"
       end
     end
-    assert_equal "1992", clouds["custom"].ssh_options["-P"]
+    # assert_equal "1992", clouds["custom"].ssh_options["-P"]
   end
   
   
@@ -197,7 +236,7 @@ class CloudTest < Test::Unit::TestCase
     clear!
     pool "monitoring2" do
       cloud "app_cloud" do
-        keypair "test_key"
+        keypair "test_key", fixtures_dir/"keys"
         platform :ubuntu
         monitor "cpu-idle" do |c|
           vote_for(:expand) if c > 0.8
@@ -213,6 +252,6 @@ class CloudTest < Test::Unit::TestCase
     recipe_file = compile_dir/"recipes"/"default.rb"
     recipe_contents = open(recipe_file).read
     
-    assert_match /install hermes/, recipe_contents
+    assert_match /install_hermes/, recipe_contents
   end
 end
