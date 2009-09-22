@@ -42,7 +42,11 @@ class ArrayTest < Test::Unit::TestCase
     arr = %w(a b c d e f)
     assert_equal [["a","b"],["b","c"],["c","d"],["d","e"],["e","f"]], arr.zip_offset(1)
     assert_equal [["a","b"],["b","c"],["c","d"],["d","e"]], arr.zip_offset(2)
+    assert_equal [["a","b"],["b","c"],["c","d"]], arr.zip_offset(3)
     assert_equal [["a","b"]], arr.zip_offset(5)
+    
+    assert_equal [["a","b"],["b","c"],["c","d"],["d","e"]], %w(a b c d e).zip_offset(1)
+    assert_equal [["a","b"],["b","c"],["c","d"]], %w(a b c d e).zip_offset(2)
   end
   
   def test_rotate
