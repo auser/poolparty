@@ -32,4 +32,9 @@ class ApacheTest < Test::Unit::TestCase
     @base.compile_to(@cloud, test_dir)
   end
   
+  def test_resource_graph
+    # @cloud.resources_graph.write_to_graphic_file("png", "/tmp/graph")
+    assert !@cloud.resources_graph.cyclic?
+  end
+  
 end
