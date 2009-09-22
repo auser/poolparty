@@ -142,7 +142,7 @@ module PoolParty
       # add_ordered_resources_to_result(without_dependencies, result)
       first_layer_of_ordered_resources = resources_without_dependencies.zip_offset(1)
       first_layer_of_ordered_resources.each do |first, second|
-        result.add_edge!(first, second) unless result.edge?(first, second) or result.edge?(second, first)
+        result.add_edge!(first, second) unless second.nil? or result.edge?(first, second) or result.edge?(second, first)
       end
       
       resources_with_dependencies.each do |r|
@@ -154,24 +154,25 @@ module PoolParty
             
             unless result.edge?(dep, r) and result.edge?(r, dep)
               existing_connections = result.adjacent(dep)
-              existing_connections.each {|c| result.remove_edge(dep, c) }
-            
+              # existing_connections.each {|c| result.remove_edge!(dep, c) }
+              
               result.add_edge!(dep, r, dep.name)
-            
-              existing_connections.each {|c| result.add_edge!(r, c) }
+              
+              # existing_connections.each {|c| result.add_edge!(r, c) }
             end
             
           end
         end
       end
       
-      resources.each_with_index do |resource, idx|
+      all_resources.each_with_index do |resource, idx|
         if on
           result.add_edge!(resource, on, resource.name) unless result.edge?(resource, on) or result.edge?(on, resource)
         else
           result.add_vertex!(resource) unless result.vertex?(resource)
         end
       end
+      
       result
     end
     
