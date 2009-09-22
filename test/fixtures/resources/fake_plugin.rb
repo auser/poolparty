@@ -15,6 +15,7 @@ module PoolParty
         has_file "/etc/my_configs/special_config" do
           requires get_directory("/etc/my_configs")
         end
+        has_directory("/etc/my_configs")
       end
       
     end

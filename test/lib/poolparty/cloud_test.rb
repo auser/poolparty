@@ -133,11 +133,12 @@ class CloudTest < Test::Unit::TestCase
         end
         has_exec "c", :requires => get_exec("a")
         has_file "b", :content => "b"
+        has_file "q", :requires => get_exec("a")
 
       end
     end
     
-    assert_equal ["b", "a", "c"], clouds["graph2"].ordered_resources.map {|a| a.name}
+    assert_equal ["fake_plugin", "/etc/my_configs", "/etc/my_configs/special_config", "b", "a", "q", "c"], clouds["graph2"].ordered_resources.map {|a| a.name}
   end
   
   def test_run
