@@ -154,11 +154,11 @@ module PoolParty
             
             unless result.edge?(dep, r) and result.edge?(r, dep)
               existing_connections = result.adjacent(dep)
-              # existing_connections.each {|c| result.remove_edge!(dep, c) }
+              existing_connections.each {|c| result.remove_edge!(r, c) }
               
               result.add_edge!(dep, r, dep.name)
               
-              # existing_connections.each {|c| result.add_edge!(r, c) }
+              existing_connections.each {|c| result.add_edge!(dep, c) }
             end
             
           end
