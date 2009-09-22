@@ -128,7 +128,7 @@ module PoolParty
     # to create edges on the graph
     def resources_graph(force=false)
       return @resources_graph if @resources_graph && !force
-      result = Digraph.new      
+      result = Digraph.new
       
       create_graph(resources, nil, result)
       
@@ -150,14 +150,17 @@ module PoolParty
         r.dependencies.each do |dep_type, deps_array|
           deps_array.each do |dep_name|
             dep = get_resource(dep_type, dep_name)
-            raise PoolPartyError.create("ResourceNotFound", "A resource required for #{resource.has_method_name}(#{resource.name}) was not found: #{dep_type}(#{dep_name}). Please make sure you've specified this in your configuration.") unless dep
-
-            existing_connections = result.adjacent(dep)
-            existing_connections.each {|c| result.remove_edge(dep, c) }
+            raise PoolPartyError.create("ResourceNotFound", "A resource required for #{dep_type}(#{dep_name}) was not found: #{dep_type}(#{dep_name}). Please make sure you've specified this in your configuration.") unless dep
             
-            result.add_edge!(dep, r, dep.name) unless result.edge?(dep, r) or result.edge?(r, dep)
+            unless result.edge?(dep, r) and result.edge?(r, dep)
+              existing_connections = result.adjacent(dep)
+              existing_connections.each {|c| result.remove_edge(dep, c) }
             
-            existing_connections.each {|c| result.add_edge!(r, c) }
+              result.add_edge!(dep, r, dep.name)
+            
+              existing_connections.each {|c| result.add_edge!(r, c) }
+            end
+            
           end
         end
       end
@@ -168,7 +171,6 @@ module PoolParty
         else
           result.add_vertex!(resource) unless result.vertex?(resource)
         end
-        create_graph(resource.resources, resource, result)
       end
       result
     end

@@ -290,17 +290,23 @@ Compiling cloud #{self.name} to #{tmp_path/"etc"/"#{dependency_resolver_name}"}
       if resources_graph.cyclic?
         cycles = []
         
-        resources_graph.edges.each do |edge|
-          if resources_graph.adjacent?(edge.source, edge.target) && resources_graph.adjacent?(edge.target, edge.source) && !cycles.include?(edge.source)
-            cycles << "#{edge.source.class}(#{edge.source.name}) depends on #{edge.target.class}(#{edge.target.name})"
-          end
+        cycles = resources_graph.find_cycle
+        cycle_string = cycles.map do |k,v|
+          "#{k} -> #{v}"
         end
+        
+        filepath = "/tmp"
+        format = "png"
+        dotpath = "#{filepath}/dot.#{format}"
+        resources_graph.write_to_graphic_file(format, filepath)
+        
+        `open #{dotpath}`
         msg =<<-EOE
       
         Your resource graph is cyclic. Two resources depend on each other, Cannot decide which resource
         to go first. Dying instead. Correct this and then try again.
       
-          #{cycles.join("\n          ")}
+          #{dotpath}
       
         Hint: You can see the resource graph by generating it with:
           cloud compile -g name
@@ -323,6 +329,27 @@ Compiling cloud #{self.name} to #{tmp_path/"etc"/"#{dependency_resolver_name}"}
         
       end
     end    
+    
+  end
+end
+
+module GRATR
+  class Digraph
+    
+    # Crappy n*n
+    def find_cycle(from=self)
+      return [] unless cyclic?
+      cyclic_cycle = []
+      forward_edge = Proc.new {|e| }
+      back_edge    = Proc.new do |b| 
+        cyclic_cycle = dfs_tree_from_vertex(b)
+      end
+      from.dfs({ 
+       :forward_edge  => forward_edge,
+       :back_edge    => back_edge
+      })
+      cyclic_cycle
+    end
     
   end
 end

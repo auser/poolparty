@@ -122,16 +122,14 @@ PassengerRuby <%= @node[:languages][:ruby][:ruby_bin] %>
           
           has_file("/etc/apache2/apache2.conf") do
             mode 0644
-            requires get_directory("/etc/apache2/conf.d")
-            requires get_package("apache2")
+            # requires get_directory("/etc/apache2/conf.d")
+            # requires get_package("apache2")
             template File.dirname(__FILE__)/"apache2"/"apache2.conf.erb"
           end
           # does_not_have_file(:name => "/etc/apache2/ports.conf")
           
           has_exec("/usr/sbin/a2dissite default") do
             only_if "/usr/bin/test -L /etc/apache2/sites-enabled/000-default"
-            notifies get_exec("reload-apache2"), :run
-            requires get_exec("reload-apache2")
           end
           
           # Base config
@@ -157,8 +155,8 @@ PassengerRuby <%= @node[:languages][:ruby][:ruby_bin] %>
       def config(name, temp)
         has_file(:name => "/etc/apache2/conf.d/#{name}.conf") do
           template File.dirname(__FILE__)/temp
-          notifies get_exec("reload-apache2"), :run
-          requires get_exec("reload-apache2")
+          # notifies get_exec("reload-apache2"), :run
+          # requires get_exec("reload-apache2")
         end
       end
       
@@ -174,7 +172,6 @@ PassengerRuby <%= @node[:languages][:ruby][:ruby_bin] %>
         else
           has_exec(:command => "/usr/sbin/a2dissite #{name}") do
             notifies get_exec("reload-apache2"), :run
-            requires get_package("apache2")
             only_if "/bin/sh -c \"[ -L /etc/apache2/sites-enabled/#{name} ] && [ /etc/apache2/sites-enabled/#{name} -ef /etc/apache2/sites-available/#{name}]\""
           end
         end
@@ -203,10 +200,10 @@ PassengerRuby <%= @node[:languages][:ruby][:ruby_bin] %>
         names.each do |name|
           has_exec(:name => "mod-#{name}", :command => "/usr/sbin/a2enmod #{name}") do            
             not_if "/bin/sh -c \'[ -L /etc/apache2/mods-enabled/#{name}.load ] && [ /etc/apache2/mods-enabled/#{name}.load -ef /etc/apache2/mods-available/#{name}.load ]\'"
-            requires get_package("apache2")
-            notifies get_exec("force-reload-apache2"), :run
-            requires get_exec("force-reload-apache2")
-            requires opts[:requires] if opts && opts[:requires]
+            # requires get_package("apache2")
+            # notifies get_exec("force-reload-apache2"), :run
+            # requires get_exec("force-reload-apache2")
+            # requires opts[:requires] if opts && opts[:requires]
           end
         end
       end
