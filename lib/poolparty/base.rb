@@ -152,7 +152,7 @@ module PoolParty
             dep = get_resource(dep_type, dep_name)
             raise PoolPartyError.create("ResourceNotFound", "A resource required for #{dep_type}(#{dep_name}) was not found: #{dep_type}(#{dep_name}). Please make sure you've specified this in your configuration.") unless dep
             
-            unless result.edge?(dep, r) or result.edge?(r, dep)
+            unless result.edge?(dep, r) and result.edge?(r, dep)
               existing_connections = result.adjacent(dep)
               existing_connections.each {|c| result.remove_edge(dep, c) }
             
