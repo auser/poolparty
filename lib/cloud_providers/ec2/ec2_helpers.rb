@@ -45,6 +45,7 @@ module CloudProviders
     # public ip
     def associate_address(instance_id)
       new_ip = next_unused_elastic_ip
+      vputs("Assigning #{new_ip} to the ec2 instance #{instance_id}")
       ec2.associate_address(instance_id, new_ip)
       loop do
         if describe_instance(:instance_id => instance_id).public_ip == new_ip
@@ -62,10 +63,11 @@ module CloudProviders
     # intersection of the unused ips and those, find the first one available
     # and return that.
     def next_unused_elastic_ip
-      if unusued_elastic_ips.empty?
+      if unused_elastic_ips.empty?
         nil
       else
-        unusued_elastic_ips.first
+        vputs("Found an unused elastic ip: #{unused_elastic_ips.first}")
+        unused_elastic_ips.first
       end
     end
     
@@ -75,7 +77,7 @@ module CloudProviders
       elastic_ips.empty? ? [] : ec2.describe_addresses & elastic_ips
     end
     
-    def unusued_elastic_ips
+    def unused_elastic_ips
       all_elastic_ips.select {|i| i[:instance_id] == nil }
     end
     
