@@ -81,6 +81,15 @@ module CloudProviders
       all_elastic_ips.select {|i| i[:instance_id] == nil }
     end
     
+    public
+    
+    # Elastic Load balancer stuff
+    
+    def register_with_load_balancer(name, &block)
+      e = ElasticLoadBalancer.new(name, grempe_ec2, &block)
+      e.get_or_create_volume
+    end
+    
     # Help create a keypair for the cloud
     # This is a helper to create the keypair and add them to the cloud for you
     # def create_keypair

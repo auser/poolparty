@@ -67,6 +67,9 @@ def stub_ec2_calls(&block)
 
   FakeWeb.register_uri(:get, /.*Action=TerminateInstances.*/, :status => ["200", "OK"],
                        :body => open(fixtures_dir/"ec2/ec2-terminate-instances_response_body.xml").read)
+                       
+  FakeWeb.register_uri(:post, /elasticloadbalancing\.amazonaws\.com/, :status => ["200", "OK"],
+                       :body => open(fixtures_dir/"ec2/elb-describe-load-balancers.xml").read)
   
   instance_eval &block if block
 end
