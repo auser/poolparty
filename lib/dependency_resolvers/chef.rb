@@ -109,10 +109,10 @@ module DependencyResolvers
       end
       
       def apply_meta_notifies(resource, add)
-        # The meta_notifies is a hash that looks like: {:file => [["pool_name", :reload]]}
+        # The meta_notifies is a hash that looks like: {:file => [["pool_name", :reload, :immediately]]}
         resource.meta_notifies.each do |ty, arr|
-          arr.each do |nm, action|
-            add << "  notifies :#{action}, resources(:#{chef_safe_resource(ty)} => \"#{nm}\")"
+          arr.each do |nm, action, at_time|
+            add << "  notifies :#{action}, resources(:#{chef_safe_resource(ty)} => \"#{nm}\"), :#{at_time}"
           end
         end
       end
