@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{poolparty}
-  s.version = "1.3.16"
+  s.version = "1.3.17"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Ari Lerner", "Michael Fairchild", "Nate Murray"]
-  s.date = %q{2009-09-20}
+  s.date = %q{2009-09-23}
   s.description = %q{PoolParty: The easy, open-source, cross-cloud management solution}
   s.email = %q{arilerner@mac.com}
   s.executables = ["cloud", "cloud-bootstrap", "cloud-compile", "cloud-configure", "cloud-console", "cloud-contract", "cloud-expand", "cloud-list", "cloud-misc", "cloud-osxcopy", "cloud-setup", "cloud-show", "cloud-ssh", "cloud-start", "cloud-terminate", "cloud-thrift", "cloud-verify"]
