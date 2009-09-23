@@ -15,7 +15,6 @@ module PoolParty
       :dependency_resolver_name => nil,
       :os                       => nil,
       :bootstrap_script         => nil
-      # :ssh_options              => {}
     )
     
     # Define what gets run on the callbacks
