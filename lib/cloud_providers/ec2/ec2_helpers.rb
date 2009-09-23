@@ -74,7 +74,7 @@ module CloudProviders
     private
     
     def all_elastic_ips
-      elastic_ips.empty? ? [] : ec2.describe_addresses & elastic_ips
+      elastic_ips.empty? ? [] : ec2.describe_addresses.map {|a| a[:public_ip]} & elastic_ips
     end
     
     def unused_elastic_ips
