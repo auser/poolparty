@@ -151,7 +151,7 @@ PassengerRuby <%= @node[:languages][:ruby][:ruby_bin] %>
       
       def enable_default
         listen 80 # assumes no haproxy
-        site "default-site", :template => File.dirname(__FILE__)/:apache2/"default-site.conf.erb"
+        site "default-site", :template => File.dirname(__FILE__)/:apache2/"default-site.conf.erb", :notifies => get_exec("reload-apache2"), :requires => get_exec("reload-apache2")
       end
       
       def config(name, temp)
@@ -174,6 +174,7 @@ PassengerRuby <%= @node[:languages][:ruby][:ruby_bin] %>
         else
           has_exec(:command => "/usr/sbin/a2dissite #{name}") do
             notifies get_exec("reload-apache2"), :run
+            requires get_exec("reload-apache2")
             only_if "/bin/sh -c \"[ -L /etc/apache2/sites-enabled/#{name} ] && [ /etc/apache2/sites-enabled/#{name} -ef /etc/apache2/sites-available/#{name}]\""
           end
         end
