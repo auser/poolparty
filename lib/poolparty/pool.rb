@@ -27,6 +27,11 @@ module PoolParty
       end
     end
     
+    class << self;attr_accessor :command;end
+    def command
+      self.class.command
+    end
+    
     # cloud
     # Define a cloud by a name and a block
     def cloud(name, o={}, &block)
