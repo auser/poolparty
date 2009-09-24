@@ -10,9 +10,9 @@ module CloudProviders
 
 end
 
-require File.dirname(__FILE__)+"/cloud_providers/connections"
-require File.dirname(__FILE__)+"/cloud_providers/cloud_provider"
-require File.dirname(__FILE__)+"/cloud_providers/cloud_provider_instance"
+%w(connections cloud_provider cloud_provider_instance load_balancer).each do |lib|
+  require File.dirname(__FILE__)+"/cloud_providers/#{lib}"
+end
 
 %w(ec2 vmware ssh).each do |lib|
   require "cloud_providers/#{lib}/#{lib}"

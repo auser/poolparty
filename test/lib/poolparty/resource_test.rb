@@ -107,7 +107,7 @@ class ResourceTest < Test::Unit::TestCase
       end
     end
     
-    assert_equal({:file => [["pool_name", :reload]]}, clouds["in_a_box"].execs.first.meta_notifies)
+    assert_equal({:file => [["pool_name", :reload, :delayed]]}, clouds["in_a_box"].execs.first.meta_notifies)
   end
   
   def test_subscribes_hash

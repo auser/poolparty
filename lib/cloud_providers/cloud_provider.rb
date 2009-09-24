@@ -87,8 +87,5 @@ module CloudProviders
     def after_compile(cld)
     end
     
-    
-    
-    
   end
 end

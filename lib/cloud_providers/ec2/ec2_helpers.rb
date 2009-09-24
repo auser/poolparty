@@ -81,6 +81,29 @@ module CloudProviders
       all_elastic_ips.select {|i| i[:instance_id] == nil }
     end
     
+    public
+    
+    # Elastic Load balancer stuff
+    def elastic_load_balancer(name=nil, &block)
+      @elastic_load_balancer ||= name ? _elastic_load_balancer(name, &block) : _elastic_load_balancer
+    end
+    
+    def _elastic_load_balancer(name=nil, &block)
+      return nil unless name
+      CloudProviders::ElasticLoadBalancer.new(name, self,
+        aws_hash.merge(:access_key_id => access_key, :secret_access_key => secret_access_key),  &block)
+    end
+    
+    def defined_load_balancer?
+      !elastic_load_balancer.nil?
+    end
+    
+    def attach_to_load_balancer(instances)
+      vputs("Attaching to load balancer - #{instances}")
+      elastic_load_balancer.create_load_balancer
+      elastic_load_balancer.attach_to_instance(instances)
+    end
+    
     # Help create a keypair for the cloud
     # This is a helper to create the keypair and add them to the cloud for you
     # def create_keypair
