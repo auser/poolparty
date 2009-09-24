@@ -17,15 +17,7 @@ class LoadBalancerTest < Test::Unit::TestCase
   
   def test_create_if_necessary
     @lb.caller = @cloud_provider
-    @lb.get_or_create_volume
-  end
-
-  def describe_load_balancers
-    ec2.describe_load_balancers
-  end
-
-  def availability_zones
-    ["us-east-1b"]
+    @lb.send :create_volume
   end
 
   def ec2

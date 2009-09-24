@@ -84,10 +84,24 @@ module CloudProviders
     public
     
     # Elastic Load balancer stuff
+    def elastic_load_balancer(name=nil, &block)
+      @elastic_load_balancer ||= name ? _elastic_load_balancer(name, &block) : _elastic_load_balancer
+    end
     
-    def register_with_load_balancer(name, &block)
-      e = ElasticLoadBalancer.new(name, grempe_ec2, &block)
-      e.get_or_create_volume
+    def _elastic_load_balancer(name=nil, &block)
+      return nil unless name
+      CloudProviders::ElasticLoadBalancer.new(name, self,
+        aws_hash.merge(:access_key_id => access_key, :secret_access_key => secret_access_key),  &block)
+    end
+    
+    def defined_load_balancer?
+      !elastic_load_balancer.nil?
+    end
+    
+    def attach_to_load_balancer(instances)
+      vputs("Attaching to load balancer - #{instances}")
+      elastic_load_balancer.create_load_balancer
+      elastic_load_balancer.attach_to_instance(instances)
     end
     
     # Help create a keypair for the cloud

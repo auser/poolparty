@@ -22,6 +22,7 @@ end
 require "#{File.dirname(__FILE__)}/ec2_helpers"
 require "#{File.dirname(__FILE__)}/ec2_response"
 require "#{File.dirname(__FILE__)}/ec2_instance"
+require "#{File.dirname(__FILE__)}/elastic_load_balancer"
 
 module CloudProviders
   class Ec2 < CloudProvider
@@ -179,6 +180,7 @@ module CloudProviders
       instances_list.each do |inst|
         associate_address(inst.instance_id) if next_unused_elastic_ip
         attach_volume(inst.instance_id) if next_unused_volume
+        attach_to_load_balancer([inst]) if defined_load_balancer?
       end
     end
     
