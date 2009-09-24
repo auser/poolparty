@@ -17,7 +17,7 @@ class LoadBalancerTest < Test::Unit::TestCase
   
   def test_create_if_necessary
     @lb.caller = @cloud_provider
-    @lb.send :create_volume
+    @lb.send :create_load_balancer
   end
 
   def ec2
