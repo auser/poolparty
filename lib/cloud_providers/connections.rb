@@ -82,7 +82,7 @@ module  CloudProviders
           while (chunk = stdin.readpartial(opts[:sysread]))
             buf << chunk
             unless chunk.nil? || chunk.empty?
-              $stdout.write(chunk) if debugging? || verbose?
+              $stdout.write(chunk) #if debugging? || verbose?
             end
           end
           err = stderr.readlines

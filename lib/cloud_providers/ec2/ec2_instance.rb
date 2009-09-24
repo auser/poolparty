@@ -85,6 +85,8 @@ module CloudProviders
                              /mnt
                              /proc
                              /sys
+                             /etc/ssh/ssh_host_*
+                             /etc/ssh/moduli
                              /etc/udev/rules.d/70-persistent-net.rules
                              /etc/udev/rules.d/z25_persistent-net.rules
                             )
@@ -110,10 +112,21 @@ module CloudProviders
       cmds << "mkdir -p #{opts[:destination]}/loop"
       cmds << "mount -o loop #{image_file} #{opts[:destination]}/loop"
       cmds << "rsync -ax #{rsync_excludes(opts[:exclude])} #{opts[:volume]}/ #{opts[:destination]}/loop/"
+      cmds << "if [[ -f /etc/init.d/ec2-ssh-host-key-gen ]]; then  chmod u+x /etc/init.d/ec2-ssh-host-key-gen ;fi"
       cmds << "umount #{opts[:destination]}/loop"
       self.run cmds
       image_file
     end
+    
+    #TODO
+    # def bundle_and_register(opts={})
+    #   arch = 'uname'
+    #   image = make_image(opts)
+    #   'ec2-bundle-image' image
+    #   'ec2-upload-bundle'
+    #   'ec2-register-bundle'
+    #   return ami
+    # end
     
   end
 

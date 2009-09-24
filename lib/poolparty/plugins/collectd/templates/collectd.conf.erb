@@ -46,7 +46,7 @@ LoadPlugin interface
 LoadPlugin iptables
 #LoadPlugin ipvs
 #LoadPlugin irq
-LoadPlugin libvirt
+# LoadPlugin libvirt
 LoadPlugin load
 #LoadPlugin mbmon
 #LoadPlugin memcached
@@ -157,16 +157,16 @@ LoadPlugin uuid
 #       IgnoreSelected true
 #</Plugin>
 
-<Plugin libvirt>
-        Connection "qemu:///system"
+#<Plugin libvirt>
+#        Connection "qemu:///system"
 #       Connection "xen:///"
-        RefreshInterval 10
+#        RefreshInterval 10
 #       Domain "name"
 #       BlockDevice "name:device"
 #       InterfaceDevice "name:device"
 #       IgnoreSelected false
-        HostnameFormat hostname name
-</Plugin>
+#         HostnameFormat hostname name
+# </Plugin>
 
 #<Plugin mbmon>
 #       Host "127.0.0.1"
@@ -196,7 +196,7 @@ LoadPlugin uuid
 
 <Plugin network>
         <%= "Server #{@node[:collectd][:server]}" %>
-        Listen "<%= @node.ipaddress %>"
+        <%= "Listen #{@node.ipaddress} if @node[:collectd][:server] %>"
 #       Server "ff18::efc0:4a42" "25826"
 #       Server "239.192.74.66" "25826"
 #       Listen "ff18::efc0:4a42" "25826"

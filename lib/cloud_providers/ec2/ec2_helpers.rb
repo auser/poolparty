@@ -12,7 +12,7 @@ module CloudProviders
       else
         available_volumes.first
       end
-    end    
+    end
         
     private
     

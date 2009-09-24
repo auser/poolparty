@@ -64,7 +64,9 @@ module PoolParty
     end
     
     # Cloud provider methods
-    def nodes(o={}); delayed_action {cloud_provider.nodes(o).collect{|n| n.cloud = self; n}}; end
+    def nodes(o={})
+       delayed_action {cloud_provider.nodes(o).collect{|n| n.cloud = self; n}}; 
+    end
     def run_instance(o={}); cloud_provider.run_instance(o);end
     def terminate_instance!(o={}); cloud_provider.terminate_instance!(o);end
     def describe_instances(o={}); cloud_provider.describe_instances(o);end
