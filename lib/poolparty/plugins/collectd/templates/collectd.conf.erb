@@ -8,7 +8,7 @@
 
 #Hostname "localhost"
 FQDNLookup true
-#BaseDir "/var/lib/collectd"
+BaseDir "<%= @node[:collectd][:base_dir] %>"
 #PluginDir "/usr/lib/collectd"
 #TypesDB "/usr/lib/collectd/types.db" "/etc/collectd/my_types.db"
 #Interval 10
@@ -62,12 +62,12 @@ LoadPlugin network
 #LoadPlugin perl
 #LoadPlugin ping
 #LoadPlugin powerdns
-# LoadPlugin processes
+LoadPlugin processes
 LoadPlugin rrdtool
 #LoadPlugin sensors
 #LoadPlugin serial
 #LoadPlugin snmp
-# LoadPlugin swap
+LoadPlugin swap
 #LoadPlugin tail
 LoadPlugin tcpconns
 #LoadPlugin teamspeak2
@@ -196,7 +196,7 @@ LoadPlugin uuid
 
 <Plugin network>
         <%= "Server #{@node[:collectd][:server]}" %>
-        <%= "Listen #{@node.ipaddress} if @node[:collectd][:server] %>"
+        <%= "Listen #{@node.ipaddress}" %> # if @node[:collectd][:server]
 #       Server "ff18::efc0:4a42" "25826"
 #       Server "239.192.74.66" "25826"
 #       Listen "ff18::efc0:4a42" "25826"
@@ -258,7 +258,7 @@ LoadPlugin uuid
 #</Plugin>
 
 <Plugin rrdtool>
-        DataDir "/var/lib/collectd/rrd"
+        # DataDir "/var/lib/collectd/rrd"
 #       CacheTimeout 120
 #       CacheFlush 900
 #
