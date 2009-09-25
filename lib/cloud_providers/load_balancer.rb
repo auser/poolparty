@@ -34,6 +34,8 @@ module CloudProviders
     def method_missing(m,*a,&block)
       if caller.respond_to?(m)
         caller.send m, *a, &block
+      elsif options.has_key?(m)
+        options[m]
       else
         super
       end

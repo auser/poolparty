@@ -91,7 +91,6 @@ module CloudProviders
         :addressing_type        => nil,
         :kernel_id              => nil,
         :ramdisk_id             => nil,
-        :availability_zone      => nil,
         :block_device_mappings  => nil,
         :elastic_ips            => [],  # An array of the elastic ips
         :ebs_volumes            => []   # The volume id of an ebs volume # TODO: ensure this is consistent with :block_device_mappings
