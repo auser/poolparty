@@ -177,9 +177,6 @@ module CloudProviders
     
     # Run before each instance is launched
     def before_launch_instance
-      if defined_auto_scaling?
-        elastic_auto_scaling
-      end
     end
     
     # Run after all the instances are run

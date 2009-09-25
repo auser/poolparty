@@ -22,20 +22,27 @@ module CloudProviders
 
     def create_launch_config
       opts = base_hash.merge(:availability_zones => availability_zone, :image_id => image_id, :instance_type => instance_type)
-      vputs("[EC2] Creating auto-scaling group - #{name}")
-      process('create-launch-config', opts)
+      vputs("[EC2] Creating auto-scaling group - #{name.camelcase}")
+      cmd = "as-create-launch-config #{name.camelcase} \
+                    --image-id #{opts[:image_id]} \
+                    --instance-type #{opts[:instance_type]} \
+                    --group #{security_group} \
+                    -I #{access_key} -S #{secret_access_key}"
+      puts "cmd: #{cmd}"
+      `#{cmd}`
+      
     end
     
     def create_auto_scaling_group
       opts = base_hash.merge(:launch_config => launch_config, :load_balancer => load_balancer, :availability_zones => availability_zone, :min_size => minimum_instances, :max_size => maximum_instances)
-      vputs("[EC2] Creating auto-scaling group - #{name}")
-      process('create-auto-scaling-group', opts)
+      vputs("[EC2] Creating auto-scaling group - #{name.camelcase}")
+      process("create-auto-scaling-group #{name.camelcase}", opts)
       vputs("[EC2] Creating or updating trigger")
       trigger.create_or_update! if trigger
     end
     
     def trigger(name=nil, &block)
-      trigger ||= name ? Trigger.new(name, &block) : nil
+      trigger ||= name ? Trigger.new(name.camelcase, &block) : nil
     end
     
     def base_hash
@@ -55,9 +62,11 @@ module CloudProviders
     
     def process(cmd, opts={})
         args={'show-xml'=>nil}.merge(opts)
-        arg_string = args.inject(''){|str, arg| str<<"--#{arg[0].to_s.gsub(/_/, '-')} #{arg[1] if arg[1]}"; str}      
+        arg_string = args.inject(''){|str, arg| str<<"--#{arg[0].to_s.gsub(/_/, '-')} #{arg[1] if arg[1]} "; str}
         cmd = "as-#{cmd.to_s.gsub(/_/, '-')}"
-        `#{cmd} #{arg_string}`
+        runcmd = "#{cmd} #{arg_string}"
+        ddputs("Running command in elastic_auto_scaling: #{runcmd}")
+        `#{runcmd}`
     end
     
   end
@@ -80,7 +89,7 @@ module CloudProviders
     
     
     def create_or_update!
-      `as-create-or-update-trigger #{name} \
+      `as-create-or-update-trigger #{name.camelcase} \
                   --auto-scaling-group #{auto_scaling_group} \
                   --measure #{measure} \
                   --statistic #{statistic} \
