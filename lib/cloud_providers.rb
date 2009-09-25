@@ -10,7 +10,8 @@ module CloudProviders
 
 end
 
-%w(connections cloud_provider cloud_provider_instance load_balancer).each do |lib|
+%w(connections cloud_provider cloud_provider_instance 
+  load_balancer auto_scaling).each do |lib|
   require File.dirname(__FILE__)+"/cloud_providers/#{lib}"
 end
 

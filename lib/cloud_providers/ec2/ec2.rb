@@ -23,6 +23,7 @@ require "#{File.dirname(__FILE__)}/ec2_helpers"
 require "#{File.dirname(__FILE__)}/ec2_response"
 require "#{File.dirname(__FILE__)}/ec2_instance"
 require "#{File.dirname(__FILE__)}/elastic_load_balancer"
+require "#{File.dirname(__FILE__)}/elastic_auto_scaling"
 
 module CloudProviders
   class Ec2 < CloudProvider
@@ -175,12 +176,20 @@ module CloudProviders
       save_aws_env_to_yml(cld.tmp_path/"etc"/"poolparty"/"env.yml") rescue nil
     end
     
+    # Run before each instance is launched
+    def before_launch_instance
+      if defined_auto_scaling?
+        elastic_auto_scaling
+      end
+    end
+    
     # Run after all the instances are run
     def after_run_instance(instances_list)
       instances_list.each do |inst|
         associate_address(inst.instance_id) if next_unused_elastic_ip
         attach_volume(inst.instance_id) if next_unused_volume
         attach_to_load_balancer([inst]) if defined_load_balancer?
+        setup_auto_scaling_group if defined_auto_scaling?
       end
     end
     

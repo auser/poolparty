@@ -104,6 +104,27 @@ module CloudProviders
       elastic_load_balancer.attach_to_instance(instances)
     end
     
+    # Auto scaling
+    def elastic_auto_scaling(name=nil, &block)
+      @elastic_auto_scaling ||= name ? _elastic_auto_scaling(name, &block) : _elastic_auto_scaling
+    end
+    
+    def _elastic_auto_scaling(name=nil, &block)
+      return nil unless name
+      CloudProviders::ElasticAutoScaling.new(name, self,
+        aws_hash.merge(:access_key_id => access_key, :secret_access_key => secret_access_key), &block)
+    end
+    
+    def defined_auto_scaling?
+      !elastic_auto_scaling.nil?
+    end
+    
+    def setup_auto_scaling_group
+      vputs("[EC2] Setting up autoscaling group")
+      elastic_auto_scaling.create_launch_config
+      create_launch_config.create_auto_scaling_group
+    end
+    
     # Help create a keypair for the cloud
     # This is a helper to create the keypair and add them to the cloud for you
     # def create_keypair

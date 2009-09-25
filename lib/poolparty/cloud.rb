@@ -32,6 +32,11 @@ module PoolParty
       validate_all_resources unless ENV["POOLPARTY_NO_VALIDATION"]
     end
     
+    # Before all instances are launched
+    def before_launch_instance
+      cloud_provider.before_launch_instance if cloud_provider.respond_to?(:before_launch_instance)
+    end
+    
     # Freeze the cloud_name so we can't modify it at all, set the plugin_directory
     # call and run instance_eval on the block and then call the after_create callback
     def initialize(n, o={}, &block)
