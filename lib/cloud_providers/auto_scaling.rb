@@ -19,6 +19,15 @@ module CloudProviders
     def after_loaded
     end
     
+    def method_missing(m,*a,&block)
+      if caller.respond_to?(m)
+        caller.send m, *a, &block
+      else
+        super
+      end
+    end
+    
+    
   end
   
   class Trigger

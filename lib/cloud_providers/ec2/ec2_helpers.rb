@@ -122,7 +122,7 @@ module CloudProviders
     def setup_auto_scaling_group
       vputs("[EC2] Setting up autoscaling group")
       elastic_auto_scaling.create_launch_config
-      create_launch_config.create_auto_scaling_group
+      elastic_auto_scaling.create_auto_scaling_group
     end
     
     # Help create a keypair for the cloud

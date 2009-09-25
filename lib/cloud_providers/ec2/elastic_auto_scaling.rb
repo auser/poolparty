@@ -39,7 +39,7 @@ module CloudProviders
     end
     
     def base_hash
-      @base_hash ||= aws_hash.merge({:access_key_id => access_key, :secret_access_key => secret_access_key})
+      @base_hash ||= {:access_key_id => access_key, :secret_access_key => secret_access_key}
     end
 
     # def grempe_elb
