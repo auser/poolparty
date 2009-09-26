@@ -121,7 +121,7 @@ module CloudProviders
     
     def setup_auto_scaling_group
       vputs("[EC2] Setting up autoscaling group")
-      elastic_auto_scaling.create_launch_config
+      lc = elastic_auto_scaling.create_launch_configuration
       elastic_auto_scaling.create_auto_scaling_group
     end
     
