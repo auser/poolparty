@@ -72,6 +72,10 @@ module PoolParty
       @cookbook_repos ||= File.expand_path(dir)
     end
     
+    def chef_repo(filepath=nil)
+      @chef_repo ||= File.expand_path(filepath)
+    end
+    
     def recipe(recipe_path, hsh={})
       fpath = File.expand_path(cookbook_repos/recipe_path)
       if File.directory?(fpath)
@@ -237,11 +241,17 @@ module PoolParty
     def resolve_for_clouds
       base_directory = tmp_path/"etc"/"#{dependency_resolver_name}"
       cookbook_directory = base_directory/"cookbooks"
-      ddputs "Copying the cookbooks into the base directory: #{cookbook_directory}"
+      
+      vputs "Copying the chef-repo into the base directory: #{cookbook_directory}"
+      FileUtils.cp_r chef_repo, cookbook_directory if File.directory?(chef_repo)
+      
+      vputs "Copying the cookbooks into the base directory: #{cookbook_directory}"
       _recipes.each do |r|
-        FileUtils.cp_r r, cookbook_directory/"#{File.basename(r)}"
+        d = cookbook_directory/"#{File.basename(r)}"
+        FileUtils.rm_r d if File.directory?(d)
+        FileUtils.cp_r r, d
       end
-      ddputs "Creating the dna.json"
+      vputs "Creating the dna.json"
       chef_attributes.to_dna _recipes.map {|a| File.basename(a) }, base_directory/"dna.json"
     end
     
