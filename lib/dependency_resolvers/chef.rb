@@ -9,8 +9,8 @@ module DependencyResolvers
       attr_reader :cookbook_directory, :base_cookbook_directory
       
       def before_compile
-        @cookbook_directory = compile_directory/"cookbooks"/"poolparty"
         @base_cookbook_directory = compile_directory/"cookbooks"
+        @cookbook_directory = @base_cookbook_directory/"poolparty"
         raise PoolParty::PoolPartyError.create("ChefCompileError", "No compile_directory is specified. Please specify one.") unless compile_directory
         FileUtils.mkdir_p cookbook_directory unless ::File.directory?(cookbook_directory)
       end

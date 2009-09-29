@@ -68,6 +68,39 @@ module PoolParty
       cloud_provider.keypair(keypair.full_filepath)
     end
     
+    def cookbook_repos(dir=nil)
+      @cookbook_repos ||= File.expand_path(dir)
+    end
+    
+    def recipe(recipe_path, hsh={})
+      fpath = File.expand_path(cookbook_repos/recipe_path)
+      if File.directory?(fpath)
+        _recipes << fpath
+        _attributes.merge!(File.basename(fpath) => hsh) unless hsh.empty?
+      else
+        raise PoolParty::PoolPartyError.create("RecipeNotFound", "Could not find the recipe: #{recipe_path}")
+      end
+    end
+    
+    def recipes(*recipes)
+      recipes.each do |r|
+        recipe(r)
+      end
+    end
+    
+    def chef_attributes(h={}, &block)
+      @chef_attributes ||= ChefAttribute.new(_attributes.merge!(h), &block)
+    end
+    
+    private
+    def _recipes
+      @_recipes ||= []
+    end
+    def _attributes
+      @_attributes ||= {}
+    end
+    public
+    
     # Cloud provider methods
     def nodes(o={})
        delayed_action {cloud_provider.nodes(o).collect{|n| n.cloud = self; n}}; 
@@ -200,6 +233,18 @@ module PoolParty
       end
     end
     
+    # The NEW actual chef resolver.
+    def resolve_for_clouds
+      base_directory = tmp_path/"etc"/"#{dependency_resolver_name}"
+      cookbook_directory = base_directory/"cookbooks"
+      ddputs "Copying the cookbooks into the base directory: #{cookbook_directory}"
+      _recipes.each do |r|
+        FileUtils.cp_r r, cookbook_directory/"#{File.basename(r)}"
+      end
+      ddputs "Creating the dna.json"
+      chef_attributes.to_dna _recipes.map {|a| File.basename(a) }, base_directory/"dna.json"
+    end
+    
     # Take the cloud's resources and compile them down using 
     # the defined (or the default dependency_resolver, chef)
     def compile(caller=nil)
@@ -211,6 +256,7 @@ Compiling cloud #{self.name} to #{tmp_path/"etc"/"#{dependency_resolver_name}"}
   number of resources: #{ordered_resources.size}
       EOE
       out = dependency_resolver.compile_to(ordered_resources, tmp_path/"etc"/"#{dependency_resolver_name}", caller)
+      resolve_for_clouds
       cloud_provider.after_compile(self)
       callback :after_compile
       out

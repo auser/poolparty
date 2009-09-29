@@ -58,7 +58,9 @@ require "keypair"
 
 # PoolParty core
 $LOAD_PATH.unshift(File.dirname(__FILE__)/"poolparty")
-%w( default pool_party_log base dsl_base cloud 
+%w( default pool_party_log base 
+    chef_attribute
+    dsl_base cloud 
     installer monitor
     pool resource plugin ).each do |lib|
   require "poolparty/#{lib}"
