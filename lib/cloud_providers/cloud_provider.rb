@@ -73,6 +73,12 @@ module CloudProviders
       @keypair = n
     end
     
+    private
+    def generate_keypair(n=nil)
+      raise Exception.new("Unimplemented for #{self.class.name}")
+    end
+    public
+    
     # Nodes
     # returns nodes from the describe_instances array
     # These can be selected on by passing a hash

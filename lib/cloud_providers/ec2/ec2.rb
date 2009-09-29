@@ -225,6 +225,13 @@ module CloudProviders
       aws.reject{|k,v| v.nil?}
     end
     
+    private
+    def generate_keypair(n=nil)
+      ec2.create_key_pair(n)
+      keypair n
+    end
+    public
+    
     # shortcut to 
     # ec2-add-keypair name > ~./.ec2/kname
     def create_keypair(kname, path='~/.ec2')

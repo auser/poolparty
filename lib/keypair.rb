@@ -7,11 +7,12 @@ class Keypair
   has_searchable_paths(:prepend_paths => [Dir.pwd, '/etc/poolparty/keys', "#{ENV["HOME"]}/.ssh/", "#{ENV["HOME"]}/.ec2/", ENV['EC2_CONFIG_DIR']])
   
   attr_accessor :filepath
-  attr_reader :extra_paths
+  attr_reader :extra_paths, :opts
   
   # Create a new key that defaults to id_rsa as the name. 
-  def initialize(fpath, extra_paths=[])
+  def initialize(fpath, extra_paths=[], opts={})
     @filepath = fpath
+    @opts = opts
     @extra_paths = extra_paths.map {|a| File.expand_path(a) }
     valid?
   end
@@ -89,7 +90,13 @@ class Keypair
   end
   
   def keypair_found?
-    raise StandardError.new("#{filepath} key file cannot be found") unless exists?
+    if exists?
+      true
+    else
+
+    end
+    # raise StandardError.new("#{filepath} key file cannot be found") unless exists?
   end
+  
   
 end

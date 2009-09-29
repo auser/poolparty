@@ -17,6 +17,7 @@ module PoolParty
       super(opts, extra_opts, &block)
       after_loaded_requires_parent
       valid?
+      vputs("Deprecated: Using resources/plugins is a deprecated feature. This will be removed in the future.")
     end
     
     # Dependency resolver methods

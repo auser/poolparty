@@ -27,8 +27,6 @@ module PoolParty
     end
     
     def before_compile
-      add_monitoring_stack_if_needed
-      
       validate_all_resources unless ENV["POOLPARTY_NO_VALIDATION"]
     end
     
@@ -56,8 +54,17 @@ module PoolParty
     # You can pass either a filename which will be searched for in ~/.ec2/ and ~/.ssh/
     # Or you can pass a full filepath
     def keypair(n=nil, extra_paths=[])
-      @keypair ||= Keypair.new(n, extra_paths)
+      @keypair ||= n ? Keypair.new(n, extra_paths) : generate_keypair
     end
+    
+    private
+    def generate_keypair
+      tmp_keypair_name = "#{pool.name}_#{name}"
+      puts "Generate the keypair for this cloud because its not found: #{tmp_keypair_name}"
+      cloud_provider.send :generate_keypair, tmp_keypair_name
+      Keypair.new(tmp_keypair_name)
+    end
+    public
     
     # Declare the CloudProvider for a cloud
     #  Create an instance of the cloud provider this cloud is using
@@ -68,12 +75,14 @@ module PoolParty
       cloud_provider.keypair(keypair.full_filepath)
     end
     
+    # CHEF STUFF
+    
     def cookbook_repos(dir=nil)
       @cookbook_repos ||= File.expand_path(dir)
     end
     
     def chef_repo(filepath=nil)
-      @chef_repo ||= File.expand_path(filepath)
+      @chef_repo ||= filepath ? File.expand_path(filepath) : nil
     end
     
     def recipe(recipe_path, hsh={})
@@ -124,7 +133,7 @@ module PoolParty
       return @cloud_provider if @cloud_provider
       klass_name = "CloudProviders::#{cloud_provider_name}".classify
       if provider_klass = CloudProviders.all.detect {|k| k.to_s == klass_name }
-        opts.merge!(:cloud => self, :keypair_name => self.keypair.basename)
+        opts.merge!(:cloud => self)
         @cloud_provider = provider_klass.new(dsl_options.merge(opts), &block)
       else
         raise PoolParty::PoolPartyError.create("UnknownCloudProviderError", "Unknown cloud_provider: #{cloud_provider_name}")
@@ -224,32 +233,36 @@ module PoolParty
       end
     end
     
-    # Add the monitoring stack
-    def add_monitoring_stack_if_needed
-      if monitors.size > 0
-        
-        run_in_context do
-          %w(collectd hermes).each do |m|
-            self.send m.to_sym
-          end
-        end
-        
-      end
-    end
+    # # Add the monitoring stack
+    # def add_monitoring_stack_if_needed
+    #   if monitors.size > 0
+    #     
+    #     run_in_context do
+    #       %w(collectd hermes).each do |m|
+    #         self.send m.to_sym
+    #       end
+    #     end
+    #     
+    #   end
+    # end
     
     # The NEW actual chef resolver.
     def resolve_for_clouds
       base_directory = tmp_path/"etc"/"#{dependency_resolver_name}"
       cookbook_directory = base_directory/"cookbooks"
       
-      vputs "Copying the chef-repo into the base directory: #{cookbook_directory}"
-      FileUtils.cp_r chef_repo, cookbook_directory if File.directory?(chef_repo)
+      if chef_repo && File.directory?(chef_repo)
+        vputs "Copying the chef-repo into the base directory: #{cookbook_directory}"
+        FileUtils.cp_r chef_repo, cookbook_directory
+      end
       
-      vputs "Copying the cookbooks into the base directory: #{cookbook_directory}"
       _recipes.each do |r|
         d = cookbook_directory/"#{File.basename(r)}"
-        FileUtils.rm_r d if File.directory?(d)
-        FileUtils.cp_r r, d
+        if File.directory?(d)
+          vputs "Copying the cookbooks into the base directory: #{d}"
+          FileUtils.rm_r d if File.directory?(d)
+          FileUtils.cp_r r, d
+        end
       end
       vputs "Creating the dna.json"
       chef_attributes.to_dna _recipes.map {|a| File.basename(a) }, base_directory/"dna.json"
