@@ -93,7 +93,8 @@ module CloudProviders
         :ramdisk_id             => nil,
         :block_device_mappings  => nil,
         :elastic_ips            => [],  # An array of the elastic ips
-        :ebs_volumes            => []   # The volume id of an ebs volume # TODO: ensure this is consistent with :block_device_mappings
+        :ebs_volumes            => [],   # The volume id of an ebs volume # TODO: ensure this is consistent with :block_device_mappings
+        :elastic_load_balancers => []
       })
       
       

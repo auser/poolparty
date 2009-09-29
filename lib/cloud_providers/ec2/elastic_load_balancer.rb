@@ -10,7 +10,7 @@ module CloudProviders
       opts = base_hash.merge(:availability_zones => availability_zone)
       opts.merge!(:listeners => [{:protocol => protocol, :load_balancer_port => load_balancer_port, :instance_port => instance_port}])
       opts.merge!(:load_balancer_name => name.camelcase)
-      vputs("[EC2] Creating volume - #{name}")
+      vputs("[EC2] Creating ElasticLoadBalancer - #{name}")
       cmd = "elb-create-lb #{opts[:load_balancer_name]} \
                     --headers \
                     --listener \"protocol=#{protocol},lb-port=#{load_balancer_port},instance-port=#{instance_port}\" \

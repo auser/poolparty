@@ -16,28 +16,32 @@
 module CloudProviders
   class ElasticAutoScaling < AutoScaling
     default_options(
-      :launch_config => "PoolPartyAutoScalingGroup",
-      :load_balancer => "PoolPartyLoadBalancer"
+      # :launch_configuration => "PoolPartyAutoScalingGroup",
+      :load_balancers => []
     )
 
-    def create_launch_config
+    def create_launch_configuration(opts={})
       opts = base_hash.merge(:availability_zones => availability_zone, :image_id => image_id, :instance_type => instance_type)
-      vputs("[EC2] Creating auto-scaling group - #{name.camelcase}")
+      vputs("[EC2] Creating launch_configuration - #{name.camelcase}")
       cmd = "as-create-launch-config #{name.camelcase} \
                     --image-id #{opts[:image_id]} \
                     --instance-type #{opts[:instance_type]} \
                     --group #{security_group} \
                     -I #{access_key} -S #{secret_access_key}"
-      puts "cmd: #{cmd}"
-      `#{cmd}`
-      
+      puts "[EC2] Creating launch_configuration: #{cmd}"
+      output = `#{cmd}`
+      puts output
+      output
     end
     
-    def create_auto_scaling_group
-      opts = base_hash.merge(:launch_config => launch_config, :load_balancer => load_balancer, :availability_zones => availability_zone, :min_size => minimum_instances, :max_size => maximum_instances)
-      vputs("[EC2] Creating auto-scaling group - #{name.camelcase}")
+    def create_auto_scaling_group(opts={})
+      create_launch_configuration(opts)
+      #TODO: verify that named launch_configuration exists, or create it
+      opts = base_hash.merge(:launch_configuration => name.camelcase, :availability_zones => availability_zone, :min_size => minimum_instances, :max_size => maximum_instances).merge(opts)
+      opts.merge!(:load_balancers => load_balancers) unless opts[:load_balancers] || load_balancers.empty?
+      puts("[EC2] Creating auto-scaling group - #{name.camelcase}")
       process("create-auto-scaling-group #{name.camelcase}", opts)
-      vputs("[EC2] Creating or updating trigger")
+      puts("[EC2] Creating or updating trigger")
       trigger.create_or_update! if trigger
     end
     
@@ -46,7 +50,7 @@ module CloudProviders
     end
     
     def base_hash
-      @base_hash ||= {:access_key_id => access_key, :secret_access_key => secret_access_key}
+      @base_hash ||= {:access_key_id => access_key, :secret_key => secret_access_key}
     end
 
     # def grempe_elb
@@ -65,8 +69,10 @@ module CloudProviders
         arg_string = args.inject(''){|str, arg| str<<"--#{arg[0].to_s.gsub(/_/, '-')} #{arg[1] if arg[1]} "; str}
         cmd = "as-#{cmd.to_s.gsub(/_/, '-')}"
         runcmd = "#{cmd} #{arg_string}"
-        ddputs("Running command in elastic_auto_scaling: #{runcmd}")
-        `#{runcmd}`
+        puts("[EC2] Running command in elastic_auto_scaling: #{runcmd}")
+        output = `#{runcmd}`
+        puts output
+        output
     end
     
   end
