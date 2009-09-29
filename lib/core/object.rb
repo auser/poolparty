@@ -77,7 +77,7 @@ class Object
     puts "[VERY DEBUG] -- #{m.is_a?(String) ? m : m.inspect}" if very_debugging?
   end
   def verbose?
-    $TESTING ||= false
+    $PP_VERBOSE ||= false
   end
   def very_verbose?
     ($VERY_VERBOSE ||= false)

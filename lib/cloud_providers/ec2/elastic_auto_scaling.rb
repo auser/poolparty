@@ -28,9 +28,9 @@ module CloudProviders
                     --instance-type #{opts[:instance_type]} \
                     --group #{security_group} \
                     -I #{access_key} -S #{secret_access_key}"
-      puts "[EC2] Creating launch_configuration: #{cmd}"
+      vputs "[EC2] Creating launch_configuration: #{cmd}"
       output = `#{cmd}`
-      puts output
+      vputs output
       output
     end
     
@@ -39,9 +39,9 @@ module CloudProviders
       #TODO: verify that named launch_configuration exists, or create it
       opts = base_hash.merge(:launch_configuration => name.camelcase, :availability_zones => availability_zone, :min_size => minimum_instances, :max_size => maximum_instances).merge(opts)
       opts.merge!(:load_balancers => load_balancers) unless opts[:load_balancers] || load_balancers.empty?
-      puts("[EC2] Creating auto-scaling group - #{name.camelcase}")
+      vputs("[EC2] Creating auto-scaling group - #{name.camelcase}")
       process("create-auto-scaling-group #{name.camelcase}", opts)
-      puts("[EC2] Creating or updating trigger")
+      vputs("[EC2] Creating or updating trigger")
       trigger.create_or_update! if trigger
     end
     
@@ -69,9 +69,9 @@ module CloudProviders
         arg_string = args.inject(''){|str, arg| str<<"--#{arg[0].to_s.gsub(/_/, '-')} #{arg[1] if arg[1]} "; str}
         cmd = "as-#{cmd.to_s.gsub(/_/, '-')}"
         runcmd = "#{cmd} #{arg_string}"
-        puts("[EC2] Running command in elastic_auto_scaling: #{runcmd}")
+        vputs("[EC2] Running command in elastic_auto_scaling: #{runcmd}")
         output = `#{runcmd}`
-        puts output
+        vputs output
         output
     end
     

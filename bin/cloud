@@ -28,7 +28,7 @@ EOS
 
   before_run do |command|
     # Setup testing/debugging
-    $TESTING        = true if command[:verbose]
+    $PP_VERBOSE     = true if command[:verbose]
     $VERY_VERBOSE   = true if command[:very_verbose]
     $DEBUGGING      = true if command[:debug]
     $VERY_DEBUGGING = true if command[:very_debug]
