@@ -75,7 +75,7 @@ module CloudProviders
         :image_id               => 'ami-bf5eb9d6',
         :instance_type          => 'm1.small',
         :addressing_type        => "public",
-        :availability_zone      => "us-east-1a",
+        :availability_zones     => ["us-east-1a"],
         :security_group         => ["default"],
         :user_id                => default_user_id,
         :private_key            => default_private_key,
@@ -227,7 +227,18 @@ module CloudProviders
     
     private
     def generate_keypair(n=nil)
-      ec2.create_key_pair(n)
+      puts "[EC2] generate_keypair is called with #{n}"
+      begin
+        hsh = ec2.create_key_pair(n)
+        string = hsh[:aws_material]
+        FileUtils.mkdir_p default_keypair_path unless File.directory?(default_keypair_path)
+        puts "[EC2] Generated keypair #{default_keypair_path/n}"
+        vputs "[EC2] #{string}"
+        File.open(default_keypair_path/n, "w") {|f| f << string }
+        File.chmod 0600, default_keypair_path/n
+      rescue RightAws::AwsError => e
+        puts "[EC2] The keypair exists in EC2, but we cannot find the keypair locally: #{n}"
+      end
       keypair n
     end
     public

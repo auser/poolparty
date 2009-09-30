@@ -54,7 +54,20 @@ module PoolParty
     # You can pass either a filename which will be searched for in ~/.ec2/ and ~/.ssh/
     # Or you can pass a full filepath
     def keypair(n=nil, extra_paths=[])
-      @keypair ||= n ? Keypair.new(n, extra_paths) : generate_keypair
+      return @keypair if @keypair
+      @keypair = case n
+      when String
+        Keypair.new(n, extra_paths)
+      when nil
+        fpath = CloudProviders::CloudProvider.default_keypair_path/"#{pool.name}_#{name}"
+        if File.exists?(fpath)
+          Keypair.new(fpath, extra_paths)
+        else
+          generate_keypair
+        end
+      else
+        raise PoolPartyError.create("WTFERROR", "What the?")
+      end
     end
     
     private
