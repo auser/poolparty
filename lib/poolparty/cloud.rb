@@ -30,6 +30,10 @@ module PoolParty
       validate_all_resources unless ENV["POOLPARTY_NO_VALIDATION"]
     end
     
+    def after_loaded
+      cloud_provider.auto_scaling(dsl_options) if auto_scaling
+    end
+    
     # Before all instances are launched
     def before_launch_instance
       cloud_provider.before_launch_instance if cloud_provider.respond_to?(:before_launch_instance)
@@ -85,7 +89,6 @@ module PoolParty
       return @cloud_provider if @cloud_provider
       self.cloud_provider_name = provider_symbol
       cloud_provider(o, &block)
-      cloud_provider.keypair(keypair.full_filepath)
     end
     
     # CHEF STUFF

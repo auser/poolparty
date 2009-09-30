@@ -23,12 +23,14 @@ require "#{File.dirname(__FILE__)}/ec2_helpers"
 require "#{File.dirname(__FILE__)}/ec2_response"
 require "#{File.dirname(__FILE__)}/ec2_instance"
 require "#{File.dirname(__FILE__)}/elastic_load_balancer"
-require "#{File.dirname(__FILE__)}/elastic_auto_scaling"
+
+require "#{File.dirname(__FILE__)}/modules/elastic_auto_scaling"
 
 module CloudProviders
   class Ec2 < CloudProvider
     
     include CloudProviders::Ec2Helpers
+    include CloudProviders::ElasticAutoScaling
     
     # Set the aws keys from the environment, or load from /etc/poolparty/env.yml if the environment variable is not set
     def self.default_access_key
@@ -241,6 +243,7 @@ module CloudProviders
       end
       keypair n
     end
+    
     public
     
     # shortcut to 

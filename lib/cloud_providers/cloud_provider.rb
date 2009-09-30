@@ -76,12 +76,17 @@ module CloudProviders
     def default_keypair_path
       self.class.default_keypair_path
     end
+    
     def self.default_keypair_path
       ENV["EC2_CONFIG_DIR"] || "#{ENV["HOME"]}/.ssh"
     end
     
     private
     def generate_keypair(n=nil)
+      raise Exception.new("Unimplemented for #{self.class.name}")
+    end
+    
+    def auto_scaling(caller=nil)
       raise Exception.new("Unimplemented for #{self.class.name}")
     end
     public
