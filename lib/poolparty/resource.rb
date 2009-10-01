@@ -17,6 +17,7 @@ module PoolParty
       super(opts, extra_opts, &block)
       after_loaded_requires_parent
       valid?
+      vputs("Deprecated: Using resources/plugins is a deprecated feature. This will be removed in the future.")
     end
     
     # Dependency resolver methods
@@ -40,11 +41,11 @@ module PoolParty
     
     # META FUNCTIONS
     # ALL RESOURCES HAVE THESE METHODS AVAILABLE
-    def notifies(other_resources_hash, action_to_take=:reload)
+    def notifies(other_resources_hash, action_to_take=:reload, at_time=:delayed)
       @meta_notifies ||= {}
       other_resources_hash.each do |k,v|
         notifies_array = (@meta_notifies[k] ||= [])
-        notifies_array << [v, action_to_take] unless notifies_array.include?([v, action_to_take])
+        notifies_array << [v, action_to_take, at_time] unless notifies_array.include?([v, action_to_take, at_time])
         # Implicitly add a require
         # requires(k => v)
       end

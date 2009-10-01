@@ -13,6 +13,25 @@ module PoolParty
       :minimum_instances        => 2,
       :maximum_instances        => 5
     )
+    
+    # Autoscaling
+    def auto_scaling(bool=true)
+      _auto_scaling ||= true
+    end
+    
+    def load_balancer(name=nil, &block)
+      _load_balancers << CloudProviders::LoadBalancer.new(name, &block)
+    end
+    
+    # Load balancer
+    private
+    def _auto_scaling
+      @_auto_scaling ||= false
+    end
+    def _load_balancers
+      @_load_balancers ||= []
+    end
+    public
             
     # Set instances with a range or a number
     # if passed with a hash, call nodes(hash) to return filtered list of 

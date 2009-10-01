@@ -9,8 +9,8 @@ module DependencyResolvers
       attr_reader :cookbook_directory, :base_cookbook_directory
       
       def before_compile
-        @cookbook_directory = compile_directory/"cookbooks"/"poolparty"
         @base_cookbook_directory = compile_directory/"cookbooks"
+        @cookbook_directory = @base_cookbook_directory/"poolparty"
         raise PoolParty::PoolPartyError.create("ChefCompileError", "No compile_directory is specified. Please specify one.") unless compile_directory
         FileUtils.mkdir_p cookbook_directory unless ::File.directory?(cookbook_directory)
       end
@@ -109,10 +109,10 @@ module DependencyResolvers
       end
       
       def apply_meta_notifies(resource, add)
-        # The meta_notifies is a hash that looks like: {:file => [["pool_name", :reload]]}
+        # The meta_notifies is a hash that looks like: {:file => [["pool_name", :reload, :immediately]]}
         resource.meta_notifies.each do |ty, arr|
-          arr.each do |nm, action|
-            add << "  notifies :#{action}, resources(:#{chef_safe_resource(ty)} => \"#{nm}\")"
+          arr.each do |nm, action, at_time|
+            add << "  notifies :#{action}, resources(:#{chef_safe_resource(ty)} => \"#{nm}\"), :#{at_time}"
           end
         end
       end

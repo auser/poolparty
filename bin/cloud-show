@@ -16,6 +16,7 @@ shows output about the clouds.rb
 EOS
 
   short_desc "shows output about the clouds.rb"
+  opt :generate_graph, "Generate the dependency tree graph", :type => :string, :default => nil
 
   run do |command|
 
@@ -30,7 +31,18 @@ EOS
         "Running on: #{cld.cloud_provider_name}"
       ]
       
-      print_msg(msg)
+      if verbose?
+        msg << [
+          "Keypair: #{cld.keypair.basename}"
+        ]
+      end
+      
+      if command[:generate_graph]
+        vputs "Generating dependency graph at: #{command[:generate_graph]}"
+        cld.output_resources_graph('png', command[:generate_graph], {"fontsize" => 30})
+      end
+            
+      print_msg(msg.flatten)
       
     end
     

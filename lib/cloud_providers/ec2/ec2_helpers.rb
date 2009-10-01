@@ -12,7 +12,7 @@ module CloudProviders
       else
         available_volumes.first
       end
-    end    
+    end
         
     private
     
@@ -79,6 +79,50 @@ module CloudProviders
     
     def unused_elastic_ips
       all_elastic_ips.select {|i| i[:instance_id] == nil }
+    end
+    
+    public
+    
+    # Elastic Load balancer stuff
+    def elastic_load_balancer(name=nil, &block)
+      @elastic_load_balancer ||= name ? _elastic_load_balancer(name, &block) : _elastic_load_balancer
+    end
+    
+    def _elastic_load_balancer(name=nil, &block)
+      return nil unless name
+      CloudProviders::ElasticLoadBalancer.new(name, self,
+        aws_hash.merge(:access_key_id => access_key, :secret_access_key => secret_access_key),  &block)
+    end
+    
+    def defined_load_balancer?
+      !elastic_load_balancer.nil?
+    end
+    
+    def attach_to_load_balancer(instances)
+      vputs("Attaching to load balancer - #{instances}")
+      elastic_load_balancer.create_load_balancer
+      elastic_load_balancer.attach_to_instance(instances)
+    end
+    
+    # Auto scaling
+    def elastic_auto_scaling(name=nil, &block)
+      @elastic_auto_scaling ||= name ? _elastic_auto_scaling(name, &block) : _elastic_auto_scaling
+    end
+    
+    def _elastic_auto_scaling(name=nil, &block)
+      return nil unless name
+      CloudProviders::ElasticAutoScaling.new(name, self,
+        aws_hash.merge(:access_key_id => access_key, :secret_access_key => secret_access_key), &block)
+    end
+    
+    def defined_auto_scaling?
+      !elastic_auto_scaling.nil?
+    end
+    
+    def setup_auto_scaling_group
+      vputs("[EC2] Setting up autoscaling group")
+      lc = elastic_auto_scaling.create_launch_configuration
+      elastic_auto_scaling.create_auto_scaling_group
     end
     
     # Help create a keypair for the cloud

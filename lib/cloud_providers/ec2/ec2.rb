@@ -22,11 +22,15 @@ end
 require "#{File.dirname(__FILE__)}/ec2_helpers"
 require "#{File.dirname(__FILE__)}/ec2_response"
 require "#{File.dirname(__FILE__)}/ec2_instance"
+require "#{File.dirname(__FILE__)}/elastic_load_balancer"
+
+require "#{File.dirname(__FILE__)}/modules/elastic_auto_scaling"
 
 module CloudProviders
   class Ec2 < CloudProvider
     
     include CloudProviders::Ec2Helpers
+    include CloudProviders::ElasticAutoScaling
     
     # Set the aws keys from the environment, or load from /etc/poolparty/env.yml if the environment variable is not set
     def self.default_access_key
@@ -73,7 +77,7 @@ module CloudProviders
         :image_id               => 'ami-bf5eb9d6',
         :instance_type          => 'm1.small',
         :addressing_type        => "public",
-        :availability_zone      => "us-east-1a",
+        :availability_zones     => ["us-east-1a"],
         :security_group         => ["default"],
         :user_id                => default_user_id,
         :private_key            => default_private_key,
@@ -89,10 +93,10 @@ module CloudProviders
         :addressing_type        => nil,
         :kernel_id              => nil,
         :ramdisk_id             => nil,
-        :availability_zone      => nil,
         :block_device_mappings  => nil,
         :elastic_ips            => [],  # An array of the elastic ips
-        :ebs_volumes            => []   # The volume id of an ebs volume # TODO: ensure this is consistent with :block_device_mappings
+        :ebs_volumes            => [],   # The volume id of an ebs volume # TODO: ensure this is consistent with :block_device_mappings
+        :elastic_load_balancers => []
       })
       
       
@@ -174,11 +178,17 @@ module CloudProviders
       save_aws_env_to_yml(cld.tmp_path/"etc"/"poolparty"/"env.yml") rescue nil
     end
     
+    # Run before each instance is launched
+    def before_launch_instance
+    end
+    
     # Run after all the instances are run
     def after_run_instance(instances_list)
       instances_list.each do |inst|
         associate_address(inst.instance_id) if next_unused_elastic_ip
         attach_volume(inst.instance_id) if next_unused_volume
+        attach_to_load_balancer([inst]) if defined_load_balancer?
+        setup_auto_scaling_group if defined_auto_scaling?
       end
     end
     
@@ -216,6 +226,25 @@ module CloudProviders
       end
       aws.reject{|k,v| v.nil?}
     end
+    
+    private
+    def generate_keypair(n=nil)
+      puts "[EC2] generate_keypair is called with #{n}"
+      begin
+        hsh = ec2.create_key_pair(n)
+        string = hsh[:aws_material]
+        FileUtils.mkdir_p default_keypair_path unless File.directory?(default_keypair_path)
+        puts "[EC2] Generated keypair #{default_keypair_path/n}"
+        vputs "[EC2] #{string}"
+        File.open(default_keypair_path/n, "w") {|f| f << string }
+        File.chmod 0600, default_keypair_path/n
+      rescue RightAws::AwsError => e
+        puts "[EC2] The keypair exists in EC2, but we cannot find the keypair locally: #{n}"
+      end
+      keypair n
+    end
+    
+    public
     
     # shortcut to 
     # ec2-add-keypair name > ~./.ec2/kname

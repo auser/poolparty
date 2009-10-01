@@ -73,6 +73,24 @@ module CloudProviders
       @keypair = n
     end
     
+    def default_keypair_path
+      self.class.default_keypair_path
+    end
+    
+    def self.default_keypair_path
+      ENV["EC2_CONFIG_DIR"] || "#{ENV["HOME"]}/.ssh"
+    end
+    
+    private
+    def generate_keypair(n=nil)
+      raise Exception.new("Unimplemented for #{self.class.name}")
+    end
+    
+    def auto_scaling(caller=nil)
+      raise Exception.new("Unimplemented for #{self.class.name}")
+    end
+    public
+    
     # Nodes
     # returns nodes from the describe_instances array
     # These can be selected on by passing a hash
@@ -86,9 +104,6 @@ module CloudProviders
     
     def after_compile(cld)
     end
-    
-    
-    
     
   end
 end

@@ -15,7 +15,6 @@ module PoolParty
       :dependency_resolver_name => nil,
       :os                       => nil,
       :bootstrap_script         => nil
-      # :ssh_options              => {}
     )
     
     # Define what gets run on the callbacks
@@ -28,9 +27,16 @@ module PoolParty
     end
     
     def before_compile
-      add_monitoring_stack_if_needed
-      
       validate_all_resources unless ENV["POOLPARTY_NO_VALIDATION"]
+    end
+    
+    def after_loaded
+      cloud_provider.auto_scaling(dsl_options) if auto_scaling
+    end
+    
+    # Before all instances are launched
+    def before_launch_instance
+      cloud_provider.before_launch_instance if cloud_provider.respond_to?(:before_launch_instance)
     end
     
     # Freeze the cloud_name so we can't modify it at all, set the plugin_directory
@@ -52,8 +58,30 @@ module PoolParty
     # You can pass either a filename which will be searched for in ~/.ec2/ and ~/.ssh/
     # Or you can pass a full filepath
     def keypair(n=nil, extra_paths=[])
-      @keypair ||= Keypair.new(n, extra_paths)
+      return @keypair if @keypair
+      @keypair = case n
+      when String
+        Keypair.new(n, extra_paths)
+      when nil
+        fpath = CloudProviders::CloudProvider.default_keypair_path/"#{pool.name}_#{name}"
+        if File.exists?(fpath)
+          Keypair.new(fpath, extra_paths)
+        else
+          generate_keypair
+        end
+      else
+        raise PoolPartyError.create("WTFERROR", "What the?")
+      end
     end
+    
+    private
+    def generate_keypair
+      tmp_keypair_name = "#{pool.name}_#{name}"
+      puts "Generate the keypair for this cloud because its not found: #{tmp_keypair_name}"
+      cloud_provider.send :generate_keypair, tmp_keypair_name
+      Keypair.new(tmp_keypair_name)
+    end
+    public
     
     # Declare the CloudProvider for a cloud
     #  Create an instance of the cloud provider this cloud is using
@@ -61,11 +89,51 @@ module PoolParty
       return @cloud_provider if @cloud_provider
       self.cloud_provider_name = provider_symbol
       cloud_provider(o, &block)
-      cloud_provider.keypair(keypair.full_filepath)
     end
     
+    # CHEF STUFF
+    
+    def cookbook_repos(dir=nil)
+      @cookbook_repos ||= File.expand_path(dir)
+    end
+    
+    def chef_repo(filepath=nil)
+      @chef_repo ||= filepath ? File.expand_path(filepath) : nil
+    end
+    
+    def recipe(recipe_path, hsh={})
+      fpath = File.expand_path(cookbook_repos/recipe_path)
+      if File.directory?(fpath)
+        _recipes << fpath
+        _attributes.merge!(File.basename(fpath) => hsh) unless hsh.empty?
+      else
+        raise PoolParty::PoolPartyError.create("RecipeNotFound", "Could not find the recipe: #{recipe_path}")
+      end
+    end
+    
+    def recipes(*recipes)
+      recipes.each do |r|
+        recipe(r)
+      end
+    end
+    
+    def chef_attributes(h={}, &block)
+      @chef_attributes ||= ChefAttribute.new(_attributes.merge!(h), &block)
+    end
+    
+    private
+    def _recipes
+      @_recipes ||= []
+    end
+    def _attributes
+      @_attributes ||= {}
+    end
+    public
+    
     # Cloud provider methods
-    def nodes(o={}); delayed_action {cloud_provider.nodes(o).collect{|n| n.cloud = self; n}}; end
+    def nodes(o={})
+       delayed_action {cloud_provider.nodes(o).collect{|n| n.cloud = self; n}}; 
+    end
     def run_instance(o={}); cloud_provider.run_instance(o);end
     def terminate_instance!(o={}); cloud_provider.terminate_instance!(o);end
     def describe_instances(o={}); cloud_provider.describe_instances(o);end
@@ -81,7 +149,7 @@ module PoolParty
       return @cloud_provider if @cloud_provider
       klass_name = "CloudProviders::#{cloud_provider_name}".classify
       if provider_klass = CloudProviders.all.detect {|k| k.to_s == klass_name }
-        opts.merge!(:cloud => self, :keypair_name => self.keypair.full_filepath)
+        opts.merge!(:cloud => self)
         @cloud_provider = provider_klass.new(dsl_options.merge(opts), &block)
       else
         raise PoolParty::PoolPartyError.create("UnknownCloudProviderError", "Unknown cloud_provider: #{cloud_provider_name}")
@@ -181,17 +249,39 @@ module PoolParty
       end
     end
     
-    # Add the monitoring stack
-    def add_monitoring_stack_if_needed
-      if monitors.size > 0
-        
-        run_in_context do
-          %w(collectd hermes).each do |m|
-            self.send m.to_sym
-          end
-        end
-        
+    # # Add the monitoring stack
+    # def add_monitoring_stack_if_needed
+    #   if monitors.size > 0
+    #     
+    #     run_in_context do
+    #       %w(collectd hermes).each do |m|
+    #         self.send m.to_sym
+    #       end
+    #     end
+    #     
+    #   end
+    # end
+    
+    # The NEW actual chef resolver.
+    def resolve_for_clouds
+      base_directory = tmp_path/"etc"/"#{dependency_resolver_name}"
+      cookbook_directory = base_directory/"cookbooks"
+      
+      if chef_repo && File.directory?(chef_repo)
+        vputs "Copying the chef-repo into the base directory: #{cookbook_directory}"
+        FileUtils.cp_r chef_repo, cookbook_directory
       end
+      
+      _recipes.each do |r|
+        d = cookbook_directory/"#{File.basename(r)}"
+        if File.directory?(d)
+          vputs "Copying the cookbooks into the base directory: #{d}"
+          FileUtils.rm_r d if File.directory?(d)
+          FileUtils.cp_r r, d
+        end
+      end
+      vputs "Creating the dna.json"
+      chef_attributes.to_dna _recipes.map {|a| File.basename(a) }, base_directory/"dna.json"
     end
     
     # Take the cloud's resources and compile them down using 
@@ -205,6 +295,7 @@ Compiling cloud #{self.name} to #{tmp_path/"etc"/"#{dependency_resolver_name}"}
   number of resources: #{ordered_resources.size}
       EOE
       out = dependency_resolver.compile_to(ordered_resources, tmp_path/"etc"/"#{dependency_resolver_name}", caller)
+      resolve_for_clouds
       cloud_provider.after_compile(self)
       callback :after_compile
       out
