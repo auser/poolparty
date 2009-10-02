@@ -31,7 +31,7 @@ module PoolParty
     end
     
     def after_loaded
-      cloud_provider.auto_scaling(dsl_options) if auto_scaling
+      # create_load_balancers # Create the load balancers from the args
     end
     
     # Before all instances are launched

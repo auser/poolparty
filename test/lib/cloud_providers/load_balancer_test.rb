@@ -19,5 +19,30 @@ class LoadBalancerTest < Test::Unit::TestCase
     assert_equal @lb.protocol, "tcp"
     assert_equal @lb.balancer_port, 80
   end
+  
+  def test_from_within_a_cloud_setup
+    clear!
+    pool :load_balancer_test_cloud do
+      cloud :elb do
+        load_balancer "TestLoadBalancer" do
+          protocol "tcp"
+        end
+        load_balancer "TestLoadBalancer2" do
+          protocol "http"
+        end
+        load_balancer "TestLoadBalancer3" do
+          protocol "http"
+        end
+      end
+    end
+    
+    cld = clouds["elb"]
+    
+    assert_equal 3, (cld.send :_load_balancers_args).size
+    assert_equal 3, cld.load_balancers.size
+    assert_equal "http", cld.load_balancers[0].protocol
+    assert_equal "http", cld.load_balancers[1].protocol
+    p cld.load_balancers[1]
+  end
     
 end

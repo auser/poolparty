@@ -15,20 +15,31 @@ module PoolParty
     )
     
     # Autoscaling
-    def auto_scaling(bool=true)
-      _auto_scaling ||= true
+    def auto_scaling(name=nil, &block)
+      _auto_scalers_args << [name, block]
     end
     
+    # Load balancers
+    # DSL for creating a new load balancer
     def load_balancer(name=nil, &block)
-      _load_balancers << CloudProviders::LoadBalancer.new(name, &block)
+      _load_balancers_args << {:name => name, :block => block}
     end
     
-    # Load balancer
-    private
-    def _auto_scaling
-      @_auto_scaling ||= false
+    def load_balancers
+      cloud_provider.load_balancers
     end
-    def _load_balancers
+    
+    private
+    
+    # Create the load balancers from the args
+    def create_load_balancers(load_balancers_args=_load_balancers_args)
+      cloud_provider.create_load_balancers load_balancers_args
+    end
+        
+    def _auto_scalers_args
+      @_auto_scaling ||= []
+    end
+    def _load_balancers_args
       @_load_balancers ||= []
     end
     public

@@ -24,13 +24,16 @@ require "#{File.dirname(__FILE__)}/ec2_response"
 require "#{File.dirname(__FILE__)}/ec2_instance"
 require "#{File.dirname(__FILE__)}/elastic_load_balancer"
 
-require "#{File.dirname(__FILE__)}/modules/elastic_auto_scaling"
+%w(elastic_auto_scaling elastic_load_balancing).each do |lib|
+  require "#{File.dirname(__FILE__)}/modules/#{lib}"
+end
 
 module CloudProviders
   class Ec2 < CloudProvider
     
     include CloudProviders::Ec2Helpers
     include CloudProviders::ElasticAutoScaling
+    include CloudProviders::ElasticLoadBalancing
     
     # Set the aws keys from the environment, or load from /etc/poolparty/env.yml if the environment variable is not set
     def self.default_access_key
@@ -95,8 +98,7 @@ module CloudProviders
         :ramdisk_id             => nil,
         :block_device_mappings  => nil,
         :elastic_ips            => [],  # An array of the elastic ips
-        :ebs_volumes            => [],   # The volume id of an ebs volume # TODO: ensure this is consistent with :block_device_mappings
-        :elastic_load_balancers => []
+        :ebs_volumes            => []   # The volume id of an ebs volume # TODO: ensure this is consistent with :block_device_mappings
       })
       
       

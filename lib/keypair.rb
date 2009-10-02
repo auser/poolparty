@@ -93,9 +93,8 @@ class Keypair
     if exists?
       true
     else
-
+      raise StandardError.new("#{filepath} key file cannot be found") unless filepath.nil?
     end
-    # raise StandardError.new("#{filepath} key file cannot be found") unless exists?
   end
   
   
