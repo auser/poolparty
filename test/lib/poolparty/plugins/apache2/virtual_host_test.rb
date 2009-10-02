@@ -8,6 +8,7 @@ class VirtualHostTest < Test::Unit::TestCase
     clear!
     @pool = pool :apache_test_pool do
       cloud :httpd do
+        keypair "test_key", fixtures_dir/"keys"
         apache do
           has_virtual_host "poolpartyrb.com"
         end

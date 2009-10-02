@@ -86,6 +86,7 @@ class ResourceTest < Test::Unit::TestCase
   def test_access_to_the_pool_and_cloud
     pool :box do
       cloud :semaphore do
+        keypair "test_key", fixtures_dir/"keys"
         has_file :name => "pool_name", :content => pool.name
         has_variable "pool", pool.name
       end
@@ -102,6 +103,8 @@ class ResourceTest < Test::Unit::TestCase
   def test_notifies
     pool :testing do
       cloud :in_a_box do
+        keypair "test_key", fixtures_dir/"keys"
+        
         has_file :name => "pool_name", :content => pool.name
         has_exec "echo 'hello'", :notifies => get_file("pool_name")
       end
@@ -114,6 +117,8 @@ class ResourceTest < Test::Unit::TestCase
     clear!
     pool :testing do
       cloud :in_a_box_for_subscribes do
+        keypair "test_key", fixtures_dir/"keys"
+        
         has_file :name => "pool_name", :content => pool.name
         has_exec "echo 'hello'" do
           subscribes get_file("pool_name"), :reload, :immediately
@@ -128,6 +133,7 @@ class ResourceTest < Test::Unit::TestCase
   def test_required_resourcing
     pool :square do
       cloud :fighting do
+        keypair "test_key", fixtures_dir/"keys"
         has_user "ari"
         has_directory "/etc/dir", :requires => {:user => "ari", :file => "/etc/my_configs"}
         has_file "/etc/my_configs"
@@ -148,6 +154,7 @@ class ResourceTest < Test::Unit::TestCase
   def test_a_subclassed_resource_has_the_method_of_the_subclassed_resource
     pool "oblong" do
       cloud "piece" do
+        keypair "test_key", fixtures_dir/"keys"
         fake_plugin do
           has_subclassed "box"
         end

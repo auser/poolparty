@@ -18,6 +18,7 @@ class BaseTest < Test::Unit::TestCase
     @base = DependencyResolvers::Chef
     @pool = pool "dummy test cloud" do
       cloud "duh" do
+        keypair "test_key", fixtures_dir/"keys"
         file "/etc/motd", :content => "piper"
       end
     end
