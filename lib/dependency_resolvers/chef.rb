@@ -220,7 +220,7 @@ module DependencyResolvers
       
       def write_solo_dot_rb
         content = <<-EOE
-cookbook_path     "/etc/chef/cookbooks"
+cookbook_path     ["/etc/chef/cookbooks", "/etc/chef/site-cookbooks"] 
 node_path         "/etc/chef/nodes"
 log_level         :info
 file_store_path  "/etc/chef"
