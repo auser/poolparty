@@ -4,7 +4,6 @@ module PoolParty
     def initialize(opts={}, &block)
       @init_block = block
       @init_opts = opts
-      
       instance_eval &block if block
       @base_name = self.name
     end
@@ -15,10 +14,10 @@ module PoolParty
     
     def to_dna(recipes, filepath)
       opts = init_opts
-      (opts[:recipes] ||= []) << recipes
+      (opts[:recipes] ||= []) << recipes unless opts[:recipes]
       
       opts[:recipes].flatten!
-      opts.delete(:name) if opts[:name].empty?
+      opts.delete(:name) if opts[:name] && opts[:name].empty?
       File.open(filepath, "w") do |f|
         f << JSON.pretty_generate(init_opts)
       end

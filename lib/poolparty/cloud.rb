@@ -31,7 +31,8 @@ module PoolParty
     end
     
     def after_loaded
-      cloud_provider.auto_scaling(dsl_options) if auto_scaling
+      cloud_provider.keypair = keypair
+      create_load_balancers # Create the load balancers from the args
     end
     
     # Before all instances are launched
@@ -67,7 +68,7 @@ module PoolParty
         if File.exists?(fpath)
           Keypair.new(fpath, extra_paths)
         else
-          generate_keypair
+          generate_keypair(extra_paths)
         end
       else
         raise PoolPartyError.create("WTFERROR", "What the?")
@@ -75,11 +76,11 @@ module PoolParty
     end
     
     private
-    def generate_keypair
+    def generate_keypair(extra_paths=[])
       tmp_keypair_name = "#{pool.name}_#{name}"
       puts "Generate the keypair for this cloud because its not found: #{tmp_keypair_name}"
       cloud_provider.send :generate_keypair, tmp_keypair_name
-      Keypair.new(tmp_keypair_name)
+      Keypair.new(tmp_keypair_name, extra_paths)
     end
     public
     
@@ -91,24 +92,26 @@ module PoolParty
       cloud_provider(o, &block)
     end
     
-    # CHEF STUFF
-    
-    def cookbook_repos(dir=nil)
-      @cookbook_repos ||= File.expand_path(dir)
-    end
-    
-    def chef_repo(filepath=nil)
-      @chef_repo ||= filepath ? File.expand_path(filepath) : nil
-    end
-    
-    def recipe(recipe_path, hsh={})
-      fpath = File.expand_path(cookbook_repos/recipe_path)
-      if File.directory?(fpath)
-        _recipes << fpath
-        _attributes.merge!(File.basename(fpath) => hsh) unless hsh.empty?
-      else
-        raise PoolParty::PoolPartyError.create("RecipeNotFound", "Could not find the recipe: #{recipe_path}")
+    def cookbook_repos(*dirs)
+      dirs.each do |d|
+        _cookbook_repos << d
       end
+      _cookbook_repos
+    end
+    
+    def chef_repo(filepath="")
+      return @chef_repo if @chef_repo
+      cookbook_repos filepath/"site-cookbooks", filepath/"cookbooks"
+      @chef_repo = File.expand_path(filepath)
+    end
+    
+    def recipe(recipe_name, hsh={})
+      if cookbook_repos.empty?
+        raise PoolParty::PoolPartyError.create("RecipeDirectoryNotFound", "Could not find the recipe directory")
+      end
+        vputs "Adding chef recipe: #{recipe_name}"
+        _recipes << recipe_name unless _recipes.include?(recipe_name)
+        _attributes.merge!(recipe_name => hsh) unless hsh.empty?
     end
     
     def recipes(*recipes)
@@ -118,10 +121,13 @@ module PoolParty
     end
     
     def chef_attributes(h={}, &block)
-      @chef_attributes ||= ChefAttribute.new(_attributes.merge!(h), &block)
+      @chef_attributes ||= ChefAttribute.new(h, &block)
     end
     
     private
+    def _cookbook_repos
+      @_cookbook_repos ||= []
+    end
     def _recipes
       @_recipes ||= []
     end
@@ -264,23 +270,17 @@ module PoolParty
     
     # The NEW actual chef resolver.
     def resolve_for_clouds
-      base_directory = tmp_path/"etc"/"#{dependency_resolver_name}"
+      base_directory = tmp_path/"etc"/"chef"
       cookbook_directory = base_directory/"cookbooks"
-      
-      if chef_repo && File.directory?(chef_repo)
-        vputs "Copying the chef-repo into the base directory: #{cookbook_directory}"
-        FileUtils.cp_r chef_repo, cookbook_directory
-      end
-      
-      _recipes.each do |r|
-        d = cookbook_directory/"#{File.basename(r)}"
-        if File.directory?(d)
-          vputs "Copying the cookbooks into the base directory: #{d}"
-          FileUtils.rm_r d if File.directory?(d)
-          FileUtils.cp_r r, d
+      FileUtils.mkdir_p cookbook_directory
+      vputs "Copying the chef-repo into the base directory from #{chef_repo}"
+      cookbook_repos.each do |r|
+        if File.directory?(r)
+          FileUtils.cp_r r, base_directory 
         end
       end
       vputs "Creating the dna.json"
+      chef_attributes.merge!(_attributes)
       chef_attributes.to_dna _recipes.map {|a| File.basename(a) }, base_directory/"dna.json"
     end
     
