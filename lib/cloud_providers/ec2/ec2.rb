@@ -127,7 +127,7 @@ module CloudProviders
                                       instance_type,
                                       kernel_id,
                                       ramdisk_id,
-                                      availability_zone,
+                                      availability_zones,
                                       block_device_mappings
                                       )
       instances = response_array.collect do |aws_response_hash|

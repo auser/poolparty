@@ -14,14 +14,13 @@ class LoadBalancerTest < Test::Unit::TestCase
       protocol "tcp"
     end
   end
-  
-  def test_create_if_necessary
-    @lb.caller = @cloud_provider
-    @lb.send :create_load_balancer
-  end
 
   def ec2
     @ec2 ||= @cloud.cloud_provider.send :grempe_elb
+  end
+  
+  def test_do_something
+    assert true
   end
     
 end

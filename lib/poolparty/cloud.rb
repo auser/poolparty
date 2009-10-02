@@ -31,7 +31,8 @@ module PoolParty
     end
     
     def after_loaded
-      # create_load_balancers # Create the load balancers from the args
+      cloud_provider.keypair = keypair
+      create_load_balancers # Create the load balancers from the args
     end
     
     # Before all instances are launched
@@ -67,7 +68,7 @@ module PoolParty
         if File.exists?(fpath)
           Keypair.new(fpath, extra_paths)
         else
-          generate_keypair
+          generate_keypair(extra_paths)
         end
       else
         raise PoolPartyError.create("WTFERROR", "What the?")
@@ -75,11 +76,11 @@ module PoolParty
     end
     
     private
-    def generate_keypair
+    def generate_keypair(extra_paths=[])
       tmp_keypair_name = "#{pool.name}_#{name}"
       puts "Generate the keypair for this cloud because its not found: #{tmp_keypair_name}"
       cloud_provider.send :generate_keypair, tmp_keypair_name
-      Keypair.new(tmp_keypair_name)
+      Keypair.new(tmp_keypair_name, extra_paths)
     end
     public
     
@@ -98,7 +99,7 @@ module PoolParty
       _cookbook_repos
     end
     
-    def chef_repo(filepath=nil)
+    def chef_repo(filepath="")
       return @chef_repo if @chef_repo
       cookbook_repos filepath/"site-cookbooks", filepath/"cookbooks"
       @chef_repo = File.expand_path(filepath)

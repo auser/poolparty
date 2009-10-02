@@ -24,14 +24,15 @@ class LoadBalancerTest < Test::Unit::TestCase
     clear!
     pool :load_balancer_test_cloud do
       cloud :elb do
-        load_balancer "TestLoadBalancer" do
+        load_balancer "TestLoadBalancer", :protocol => "tcp" do
           protocol "tcp"
         end
         load_balancer "TestLoadBalancer2" do
           protocol "http"
+          balancer_port 8090
         end
         load_balancer "TestLoadBalancer3" do
-          protocol "http"
+          protocol "udp"
         end
       end
     end
@@ -40,9 +41,12 @@ class LoadBalancerTest < Test::Unit::TestCase
     
     assert_equal 3, (cld.send :_load_balancers_args).size
     assert_equal 3, cld.load_balancers.size
-    assert_equal "http", cld.load_balancers[0].protocol
+    assert_equal "tcp", cld.load_balancers[0].protocol
+    assert_equal 80, cld.load_balancers[0].instance_server_port
     assert_equal "http", cld.load_balancers[1].protocol
-    p cld.load_balancers[1]
+    assert_equal 8090, cld.load_balancers[1].balancer_port
+    assert_equal "udp", cld.load_balancers[2].protocol
+    assert_equal 80, cld.load_balancers[2].balancer_port
   end
     
 end

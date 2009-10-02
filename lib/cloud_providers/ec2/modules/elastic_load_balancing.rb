@@ -1,16 +1,17 @@
 module CloudProviders
   module ElasticLoadBalancing
     
-    # Create and store the load balancers from args
-    # The args are in the format [[name, block], [name, block]]
-    def create_load_balancers(args)
-      args.each do |arr|
-        load_balancers << ElasticLoadBalancer.new(arr)
-      end
-    end
-        
     def load_balancers
       @load_balancers ||= []
+    end
+    
+    def load_balancer_names
+      load_balancers.map {|a| a.name }
+    end
+    
+    def create_load_balancer(array)
+      name, opts, block = array
+      load_balancers << ElasticLoadBalancer.new(name, opts, &block) unless load_balancer_names.include?(name)
     end
     
   end

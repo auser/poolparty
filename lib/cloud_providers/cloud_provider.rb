@@ -95,6 +95,9 @@ module CloudProviders
     def load_balancer(*args)
       raise Exception.new("Unimplemented for #{self.class.name}")
     end
+    def create_load_balancer(*args)
+      raise Exception.new("Unimplemented for #{self.class.name}")
+    end
     
     # Nodes
     # returns nodes from the describe_instances array

@@ -9,12 +9,12 @@ class AutoScalingTest < Test::Unit::TestCase
     @pool = PoolParty::Pool.load_from_file(@filepath)
     @cloud = @pool.clouds[@pool.clouds.keys.first]
     
-    @as = CloudProviders::AutoScaling.new "scaling in the east" do
+    @as = CloudProviders::AutoScaler.new "scaling in the east" do
     end
   end
   
   def test_load_balancer_instantiation
-    assert_equal @as.class, CloudProviders::AutoScaling
+    assert_equal @as.class, CloudProviders::AutoScaler
   end
     
 end

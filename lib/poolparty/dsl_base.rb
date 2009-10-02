@@ -21,8 +21,8 @@ module PoolParty
     
     # Load balancers
     # DSL for creating a new load balancer
-    def load_balancer(name=nil, &block)
-      _load_balancers_args << {:name => name, :block => block}
+    def load_balancer(name=nil, opts={}, &block)
+      _load_balancers_args << [name, opts, block]
     end
     
     def load_balancers
@@ -31,9 +31,10 @@ module PoolParty
     
     private
     
-    # Create the load balancers from the args
-    def create_load_balancers(load_balancers_args=_load_balancers_args)
-      cloud_provider.create_load_balancers load_balancers_args
+    def create_load_balancers
+      _load_balancers_args.each do |arg_array|
+        cloud_provider.create_load_balancer arg_array
+      end
     end
         
     def _auto_scalers_args

@@ -4,7 +4,7 @@ module CloudProviders
     include Callbacks
     
     # This is the ACTUAL cloud_provider
-    attr_accessor :caller, :name, :options
+    attr_accessor :name, :options
     
     default_options(
       :balancer_port        => 80,
@@ -12,10 +12,10 @@ module CloudProviders
       :protocol             => "http"
     )
     
-    def initialize(name="Load balancer", caller=nil, opts={}, &block)
+    def initialize(name="Load balancer", opts={}, &block)
       @name = name
-      @caller = caller
       @options = opts
+      set_vars_from_options(opts)
       instance_eval(&block) if block
       after_loaded
     end
@@ -29,16 +29,6 @@ module CloudProviders
     end
     
     def attach_to_instance(instance)
-    end
-    
-    def method_missing(m,*a,&block)
-      if caller.respond_to?(m)
-        caller.send m, *a, &block
-      elsif options.has_key?(m)
-        options[m]
-      else
-        super
-      end
     end
     
   end
