@@ -27,6 +27,11 @@ module CloudProviders
       opts.delete(:id)  # metavirt (in case your using it) passes an id that we do not want to set
       set_vars_from_options(opts)
       super
+      after_loaded
+    end
+    
+    # This callback is called when the instance is first instantiated
+    def after_loaded
     end
     
     # Printing. This is how we extract the instances into the listing on the 

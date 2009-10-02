@@ -163,6 +163,12 @@ module PoolParty
       @cloud_provider
     end
     
+    def set_cloud_provider(new_cloud_provider_name, o={}, &block)
+      @cloud_provider = nil
+      self.cloud_provider_name = new_cloud_provider_name
+      cloud_provider(o, &block)
+    end
+    
     # 1.) Launches a new instance,
     # 2.) Waits for the instance to get an ip address
     # 3.) Waits for port ssh_port to be open

@@ -24,6 +24,7 @@ class LoadBalancerTest < Test::Unit::TestCase
     clear!
     pool :load_balancer_test_cloud do
       cloud :elb do
+        keypair "test_key"
         load_balancer "TestLoadBalancer", :protocol => "tcp" do
           protocol "tcp"
         end
@@ -47,6 +48,8 @@ class LoadBalancerTest < Test::Unit::TestCase
     assert_equal 8090, cld.load_balancers[1].balancer_port
     assert_equal "udp", cld.load_balancers[2].protocol
     assert_equal 80, cld.load_balancers[2].balancer_port
+    
+    assert_equal cld.load_balancers.first.class, CloudProviders::ElasticLoadBalancer
   end
     
 end

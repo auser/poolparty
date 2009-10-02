@@ -1,3 +1,6 @@
+=begin rdoc
+  This module is included in EC2 to provide elastic load balancing support
+=end
 module CloudProviders
   module ElasticLoadBalancing
     

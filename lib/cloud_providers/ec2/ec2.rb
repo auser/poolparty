@@ -22,7 +22,10 @@ end
 require "#{File.dirname(__FILE__)}/ec2_helpers"
 require "#{File.dirname(__FILE__)}/ec2_response"
 require "#{File.dirname(__FILE__)}/ec2_instance"
-require "#{File.dirname(__FILE__)}/elastic_load_balancer"
+
+%w(elastic_load_balancer).each do |lib|
+  require "#{File.dirname(__FILE__)}/classes/#{lib}"
+end
 
 %w(elastic_auto_scaling elastic_load_balancing).each do |lib|
   require "#{File.dirname(__FILE__)}/modules/#{lib}"
@@ -108,6 +111,7 @@ module CloudProviders
     
     # Start a new instance with the given options
     def run_instance(o={})
+      before_launch_instances # Callback
       number_of_instances = o[:number_of_instances] || 1
       set_vars_from_options o
       raise StandardError.new("You must pass a keypair to launch an instance, or else you will not be able to login. options = #{o.inspect}") if !keypair_name
@@ -134,6 +138,7 @@ module CloudProviders
         Ec2Instance.new( Ec2Response.pp_format(aws_response_hash).merge(o) )
       end
       
+      after_launched_instances(instances)
       after_run_instance(instances)
       
       instances.first

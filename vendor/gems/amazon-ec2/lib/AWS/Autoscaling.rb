@@ -1,19 +1,18 @@
 module AWS
-  module ELB
-
+  module Autoscaling
     # Which host FQDN will we connect to for all API calls to AWS?
-    # If ELB_URL is defined in the users ENV we can override the default with that.
-    # 
+    # If AS_URL is defined in the users ENV we can override the default with that.
+    #
     # @example
-    #   export ELB_URL='https://elasticloadbalancing.amazonaws.com'
-    if ENV['ELB_URL']
-      ELB_URL = ENV['ELB_URL']
-      VALID_HOSTS = ['elasticloadbalancing.amazonaws.com']
-      raise ArgumentError, "Invalid ELB_URL environment variable : #{ELB_URL}" unless VALID_HOSTS.include?(ELB_URL)
-      DEFAULT_HOST = URI.parse(ELB_URL).host
+    #   export AS_URL='http://autoscaling.amazonaws.com'
+    if ENV['AS_URL']
+      AS_URL = ENV['AS_URL']
+      VALID_HOSTS = ['http://autoscaling.amazonaws.com']
+      raise ArgumentError, "Invalid AS_URL environment variable : #{AS_URL}" unless VALID_HOSTS.include?(AS_URL)
+      DEFAULT_HOST = URI.parse(AS_URL).host
     else
       # Default US API endpoint
-      DEFAULT_HOST = 'elasticloadbalancing.amazonaws.com'
+      DEFAULT_HOST = 'autoscaling.amazonaws.com'
     end
 
     API_VERSION = '2009-05-15'
@@ -26,7 +25,7 @@ module AWS
       def default_host
         DEFAULT_HOST
       end
-      
+
       # Raises the appropriate error if the specified Net::HTTPResponse object
       # contains an Amazon EC2 error; returns +false+ otherwise.
       def aws_error?(response)
@@ -64,7 +63,7 @@ module AWS
         end
 
       end
-      
+
     end
 
   end

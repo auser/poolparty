@@ -11,6 +11,7 @@
 %w[ base64 cgi openssl digest/sha1 net/https rexml/document time ostruct ].each { |f| require f }
 
 begin
+  require "rubygems"
   require 'xmlsimple' unless defined? XmlSimple
 rescue Exception => e
   require 'xml-simple' unless defined? XmlSimple
@@ -214,7 +215,7 @@ module AWS
           req['User-Agent'] = "github-amazon-ec2-ruby-gem"
 
           response = @http.request(req, query)
-
+          
           # Make a call to see if we need to throw an error based on the response given by EC2
           # All error classes are defined in EC2/exceptions.rb
           aws_error?(response)

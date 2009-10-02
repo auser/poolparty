@@ -5,6 +5,15 @@ module CloudProviders
       :instance_port => "80",
       :protocol => "http"
     )
+    
+    def before_launch_instances
+    end
+    
+    def after_launched_instance(instances=[])
+    end
+    
+    def after_running_instances(instances=[])
+    end
 
     def create_load_balancer
       opts = base_hash.merge(:availability_zones => availability_zone)

@@ -46,6 +46,7 @@ class CloudTest < Test::Unit::TestCase
   
   def test_can_use_basic_resources
     @cloud.instance_eval do
+      using :not_a_cloud_provider
       has_file "/etc/motd"
     end
     assert_equal "/etc/motd", @cloud.files.first.name
@@ -63,20 +64,19 @@ class CloudTest < Test::Unit::TestCase
   def test_raise_if_the_cloud_provider_is_not_a_known_type
     PoolParty::PoolPartyError.create("UnknownCloudProviderError")
     assert_raises UnknownCloudProviderError do
-      @cloud.cloud_provider_name = :not_a_cloud_provider
+      @cloud.set_cloud_provider :not_a_cloud_provider
       @cloud.cloud_provider
     end
   end
     
   def test_set_the_cloud_provider_cloud_and_keypair_with_cloud_provider
     assert_equal @cloud, @cloud.cloud_provider.cloud
-    p @cloud.cloud_provider.keypair
-    assert_equal @cloud.keypair.basename, @cloud.cloud_provider.keypair_name
+    assert_equal @cloud.keypair.basename, @cloud.cloud_provider.keypair.basename
   end
   
   def test_set_the_cloud_provider_with_a_using_block
     @cloud.instance_eval do
-      keypair "test_key", fixtures/"keys"
+      keypair "test_key", fixtures_dir/"keys"
       using :ec2 do
         image_id 'emi-39921602'
       end
@@ -102,7 +102,7 @@ class CloudTest < Test::Unit::TestCase
   def test_resource_graph_generation
     pool "resource" do
       cloud "graph" do
-        
+        keypair "test_key"
         has_file "a", :content => "a"
         has_file "g", :content => "g", :requires => get_file("c")
         has_file "b", :content => "b"
@@ -201,6 +201,7 @@ class CloudTest < Test::Unit::TestCase
       minimum_instances 1
       maximum_instances 10
       cloud "inside" do
+        keypair "test_key"
         maximum_instances 100
       end
     end
@@ -215,6 +216,7 @@ class CloudTest < Test::Unit::TestCase
     clear!
     pool "monitoring" do
       cloud "monitor_app" do
+        keypair "test_key"
         monitor :cpu do |v|
           configure if v < 0.2
           vote_for(:expand) if v > 1.1
