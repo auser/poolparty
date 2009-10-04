@@ -1,10 +1,5 @@
-require "#{File.dirname(__FILE__)}/deprecation/dep_clouds"
-
 module PoolParty  
   class Cloud < DslBase
-    # Deprecated stuff
-    include PoolParty::DepClouds
-    
     has_searchable_paths
     
     # Options we want on the output of the compiled script
@@ -36,6 +31,7 @@ module PoolParty
     end
     
     def after_loaded
+      cloud_provider.keypair = keypair
       create_load_balancers # Create the load balancers from the args
     end
     
@@ -167,12 +163,6 @@ module PoolParty
       @cloud_provider
     end
     
-    def set_cloud_provider(new_cloud_provider_name, o={}, &block)
-      @cloud_provider = nil
-      self.cloud_provider_name = new_cloud_provider_name
-      cloud_provider(o, &block)
-    end
-    
     # 1.) Launches a new instance,
     # 2.) Waits for the instance to get an ip address
     # 3.) Waits for port ssh_port to be open
@@ -244,7 +234,27 @@ module PoolParty
     def pool
       parent
     end
-        
+    
+    # compile
+    
+    # Resolve with the dependency resolver
+    def resolve_with(a)
+      if DependencyResolvers.const_defined?(a.classify)        
+        dependency_resolver DependencyResolvers.module_eval("#{a.classify}")
+      else
+        raise PoolParty::PoolPartyError.create("DependencyResolverError", "Undefined dependency resolver: #{a}. Please specify one of the following: #{DependencyResolvers.all.join(", ")}")
+      end
+    end
+    
+    # Set the dependency resolver
+    def dependency_resolver(sym=nil)
+      @dependency_resolver ||= case sym
+      when :chef, nil
+        dsl_options[:dependency_resolver_name] = :chef
+        DependencyResolvers::Chef
+      end
+    end
+    
     # # Add the monitoring stack
     # def add_monitoring_stack_if_needed
     #   if monitors.size > 0
@@ -290,6 +300,17 @@ Compiling cloud #{self.name} to #{tmp_path/"etc"/"#{dependency_resolver_name}"}
       callback :after_compile
       out
     end
+    
+    # Get the os of the first node if it was not explicity defined, we'll assume they are
+    # all homogenous
+    def os(sym=nil)
+      if sym
+        dsl_options[:os] = sym
+      else
+        nodes.size > 0 ? nodes.first.os : dsl_options[:os]
+      end
+    end
+    alias :platform :os
     
     # The public_ip of the cloud is equivalent to the public_ip
     # of the cloud's oldest node
@@ -355,6 +376,50 @@ Compiling cloud #{self.name} to #{tmp_path/"etc"/"#{dependency_resolver_name}"}
         self.send meth
       end
     end
+    
+    def ensure_not_cyclic
+      if resources_graph.cyclic?
+        cycles = []
+        
+        cycles = resources_graph.find_cycle
+        cycle_string = cycles.map do |k,v|
+          "#{k} -> #{v}"
+        end
+        
+        filepath = "/tmp"
+        format = "png"
+        dotpath = "#{filepath}/dot.#{format}"
+        resources_graph.write_to_graphic_file(format, filepath)
+        
+        `open #{dotpath}`
+        msg =<<-EOE
+      
+        Your resource graph is cyclic. Two resources depend on each other, Cannot decide which resource
+        to go first. Dying instead. Correct this and then try again.
+      
+          #{dotpath}
+      
+        Hint: You can see the resource graph by generating it with:
+          cloud compile -g name
+        
+        EOE
+        raise PoolPartyError.create("CyclicResourceGraphError", msg)
+      end
+    end
+    
+    def ensure_meta_fun_are_resources
+      resources.each do |res|
+        
+        if res.meta_notifies
+          res.meta_notifies.each do |ty, arr|
+            arr.each do |nm, action|
+              raise PoolPartyError.create("ResourceNotFound", "A resource required for #{ty}(#{nm}) was not found: #{ty}(#{nm}). Please make sure you've specified this in your configuration.") unless get_resource(ty, nm)
+            end
+          end
+        end
+        
+      end
+    end    
     
   end
 end

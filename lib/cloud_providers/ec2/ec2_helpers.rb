@@ -90,7 +90,7 @@ module CloudProviders
     
     def _elastic_load_balancer(name=nil, &block)
       return nil unless name
-      CloudProviders::ElasticLoadBalancer.new(name, self,
+      CloudProviders::ElasticLoadBalancer.new(name,
         aws_hash.merge(:access_key_id => access_key, :secret_access_key => secret_access_key),  &block)
     end
     
