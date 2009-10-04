@@ -445,6 +445,7 @@ module CloudProviders
       elastic_load_balancers.select {|lb| lb.name == name }.empty?
     end
     def create_load_balancer!
+      elb.delete_load_balancer(:load_balancer_name => cloud.proper_name)
       elb.create_load_balancer(  
         :availability_zones => parent.availability_zones,
         :load_balancer_name => cloud.proper_name,
@@ -486,7 +487,6 @@ module CloudProviders
     def run
       puts "-----> Checking for launch configuration named: #{name}"
       if should_create_launch_configuration?
-        puts "-----> Creating launch configuration"
         create_launch_configuration!
       end
       if should_create_autoscaling_group?
@@ -527,8 +527,10 @@ module CloudProviders
       end
     end
     def create_launch_configuration!
-      as.delete_launch_configuration(:launch_configuration_name => cloud.proper_name) rescue nil
-      as.create_launch_configuration({
+      puts "-----> Creating launch configuration: #{cloud.proper_name}"
+      p as.delete_autoscaling_group(:autoscaling_group_name => cloud.proper_name)
+      p as.delete_launch_configuration(:launch_configuration_name => cloud.proper_name)
+      p as.create_launch_configuration({
         :launch_configuration_name => cloud.proper_name,
         :image_id => parent.image_id,
         :instance_type => parent.instance_type,
@@ -652,12 +654,16 @@ module PoolParty
 end
 
 
-pool "test" do
-  cloud "application" do
-    load_balancer "map_to_stuff", :external_port => 80 do
-      internal_port 8080
+pool "skinnytest" do
+  
+  cloud "app" do
+    load_balancer "mapA", :external_port => 8000 do
+      internal_port '81'
     end
-    autoscale "test-application"
+    load_balancer "mapB", :external_port => 443 do
+      internal_port 8443
+    end
+    autoscale "a"
     using :ec2 do
       security_group "test_cloud" do
         revoke :from_port => "8080", :to_port => "8081"
@@ -669,5 +675,4 @@ pool "test" do
   end
   
 end
-
 pool.run
