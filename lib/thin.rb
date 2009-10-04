@@ -488,13 +488,13 @@ module CloudProviders
       puts "-----> Checking for launch configuration named: #{name}"
       if should_create_launch_configuration?
         create_launch_configuration!
-        if should_create_autoscaling_group?
-          create_autoscaling_group
-        end
+      end
+      if should_create_autoscaling_group?
+        create_autoscaling_group
       end
     end
     def should_create_autoscaling_group?
-      known = autoscaling_groups.select {|ag| ag.name == name }
+      known = autoscaling_groups.select {|ag| ag.name == cloud.proper_name }
       if known.empty?
         true
       else
