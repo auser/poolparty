@@ -556,7 +556,7 @@ module CloudProviders
     end
     def create_autoscaling_group
       as.delete_autoscaling_group(:autoscaling_group_name => cloud.proper_name) rescue nil
-      p as.create_autoscaling_group({
+      as.create_autoscaling_group({
         :autoscaling_group_name => cloud.proper_name,
         :availability_zones => parent.availability_zones,
         :launch_configuration_name => cloud.proper_name,

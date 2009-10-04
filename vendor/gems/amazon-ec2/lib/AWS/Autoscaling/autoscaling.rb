@@ -58,9 +58,9 @@ module AWS
         params['AutoScalingGroupName'] = options[:autoscaling_group_name]
         params['MinSize'] = options[:min_size].to_s
         params['MaxSize'] = options[:max_size].to_s
-        params['LoadBalancerNames'] = options[:load_balancer_names] if options[:load_balancer_names]
+        params.merge!(pathlist("LoadBalancerNames.member", options[:load_balancer_names])) if options[:load_balancer_names]
         params['CoolDown'] = options[:cooldown] if options[:cooldown]
-
+        
         return response_generator(:action => "CreateAutoScalingGroup", :params => params)
       end
 
