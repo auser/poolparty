@@ -337,10 +337,11 @@ module CloudProviders
     def run
       if should_create_security_group?
         puts "Should create the security group: #{cloud.proper_name}"
+        create_security_group!
       end
     end
     def create_security_group!
-      ec2.create_security_group()
+      ec2.create_security_group(:group_name => cloud.proper_name, :group_description => "PoolParty generated security group: #{cloud.proper_name}")
     end
     def should_create_security_group?
       security_groups.select {|sg| sg[:name] == cloud.proper_name }
