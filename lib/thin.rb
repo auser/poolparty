@@ -653,19 +653,3 @@ pool "test" do
 end
 
 pool.run
-
-# ---- Starting to build cloud application
-#   running on CloudProviders::Ec2
-# [DEBUG] --     building load balancer: map_to_stuff => ["map_to_stuff", {}, #<Proc:0x00090574@/Users/petegolibersuch/Desktop/shw.rb:292>]
-# [DEBUG] --     building autoscaler a
-# [DEBUG] --   for cloud: application
-# [DEBUG] --   minimum_instances: 1
-# [DEBUG] --   maximum_instances: 4
-# [DEBUG] --     load balancer: map_to_stuff
-# [DEBUG] --     autoscalers: a
-#   
-# ---- Starting to build cloud database
-#   running on CloudProviders::Ec2
-# [DEBUG] --   for cloud: database
-# [DEBUG] --   minimum_instances: 1
-# [DEBUG] --   maximum_instances: 4
