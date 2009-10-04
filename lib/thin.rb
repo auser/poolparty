@@ -309,6 +309,13 @@ module CloudProviders
     def security_group(name, o={}, &block)
       _security_groups << SecurityGroup.new(name, o.merge(:parent => self, :cloud => cloud), &block)
     end
+    def method_missing(m,*a,&block)
+      if cloud.respond_to?(m)
+        cloud.send(m,*a,&block)
+      else
+        super
+      end
+    end
     protected
     def ec2
       @ec2 ||= AWS::EC2::Base.new( :access_key_id => access_key, :secret_access_key => secret_access_key )
@@ -551,11 +558,11 @@ module CloudProviders
       as.delete_autoscaling_group(:autoscaling_group_name => cloud.proper_name) rescue nil
       p as.create_autoscaling_group({
         :autoscaling_group_name => cloud.proper_name,
-        :availability_zones => cloud.availability_zones,
+        :availability_zones => parent.availability_zones,
         :launch_configuration_name => cloud.proper_name,
-        :min_size => cloud.minimum_instances,
-        :max_size => cloud.maximum_instances,
-        :load_balancer_names => parent.load_balancers.map {|lb| lb.names }
+        :min_size => parent.minimum_instances,
+        :max_size => parent.maximum_instances,
+        :load_balancer_names => parent.load_balancers.map {|k,v| k }
       })
     end
     def autoscaling_groups
