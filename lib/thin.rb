@@ -445,10 +445,10 @@ module CloudProviders
       elastic_load_balancers.select {|lb| lb.name == name }.empty?
     end
     def create_load_balancer!
-      elb.delete_load_balancer(:load_balancer_name => cloud.proper_name)
-      elb.create_load_balancer(  
+      p elb.delete_load_balancer(:load_balancer_name => name)
+      p elb.create_load_balancer(
         :availability_zones => parent.availability_zones,
-        :load_balancer_name => cloud.proper_name,
+        :load_balancer_name => name,
         :listeners => [{:protocol => protocol, 
                         :load_balancer_port => external_port.to_s,
                         :instance_port => internal_port.to_s}]
