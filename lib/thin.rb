@@ -528,19 +528,25 @@ module CloudProviders
     end
     def create_launch_configuration!
       puts "-----> Creating launch configuration: #{cloud.proper_name}"
-      p as.delete_autoscaling_group(:autoscaling_group_name => cloud.proper_name)
-      p as.delete_launch_configuration(:launch_configuration_name => cloud.proper_name)
-      p as.create_launch_configuration({
-        :launch_configuration_name => cloud.proper_name,
-        :image_id => parent.image_id,
-        :instance_type => parent.instance_type,
-        :security_groups => parent.security_groups,
-        :key_name => cloud.keypair,
-        :user_data => parent.user_data,
-        :kernel_id => parent.kernel_id,
-        :ramdisk_id => parent.ramdisk_id,
-        :block_device_mappings => parent.block_device_mappings
-      })
+      begin
+        as.delete_autoscaling_group(:autoscaling_group_name => cloud.proper_name)
+        as.delete_launch_configuration(:launch_configuration_name => cloud.proper_name)
+        as.create_launch_configuration({
+          :launch_configuration_name => cloud.proper_name,
+          :image_id => parent.image_id,
+          :instance_type => parent.instance_type,
+          :security_groups => parent.security_groups,
+          :key_name => cloud.keypair,
+          :user_data => parent.user_data,
+          :kernel_id => parent.kernel_id,
+          :ramdisk_id => parent.ramdisk_id,
+          :block_device_mappings => parent.block_device_mappings
+        })
+      rescue Exception => e
+        puts <<-EOE
+-----> There was an error: #{e.inspect} when creating the launch_configurations
+        EOE
+      end
     end
     def launch_configurations
       @launch_configurations ||= as.describe_launch_configurations.DescribeLaunchConfigurationsResult.LaunchConfigurations.member.map do |a|
