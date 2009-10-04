@@ -1,5 +1,5 @@
 require "rubygems"
-require "/Users/alerner/Development/ruby/mine/amazon-ec2/lib/AWS"
+require "#{File.dirname(__FILE__)}/../vendor/gems/amazon-ec2/lib/AWS"
 class Array
   # Example  nodes.select_with_hash(:status=>'running')
   def select_with_hash(conditions={})
