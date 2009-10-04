@@ -477,15 +477,26 @@ module CloudProviders
   end
   class ElasticAutoScaler < Ec2
     def run
-      puts "-----> Checking for launch configuration named: #{cloud.proper_name}"
+      puts "-----> Checking for launch configuration named: #{name}"
       if should_create_launch_configuration?
         puts "-----> Creating launch configuration"
         create_launch_configuration!
-        # a.create_autoscaling_group
+      end
+      if should_create_autoscaling_group?
+        create_autoscaling_group
+      end
+    end
+    def should_create_autoscaling_group?
+      known = autoscaling_groups.select {|ag| ag.name == name }
+      if known.empty?
+        true
+      else
+        puts "Autoscaling group already defined...: #{name}"
+        false
       end
     end
     def should_create_launch_configuration?
-      known = launch_configurations.select {|lc| lc.name == cloud.proper_name }
+      known = launch_configurations.select {|lc| lc.name == name }
       if known.empty?
         true
       else
@@ -538,7 +549,7 @@ module CloudProviders
     end
     def create_autoscaling_group
       as.delete_autoscaling_group(:autoscaling_group_name => cloud.proper_name) rescue nil
-      as.create_autoscaling_group({
+      p as.create_autoscaling_group({
         :autoscaling_group_name => cloud.proper_name,
         :availability_zones => cloud.availability_zones,
         :launch_configuration_name => cloud.proper_name,
@@ -639,7 +650,7 @@ pool "test" do
     load_balancer "map_to_stuff", :external_port => 80 do
       internal_port 8080
     end
-    autoscale "a"
+    autoscale "test-application"
     using :ec2 do
       security_group "test_cloud" do
         revoke :from_port => "8080", :to_port => "8081"
