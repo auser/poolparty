@@ -529,8 +529,8 @@ module CloudProviders
     def create_launch_configuration!
       puts "-----> Creating launch configuration: #{cloud.proper_name}"
       begin
-        as.delete_autoscaling_group(:autoscaling_group_name => cloud.proper_name)
-        as.delete_launch_configuration(:launch_configuration_name => cloud.proper_name)
+        # as.delete_autoscaling_group(:autoscaling_group_name => cloud.proper_name)
+        # as.delete_launch_configuration(:launch_configuration_name => cloud.proper_name)
         as.create_launch_configuration({
           :launch_configuration_name => cloud.proper_name,
           :image_id => parent.image_id,
@@ -660,7 +660,7 @@ module PoolParty
 end
 
 
-pool "skinnytest" do
+pool "skinnytest2" do
   
   cloud "app" do
     load_balancer "mapA", :external_port => 8000 do
