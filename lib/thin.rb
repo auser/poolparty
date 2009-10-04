@@ -488,9 +488,9 @@ module CloudProviders
       puts "-----> Checking for launch configuration named: #{name}"
       if should_create_launch_configuration?
         create_launch_configuration!
-      end
-      if should_create_autoscaling_group?
-        create_autoscaling_group
+        if should_create_autoscaling_group?
+          create_autoscaling_group
+        end
       end
     end
     def should_create_autoscaling_group?
