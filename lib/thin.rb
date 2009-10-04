@@ -442,7 +442,7 @@ module CloudProviders
     end
     
     def should_create_load_balancer?
-      elastic_load_balancers.select {|lb| lb.name == cloud.proper_name }.empty?
+      elastic_load_balancers.select {|lb| lb.name == name }.empty?
     end
     def create_load_balancer!
       elb.create_load_balancer(  
