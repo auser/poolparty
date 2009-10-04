@@ -347,18 +347,40 @@ module CloudProviders
                   :to_port => to_port,
                   :cidr_ip => cidr_ip}
                   
-      p ec2.authorize_security_group_ingress(options)
+      ec2.authorize_security_group_ingress(options) rescue nil
     end
   end
+  class Revoke < Ec2
+    default_options({
+                :protocol => "tcp",
+                :from_port => "22",
+                :to_port => "22",
+                :cidr_ip => "0.0.0.0/0"})
+    def run
+      puts "Revoking: #{cloud.proper_name} for #{protocol} to #{from_port}:#{to_port} #{cidr_ip}"
+      options = { :group_name => cloud.proper_name,
+                  :ip_protocol => protocol,
+                  :from_port => from_port,
+                  :to_port => to_port,
+                  :cidr_ip => cidr_ip}
+                  
+      ec2.revoke_security_group_ingress(options) rescue nil
+    end
+  end
+  
   class SecurityGroup < Ec2
     def run
       if should_create_security_group?
         create_security_group! rescue nil
       end
       authorizes.each {|a| a.run }
+      revokes.each {|a| a.run }
     end
     def authorize(o={}, &block)
       authorizes << Authorize.new("#{name}", o.merge(:parent => parent, :cloud => cloud), &block)
+    end
+    def revoke(o={}, &block)
+      revokes << Revoke.new("#{name}", o.merge(:parent => parent, :cloud => cloud), &block)
     end
     def create_security_group!
       ec2.create_security_group(:group_name => cloud.proper_name, :group_description => "PoolParty generated security group: #{cloud.proper_name}")
@@ -392,6 +414,9 @@ module CloudProviders
     end
     def authorizes
       @authorizes ||= []
+    end
+    def revokes
+      @revokes ||= []
     end
   end
   class AutoScaler < Ec2
@@ -617,10 +642,8 @@ pool "test" do
     autoscale "a"
     using :ec2 do
       security_group "test_cloud" do
-        authorize do
-          from_port 8080
-          to_port 8081
-        end
+        revoke :from_port => "8080", :to_port => "8081"
+        authorize :from_port => "22", :to_port => "22"
       end
       minimum_instances 1
       maximum_instances 1
