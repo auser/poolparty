@@ -333,18 +333,37 @@ module CloudProviders
       @autoscales ||= []
     end
   end
+  class Authorize < Ec2
+    default_options({
+                :protocol => "tcp",
+                :from_port => nil,
+                :to_port => nil,
+                :cidr_ip => nil})
+    def run
+      puts "Authorizing: #{parent.name}"
+      options = { :group_name => cloud.proper_name,
+                  :ip_protocol => protocol,
+                  :from_port => from_port,
+                  :to_port => to_port,
+                  :cidr_ip => cidr_ip}
+      ec2.authorize_security_group_ingress(options)
+    end
+  end
   class SecurityGroup < Ec2
     def run
       if should_create_security_group?
-        puts "Should create the security group: #{cloud.proper_name}"
-        create_security_group!
+        create_security_group! rescue nil
       end
+      authorizes.each {|a| a.run }
+    end
+    def authorize(o={}, &block)
+      authorizes << Authorize.new("#{name}", o.merge(:parent => parent, :cloud => cloud), &block)
     end
     def create_security_group!
       ec2.create_security_group(:group_name => cloud.proper_name, :group_description => "PoolParty generated security group: #{cloud.proper_name}")
     end
     def should_create_security_group?
-      security_groups.select {|sg| sg[:name] == cloud.proper_name }
+      security_groups.select {|sg| sg[:name] == cloud.proper_name }.empty?
     end
     def security_groups
       @security_groups ||= ec2.describe_security_groups.securityGroupInfo.item.map do |sg|
@@ -369,6 +388,9 @@ module CloudProviders
     end
     def to_s
       name
+    end
+    def authorizes
+      @authorizes ||= []
     end
   end
   class AutoScaler < Ec2
@@ -593,7 +615,12 @@ pool "test" do
     end
     autoscale "a"
     using :ec2 do
-      security_group "test_cloud"
+      security_group "test_cloud" do
+        authorize do
+          from_port 8080
+          to_port 8081
+        end
+      end
       minimum_instances 1
       maximum_instances 1
     end
