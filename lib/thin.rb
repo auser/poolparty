@@ -1,150 +1,154 @@
 require "rubygems"
 require "#{File.dirname(__FILE__)}/../vendor/gems/amazon-ec2/lib/AWS"
-class Array
-  # Example  nodes.select_with_hash(:status=>'running')
-  def select_with_hash(conditions={})
-    return self if conditions.empty?
-    select do |node|
-      conditions.any? do |k,v|
-        ( node.has_key?(k) && node[k]==v ) or ( node.respond_to?(k) && node.send(k)==v )
+
+# Base object extensions and Dslify
+begin # this block is not required, but nice for folding in the text editor
+  class Array
+    # Example  nodes.select_with_hash(:status=>'running')
+    def select_with_hash(conditions={})
+      return self if conditions.empty?
+      select do |node|
+        conditions.any? do |k,v|
+          ( node.has_key?(k) && node[k]==v ) or ( node.respond_to?(k) && node.send(k)==v )
+        end
       end
     end
   end
-end
-class Hash
-  def diff(other, *hsh)
-    keys.map do |k|
-      if hsh.include?(k)
-        other[k] == self[k] ? nil : {k => other[k]}
-      end
-    end.reject {|b| b.nil? }
+  class Hash
+    def diff(other, *hsh)
+      keys.map do |k|
+        if hsh.include?(k)
+          other[k] == self[k] ? nil : {k => other[k]}
+        end
+      end.reject {|b| b.nil? }
+    end
   end
-end
-class Object
-  def pool(name=nil, &block)
-    @pool ||= PoolParty::Pool.new(name, &block)
+  class Object
+    def pool(name=nil, &block)
+      @pool ||= PoolParty::Pool.new(name, &block)
+    end
   end
-end
-class String
-  # Turn a downcased string and capitalize it
-  # so that it can be a class
-  # doc_river #=> DocRiver
-  def camelcase
-    gsub(/(^|_|-)(.)/) { $2.upcase }
-  end
+  class String
+    # Turn a downcased string and capitalize it
+    # so that it can be a class
+    # doc_river #=> DocRiver
+    def camelcase
+      gsub(/(^|_|-)(.)/) { $2.upcase }
+    end
   
-  # "FooBar".snake_case #=> "foo_bar"
-  def snake_case
-   gsub(/\B[A-Z]+/, '_\&').downcase
-  end
+    # "FooBar".snake_case #=> "foo_bar"
+    def snake_case
+     gsub(/\B[A-Z]+/, '_\&').downcase
+    end
  
-  # "FooBar".dasherize #=> "foo-bar"
-  def dasherize
-    gsub(/\B[A-Z]+/, '-\&').downcase
-  end
+    # "FooBar".dasherize #=> "foo-bar"
+    def dasherize
+      gsub(/\B[A-Z]+/, '-\&').downcase
+    end
     
-  # Turn a string from lowercased with a .
-  # to a classified classname
-  # rice_and_beans #=> "RiceAndBeans"
-  # handles subclassed and namespaced classes as well
-  # for instance
-  #   rice::and::beans #=> Rice::And::Beans
-  def classify
-    self.sub(/.*\./, '').split("::").map {|ele| ele.camelcase }.join("::")
-  end
-  # Constantize tries to find a declared constant with the name specified
-  # in the string. It raises a NameError when the name is not in CamelCase
-  # or is not initialized.
-  #
-  # Examples
-  #   "Module".constantize #=> Module
-  #   "Class".constantize #=> Class
-  def constantize(mod=Object)
-    camelcased_word = classify
-    begin
-      mod.module_eval(camelcased_word, __FILE__, __LINE__)
-    rescue NameError
-      nil
+    # Turn a string from lowercased with a .
+    # to a classified classname
+    # rice_and_beans #=> "RiceAndBeans"
+    # handles subclassed and namespaced classes as well
+    # for instance
+    #   rice::and::beans #=> Rice::And::Beans
+    def classify
+      self.sub(/.*\./, '').split("::").map {|ele| ele.camelcase }.join("::")
+    end
+    # Constantize tries to find a declared constant with the name specified
+    # in the string. It raises a NameError when the name is not in CamelCase
+    # or is not initialized.
+    #
+    # Examples
+    #   "Module".constantize #=> Module
+    #   "Class".constantize #=> Class
+    def constantize(mod=Object)
+      camelcased_word = classify
+      begin
+        mod.module_eval(camelcased_word, __FILE__, __LINE__)
+      rescue NameError
+        nil
+      end
     end
   end
-end
-module Dslify
-  def self.included(base)
-    base.send     :include, InstanceMethods
-    base.extend(ClassMethods)
-  end
+  module Dslify
+    def self.included(base)
+      base.send     :include, InstanceMethods
+      base.extend(ClassMethods)
+    end
   
-  module ClassMethods    
-    def default_options(hsh={})
-      (@_dsl_options ||= {}).merge! hsh
-      set_default_options(@_dsl_options)
-    end
+    module ClassMethods    
+      def default_options(hsh={})
+        (@_dsl_options ||= {}).merge! hsh
+        set_default_options(@_dsl_options)
+      end
     
-    def dsl_options
-      @_dsl_options ||= {}
-    end
-    def options
-      dsl_options
-    end
+      def dsl_options
+        @_dsl_options ||= {}
+      end
+      def options
+        dsl_options
+      end
     
-    def dsl_methods(*syms)
-      syms.each {|sym| set_default_options({sym => nil}) }
-    end
+      def dsl_methods(*syms)
+        syms.each {|sym| set_default_options({sym => nil}) }
+      end
     
-    def set_default_options(new_options)
-      new_options.each do |k,v|
-        dsl_options[k] = v
-        class_eval define_dsl_method_str(k)
+      def set_default_options(new_options)
+        new_options.each do |k,v|
+          dsl_options[k] = v
+          class_eval define_dsl_method_str(k)
+        end
+      end
+    
+      def define_dsl_method_str(k)
+        <<-EOE
+          def #{k}(n=nil)
+            if n.nil?
+              fetch(:#{k})
+            else
+              self.#{k}=n
+            end          
+          end
+          def #{k}=(n)
+            dsl_options[:#{k}] = n
+          end
+          def fetch(k)
+            dsl_options[k]                    
+          end
+        EOE
+      end
+    
+      def inherited(subclass)
+        subclass.set_default_options(dsl_options)
       end
     end
-    
-    def define_dsl_method_str(k)
-      <<-EOE
-        def #{k}(n=nil)
-          if n.nil?
-            fetch(:#{k})
-          else
-            self.#{k}=n
-          end          
-        end
-        def #{k}=(n)
-          dsl_options[:#{k}] = n
-        end
-        def fetch(k)
-          dsl_options[k]                    
-        end
-      EOE
-    end
-    
-    def inherited(subclass)
-      subclass.set_default_options(dsl_options)
-    end
-  end
-  module InstanceMethods
-    def dsl_options
-      @dsl_options ||= self.class.dsl_options.clone
-    end
-    def default_options
-      Hash[*dsl_options.select{|k,v| self.class.default_options.has_key?(k) }.inject([]){|res,(k,v)| res << k << v }]
-    end
-    def set_vars_from_options(hsh={})
-      hsh.each do |k,v| 
-        instance_eval self.class.define_dsl_method_str(k) unless self.respond_to?(k)
-        self.send k, v
+    module InstanceMethods
+      def dsl_options
+        @dsl_options ||= self.class.dsl_options.clone
       end
-    end
+      def default_options
+        Hash[*dsl_options.select{|k,v| self.class.default_options.has_key?(k) }.inject([]){|res,(k,v)| res << k << v }]
+      end
+      def set_vars_from_options(hsh={})
+        hsh.each do |k,v| 
+          instance_eval self.class.define_dsl_method_str(k) unless self.respond_to?(k)
+          self.send k, v
+        end
+      end
     
-    def set_default_options(hsh={})
-      self.class.set_default_options(hsh)
-    end
+      def set_default_options(hsh={})
+        self.class.set_default_options(hsh)
+      end
     
-    def method_missing(m,*a,&block)
-      if m.to_s[-1..-1] == '?'
-        t = m.to_s.gsub(/\?/, '').to_sym
-        warn "DEPRECATED: Dslify will no longer support ? methods. Fix yo code.: #{m}"
-        respond_to?(t) && !self.send(t, *a, &block).nil?
-      else
-        super
+      def method_missing(m,*a,&block)
+        if m.to_s[-1..-1] == '?'
+          t = m.to_s.gsub(/\?/, '').to_sym
+          warn "DEPRECATED: Dslify will no longer support ? methods. Fix yo code.: #{m}"
+          respond_to?(t) && !self.send(t, *a, &block).nil?
+        else
+          super
+        end
       end
     end
   end
@@ -171,8 +175,10 @@ module CloudProviders
       init_opts.has_key?(:cloud) ? init_opts[:cloud] : nil
     end
   end
+  
   class Base < CloudProvider
   end
+  
   class Ec2 < CloudProvider
     # Set the aws keys from the environment, or load from /etc/poolparty/env.yml if the environment variable is not set
     def self.default_access_key
@@ -340,6 +346,7 @@ module CloudProviders
       @autoscales ||= []
     end
   end
+  
   class Authorize < Ec2
     default_options({
                 :protocol => "tcp",
@@ -357,6 +364,7 @@ module CloudProviders
       ec2.authorize_security_group_ingress(options) rescue nil
     end
   end
+  
   class Revoke < Ec2
     default_options({
                 :protocol => "tcp",
@@ -426,8 +434,10 @@ module CloudProviders
       @revokes ||= []
     end
   end
+  
   class AutoScaler < Ec2
   end
+  
   class ElasticLoadBalancer < Ec2
     default_options(
       :internal_port => 8080,
@@ -483,6 +493,7 @@ module CloudProviders
       end
     end
   end
+  
   class ElasticAutoScaler < Ec2
     def run
       puts "-----> Checking for launch configuration named: #{name}"
@@ -529,8 +540,13 @@ module CloudProviders
     def create_launch_configuration!
       puts "-----> Creating launch configuration: #{cloud.proper_name}"
       begin
-        # as.delete_autoscaling_group(:autoscaling_group_name => cloud.proper_name)
-        # as.delete_launch_configuration(:launch_configuration_name => cloud.proper_name)
+        #TODO: use update_autscaling_group instead
+        begin
+          as.delete_autoscaling_group(:autoscaling_group_name => cloud.proper_name)
+        rescue AWS::ValidationError => e
+          puts e
+        end
+        as.delete_launch_configuration(:launch_configuration_name => cloud.proper_name)
         as.create_launch_configuration({
           :launch_configuration_name => cloud.proper_name,
           :image_id => parent.image_id,
@@ -562,9 +578,14 @@ module CloudProviders
         }
       end
     end
-    def create_autoscaling_group
-      as.delete_autoscaling_group(:autoscaling_group_name => cloud.proper_name) rescue nil
+    def create_autoscaling_group()
+      begin
+        as.delete_autoscaling_group(:autoscaling_group_name => cloud.proper_name)
+      rescue Exception => e
+        raise e if e.message.grep(/AutoScalingGroup name not found/).empty?
+      end
       as.create_autoscaling_group({
+        :cooldown => '10',
         :autoscaling_group_name => cloud.proper_name,
         :availability_zones => parent.availability_zones,
         :launch_configuration_name => cloud.proper_name,
@@ -582,7 +603,7 @@ module CloudProviders
           :min_size => g["MinSize"],
           :max_size => g["MaxSize"],
           :load_balancer_names => (g["LoadBalancerNames"]["member"] rescue []),
-          :availabilityZones => (g["AvailabilityZones"]["member"] rescue []),
+          :availability_zones => (g["AvailabilityZones"]["member"] rescue []),
           :launch_configuration_name => g["LaunchConfigurationName"],
           :name => g["AutoScalingGroupName"],
           :instances => (g["Instances"]["member"] rescue []).map {|i|
@@ -596,6 +617,7 @@ module CloudProviders
     
   end
 end
+
 module PoolParty
   class Base
     include Dslify
@@ -629,12 +651,13 @@ module PoolParty
       end
     end
   end
+  
   class Cloud < Base
     default_options(:keypair => nil)
     def load_balancer(name, o={}, &block);load_balancers[name] = [name, o, block];end
     def load_balancers;@load_balancers ||= {};end
     
-    def autoscale(name, o={}, &block);autoscales[name] = [name, o, block];end
+    def autoscale(name=proper_name, o={}, &block);autoscales[name] = [name, o, block];end
     def autoscales;@autoscales ||= {};end
     
     attr_reader :cloud_provider
@@ -658,27 +681,27 @@ module PoolParty
     end
   end
 end
-
-
-pool "skinnytest2" do
-  
-  cloud "app" do
-    load_balancer "mapA", :external_port => 8000 do
-      internal_port '81'
-    end
-    load_balancer "mapB", :external_port => 443 do
-      internal_port 8443
-    end
-    autoscale "a"
-    using :ec2 do
-      security_group "test_cloud" do
-        revoke :from_port => "8080", :to_port => "8081"
-        authorize :from_port => "22", :to_port => "22"
-      end
-      minimum_instances 1
-      maximum_instances 1
-    end
-  end
-  
-end
-pool.run
+# 
+# 
+# pool "skinnytest2" do
+#   
+#   cloud "app" do
+#     load_balancer "mapA", :external_port => 8000 do
+#       internal_port '81'
+#     end
+#     load_balancer "mapB", :external_port => 443 do
+#       internal_port 8443
+#     end
+#     autoscale "a"
+#     using :ec2 do
+#       security_group "test_cloud" do
+#         revoke :from_port => "8080", :to_port => "8081"
+#         authorize :from_port => "22", :to_port => "22"
+#       end
+#       minimum_instances 1
+#       maximum_instances 1
+#     end
+#   end
+#   
+# end
+# pool.run
