@@ -1,9 +1,7 @@
 module CloudProviders
   class ElasticLoadBalancer < Ec2
     default_options(
-      :internal_port => 8080,
-      :external_port => 80,
-      :protocol => "http"
+      :listeners => []
     )
     def run
       if should_create_load_balancer?
@@ -11,7 +9,19 @@ module CloudProviders
         create_load_balancer!
       end
     end
-  
+    
+    def listener(*listener_hashes)
+      listener_hashes.each do |hsh|
+        _listeners << ElasticListener.new(hsh)
+      end
+    end
+    
+    private
+    def _listeners
+      @_listeners ||= []
+    end
+    public 
+    
     def should_create_load_balancer?
       elastic_load_balancers.select {|lb| lb.name == name }.empty?
     end
@@ -20,9 +30,7 @@ module CloudProviders
       elb.create_load_balancer(
         :availability_zones => parent.availability_zones,
         :load_balancer_name => name,
-        :listeners => [{:protocol => protocol, 
-                        :load_balancer_port => external_port.to_s,
-                        :instance_port => internal_port.to_s}]
+        :listeners => _listeners.map {|l| l.to_hash }
       )
     
     end
@@ -52,6 +60,17 @@ module CloudProviders
           end
         }
       end
+    end
+  end
+  class ElasticListener < Ec2
+    default_options(
+      :internal_port => 8080,
+      :external_port => 80,
+      :protocol => "http"
+    )
+    
+    def to_hash
+      {:protocol => protocol, :load_balancer_port => external_port.to_s, :instance_port => internal_port.to_s}
     end
   end
 end

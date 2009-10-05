@@ -8,7 +8,7 @@ module CloudProviders
                 :cidr_ip => "0.0.0.0/0"})
     def run
       puts "Revoking: #{cloud.proper_name} for #{protocol} to #{from_port}:#{to_port} #{cidr_ip}"
-      options = { :group_name => cloud.proper_name,
+      options = { :group_name => proper_name,
                   :ip_protocol => protocol,
                   :from_port => from_port,
                   :to_port => to_port,

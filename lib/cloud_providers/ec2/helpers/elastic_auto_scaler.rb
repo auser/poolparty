@@ -25,12 +25,12 @@ module CloudProviders
       else
         differences = known.map do |k|
          t = k.diff({
-            :name => cloud.proper_name,
-            :image_id => parent.image_id,
-            :instance_type => parent.instance_type,
-            :security_groups => parent.security_groups.flatten,
-            :key_name => cloud.keypair,
-            :user_data => parent.user_data,
+            :name => proper_name,
+            :image_id => image_id,
+            :instance_type => instance_type,
+            :security_groups => security_groups.flatten,
+            :key_name => keypair,
+            :user_data => user_data,
           }, :user_data, :name, :image_id, :instance_type, :security_groups, :key_name)
           t.empty? ? nil : t
         end.reject {|a| a.nil? }
@@ -49,14 +49,14 @@ module CloudProviders
         # as.delete_launch_configuration(:launch_configuration_name => cloud.proper_name)
         as.create_launch_configuration({
           :launch_configuration_name => cloud.proper_name,
-          :image_id => parent.image_id,
-          :instance_type => parent.instance_type,
-          :security_groups => parent.security_groups,
+          :image_id => image_id,
+          :instance_type => instance_type,
+          :security_groups => security_groups,
           :key_name => cloud.keypair,
-          :user_data => parent.user_data,
-          :kernel_id => parent.kernel_id,
-          :ramdisk_id => parent.ramdisk_id,
-          :block_device_mappings => parent.block_device_mappings
+          :user_data => user_data,
+          :kernel_id => kernel_id,
+          :ramdisk_id => ramdisk_id,
+          :block_device_mappings => block_device_mappings
         })
       rescue Exception => e
         puts <<-EOE
@@ -82,11 +82,11 @@ module CloudProviders
       as.delete_autoscaling_group(:autoscaling_group_name => cloud.proper_name) rescue nil
       as.create_autoscaling_group({
         :autoscaling_group_name => cloud.proper_name,
-        :availability_zones => parent.availability_zones,
+        :availability_zones => availability_zones,
         :launch_configuration_name => cloud.proper_name,
-        :min_size => parent.minimum_instances,
-        :max_size => parent.maximum_instances,
-        :load_balancer_names => parent.load_balancers.map {|k,v| k }
+        :min_size => minimum_instances,
+        :max_size => maximum_instances,
+        :load_balancer_names => load_balancers.map {|k,v| k }
       })
     end
     def autoscaling_groups

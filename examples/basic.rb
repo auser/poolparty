@@ -5,11 +5,12 @@ require "poolparty"
 pool "skinnytest2" do
   
   cloud "app" do
-    load_balancer "mapA", :external_port => 8000 do
-      internal_port '81'
+    load_balancer "mapA" do
+      listener :external_port => 8081, :internal_port => 81
+      listener :external_port => 8082, :internal_port => 82, :protocol => 'tcp'
     end
-    load_balancer "mapB", :external_port => 443 do
-      internal_port 8443
+    load_balancer "mapB" do
+      listener :internal_port => 8443, :external_port => 443 
     end
     autoscale "a"
     using :ec2 do

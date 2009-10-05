@@ -8,6 +8,14 @@ module PoolParty
     def clouds
       @clouds ||= {}
     end
+    
+    at_exit do
+      puts <<-EOE
+----> Running #{pool.name}
+      EOE
+      pool.run
+    end
+    
     def run
       clouds.each do |cloud_name, cld|
         puts "---- Starting to build cloud #{cloud_name}"

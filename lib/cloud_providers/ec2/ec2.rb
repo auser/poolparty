@@ -141,14 +141,14 @@ module CloudProviders
     
     def load_balancer(*arr)
       name, o, block = *arr
-      load_balancers << ElasticLoadBalancer.new(name, o.merge(:parent => self, :cloud => cloud), &block)
+      load_balancers << ElasticLoadBalancer.new(name, dsl_options.merge(o), &block)
     end
     def autoscale(*arr)
       name, o, block = *arr
-      autoscales << ElasticAutoScaler.new(name, o.merge(:parent => self, :cloud => cloud), &block)
+      autoscales << ElasticAutoScaler.new(name, dsl_options.merge(o), &block)
     end
     def security_group(name, o={}, &block)
-      _security_groups << SecurityGroup.new(name, o.merge(:parent => self, :cloud => cloud), &block)
+      _security_groups << SecurityGroup.new(name, dsl_options.merge(o), &block)
     end
     def method_missing(m,*a,&block)
       if cloud.respond_to?(m)
