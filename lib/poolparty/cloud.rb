@@ -1,10 +1,19 @@
 module PoolParty  
   class Cloud < Base
-    default_options(:keypair => nil)
-    def load_balancer(name, o={}, &block);load_balancers[name] = [name, o, block];end
+    default_options(
+      :keypair                => nil,
+      :minimum_instances      => 1,
+      :maximum_instances      => 3
+    )
+    
+    def instances(*a)
+      
+    end
+    
+    def load_balancer(name=proper_name, o={}, &block);load_balancers[name] = [name, o, block];end
     def load_balancers;@load_balancers ||= {};end
     
-    def autoscale(name, o={}, &block);autoscales[name] = [name, o, block];end
+    def autoscale(name=proper_name, o={}, &block);autoscales[name] = [name, o, block];end
     def autoscales;@autoscales ||= {};end
     
     attr_reader :cloud_provider

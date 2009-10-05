@@ -20,16 +20,22 @@ module CloudProviders
     def _listeners
       @_listeners ||= []
     end
+    def real_name
+      return @real_name if @real_name
+      used_fullnames = elastic_load_balancers.select {|hsh| hsh[:name] =~ /#{name}/}
+      used_ints = used_fullnames.map {|a| a.gsub(/#{name}/, '').to_i }
+      "#{name}#{used_ints[-1]+1}"
+    end
     public 
     
     def should_create_load_balancer?
       elastic_load_balancers.select {|lb| lb.name == name }.empty?
     end
     def create_load_balancer!
-      elb.delete_load_balancer(:load_balancer_name => name)
-      elb.create_load_balancer(
+      p elb.delete_load_balancer(:load_balancer_name => name)
+      p elb.create_load_balancer(
         :availability_zones => parent.availability_zones,
-        :load_balancer_name => name,
+        :load_balancer_name => real_name,
         :listeners => _listeners.map {|l| l.to_hash }
       )
     

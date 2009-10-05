@@ -10,11 +10,13 @@ class Hash
   
   # Computes the difference between two hashes
   def diff(other, *hsh)
+    o = {}
     keys.map do |k|
       if hsh.include?(k) || hsh.empty?
-        other[k] == self[k] ? nil : {k => other[k]}
+        other[k] == self[k] ? nil : o.merge!({k => other[k]})
       end
     end.reject {|b| b.nil? }
+    o
   end
   
   # Converts all of the keys to strings

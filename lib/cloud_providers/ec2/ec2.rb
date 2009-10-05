@@ -56,8 +56,6 @@ module CloudProviders
     default_options(
       :image_id               => 'ami-ed46a784',
       :instance_type          => 'm1.small',
-      :minimum_instances      => 1,
-      :maximum_instances      => 3,
       :addressing_type        => "public",
       :availability_zones     => ["us-east-1a"],
       :user_id                => default_user_id,

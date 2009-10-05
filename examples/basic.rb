@@ -12,15 +12,13 @@ pool "skinnytest2" do
     load_balancer "mapB" do
       listener :internal_port => 8443, :external_port => 443 
     end
-    autoscale "a"
+    autoscale
     using :ec2 do
       security_group "test_cloud" do
         revoke :from_port => "8080", :to_port => "8081"
         authorize :from_port => "22", :to_port => "22"
       end
-      minimum_instances 1
-      maximum_instances 1
+      instances 0
     end
   end
-  
 end
