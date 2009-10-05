@@ -11,13 +11,8 @@ end
 Dir[File.dirname(__FILE__)+"/../vendor/gems/*"].each {|lib| $LOAD_PATH.unshift(File.expand_path("#{lib}/lib")) }
 
 # Load local gems
-%w(dslify parenting json daemons net/ssh).each do |dep|
+%w(dslify json).each do |dep|
   require dep
-end
-
-# Gratr dependencies
-%w(import dot).each do |sublib|
-  require "gratr/#{sublib}"
 end
 
 module PoolParty
@@ -36,22 +31,12 @@ require "poolparty/pool_party_error"
 
 # Core object overloads
 %w( object
-    module
     string
-    integer
     array
     hash
     symbol
-    proc
-    time
-    file
   ).each do |lib|
   require "core/#{lib}"
-end
-
-# Mixins
-%w(callbacks pinger searchable_paths delayed askable).each do |lib| 
-  require "mixins/#{lib}"
 end
 
 require "keypair"

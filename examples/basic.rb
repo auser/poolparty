@@ -1,30 +1,26 @@
-# Basic pool spec
-# Shows global settings for the clouds
-pool :application do
-  instances 1..5
-  
-  cloud :basic_app do
-    minimum_instances 3
-    maximum_instances 10
-    keypair 'ari'
-    using :ec2 do
-      image_id "ami-abc123"
-    end
-    
-    monitor :cpu do |v|
-      configure if v < 0.2
-      vote_for(:expand) if v > 0.9
-    end
-    
-    has_file :name => "/etc/motd", :content => "Welcome to your PoolParty instance"
-  end
-  
-  cloud :basic_db do    
-    minimum_instances 1
-    keypair "id_rsa"
-    using :ec2 do
-      image_id "ami-1234bc"
-    end
-  end
+$:.unshift("#{File.dirname(__FILE__)}/../lib")
+require "rubygems"
+require "poolparty"
 
+pool "skinnytest2" do
+  
+  cloud "app" do
+    load_balancer "mapA", :external_port => 8000 do
+      internal_port '81'
+    end
+    load_balancer "mapB", :external_port => 443 do
+      internal_port 8443
+    end
+    autoscale "a"
+    using :ec2 do
+      security_group "test_cloud" do
+        revoke :from_port => "8080", :to_port => "8081"
+        authorize :from_port => "22", :to_port => "22"
+      end
+      minimum_instances 1
+      maximum_instances 1
+    end
+  end
+  
 end
+pool.run

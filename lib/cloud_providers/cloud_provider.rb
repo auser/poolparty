@@ -1,117 +1,33 @@
 =begin rdoc
   CloudProvider is the base class for cloud computing services such as Ec2, Eucalyptus - where your servers run.
 =end
+require "#{File.dirname(__FILE__)}/connections"
 module CloudProviders
   class CloudProvider
-    include Dslify
-    include Callbacks
+    include Dslify, Connections
     
-    default_options(
-      :cloud        => nil,
-      :keypair_name => nil,
-      :image_id     => nil
-    )
+    attr_reader :name, :init_opts
     
-    # All CloudProviders are added to the CloudProviders.all array
-    def self.inherited(subclass)
-      unless CloudProviders.all.include?(subclass)
-        CloudProviders.all << subclass
-      end
+    def initialize(name, init_opts={}, &block)
+      @name = name
+      @init_opts = init_opts
+      set_vars_from_options(init_opts)
+      instance_eval &block if block
+      after_initialized
     end
     
-    def initialize(opts={}, &block)
-      set_vars_from_options(opts)
-      instance_eval(&block) if block
+    def after_initialized
     end
     
-    # Required methods
-    # The next methods are required on all CloudProviderInstance types
-    # If your CloudProviderInstance type does not overwrite the following methods
-    # An exception will be raised and poolparty will explode into tiny little 
-    # pieces. Don't forget to overwrite these methods
-    
-    # Launch a new instance
-    def run_instance(o={})
-      raise StandardError.new("method_not_defined :launch_new_instance")
-    end
-    
-    # Terminate an instance by id
-    # Required params:
-    #   instance_id or instance_ids
-    def terminate_instance!(o={})
-      raise StandardError.new("method_not_defined :terminate_instance!")
-    end
-    
-    # Describe an instance's status.  Should return a hash like object
-    # Required keys are:
-    # :image_id
-    # :keypair_name
-    # :instance_id
-    # :status
-    def describe_instance(hash_of_criteria_to_select_instance_against)
-      raise StandardError.new("method_not_defined :describe_instance")
-    end
-    
-    # Get instances
-    # The instances must return an object responding to each
-    # Each yielded object must respond to [:status]
-    def describe_instances(o={})
-      raise StandardError.new("method_not_defined :describe_instances")
-    end
-    
-    # DSL and helpers
-    
-    # Returns an instance of Keypair
-    # You can pass either a filename which will be searched for in ~/.ec2/ and ~/.ssh/
-    # or you can pass a full filepath
-    def keypair(n=keypair_name)
-      @keypair ||= Keypair.new(n)
-      keypair_name @keypair.basename
-      @keypair
-    end
-    def keypair=(n)
-      @keypair = n
-    end
-    
-    def default_keypair_path
-      self.class.default_keypair_path
-    end
-    
-    def self.default_keypair_path
-      ENV["EC2_CONFIG_DIR"] || "#{ENV["HOME"]}/.ssh"
+    def run
+      warn "#{self.class} does not implement run. Something is wrong"
     end
     
     private
-    def generate_keypair(n=nil)
-      raise Exception.new("Unimplemented for #{self.class.name}")
-    end
     
-    def auto_scaling(caller=nil)
-      raise Exception.new("Unimplemented for #{self.class.name}")
+    def cloud
+      init_opts.has_key?(:cloud) ? init_opts[:cloud] : nil
     end
-    public
-    
-    # Load balancing
-    def load_balancer(*args)
-      raise Exception.new("Unimplemented for #{self.class.name}")
-    end
-    def create_load_balancer(*args)
-      raise Exception.new("Unimplemented for #{self.class.name}")
-    end
-    
-    # Nodes
-    # returns nodes from the describe_instances array
-    # These can be selected on by passing a hash
-    def nodes(hsh={})
-      results = describe_instances(:status=>'running').select_with_hash({:keypair_name => keypair.basename})
-      results.select_with_hash(hsh)
-    end
-    
-    def before_compile(cld)
-    end
-    
-    def after_compile(cld)
-    end
-    
+        
   end
 end

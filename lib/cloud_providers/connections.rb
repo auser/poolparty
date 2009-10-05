@@ -20,14 +20,25 @@ module  CloudProviders
       end
     end
     
+    def ping_port(host, port=22, retry_times=400)
+      connected = false
+      retry_times.times do |i|
+        begin
+          break if connected = TCPSocket.new(host, port).is_a?(TCPSocket)
+        rescue Exception => e
+          sleep(2)
+        end
+      end
+      connected
+    end
+    
     def run(commands, o={})
       ssh(commands)
     end
-    
-    # Simply shell out and call ssh, simple, reliable and fewest dependencies, but slow
+  	
     def ssh( commands=[], extra_ssh_ops={})
       commands = commands.compact.join(' && ') if commands.is_a?(Array)
-      cmd_string = "ssh #{user}@#{host} #{ssh_options(extra_ssh_ops)} "
+      cmd_string = "ssh #{user}@#{host} #{ssh_options(extra_ssh_ops)} > ~/.poolparty/ssh.log"
       if commands.empty?
         #TODO: replace this with a IO.popen call with read_nonblocking to show progress, and accept input
         Kernel.system(cmd_string)
@@ -95,6 +106,9 @@ module  CloudProviders
           $stderr.write_nonblock(err)
           # used to do nothing
         end
+      end
+      unless $?.success?
+        warn "Failed sshing. Check ~/.poolparty/ssh.log for details"
       end
       buf
     end
