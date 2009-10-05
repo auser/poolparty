@@ -13,9 +13,9 @@ module CloudProviders
                   :from_port => from_port,
                   :to_port => to_port,
                   :cidr_ip => cidr_ip}
-                  
+                
       ec2.revoke_security_group_ingress(options) rescue nil
     end
   end
-  
+
 end

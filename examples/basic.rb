@@ -23,4 +23,3 @@ pool "skinnytest2" do
   end
   
 end
-pool.run

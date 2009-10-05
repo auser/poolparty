@@ -6,12 +6,7 @@ begin
   require 'AWS'
 rescue LoadError
   puts <<-EOM
-Error: In order to use ec2, you need to install the right_aws gem
-
-Ec2 is the default cloud provider for PoolParty. If you intend on using
-a different provider, specify it with:
-
-using :provider_name
+  There was an error requiring AWS
 EOM
 end
 
@@ -205,6 +200,6 @@ module CloudProviders
   end
 end
 
-%w(authorize elastic_auto_scaler elastic_block_store elastic_load_balancer revoke).each do |lib|
+%w(security_group authorize elastic_auto_scaler elastic_block_store elastic_load_balancer revoke).each do |lib|
   require "#{File.dirname(__FILE__)}/helpers/#{lib}"
 end

@@ -11,7 +11,7 @@ module CloudProviders
         create_load_balancer!
       end
     end
-    
+  
     def should_create_load_balancer?
       elastic_load_balancers.select {|lb| lb.name == name }.empty?
     end
@@ -24,7 +24,7 @@ module CloudProviders
                         :load_balancer_port => external_port.to_s,
                         :instance_port => internal_port.to_s}]
       )
-      
+    
     end
     def elastic_load_balancers
       @elastic_load_balancers ||= elb.describe_load_balancers.DescribeLoadBalancersResult.LoadBalancerDescriptions.member.map do |lb|

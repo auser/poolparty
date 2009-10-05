@@ -1,5 +1,4 @@
 module CloudProviders
-
   class SecurityGroup < Ec2
     def run
       if should_create_security_group?
@@ -51,5 +50,5 @@ module CloudProviders
       @revokes ||= []
     end
   end
-  
+
 end
