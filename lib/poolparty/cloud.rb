@@ -84,8 +84,7 @@ module PoolParty
         FileUtils.cp_r chef_repo, base_directory 
       end
       puts "Creating the dna.json"
-      chef_attributes.merge!(_attributes)
-      chef_attributes.to_dna _recipes.map {|a| File.basename(a) }, base_directory/"dna.json"
+      chef_attributes.to_dna [], base_directory/"dna.json", {:run_list => ["role[#{name}]"]}
       
       write_solo_dot_rb
       write_chef_role_json tmp_path/"etc"/"chef"/"roles/#{name}.json"
@@ -93,11 +92,9 @@ module PoolParty
     
     def write_solo_dot_rb(to=tmp_path/"etc"/"chef"/"solo.rb")
       content = <<-EOE
-cookbook_path     "/etc/chef/cookbooks"
-node_path         "/etc/chef/nodes"
+cookbook_path     ["/etc/chef/chef-repo/site-cookbooks", "/etc/chef/chef-repo/cookbooks"]
+role_path         "/etc/chef/roles"
 log_level         :info
-file_store_path  "/etc/chef"
-file_cache_path  "/etc/chef"
       EOE
 
       File.open(to, "w") do |f|
@@ -106,13 +103,15 @@ file_cache_path  "/etc/chef"
     end
     
     def write_chef_role_json(to=tmp_path/"etc"/"chef"/"dna.json")
-      File.open(to, "w") do |f|
-        f << JSON.pretty_generate({
-          :name => name,
-          :description => description,
-          :recipes => _recipes.map {|r| File.basename(r) }
-        })
-      end
+      ca = ChefAttribute.new({
+        :name => name,
+        :json_class => "Chef::Role",
+        :chef_type => "role",
+        :default_attributes => chef_attributes.init_opts,
+        :override_attributes => {},
+        :description => description
+      })
+      ca.to_dna _recipes.map {|a| File.basename(a) }, to
     end
     
     def tmp_path

@@ -119,6 +119,8 @@ module CloudProviders
         next unless node.in_service?
         node.cloud_provider = self
         node.rsync_dir(tmp_path)
+        node.bootstrap_chef!
+        node.run_chef!
       end
     end
     

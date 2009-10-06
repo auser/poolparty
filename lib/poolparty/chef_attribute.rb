@@ -12,14 +12,15 @@ module PoolParty
       init_opts.merge!(h)
     end
     
-    def to_dna(recipes, filepath)
-      opts = init_opts
-      (opts[:recipes] ||= []) << recipes
+    def to_dna(recipes, filepath, opts=init_opts)
+      if recipes && !recipes.empty?
+        (opts[:recipes] ||= []) << recipes
+        opts[:recipes].flatten!
+      end
       
-      opts[:recipes].flatten!
       opts.delete(:name) if opts[:name] && opts[:name].empty?
       File.open(filepath, "w") do |f|
-        f << JSON.pretty_generate(init_opts)
+        f << JSON.pretty_generate(opts)
       end
     end
     

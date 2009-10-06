@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
 $:.unshift(File.dirname(__FILE__) + "/../lib")
 require "poolparty"
-
 require 'git-style-binary/command'
 
 GitStyleBinary.command do
@@ -24,11 +23,9 @@ EOS
     # libs << " -r #{File.dirname(__FILE__) + '/../lib/console_lib/console_logger.rb'}"
     libs <<  " -r #{File.dirname(__FILE__) + '/../lib/poolparty.rb'}"
     f = command[:clouds_dot_rb]
-    libs <<  " -r " + if File.file?(f)
-      f
-    else
-      "#{PoolParty::Pool.find_default_clouds_dot_rb('clouds.rb')}"
-    end
+    File.open("/tmp/console.rb", "w") {|f| f << "require '#{command[:clouds_dot_rb]}'\npool.do_not_execute = true" }
+    libs <<  " -r /tmp/console.rb"
+    
     puts "Loading PoolParty console..."
     exec "#{irb} #{libs} --simple-prompt"
     

@@ -37,6 +37,8 @@ EOS
       cld.verbose = command[:verbose]
       cld.debug = command[:debug]
     end
+    require command[:clouds_dot_rb] if command[:clouds_dot_rb]
+    pool.do_not_execute = true
   end
   
   run do |command|

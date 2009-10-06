@@ -11,14 +11,7 @@ pool "skinnytest2" do
     recipe "ganglia::monitor_sshd"
     chef_attributes :collectd => {:server => "10.208.114.145"},
                     :rsyslog  => {:server => "ec2.monitor.chacha.metavirt.com",  :protocol=>'udp'},
-                    :recipes  => ["chef", "ganglia"],
-                    :chef     => {:server_hostname => "monitor",
-                                  :server_fqdn => "ec2.monitor.chacha.metavirt.com",
-                                  :init_style => 'init',
-                                  :cache_path => '/etc/chef/cache',
-                                  :serve_path => '/etc/chef',
-                                  :path => '/etc/chef',
-                                  :server_token => ''}
+                    :apache2 => {:listen_ports => ["80", "443"]}
 
     
     load_balancer do

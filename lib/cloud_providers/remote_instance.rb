@@ -25,6 +25,29 @@ module CloudProviders
     def rsync_dir(dir)
       rsync :source => dir/"*", :destination => "/"
     end
+    
+    def chef_bootstrapped?
+      o = ssh(["gem list | grep chedf"])
+      !o.empty?
+    end
+    
+    def bootstrap_chef!
+      unless chef_bootstrapped?
+        ssh([
+          'apt-get update',
+    			'apt-get autoremove -y',
+    			'apt-get install -y ruby ruby-dev rubygems git-core',
+    			'gem sources -a http://gems.opscode.com',
+    			'gem install chef ohai --no-rdoc --no-ri'
+        ])
+      end
+    end
+    
+    def run_chef!
+      ssh([
+        "/var/lib/gems/1.8/bin/chef-solo -j /etc/chef/dna.json -c /etc/chef/solo.rb"
+      ])
+    end
         
     def run
       warn "#{self.class} does not implement run. Something is wrong"
@@ -37,7 +60,7 @@ module CloudProviders
     private
     
     def cloud
-      init_opts.has_key?(:cloud) ? init_opts[:cloud] : nil
+      init_opts.has_key?(:cloud) ? init_opts[:cloud] : cloud_provider.cloud
     end
         
   end
