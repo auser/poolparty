@@ -27,9 +27,12 @@ module PoolParty
     end
     
     def before_compile
-      add_monitoring_stack_if_needed
-      
       validate_all_resources unless ENV["POOLPARTY_NO_VALIDATION"]
+    end
+    
+    def after_loaded
+      cloud_provider.keypair = keypair
+      create_load_balancers # Create the load balancers from the args
     end
     
     # Before all instances are launched
@@ -56,8 +59,30 @@ module PoolParty
     # You can pass either a filename which will be searched for in ~/.ec2/ and ~/.ssh/
     # Or you can pass a full filepath
     def keypair(n=nil, extra_paths=[])
-      @keypair ||= Keypair.new(n, extra_paths)
+      return @keypair if @keypair
+      @keypair = case n
+      when String
+        Keypair.new(n, extra_paths)
+      when nil
+        fpath = CloudProviders::CloudProvider.default_keypair_path/"#{pool.name}_#{name}"
+        if File.exists?(fpath)
+          Keypair.new(fpath, extra_paths)
+        else
+          generate_keypair(extra_paths)
+        end
+      else
+        raise PoolPartyError.create("WTFERROR", "What the?")
+      end
     end
+    
+    private
+    def generate_keypair(extra_paths=[])
+      tmp_keypair_name = "#{pool.name}_#{name}"
+      puts "Generate the keypair for this cloud because its not found: #{tmp_keypair_name}"
+      cloud_provider.send :generate_keypair, tmp_keypair_name
+      Keypair.new(tmp_keypair_name, extra_paths)
+    end
+    public
     
     # Declare the CloudProvider for a cloud
     #  Create an instance of the cloud provider this cloud is using
@@ -65,7 +90,6 @@ module PoolParty
       return @cloud_provider if @cloud_provider
       self.cloud_provider_name = provider_symbol
       cloud_provider(o, &block)
-      cloud_provider.keypair(keypair.full_filepath)
     end
     
     def cookbook_repos(*dirs)
@@ -75,7 +99,7 @@ module PoolParty
       _cookbook_repos
     end
     
-    def chef_repo(filepath=nil)
+    def chef_repo(filepath="")
       return @chef_repo if @chef_repo
       cookbook_repos filepath/"site-cookbooks", filepath/"cookbooks"
       @chef_repo = File.expand_path(filepath)
@@ -131,7 +155,7 @@ module PoolParty
       return @cloud_provider if @cloud_provider
       klass_name = "CloudProviders::#{cloud_provider_name}".classify
       if provider_klass = CloudProviders.all.detect {|k| k.to_s == klass_name }
-        opts.merge!(:cloud => self, :keypair_name => self.keypair.basename)
+        opts.merge!(:cloud => self)
         @cloud_provider = provider_klass.new(dsl_options.merge(opts), &block)
       else
         raise PoolParty::PoolPartyError.create("UnknownCloudProviderError", "Unknown cloud_provider: #{cloud_provider_name}")
@@ -231,18 +255,18 @@ module PoolParty
       end
     end
     
-    # Add the monitoring stack
-    def add_monitoring_stack_if_needed
-      if monitors.size > 0
-        
-        run_in_context do
-          %w(collectd hermes).each do |m|
-            self.send m.to_sym
-          end
-        end
-        
-      end
-    end
+    # # Add the monitoring stack
+    # def add_monitoring_stack_if_needed
+    #   if monitors.size > 0
+    #     
+    #     run_in_context do
+    #       %w(collectd hermes).each do |m|
+    #         self.send m.to_sym
+    #       end
+    #     end
+    #     
+    #   end
+    # end
     
     # The NEW actual chef resolver.
     def resolve_for_clouds

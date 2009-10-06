@@ -70,12 +70,13 @@ class CloudTest < Test::Unit::TestCase
     
   def test_set_the_cloud_provider_cloud_and_keypair_with_cloud_provider
     assert_equal @cloud, @cloud.cloud_provider.cloud
+    p @cloud.cloud_provider.keypair
     assert_equal @cloud.keypair.basename, @cloud.cloud_provider.keypair_name
   end
   
   def test_set_the_cloud_provider_with_a_using_block
     @cloud.instance_eval do
-      keypair "test_key"
+      keypair "test_key", fixtures/"keys"
       using :ec2 do
         image_id 'emi-39921602'
       end
@@ -258,6 +259,7 @@ class CloudTest < Test::Unit::TestCase
     recipe_file = compile_dir/"recipes"/"default.rb"
     recipe_contents = open(recipe_file).read
     
-    assert_match /install_hermes/, recipe_contents
+    # NO MORE?!?
+    assert_no_match /install_hermes/, recipe_contents
   end
 end

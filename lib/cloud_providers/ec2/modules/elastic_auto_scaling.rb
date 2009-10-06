@@ -14,12 +14,14 @@
 =end
 
 module CloudProviders
-  class ElasticAutoScaling < AutoScaling
-    default_options(
-      # :launch_configuration => "PoolPartyAutoScalingGroup",
-      :load_balancers => []
-    )
-
+  module ElasticAutoScaling
+    
+    
+    def auto_scaling(opts={})
+      all_auto_scaling_opts = dsl_options.merge(opts)
+      
+    end
+    
     def create_launch_configuration(opts={})
       opts = base_hash.merge(:availability_zones => availability_zone, :image_id => image_id, :instance_type => instance_type)
       vputs("[EC2] Creating launch_configuration - #{name.camelcase}")
@@ -33,7 +35,7 @@ module CloudProviders
       vputs output
       output
     end
-    
+
     def create_auto_scaling_group(opts={})
       create_launch_configuration(opts)
       #TODO: verify that named launch_configuration exists, or create it
@@ -44,11 +46,11 @@ module CloudProviders
       vputs("[EC2] Creating or updating trigger")
       trigger.create_or_update! if trigger
     end
-    
+
     def trigger(name=nil, &block)
       trigger ||= name ? Trigger.new(name.camelcase, &block) : nil
     end
-    
+
     def base_hash
       @base_hash ||= {:access_key_id => access_key, :secret_key => secret_access_key}
     end
@@ -61,9 +63,9 @@ module CloudProviders
     # def require_aws
     #   require PoolParty.lib_dir/"vendor"/"gems"/"amazon-ec2/lib"/"AWS"
     # end
-    
+
     private
-    
+
     def process(cmd, opts={})
         args={'show-xml'=>nil}.merge(opts)
         arg_string = args.inject(''){|str, arg| str<<"--#{arg[0].to_s.gsub(/_/, '-')} #{arg[1] if arg[1]} "; str}
@@ -74,11 +76,11 @@ module CloudProviders
         vputs output
         output
     end
-    
+
   end
   class Trigger
     include Dslify
-    
+
     default_options(
       :measure => "CPUUtilization",
       :auto_scaling_group => "PoolPartyAutoscalingGroup",
@@ -92,8 +94,8 @@ module CloudProviders
       :upper_breach_increment => 1,
       :breach_duration => 120
     )
-    
-    
+
+
     def create_or_update!
       `as-create-or-update-trigger #{name.camelcase} \
                   --auto-scaling-group #{auto_scaling_group} \
