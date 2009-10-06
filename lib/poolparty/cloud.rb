@@ -23,6 +23,21 @@ module PoolParty
     
     def load_balancer(name=proper_name, o={}, &block);load_balancers[name] = [name, o, block];end
     def load_balancers;@load_balancers ||= {};end
+
+    def chef_repo(filepath="")
+      return @chef_repo if @chef_repo
+      cookbook_repos filepath/"site-cookbooks", filepath/"cookbooks"
+      @chef_repo = File.expand_path(filepath)
+    end
+    
+    def recipe(recipe_name, hsh={})
+      if cookbook_repos.empty?
+        raise PoolParty::PoolPartyError.create("RecipeDirectoryNotFound", "Could not find the recipe directory")
+      end
+        vputs " #{self.name} => Adding chef recipe: #{recipe_name}"
+        _recipes << recipe_name unless _recipes.include?(recipe_name)
+        _attributes.merge!(recipe_name => hsh) unless hsh.empty?
+    end
     
     def autoscale(name=proper_name, o={}, &block);autoscales[name] = [name, o, block];end
     def autoscales;@autoscales ||= {};end
