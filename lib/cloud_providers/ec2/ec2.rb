@@ -113,11 +113,25 @@ module CloudProviders
         end
       end
     end
+    
+    def bootstrap_nodes!(tmp_path)
+      nodes.each do |node|
+        next unless node.running?
+        p node
+        node.cloud_provider = self
+        node.rsync_dir(tmp_path)
+      end
+    end
+    
     def nodes
       @nodes ||= describe_instances.select {|i| security_groups.include?(i.security_groups) }
     end
-    def describe_instances
-      @describe_instances ||= _describe_instances.map {|hsh| Ec2Instance.new(hsh) }
+    def describe_instances(id=nil)
+      if id
+        ec2.describe_instances(:instance_id => id)
+      else
+        @describe_instances ||= _describe_instances.map {|hsh| Ec2Instance.new(hsh) }
+      end
     end
     def _describe_instances
       @_describe_instances ||= ec2.describe_instances.reservationSet.item.map do |r|
@@ -189,7 +203,7 @@ module CloudProviders
       puts "[EC2] generate_keypair is called with #{default_keypair_path/n}"
       begin
         hsh = ec2.create_keypair(:key_name => n)
-        string = hsh[:aws_material]
+        string = hsh.keyMaterial
         FileUtils.mkdir_p default_keypair_path unless File.directory?(default_keypair_path)
         puts "[EC2] Generated keypair #{default_keypair_path/n}"
         puts "[EC2] #{string}"

@@ -6,6 +6,7 @@ module CloudProviders
     include Dslify, Connections
     
     attr_reader :name, :init_opts
+    attr_accessor :cloud_provider
     
     def initialize(init_opts={}, &block)
       @init_opts = init_opts
@@ -22,7 +23,7 @@ module CloudProviders
     end
     
     def rsync_dir(dir)
-      rsync :source => dir, :destination => "/"
+      rsync :source => dir/"*", :destination => "/"
     end
     
     def run

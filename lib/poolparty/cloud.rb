@@ -145,9 +145,7 @@ file_cache_path  "/etc/chef"
       
       unless chef_repo.nil?
         build_tmp_dir
-        nodes.each do |node|
-          node.rsync_dir(tmp_path)
-        end
+        cloud_provider.bootstrap_nodes!(tmp_path)
       end
     end
     

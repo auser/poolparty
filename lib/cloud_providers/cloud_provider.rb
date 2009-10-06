@@ -30,6 +30,9 @@ module CloudProviders
       ENV["EC2_CONFIG_DIR"] || "#{ENV["HOME"]}/.ssh"
     end
     
+    def bootstrap_nodes!
+    end
+    
     private
     
     def cloud

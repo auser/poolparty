@@ -59,7 +59,6 @@ module CloudProviders
         if differences.empty?
           false
         else
-          p [differences, known]
           true
         end
       end
