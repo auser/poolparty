@@ -27,8 +27,7 @@ module CloudProviders
     end
     
     def chef_bootstrapped?
-      o = ssh(["gem list | grep chedf"])
-      !o.empty?
+      @chef_bootstrapped ||= !ssh(["gem list | grep chef"]).empty?
     end
     
     def bootstrap_chef!
