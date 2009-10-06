@@ -116,8 +116,7 @@ module CloudProviders
     
     def bootstrap_nodes!(tmp_path)
       nodes.each do |node|
-        next unless node.running?
-        p node
+        next unless node.in_service?
         node.cloud_provider = self
         node.rsync_dir(tmp_path)
       end

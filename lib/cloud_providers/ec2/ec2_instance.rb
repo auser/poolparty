@@ -7,8 +7,16 @@ module CloudProviders
       ping_port self.public_ip, 22
     end
     
+    def in_service?
+      running? || pending?
+    end
+    
     def running?
       self.status == "running"
+    end
+    
+    def pending?
+      self.status == "pending"
     end
     
   end
