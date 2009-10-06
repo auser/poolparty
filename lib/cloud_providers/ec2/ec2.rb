@@ -81,6 +81,7 @@ module CloudProviders
       puts "  minimum_instances: #{minimum_instances}"
       puts "  maximum_instances: #{maximum_instances}"
       puts "  security_groups: #{security_groups.join(", ")}"
+      puts "  running on keypair: #{keypair}"
       
       unless _security_groups.empty?
         _security_groups.each do |sg|
@@ -95,7 +96,7 @@ module CloudProviders
         end
       end
       
-      if autoscales.empty?
+      if autoscalers.empty?
         puts "---- live, running instances (#{instances.size}) ----"
         if instances.size < minimum_instances
           expansion_count = minimum_instances - instances.size
@@ -105,7 +106,7 @@ module CloudProviders
           puts "-----> contracting the cloud because the instances count exceeds the maximum_instances by #{contraction_count} (TODO)"
         end
       else
-        autoscales.each do |a|
+        autoscalers.each do |a|
           puts "    autoscaler: #{a.name}"
           puts "-----> The autoscaling groups will launch the instances"
           a.run
@@ -140,7 +141,7 @@ module CloudProviders
     end
     def autoscale(*arr)
       name, o, block = *arr
-      autoscales << ElasticAutoScaler.new(name, dsl_options.merge(o), &block)
+      autoscalers << ElasticAutoScaler.new(name, dsl_options.merge(o), &block)
     end
     def security_group(name, o={}, &block)
       _security_groups << SecurityGroup.new(name, dsl_options.merge(o), &block)
@@ -172,22 +173,22 @@ module CloudProviders
     def load_balancers
       @load_balancers ||= []
     end
-    def autoscales
-      @autoscales ||= []
+    def autoscalers
+      @autoscalers ||= []
     end
     
     def generate_keypair(n=nil)
-      puts "[EC2] generate_keypair is called with #{n}"
+      puts "[EC2] generate_keypair is called with #{default_keypair_path/n}"
       begin
-        hsh = ec2.create_key_pair(n)
+        hsh = ec2.create_keypair(:key_name => n)
         string = hsh[:aws_material]
         FileUtils.mkdir_p default_keypair_path unless File.directory?(default_keypair_path)
         puts "[EC2] Generated keypair #{default_keypair_path/n}"
-        vputs "[EC2] #{string}"
+        puts "[EC2] #{string}"
         File.open(default_keypair_path/n, "w") {|f| f << string }
         File.chmod 0600, default_keypair_path/n
-      rescue RightAws::AwsError => e
-        puts "[EC2] The keypair exists in EC2, but we cannot find the keypair locally: #{n}"
+      rescue Exception => e
+        puts "[EC2] The keypair exists in EC2, but we cannot find the keypair locally: #{n} (#{e.inspect})"
       end
       keypair n
     end

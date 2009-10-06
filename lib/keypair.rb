@@ -36,7 +36,10 @@ class Keypair
         search_in_known_locations(filepath, extra_paths)
       end
   end
-  alias :to_s :full_filepath
+  
+  def to_s
+    basename
+  end
   
   #TODO: gracefully handle the case when a passpharase is needed
   # Generate a public key from the private key
