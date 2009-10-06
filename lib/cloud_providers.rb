@@ -10,7 +10,7 @@ module CloudProviders
 
 end
 
-%w(connections cloud_provider).each do |lib|
+%w(connections remote_instance cloud_provider).each do |lib|
   require File.dirname(__FILE__)+"/cloud_providers/#{lib}"
 end
 

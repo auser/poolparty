@@ -50,7 +50,7 @@ module CloudProviders
           t = k.diff({
             :image_id => image_id,
             :instance_type => instance_type,
-            :security_groups => security_groups.flatten,
+            :security_groups => parent.security_groups.flatten,
             :key_name => keypair.to_s,
             :user_data => user_data,
             }, :user_data, :image_id, :instance_type, :security_groups, :key_name)
@@ -75,7 +75,7 @@ module CloudProviders
           :launch_configuration_name => launch_configuration_name,
           :image_id => image_id,
           :instance_type => instance_type,
-          :security_groups => security_groups,
+          :security_groups => parent.security_groups,
           :key_name => keypair.to_s,
           :user_data => user_data,
           :kernel_id => kernel_id,

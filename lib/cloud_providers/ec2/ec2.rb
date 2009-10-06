@@ -113,8 +113,14 @@ module CloudProviders
         end
       end
     end
+    def nodes
+      @nodes ||= describe_instances.select {|i| security_groups.include?(i.security_groups) }
+    end
     def describe_instances
-      @describe_instances ||= ec2.describe_instances.reservationSet.item.map do |r|
+      @describe_instances ||= _describe_instances.map {|hsh| Ec2Instance.new(hsh) }
+    end
+    def _describe_instances
+      @_describe_instances ||= ec2.describe_instances.reservationSet.item.map do |r|
         r.instancesSet.item.map do |i|
           {
             :instance_id => i["instanceId"],
@@ -130,21 +136,21 @@ module CloudProviders
             :status => i["instanceState"]["name"]
           }
         end
-      end
+      end.flatten
     end
     
     # Extras!
     
     def load_balancer(*arr)
       name, o, block = *arr
-      load_balancers << ElasticLoadBalancer.new(name, dsl_options.merge(o), &block)
+      load_balancers << ElasticLoadBalancer.new(name, sub_opts.merge(o), &block)
     end
     def autoscale(*arr)
       name, o, block = *arr
-      autoscalers << ElasticAutoScaler.new(name, dsl_options.merge(o), &block)
+      autoscalers << ElasticAutoScaler.new(name, sub_opts.merge(o), &block)
     end
-    def security_group(name, o={}, &block)
-      _security_groups << SecurityGroup.new(name, dsl_options.merge(o), &block)
+    def security_group(name=proper_name, o={}, &block)
+      _security_groups << SecurityGroup.new(name, sub_opts.merge(o), &block)
     end
     def method_missing(m,*a,&block)
       if cloud.respond_to?(m)
@@ -167,7 +173,7 @@ module CloudProviders
       _security_groups.map {|a| a.to_s }
     end
     def _security_groups
-      @security_groups ||= [SecurityGroup.new("default", {:parent => self, :cloud => cloud})]
+      @security_groups ||= []
     end
     private
     def load_balancers
@@ -176,7 +182,9 @@ module CloudProviders
     def autoscalers
       @autoscalers ||= []
     end
-    
+    def sub_opts
+      dsl_options.merge(:parent => self)
+    end
     def generate_keypair(n=nil)
       puts "[EC2] generate_keypair is called with #{default_keypair_path/n}"
       begin
@@ -196,6 +204,7 @@ module CloudProviders
   end
 end
 
+require "#{File.dirname(__FILE__)}/ec2_instance"
 %w(security_group authorize elastic_auto_scaler elastic_block_store elastic_load_balancer revoke).each do |lib|
   require "#{File.dirname(__FILE__)}/helpers/#{lib}"
 end

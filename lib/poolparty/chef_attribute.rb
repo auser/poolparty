@@ -1,6 +1,6 @@
 module PoolParty
   class ChefAttribute < Base
-    
+    attr_reader :init_opts
     def initialize(opts={}, &block)
       @init_block = block
       @init_opts = opts
@@ -14,7 +14,7 @@ module PoolParty
     
     def to_dna(recipes, filepath)
       opts = init_opts
-      (opts[:recipes] ||= []) << recipes unless opts[:recipes]
+      (opts[:recipes] ||= []) << recipes
       
       opts[:recipes].flatten!
       opts.delete(:name) if opts[:name] && opts[:name].empty?

@@ -5,19 +5,31 @@ require "poolparty"
 pool "skinnytest2" do
   
   cloud "app" do
-    load_balancer "mapA" do
-      listener :external_port => 8081, :internal_port => 81
+    chef_repo "/Users/auser/Development/work/chacha/chef-repo"
+    recipe "ganglia::default"
+    recipe "ganglia::gmetad"
+    recipe "ganglia::monitor_sshd"
+    chef_attributes :collectd => {:server => "10.208.114.145"},
+                    :rsyslog  => {:server => "ec2.monitor.chacha.metavirt.com",  :protocol=>'udp'},
+                    :recipes  => ["chef", "ganglia"],
+                    :chef     => {:server_hostname => "monitor",
+                                  :server_fqdn => "ec2.monitor.chacha.metavirt.com",
+                                  :init_style => 'init',
+                                  :cache_path => '/etc/chef/cache',
+                                  :serve_path => '/etc/chef',
+                                  :path => '/etc/chef',
+                                  :server_token => ''}
+
+    
+    load_balancer do
       listener :external_port => 8082, :internal_port => 82, :protocol => 'tcp'
     end
-    load_balancer "mapB" do
-      listener :internal_port => 8443, :external_port => 443 
-    end
+
     autoscaler do
       cooldown "30"
     end
     using :ec2 do
-      
-      security_group "test_cloud" do
+      security_group do
         revoke :from_port => "8080", :to_port => "8081"
         authorize :from_port => "22", :to_port => "22"
       end
@@ -26,7 +38,7 @@ pool "skinnytest2" do
 echo "New User Data! ho."    
       EOE
   
-      instances 0
+      instances 1..1
     end
   end
 end

@@ -1,21 +1,28 @@
 =begin rdoc
-  CloudProvider is the base class for cloud computing services such as Ec2, Eucalyptus - where your servers run.
+  Remote instances
 =end
 module CloudProviders
-  class CloudProvider
-    include Dslify
+  class RemoteInstance
+    include Dslify, Connections
     
     attr_reader :name, :init_opts
     
-    def initialize(name, init_opts={}, &block)
-      @name = name
+    def initialize(init_opts={}, &block)
       @init_opts = init_opts
       set_vars_from_options(init_opts)
       instance_eval &block if block
       after_initialized
     end
     
+    def keypair(n=nil)
+      @keypair ||= n.nil? ? nil : Keypair.new(n)
+    end
+    
     def after_initialized
+    end
+    
+    def rsync_dir(dir)
+      rsync :source => dir, :destination => "/"
     end
     
     def run
@@ -24,10 +31,6 @@ module CloudProviders
     
     def default_keypair_path
       self.class.default_keypair_path
-    end
-    
-    def self.default_keypair_path
-      ENV["EC2_CONFIG_DIR"] || "#{ENV["HOME"]}/.ssh"
     end
     
     private

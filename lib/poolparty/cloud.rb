@@ -1,7 +1,7 @@
 module PoolParty  
   class Cloud < Base
     default_options(
-      :keypair                => nil,
+      :description            => "PoolParty cloud",
       :minimum_instances      => 1,
       :maximum_instances      => 3
     )
@@ -44,24 +44,86 @@ module PoolParty
       end
     end
     
-    def load_balancer(name=proper_name, o={}, &block);load_balancers[name] = [name, o, block];end
-    def load_balancers;@load_balancers ||= {};end
-
-    def chef_repo(filepath="")
+    # Chef    
+    def chef_repo(filepath=nil)
       return @chef_repo if @chef_repo
-      cookbook_repos filepath/"site-cookbooks", filepath/"cookbooks"
-      @chef_repo = File.expand_path(filepath)
+      @chef_repo = filepath.nil? ? nil : File.expand_path(filepath)
+    end
+    
+    def chef_attributes(hsh={}, &block)
+      @chef_attributes ||= ChefAttribute.new(hsh, &block)
     end
     
     def recipe(recipe_name, hsh={})
-      if cookbook_repos.empty?
-        raise PoolParty::PoolPartyError.create("RecipeDirectoryNotFound", "Could not find the recipe directory")
-      end
-        vputs " #{self.name} => Adding chef recipe: #{recipe_name}"
-        _recipes << recipe_name unless _recipes.include?(recipe_name)
-        _attributes.merge!(recipe_name => hsh) unless hsh.empty?
+      _recipes << recipe_name unless _recipes.include?(recipe_name)
+      _attributes.merge!(recipe_name => hsh) unless hsh.empty?
     end
     
+    def recipes(*recipes)
+      recipes.each do |r|
+        recipe(r)
+      end
+    end
+    
+    private
+    
+    def _recipes
+      @_recipes ||= []
+    end
+    def _attributes
+      @_attributes ||= {}
+    end
+    
+    # The NEW actual chef resolver.
+    def build_tmp_dir
+      base_directory = tmp_path/"etc"/"chef"
+      puts "Copying the chef-repo into the base directory from #{chef_repo}"
+      FileUtils.mkdir_p base_directory/"roles"
+      
+      if File.directory?(chef_repo)
+        FileUtils.cp_r chef_repo, base_directory 
+      end
+      puts "Creating the dna.json"
+      chef_attributes.merge!(_attributes)
+      chef_attributes.to_dna _recipes.map {|a| File.basename(a) }, base_directory/"dna.json"
+      
+      write_solo_dot_rb
+      write_chef_role_json tmp_path/"etc"/"chef"/"roles/#{name}.json"
+    end
+    
+    def write_solo_dot_rb(to=tmp_path/"etc"/"chef"/"solo.rb")
+      content = <<-EOE
+cookbook_path     "/etc/chef/cookbooks"
+node_path         "/etc/chef/nodes"
+log_level         :info
+file_store_path  "/etc/chef"
+file_cache_path  "/etc/chef"
+      EOE
+
+      File.open(to, "w") do |f|
+        f << content
+      end
+    end
+    
+    def write_chef_role_json(to=tmp_path/"etc"/"chef"/"dna.json")
+      File.open(to, "w") do |f|
+        f << JSON.pretty_generate({
+          :name => name,
+          :description => description,
+          :recipes => _recipes.map {|r| File.basename(r) }
+        })
+      end
+    end
+    
+    def tmp_path
+      "/tmp/poolparty" / pool.name / name
+    end
+    
+    public
+    
+    def load_balancer(name=proper_name, o={}, &block);load_balancers[name] = [name, o, block];end
+    def load_balancers;@load_balancers ||= {};end
+        
     def autoscaler(name=proper_name, o={}, &block);autoscalers[name] = [name, o, block];end
     def autoscalers;@autoscalers ||= {};end
     
@@ -72,6 +134,7 @@ module PoolParty
     end
     def run
       puts "  running on #{cloud_provider.class}"
+      
       load_balancers.each do |lb_name, lb|
         cloud_provider.load_balancer(*lb)
       end
@@ -79,6 +142,17 @@ module PoolParty
         cloud_provider.autoscale(*as)
       end
       cloud_provider.run
+      
+      unless chef_repo.nil?
+        build_tmp_dir
+        nodes.each do |node|
+          node.rsync_dir(tmp_path)
+        end
+      end
+    end
+    
+    def nodes
+      cloud_provider.nodes
     end
     
     def proper_name

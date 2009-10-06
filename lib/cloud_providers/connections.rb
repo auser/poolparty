@@ -1,6 +1,6 @@
 require "open3"
 
-module  CloudProviders
+module CloudProviders
   module Connections
     
     def user(n=nil)
