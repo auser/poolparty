@@ -6,6 +6,29 @@ module PoolParty
       :maximum_instances      => 3
     )
     
+    # returns an instance of Keypair
+    # You can pass either a filename which will be searched for in ~/.ec2/ and ~/.ssh/
+    # Or you can pass a full filepath
+    def keypair(n=nil, extra_paths=[])
+      return @keypair if @keypair
+      @keypair = case n
+      when String
+        Keypair.new(n, extra_paths)
+      when nil
+        fpath = CloudProviders::CloudProvider.default_keypair_path/"#{proper_name}"
+        File.exists?(fpath) ? Keypair.new(fpath, extra_paths) : generate_keypair(extra_paths)
+      else
+        raise ArgumentError, "There was an error when defining the keypair"
+      end
+    end
+    
+    private
+    def generate_keypair(extra_paths=[])
+      puts "Generate the keypair for this cloud because its not found: #{proper_name}"
+      cloud_provider.send :generate_keypair, proper_name
+      Keypair.new(proper_name, extra_paths)
+    end
+    public
     def instances(arg)
       case arg
       when Range
@@ -39,8 +62,8 @@ module PoolParty
         _attributes.merge!(recipe_name => hsh) unless hsh.empty?
     end
     
-    def autoscale(name=proper_name, o={}, &block);autoscales[name] = [name, o, block];end
-    def autoscales;@autoscales ||= {};end
+    def autoscaler(name=proper_name, o={}, &block);autoscalers[name] = [name, o, block];end
+    def autoscalers;@autoscalers ||= {};end
     
     attr_reader :cloud_provider
     def using(provider_name, &block)
@@ -52,7 +75,7 @@ module PoolParty
       load_balancers.each do |lb_name, lb|
         cloud_provider.load_balancer(*lb)
       end
-      autoscales.each do |as_name, as|
+      autoscalers.each do |as_name, as|
         cloud_provider.autoscale(*as)
       end
       cloud_provider.run

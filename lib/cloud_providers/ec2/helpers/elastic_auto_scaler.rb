@@ -7,8 +7,9 @@ module CloudProviders
     def run
       puts "-----> Checking for launch configuration named: #{old_launch_configuration_name}"
       if should_create_launch_configuration?
-        puts "-----> Recreating the launch configuration as details have changed"
         create_launch_configuration!
+      elsif should_update_launch_configuration?
+        update_launch_configuration!
       end
       if should_create_autoscaling_group?
         create_autoscaling_group!
@@ -20,6 +21,7 @@ module CloudProviders
       as.delete_launch_configuration(:launch_configuration_name => old_launch_configuration_name) if should_create_launch_configuration?
     end
     def teardown
+      as.delete_launch_configuration(:launch_configuration_name => old_launch_configuration_name)
     end
     
     def should_create_autoscaling_group?
@@ -36,12 +38,20 @@ module CloudProviders
       if known.empty?
         true
       else
+        false
+      end
+    end
+    def should_update_launch_configuration?
+      known = launch_configurations.select {|lc| lc.name =~ /#{name}/ }
+      if known.empty?
+        true
+      else
         differences = known.map do |k|
           t = k.diff({
             :image_id => image_id,
             :instance_type => instance_type,
             :security_groups => security_groups.flatten,
-            :key_name => keypair,
+            :key_name => keypair.to_s,
             :user_data => user_data,
             }, :user_data, :image_id, :instance_type, :security_groups, :key_name)
           t.empty? ? nil : t
@@ -54,16 +64,19 @@ module CloudProviders
         end
       end
     end
-    def create_launch_configuration!
+    def update_launch_configuration!
+      create_launch_configuration!
+    end
+    def create_launch_configuration!(lc=new_launch_configuration_name)
       puts "-----> Creating launch configuration: #{new_launch_configuration_name} for #{proper_name}"
       begin
-        @launch_configuration_name = new_launch_configuration_name
+        @launch_configuration_name = lc
         as.create_launch_configuration({
           :launch_configuration_name => launch_configuration_name,
           :image_id => image_id,
           :instance_type => instance_type,
           :security_groups => security_groups,
-          :key_name => keypair,
+          :key_name => keypair.to_s,
           :user_data => user_data,
           :kernel_id => kernel_id,
           :ramdisk_id => ramdisk_id,

@@ -23,6 +23,14 @@ module CloudProviders
       warn "#{self.class} does not implement run. Something is wrong"
     end
     
+    def default_keypair_path
+      self.class.default_keypair_path
+    end
+    
+    def self.default_keypair_path
+      ENV["EC2_CONFIG_DIR"] || "#{ENV["HOME"]}/.ssh"
+    end
+    
     private
     
     def cloud
