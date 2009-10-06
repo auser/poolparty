@@ -85,7 +85,7 @@ module PoolParty
       if cookbook_repos.empty?
         raise PoolParty::PoolPartyError.create("RecipeDirectoryNotFound", "Could not find the recipe directory")
       end
-        vputs "Adding chef recipe: #{recipe_name}"
+        vputs " #{self.name} => Adding chef recipe: #{recipe_name}"
         _recipes << recipe_name unless _recipes.include?(recipe_name)
         _attributes.merge!(recipe_name => hsh) unless hsh.empty?
     end
