@@ -6,8 +6,19 @@ module PoolParty
       :maximum_instances      => 3
     )
     
-    def instances(*a)
-      
+    def instances(arg)
+      case arg
+      when Range
+        minimum_instances arg.first
+        maximum_instances arg.last
+      when Fixnum
+        minimum_instances arg
+        maximum_instances arg
+      when Hash
+        nodes(arg)
+      else
+        raise PoolParty::PoolPartyError.create("DslMethodCall", "You must call instances with either a number, a range or a hash (for a list of nodes)")
+      end
     end
     
     def load_balancer(name=proper_name, o={}, &block);load_balancers[name] = [name, o, block];end

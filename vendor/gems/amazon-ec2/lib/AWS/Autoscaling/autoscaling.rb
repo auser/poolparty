@@ -262,7 +262,7 @@ module AWS
         params['MinSize'] = options[:min_size] if options.has_key?(:min_size)
         params['MaxSize'] = options[:max_size] if options.has_key?(:max_size)
         params['CoolDown'] = options[:cooldown]  if options.has_key?(:cooldown)
-
+        
         return response_generator(:action => "UpdateAutoScalingGroup", :params => params)
 
       end

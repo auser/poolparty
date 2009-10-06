@@ -19,6 +19,11 @@ class Hash
     o
   end
   
+  def merge_if!(k, v)
+    self[k] = v if v
+    self
+  end
+  
   # Converts all of the keys to strings
   # can pass in a :key_modifier that will be sent to each key, before being symbolized.
   # This can be usefull if you want to downcase, or snake_case each key.

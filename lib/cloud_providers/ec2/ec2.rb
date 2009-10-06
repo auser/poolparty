@@ -80,7 +80,7 @@ module CloudProviders
       puts "  for cloud: #{cloud.name}"
       puts "  minimum_instances: #{minimum_instances}"
       puts "  maximum_instances: #{maximum_instances}"
-      puts "  security_groups: #{security_groups}"
+      puts "  security_groups: #{security_groups.join(", ")}"
       
       unless _security_groups.empty?
         _security_groups.each do |sg|
@@ -111,9 +111,6 @@ module CloudProviders
           a.run
         end
       end
-    end
-    def instances
-      @instances ||= describe_instances
     end
     def describe_instances
       @describe_instances ||= ec2.describe_instances.reservationSet.item.map do |r|

@@ -1,14 +1,27 @@
 module CloudProviders
   class ElasticAutoScaler < Ec2
+    default_options(
+      :cooldown => nil,
+      :desired_capacity => nil
+    )
     def run
-      puts "-----> Checking for launch configuration named: #{name}"
+      puts "-----> Checking for launch configuration named: #{old_launch_configuration_name}"
       if should_create_launch_configuration?
+        puts "-----> Recreating the launch configuration as details have changed"
         create_launch_configuration!
       end
       if should_create_autoscaling_group?
         create_autoscaling_group!
+      elsif should_update_autoscaling_group?
+        update_autoscaling_group!
       end
+      
+      # CLEANUP!
+      as.delete_launch_configuration(:launch_configuration_name => old_launch_configuration_name) if should_create_launch_configuration?
     end
+    def teardown
+    end
+    
     def should_create_autoscaling_group?
       known = autoscaling_groups.select {|ag| ag.name == cloud.proper_name }
       if known.empty?
@@ -24,21 +37,19 @@ module CloudProviders
         true
       else
         differences = known.map do |k|
-          p old_launch_configuration_name
           t = k.diff({
-            :name => old_launch_configuration_name,
             :image_id => image_id,
             :instance_type => instance_type,
             :security_groups => security_groups.flatten,
             :key_name => keypair,
             :user_data => user_data,
-            }, :name, :user_data, :image_id, :instance_type, :security_groups, :key_name)
+            }, :user_data, :image_id, :instance_type, :security_groups, :key_name)
           t.empty? ? nil : t
         end.reject {|a| a.nil? }
         if differences.empty?
           false
         else
-          puts "-----> Recreating the launch configuration as details have changed: #{differences.inspect}"
+          p [differences, known]
           true
         end
       end
@@ -46,8 +57,9 @@ module CloudProviders
     def create_launch_configuration!
       puts "-----> Creating launch configuration: #{new_launch_configuration_name} for #{proper_name}"
       begin
+        @launch_configuration_name = new_launch_configuration_name
         as.create_launch_configuration({
-          :launch_configuration_name => new_launch_configuration_name,
+          :launch_configuration_name => launch_configuration_name,
           :image_id => image_id,
           :instance_type => instance_type,
           :security_groups => security_groups,
@@ -57,11 +69,12 @@ module CloudProviders
           :ramdisk_id => ramdisk_id,
           :block_device_mappings => block_device_mappings
         })
-        as.delete_launch_configuration(:launch_configuration_name => old_launch_configuration_name)
       rescue Exception => e
         puts <<-EOE
 -----> There was an error: #{e.inspect} when creating the launch_configurations
         EOE
+      ensure
+        reset!
       end
     end
     def launch_configurations
@@ -82,14 +95,59 @@ module CloudProviders
       as.create_autoscaling_group({
         :autoscaling_group_name => name,
         :availability_zones => availability_zones,
-        :launch_configuration_name => new_launch_configuration_name,
-        :min_size => minimum_instances,
-        :max_size => maximum_instances,
+        :launch_configuration_name => launch_configuration_name,
+        :min_size => minimum_instances.to_s,
+        :max_size => maximum_instances.to_s,
         :load_balancer_names => load_balancers.map {|k,v| k }
       })
+      reset!
     end
+    
+    def should_update_autoscaling_group?
+      known = autoscaling_groups.select {|lc| lc.name =~ /#{name}/ }
+      if known.empty?
+        true
+      else
+        differences = known.map do |k|
+          hsh = {
+            :min_size => minimum_instances.to_s, :max_size => maximum_instances.to_s,
+            :load_balancer_names => load_balancers, 
+            :availability_zones => availability_zones,
+            :launch_configuration_name => old_launch_configuration_name
+          }
+          hsh.merge!(:cooldown => cooldown.to_s) if cooldown
+          
+          t = k.diff(hsh, :cooldown, 
+                          :min_size, 
+                          :max_size, 
+                          :load_balancer_names, 
+                          :availability_zones, 
+                          :launch_configuration_name)
+          t.empty? ? nil : t
+        end.reject {|a| a.nil? }
+        if differences.empty?
+          false
+        else
+          puts "-----> Recreating the autoscaling group as details have changed: #{differences.inspect}"
+          true
+        end
+      end
+    end
+    
+    def update_autoscaling_group!
+      puts "Updated autoscaling group!"
+      as.update_autoscaling_group(
+        :autoscaling_group_name => name,
+        :launch_configuration_name => launch_configuration_name,
+        :min_size => minimum_instances.to_s,
+        :max_size => maximum_instances.to_s,
+        :cooldown => cooldown.to_s,
+        :load_balancer_names => load_balancers.map {|k,v| k }
+      )
+    end
+    
     def autoscaling_groups
-      as.describe_autoscaling_groups.DescribeAutoScalingGroupsResult.AutoScalingGroups.member.map do |g|
+      @autoscaling_groups ||= as.describe_autoscaling_groups.DescribeAutoScalingGroupsResult.AutoScalingGroups.member.map do |g|
         {
           :cooldown => g["Cooldown"],
           :desired_capacity => g["DesiredCapacity"],
@@ -110,18 +168,45 @@ module CloudProviders
     end
     # Temporary names so we can create and recreate launch_configurations
     def new_launch_configuration_name
-      return @new_launch_configuration_name if @new_launch_configuration_name
-      used_configuration_names = launch_configurations.map {|hsh| hsh[:name] =~ /#{name}/ ? hsh[:name] : nil }.reject {|a| a.nil?}
-      used_ints = used_configuration_names.map {|a| a.gsub(/#{name}/, '').to_i }.reject {|a| a.zero? }
-      used_ints = [0] if used_ints.empty?
-      @new_launch_configuration_name = "#{name}#{used_ints[-1]+1}"
+      @new_launch_configuration_name ||= "#{name}#{used_launched_config_ids[-1]+1}"
     end
     def old_launch_configuration_name
       return @old_launch_configuration_name if @old_launch_configuration_name
+      @old_launch_configuration_name ||= "#{name}#{used_launched_config_ids[-1]}"
+    end
+    def launch_configuration_name
+      @launch_configuration_name ||= old_launch_configuration_name
+    end
+    def used_launched_config_ids
+      return @used_launched_config_ids if @used_launched_config_ids
       used_configuration_names = launch_configurations.map {|hsh| hsh[:name] =~ /#{name}/ ? hsh[:name] : nil }.reject {|a| a.nil?}
-      used_ints = used_configuration_names.map {|a| a.gsub(/#{name}/, '').to_i }.reject {|a| a.zero? } || [0]
-      used_ints = [0] if used_ints.empty?
-      @old_launch_configuration_name = "#{name}#{used_ints[-1]}"
+      used_launched_config_ids = used_configuration_names.map {|a| a.gsub(/#{name}/, '').to_i }.reject {|a| a.zero? }
+      used_launched_config_ids = [0] if used_launched_config_ids.empty?
+      @used_launched_config_ids ||= used_launched_config_ids
+    end
+    
+    def new_auto_scaling_group_name
+      @new_auto_scaling_group_name ||= "#{name}#{used_autoscaling_group_ids[-1]+1}"
+    end
+    
+    def old_auto_scaling_group_name
+      @old_auto_scaling_group_name ||= "#{name}#{used_autoscaling_group_ids[-1]}"
+    end
+    
+    def used_autoscaling_group_ids
+      return @used_autoscaling_group_ids if @used_autoscaling_group_ids
+      used_autoscaling_groups = launch_configurations.map {|hsh| hsh[:name] =~ /#{name}/ ? hsh[:name] : nil }.reject {|a| a.nil?}
+      used_autoscaling_group_ids = used_autoscaling_groups.map {|a| a.gsub(/#{name}/, '').to_i }.reject {|a| a.zero? }
+      used_autoscaling_group_ids = [0] if used_autoscaling_group_ids.empty?
+      @used_autoscaling_group_ids ||= used_autoscaling_group_ids
+    end
+    
+    private
+    def reset!
+      @old_auto_scaling_group_name = 
+        @new_auto_scaling_group_name = 
+          @autoscaling_groups =
+            @launch_configurations = nil
     end
   end
 end
