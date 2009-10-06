@@ -149,8 +149,12 @@ file_cache_path  "/etc/chef"
       end
     end
     
+    def ssh(num=0)
+      nodes[num].ssh
+    end
+    
     def nodes
-      cloud_provider.nodes
+      cloud_provider.nodes.select {|a| a.in_service? }
     end
     
     def proper_name

@@ -25,7 +25,7 @@ module CloudProviders
     def rsync_dir(dir)
       rsync :source => dir/"*", :destination => "/"
     end
-    
+        
     def run
       warn "#{self.class} does not implement run. Something is wrong"
     end
