@@ -5,7 +5,6 @@ require "poolparty"
 pool "skinnytest2" do
   
   cloud "app" do
-    
     load_balancer "mapA" do
       listener :external_port => 8081, :internal_port => 81
       listener :external_port => 8082, :internal_port => 82, :protocol => 'tcp'
