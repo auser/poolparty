@@ -133,7 +133,7 @@ module CloudProviders
     def contract_by(num=1)
       num.times do |i|
         instance_id = nodes[-num].instance_id
-        p ec2.terminate_instances(:instance_id => instance_id)
+        ec2.terminate_instances(:instance_id => instance_id)
       end
     end
     
