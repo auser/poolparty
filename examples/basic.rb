@@ -5,28 +5,30 @@ require "poolparty"
 pool "skinnytest2" do
   
   cloud "app" do
-    load_balancer "mapA" do
-      listener :external_port => 8081, :internal_port => 81
+    chef_repo "/Users/auser/Development/work/chacha/chef-repo"
+    recipe "apache2"
+
+    chef_attributes :apache2 => {:listen_ports => ["80", "8080"]}
+
+    
+    load_balancer do
       listener :external_port => 8082, :internal_port => 82, :protocol => 'tcp'
     end
-    load_balancer "mapB" do
-      listener :internal_port => 8443, :external_port => 443 
-    end
-    autoscaler do
-      cooldown "30"
-    end
+
+    # autoscaler
+    
     using :ec2 do
-      
-      security_group "test_cloud" do
+      security_group do
         revoke :from_port => "8080", :to_port => "8081"
         authorize :from_port => "22", :to_port => "22"
+        authorize :from_port => "80", :to_port => "80"
       end
       user_data <<-EOE
 #!/bin/bash -x
 echo "New User Data! ho."    
       EOE
   
-      instances 0
+      instances 1
     end
   end
 end

@@ -14,7 +14,6 @@ class Keypair
     @filepath = fpath
     @opts = opts
     @extra_paths = extra_paths.map {|a| File.expand_path(a) }
-    valid?
   end
   
   # If the full_filepath is nil, then the key doesn't exist
@@ -30,11 +29,13 @@ class Keypair
   # Returns the full_filepath of the key. If a full filepath is passed, we just return the expanded filepath
   # for the keypair, otherwise query where it is against known locations
   def full_filepath
-    @full_filepath ||= if File.file?(File.expand_path(filepath))
+    return @full_filepath if @full_filepath
+    @full_filepath = if File.file?(File.expand_path(filepath))
       ::File.expand_path(filepath)
       else
         search_in_known_locations(filepath, extra_paths)
       end
+    exists? ? @full_filepath : false
   end
   
   def to_s
@@ -71,21 +72,9 @@ class Keypair
   def each
     yield full_filepath
   end
-      
-  # Validation checks
-  # if all of the validations pass, the object is considered valid
-  # the validations are responsible for raising a PoolPartyError (StandardError)
-  def valid?
-    validations.each {|validation| self.send(validation.to_sym) }
-  end
 
   private
 
-  # Validations
-  def validations
-    [:keypair_found?, :has_proper_permissions?]
-  end
-  
   # Check the proper permissions
   def has_proper_permissions?
     perm_truth = [:readable?, :writable?, :executable?].map {|meth| File.send(meth, full_filepath)} == [true, true, false]

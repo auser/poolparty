@@ -97,13 +97,15 @@ module CloudProviders
       end
       
       if autoscalers.empty?
-        puts "---- live, running instances (#{instances.size}) ----"
-        if instances.size < minimum_instances
-          expansion_count = minimum_instances - instances.size
-          puts "-----> expanding the cloud because the minimum_instances is not satisified: #{expansion_count} (TODO)"
-        elsif instances.size > maximum_instances
-          contraction_count = instances.size - maximum_instances
-          puts "-----> contracting the cloud because the instances count exceeds the maximum_instances by #{contraction_count} (TODO)"
+        puts "---- live, running instances (#{nodes.size}) ----"
+        if nodes.size < minimum_instances
+          expansion_count = minimum_instances - nodes.size
+          puts "-----> expanding the cloud because the minimum_instances is not satisified: #{expansion_count}"
+          expand_by(expansion_count)
+        elsif nodes.size > maximum_instances
+          contraction_count = nodes.size - maximum_instances
+          puts "-----> contracting the cloud because the instances count exceeds the maximum_instances by #{contraction_count}"
+          contract_by(contraction_count)
         end
       else
         autoscalers.each do |a|
@@ -113,8 +115,59 @@ module CloudProviders
         end
       end
     end
-    def describe_instances
-      @describe_instances ||= ec2.describe_instances.reservationSet.item.map do |r|
+    
+    def expand_by(num=1)
+      ec2.run_instances(
+        :image_id => image_id,
+        :min_count => num,
+        :max_count => maximum_instances,
+        :key_name => keypair.basename,
+        :group_id => security_groups,
+        :user_data => user_data,
+        :instance_type => instance_type,
+        :availability_zone => availability_zones.first,
+        :base64_encoded => true
+      )
+    end
+    
+    def contract_by(num=1)
+      num.times do |i|
+        instance_id = nodes[-num].instance_id
+        ec2.terminate_instances(:instance_id => instance_id)
+      end
+    end
+    
+    def bootstrap_nodes!(tmp_path)
+      nodes.each do |node|
+        next unless node.in_service?
+        node.cloud_provider = self
+        node.rsync_dir(tmp_path)
+        node.bootstrap_chef!
+        node.run_chef!
+      end
+    end
+    
+    def configure_nodes!(tmp_path=nil)
+      nodes.each do |node|
+        next unless node.in_service?
+        node.cloud_provider = self
+        node.rsync_dir(tmp_path) if tmp_path
+        node.run_chef!
+      end
+    end
+    
+    def nodes
+      @nodes ||= describe_instances.select {|i| i.in_service? && security_groups.include?(i.security_groups) }
+    end
+    def describe_instances(id=nil)
+      if id
+        ec2.describe_instances(:instance_id => id)
+      else
+        @describe_instances ||= _describe_instances.map {|hsh| Ec2Instance.new(hsh) }
+      end
+    end
+    def _describe_instances
+      @_describe_instances ||= ec2.describe_instances.reservationSet.item.map do |r|
         r.instancesSet.item.map do |i|
           {
             :instance_id => i["instanceId"],
@@ -130,21 +183,21 @@ module CloudProviders
             :status => i["instanceState"]["name"]
           }
         end
-      end
+      end.flatten
     end
     
     # Extras!
     
     def load_balancer(*arr)
       name, o, block = *arr
-      load_balancers << ElasticLoadBalancer.new(name, dsl_options.merge(o), &block)
+      load_balancers << ElasticLoadBalancer.new(name, sub_opts.merge(o), &block)
     end
     def autoscale(*arr)
       name, o, block = *arr
-      autoscalers << ElasticAutoScaler.new(name, dsl_options.merge(o), &block)
+      autoscalers << ElasticAutoScaler.new(name, sub_opts.merge(o), &block)
     end
-    def security_group(name, o={}, &block)
-      _security_groups << SecurityGroup.new(name, dsl_options.merge(o), &block)
+    def security_group(name=proper_name, o={}, &block)
+      _security_groups << SecurityGroup.new(name, sub_opts.merge(o), &block)
     end
     def method_missing(m,*a,&block)
       if cloud.respond_to?(m)
@@ -167,7 +220,7 @@ module CloudProviders
       _security_groups.map {|a| a.to_s }
     end
     def _security_groups
-      @security_groups ||= [SecurityGroup.new("default", {:parent => self, :cloud => cloud})]
+      @security_groups ||= []
     end
     private
     def load_balancers
@@ -176,12 +229,14 @@ module CloudProviders
     def autoscalers
       @autoscalers ||= []
     end
-    
+    def sub_opts
+      dsl_options.merge(:parent => self)
+    end
     def generate_keypair(n=nil)
       puts "[EC2] generate_keypair is called with #{default_keypair_path/n}"
       begin
         hsh = ec2.create_keypair(:key_name => n)
-        string = hsh[:aws_material]
+        string = hsh.keyMaterial
         FileUtils.mkdir_p default_keypair_path unless File.directory?(default_keypair_path)
         puts "[EC2] Generated keypair #{default_keypair_path/n}"
         puts "[EC2] #{string}"
@@ -196,6 +251,7 @@ module CloudProviders
   end
 end
 
+require "#{File.dirname(__FILE__)}/ec2_instance"
 %w(security_group authorize elastic_auto_scaler elastic_block_store elastic_load_balancer revoke).each do |lib|
   require "#{File.dirname(__FILE__)}/helpers/#{lib}"
 end

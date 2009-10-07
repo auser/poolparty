@@ -16,7 +16,6 @@ shows output about the clouds.rb
 EOS
 
   short_desc "shows output about the clouds.rb"
-  opt :generate_graph, "Generate the dependency tree graph", :type => :string, :default => nil
 
   run do |command|
 
@@ -25,24 +24,14 @@ EOS
       msg = [
         "Cloud: #{cld.name}",
         "----------------------------",
-        "Instances: #{cld.nodes(:status => "running").size}",
-        "Minimum instances: #{cld.minimum_instances}",
-        "Maximum instances: #{cld.maximum_instances}",
-        "Running on: #{cld.cloud_provider_name}"
+        "Running Instances:   #{cld.nodes.size}",
+        "Minimum instances:   #{cld.minimum_instances}",
+        "Maximum instances:   #{cld.maximum_instances}",
+        "Running on:          #{cld.cloud_provider.name}",
+        "Keypair:             #{cld.keypair.basename}"
       ]
-      
-      if verbose?
-        msg << [
-          "Keypair: #{cld.keypair.basename}"
-        ]
-      end
-      
-      if command[:generate_graph]
-        vputs "Generating dependency graph at: #{command[:generate_graph]}"
-        cld.output_resources_graph('png', command[:generate_graph], {"fontsize" => 30})
-      end
             
-      print_msg(msg.flatten)
+      puts msg.flatten
       
     end
     

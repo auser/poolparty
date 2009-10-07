@@ -20,15 +20,7 @@ EOS
     
     @loaded_clouds.each do |cld|
       
-      if command[:generate_graph]
-        vputs "Generating dependency graph at: #{command[:generate_graph]}"
-        cld.output_resources_graph('png', command[:generate_graph], {"fontsize" => 30})
-      end
-      
-      cld.nodes.each do |node|
-        node.cloud = cld # ?
-        node.configure!(:cloud => cld)
-      end
+      cld.configure!
       
     end
     

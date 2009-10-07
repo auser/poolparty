@@ -1,10 +1,9 @@
 =begin rdoc
   CloudProvider is the base class for cloud computing services such as Ec2, Eucalyptus - where your servers run.
 =end
-require "#{File.dirname(__FILE__)}/connections"
 module CloudProviders
   class CloudProvider
-    include Dslify, Connections
+    include Dslify
     
     attr_reader :name, :init_opts
     
@@ -29,6 +28,9 @@ module CloudProviders
     
     def self.default_keypair_path
       ENV["EC2_CONFIG_DIR"] || "#{ENV["HOME"]}/.ssh"
+    end
+    
+    def bootstrap_nodes!
     end
     
     private

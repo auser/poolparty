@@ -1,19 +1,22 @@
 module PoolParty
     
   class Pool < Base
-    attr_accessor :verbose, :very_verbose, :debugging, :very_debugging
+    attr_accessor :verbose, :very_verbose, :debugging, :very_debugging, :do_not_execute
+    
     def cloud(name, &block)
       clouds[name] = Cloud.new(name, {:parent => self}, &block)
     end
     def clouds
       @clouds ||= {}
     end
-    
+        
     at_exit do
-      puts <<-EOE
-----> Running #{pool.name}
-      EOE
-      pool.run
+      unless pool.do_not_execute
+        puts <<-EOE
+  ----> Running #{pool.name} #{pool.do_not_execute}
+        EOE
+        pool.run
+      end
     end
     
     def run

@@ -17,32 +17,7 @@ EOS
     
     @loaded_clouds.each do |cld|
 
-      if cld.nodes.size.zero?
-        puts "Starting cloud #{cld.name} (#{cld.keypair})"
-        puts "#{cld.nodes(:status => "running").size} running instances (#{cld.minimum_instances} - #{cld.maximum_instances})"
-        
-        cld.minimum_instances.times do |i|
-          cld.expand
-        end
-        # cld.nodes.each do |node|
-        #   vputs "Bootstrapping: #{node.instance_id}"
-        #   node.bootstrap!
-        #   node.configure!(:cloud => cld)
-        # end
-        
-        msg = [
-          "Your cloud has started with the following public_ips:"
-        ]
-        
-        cld.nodes.each {|node| msg << "#{node.public_ip}"}
-        
-        print_msg(msg)
-      else
-        puts <<-EOE
-          #{cld.nodes}
-          Your cloud is already running.
-        EOE
-      end
+      cld.run
       
     end
     
