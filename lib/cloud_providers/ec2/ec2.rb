@@ -97,13 +97,15 @@ module CloudProviders
       end
       
       if autoscalers.empty?
-        puts "---- live, running instances (#{instances.size}) ----"
-        if instances.size < minimum_instances
-          expansion_count = minimum_instances - instances.size
-          puts "-----> expanding the cloud because the minimum_instances is not satisified: #{expansion_count} (TODO)"
-        elsif instances.size > maximum_instances
-          contraction_count = instances.size - maximum_instances
-          puts "-----> contracting the cloud because the instances count exceeds the maximum_instances by #{contraction_count} (TODO)"
+        puts "---- live, running instances (#{nodes.size}) ----"
+        if nodes.size < minimum_instances
+          expansion_count = minimum_instances - nodes.size
+          puts "-----> expanding the cloud because the minimum_instances is not satisified: #{expansion_count}"
+          expand_by(expansion_count)
+        elsif nodes.size > maximum_instances
+          contraction_count = nodes.size - maximum_instances
+          puts "-----> contracting the cloud because the instances count exceeds the maximum_instances by #{contraction_count}"
+          contract_by(contraction_count)
         end
       else
         autoscalers.each do |a|
@@ -111,6 +113,27 @@ module CloudProviders
           puts "-----> The autoscaling groups will launch the instances"
           a.run
         end
+      end
+    end
+    
+    def expand_by(num=1)
+      ec2.run_instances(
+        :image_id => image_id,
+        :min_count => num,
+        :max_count => maximum_instances,
+        :key_name => keypair.basename,
+        :group_id => security_groups,
+        :user_data => user_data,
+        :instance_type => instance_type,
+        :availability_zone => availability_zones.first,
+        :base64_encoded => true
+      )
+    end
+    
+    def contract_by(num=1)
+      num.times do |i|
+        instance_id = nodes[-num].instance_id
+        p ec2.terminate_instances(:instance_id => instance_id)
       end
     end
     
@@ -124,8 +147,17 @@ module CloudProviders
       end
     end
     
+    def configure_nodes!(tmp_path=nil)
+      nodes.each do |node|
+        next unless node.in_service?
+        node.cloud_provider = self
+        node.rsync_dir(tmp_path) if tmp_path
+        node.run_chef!
+      end
+    end
+    
     def nodes
-      @nodes ||= describe_instances.select {|i| security_groups.include?(i.security_groups) }
+      @nodes ||= describe_instances.select {|i| i.in_service? && security_groups.include?(i.security_groups) }
     end
     def describe_instances(id=nil)
       if id

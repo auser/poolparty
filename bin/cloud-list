@@ -26,7 +26,8 @@ EOS
         msg = ["Listing cloud #{cld.name}"]
 
         hsh = {}
-        cld.describe_instances(:keypair_name => cld.keypair.basename).each do |n| 
+        
+        cld.nodes.each do |n| 
           (hsh[n.status] ||= []) << n
         end
         
@@ -34,12 +35,12 @@ EOS
           msg << "#{k.capitalize} nodes"
           msg << line
           v.each do |a|
-            msg << "  #{a[:instance_id] || a[:id]}\t#{a[:ip] || a[:public_ip] || a[:name]}"
+            msg << "  #{a.instance_id}\t#{a.status}\t#{a.public_ip}\t#{a.dns_name}"
           end
           msg << ""
         end
         
-        print_msg(msg)
+        puts msg
       end
       
     end

@@ -143,9 +143,22 @@ log_level         :info
       cloud_provider.run
       
       unless chef_repo.nil?
-        build_tmp_dir
-        cloud_provider.bootstrap_nodes!(tmp_path)
+        compile!
+        bootstrap!
       end
+    end
+    
+    def compile!
+      build_tmp_dir unless chef_repo.nil?
+    end
+    
+    def bootstrap!
+      cloud_provider.bootstrap_nodes!(tmp_path)
+    end
+    
+    def configure!
+      compile!
+      cloud_provider.configure_nodes!(tmp_path)
     end
     
     def ssh(num=0)
