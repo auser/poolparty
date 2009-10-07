@@ -1,7 +1,8 @@
-require File.dirname(__FILE__)+'/../lib/thin.rb'
+require File.dirname(__FILE__)+'/../lib/poolparty.rb'
 $PP_VERBOSE=true
 
-pool "skinnytest" do
+pool "cloudteam" do
+  execute false
   # security_group 'minerva_chacha' do
   #   authorize :port=>80, :protocol=>'tcp', :network=>'0.0.0.0/0'
   #   authorize :port=>22, :protocol=>'tcp', :network=>'0.0.0.0/0'
@@ -17,7 +18,6 @@ pool "skinnytest" do
   # end
   
   cloud "cha" do
-    keypair 'cloudteam'
     
     #TODO: default cloud load_balancer taking an array of balancer/port/protocol hashes.
     #NOTE:loadbalancers are paid for per balancer, and are limited availabiliyt, so good to use multiple ports per LB
@@ -25,14 +25,12 @@ pool "skinnytest" do
     #                  {:external_port=>443, :internal_port=>8443, :protocol=>'tcp'} ]
     
     
-    # load_balancer "web", :external_port => '80' do
-    #   internal_port '80'
-    # end
-    # load_balancer "voice", :external_port => 8000 do
-    #   internal_port 800
-    # end
+    load_balancer do
+      # listener :external_port => 80, :internal_port => 8000
+      listener :external_port => 8080, :internal_port => 8080, :protocol => 'tcp'
+    end
     
-    autoscale #"chaAS" #,{:cooldown=>60}  #TODO: take hash of options
+    autoscaler #"chaAS" #,{:cooldown=>60}  #TODO: take hash of options
 
     # autoscale 'skinyscaler', {
     #   :availability_zones => ['us-east-1a]  #NOTE  good to be able to have multiple scaling groups per cloud for fine grained scaling per AZ controll
@@ -57,23 +55,47 @@ pool "skinnytest" do
       end
       minimum_instances 1
       maximum_instances 2
+      user_data 'Hello user data'
     end
   end
   
 end
 
 
-# pool.run
-
+pool.run if !pool.running?
 sleep 4
+
 puts "pool has been run\n----"
 puts "describing current autscaling activities:"
-puts "===========================================\n"
+
+@opts={:access_key_id => ENV['EC2_ACCESS_KEY'], :secret_access_key => ENV['EC2_SECRET_KEY'], :symbolize_keys=>:snake_case}
+if ENV['EC2_URL']
+  @opts[:server] = URI.parse(ENV['EC2_URL']).host
+end
+@ec2 = AWS::EC2::Base.new(@opts)
+@elb = AWS::ELB::Base.new(@opts)
+@as = AWS::Autoscaling::Base.new(@opts)
+
 pool.clouds.each do |name,cld| 
-  cld.autoscales.each do |asg| 
-    puts "activities for cloud[:#{name}] and autoscaling_group #{asg.first}"
-    pp cld.cloud_provider.send(:as).describe_scaling_activities(:autoscaling_group_name=>'skinnytest-cha')
-    puts `$HOME/Dropbox/cloudteam/ec2_api_tools/AutoScaling-1.0.4.4/bin/as-describe-scaling-activities #{asg.first}`
+  puts "\ncloud[:#{name}]\n"
+  cld.autoscalers.each do |asg| 
+    puts "AS #{asg.first} ===========================================\n"
+    # pp cld.cloud_provider.send(:as).describe_scaling_activities(:autoscaling_group_name=>'skinnytest-cha')
+    # puts `$HOME/Dropbox/cloudteam/ec2_api_tools/AutoScaling-1.0.4.4/bin/as-describe-scaling-activities #{asg.first}`
+     grp = @as.describe_autoscaling_groups['DescribeAutoScalingGroupsResult']['AutoScalingGroups']['member'].select_with_hash('AutoScalingGroupName'=>asg.first)
+     (!grp || grp.empty?) ? warn("ASGroup #{asg.first} was not created") : pp(grp)
+     activities = @as.describe_scaling_activities(:autoscaling_group_name=>'cloudteam-cha')["DescribeScalingActivitiesResult"]["Activities"]["member"]
+     activities.each{|act| puts act.Cause}
+  end
+  cld.load_balancers.each do |name, lb|
+    puts "ELB #{name} ===========================================\n"
+    elbt = @elb.describe_load_balancers.DescribeLoadBalancersResult.LoadBalancerDescriptions.member.select_with_hash(:load_balancer_name=>name)
+    (!elbt || elbt.empty?) ? warn("LB #{name} was not created: #{elbt}") : pp(elbt)
   end
 end
+
+
+
+
+
 # puts `$HOME/Dropbox/cloudteam/ec2_api_tools/AutoScaling-1.0.4.4/bin/as-describe-scaling-activities #{'a'}`
