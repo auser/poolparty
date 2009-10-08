@@ -5,8 +5,14 @@ module CloudProviders
   class RemoteInstance
     include Dslify, Connections
     
-    attr_reader :name, :init_opts
+    attr_reader :name, :init_opts, :raw_response
     attr_accessor :cloud_provider
+    
+    default_options(
+      :instance_id => nil,
+      :image_id => nil,
+      :status => nil
+    )
     
     def initialize(init_opts={}, &block)
       @init_opts = init_opts

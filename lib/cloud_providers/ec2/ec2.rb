@@ -98,6 +98,9 @@ module CloudProviders
       
       if autoscalers.empty?
         puts "---- live, running instances (#{nodes.size}) ----"
+        nodes.each do |node|
+          p [node.instance_id, node.public_ip, node.status]
+        end
         if nodes.size < minimum_instances
           expansion_count = minimum_instances - nodes.size
           puts "-----> expanding the cloud because the minimum_instances is not satisified: #{expansion_count}"
@@ -107,6 +110,23 @@ module CloudProviders
           puts "-----> contracting the cloud because the instances count exceeds the maximum_instances by #{contraction_count}"
           contract_by(contraction_count)
         end
+        
+        unless _elastic_ips.empty?
+          unused_elastic_ip_addresses = ElasticIp.unused_elastic_ips(self).map {|i| i.public_ip }
+          
+          elastic_ip_objects = ElasticIp.unused_elastic_ips(self).select {|ip_obj| _elastic_ips.include?(ip_obj.public_ip) }
+          
+          puts "-----> Elastic ips are not enabled yet"
+          # assignee_nodes = nodes.select {|n| !ElasticIp.elastic_ips(self).include?(n.public_ip) }
+          # assignee_nodes.each do |node|
+          #   # Only get the nodes that do not have elastic ips associated with them
+          #   assignee_nodes.reject do |node|
+          #     eip.assign_to(node)
+          #   end
+          #   reset!
+          # end
+        end
+        
       else
         autoscalers.each do |a|
           puts "    autoscaler: #{a.name}"
@@ -163,25 +183,13 @@ module CloudProviders
       if id
         ec2.describe_instances(:instance_id => id)
       else
-        @describe_instances ||= _describe_instances.map {|hsh| Ec2Instance.new(hsh) }
+        @describe_instances ||= _describe_instances
       end
     end
     def _describe_instances
       @_describe_instances ||= ec2.describe_instances.reservationSet.item.map do |r|
         r.instancesSet.item.map do |i|
-          {
-            :instance_id => i["instanceId"],
-            :security_groups => r.groupSet.item[0].groupId,
-            :image_id => i["imageId"],
-            :private_ip => i["privateIpAddress"],
-            :dns_name => i["dnsName"],
-            :instance_type => i["instanceType"],
-            :public_ip => i["ipAddress"],
-            :keypair => i["keyName"],
-            :launch_time => i["launchTime"],
-            :availability_zones => i["placement"]["availabilityZone"],
-            :status => i["instanceState"]["name"]
-          }
+          Ec2Instance.new(i.merge(r))
         end
       end.flatten
     end
@@ -199,6 +207,9 @@ module CloudProviders
     def security_group(name=proper_name, o={}, &block)
       _security_groups << SecurityGroup.new(name, sub_opts.merge(o), &block)
     end
+    def elastic_ip(*ips)
+      ips.each {|ip| _elastic_ips << ip}
+    end
     def method_missing(m,*a,&block)
       if cloud.respond_to?(m)
         cloud.send(m,*a,&block)
@@ -206,7 +217,7 @@ module CloudProviders
         super
       end
     end
-    protected
+    # Grempe
     def ec2
       @ec2 ||= AWS::EC2::Base.new( :access_key_id => access_key, :secret_access_key => secret_access_key )
     end
@@ -216,13 +227,13 @@ module CloudProviders
     def elb
       @elb ||= AWS::ELB::Base.new( :access_key_id => access_key, :secret_access_key => secret_access_key )
     end
+    private
     def security_groups
       _security_groups.map {|a| a.to_s }
     end
     def _security_groups
       @security_groups ||= []
     end
-    private
     def load_balancers
       @load_balancers ||= []
     end
@@ -231,6 +242,9 @@ module CloudProviders
     end
     def sub_opts
       dsl_options.merge(:parent => self)
+    end
+    def _elastic_ips
+      @_elastic_ips ||= []
     end
     def generate_keypair(n=nil)
       puts "[EC2] generate_keypair is called with #{default_keypair_path/n}"
@@ -247,11 +261,21 @@ module CloudProviders
       end
       keypair n
     end
-
+    
+    def reset!
+      @nodes = @_describe_instances = nil
+      ElasticIp.reset!
+    end
   end
 end
 
 require "#{File.dirname(__FILE__)}/ec2_instance"
-%w(security_group authorize elastic_auto_scaler elastic_block_store elastic_load_balancer revoke).each do |lib|
+%w( security_group 
+    authorize 
+    elastic_auto_scaler 
+    elastic_block_store 
+    elastic_load_balancer 
+    elastic_ip
+    revoke).each do |lib|
   require "#{File.dirname(__FILE__)}/helpers/#{lib}"
 end
