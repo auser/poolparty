@@ -227,7 +227,6 @@ module CloudProviders
     def elb
       @elb ||= AWS::ELB::Base.new( :access_key_id => access_key, :secret_access_key => secret_access_key )
     end
-    private
     def security_groups
       _security_groups.map {|a| a.to_s }
     end
@@ -240,6 +239,7 @@ module CloudProviders
     def autoscalers
       @autoscalers ||= []
     end
+    private
     def sub_opts
       dsl_options.merge(:parent => self)
     end

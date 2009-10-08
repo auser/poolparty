@@ -15,7 +15,7 @@ pool "skinnytest2" do
       listener :external_port => 8082, :internal_port => 82, :protocol => 'tcp'
     end
 
-    # autoscaler
+    autoscaler
     
     using :ec2 do
       
