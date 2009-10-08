@@ -130,8 +130,8 @@ module CloudProviders
           }
           hsh.merge!(:cooldown => cooldown.to_s) if cooldown
           
-          t = k.diff(hsh, :cooldown, 
-                          :min_size, 
+          t = hsh.diff(k, :cooldown,
+                          :min_size,
                           :max_size, 
                           :load_balancer_names, 
                           :availability_zones, 
@@ -168,7 +168,7 @@ module CloudProviders
           :min_size => g["MinSize"],
           :max_size => g["MaxSize"],
           :load_balancer_names => (g["LoadBalancerNames"]["member"] rescue []),
-          :availabilityZones => (g["AvailabilityZones"]["member"] rescue []),
+          :availability_zones => (g["AvailabilityZones"]["member"] rescue []),
           :launch_configuration_name => g["LaunchConfigurationName"],
           :name => g["AutoScalingGroupName"],
           :instances => (g["Instances"]["member"] rescue []).map {|i|

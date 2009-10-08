@@ -98,9 +98,6 @@ module CloudProviders
       
       if autoscalers.empty?
         puts "---- live, running instances (#{nodes.size}) ----"
-        nodes.each do |node|
-          p [node.instance_id, node.public_ip, node.status]
-        end
         if nodes.size < minimum_instances
           expansion_count = minimum_instances - nodes.size
           puts "-----> expanding the cloud because the minimum_instances is not satisified: #{expansion_count}"
@@ -133,6 +130,13 @@ module CloudProviders
           puts "-----> The autoscaling groups will launch the instances"
           a.run
         end
+      end
+    end
+    
+    def teardown
+      puts "------ Tearing down and cleaning up #{cloud.name} cloud"
+      unless autoscalers.empty?
+        puts "Tearing down autoscalers"
       end
     end
     
