@@ -38,6 +38,7 @@ module CloudProviders
           break
         else
           $stdout.print "."
+          $stdout.flush
           sleep 1
           count +=1 
         end
