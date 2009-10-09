@@ -18,6 +18,14 @@ module PoolParty
     def run
       warn "#{self.class} does not implement run. Something is wrong"
     end
+    def method_missing(m,*a,&block)
+      if parent.respond_to?(m)
+        parent.send(m,*a,&block)
+      else
+        super
+      end
+    end
+    
     private
   end
 

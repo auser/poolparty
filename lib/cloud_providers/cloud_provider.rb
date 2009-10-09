@@ -33,6 +33,14 @@ module CloudProviders
     def bootstrap_nodes!
     end
     
+    def method_missing(m,*a,&block)
+      if cloud.respond_to?(m)
+        cloud.send(m,*a,&block)
+      else
+        super
+      end
+    end
+    
     private
     
     def cloud

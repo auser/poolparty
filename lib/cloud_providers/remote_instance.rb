@@ -61,11 +61,15 @@ module CloudProviders
     def default_keypair_path
       self.class.default_keypair_path
     end
-    
+         
     private
     
     def cloud
-      init_opts.has_key?(:cloud) ? init_opts[:cloud] : cloud_provider.cloud
+      init_opts.has_key?(:cloud) ? init_opts[:cloud] : nil
+    end
+    
+    def cloud_provider
+      cloud.cloud_provider
     end
         
   end

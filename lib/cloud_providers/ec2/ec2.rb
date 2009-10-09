@@ -141,27 +141,32 @@ module CloudProviders
     end
     
     def expand_by(num=1)
-      ec2.run_instances(
+      e = Ec2Instance.run!({
         :image_id => image_id,
         :min_count => num,
         :max_count => maximum_instances,
         :key_name => keypair.basename,
-        :group_id => security_groups,
+        :security_groups => security_groups,
         :user_data => user_data,
         :instance_type => instance_type,
         :availability_zone => availability_zones.first,
-        :base64_encoded => true
-      )
+        :base64_encoded => true,
+        :cloud => cloud
+      })
+      reset!
+      e
     end
     
     def contract_by(num=1)
       num.times do |i|
-        instance_id = nodes[-num].instance_id
-        ec2.terminate_instances(:instance_id => instance_id)
+        id = nodes[-num].instance_id
+        Ec2Instance.terminate!(:instance_id => id, :cloud => cloud)
       end
+      reset!
     end
     
-    def bootstrap_nodes!(tmp_path)
+    def bootstrap_nodes!(tmp_path=nil)
+      tmp_path ||= cloud.tmp_path
       nodes.each do |node|
         next unless node.in_service?
         node.cloud_provider = self
@@ -172,6 +177,7 @@ module CloudProviders
     end
     
     def configure_nodes!(tmp_path=nil)
+      tmp_path ||= cloud.tmp_path
       nodes.each do |node|
         next unless node.in_service?
         node.cloud_provider = self
@@ -183,17 +189,24 @@ module CloudProviders
     def nodes
       @nodes ||= describe_instances.select {|i| i.in_service? && security_groups.include?(i.security_groups) }
     end
+    
+    # Describe instances
+    # Describe the instances that are available on this cloud
+    # @params id (optional) if present, details about the instance
+    #   with the id given will be returned
+    #   if not given, details for all instances will be returned
     def describe_instances(id=nil)
-      if id
-        ec2.describe_instances(:instance_id => id)
-      else
-        @describe_instances ||= _describe_instances
-      end
+      id ?  ec2.describe_instances(:instance_id => id) : _describe_instances
     end
+    
+    # Gather the descriptions of the instances and instantiate an Ec2Instance
+    # object. 
+    # @params none
+    # @return [Array]
     def _describe_instances
       @_describe_instances ||= ec2.describe_instances.reservationSet.item.map do |r|
         r.instancesSet.item.map do |i|
-          Ec2Instance.new(i.merge(r))
+          Ec2Instance.new(i.merge(r.merge(:cloud => cloud)))
         end
       end.flatten
     end
@@ -214,15 +227,7 @@ module CloudProviders
     def elastic_ip(*ips)
       ips.each {|ip| _elastic_ips << ip}
     end
-    
-    def method_missing(m,*a,&block)
-      if cloud.respond_to?(m)
-        cloud.send(m,*a,&block)
-      else
-        super
-      end
-    end
-    
+        
     # Grempe
     def ec2
       @ec2 ||= AWS::EC2::Base.new( :access_key_id => access_key, :secret_access_key => secret_access_key )
@@ -245,9 +250,16 @@ module CloudProviders
     def autoscalers
       @autoscalers ||= []
     end
+    
+    # Clear the cache
+    def reset!
+      @nodes = @_describe_instances = nil
+    end
+    
     private
+    # Helper to get the options with self as parent
     def sub_opts
-      dsl_options.merge(:parent => self)
+      dsl_options.merge(:parent => self, :cloud => cloud)
     end
     def _elastic_ips
       @_elastic_ips ||= []
@@ -268,10 +280,6 @@ module CloudProviders
       keypair n
     end
     
-    def reset!
-      @nodes = @_describe_instances = nil
-      ElasticIp.reset!
-    end
   end
 end
 

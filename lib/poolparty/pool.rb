@@ -13,7 +13,7 @@ module PoolParty
     at_exit do
       if pool.auto_execute
         puts <<-EOE
-  ----> Running #{pool.name} #{pool.auto_execute}
+----> Running #{pool.name} #{pool.auto_execute}
         EOE
         pool.run
       end
@@ -21,7 +21,7 @@ module PoolParty
     
     def run
       clouds.each do |cloud_name, cld|
-        puts "---- Starting to build cloud #{cloud_name}"
+        puts "----> Starting to build cloud #{cloud_name}"
         cld.run
       end
     end
