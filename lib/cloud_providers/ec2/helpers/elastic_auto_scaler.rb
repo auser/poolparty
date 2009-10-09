@@ -10,6 +10,7 @@ module CloudProviders
       #   create_launch_configuration!
       # end
       if should_create_autoscaling_group?
+        create_launch_configuration!
         create_autoscaling_group!
       elsif should_update_autoscaling_group?
         # CLEANUP!
