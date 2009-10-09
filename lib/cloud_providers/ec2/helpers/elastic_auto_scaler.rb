@@ -21,8 +21,30 @@ module CloudProviders
         as.delete_launch_configuration(:launch_configuration_name => old_launch_configuration_name)
       end
     end
+    
+    # First, change the min_count to 
     def teardown
-      as.delete_launch_configuration(:launch_configuration_name => old_launch_configuration_name)
+      self.minimum_instances = 0
+      @new_launch_configuration_name = old_launch_configuration_name
+      puts "Updating autoscaling group: #{@new_launch_configuration_name}"
+      update_autoscaling_group!
+      puts "Terminating nodes in autoscaling group"
+      cloud.nodes.each do |n|
+        n.terminate!
+      end
+      count = 0
+      loop do
+        if count > (cooldown || 60)
+          break
+        else
+          $stdout.print "."
+          sleep 1
+          count +=1 
+        end
+      end
+      sleep (cooldown || 30)
+      as.delete_autoscaling_group(:autoscaling_group_name => name)
+      as.delete_launch_configuration(:launch_configuration_name => new_launch_configuration_name)
     end
     
     def should_create_autoscaling_group?

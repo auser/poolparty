@@ -138,17 +138,21 @@ log_level         :info
     def run
       puts "  running on #{cloud_provider.class}"
       
-      load_balancers.each do |lb_name, lb|
-        cloud_provider.load_balancer(*lb)
-      end
-      autoscalers.each do |as_name, as|
-        cloud_provider.autoscale(*as)
-      end
+      setup_extras
       cloud_provider.run
       
       unless chef_repo.nil?
         compile!
         bootstrap!
+      end
+    end
+    
+    def setup_extras
+      load_balancers.each do |lb_name, lb|
+        cloud_provider.load_balancer(*lb)
+      end
+      autoscalers.each do |as_name, as|
+        cloud_provider.autoscale(*as)
       end
     end
     
@@ -158,17 +162,32 @@ log_level         :info
     def teardown
       raise "Only Ec2 teardown supported" unless cloud_provider.name.to_s == 'ec2'
       puts "!! Tearing down cloud #{name}"
-      load_balancers.keys.each do |lb_name|
-        puts "! Deleting load_balaner #{lb_name}"
-        cloud_provider.elb.delete_load_balancer(:load_balancer_name => lb_name)
+      # load_balancers.each do |name, lb|
+      #   puts "! Deleting load_balaner #{lb_name}"
+      #   lb.teardown
+      # end
+      setup_extras
+      cloud_provider.load_balancers.each do |lb|
+        puts "-----> Tearing down load balancer: #{lb.name}"
+        lb.teardown
       end
       # instances belonging to an auto_scaling group must be deleted before the auto_scaling group
       #THIS SCARES ME! nodes.each{|n| n.terminate_instance!}
       # loop {nodes.size>0 ? sleep(4) : break }
-      autoscalers.keys.each do |as_name|
-        puts "! Deleting auto_scaling_group #{as_name}"
-        cloud_provider.as.delete_autoscaling_group('AutoScalingGroupName' => as_name)
+      if autoscalers.empty?
+        nodes.each do |node|
+          node.terminate!
+        end
+      else
+        cloud_provider.autoscalers.each do |a|
+          puts "-----> Tearing down autoscaler #{a.name}"
+          a.teardown
+        end
       end
+      # autoscalers.keys.each do |as_name|
+      #   puts "! Deleting auto_scaling_group #{as_name}"
+      #   cloud_provider.as.delete_autoscaling_group('AutoScalingGroupName' => as_name)
+      # end
       #TODO: keypair.delete # Do we want to delete the keypair?  probably, but not certain
     end
     
