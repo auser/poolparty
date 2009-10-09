@@ -120,10 +120,14 @@ log_level         :info
     
     public
     
-    def load_balancer(name=proper_name, o={}, &block);load_balancers[name] = [name, o, block];end
+    def load_balancer(name=proper_name, o={}, &block)
+      load_balancers[name] = [name, o, block]
+    end
     def load_balancers;@load_balancers ||= {};end
         
-    def autoscaler(name=proper_name, o={}, &block);autoscalers[name] = [name, o, block];end
+    def autoscaler(name=proper_name, o={}, &block)
+      autoscalers[name] = [name, o, block]
+    end
     def autoscalers;@autoscalers ||= {};end
     
     attr_reader :cloud_provider
@@ -146,6 +150,26 @@ log_level         :info
         compile!
         bootstrap!
       end
+    end
+    
+    # TODO: Incomplete and needs testing
+    # Shutdown and delete the load_balancers, auto_scaling_groups, launch_configurations,
+    # security_groups, triggers and instances defined by this cloud
+    def teardown
+      raise "Only Ec2 teardown supported" unless cloud_provider.name.to_s == 'ec2'
+      puts "!! Tearing down cloud #{name}"
+      load_balancers.keys.each do |lb_name|
+        puts "! Deleting load_balaner #{lb_name}"
+        cloud_provider.elb.delete_load_balancer(:load_balancer_name => lb_name)
+      end
+      # instances belonging to an auto_scaling group must be deleted before the auto_scaling group
+      #THIS SCARES ME! nodes.each{|n| n.terminate_instance!}
+      # loop {nodes.size>0 ? sleep(4) : break }
+      autoscalers.keys.each do |as_name|
+        puts "! Deleting auto_scaling_group #{as_name}"
+        cloud_provider.as.delete_autoscaling_group('AutoScalingGroupName' => as_name)
+      end
+      #TODO: keypair.delete # Do we want to delete the keypair?  probably, but not certain
     end
     
     def compile!

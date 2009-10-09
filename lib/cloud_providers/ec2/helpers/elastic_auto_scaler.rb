@@ -212,6 +212,12 @@ module CloudProviders
       @used_autoscaling_group_id ||= used_autoscaling_group_id
     end
     
+    # Convenience methods
+    # Return an array of hashes describing the autoscaling groups
+    def list
+      describe_autoscaling_groups.DescribeAutoScalingGroupsResult.AutoScalingGroups.member
+    end
+    
     private
     def reset!
       @old_auto_scaling_group_name = 

@@ -267,6 +267,16 @@ module AWS
 
       end
 
+      # Convenience methods
+      # Return an array of hashes describing the autoscaling groups
+      def list
+        describe_autoscaling_groups.DescribeAutoScalingGroupsResult.AutoScalingGroups.member
+      end
+      # Return an array of autoscaling group names
+      def names
+        list.collect{|a| a.AutoScalingGroupName}
+      end
+
     end
   end
 end

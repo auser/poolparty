@@ -214,6 +214,7 @@ module CloudProviders
     def elastic_ip(*ips)
       ips.each {|ip| _elastic_ips << ip}
     end
+    
     def method_missing(m,*a,&block)
       if cloud.respond_to?(m)
         cloud.send(m,*a,&block)
@@ -221,6 +222,7 @@ module CloudProviders
         super
       end
     end
+    
     # Grempe
     def ec2
       @ec2 ||= AWS::EC2::Base.new( :access_key_id => access_key, :secret_access_key => secret_access_key )

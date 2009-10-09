@@ -11,7 +11,7 @@ module PoolParty
     end
         
     at_exit do
-      unless pool.do_not_execute
+      if pool.auto_execute
         puts <<-EOE
   ----> Running #{pool.name} #{pool.do_not_execute}
         EOE
