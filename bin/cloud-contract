@@ -17,22 +17,18 @@ EOS
     @loaded_clouds.each do |cld|
       
       node_to_terminate = cld.nodes.last
-      node_to_terminate.cloud = cld
+      # node_to_terminate.cloud = cld
       
       msg = [
         "Contracting cloud #{cld.name} (#{cld.keypair}) by 1",
         " node: #{node_to_terminate.public_ip}"
       ]
       
-      print_msg(msg)
+      puts msg.join("\n")
       
       node_to_terminate.terminate!
       
-      msg = [
-        "#{node_to_terminate.public_ip} has been terminated"
-      ]
-      
-      print_msg(msg)
+      puts "#{node_to_terminate.public_ip} has been terminated"
     end    
   end
 end

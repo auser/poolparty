@@ -1,7 +1,7 @@
 module PoolParty
     
   class Pool < Base
-    attr_accessor :verbose, :very_verbose, :debugging, :very_debugging, :do_not_execute
+    attr_accessor :verbose, :very_verbose, :debugging, :very_debugging, :auto_execute
     
     def cloud(name, &block)
       clouds[name] = Cloud.new(name, {:parent => self}, &block)
@@ -13,7 +13,7 @@ module PoolParty
     at_exit do
       if pool.auto_execute
         puts <<-EOE
-  ----> Running #{pool.name} #{pool.do_not_execute}
+  ----> Running #{pool.name} #{pool.auto_execute}
         EOE
         pool.run
       end

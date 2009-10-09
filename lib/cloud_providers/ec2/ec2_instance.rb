@@ -48,5 +48,9 @@ module CloudProviders
       self.status == "pending"
     end
     
+    def start!(opts={})
+      
+    end
+    
   end
 end
