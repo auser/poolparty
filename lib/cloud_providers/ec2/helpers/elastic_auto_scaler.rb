@@ -17,8 +17,11 @@ module CloudProviders
         # if should_update_launch_configuration?
           # update_launch_configuration!
         # end
+        puts "Creating updated launch configuration"
         create_launch_configuration!
+        puts "Updating autoscaling group"
         update_autoscaling_group!
+        puts "Deleting old launch configuration: #{old_launch_configuration_name}"
         as.delete_launch_configuration(:launch_configuration_name => old_launch_configuration_name)
       end
     end
@@ -67,6 +70,7 @@ module CloudProviders
       end
     end
     def should_update_launch_configuration?
+      puts "Should we update the autoscaling group??!?!?!?!"
       known = launch_configurations.select {|lc| lc.name =~ /#{name}/ }
       if known.empty?
         true
@@ -172,9 +176,9 @@ module CloudProviders
     end
     
     def update_autoscaling_group!
-      puts "Updated autoscaling group!"
       as.update_autoscaling_group(
         :autoscaling_group_name => name,
+        :availability_zones => availability_zones.first, # TODO: Figure out how to support multiple availability_zones
         :launch_configuration_name => new_launch_configuration_name,
         :min_size => minimum_instances.to_s,
         :max_size => maximum_instances.to_s,

@@ -4,7 +4,7 @@ module PoolParty
     attr_accessor :verbose, :very_verbose, :debugging, :very_debugging, :auto_execute
     
     def cloud(name, &block)
-      clouds[name] = Cloud.new(name, {:parent => self}, &block)
+      clouds[name.to_s] = Cloud.new(name.to_s, {:parent => self}, &block)
     end
     def clouds
       @clouds ||= {}
