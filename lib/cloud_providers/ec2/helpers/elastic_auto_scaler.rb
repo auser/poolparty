@@ -38,15 +38,33 @@ module CloudProviders
         update_autoscaling_group!
         puts "Terminating nodes in autoscaling group: #{name}"
         reset!
-        cloud.nodes.each {|n| n.terminate! }
-        ensure_deletion_of_autoscaling_group!
-        as.delete_launch_configuration(:launch_configuration_name => new_launch_configuration_name)
+        # cloud.nodes.each {|n| n.terminate! }
+        delete_autoscaling_group!
+        delete_launch_configuration!
       end
     end
     
     private
-    def ensure_deletion_of_autoscaling_group!(sleep_time=10)
+    def delete_autoscaling_group!
+      ensure_no_scaling_activities
+      reset!
+      begin
+        as.delete_autoscaling_group(:autoscaling_group_name => name)
+      rescue AWS::Error => e
+        if e.message =~ /You cannot delete an AutoScalingGroup while there are scaling activities in progress/
+          delete_autoscaling_group!
+        end
+      rescue Exception => e
+        p e.inspect
+      end
+    end
+    def delete_launch_configuration!
+      ensure_no_scaling_activities
+      as.delete_launch_configuration(:launch_configuration_name => new_launch_configuration_name)
+    end
+    def ensure_no_scaling_activities
       loop do
+        reset!
         activities = scaling_activities.select {|a| !a[:complete] }
         running_nodes = cloud.nodes.select {|n| n.running? }
         if activities.empty? && running_nodes.empty?
@@ -55,11 +73,9 @@ module CloudProviders
           $stdout.print "."
           $stdout.flush
           sleep 1
-          reset!
         end
       end
       reset!
-      as.delete_autoscaling_group(:autoscaling_group_name => name)
     end
     public
     def should_create_autoscaling_group?
@@ -225,7 +241,7 @@ module CloudProviders
           :activity_id  => action["ActivityId"],
           :description  => action["Description"],
           :status_code  => action["StatusCode"],
-          :complete     => action["StatusCode"] == "Successful" ? true : false,
+          :complete     => action["StatusCode"] == "Pending" ? false : true,
           :start_time   => action["StartTime"]
         }
       end rescue []
@@ -275,6 +291,7 @@ module CloudProviders
         @new_auto_scaling_group_name = 
           @autoscaling_groups = @scaling_activities =
             @launch_configurations = nil
+      cloud.reset!
     end
   end
 end

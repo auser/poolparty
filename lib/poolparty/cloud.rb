@@ -204,6 +204,10 @@ log_level         :info
       cloud_provider.configure_nodes!(tmp_path)
     end
     
+    def reset!
+      cloud_provider.reset!
+    end
+    
     def ssh(num=0)
       nodes[num].ssh
     end
