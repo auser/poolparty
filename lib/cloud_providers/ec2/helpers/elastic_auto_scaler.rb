@@ -28,30 +28,40 @@ module CloudProviders
     
     # First, change the min_count to 
     def teardown
-      self.minimum_instances = 0
-      @new_launch_configuration_name = old_launch_configuration_name
-      puts "Updating autoscaling group: #{@new_launch_configuration_name}"
-      update_autoscaling_group!
-      puts "Terminating nodes in autoscaling group"
-      cloud.nodes.each do |n|
-        n.terminate!
+      if autoscaling_groups.select {|n| n.name == name }.empty?
+        puts "Cloud #{cloud.name} autoscaling group does not exist"
+      else
+        self.minimum_instances = 0
+        self.maximum_instances = 0
+        @new_launch_configuration_name = old_launch_configuration_name
+        puts "Updating autoscaling group: #{@new_launch_configuration_name}"
+        update_autoscaling_group!
+        puts "Terminating nodes in autoscaling group: #{name}"
+        reset!
+        cloud.nodes.each {|n| n.terminate! }
+        ensure_deletion_of_autoscaling_group!
+        as.delete_launch_configuration(:launch_configuration_name => new_launch_configuration_name)
       end
-      count = 0
+    end
+    
+    private
+    def ensure_deletion_of_autoscaling_group!(sleep_time=10)
       loop do
-        if count > (cooldown || 60)
+        activities = scaling_activities.select {|a| !a[:complete] }
+        running_nodes = cloud.nodes.select {|n| n.running? }
+        if activities.empty? && running_nodes.empty?
           break
         else
           $stdout.print "."
           $stdout.flush
           sleep 1
-          count +=1 
+          reset!
         end
       end
-      sleep (cooldown || 30)
+      reset!
       as.delete_autoscaling_group(:autoscaling_group_name => name)
-      as.delete_launch_configuration(:launch_configuration_name => new_launch_configuration_name)
     end
-    
+    public
     def should_create_autoscaling_group?
       known = autoscaling_groups.select {|ag| ag.name == cloud.proper_name }
       if known.empty?
@@ -205,7 +215,20 @@ module CloudProviders
             :availability_zone => i["AvailabilityZone"]
           }}
         }
-      end
+      end rescue []
+    end
+    def scaling_activities
+      @scaling_activities ||= as.describe_scaling_activities(:autoscaling_group_name => name).DescribeScalingActivitiesResult.Activities.member.map do |action|
+        {
+          :cause        => action["Cause"],
+          :progress     => action["Progress"].to_i,
+          :activity_id  => action["ActivityId"],
+          :description  => action["Description"],
+          :status_code  => action["StatusCode"],
+          :complete     => action["StatusCode"] == "Successful" ? true : false,
+          :start_time   => action["StartTime"]
+        }
+      end rescue []
     end
     # Temporary names so we can create and recreate launch_configurations
     def new_launch_configuration_name
@@ -250,7 +273,7 @@ module CloudProviders
     def reset!
       @old_auto_scaling_group_name = 
         @new_auto_scaling_group_name = 
-          @autoscaling_groups =
+          @autoscaling_groups = @scaling_activities =
             @launch_configurations = nil
     end
   end
