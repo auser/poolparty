@@ -126,7 +126,7 @@ module CloudProviders
         
         elastic_ip_objects.each_with_index do |eip, idx|
           # Only get the nodes that do not have elastic ips associated with them
-          ec2.associate_address(:instance_id => assignee_nodes[idx].instance_id, :public_ip => eip.public_ip)
+          ec2.associate_address(:instance_id => assignee_nodes[idx].instance_id, :public_ip => eip.public_ip) rescue puts("Could not assign address as the instance is not up. Try running again once the instance is up")
           reset!
         end
       end

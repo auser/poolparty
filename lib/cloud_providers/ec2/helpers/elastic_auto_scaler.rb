@@ -75,6 +75,7 @@ module CloudProviders
           sleep 1
         end
       end
+      puts ""
       reset!
     end
     public
