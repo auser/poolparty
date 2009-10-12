@@ -35,7 +35,7 @@ class Keypair
       else
         search_in_known_locations(filepath, extra_paths)
       end
-    exists? ? @full_filepath : false
+    @full_filepath ? @full_filepath : false
   end
   
   def to_s

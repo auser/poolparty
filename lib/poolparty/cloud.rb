@@ -212,6 +212,12 @@ log_level         :info
       nodes[num].ssh
     end
     
+    def rsync(source, dest)
+      nodes.each do |node|
+        node.rsync(:source => source, :destination => dest)
+      end
+    end
+    
     def nodes
       cloud_provider.nodes.select {|a| a.in_service? }
     end

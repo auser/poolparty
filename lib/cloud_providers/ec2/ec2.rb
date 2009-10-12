@@ -106,24 +106,7 @@ module CloudProviders
           contraction_count = nodes.size - maximum_instances
           puts "-----> contracting the cloud because the instances count exceeds the maximum_instances by #{contraction_count}"
           contract_by(contraction_count)
-        end
-        
-        unless _elastic_ips.empty?
-          unused_elastic_ip_addresses = ElasticIp.unused_elastic_ips(self).map {|i| i.public_ip }
-          
-          elastic_ip_objects = ElasticIp.unused_elastic_ips(self).select {|ip_obj| _elastic_ips.include?(ip_obj.public_ip) }
-          
-          puts "-----> Elastic ips are not enabled yet"
-          # assignee_nodes = nodes.select {|n| !ElasticIp.elastic_ips(self).include?(n.public_ip) }
-          # assignee_nodes.each do |node|
-          #   # Only get the nodes that do not have elastic ips associated with them
-          #   assignee_nodes.reject do |node|
-          #     eip.assign_to(node)
-          #   end
-          #   reset!
-          # end
-        end
-        
+        end        
       else
         autoscalers.each do |a|
           puts "    autoscaler: #{a.name}"
@@ -131,6 +114,24 @@ module CloudProviders
           a.run
         end
       end
+      
+      # ELASTIC IPS
+      unless _elastic_ips.empty?
+        unused_elastic_ip_addresses = ElasticIp.unused_elastic_ips(self).map {|i| i.public_ip }
+        used_elastic_ip_addresses = ElasticIp.elastic_ips(self).map {|i| i.public_ip }
+        
+        elastic_ip_objects = ElasticIp.unused_elastic_ips(self).select {|ip_obj| _elastic_ips.include?(ip_obj.public_ip) }
+        
+        assignee_nodes = nodes.select {|n| !ElasticIp.elastic_ips(self).include?(n.public_ip) }
+        
+        elastic_ip_objects.each_with_index do |eip, idx|
+          # Only get the nodes that do not have elastic ips associated with them
+          ec2.associate_address(:instance_id => assignee_nodes[idx].instance_id, :public_ip => eip.public_ip)
+          reset!
+        end
+      end
+      
+      
     end
     
     def teardown
