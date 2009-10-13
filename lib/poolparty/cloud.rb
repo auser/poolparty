@@ -216,10 +216,13 @@ No autoscalers defined
           loop do
             reset!
             break if nodes.size == num_nodes
+            $stdout.print "."
+            $stdout.flush
             sleep 1
           end
         end
       end
+      puts ""
     end
     
     def compile!
