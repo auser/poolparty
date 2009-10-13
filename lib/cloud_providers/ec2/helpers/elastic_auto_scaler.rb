@@ -41,6 +41,7 @@ module CloudProviders
         # cloud.nodes.each {|n| n.terminate! }
         delete_autoscaling_group!
         delete_launch_configuration!
+        puts ""
       end
     end
     
@@ -75,7 +76,6 @@ module CloudProviders
           sleep 1
         end
       end
-      puts ""
       reset!
     end
     public

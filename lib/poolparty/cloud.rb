@@ -191,6 +191,37 @@ log_level         :info
       #TODO: keypair.delete # Do we want to delete the keypair?  probably, but not certain
     end
     
+    def reboot!
+      orig_nodes = nodes
+      num_nodes = nodes.size
+      
+      if autoscalers.empty?
+        puts <<-EOE
+No autoscalers defined
+  Launching new nodes and then shutting down original nodes
+        EOE
+        # Start new nodes
+        expand_by(num_nodes)
+        # Terminate the nodes
+        orig_nodes.each do |node|
+          node.terminate!
+        end
+      else
+        # Terminate the nodes
+        orig_nodes.each do |node|
+          node.terminate!
+          puts "----> Terminated node: #{node.instance_id}"
+          # Wait for the autoscaler to boot the next node
+          puts "----> Waiting for new node to boot via the autoscaler"
+          loop do
+            reset!
+            break if nodes.size == num_nodes
+            sleep 1
+          end
+        end
+      end
+    end
+    
     def compile!
       build_tmp_dir unless chef_repo.nil?
     end
