@@ -4,25 +4,24 @@ module CloudProviders
       :cooldown => nil,
       :desired_capacity => nil
     )
-    def run
-      puts "-----> Checking for launch configuration named: #{old_launch_configuration_name}"
-      # if should_create_launch_configuration?
-      #   create_launch_configuration!
-      # end
+    def run      
       if should_create_autoscaling_group?
+        puts "Creating autoscaling group"
         create_launch_configuration!
         create_autoscaling_group!
-      elsif should_update_autoscaling_group?
-        # CLEANUP!
-        # if should_update_launch_configuration?
-          # update_launch_configuration!
-        # end
-        puts "Creating updated launch configuration"
-        create_launch_configuration!
-        puts "Updating autoscaling group"
-        update_autoscaling_group!
-        puts "Deleting old launch configuration: #{old_launch_configuration_name}"
-        as.delete_launch_configuration(:launch_configuration_name => old_launch_configuration_name)
+      else
+        puts "-----> Checking for launch configuration named: #{old_launch_configuration_name}"
+        if should_create_launch_configuration?
+          create_launch_configuration!
+        elsif should_update_launch_configuration? || should_update_autoscaling_group?
+          update_launch_configuration!
+          
+          puts "Updating autoscaling group"
+          update_autoscaling_group!
+          puts "Deleting old launch configuration: #{old_launch_configuration_name}"
+          as.delete_launch_configuration(:launch_configuration_name => old_launch_configuration_name)
+        end
+        
       end
     end
     
@@ -59,9 +58,9 @@ module CloudProviders
         p e.inspect
       end
     end
-    def delete_launch_configuration!
+    def delete_launch_configuration!(n=new_launch_configuration_name)
       ensure_no_scaling_activities
-      as.delete_launch_configuration(:launch_configuration_name => new_launch_configuration_name)
+      as.delete_launch_configuration(:launch_configuration_name => n)
     end
     def ensure_no_scaling_activities
       loop do
@@ -97,7 +96,6 @@ module CloudProviders
       end
     end
     def should_update_launch_configuration?
-      puts "Should we update the autoscaling group??!?!?!?!"
       known = launch_configurations.select {|lc| lc.name =~ /#{name}/ }
       if known.empty?
         true
