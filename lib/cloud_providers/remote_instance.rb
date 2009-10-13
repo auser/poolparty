@@ -5,8 +5,14 @@ module CloudProviders
   class RemoteInstance
     include Dslify, Connections
     
-    attr_reader :name, :init_opts
+    attr_reader :name, :init_opts, :raw_response
     attr_accessor :cloud_provider
+    
+    default_options(
+      :instance_id => nil,
+      :image_id => nil,
+      :status => nil
+    )
     
     def initialize(init_opts={}, &block)
       @init_opts = init_opts
@@ -55,11 +61,15 @@ module CloudProviders
     def default_keypair_path
       self.class.default_keypair_path
     end
-    
+         
     private
     
     def cloud
-      init_opts.has_key?(:cloud) ? init_opts[:cloud] : cloud_provider.cloud
+      init_opts.has_key?(:cloud) ? init_opts[:cloud] : nil
+    end
+    
+    def cloud_provider
+      cloud.cloud_provider
     end
         
   end

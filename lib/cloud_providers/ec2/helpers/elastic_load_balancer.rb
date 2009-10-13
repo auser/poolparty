@@ -10,6 +10,11 @@ module CloudProviders
       end
     end
     
+    def teardown
+      puts "-----> Tearing down load balancer: #{name}"
+      elb.delete_load_balancer(:load_balancer_name => name)
+    end
+    
     def listener(*listener_hashes)
       listener_hashes.each do |hsh|
         _listeners << ElasticListener.new(hsh)

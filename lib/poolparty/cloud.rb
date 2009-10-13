@@ -120,10 +120,14 @@ log_level         :info
     
     public
     
-    def load_balancer(name=proper_name, o={}, &block);load_balancers[name] = [name, o, block];end
+    def load_balancer(name=proper_name, o={}, &block)
+      load_balancers[name] = [name, o, block]
+    end
     def load_balancers;@load_balancers ||= {};end
         
-    def autoscaler(name=proper_name, o={}, &block);autoscalers[name] = [name, o, block];end
+    def autoscaler(name=proper_name, o={}, &block)
+      autoscalers[name] = [name, o, block]
+    end
     def autoscalers;@autoscalers ||= {};end
     
     attr_reader :cloud_provider
@@ -134,18 +138,57 @@ log_level         :info
     def run
       puts "  running on #{cloud_provider.class}"
       
-      load_balancers.each do |lb_name, lb|
-        cloud_provider.load_balancer(*lb)
-      end
-      autoscalers.each do |as_name, as|
-        cloud_provider.autoscale(*as)
-      end
+      setup_extras
       cloud_provider.run
       
       unless chef_repo.nil?
         compile!
         bootstrap!
       end
+    end
+    
+    def setup_extras
+      load_balancers.each do |lb_name, lb|
+        cloud_provider.load_balancer(*lb)
+      end
+      autoscalers.each do |as_name, as|
+        cloud_provider.autoscale(*as)
+      end
+    end
+    
+    # TODO: Incomplete and needs testing
+    # Shutdown and delete the load_balancers, auto_scaling_groups, launch_configurations,
+    # security_groups, triggers and instances defined by this cloud
+    def teardown
+      raise "Only Ec2 teardown supported" unless cloud_provider.name.to_s == 'ec2'
+      puts "!! Tearing down cloud #{name}"
+      # load_balancers.each do |name, lb|
+      #   puts "! Deleting load_balaner #{lb_name}"
+      #   lb.teardown
+      # end
+      setup_extras
+      cloud_provider.load_balancers.each do |lb|
+        puts "-----> Tearing down load balancer: #{lb.name}"
+        lb.teardown
+      end
+      # instances belonging to an auto_scaling group must be deleted before the auto_scaling group
+      #THIS SCARES ME! nodes.each{|n| n.terminate_instance!}
+      # loop {nodes.size>0 ? sleep(4) : break }
+      if autoscalers.empty?
+        nodes.each do |node|
+          node.terminate!
+        end
+      else
+        cloud_provider.autoscalers.each do |a|
+          puts "-----> Tearing down autoscaler #{a.name}"
+          a.teardown
+        end
+      end
+      # autoscalers.keys.each do |as_name|
+      #   puts "! Deleting auto_scaling_group #{as_name}"
+      #   cloud_provider.as.delete_autoscaling_group('AutoScalingGroupName' => as_name)
+      # end
+      #TODO: keypair.delete # Do we want to delete the keypair?  probably, but not certain
     end
     
     def compile!
@@ -161,8 +204,18 @@ log_level         :info
       cloud_provider.configure_nodes!(tmp_path)
     end
     
+    def reset!
+      cloud_provider.reset!
+    end
+    
     def ssh(num=0)
       nodes[num].ssh
+    end
+    
+    def rsync(source, dest)
+      nodes.each do |node|
+        node.rsync(:source => source, :destination => dest)
+      end
     end
     
     def nodes

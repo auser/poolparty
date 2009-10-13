@@ -172,6 +172,12 @@ module AWS
       def enable_availability_zones_for_load_balancer( options = {} )
         raise "Not yet implemented"
       end
+      
+      #convenience methods
+      # return an array of hashes describing the load_balancers
+      def list
+        describe_load_balancers.DescribeLoadBalancersResult.LoadBalancerDescriptions.member
+      end
 
     end
   end

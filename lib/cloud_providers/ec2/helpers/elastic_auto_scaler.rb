@@ -6,24 +6,79 @@ module CloudProviders
     )
     def run
       puts "-----> Checking for launch configuration named: #{old_launch_configuration_name}"
-      if should_create_launch_configuration?
-        create_launch_configuration!
-      elsif should_update_launch_configuration?
-        update_launch_configuration!
-      end
+      # if should_create_launch_configuration?
+      #   create_launch_configuration!
+      # end
       if should_create_autoscaling_group?
+        create_launch_configuration!
         create_autoscaling_group!
       elsif should_update_autoscaling_group?
+        # CLEANUP!
+        # if should_update_launch_configuration?
+          # update_launch_configuration!
+        # end
+        puts "Creating updated launch configuration"
+        create_launch_configuration!
+        puts "Updating autoscaling group"
         update_autoscaling_group!
+        puts "Deleting old launch configuration: #{old_launch_configuration_name}"
+        as.delete_launch_configuration(:launch_configuration_name => old_launch_configuration_name)
       end
-      
-      # CLEANUP!
-      as.delete_launch_configuration(:launch_configuration_name => old_launch_configuration_name) if should_create_launch_configuration?
-    end
-    def teardown
-      as.delete_launch_configuration(:launch_configuration_name => old_launch_configuration_name)
     end
     
+    # First, change the min_count to 
+    def teardown
+      if autoscaling_groups.select {|n| n.name == name }.empty?
+        puts "Cloud #{cloud.name} autoscaling group does not exist"
+      else
+        self.minimum_instances = 0
+        self.maximum_instances = 0
+        @new_launch_configuration_name = old_launch_configuration_name
+        puts "Updating autoscaling group: #{@new_launch_configuration_name}"
+        update_autoscaling_group!
+        puts "Terminating nodes in autoscaling group: #{name}"
+        reset!
+        # cloud.nodes.each {|n| n.terminate! }
+        delete_autoscaling_group!
+        delete_launch_configuration!
+      end
+    end
+    
+    private
+    def delete_autoscaling_group!
+      ensure_no_scaling_activities
+      reset!
+      begin
+        as.delete_autoscaling_group(:autoscaling_group_name => name)
+      rescue AWS::Error => e
+        if e.message =~ /You cannot delete an AutoScalingGroup while there are scaling activities in progress/
+          delete_autoscaling_group!
+        end
+      rescue Exception => e
+        p e.inspect
+      end
+    end
+    def delete_launch_configuration!
+      ensure_no_scaling_activities
+      as.delete_launch_configuration(:launch_configuration_name => new_launch_configuration_name)
+    end
+    def ensure_no_scaling_activities
+      loop do
+        reset!
+        activities = scaling_activities.select {|a| !a[:complete] }
+        running_nodes = cloud.nodes.select {|n| n.running? }
+        if activities.empty? && running_nodes.empty?
+          break
+        else
+          $stdout.print "."
+          $stdout.flush
+          sleep 1
+        end
+      end
+      puts ""
+      reset!
+    end
+    public
     def should_create_autoscaling_group?
       known = autoscaling_groups.select {|ag| ag.name == cloud.proper_name }
       if known.empty?
@@ -42,6 +97,7 @@ module CloudProviders
       end
     end
     def should_update_launch_configuration?
+      puts "Should we update the autoscaling group??!?!?!?!"
       known = launch_configurations.select {|lc| lc.name =~ /#{name}/ }
       if known.empty?
         true
@@ -71,7 +127,7 @@ module CloudProviders
       begin
         @launch_configuration_name = lc
         as.create_launch_configuration({
-          :launch_configuration_name => launch_configuration_name,
+          :launch_configuration_name => new_launch_configuration_name,
           :image_id => image_id,
           :instance_type => instance_type,
           :security_groups => parent.security_groups,
@@ -107,7 +163,7 @@ module CloudProviders
       as.create_autoscaling_group({
         :autoscaling_group_name => name,
         :availability_zones => availability_zones,
-        :launch_configuration_name => launch_configuration_name,
+        :launch_configuration_name => new_launch_configuration_name,
         :min_size => minimum_instances.to_s,
         :max_size => maximum_instances.to_s,
         :load_balancer_names => load_balancers.map {|k,v| k }
@@ -129,8 +185,8 @@ module CloudProviders
           }
           hsh.merge!(:cooldown => cooldown.to_s) if cooldown
           
-          t = k.diff(hsh, :cooldown, 
-                          :min_size, 
+          t = hsh.diff(k, :cooldown,
+                          :min_size,
                           :max_size, 
                           :load_balancer_names, 
                           :availability_zones, 
@@ -147,10 +203,10 @@ module CloudProviders
     end
     
     def update_autoscaling_group!
-      puts "Updated autoscaling group!"
       as.update_autoscaling_group(
         :autoscaling_group_name => name,
-        :launch_configuration_name => launch_configuration_name,
+        :availability_zones => availability_zones.first, # TODO: Figure out how to support multiple availability_zones
+        :launch_configuration_name => new_launch_configuration_name,
         :min_size => minimum_instances.to_s,
         :max_size => maximum_instances.to_s,
         :cooldown => cooldown.to_s,
@@ -167,7 +223,7 @@ module CloudProviders
           :min_size => g["MinSize"],
           :max_size => g["MaxSize"],
           :load_balancer_names => (g["LoadBalancerNames"]["member"] rescue []),
-          :availabilityZones => (g["AvailabilityZones"]["member"] rescue []),
+          :availability_zones => (g["AvailabilityZones"]["member"] rescue []),
           :launch_configuration_name => g["LaunchConfigurationName"],
           :name => g["AutoScalingGroupName"],
           :instances => (g["Instances"]["member"] rescue []).map {|i|
@@ -176,49 +232,67 @@ module CloudProviders
             :availability_zone => i["AvailabilityZone"]
           }}
         }
-      end
+      end rescue []
+    end
+    def scaling_activities
+      @scaling_activities ||= as.describe_scaling_activities(:autoscaling_group_name => name).DescribeScalingActivitiesResult.Activities.member.map do |action|
+        {
+          :cause        => action["Cause"],
+          :progress     => action["Progress"].to_i,
+          :activity_id  => action["ActivityId"],
+          :description  => action["Description"],
+          :status_code  => action["StatusCode"],
+          :complete     => action["StatusCode"] == "Pending" ? false : true,
+          :start_time   => action["StartTime"]
+        }
+      end rescue []
     end
     # Temporary names so we can create and recreate launch_configurations
     def new_launch_configuration_name
-      @new_launch_configuration_name ||= "#{name}#{used_launched_config_ids[-1]+1}"
+      @new_launch_configuration_name ||= "#{name}#{used_launched_config_id.zero? ? 1 : 0}"
     end
     def old_launch_configuration_name
-      return @old_launch_configuration_name if @old_launch_configuration_name
-      @old_launch_configuration_name ||= "#{name}#{used_launched_config_ids[-1]}"
+      @old_launch_configuration_name ||= "#{name}#{used_launched_config_id.zero? ? 0 : 1}"
     end
-    def launch_configuration_name
-      @launch_configuration_name ||= old_launch_configuration_name
-    end
-    def used_launched_config_ids
-      return @used_launched_config_ids if @used_launched_config_ids
+    # Compute the next configuration launch id. We'll be cycling through the usage of 0 and 1
+    # Here we are just looking for which one that is, either zero or 1
+    def used_launched_config_id
+      return @used_launched_config_id if @used_launched_config_id
       used_configuration_names = launch_configurations.map {|hsh| hsh[:name] =~ /#{name}/ ? hsh[:name] : nil }.reject {|a| a.nil?}
-      used_launched_config_ids = used_configuration_names.map {|a| a.gsub(/#{name}/, '').to_i }.reject {|a| a.zero? }
-      used_launched_config_ids = [0] if used_launched_config_ids.empty?
-      @used_launched_config_ids ||= used_launched_config_ids
+      used_launched_config_id = used_configuration_names.map {|a| a.gsub(/#{name}/, '').to_i }.reject {|a| a.zero? }.first
+      used_launched_config_id = 0 if used_launched_config_id.nil?
+      @used_launched_config_id = used_launched_config_id
     end
     
     def new_auto_scaling_group_name
-      @new_auto_scaling_group_name ||= "#{name}#{used_autoscaling_group_ids[-1]+1}"
+      @new_auto_scaling_group_name ||= "#{name}#{used_autoscaling_group_id.zero? ? 1 : 0}"
     end
     
     def old_auto_scaling_group_name
-      @old_auto_scaling_group_name ||= "#{name}#{used_autoscaling_group_ids[-1]}"
+      @old_auto_scaling_group_name ||= "#{name}#{used_autoscaling_group_id.zero? ? 0 : 1}"
     end
     
-    def used_autoscaling_group_ids
-      return @used_autoscaling_group_ids if @used_autoscaling_group_ids
+    def used_autoscaling_group_id
+      return @used_autoscaling_group_id if @used_autoscaling_group_id
       used_autoscaling_groups = launch_configurations.map {|hsh| hsh[:name] =~ /#{name}/ ? hsh[:name] : nil }.reject {|a| a.nil?}
-      used_autoscaling_group_ids = used_autoscaling_groups.map {|a| a.gsub(/#{name}/, '').to_i }.reject {|a| a.zero? }
-      used_autoscaling_group_ids = [0] if used_autoscaling_group_ids.empty?
-      @used_autoscaling_group_ids ||= used_autoscaling_group_ids
+      used_autoscaling_group_id = used_autoscaling_groups.map {|a| a.gsub(/#{name}/, '').to_i }.reject {|a| a.zero? }.first
+      used_autoscaling_group_id = 0 if used_autoscaling_group_id.nil?
+      @used_autoscaling_group_id ||= used_autoscaling_group_id
+    end
+    
+    # Convenience methods
+    # Return an array of hashes describing the autoscaling groups
+    def list
+      describe_autoscaling_groups.DescribeAutoScalingGroupsResult.AutoScalingGroups.member
     end
     
     private
     def reset!
       @old_auto_scaling_group_name = 
         @new_auto_scaling_group_name = 
-          @autoscaling_groups =
+          @autoscaling_groups = @scaling_activities =
             @launch_configurations = nil
+      cloud.reset!
     end
   end
 end

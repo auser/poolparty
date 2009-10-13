@@ -15,9 +15,12 @@ pool "skinnytest2" do
       listener :external_port => 8082, :internal_port => 82, :protocol => 'tcp'
     end
 
-    # autoscaler
+    autoscaler
     
     using :ec2 do
+      
+      elastic_ip "174.129.218.49", "174.129.204.191"
+      
       security_group do
         revoke :from_port => "8080", :to_port => "8081"
         authorize :from_port => "22", :to_port => "22"

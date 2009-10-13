@@ -23,7 +23,7 @@ EOS
     # libs << " -r #{File.dirname(__FILE__) + '/../lib/console_lib/console_logger.rb'}"
     libs <<  " -r #{File.dirname(__FILE__) + '/../lib/poolparty.rb'}"
     f = command[:clouds_dot_rb]
-    File.open("/tmp/console.rb", "w") {|f| f << "require '#{command[:clouds_dot_rb]}'\npool.do_not_execute = true" }
+    File.open("/tmp/console.rb", "w") {|f| f << "require '#{command[:clouds_dot_rb]}'\npool.auto_execute = false" }
     libs <<  " -r /tmp/console.rb"
     
     puts "Loading PoolParty console..."
