@@ -9,7 +9,11 @@ module CloudProviders
     
     def initialize(name, init_opts={}, &block)
       @name = name
-      @init_opts = init_opts
+      if name.is_a?(Hash) && init_opts.empty?
+        @init_opts = name
+      else
+        @init_opts = init_opts
+      end
       set_vars_from_options(init_opts)
       instance_eval &block if block
       after_initialized
