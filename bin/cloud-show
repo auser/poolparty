@@ -28,7 +28,9 @@ EOS
         "Minimum instances:   #{cld.minimum_instances}",
         "Maximum instances:   #{cld.maximum_instances}",
         "Running on:          #{cld.cloud_provider.name}",
-        "Keypair:             #{cld.keypair.basename}"
+        "Keypair:             #{cld.keypair.basename}",
+        "Security group:      #{cld.cloud_provider.security_groups}",
+        "Availability zones:  #{cld.cloud_provider.availability_zones}"
       ]
             
       puts msg.flatten

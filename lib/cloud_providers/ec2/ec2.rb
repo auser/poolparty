@@ -188,11 +188,11 @@ module CloudProviders
     end
     
     def nodes
-      @nodes ||= all_nodes.select {|i| i.in_service? }#describe_instances.select {|i| i.in_service? && security_groups.include?(i.security_groups) }
+      all_nodes.select {|i| i.in_service? }#describe_instances.select {|i| i.in_service? && security_groups.include?(i.security_groups) }
     end
     
     def all_nodes
-      @inactive_nodes ||= describe_instances.select {|i| security_groups.include?(i.security_groups) }
+      @nodes ||= describe_instances.select {|i| security_groups.include?(i.security_groups) }
     end
     
     # Describe instances

@@ -4,7 +4,7 @@ module CloudProviders
       :listeners => []
     )
     def run
-      if should_create_load_balancer?
+      if should_create_load_balancer? || true
         puts "-----> Creating ElasticLoadBalancer: #{name}"
         create_load_balancer!
       elsif should_update_load_balancer?
@@ -58,7 +58,7 @@ module CloudProviders
     def create_load_balancer!
       elb.delete_load_balancer(:load_balancer_name => name)
       elb.create_load_balancer(
-        :availability_zones => availability_zones,
+        :availability_zones => parent.availability_zones,
         :load_balancer_name => real_name,
         :listeners => _listeners.map {|l| l.to_hash }
       )

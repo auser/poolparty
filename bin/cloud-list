@@ -27,7 +27,7 @@ EOS
 
         hsh = {}
         
-        cld.nodes.each do |n| 
+        cld.all_nodes.each do |n| 
           (hsh[n.status] ||= []) << n
         end
         
