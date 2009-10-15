@@ -8,6 +8,8 @@ module CloudProviders
         puts "-----> Creating ElasticLoadBalancer: #{name}"
         create_load_balancer!
       elsif should_update_load_balancer?
+        puts "Should update!"
+        create_load_balancer!
       end
       _health_checks.each do |ck|
         configure_health_check!(ck)
@@ -68,13 +70,17 @@ module CloudProviders
       elb.configure_health_check(:health_check => hc.to_hash, :load_balancer_name => name)
     end
     def should_update_load_balancer?
-      known = elastic_load_balancers.select {|lc| lc.name =~ /#{name}/ }
+      known = elastic_load_balancers.select {|lc| lc.name =~ /#{name}/ }.flatten
       if known.empty?
         true
       else
-        differences = _listeners.map do |listener|
-          known.map {|a| listener.diff(a.listeners.first) } # TODO: enable multiple listeners
-        end
+        known_listeners = known.map {|a| a[:listeners]}.flatten
+        # Take the known listeners (that are defined on the cloud_provider)
+        # and compare their describable values to those that are defined in
+        # the clouds.rb. Select only those that are different.
+        differences = _listeners.reject do |listener|
+          known_listeners.reject {|kl| listener.diff(kl).empty? }.empty?
+        end.flatten
         if differences.empty?
           false
         else
@@ -133,8 +139,8 @@ module CloudProviders
   end
   class ElasticListener < Ec2
     default_options(
-      :internal_port => 80,
-      :external_port => 80,
+      :instance_port => 80,
+      :load_balancer_port => 80,
       :protocol => "http"
     )
     def initialize(name, init_opts={}, &block)
@@ -143,14 +149,13 @@ module CloudProviders
     end
     
     def to_hash
-      {:protocol => protocol, :load_balancer_port => external_port.to_s, :instance_port => internal_port.to_s}
+      {:protocol => protocol, :load_balancer_port => load_balancer_port.to_s, :instance_port => instance_port.to_s}
     end
     
     def diff(hsh={})
-      hsh.select {|k,v| hsh[k] != self.send(k) }
-    end
-    def load_balancer_port; external_port; end
-    def instance_port; internal_port; end
-    
+      [:protocol, :load_balancer_port, :instance_port].reject do |k|
+        hsh[k].to_s.capitalize == self.send(k).to_s.capitalize
+      end
+    end    
   end
 end
