@@ -63,17 +63,23 @@ module CloudProviders
       as.delete_launch_configuration(:launch_configuration_name => n)
     end
     def ensure_no_scaling_activities
-      loop do
+      # loop do
+      #   reset!
+      #   activities = scaling_activities.select {|a| !a[:complete] }
+      #   running_nodes = cloud.nodes.select {|n| n.running? }
+      #   if activities.empty? && running_nodes.empty?
+      #     break
+      #   else
+      #     $stdout.print "."
+      #     $stdout.flush
+      #     sleep 1
+      #   end
+      # end
+      progress_bar_until("Ensuring there are no scaling activities") do
         reset!
         activities = scaling_activities.select {|a| !a[:complete] }
         running_nodes = cloud.nodes.select {|n| n.running? }
-        if activities.empty? && running_nodes.empty?
-          break
-        else
-          $stdout.print "."
-          $stdout.flush
-          sleep 1
-        end
+        activities.empty? && running_nodes.empty?
       end
       reset!
     end
