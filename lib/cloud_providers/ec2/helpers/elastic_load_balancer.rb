@@ -4,13 +4,13 @@ module CloudProviders
       :listeners => []
     )
     def run
-      if should_create_load_balancer? || true
+      if should_create_load_balancer?
         puts "-----> Creating ElasticLoadBalancer: #{name}"
         create_load_balancer!
       elsif should_update_load_balancer?
       end
       _health_checks.each do |ck|
-        create_health_check!(ck)
+        configure_health_check!(ck)
       end
       detach_instances_if_necessary
       attach_instances_if_necessary
@@ -46,7 +46,7 @@ module CloudProviders
     public 
     def attach_instances_if_necessary
       instances = parent.nodes.map {|a| {:instance_id => a.instance_id} }
-      elb.register_instances_with_load_balancer(:instances => instances, :load_balancer_name => "#{name}")
+      elb.register_instances_with_load_balancer(:instances => instances, :load_balancer_name => "#{name}") unless instances.empty?
     end
     def detach_instances_if_necessary
       instances = parent.all_nodes.select {|a| !a.running? }.map {|a| {:instance_id => a.instance_id} }
@@ -57,13 +57,14 @@ module CloudProviders
     end
     def create_load_balancer!
       elb.delete_load_balancer(:load_balancer_name => name)
-      elb.create_load_balancer(
+      p elb.create_load_balancer(
         :availability_zones => parent.availability_zones,
         :load_balancer_name => real_name,
         :listeners => _listeners.map {|l| l.to_hash }
       )
     end
-    def create_health_check!(hc)
+    def configure_health_check!(hc)
+      # puts "Configuring health_check: #{hc.to_hash.inspect}"
       elb.configure_health_check(:health_check => hc.to_hash, :load_balancer_name => name)
     end
     def should_update_load_balancer?
@@ -132,10 +133,14 @@ module CloudProviders
   end
   class ElasticListener < Ec2
     default_options(
-      :internal_port => 8080,
+      :internal_port => 80,
       :external_port => 80,
       :protocol => "http"
     )
+    def initialize(name, init_opts={}, &block)
+      set_vars_from_options(name)
+      super
+    end
     
     def to_hash
       {:protocol => protocol, :load_balancer_port => external_port.to_s, :instance_port => internal_port.to_s}
