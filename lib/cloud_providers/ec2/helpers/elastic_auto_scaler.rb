@@ -75,7 +75,7 @@ module CloudProviders
       #     sleep 1
       #   end
       # end
-      progress_bar_until("Ensuring there are no scaling activities") do
+      progress_bar_until("") do
         reset!
         activities = scaling_activities.select {|a| !a[:complete] }
         running_nodes = cloud.nodes.select {|n| n.running? }
