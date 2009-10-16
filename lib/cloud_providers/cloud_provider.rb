@@ -52,7 +52,7 @@ module CloudProviders
     end
     
     def progress_bar_until(msg=nil, &block)
-      puts "#{msg}"
+      print "#{msg}"
       loop do
         if block.call
           break
@@ -62,7 +62,8 @@ module CloudProviders
           sleep 1
         end
       end
-      puts "OK"
+      print " OK"
+      puts ""
     end
         
   end

@@ -3,18 +3,34 @@ module CloudProviders
     default_options(
       :listeners => []
     )
-    def run
+    def create!
       if should_create_load_balancer?
         puts "-----> Creating ElasticLoadBalancer: #{name}"
         create_load_balancer!
-      elsif should_update_load_balancer?
+      end
+    end
+    
+    def run
+      create! # Just for now, while we migrate to 2 commands
+      if should_update_load_balancer?
         puts "Should update!"
         create_load_balancer!
       end
       _health_checks.each do |ck|
         configure_health_check!(ck)
       end
+      # Remove old nodes that are no longer alive
       detach_instances_if_necessary
+      # Try to unregister and reregister nodes that are out of service, perhaps it was just a setup bug that the setup took too long
+      out_of_service_node_listing = instance_healths.select {|a| a[:state] == "OutOfService" }.map {|a| {:instance_id => a[:instance_id]}}
+      reset!
+      out_of_service_nodes = nodes.select {|n| out_of_service_node_listing.include?(n.instance_id)}
+      unless out_of_service_nodes.empty?
+        puts "Uh oh. Out of service instance!: #{out_of_service_nodes.inspect}"
+        elb.deregister_instances_from_load_balancer(:load_balancer_name => name, :instances => out_of_service_nodes)
+        elb.register_instances_with_load_balancer(:load_balancer_name => name, :instances => out_of_service_nodes)
+      end
+      # Attach new nodes if there are any new nodes
       attach_instances_if_necessary
     end
     
@@ -47,12 +63,17 @@ module CloudProviders
     end
     public 
     def attach_instances_if_necessary
+      parent.reset!
       instances = parent.nodes.map {|a| {:instance_id => a.instance_id} }
       elb.register_instances_with_load_balancer(:instances => instances, :load_balancer_name => "#{name}") unless instances.empty?
     end
     def detach_instances_if_necessary
-      instances = parent.all_nodes.select {|a| !a.running? }.map {|a| {:instance_id => a.instance_id} }
-      elb.deregister_instances_from_load_balancer(:instances => instances, :load_balancer_name => "#{name}") unless instances.empty?
+      parent.reset!
+      begin
+        instances = parent.all_nodes.select {|a| !a.running? }.map {|a| {:instance_id => a.instance_id} }
+        elb.deregister_instances_from_load_balancer(:instances => instances, :load_balancer_name => "#{name}") unless instances.empty?
+      rescue Exception => e
+      end
     end
     def should_create_load_balancer?
       elastic_load_balancers.select {|lb| lb.name == name }.empty?
@@ -113,6 +134,21 @@ module CloudProviders
             }
           end
         }
+      end
+    end
+    def instance_healths
+      @instance_healths ||= 
+      begin
+        elb.describe_instance_health(:load_balancer_name => name).DescribeInstanceHealthResult.InstanceStates.member.map do |i|
+          {
+            :instance_id => i["InstanceId"],
+            :reason_code => i["ReasonCode"],
+            :state => i["State"],
+            :description => i["Description"]
+          }
+        end
+      rescue Exception => e
+        []
       end
     end
   end

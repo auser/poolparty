@@ -76,6 +76,14 @@ module CloudProviders
       :elastic_ips            => [],  # An array of the elastic ips
       :ebs_volumes            => []   # The volume id of an ebs volume # TODO: ensure this is consistent with :block_device_mappings
     )
+    
+    # Called when the create command is called on the cloud
+    def create!
+      [:_security_groups, :load_balancers].each do |type|
+        self.send(type).each {|ele| ele.create! }
+      end
+    end
+    
     def run
       puts "  for cloud: #{cloud.name}"
       puts "  minimum_instances: #{minimum_instances}"
@@ -112,6 +120,13 @@ module CloudProviders
           puts "    autoscaler: #{a.name}"
           puts "-----> The autoscaling groups will launch the instances"
           a.run
+          
+          progress_bar_until("Waiting for autoscaler to launch instances") do
+            reset!
+            running_nodes = nodes.select {|n| n.running? }
+            minimum_instances == running_nodes.size
+          end
+          reset!
         end
       end
       
