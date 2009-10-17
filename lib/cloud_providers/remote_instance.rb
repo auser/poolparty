@@ -61,6 +61,66 @@ module CloudProviders
     def default_keypair_path
       self.class.default_keypair_path
     end
+    
+    ## provide hash like methods to access and iterate over node attributes
+    def each
+      dsl_options.each{ |k,v| yield k,v }
+    end
+    
+    def [](k)
+      if dsl_options.has_key? k
+        dsl_options[k]
+      else
+        nil
+      end
+    end
+    
+    def []=(k,v)
+      dsl_options[k] = v
+    end
+    
+    def has_key?(key)
+      dsl_options.has_key?(key)
+    end
+    
+    def keys
+      dsl_options.keys
+    end
+       
+    def values
+      dsl_options.values
+    end
+    
+    def to_hash
+      dsl_options
+    end
+    ##end of hash like methods
+    
+    # Is this instance running?
+    def running?
+      !(status =~ /running/).nil?
+    end
+    # Is this instance pending?
+    def pending?
+      !(status =~ /pending/).nil?
+    end
+    # Is this instance terminating?
+    def terminating?
+      !(status =~ /shutting/).nil?
+    end
+    # Has this instance been terminated?
+    def terminated?
+      !(status =~ /terminated/).nil?
+    end
+    
+    # elapsed seconds since node launch time
+    def elapsed_runtime
+      Time.now - Time.parse(launch_time)
+    end
+    
+    def  inspect
+     pp (cloud ? to_hash.merge(:cloud=>cloud.name) : to_hash)
+    end
          
     private
     

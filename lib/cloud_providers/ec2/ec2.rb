@@ -89,21 +89,18 @@ module CloudProviders
       puts "  minimum_instances: #{minimum_instances}"
       puts "  maximum_instances: #{maximum_instances}"
       puts "  security_groups: #{security_groups.join(", ")}"
-      puts "  running on keypair: #{keypair}"
-      
+      puts "  running on keypair: #{keypair}"      
       unless _security_groups.empty?
         _security_groups.each do |sg|
           sg.run
         end
       end
-      
       unless load_balancers.empty?
         load_balancers.each do |lb|
           puts "    load balancer: #{lb.name}"
           lb.run
         end
-      end
-      
+      end     
       if autoscalers.empty?
         puts "---- live, running instances (#{nodes.size}) ----"
         if nodes.size < minimum_instances
@@ -128,8 +125,7 @@ module CloudProviders
           end
           reset!
         end
-      end
-      
+      end     
       # ELASTIC IPS
       unless _elastic_ips.empty?
         unused_elastic_ip_addresses = ElasticIp.unused_elastic_ips(self).map {|i| i.public_ip }
@@ -145,8 +141,6 @@ module CloudProviders
           reset!
         end
       end
-      
-      
     end
     
     def teardown
@@ -207,6 +201,7 @@ module CloudProviders
     end
     
     def all_nodes
+      #TODO: need to sort by launch time
       @nodes ||= describe_instances.select {|i| security_groups.include?(i.security_groups) }
     end
     
@@ -226,7 +221,8 @@ module CloudProviders
     def _describe_instances
       @_describe_instances ||= ec2.describe_instances.reservationSet.item.map do |r|
         r.instancesSet.item.map do |i|
-          Ec2Instance.new(i.merge(r.merge(:cloud => cloud)))
+          inst_options = i.merge(r.merge(:cloud => cloud)).merge(cloud.cloud_provider.dsl_options) #YUK
+          Ec2Instance.new(inst_options)
         end
       end.flatten
     end

@@ -12,9 +12,8 @@ module CloudProviders
       :availability_zones => []
     )
     
-    def initialize(raw_response={})
+    def initialize(raw_response={})      
       @raw_response = raw_response
-      
       self.instance_id = raw_response["instanceId"] rescue nil
       self.security_groups = raw_response.groupSet.item[0].groupId rescue nil
       self.image_id = raw_response["imageId"] rescue nil
@@ -41,14 +40,6 @@ module CloudProviders
       running?
     end
     
-    def running?
-      self.status == "running"
-    end
-    
-    def pending?
-      self.status == "pending"
-    end
-    
     def run!
       cloud_provider.ec2.run_instances(:image_id => image_id,
       :min_count => min_count,
@@ -67,6 +58,68 @@ module CloudProviders
       cloud_provider.reset!
     end
     def self.terminate!(hsh={}); new(hsh).terminate!; end
+    
+    # list of directories and files to exclude when bundling an instance
+    def rsync_excludes(array_of_abs_paths_to_exclude=nil)
+      array_of_abs_paths_to_exclude ||= %w( /sys
+            /proc
+            /dev/pts
+            /dev
+            /media
+            /mnt
+            /proc
+            /sys
+            /etc/ssh/ssh_host_*
+            /etc/ssh/moduli
+            /etc/udev/rules.d/70-persistent-net.rules
+            /etc/udev/rules.d/z25_persistent-net.rules
+            )
+      array_of_abs_paths_to_exclude.inject(''){|str, path| str<<"--exclude=#{path}"; str}
+    end
+
+    # create an image file and copy this instance to the image file.
+    def make_image(opts={})
+      opts = {:volume       => '/',
+              :size         => 6000,
+              :destination  => '/mnt/bundle',
+              :exclude      => nil
+              }.merge(opts)
+      image_file = File.join(opts[:destination], opts[:prefix] )
+      cmds = ["mkdir -p #{opts[:destination]}"]
+      cmds << "dd if=/dev/zero of=#{image_file} bs=1M count=#{opts[:size]}"
+      cmds << "mkfs.ext3 -F -j #{image_file}"
+      cmds << "mkdir -p #{opts[:destination]}/loop"
+      cmds << "mount -o loop #{image_file} #{opts[:destination]}/loop"
+      cmds << "rsync -ax #{rsync_excludes(opts[:exclude])} #{opts[:volume]}/ #{opts[:destination]}/loop/"
+      cmds << "if [[ -f /etc/init.d/ec2-ssh-host-key-gen ]]; then chmod u+x /etc/init.d/ec2-ssh-host-key-gen ;fi"
+      cmds << "umount #{opts[:destination]}/loop"
+      self.ssh cmds
+      image_file
+    end
+
+    # TODO: WIP:  bundle up the instance and register it as a new ami.
+    # An image of the running node will be creatd, or
+    # if a path to an image file on the remote node is given, that will be used
+    def bundle_and_register(img=nil, opts={})
+      opts = {:cert         => cert,
+              :bucket       => nil,
+              :prefix       => image_id,
+              :kernel       => kernel_id,
+              :ramdisk      => ramdisk_id,
+              :ec2cert      => cloud_cert
+              }.merge(opts)
+      raise "You must specify a bucket to bundle to" if opts[:bucket].nil?
+      scp ec2cert, "/mnt/bundle/"
+      scp cert, "/mnt/bundle/"
+      arch = self[:instanceType].match(/m1\.small|c1\.medium/) ? 'i386' : 'x86_64'
+      image = img ? img : make_image(opts) 
+      ssh "ec2-bundle-image #{image} -d /mnt/bundle -u #{self[:ownerId]} -k /mnt/bundle/pk-*.pem -c /tmp/cert-*.pem"
+      manifest = "/mnt/bundle/#{opts[:prefix]}.manifest.xml"
+      ssh "ec2-upload-bundle -a #{access_key} -s #{secret_access_key} -m #{manifest}"
+      ami_str = ssh "ec2-register-bundle"
+      ami = ami_str.grep(/ami-\w*/).first
+      return ami
+    end
         
   end
 end
