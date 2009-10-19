@@ -50,7 +50,7 @@ module CloudProviders
         _health_checks << HealthCheck.new(hsh)
       end
     end
-    
+        
     private
     def _listeners
       @_listeners ||= []
@@ -80,7 +80,7 @@ module CloudProviders
     end
     def create_load_balancer!
       elb.delete_load_balancer(:load_balancer_name => name)
-      p elb.create_load_balancer(
+      elb.create_load_balancer(
         :availability_zones => parent.availability_zones,
         :load_balancer_name => real_name,
         :listeners => _listeners.map {|l| l.to_hash }
@@ -108,6 +108,10 @@ module CloudProviders
           true
         end
       end
+    end
+    
+    def running_load_balancers
+      elastic_load_balancers.select {|lc| lc.name =~ /#{name}/ }.flatten
     end
     def elastic_load_balancers
       @elastic_load_balancers ||= elb.describe_load_balancers.DescribeLoadBalancersResult.LoadBalancerDescriptions.member.map do |lb|
