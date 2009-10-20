@@ -1,6 +1,6 @@
 module CloudProviders
 
-  class ElasticIp < Ec2
+  class ElasticIp < Ec2Helper
     
     default_options(:instance_id => nil, :public_ip => nil)
     

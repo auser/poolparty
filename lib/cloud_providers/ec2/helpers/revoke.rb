@@ -1,6 +1,6 @@
 module CloudProviders
 
-  class Revoke < Ec2
+  class Revoke < Ec2Helper
     default_options({
                 :protocol => "tcp",
                 :from_port => "22",

@@ -1,5 +1,5 @@
 module CloudProviders
-  class Authorize < Ec2
+  class Authorize < Ec2Helper
     default_options({
                 :protocol => "tcp",
                 :from_port => "22",

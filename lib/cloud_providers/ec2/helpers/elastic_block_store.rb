@@ -1,5 +1,5 @@
 module CloudProviders
-    class ElasticBlockStore < CloudProvider
+    class ElasticBlockStore < Ec2Helper
   
     def run
       warn "ElasticBlockStore unimplemented as of now"

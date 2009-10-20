@@ -1,5 +1,5 @@
 module CloudProviders
-  class ElasticAutoScaler < Ec2
+  class ElasticAutoScaler < Ec2Helper
     default_options(
       :cooldown => nil,
       :desired_capacity => nil

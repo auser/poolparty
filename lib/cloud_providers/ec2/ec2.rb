@@ -310,6 +310,7 @@ module CloudProviders
 end
 
 require "#{File.dirname(__FILE__)}/ec2_instance"
+require "#{File.dirname(__FILE__)}/helpers/ec2_helper"
 %w( security_group 
     authorize 
     elastic_auto_scaler 

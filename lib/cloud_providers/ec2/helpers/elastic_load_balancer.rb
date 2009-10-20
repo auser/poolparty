@@ -1,5 +1,5 @@
 module CloudProviders
-  class ElasticLoadBalancer < Ec2
+  class ElasticLoadBalancer < Ec2Helper
     default_options(
       :listeners => []
     )
@@ -156,7 +156,7 @@ module CloudProviders
       end
     end
   end
-  class HealthCheck < Ec2
+  class HealthCheck < Ec2Helper
     default_options(
       :target => "HTTP:80/",
       :interval => 5,
@@ -177,7 +177,7 @@ module CloudProviders
           :healthy_threshold => healthy_threshold.to_s}
     end
   end
-  class ElasticListener < Ec2
+  class ElasticListener < Ec2Helper
     default_options(
       :instance_port => 80,
       :load_balancer_port => 80,
