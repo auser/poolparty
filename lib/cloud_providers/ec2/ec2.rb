@@ -90,9 +90,9 @@ module CloudProviders
       puts "  maximum_instances: #{maximum_instances}"
       puts "  security_groups: #{security_groups.join(", ")}"
       puts "  running on keypair: #{keypair}"
-      if _security_groups.empty?
-        _security_groups << security_group(cloud.proper_name)
-      end
+      
+      security_group(cloud.proper_name) if _security_groups.empty?
+      
       _security_groups.each do |sg|
         sg.run
       end
