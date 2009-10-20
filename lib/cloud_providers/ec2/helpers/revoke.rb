@@ -14,7 +14,7 @@ module CloudProviders
                   :to_port => to_port,
                   :cidr_ip => network}
 
-      ec2.revoke_security_group_ingress(options)
+      ec2.revoke_security_group_ingress(options) rescue nil
     end
     
     alias :network :cidr_ip

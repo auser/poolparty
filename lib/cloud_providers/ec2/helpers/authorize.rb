@@ -17,7 +17,7 @@ module CloudProviders
         to_hash
       end
       
-      ec2.authorize_security_group_ingress(options)
+      ec2.authorize_security_group_ingress(options) rescue nil
     end
     
     def to_hash
