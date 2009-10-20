@@ -38,7 +38,7 @@ module CloudProviders
     end
     
     def method_missing(m,*a,&block)
-      if cloud.respond_to?(m)
+      if cloud && cloud.respond_to?(m)
         cloud.send(m,*a,&block)
       else
         super
@@ -46,6 +46,10 @@ module CloudProviders
     end
     
     private
+    
+    def proper_name
+      cloud.proper_name
+    end
     
     def cloud
       init_opts.has_key?(:cloud) ? init_opts[:cloud] : nil
