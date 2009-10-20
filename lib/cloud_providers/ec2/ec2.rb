@@ -89,8 +89,7 @@ module CloudProviders
       puts "  minimum_instances: #{minimum_instances}"
       puts "  maximum_instances: #{maximum_instances}"
       puts "  security_groups: #{security_groups.join(", ")}"
-      puts "  running on keypair: #{keypair}"      
-      create!
+      puts "  running on keypair: #{keypair}"
       if _security_groups.empty?
         _security_groups << SecurityGroup.new(cloud.proper_name)
       end
