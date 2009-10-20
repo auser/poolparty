@@ -91,7 +91,7 @@ module CloudProviders
       puts "  security_groups: #{security_groups.join(", ")}"
       puts "  running on keypair: #{keypair}"
       if _security_groups.empty?
-        _security_groups << SecurityGroup.new(cloud.proper_name)
+        _security_groups << security_group(cloud.proper_name)
       end
       _security_groups.each do |sg|
         sg.run
