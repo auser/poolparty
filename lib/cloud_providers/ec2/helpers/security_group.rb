@@ -6,13 +6,25 @@ module CloudProviders
       end
       current_security_groups = security_groups.map {|a| 
         a[:ip_permissions].map do |perm|
-          {
-            :group_name => a[:name],
-            :from_port => perm[:from_port], 
-            :to_port => perm[:to_port],
-            :cidr_ip => perm[:ip_ranges].map {|c| c[:cidrIp] }.first, # first for simplicity for now...
-            :ip_protocol => perm[:protocol]
-          }
+          if perm[:ip_ranges].size > 1
+            perm[:ip_ranges].map do |range|
+              {
+                :group_name => a[:name],
+                :from_port => perm[:from_port], 
+                :to_port => perm[:to_port],
+                :cidr_ip => range,
+                :ip_protocol => perm[:protocol]
+              }.flatten
+            end.flatten
+          else
+            {
+              :group_name => a[:name],
+              :from_port => perm[:from_port], 
+              :to_port => perm[:to_port],
+              :cidr_ip => perm[:ip_ranges].map {|c| c[:cidrIp] }.first, # first for simplicity for now...
+              :ip_protocol => perm[:protocol]
+            }
+          end
         end.flatten
       }.flatten
       
@@ -24,9 +36,10 @@ module CloudProviders
       end
       
       defined_security_group_hashes = authorizes.map {|a| a.to_hash}
+      
       current_security_groups.each do |hsh|
         unless defined_security_group_hashes.include?(hsh)
-          revoke(hsh)
+          revoke(hsh.merge(:protocol => hsh[:ip_protocol]))
         end
       end
       
