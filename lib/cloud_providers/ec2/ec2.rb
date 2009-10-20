@@ -79,9 +79,13 @@ module CloudProviders
     
     # Called when the create command is called on the cloud
     def create!
-      [:_security_groups, :load_balancers].each do |type|
+      [:security_groups, :load_balancers].each do |type|
         self.send(type).each {|ele| ele.create! }
       end
+    end
+    
+    def after_initialized
+      security_group(cloud.proper_name) if security_groups.empty?
     end
     
     def run
@@ -91,11 +95,10 @@ module CloudProviders
       puts "  security_groups: #{security_groups.join(", ")}"
       puts "  running on keypair: #{keypair}"
       
-      security_group(cloud.proper_name) if _security_groups.empty?
-      
-      _security_groups.each do |sg|
+      security_groups.each do |sg|
         sg.run
       end
+      
       unless load_balancers.empty?
         load_balancers.each do |lb|
           puts "    load balancer: #{lb.name}"
@@ -211,7 +214,11 @@ module CloudProviders
     
     def all_nodes
       #TODO: need to sort by launch time
-      @nodes ||= describe_instances.select {|i| security_groups.include?(i.security_groups) }
+      describe_instances.select {|i| security_group_names.include?(i.security_groups) }
+    end
+    
+    def security_group_names
+      @security_group_names ||= security_groups.map{|sg| sg.to_s}
     end
     
     # Describe instances
@@ -230,8 +237,7 @@ module CloudProviders
     def _describe_instances
       @_describe_instances ||= ec2.describe_instances.reservationSet.item.map do |r|
         r.instancesSet.item.map do |i|
-          inst_options = i.merge(r.merge(:cloud => cloud)).merge(cloud.cloud_provider.dsl_options) #YUK
-          Ec2Instance.new(inst_options)
+          Ec2Instance.new(i.merge(r.merge(sub_opts))) #.merge(dsl_options)
         end
       end.flatten
     end
@@ -247,7 +253,7 @@ module CloudProviders
       autoscalers << ElasticAutoScaler.new(name, sub_opts.merge(o), &block)
     end
     def security_group(name=proper_name, o={}, &block)
-      _security_groups << SecurityGroup.new(name, sub_opts.merge(o), &block)
+      security_groups << SecurityGroup.new(name, sub_opts.merge(o), &block)
     end
     def elastic_ip(*ips)
       ips.each {|ip| _elastic_ips << ip}
@@ -264,9 +270,6 @@ module CloudProviders
       @elb ||= AWS::ELB::Base.new( :access_key_id => access_key, :secret_access_key => secret_access_key )
     end
     def security_groups
-      _security_groups.map {|a| a.to_s }
-    end
-    def _security_groups
       @security_groups ||= []
     end
     def load_balancers

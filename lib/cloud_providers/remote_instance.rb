@@ -118,9 +118,9 @@ module CloudProviders
       Time.now - Time.parse(launch_time)
     end
     
-    def  inspect
-     pp (cloud ? to_hash.merge(:cloud=>cloud.name) : to_hash)
-    end
+    # def  inspect
+    #  pp (cloud ? to_hash.merge(:cloud=>cloud.name) : to_hash)
+    # end
          
     private
     

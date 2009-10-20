@@ -130,17 +130,30 @@ log_level         :info
     end
     def autoscalers;@autoscalers ||= {};end
     
+    def scaling_activities(name=nil)
+      autoscalers.eac
+    end
+    
     attr_reader :cloud_provider
     def using(provider_name, &block)
       return @cloud_provider if @cloud_provider
       @cloud_provider = "#{provider_name}".constantize(CloudProviders).send :new, provider_name, :cloud => self, &block
     end
+    
+    # proxy to cloud_provider
+    def method_missing(m,*a,&block)
+      if cloud_provider.respond_to?(m)
+        cloud_provider.send(m,*a,&block)
+      else
+        super
+      end
+    end
+    
+    # compile the cloud spec and execute the compiled system and remote calls
     def run
-      puts "  running on #{cloud_provider.class}"
-      
+      puts "  running on #{cloud_provider.class}"      
       setup_extras
       cloud_provider.run
-      
       unless chef_repo.nil?
         compile!
         bootstrap!
@@ -194,7 +207,6 @@ log_level         :info
     def reboot!
       orig_nodes = nodes
       num_nodes = nodes.size
-      
       if autoscalers.empty?
         puts <<-EOE
 No autoscalers defined
@@ -252,12 +264,32 @@ No autoscalers defined
       end
     end
     
+    # TODO: list of nodes needs to be consistentley sorted
     def nodes
       cloud_provider.nodes.select {|a| a.in_service? }
     end
     def all_nodes
       cloud_provider.all_nodes
     end
+    
+    # Run command/s on all nodes in the cloud.
+    # Returns a hash of instance_id=>result pairs
+    def cmd(commands, opts={})
+      opts[:key_by]= :instance_id unless opts[:key_by]
+      results = {}
+      threads = nodes.collect do |n|
+        puts "result for #{n.instance_id} ==> #{n.ssh(commands, opts)}"
+         Thread.new{ results[ n.send(opts[:key_by]) ] = n.ssh(commands, opts) }
+      end
+      threads.each{ |aThread| aThread.join }
+      results
+    end
+    
+    # Explicit proxies to cloud_provider methods
+    def run_instance(o={}); cloud_provider.run_instance(o);end
+    def terminate_instance!(o={}); cloud_provider.terminate_instance!(o);end
+    def describe_instances(o={}); cloud_provider.describe_instances(o);end
+    def describe_instance(o={}); cloud_provider.describe_instance(o);end
     
     def proper_name
       "#{parent.name}-#{name}"
