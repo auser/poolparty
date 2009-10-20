@@ -112,7 +112,15 @@ module CloudProviders
           contraction_count = nodes.size - maximum_instances
           puts "-----> contracting the cloud because the instances count exceeds the maximum_instances by #{contraction_count}"
           contract_by(contraction_count)
-        end        
+        end
+        
+        progress_bar_until("Waiting for the instances to be launched") do
+          reset!
+          running_nodes = nodes.select {|n| n.running? }
+          minimum_instances == running_nodes.size
+        end
+        reset!
+        
       else
         autoscalers.each do |a|
           puts "    autoscaler: #{a.name}"
