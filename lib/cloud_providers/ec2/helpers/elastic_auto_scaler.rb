@@ -183,7 +183,6 @@ module CloudProviders
         differences = known.map do |k|
           hsh = {
             :min_size => minimum_instances.to_s, :max_size => maximum_instances.to_s,
-            :load_balancer_names => load_balancers, 
             :availability_zones => availability_zones,
             :launch_configuration_name => old_launch_configuration_name
           }
@@ -192,7 +191,6 @@ module CloudProviders
           t = hsh.diff(k, :cooldown,
                           :min_size,
                           :max_size, 
-                          :load_balancer_names, 
                           :availability_zones, 
                           :launch_configuration_name)
           t.empty? ? nil : t
