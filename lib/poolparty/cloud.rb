@@ -28,6 +28,12 @@ module PoolParty
       cloud_provider.send :generate_keypair, proper_name
       Keypair.new(proper_name, extra_paths)
     end
+    
+    def after_initialized
+      security_group if security_groups.empty?
+      setup_extras
+    end
+    
     public
     def instances(arg)
       case arg
@@ -78,14 +84,12 @@ module PoolParty
     def build_tmp_dir
       base_directory = tmp_path/"etc"/"chef"
       puts "Copying the chef-repo into the base directory from #{chef_repo}"
-      FileUtils.mkdir_p base_directory/"roles"
-      
+      FileUtils.mkdir_p base_directory/"roles"   
       if File.directory?(chef_repo)
         FileUtils.cp_r chef_repo, base_directory 
       end
       puts "Creating the dna.json"
       chef_attributes.to_dna [], base_directory/"dna.json", {:run_list => ["role[#{name}]"]}
-      
       write_solo_dot_rb
       write_chef_role_json tmp_path/"etc"/"chef"/"roles/#{name}.json"
     end
@@ -130,8 +134,13 @@ log_level         :info
     end
     def autoscalers;@autoscalers ||= {};end
     
+    def security_group(name=proper_name, o={}, &block)
+      security_groups[name] = [name, o, block]
+    end
+    def security_groups; @security_groups ||= {};end
+    
     def scaling_activities(name=nil)
-      autoscalers.eac
+      autoscalers.each{|as| as.describe_scaling_activities}
     end
     
     attr_reader :cloud_provider
@@ -167,7 +176,11 @@ log_level         :info
       autoscalers.each do |as_name, as|
         cloud_provider.autoscale(*as)
       end
+      security_groups.each do |sg_name, sg|
+        cloud_provider.security_group(*sg)
+      end
     end
+    
     
     # TODO: Incomplete and needs testing
     # Shutdown and delete the load_balancers, auto_scaling_groups, launch_configurations,

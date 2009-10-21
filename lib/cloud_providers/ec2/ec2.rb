@@ -90,10 +90,7 @@ module CloudProviders
       puts "  maximum_instances: #{maximum_instances}"
       puts "  security_groups: #{security_groups.join(", ")}"
       puts "  running on keypair: #{keypair}"
-      
-      # TODO: Put this in after_initialized
-      _security_groups << SecurityGroup.new(cloud.proper_name) if _security_groups.empty?
-      
+            
       _security_groups.each do |sg|
         sg.run
       end
@@ -212,6 +209,7 @@ module CloudProviders
     
     def all_nodes
       #TODO: need to sort by launch time
+      # 
       @nodes ||= describe_instances.select {|i| security_groups.include?(i.security_groups) }
     end
     
@@ -221,20 +219,13 @@ module CloudProviders
     #   with the id given will be returned
     #   if not given, details for all instances will be returned
     def describe_instances(id=nil)
-      id ?  ec2.describe_instances(:instance_id => id) : _describe_instances
-    end
-    
-    # Gather the descriptions of the instances and instantiate an Ec2Instance
-    # object. 
-    # @params none
-    # @return [Array]
-    def _describe_instances
-      @_describe_instances ||= ec2.describe_instances.reservationSet.item.map do |r|
+      @describe_instances = ec2.describe_instances.reservationSet.item.map do |r|
         r.instancesSet.item.map do |i|
-          inst_options = i.merge(r.merge(:cloud => cloud)).merge(cloud.cloud_provider.dsl_options) #YUK
+          inst_options = i.merge(r.merge(:cloud => cloud)).merge(cloud.cloud_provider.dsl_options)
           Ec2Instance.new(inst_options)
         end
       end.flatten
+      # id.nil? ? @describe_instances : @describe_instances.select {|a| a.instance_id == id }.first
     end
     
     # Extras!
@@ -247,7 +238,8 @@ module CloudProviders
       name, o, block = *arr
       autoscalers << ElasticAutoScaler.new(name, sub_opts.merge(o), &block)
     end
-    def security_group(name=proper_name, o={}, &block)
+    def security_group(*arr)
+      name, o, block = *arr
       _security_groups << SecurityGroup.new(name, sub_opts.merge(o), &block)
     end
     def elastic_ip(*ips)
@@ -279,7 +271,7 @@ module CloudProviders
     
     # Clear the cache
     def reset!
-      @nodes = @_describe_instances = nil
+      @nodes = @describe_instances = nil
     end
     
     private
