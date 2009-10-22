@@ -16,14 +16,11 @@ pool "poolpartytest" do
     end
     
     using :ec2 do
-      
       elastic_ip "174.129.218.49", "174.129.204.191"
-      
       user_data <<-EOE
 #!/bin/bash -x
 echo "New User Data! ho."    
       EOE
-  
       instances 1
     end
   end

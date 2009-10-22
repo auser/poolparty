@@ -3,7 +3,7 @@ module CloudProviders
         
     def run
       if should_create_security_group?
-        create_security_group! rescue nil
+        create_security_group!
       end
       current_security_groups = security_groups.map {|a| 
         a[:ip_permissions].map do |perm|
