@@ -94,6 +94,7 @@ module CloudProviders
       _security_groups.each do |sg|
         sg.run
       end
+      
       unless load_balancers.empty?
         load_balancers.each do |lb|
           puts "    load balancer: #{lb.name}"
@@ -118,7 +119,13 @@ module CloudProviders
           minimum_instances == running_nodes.size
         end
         reset!
-        
+        progress_bar_until("Waiting for the instances to be accessible by ssh") do
+          running_nodes = nodes.select {|n| n.running? }
+          accessible_count = running_nodes.map do |node|
+            node.accessible?
+          end.size
+          accessible_count == running_nodes.size
+        end
       else
         autoscalers.each do |a|
           puts "    autoscaler: #{a.name}"
@@ -232,15 +239,15 @@ module CloudProviders
     
     def load_balancer(*arr)
       name, o, block = *arr
-      load_balancers << ElasticLoadBalancer.new(name, sub_opts.merge(o), &block)
+      load_balancers << ElasticLoadBalancer.new(name, sub_opts.merge(o || {}), &block)
     end
     def autoscale(*arr)
       name, o, block = *arr
-      autoscalers << ElasticAutoScaler.new(name, sub_opts.merge(o), &block)
+      autoscalers << ElasticAutoScaler.new(name, sub_opts.merge(o || {}), &block)
     end
     def security_group(*arr)
       name, o, block = *arr
-      _security_groups << SecurityGroup.new(name, sub_opts.merge(o), &block)
+      _security_groups << SecurityGroup.new(name, sub_opts.merge(o || {}), &block)
     end
     def elastic_ip(*ips)
       ips.each {|ip| _elastic_ips << ip}

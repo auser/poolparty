@@ -1,0 +1,107 @@
+# Config file for collectd(1).
+#
+# Some plugins need additional configuration and are disabled by default.
+# Please read collectd.conf(5) for details.
+#
+# You should also read /usr/share/doc/collectd/README.Debian.plugins before
+# enabling any more plugins.
+
+#Hostname "localhost"
+FQDNLookup true
+BaseDir "<%= @data_dir || "/var/lib/collectd"%>"
+#PluginDir "/usr/lib/collectd"
+#TypesDB "/usr/lib/collectd/types.db" "/etc/collectd/my_types.db"
+#Interval 10
+#ReadThreads 5
+
+#LoadPlugin logfile
+LoadPlugin syslog
+
+#<Plugin logfile>
+#	LogLevel "info"
+#	File STDOUT
+#	Timestamp true
+#</Plugin>
+
+<Plugin syslog>
+	LogLevel info
+</Plugin>
+
+#LoadPlugin apache
+#LoadPlugin apcups
+#LoadPlugin ascent
+LoadPlugin battery
+#LoadPlugin bind
+LoadPlugin cpu
+#LoadPlugin cpufreq
+#LoadPlugin csv
+#LoadPlugin curl
+#LoadPlugin dbi
+LoadPlugin df
+LoadPlugin disk
+#LoadPlugin dns
+#LoadPlugin email
+LoadPlugin entropy
+#LoadPlugin exec
+#LoadPlugin filecount
+#LoadPlugin hddtemp
+LoadPlugin interface
+#LoadPlugin ipmi
+#LoadPlugin iptables
+#LoadPlugin ipvs
+LoadPlugin irq
+#LoadPlugin libvirt
+LoadPlugin load
+#LoadPlugin mbmon
+#LoadPlugin memcached
+LoadPlugin memory
+#LoadPlugin multimeter
+#LoadPlugin mysql
+#LoadPlugin netlink
+<%= (@server ||@listen) ? "LoadPlugin network" :  "#LoadPlugin network" %>
+#LoadPlugin nfs
+#LoadPlugin nginx
+#LoadPlugin notify_desktop
+#LoadPlugin notify_email
+#LoadPlugin ntpd
+#LoadPlugin nut
+#LoadPlugin openvpn
+#LoadPlugin perl
+#LoadPlugin ping
+#LoadPlugin postgresql
+#LoadPlugin powerdns
+LoadPlugin processes
+LoadPlugin rrdtool
+#LoadPlugin sensors
+#LoadPlugin serial
+#LoadPlugin snmp
+LoadPlugin swap
+#LoadPlugin tail
+#LoadPlugin tcpconns
+#LoadPlugin teamspeak2
+#LoadPlugin thermal
+#LoadPlugin unixsock
+LoadPlugin users
+#LoadPlugin uuid
+#LoadPlugin vmem
+#LoadPlugin vserver
+#LoadPlugin wireless
+
+
+
+<Plugin network>
+#	Server "ff18::efc0:4a42" "25826"
+<%= "Listen '#{@listen}'" if @listen %>
+<%= "Server '#{@server}'" if @server %>
+#	Server "ff18::efc0:4a42" "25826"
+#	Server "239.192.74.66" "25826"
+#	Listen "ff18::efc0:4a42" "25826"
+#	Listen "239.192.74.66" "25826"
+#	TimeToLive "128"
+#	Forward false
+#	CacheFlush 1800
+</Plugin>
+
+
+Include "/etc/collectd/filters.conf"
+Include "/etc/collectd/thresholds.conf"

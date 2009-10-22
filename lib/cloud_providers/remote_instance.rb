@@ -28,6 +28,10 @@ module CloudProviders
     def after_initialized
     end
     
+    def accessible?
+      ping_port(public_ip, 22)
+    end
+    
     def rsync_dir(dir)
       rsync :source => dir/"*", :destination => "/"
     end

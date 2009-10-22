@@ -1,0 +1,9 @@
+= DESCRIPTION:
+	Install collectd http://collectd.org/.
+	Configure for stand alone, server or client
+= REQUIREMENTS:
+
+= ATTRIBUTES: 
+
+= USAGE:
+
