@@ -1,5 +1,6 @@
 module CloudProviders
   class SecurityGroup < Ec2Helper
+        
     def run
       if should_create_security_group?
         create_security_group! rescue nil
