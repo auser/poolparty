@@ -119,6 +119,29 @@ module CloudProviders
           minimum_instances == running_nodes.size
         end
         reset!
+        # ELASTIC IPS
+        unless _elastic_ips.empty?
+          unused_elastic_ip_addresses = ElasticIp.unused_elastic_ips(self).map {|i| i.public_ip }
+          used_elastic_ip_addresses = ElasticIp.elastic_ips(self).map {|i| i.public_ip }
+
+          elastic_ip_objects = ElasticIp.unused_elastic_ips(self).select {|ip_obj| _elastic_ips.include?(ip_obj.public_ip) }
+
+          assignee_nodes = nodes.select {|n| !ElasticIp.elastic_ips(self).include?(n.public_ip) }
+
+          elastic_ip_objects.each_with_index do |eip, idx|
+            # Only get the nodes that do not have elastic ips associated with them
+            begin
+              if assignee_nodes[idx]
+                puts "Assigning elastic ip: #{eip.public_ip} to node: #{assignee_nodes[idx].instance_id}"
+                ec2.associate_address(:instance_id => assignee_nodes[idx].instance_id, :public_ip => eip.public_ip)
+              end
+            rescue Exception => e
+              p [:error, e.inspect]
+            end
+            reset!
+          end
+        end
+        reset!
         progress_bar_until("Waiting for the instances to be accessible by ssh") do
           running_nodes = nodes.select {|n| n.running? }
           accessible_count = running_nodes.map do |node|
@@ -140,21 +163,6 @@ module CloudProviders
           reset!
         end
       end     
-      # ELASTIC IPS
-      unless _elastic_ips.empty?
-        unused_elastic_ip_addresses = ElasticIp.unused_elastic_ips(self).map {|i| i.public_ip }
-        used_elastic_ip_addresses = ElasticIp.elastic_ips(self).map {|i| i.public_ip }
-        
-        elastic_ip_objects = ElasticIp.unused_elastic_ips(self).select {|ip_obj| _elastic_ips.include?(ip_obj.public_ip) }
-        
-        assignee_nodes = nodes.select {|n| !ElasticIp.elastic_ips(self).include?(n.public_ip) }
-        
-        elastic_ip_objects.each_with_index do |eip, idx|
-          # Only get the nodes that do not have elastic ips associated with them
-          ec2.associate_address(:instance_id => assignee_nodes[idx].instance_id, :public_ip => eip.public_ip) rescue puts("Could not assign address as the instance is not up. Try running again once the instance is up")
-          reset!
-        end
-      end
     end
     
     def teardown

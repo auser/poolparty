@@ -161,7 +161,6 @@ log_level         :info
     # compile the cloud spec and execute the compiled system and remote calls
     def run
       puts "  running on #{cloud_provider.class}"      
-      setup_extras
       cloud_provider.run
       unless chef_repo.nil?
         compile!
