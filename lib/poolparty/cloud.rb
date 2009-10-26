@@ -30,6 +30,14 @@ module PoolParty
     end
     
     def after_initialized
+      raise PoolParty::PoolPartyError.create("NoCloudProvider", <<-EOE
+You did not specify a cloud provider in your clouds.rb. Make sure you have a block that looks like:
+
+  using :ec2 do
+    # Ec2 specific calls
+  end
+      EOE
+      ) unless cloud_provider
       security_group if security_groups.empty?
       setup_extras
     end
@@ -160,7 +168,7 @@ log_level         :info
     
     # compile the cloud spec and execute the compiled system and remote calls
     def run
-      puts "  running on #{cloud_provider.class}"      
+      puts "  running on #{cloud_provider.class}"
       cloud_provider.run
       unless chef_repo.nil?
         compile!
