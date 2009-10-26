@@ -116,7 +116,7 @@ module CloudProviders
         progress_bar_until("Waiting for the instances to be launched") do
           reset!
           running_nodes = nodes.select {|n| n.running? }
-          minimum_instances == running_nodes.size
+          running_nodes.size >= minimum_instances
         end
         reset!
         # ELASTIC IPS
@@ -176,7 +176,7 @@ module CloudProviders
       e = Ec2Instance.run!({
         :image_id => image_id,
         :min_count => num,
-        :max_count => maximum_instances,
+        :max_count => num,
         :key_name => keypair.basename,
         :security_groups => security_groups,
         :user_data => user_data,
