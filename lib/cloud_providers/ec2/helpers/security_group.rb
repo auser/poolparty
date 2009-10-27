@@ -11,7 +11,7 @@ module CloudProviders
             perm[:ip_ranges].map do |range|
               {
                 :group_name => a[:name],
-                :from_port => perm[:from_port], 
+                :from_port => perm[:from_port],
                 :to_port => perm[:to_port],
                 :cidr_ip => range,
                 :ip_protocol => perm[:protocol]

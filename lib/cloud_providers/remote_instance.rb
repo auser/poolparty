@@ -44,10 +44,10 @@ module CloudProviders
       unless chef_bootstrapped?
         ssh([
           'apt-get update',
-    			'apt-get autoremove -y',
-    			'apt-get install -y ruby ruby-dev rubygems git-core',
-    			'gem sources -a http://gems.opscode.com',
-    			'gem install chef ohai --no-rdoc --no-ri'
+          'apt-get autoremove -y',
+          'apt-get install -y ruby ruby-dev rubygems git-core',
+          'gem sources -a http://gems.opscode.com',
+          'gem install chef ohai --no-rdoc --no-ri'
         ])
       end
     end
@@ -122,12 +122,11 @@ module CloudProviders
       Time.now - Time.parse(launch_time)
     end
     
-    # def  inspect
-    #  pp (cloud ? to_hash.merge(:cloud=>cloud.name) : to_hash)
+    # def  to_s
+    #  (cloud ? to_hash.merge(:cloud=>cloud.name) : to_hash)
     # end
-         
-    private
     
+    private
     def cloud
       init_opts.has_key?(:cloud) ? init_opts[:cloud] : nil
     end
@@ -135,6 +134,6 @@ module CloudProviders
     def cloud_provider
       cloud.cloud_provider
     end
-        
+    
   end
 end

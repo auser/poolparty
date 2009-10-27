@@ -247,14 +247,17 @@ module CloudProviders
     
     def load_balancer(*arr)
       name, o, block = *arr
+      name = cloud.proper_name if name.nil? && cloud
       load_balancers << ElasticLoadBalancer.new(name, sub_opts.merge(o || {}), &block)
     end
     def autoscale(*arr)
       name, o, block = *arr
+      name = cloud.proper_name if name.nil? && cloud
       autoscalers << ElasticAutoScaler.new(name, sub_opts.merge(o || {}), &block)
     end
     def security_group(*arr)
       name, o, block = *arr
+      name = cloud.proper_name if name.nil? && cloud
       _security_groups << SecurityGroup.new(name, sub_opts.merge(o || {}), &block)
     end
     def elastic_ip(*ips)

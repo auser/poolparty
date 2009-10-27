@@ -11,6 +11,7 @@ pool "poolparty" do
     security_group do
       %w(22 80 443 8642).each {|port|  authorize :from_port => port, :to_port => port}
     end
+    autoscale
   end
   
 end

@@ -69,6 +69,6 @@ module CloudProviders
       print " OK"
       puts ""
     end
-        
+    
   end
 end
