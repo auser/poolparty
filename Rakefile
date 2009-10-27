@@ -8,8 +8,6 @@ end
 
 require 'config/jeweler' # setup gem configuration
 
-Dir['tasks/**/*.rake'].each { |rake| load rake }
-
 desc "Clean tmp directory"
 task :clean_tmp do |t|
   FileUtils.rm_rf("#{File.dirname(__FILE__)}/Manifest.txt") if ::File.exists?("#{File.dirname(__FILE__)}/Manifest.txt") 

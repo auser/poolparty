@@ -73,14 +73,25 @@ class Keypair
     yield full_filepath
   end
 
+  # Validation checks
+  # if all of the validations pass, the object is considered valid
+  # the validations are responsible for raising a PoolPartyError (StandardError)
+  def valid?
+    validations.each {|validation| self.send(validation.to_sym) }
+  end
+ 
   private
-
+ 
+  # Validations
+  def validations
+    [:keypair_found?, :has_proper_permissions?]
+  end
+  
   # Check the proper permissions
   def has_proper_permissions?
     perm_truth = [:readable?, :writable?, :executable?].map {|meth| File.send(meth, full_filepath)} == [true, true, false]
     raise StandardError.new("Your keypair #{full_filepath} has improper file permissions. Keypairs must be 0600 permission. Please chmod your keypair file and try again") unless perm_truth
-  end
-  
+  end  
   def keypair_found?
     if exists?
       true
