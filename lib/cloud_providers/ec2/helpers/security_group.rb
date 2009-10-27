@@ -43,6 +43,7 @@ module CloudProviders
           revoke(hsh.merge(:protocol => hsh[:ip_protocol]))
         end
       end
+      
       revokes.each {|r| r.run }
       authorizers.each {|a| a.run}
     end
