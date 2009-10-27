@@ -261,13 +261,17 @@ module CloudProviders
       ips.each {|ip| _elastic_ips << ip}
     end
         
-    # Grempe
+    # Proxy to the raw Grempe amazon-aws @ec2 instance
     def ec2
       @ec2 ||= AWS::EC2::Base.new( :access_key_id => access_key, :secret_access_key => secret_access_key )
     end
+    
+    # Proxy to the raw Grempe amazon-aws autoscaling instance
     def as
       @as = AWS::Autoscaling::Base.new( :access_key_id => access_key, :secret_access_key => secret_access_key )
     end
+    
+    # Proxy to the raw Grempe amazon-aws elastic_load_balancing instance
     def elb
       @elb ||= AWS::ELB::Base.new( :access_key_id => access_key, :secret_access_key => secret_access_key )
     end

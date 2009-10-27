@@ -33,13 +33,10 @@ module PoolParty
       raise PoolParty::PoolPartyError.create("NoCloudProvider", <<-EOE
 You did not specify a cloud provider in your clouds.rb. Make sure you have a block that looks like:
 
-  using :ec2 do
-    # Ec2 specific calls
-  end
+  using :ec2
       EOE
       ) unless cloud_provider
-      security_group if security_groups.empty?
-      setup_extras
+      security_group(proper_name) if security_groups.empty?
     end
     
     public
@@ -132,39 +129,30 @@ log_level         :info
     
     public
     
-    def load_balancer(name=proper_name, o={}, &block)
-      load_balancers[name] = [name, o, block]
-    end
-    def load_balancers;@load_balancers ||= {};end
-        
-    def autoscaler(name=proper_name, o={}, &block)
-      autoscalers[name] = [name, o, block]
-    end
-    def autoscalers;@autoscalers ||= {};end
-    
-    def security_group(name=proper_name, o={}, &block)
-      security_groups[name] = [name, o, block]
-    end
-    def security_groups; @security_groups ||= {};end
-    
-    def scaling_activities(name=nil)
-      autoscalers.each{|as| as.describe_scaling_activities}
-    end
-    
     attr_reader :cloud_provider
     def using(provider_name, &block)
       return @cloud_provider if @cloud_provider
-      @cloud_provider = "#{provider_name}".constantize(CloudProviders).send :new, provider_name, :cloud => self, &block
+      @cloud_provider = "#{provider_name}".constantize(CloudProviders).send(:new, provider_name, :cloud => self, &block)
+      # Decorate the cloud with the cloud_provider methods
+      (class << self; self; end).instance_variable_set('@cloud_provider', @cloud_provider)
+        (class << self; self; end).class_eval do
+          @cloud_provider.public_methods(false).each do |meth|
+            next if respond_to?(meth) || method_defined?(meth) || private_method_defined?(meth)
+            define_method meth.to_sym  do |*args|
+              @cloud_provider.send(meth, *args)
+            end 
+        end
+      end
     end
     
     # proxy to cloud_provider
-    def method_missing(m,*a,&block)
-      if cloud_provider.respond_to?(m)
-        cloud_provider.send(m,*a,&block)
-      else
-        super
-      end
-    end
+    # def method_missing(m,*a,&block)
+    #   if cloud_provider.respond_to?(m)
+    #     cloud_provider.send(m,*a,&block)
+    #   else
+    #     super
+    #   end
+    # end
     
     # compile the cloud spec and execute the compiled system and remote calls
     def run
@@ -175,19 +163,7 @@ log_level         :info
         bootstrap!
       end
     end
-    
-    def setup_extras
-      load_balancers.each do |lb_name, lb|
-        cloud_provider.load_balancer(*lb)
-      end
-      autoscalers.each do |as_name, as|
-        cloud_provider.autoscale(*as)
-      end
-      security_groups.each do |sg_name, sg|
-        cloud_provider.security_group(*sg)
-      end
-    end
-    
+        
     
     # TODO: Incomplete and needs testing
     # Shutdown and delete the load_balancers, auto_scaling_groups, launch_configurations,
