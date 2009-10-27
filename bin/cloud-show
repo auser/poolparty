@@ -29,12 +29,11 @@ EOS
         "Maximum instances:   #{cld.maximum_instances}",
         "Running on:          #{cld.cloud_provider.name}",
         "Keypair:             #{cld.keypair.basename}",
-        "Security group:      #{cld.cloud_provider.security_groups}",
+        "Security group:      #{cld.cloud_provider.security_group_names}",
         "Availability zones:  #{cld.cloud_provider.availability_zones}"
       ]
       
       if cld.load_balancers.size > 0
-        cld.setup_extras
         load_balancers = cld.cloud_provider.load_balancers.first.running_load_balancers.map {|a| a[:dns_name]}
         msg << "Load balancers:      #{load_balancers.join("\n\t\t\t")}"
       end

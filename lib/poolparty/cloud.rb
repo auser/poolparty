@@ -175,8 +175,7 @@ log_level         :info
       #   puts "! Deleting load_balaner #{lb_name}"
       #   lb.teardown
       # end
-      setup_extras
-      cloud_provider.load_balancers.each do |lb|
+      load_balancers.each do |lb|
         puts "-----> Tearing down load balancer: #{lb.name}"
         lb.teardown
       end
@@ -188,7 +187,7 @@ log_level         :info
           node.terminate!
         end
       else
-        cloud_provider.autoscalers.each do |a|
+        autoscalers.each do |a|
           puts "-----> Tearing down autoscaler #{a.name}"
           a.teardown
         end
