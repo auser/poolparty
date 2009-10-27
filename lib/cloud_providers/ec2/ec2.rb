@@ -231,7 +231,7 @@ module CloudProviders
     def all_nodes
       #TODO: need to sort by launch time
       # 
-      @nodes ||= describe_instances.select {|i| security_groups.include?(i.security_groups) }
+      @nodes ||= describe_instances.select {|i| security_group_names.include?(i.security_groups) }
     end
     
     # Describe instances

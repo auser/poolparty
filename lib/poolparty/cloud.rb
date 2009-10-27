@@ -263,10 +263,7 @@ No autoscalers defined
     def nodes
       cloud_provider.nodes.select {|a| a.in_service? }
     end
-    def all_nodes
-      cloud_provider.all_nodes
-    end
-    
+        
     # Run command/s on all nodes in the cloud.
     # Returns a hash of instance_id=>result pairs
     def cmd(commands, opts={})
