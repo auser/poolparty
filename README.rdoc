@@ -19,12 +19,9 @@ For instance, to start a basic cloud, let's write one:
 
   pool "demo" do
     cloud "app" do
-      instances 2..10
-      keypair "cloud_demo"
-      
       using :ec2
-      
-      has_file "/etc/motd", :content => "Hello from your cloud"
+      instances 1
+      keypair "cloud_demo"
     end
   end
   
