@@ -36,7 +36,7 @@ You did not specify a cloud provider in your clouds.rb. Make sure you have a blo
   using :ec2
       EOE
       ) unless cloud_provider
-      security_group(proper_name) if security_groups.empty?
+      security_group(proper_name, :authorize => {:from_port => 22, :to_port => 22}) if security_groups.empty?
     end
     
     public
