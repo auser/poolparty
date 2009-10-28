@@ -56,7 +56,7 @@
     </tr>
     <tr class="top-aligned-row">
       <td><strong>Last Update:</strong></td>
-      <td>Tue May 12 15:04:18 -0700 2009</td>
+      <td>Thu Aug 27 18:44:25 -0700 2009</td>
     </tr>
     </table>
   </div>
@@ -68,6 +68,37 @@
 
   <div id="contextContent">
 
+    <div id="description">
+      <h2>Directory</h2>
+<p>
+The directory resource is used to describe a directory that should be
+present on all of the instances.
+</p>
+<h2>Usage</h2>
+<pre>
+  has_directory 'name', :from =&gt; '/local/path', :to =&gt; '/path/on/server/'
+</pre>
+<p>
+The above example will place the contents of &#8217;/local/path&#8217; at
+&#8217;/path/on/server/name&#8216;
+</p>
+<pre>
+  has_directory(:name =&gt; '/etc/apache2')
+</pre>
+<h2>Options</h2>
+<ul>
+<li><tt>name</tt> Describe the location of the file with the name
+
+</li>
+<li><tt>mode</tt> Describe the mode of the file (default: 644)
+
+</li>
+<li><tt>owner</tt> The owner of the file (default: poolparty user)
+
+</li>
+</ul>
+
+    </div>
 
 
    </div>

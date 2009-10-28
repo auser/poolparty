@@ -56,7 +56,7 @@
     </tr>
     <tr class="top-aligned-row">
       <td><strong>Last Update:</strong></td>
-      <td>Tue May 12 15:04:18 -0700 2009</td>
+      <td>Thu Aug 27 18:44:25 -0700 2009</td>
     </tr>
     </table>
   </div>
@@ -68,6 +68,54 @@
 
   <div id="contextContent">
 
+    <div id="description">
+      <h2>Cron</h2>
+<p>
+The cron resource will set cron jobs at the intervals you set
+</p>
+<h2>Usage</h2>
+<pre>
+  has_cron(:name =&gt; '...') do
+    # More options.
+    # This block is optional
+  end
+</pre>
+<h2>Options</h2>
+<ul>
+<li><tt>name</tt> The name of the cronjob
+
+</li>
+<li><tt>user</tt> The users who owns the cronjob
+
+</li>
+<li><tt>command</tt> The cronjob command to run
+
+</li>
+<li><tt>minute</tt> Set the minute of the cronjob
+
+</li>
+<li><tt>hour</tt> Set the hour of the cronjob
+
+</li>
+<li><tt>month</tt> Set the month of the cronjob
+
+</li>
+<li><tt>monthday</tt> Set the day of the month of the cronjob
+
+</li>
+<li><tt>weekday</tt> Set the weekday of the cronjob, in 0-6 format, where 0 is
+Sunday
+
+</li>
+</ul>
+<h2>Example</h2>
+<pre>
+  has_cron(:name =&gt; &quot;report mailer&quot;, :minute =&gt; &quot;5&quot;, :hour =&gt; &quot;0&quot;, :weekday =&gt; 1) do
+    command &quot;/bin/sh /home/user/email_reports.sh&quot;
+  end
+</pre>
+
+    </div>
 
 
    </div>

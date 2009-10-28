@@ -43,13 +43,11 @@
       </div>
       <div id='content'>
         <h2>Examples</h2>
+        <!-- %p -->
+        <!-- Example: -->
+        <!-- ~file_to_code("basic.rb") -->
         <p>
-          We've created a git repo containing a number of working and tested examples:
-          <a href="http://github.com/auser/poolparty-examples/tree/master">http://github.com/auser/poolparty-examples/tree/master</a>
-        </p>
-        <p>
-          Example:
-          <script src='http://gist.github.com/69121.js'></script>
+          <pre class="blackboard">pool <span class="String"><span class="String">&quot;</span>my_twitter<span class="String">&quot;</span></span> <span class="Keyword">do  </span>&#x000A;  cloud <span class="String"><span class="String">&quot;</span>app<span class="String">&quot;</span></span> <span class="Keyword">do</span>&#x000A;    using <span class="Constant"><span class="Constant">:</span>ec2</span>&#x000A;    instances <span class="Constant">1</span>..<span class="Constant">4</span>&#x000A;    image_id <span class="String"><span class="String">&quot;</span>ami-ccf615a5<span class="String">&quot;</span></span> <span class="Comment"><span class="Comment">#</span>alestic jaunty</span>&#x000A;    availability_zones [<span class="String"><span class="String">'</span>us-east-1c<span class="String">'</span></span>]&#x000A;    security_group <span class="Keyword">do</span>&#x000A;      <span class="String"><span class="String">%w(</span>22 80<span class="String">)</span></span>.<span class="Entity">each</span> {|<span class="Variable">port</span>|  authorize <span class="Constant"><span class="Constant">:</span>from_port</span> =&gt; port, <span class="Constant"><span class="Constant">:</span>to_port</span> =&gt; port}&#x000A;    <span class="Keyword">end</span>&#x000A;    autoscale&#x000A;  <span class="Keyword">end</span>&#x000A;  &#x000A;  cloud <span class="String"><span class="String">&quot;</span>database<span class="String">&quot;</span></span> <span class="Keyword">do</span>&#x000A;    using <span class="Constant"><span class="Constant">:</span>ec2</span>&#x000A;    instances <span class="Constant">1</span>..<span class="Constant">4</span>&#x000A;    image_id <span class="String"><span class="String">&quot;</span>ami-ccf615a5<span class="String">&quot;</span></span> <span class="Comment"><span class="Comment">#</span>alestic jaunty</span>&#x000A;    availability_zones [<span class="String"><span class="String">'</span>us-east-1a<span class="String">'</span></span>]&#x000A;    security_group <span class="Keyword">do</span>&#x000A;      <span class="String"><span class="String">%w(</span>22 80<span class="String">)</span></span>.<span class="Entity">each</span> {|<span class="Variable">port</span>|  authorize <span class="Constant"><span class="Constant">:</span>from_port</span> =&gt; port, <span class="Constant"><span class="Constant">:</span>to_port</span> =&gt; port}&#x000A;    <span class="Keyword">end</span>&#x000A;  <span class="Keyword">end</span>&#x000A;  &#x000A;<span class="Keyword">end</span>&#x000A;</pre>
         </p>
       </div>
       <div id='footer'>

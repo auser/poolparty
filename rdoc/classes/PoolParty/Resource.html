@@ -1,0 +1,1020 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Class: PoolParty::Resource</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+    <div id="classHeader">
+        <table class="header-table">
+        <tr class="top-aligned-row">
+          <td><strong>Class</strong></td>
+          <td class="class-name-in-header">PoolParty::Resource</td>
+        </tr>
+        <tr class="top-aligned-row">
+            <td><strong>In:</strong></td>
+            <td>
+                <a href="../../files/lib/poolparty/resource_rb.html">
+                lib/poolparty/resource.rb
+                </a>
+        <br />
+            </td>
+        </tr>
+
+        <tr class="top-aligned-row">
+            <td><strong>Parent:</strong></td>
+            <td>
+                <a href="Base.html">
+                Base
+               </a>
+            </td>
+        </tr>
+        </table>
+    </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+
+
+   </div>
+
+    <div id="method-list">
+      <h3 class="section-bar">Methods</h3>
+
+      <div class="name-list">
+      <a href="#M000262">after_compile</a>&nbsp;&nbsp;
+      <a href="#M000263">after_loaded</a>&nbsp;&nbsp;
+      <a href="#M000261">before_compile</a>&nbsp;&nbsp;
+      <a href="#M000268">case_of</a>&nbsp;&nbsp;
+      <a href="#M000266">cloud</a>&nbsp;&nbsp;
+      <a href="#M000250">compile</a>&nbsp;&nbsp;
+      <a href="#M000270">define_resource</a>&nbsp;&nbsp;
+      <a href="#M000269">define_resource_methods</a>&nbsp;&nbsp;
+      <a href="#M000274">defined</a>&nbsp;&nbsp;
+      <a href="#M000275">defined_resources</a>&nbsp;&nbsp;
+      <a href="#M000260">does_not_exist!</a>&nbsp;&nbsp;
+      <a href="#M000257">exists</a>&nbsp;&nbsp;
+      <a href="#M000259">exists!</a>&nbsp;&nbsp;
+      <a href="#M000258">exists?</a>&nbsp;&nbsp;
+      <a href="#M000265">has_method_name</a>&nbsp;&nbsp;
+      <a href="#M000264">has_method_name</a>&nbsp;&nbsp;
+      <a href="#M000271">inherited</a>&nbsp;&nbsp;
+      <a href="#M000272">method_defined!</a>&nbsp;&nbsp;
+      <a href="#M000273">method_defined?</a>&nbsp;&nbsp;
+      <a href="#M000249">new</a>&nbsp;&nbsp;
+      <a href="#M000255">not_if</a>&nbsp;&nbsp;
+      <a href="#M000252">notifies</a>&nbsp;&nbsp;
+      <a href="#M000256">only_if</a>&nbsp;&nbsp;
+      <a href="#M000267">pool</a>&nbsp;&nbsp;
+      <a href="#M000251">print_to_chef</a>&nbsp;&nbsp;
+      <a href="#M000276">print_variable</a>&nbsp;&nbsp;
+      <a href="#M000254">requires</a>&nbsp;&nbsp;
+      <a href="#M000253">subscribes</a>&nbsp;&nbsp;
+      </div>
+    </div>
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+
+
+
+
+    <div id="attribute-list">
+      <h3 class="section-bar">Attributes</h3>
+
+      <div class="name-list">
+        <table>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">exists</td>
+          <td class="context-item-value">&nbsp;[RW]&nbsp;</td>
+          <td class="context-item-desc"></td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">graph_index</td>
+          <td class="context-item-value">&nbsp;[RW]&nbsp;</td>
+          <td class="context-item-desc"></td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">meta_not_if</td>
+          <td class="context-item-value">&nbsp;[RW]&nbsp;</td>
+          <td class="context-item-desc"></td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">meta_notifies</td>
+          <td class="context-item-value">&nbsp;[RW]&nbsp;</td>
+          <td class="context-item-desc"></td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">meta_only_if</td>
+          <td class="context-item-value">&nbsp;[RW]&nbsp;</td>
+          <td class="context-item-desc"></td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">meta_subscribes</td>
+          <td class="context-item-value">&nbsp;[RW]&nbsp;</td>
+          <td class="context-item-desc"></td>
+        </tr>
+        </table>
+      </div>
+    </div>
+      
+
+
+    <!-- if method_list -->
+    <div id="methods">
+      <h3 class="section-bar">Public Class methods</h3>
+
+      <div id="method-M000270" class="method-detail">
+        <a name="M000270"></a>
+
+        <div class="method-heading">
+          <a href="#M000270" class="method-signature">
+          <span class="method-name">define_resource</span><span class="method-args">(res)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Define the resource on the base class so it&#8216;s available across all <a
+href="../PoolParty.html">PoolParty</a> classes that use <a
+href="Base.html">Base</a>
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000270-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000270-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/resource.rb, line 177</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">define_resource</span>(<span class="ruby-identifier">res</span>)
+      <span class="ruby-constant">Base</span>.<span class="ruby-identifier">class_eval</span> <span class="ruby-value str">&quot;def has_\#{res.has_method_name}(a={},b={},e=true, &amp;block)\nobj = \#{res}.new(a,b,e,&amp;block)\nresources &lt;&lt; obj\nobj\nend\ndef does_not_have_\#{res.has_method_name}(a={},b={},&amp;block)\nobj = has_\#{res.has_method_name}(a,b,false,&amp;block)\nobj\nend\ndef \#{res.has_method_name}s\nall_resources.select {|q| q if q.class.to_s =~ /\#{res.to_s.classify}/ }\nend\nalias :\#{res.has_method_name} :has_\#{res.has_method_name}\n\ndef get_\#{res.has_method_name}(nm)\n{:\#{res.has_method_name} =&gt; nm}\nend\n&quot;</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000269" class="method-detail">
+        <a name="M000269"></a>
+
+        <div class="method-heading">
+          <a href="#M000269" class="method-signature">
+          <span class="method-name">define_resource_methods</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Define the resource methods for all the resources sublcassed by <a
+href="Resource.html">Resource</a> this creates the methods:
+</p>
+<pre>
+  has_&lt;resource_name&gt;
+  does_not_have_&lt;resource_name&gt;
+  &lt;resource_name&gt;
+</pre>
+<p>
+on the <a href="Base.html">Base</a> class The has_ method calls <a
+href="Resource.html#M000259">exists!</a> on the resource, then places the
+resource in the ordered_resources array
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000269-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000269-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/resource.rb, line 163</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">define_resource_methods</span>
+      <span class="ruby-identifier">defined_resources</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">res</span><span class="ruby-operator">|</span>
+        <span class="ruby-keyword kw">next</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">res</span>.<span class="ruby-identifier">method_defined?</span>
+        <span class="ruby-identifier">ddputs</span> <span class="ruby-node">&quot;Defining resource: #{res} as #{res.has_method_name}&quot;</span>
+        <span class="ruby-identifier">define_resource</span>(<span class="ruby-identifier">res</span>)
+        <span class="ruby-identifier">res</span>.<span class="ruby-identifier">method_defined!</span>
+        <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">res</span>.<span class="ruby-identifier">defined_resources</span>.<span class="ruby-identifier">empty?</span>
+          <span class="ruby-identifier">res</span>.<span class="ruby-identifier">define_resource_methods</span>
+        <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000274" class="method-detail">
+        <a name="M000274"></a>
+
+        <div class="method-heading">
+          <a href="#M000274" class="method-signature">
+          <span class="method-name">defined</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000274-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000274-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/resource.rb, line 216</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">defined</span>
+      <span class="ruby-ivar">@defined</span> <span class="ruby-operator">||=</span> <span class="ruby-keyword kw">false</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000275" class="method-detail">
+        <a name="M000275"></a>
+
+        <div class="method-heading">
+          <a href="#M000275" class="method-signature">
+          <span class="method-name">defined_resources</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Storage of <a href="Resource.html#M000274">defined</a> resources that are
+stored when the subclass&#8216;d resource is subclassed
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000275-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000275-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/resource.rb, line 222</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">defined_resources</span>
+      <span class="ruby-ivar">@defined_resources</span> <span class="ruby-operator">||=</span> []
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000264" class="method-detail">
+        <a name="M000264"></a>
+
+        <div class="method-heading">
+          <a href="#M000264" class="method-signature">
+          <span class="method-name">has_method_name</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Singleton methods has_name The has_ and does_not_have methods names are
+considered, unless otherwise denoted to be the top level class name for
+instance
+</p>
+<pre>
+  class Tengo &lt; Resource
+  end
+</pre>
+<p>
+the has_ method will be
+</p>
+<pre>
+  has_tengo
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000264-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000264-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/resource.rb, line 132</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">has_method_name</span>
+      <span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">top_level_class</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000271" class="method-detail">
+        <a name="M000271"></a>
+
+        <div class="method-heading">
+          <a href="#M000271" class="method-signature">
+          <span class="method-name">inherited</span><span class="method-args">(subclass)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+When a <a href="Resource.html#M000249">new</a> resource is created, the
+class gets stored as a <a href="Resource.html#M000274">defined</a> resource
+in the <a href="Resource.html#M000275">defined_resources</a> resources
+class variable
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000271-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000271-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/resource.rb, line 202</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">inherited</span>(<span class="ruby-identifier">subclass</span>)
+      <span class="ruby-identifier">defined_resources</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">subclass</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000272" class="method-detail">
+        <a name="M000272"></a>
+
+        <div class="method-heading">
+          <a href="#M000272" class="method-signature">
+          <span class="method-name">method_defined!</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Note that this resource has been <a
+href="Resource.html#M000274">defined</a> already
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000272-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000272-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/resource.rb, line 207</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">method_defined!</span>
+      <span class="ruby-ivar">@defined</span> = <span class="ruby-keyword kw">true</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000273" class="method-detail">
+        <a name="M000273"></a>
+
+        <div class="method-heading">
+          <a href="#M000273" class="method-signature">
+          <span class="method-name">method_defined?</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Query if this resource has been <a href="Resource.html#M000274">defined</a>
+yet
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000273-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000273-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/resource.rb, line 212</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">method_defined?</span>
+      <span class="ruby-identifier">defined</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000249" class="method-detail">
+        <a name="M000249"></a>
+
+        <div class="method-heading">
+          <a href="#M000249" class="method-signature">
+          <span class="method-name">new</span><span class="method-args">(opts={}, extra_opts={}, exists=true, &amp;block)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000249-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000249-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/resource.rb, line 15</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">opts</span>={}, <span class="ruby-identifier">extra_opts</span>={}, <span class="ruby-identifier">exists</span>=<span class="ruby-keyword kw">true</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+      <span class="ruby-ivar">@exists</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">exists</span>
+      <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">opts</span>, <span class="ruby-identifier">extra_opts</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+      <span class="ruby-identifier">valid?</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="section-bar">Public Instance methods</h3>
+
+      <div id="method-M000262" class="method-detail">
+        <a name="M000262"></a>
+
+        <div class="method-heading">
+          <a href="#M000262" class="method-signature">
+          <span class="method-name">after_compile</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000262-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000262-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/resource.rb, line 115</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">after_compile</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000263" class="method-detail">
+        <a name="M000263"></a>
+
+        <div class="method-heading">
+          <a href="#M000263" class="method-signature">
+          <span class="method-name">after_loaded</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000263-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000263-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/resource.rb, line 118</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">after_loaded</span>
+      <span class="ruby-identifier">requires</span> <span class="ruby-identifier">parent</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">parent</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">parent</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">PoolParty</span><span class="ruby-operator">::</span><span class="ruby-constant">Cloud</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">parent</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">PoolParty</span><span class="ruby-operator">::</span><span class="ruby-constant">Pool</span>)
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000261" class="method-detail">
+        <a name="M000261"></a>
+
+        <div class="method-heading">
+          <a href="#M000261" class="method-signature">
+          <span class="method-name">before_compile</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+CALLBACKS
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000261-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000261-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/resource.rb, line 112</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">before_compile</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000268" class="method-detail">
+        <a name="M000268"></a>
+
+        <div class="method-heading">
+          <a href="#M000268" class="method-signature">
+          <span class="method-name">case_of</span><span class="method-args">(var, &amp;block)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000268-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000268-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/resource.rb, line 152</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">case_of</span>(<span class="ruby-identifier">var</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000266" class="method-detail">
+        <a name="M000266"></a>
+
+        <div class="method-heading">
+          <a href="#M000266" class="method-signature">
+          <span class="method-name">cloud</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+DSL METHODS Get access to the <a href="Resource.html#M000266">cloud</a>
+that contains this resource
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000266-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000266-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/resource.rb, line 144</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cloud</span>
+      <span class="ruby-identifier">get_parent_of_class</span>(<span class="ruby-constant">PoolParty</span><span class="ruby-operator">::</span><span class="ruby-constant">Cloud</span>)
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000250" class="method-detail">
+        <a name="M000250"></a>
+
+        <div class="method-heading">
+          <a href="#M000250" class="method-signature">
+          <span class="method-name">compile</span><span class="method-args">(compiler)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Dependency resolver methods
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000250-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000250-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/resource.rb, line 22</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">compile</span>(<span class="ruby-identifier">compiler</span>)
+      <span class="ruby-ivar">@compiler</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">PoolParty</span>.<span class="ruby-identifier">module_eval</span>(<span class="ruby-node">&quot;DependencyResolvers::#{compiler.to_s.capitalize}&quot;</span>)
+      <span class="ruby-ivar">@compiler</span>.<span class="ruby-identifier">compile</span>(<span class="ruby-keyword kw">self</span>)
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000260" class="method-detail">
+        <a name="M000260"></a>
+
+        <div class="method-heading">
+          <a href="#M000260" class="method-signature">
+          <span class="method-name">does_not_exist!</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+The resource should be removed or deleted from the remote system
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000260-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000260-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/resource.rb, line 106</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">does_not_exist!</span>
+      <span class="ruby-ivar">@exists</span> = <span class="ruby-keyword kw">false</span>
+      <span class="ruby-keyword kw">false</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000257" class="method-detail">
+        <a name="M000257"></a>
+
+        <div class="method-heading">
+          <a href="#M000257" class="method-signature">
+          <span class="method-name">exists</span><span class="method-args">(n=nil)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Should this resource exist on the remote systems which is a lookup of the
+instance variable on the instance of the resource The default is that the
+resource DOES exist
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000257-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000257-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/resource.rb, line 93</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">exists</span>(<span class="ruby-identifier">n</span>=<span class="ruby-keyword kw">nil</span>)
+      <span class="ruby-ivar">@exists</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000259" class="method-detail">
+        <a name="M000259"></a>
+
+        <div class="method-heading">
+          <a href="#M000259" class="method-signature">
+          <span class="method-name">exists!</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+The resource <a href="Resource.html#M000257">exists</a> in the output and
+should be created on the remote systems.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000259-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000259-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/resource.rb, line 100</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">exists!</span>
+      <span class="ruby-ivar">@exists</span> = <span class="ruby-keyword kw">true</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000258" class="method-detail">
+        <a name="M000258"></a>
+
+        <div class="method-heading">
+          <span class="method-name">exists?</span><span class="method-args">(n=nil)</span>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Alias for <a href="Resource.html#M000257">exists</a>
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000265" class="method-detail">
+        <a name="M000265"></a>
+
+        <div class="method-heading">
+          <a href="#M000265" class="method-signature">
+          <span class="method-name">has_method_name</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+<a href="Resource.html#M000264">has_method_name</a> alias for the singleton
+method <a href="Resource.html#M000264">has_method_name</a> so that there is
+access to the <a href="Resource.html#M000264">has_method_name</a> on the
+instance
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000265-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000265-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/resource.rb, line 138</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">has_method_name</span>
+      <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">has_method_name</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000255" class="method-detail">
+        <a name="M000255"></a>
+
+        <div class="method-heading">
+          <a href="#M000255" class="method-signature">
+          <span class="method-name">not_if</span><span class="method-args">(code_str=nil, &amp;block)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Not if If a block is given with the <a
+href="Resource.html#M000255">not_if</a>, we assume it is a proc object so
+we grab the proc source code on both <a
+href="Resource.html#M000255">not_if</a> and <a
+href="Resource.html#M000256">only_if</a> code
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000255-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000255-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/resource.rb, line 80</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">not_if</span>(<span class="ruby-identifier">code_str</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+      <span class="ruby-ivar">@meta_not_if</span> = <span class="ruby-identifier">block</span> <span class="ruby-value">? </span>[<span class="ruby-identifier">block</span>.<span class="ruby-identifier">code</span>, <span class="ruby-identifier">:block</span>] <span class="ruby-operator">:</span> [<span class="ruby-identifier">code_str</span>, <span class="ruby-identifier">:string</span>]
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000252" class="method-detail">
+        <a name="M000252"></a>
+
+        <div class="method-heading">
+          <a href="#M000252" class="method-signature">
+          <span class="method-name">notifies</span><span class="method-args">(other_resources_hash, action_to_take=:reload)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+META FUNCTIONS ALL RESOURCES HAVE THESE METHODS AVAILABLE
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000252-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000252-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/resource.rb, line 43</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">notifies</span>(<span class="ruby-identifier">other_resources_hash</span>, <span class="ruby-identifier">action_to_take</span>=<span class="ruby-identifier">:reload</span>)
+      <span class="ruby-ivar">@meta_notifies</span> <span class="ruby-operator">||=</span> {}
+      <span class="ruby-identifier">other_resources_hash</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span>
+        <span class="ruby-identifier">notifies_array</span> = (<span class="ruby-ivar">@meta_notifies</span>[<span class="ruby-identifier">k</span>] <span class="ruby-operator">||=</span> [])
+        <span class="ruby-identifier">notifies_array</span> <span class="ruby-operator">&lt;&lt;</span> [<span class="ruby-identifier">v</span>, <span class="ruby-identifier">action_to_take</span>] <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">notifies_array</span>.<span class="ruby-identifier">include?</span>([<span class="ruby-identifier">v</span>, <span class="ruby-identifier">action_to_take</span>])
+        <span class="ruby-comment cmt"># Implicitly add a require</span>
+        <span class="ruby-comment cmt"># requires(k =&gt; v)</span>
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000256" class="method-detail">
+        <a name="M000256"></a>
+
+        <div class="method-heading">
+          <a href="#M000256" class="method-signature">
+          <span class="method-name">only_if</span><span class="method-args">(code_str=nil, &amp;block)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Run only if
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000256-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000256-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/resource.rb, line 85</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">only_if</span>(<span class="ruby-identifier">code_str</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+      <span class="ruby-ivar">@meta_only_if</span> = <span class="ruby-identifier">block</span> <span class="ruby-value">? </span>[<span class="ruby-identifier">block</span>.<span class="ruby-identifier">code</span>, <span class="ruby-identifier">:block</span>] <span class="ruby-operator">:</span> [<span class="ruby-identifier">code_str</span>, <span class="ruby-identifier">:string</span>]
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000267" class="method-detail">
+        <a name="M000267"></a>
+
+        <div class="method-heading">
+          <a href="#M000267" class="method-signature">
+          <span class="method-name">pool</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Get access to the <a href="Resource.html#M000267">pool</a> that contains
+this resource
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000267-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000267-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/resource.rb, line 148</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">pool</span>
+      <span class="ruby-identifier">get_parent_of_class</span>(<span class="ruby-constant">PoolParty</span><span class="ruby-operator">::</span><span class="ruby-constant">Pool</span>)
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000251" class="method-detail">
+        <a name="M000251"></a>
+
+        <div class="method-heading">
+          <a href="#M000251" class="method-signature">
+          <span class="method-name">print_to_chef</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+<a href="Resource.html#M000251">print_to_chef</a> When the dependency
+resolver comes through and resolves this resource, it will come through and
+check if it resolves to chef by checking it it responds to the
+</p>
+<pre>
+ print_to_chef
+</pre>
+<p>
+method. The contents of the method are considered an ERB template and will
+be rendered as an ERB template.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000251-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000251-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/resource.rb, line 34</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">print_to_chef</span>
+      <span class="ruby-value str">&quot;# &lt;%= has_method_name %&gt;\n&quot;</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000276" class="method-detail">
+        <a name="M000276"></a>
+
+        <div class="method-heading">
+          <a href="#M000276" class="method-signature">
+          <span class="method-name">print_variable</span><span class="method-args">(obj)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+HELPERS FOR RESOURCES Print objects This helper takes an object and prints
+them out with as expected Case of:
+</p>
+<pre>
+  Number:
+    Integer of the format \d\d\d      =&gt; 0644
+    Else                              =&gt; 79
+  String
+    String of the format \d\d\d\d     =&gt; 0655
+    String of the format \d\d\d       =&gt; 0644
+    Else                              =&gt; &quot;String&quot;
+  Proc object
+    Calls the proc object
+  Array
+    All                               =&gt; [ &quot;a&quot;, &quot;b&quot; ]
+  Symbol
+    All                               =&gt; :a
+  Hash
+    All                               =&gt; :a =&gt; &quot;a&quot;, :b =&gt; [&quot;b&quot;]
+  Object
+    All                               =&gt; object
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000276-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000276-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/resource.rb, line 247</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">print_variable</span>(<span class="ruby-identifier">obj</span>)
+      <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">obj</span>
+      <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Fixnum</span>
+        <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">obj</span>
+        <span class="ruby-keyword kw">when</span> <span class="ruby-regexp re">/^\d{3}$/</span>
+          <span class="ruby-node">&quot;0#{obj.to_i}&quot;</span>
+        <span class="ruby-keyword kw">else</span>
+          <span class="ruby-node">&quot;#{obj.to_i}&quot;</span>
+        <span class="ruby-keyword kw">end</span>        
+      <span class="ruby-keyword kw">when</span> <span class="ruby-constant">String</span>
+        <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">obj</span>
+        <span class="ruby-keyword kw">when</span> <span class="ruby-regexp re">/^\d{4}$/</span>
+          <span class="ruby-node">&quot;#{obj}&quot;</span>
+        <span class="ruby-keyword kw">when</span> <span class="ruby-regexp re">/^\d{3}$/</span>
+          <span class="ruby-node">&quot;0#{obj}&quot;</span>
+        <span class="ruby-keyword kw">else</span>
+          <span class="ruby-node">&quot;\&quot;#{obj}\&quot;&quot;</span>
+        <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Proc</span>
+        <span class="ruby-identifier">obj</span>.<span class="ruby-identifier">call</span> <span class="ruby-comment cmt"># eh</span>
+      <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Array</span>
+        <span class="ruby-node">&quot;[ #{obj.map {|e| print_variable(e) }.reject {|a| a.nil? || a.empty? }.join(&quot;, &quot;)} ]&quot;</span>
+      <span class="ruby-keyword kw">when</span> <span class="ruby-keyword kw">nil</span>
+        <span class="ruby-keyword kw">nil</span>
+      <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Symbol</span>
+        <span class="ruby-node">&quot;:#{obj}&quot;</span>
+      <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Hash</span>
+        <span class="ruby-node">&quot;#{obj.map {|k,v| &quot;:#{k} =&gt; #{print_variable(v)}&quot; unless v == obj }.compact.join(&quot;,\n&quot;)}&quot;</span>
+      <span class="ruby-keyword kw">else</span>
+        <span class="ruby-node">&quot;#{obj}&quot;</span>
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000254" class="method-detail">
+        <a name="M000254"></a>
+
+        <div class="method-heading">
+          <a href="#M000254" class="method-signature">
+          <span class="method-name">requires</span><span class="method-args">(other_resources_obj)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Requires
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000254-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000254-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/resource.rb, line 62</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">requires</span>(<span class="ruby-identifier">other_resources_obj</span>)
+      <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">other_resources_obj</span>
+      <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Hash</span>
+        <span class="ruby-identifier">other_resources_obj</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span>
+          <span class="ruby-identifier">dependencies</span>[<span class="ruby-identifier">k</span>] <span class="ruby-operator">||=</span> []
+          <span class="ruby-identifier">dependencies</span>[<span class="ruby-identifier">k</span>] <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">v</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">dependencies</span>[<span class="ruby-identifier">k</span>].<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">v</span>)
+        <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Array</span>
+        <span class="ruby-identifier">other_resources_obj</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">obj</span><span class="ruby-operator">|</span>
+          <span class="ruby-identifier">requires</span>(<span class="ruby-identifier">obj</span>)
+        <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000253" class="method-detail">
+        <a name="M000253"></a>
+
+        <div class="method-heading">
+          <a href="#M000253" class="method-signature">
+          <span class="method-name">subscribes</span><span class="method-args">(other_resources_hash, action_to_take=:reload, at_time=:delayed)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000253-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000253-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/resource.rb, line 53</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">subscribes</span>(<span class="ruby-identifier">other_resources_hash</span>, <span class="ruby-identifier">action_to_take</span>=<span class="ruby-identifier">:reload</span>, <span class="ruby-identifier">at_time</span>=<span class="ruby-identifier">:delayed</span>)
+      <span class="ruby-ivar">@meta_subscribes</span> <span class="ruby-operator">||=</span> {}
+      <span class="ruby-identifier">other_resources_hash</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span>
+        <span class="ruby-identifier">subscribes_array</span> = (<span class="ruby-ivar">@meta_subscribes</span>[<span class="ruby-identifier">k</span>] <span class="ruby-operator">||=</span> [])
+        <span class="ruby-identifier">subscribes_array</span> <span class="ruby-operator">&lt;&lt;</span> [<span class="ruby-identifier">v</span>, <span class="ruby-identifier">action_to_take</span>, <span class="ruby-identifier">at_time</span>] <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">subscribes_array</span>.<span class="ruby-identifier">include?</span>([<span class="ruby-identifier">v</span>, <span class="ruby-identifier">action_to_take</span>, <span class="ruby-identifier">at_time</span>])
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>

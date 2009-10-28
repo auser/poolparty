@@ -48,34 +48,21 @@
         </p>
         <h2>Cloud</h2>
         <p>
-          All of the cloud binaries are labeled with
-        </p>
-        <p>
-          -n [name of the cloud]
+          All of the cloud binaries have the following switches available
+          <pre class="blackboard"><span class="Keyword">-</span>n [name of the cloud]&#x000A;<span class="Keyword">-</span>c [path<span class="Keyword">/</span>to<span class="Keyword">/</span>clouds.<span class="Entity">rb</span>]&#x000A;<span class="Keyword">-</span>h&#x000A;</pre>
         </p>
         <div class='binary_list'>
           <ul>
-            <li><div class='title'><a>List</a></div><div class='desc'>List the current running and pending instances for the cloud</div></li>
-            <li><div class='title'><a>Start</a></div><div class='desc'>Start the cloud</div></li>
-            <li><div class='title'><a>Ssh</a></div><div class='desc'>Ssh into the cloud (specify the node with -i [defaults to the master 0])</div></li>
-            <li><div class='title'><a>Terminate</a></div><div class='desc'>Terminate the cloud</div></li>
-            <li><div class='title'><a>Refresh</a></div><div class='desc'>Reconfigure the cloud quickly. Useful if you want the cloud to refresh from the configuration</div></li>
-            <li><div class='title'><a>Provision</a></div><div class='desc'>Provision the cloud. When you make a change to your manifest, use this to push the changes to the cloud</div></li>
-            <li><div class='title'><a>Osxcopy</a></div><div class='desc'>Copy the master ip to the pasteboard (on osx)</div></li>
-            <li><div class='title'><a>Maintain</a></div><div class='desc'>Run the maintenance script to ensure the cloud is maintaining status</div></li>
-            <li><div class='title'><a>Expand</a></div><div class='desc'>Expands the cloud if it can expand</div></li>
-            <li><div class='title'><a>Contract</a></div><div class='desc'>Contract the cloud if it can contract</div></li>
-            <li><div class='title'><a>Configure</a></div><div class='desc'>Configure the cloud</div></li>
-            <li><div class='title'><a>Add-keypair</a></div><div class='desc'>Helper method to create a new keypair for the instances</div></li>
-          </ul>
-        </div>
-        <h2>Pool</h2>
-        <div class='binary_list'>
-          <ul>
-            <li><div class='title'><a>Console</a></div><div class='desc'>PoolParty console (useful for testing)</div></li>
-            <li><div class='title'><a>Describe</a></div><div class='desc'>Describe the pool</div></li>
-            <li><div class='title'><a>List</a></div><div class='desc'>List the pools</div></li>
-            <li><div class='title'><a>Spec</a></div><div class='desc'>Spec generator</div></li>
+            <li><div class='title'><a>List</a></div><pre class='desc'>List the current running and pending instances for the cloud</pre></li>
+            <li><div class='title'><a>Start</a></div><pre class='desc'>Start the cloud</pre></li>
+            <li><div class='title'><a>Ssh</a></div><pre class='desc'>Ssh into the cloud (specify the node with -i [defaults to the master 0])</pre></li>
+            <li><div class='title'><a>Terminate</a></div><pre class='desc'>Terminate the cloud</pre></li>
+            <li><div class='title'><a>Expand</a></div><pre class='desc'>Expands the cloud if it can expand</pre></li>
+            <li><div class='title'><a>Contract</a></div><pre class='desc'>Contract the cloud if it can contract</pre></li>
+            <li><div class='title'><a>Configure</a></div><pre class='desc'>Configure the cloud</pre></li>
+            <li><div class='title'><a>Console</a></div><pre class='desc'>Give an irb console with the clouds.rb loaded</pre></li>
+            <li><div class='title'><a>Reboot</a></div><pre class='desc'>Restart each node in the cloud (one-by-one) to refresh the user-data and the nodes</pre></li>
+            <li><div class='title'><a>Show</a></div><pre class='desc'>Describe the cloud setup</pre></li>
           </ul>
         </div>
       </div>

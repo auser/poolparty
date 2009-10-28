@@ -65,9 +65,7 @@
         <tr class="top-aligned-row">
             <td><strong>Parent:</strong></td>
             <td>
-                <a href="Resource.html">
                 Resource
-               </a>
             </td>
         </tr>
         </table>
@@ -80,37 +78,6 @@
 
   <div id="contextContent">
 
-    <div id="description">
-      <h2><a href="Directory.html">Directory</a></h2>
-<p>
-The directory resource is used to describe a directory that should be <a
-href="Directory.html#M000360">present</a> on all of the instances.
-</p>
-<h2>Usage</h2>
-<pre>
-  has_directory 'name', :from =&gt; '/local/path', :to =&gt; '/path/on/server/'
-</pre>
-<p>
-The above example will place the contents of &#8217;/local/path&#8217; at
-&#8217;/path/on/server/name&#8216;
-</p>
-<pre>
-  has_directory(:name =&gt; '/etc/apache2')
-</pre>
-<h2>Options</h2>
-<ul>
-<li><tt>name</tt> Describe the location of the file with the name
-
-</li>
-<li><tt>mode</tt> Describe the mode of the file (default: 644)
-
-</li>
-<li><tt>owner</tt> The owner of the file (default: poolparty user)
-
-</li>
-</ul>
-
-    </div>
 
 
    </div>
@@ -119,7 +86,8 @@ The above example will place the contents of &#8217;/local/path&#8217; at
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000360">present</a>&nbsp;&nbsp;
+      <a href="#M000187">after_loaded</a>&nbsp;&nbsp;
+      <a href="#M000188">print_to_chef</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -141,23 +109,46 @@ The above example will place the contents of &#8217;/local/path&#8217; at
     <div id="methods">
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000360" class="method-detail">
-        <a name="M000360"></a>
+      <div id="method-M000187" class="method-detail">
+        <a name="M000187"></a>
 
         <div class="method-heading">
-          <a href="#M000360" class="method-signature">
-          <span class="method-name">present</span><span class="method-args">()</span>
+          <a href="#M000187" class="method-signature">
+          <span class="method-name">after_loaded</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000360-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000360-source">
+            onclick="toggleCode('M000187-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000187-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/resources/directory.rb, line 33</span>
-      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">present</span>
-        <span class="ruby-identifier">:create</span>
+<span class="ruby-comment cmt"># File lib/poolparty/resources/directory.rb, line 35</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">after_loaded</span>
+        <span class="ruby-identifier">requires</span> <span class="ruby-identifier">get_user</span>(<span class="ruby-identifier">owner</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">owner</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">owner</span> <span class="ruby-operator">!=</span> <span class="ruby-value str">&quot;root&quot;</span>
+      <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000188" class="method-detail">
+        <a name="M000188"></a>
+
+        <div class="method-heading">
+          <a href="#M000188" class="method-signature">
+          <span class="method-name">print_to_chef</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000188-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000188-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/resources/directory.rb, line 39</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">print_to_chef</span>
+        <span class="ruby-value str">&quot;directory \&quot;&lt;%= name %&gt;\&quot; do\naction :&lt;%= exists ? :create : :delete %&gt;\nrecursive &lt;%= print_variable(recursive) %&gt;\nmode &lt;%= print_variable(mode) %&gt;\nowner &lt;%= print_variable(owner) %&gt;\ngroup &lt;%= print_variable(group) %&gt;\nend\n&quot;</span>
       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>

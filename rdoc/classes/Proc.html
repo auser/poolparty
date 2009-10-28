@@ -55,8 +55,8 @@
         <tr class="top-aligned-row">
             <td><strong>In:</strong></td>
             <td>
-                <a href="../files/lib/poolparty/core/proc_rb.html">
-                lib/poolparty/core/proc.rb
+                <a href="../files/lib/core/proc_rb.html">
+                lib/core/proc.rb
                 </a>
         <br />
             </td>
@@ -88,7 +88,11 @@
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000056">to_ruby</a>&nbsp;&nbsp;
+      <a href="#M000046">code</a>&nbsp;&nbsp;
+      <a href="#M000050">proc_info</a>&nbsp;&nbsp;
+      <a href="#M000047">source</a>&nbsp;&nbsp;
+      <a href="#M000048">source_file</a>&nbsp;&nbsp;
+      <a href="#M000049">source_line_number</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -110,23 +114,159 @@
     <div id="methods">
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000056" class="method-detail">
-        <a name="M000056"></a>
+      <div id="method-M000046" class="method-detail">
+        <a name="M000046"></a>
 
         <div class="method-heading">
-          <a href="#M000056" class="method-signature">
-          <span class="method-name">to_ruby</span><span class="method-args">(opts={})</span>
+          <a href="#M000046" class="method-signature">
+          <span class="method-name">code</span><span class="method-args">(filename=source_file)</span>
           </a>
         </div>
       
         <div class="method-description">
+          <p>
+Get the <a href="Proc.html#M000046">code</a>, based on the inspect&#8216;s
+filename and line number start
+</p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000056-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000056-source">
+            onclick="toggleCode('M000046-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000046-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/core/proc.rb, line 4</span>
-  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_ruby</span>(<span class="ruby-identifier">opts</span>={})
-    <span class="ruby-constant">Ruby2Ruby</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">process</span>(<span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">to_sexp</span>).<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/proc \{/</span>, <span class="ruby-node">&quot;do \n#{opts.map {|k,v| &quot;#{k} \&quot;#{v}\&quot;&quot;}.join(&quot;\n&quot;)}\n&quot;</span>).<span class="ruby-identifier">sub</span>(<span class="ruby-regexp re">/\}/</span>, <span class="ruby-value str">&quot;\nend&quot;</span>)
+<span class="ruby-comment cmt"># File lib/core/proc.rb, line 4</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">code</span>(<span class="ruby-identifier">filename</span>=<span class="ruby-identifier">source_file</span>)
+    <span class="ruby-keyword kw">return</span> <span class="ruby-ivar">@code</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@code</span>
+    <span class="ruby-identifier">current_block_count</span> = <span class="ruby-value">1</span>
+    <span class="ruby-identifier">line_count</span> = <span class="ruby-value">0</span>
+    
+    <span class="ruby-identifier">source</span>(<span class="ruby-identifier">filename</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">line</span><span class="ruby-operator">|</span>
+      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">line</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/do(\W*?)$/</span>
+        <span class="ruby-identifier">current_block_count</span><span class="ruby-operator">+=</span><span class="ruby-value">1</span>
+      <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">line</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/end$/</span>
+        <span class="ruby-identifier">current_block_count</span><span class="ruby-operator">-=</span><span class="ruby-value">1</span>
+        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">current_block_count</span> <span class="ruby-operator">==</span> <span class="ruby-value">0</span>
+          <span class="ruby-keyword kw">return</span> <span class="ruby-ivar">@code</span> = <span class="ruby-identifier">source</span>(<span class="ruby-identifier">filename</span>)[<span class="ruby-value">0</span><span class="ruby-operator">..</span>(<span class="ruby-identifier">line_count</span><span class="ruby-operator">-</span><span class="ruby-value">1</span>)].<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot;\n&quot;</span>)
+        <span class="ruby-keyword kw">end</span>        
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-identifier">line_count</span><span class="ruby-operator">+=</span><span class="ruby-value">1</span>
+    <span class="ruby-keyword kw">end</span>    
+  <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000050" class="method-detail">
+        <a name="M000050"></a>
+
+        <div class="method-heading">
+          <a href="#M000050" class="method-signature">
+          <span class="method-name">proc_info</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Grab the <a href="Proc.html#M000047">source</a> location from the inspect
+method
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000050-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000050-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/core/proc.rb, line 46</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">proc_info</span>
+    <span class="ruby-keyword kw">return</span> <span class="ruby-ivar">@proc_info</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@proc_info</span>
+    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">md</span> = <span class="ruby-regexp re">/^#&lt;Proc:0x[0-9A-Fa-f]+@(.+):(\d+)&gt;$/</span>.<span class="ruby-identifier">match</span>(<span class="ruby-identifier">inspect</span>)
+      <span class="ruby-identifier">filename</span>, <span class="ruby-identifier">line</span> = <span class="ruby-identifier">md</span>.<span class="ruby-identifier">captures</span>
+      <span class="ruby-ivar">@proc_info</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">filename</span>), <span class="ruby-identifier">line</span>.<span class="ruby-identifier">to_i</span>
+    <span class="ruby-keyword kw">end</span>
+    <span class="ruby-ivar">@proc_info</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000047" class="method-detail">
+        <a name="M000047"></a>
+
+        <div class="method-heading">
+          <a href="#M000047" class="method-signature">
+          <span class="method-name">source</span><span class="method-args">(filename = source_file, start_line = source_line_number)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Source
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000047-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000047-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/core/proc.rb, line 23</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">source</span>(<span class="ruby-identifier">filename</span> = <span class="ruby-identifier">source_file</span>, <span class="ruby-identifier">start_line</span> = <span class="ruby-identifier">source_line_number</span>)
+    <span class="ruby-ivar">@source</span> <span class="ruby-operator">||=</span> <span class="ruby-keyword kw">if</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">exist?</span>(<span class="ruby-identifier">filename</span>)
+      <span class="ruby-keyword kw">begin</span>
+        <span class="ruby-identifier">open</span>(<span class="ruby-identifier">filename</span>).<span class="ruby-identifier">read</span>.<span class="ruby-identifier">split</span>(<span class="ruby-value str">&quot;\n&quot;</span>)[<span class="ruby-identifier">start_line</span> <span class="ruby-operator">..</span> <span class="ruby-value">-1</span>]
+      <span class="ruby-keyword kw">rescue</span>
+        <span class="ruby-keyword kw">nil</span>
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-identifier">raise</span> <span class="ruby-constant">StandardError</span>.<span class="ruby-identifier">new</span>(<span class="ruby-node">&quot;Cannot find the source file for #{self.inspect}&quot;</span>)
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000048" class="method-detail">
+        <a name="M000048"></a>
+
+        <div class="method-heading">
+          <a href="#M000048" class="method-signature">
+          <span class="method-name">source_file</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Grab the location of the proc by filename
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000048-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000048-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/core/proc.rb, line 36</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">source_file</span>
+    <span class="ruby-ivar">@source_file</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">proc_info</span>[<span class="ruby-value">0</span>]
+  <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000049" class="method-detail">
+        <a name="M000049"></a>
+
+        <div class="method-heading">
+          <a href="#M000049" class="method-signature">
+          <span class="method-name">source_line_number</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Grab the line number in the <a href="Proc.html#M000048">source_file</a>
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000049-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000049-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/core/proc.rb, line 41</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">source_line_number</span>
+    <span class="ruby-ivar">@source_line_number</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">proc_info</span>[<span class="ruby-value">1</span>]
   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>

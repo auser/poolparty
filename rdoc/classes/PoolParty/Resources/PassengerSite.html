@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Class: PoolParty::Resources::PassengerSite</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+    <div id="classHeader">
+        <table class="header-table">
+        <tr class="top-aligned-row">
+          <td><strong>Class</strong></td>
+          <td class="class-name-in-header">PoolParty::Resources::PassengerSite</td>
+        </tr>
+        <tr class="top-aligned-row">
+            <td><strong>In:</strong></td>
+            <td>
+                <a href="../../../files/lib/poolparty/plugins/apache2/passenger_site_rb.html">
+                lib/poolparty/plugins/apache2/passenger_site.rb
+                </a>
+        <br />
+            </td>
+        </tr>
+
+        <tr class="top-aligned-row">
+            <td><strong>Parent:</strong></td>
+            <td>
+                Resource
+            </td>
+        </tr>
+        </table>
+    </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+    <div id="description">
+      <p>
+Usage:
+</p>
+<p>
+passenger_site do end
+</p>
+
+    </div>
+
+
+   </div>
+
+    <div id="method-list">
+      <h3 class="section-bar">Methods</h3>
+
+      <div class="name-list">
+      <a href="#M000166">after_loaded</a>&nbsp;&nbsp;
+      <a href="#M000168">has_site_directory</a>&nbsp;&nbsp;
+      <a href="#M000167">passenger_entry</a>&nbsp;&nbsp;
+      <a href="#M000169">site_directory</a>&nbsp;&nbsp;
+      </div>
+    </div>
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+
+
+
+
+      
+
+
+    <!-- if method_list -->
+    <div id="methods">
+      <h3 class="section-bar">Public Instance methods</h3>
+
+      <div id="method-M000166" class="method-detail">
+        <a name="M000166"></a>
+
+        <div class="method-heading">
+          <a href="#M000166" class="method-signature">
+          <span class="method-name">after_loaded</span><span class="method-args">(opts={})</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000166-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000166-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/plugins/apache2/passenger_site.rb, line 18</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">after_loaded</span>(<span class="ruby-identifier">opts</span>={})
+        <span class="ruby-identifier">enable_passenger</span>
+        <span class="ruby-identifier">port</span> <span class="ruby-value str">&quot;80&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">port</span>
+        
+        <span class="ruby-identifier">has_directory</span>(<span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">dir</span>,                 <span class="ruby-identifier">:owner</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">www_user</span>, <span class="ruby-identifier">:mode</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'0744'</span>)
+        <span class="ruby-identifier">has_directory</span>(<span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;#{site_directory}&quot;</span>, <span class="ruby-identifier">:owner</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">www_user</span>, <span class="ruby-identifier">:mode</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'0744'</span>)
+        <span class="ruby-identifier">has_site_directory</span> <span class="ruby-value str">'logs'</span>
+        
+        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">dsl_options</span>[<span class="ruby-identifier">:deploy_dirs</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:with_deployment_directories</span>]
+          <span class="ruby-identifier">has_site_directory</span> <span class="ruby-value str">&quot;shared&quot;</span>
+          <span class="ruby-identifier">has_site_directory</span> <span class="ruby-value str">&quot;shared/public&quot;</span>
+          <span class="ruby-identifier">has_site_directory</span> <span class="ruby-value str">&quot;shared/config&quot;</span>
+          <span class="ruby-identifier">has_site_directory</span> <span class="ruby-value str">&quot;shared/log&quot;</span>
+          <span class="ruby-identifier">has_site_directory</span> <span class="ruby-value str">&quot;releases&quot;</span>
+          <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">exists?</span>(<span class="ruby-node">&quot;#{dir}/#{name}/current&quot;</span>)
+          
+          <span class="ruby-comment cmt"># setup an initial symlink so apache will start even if there have not been any deploys yet</span>
+            <span class="ruby-comment cmt">#has_site_directory &quot;releases/initial/public&quot;</span>
+            <span class="ruby-comment cmt">#FIXME  the following line is chef specific.  It will fail with puppet</span>
+            <span class="ruby-identifier">has_link</span>(<span class="ruby-identifier">:target_file</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;#{dir}/#{name}/current&quot;</span>, <span class="ruby-identifier">:to</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;#{dir}/#{name}/releases/initial&quot;</span>)
+          <span class="ruby-keyword kw">end</span>
+          <span class="ruby-identifier">log_dir</span> = <span class="ruby-node">&quot;#{site_directory}/shared/log&quot;</span>
+          <span class="ruby-identifier">appended_path</span> <span class="ruby-value str">&quot;current&quot;</span>
+        
+        <span class="ruby-keyword kw">else</span>
+          <span class="ruby-identifier">log_dir</span> = <span class="ruby-node">&quot;#{site_directory}/log&quot;</span>
+        <span class="ruby-keyword kw">end</span>
+        
+        <span class="ruby-identifier">pass_entry</span> = <span class="ruby-value str">&quot;&lt;VirtualHost *:\#{port}&gt;\nServerName \#{name}\nDocumentRoot \#{site_directory}/public\nRailsEnv \#{environment}\nErrorLog \#{log_dir}/error_log\nCustomLog \#{log_dir}/access_log common\n&lt;/VirtualHost&gt;\n&quot;</span>
+        
+        <span class="ruby-identifier">passenger_entry</span>(<span class="ruby-identifier">pass_entry</span>)
+        
+        <span class="ruby-identifier">install_site</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">:no_file</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">true</span>) <span class="ruby-comment cmt"># we already created the file with #passenger_entry</span>
+      <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000168" class="method-detail">
+        <a name="M000168"></a>
+
+        <div class="method-heading">
+          <a href="#M000168" class="method-signature">
+          <span class="method-name">has_site_directory</span><span class="method-args">( dir_name='' , opts={})</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000168-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000168-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/plugins/apache2/passenger_site.rb, line 70</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">has_site_directory</span>( <span class="ruby-identifier">dir_name</span>=<span class="ruby-value str">''</span> , <span class="ruby-identifier">opts</span>={})
+        <span class="ruby-identifier">has_directory</span>({ <span class="ruby-identifier">:name</span>   =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;#{site_directory}/#{dir_name}&quot;</span>, 
+                        <span class="ruby-identifier">:owner</span>  =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">www_user</span>, 
+                        <span class="ruby-identifier">:mode</span>   =<span class="ruby-operator">&gt;</span><span class="ruby-value str">'0744'</span>
+                      }.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">opts</span>) )
+      <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000167" class="method-detail">
+        <a name="M000167"></a>
+
+        <div class="method-heading">
+          <a href="#M000167" class="method-signature">
+          <span class="method-name">passenger_entry</span><span class="method-args">(file)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000167-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000167-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/plugins/apache2/passenger_site.rb, line 62</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">passenger_entry</span>(<span class="ruby-identifier">file</span>)
+        <span class="ruby-keyword kw">if</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">file?</span>(<span class="ruby-identifier">file</span>)
+          <span class="ruby-identifier">has_file</span>({<span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;/etc/apache2/sites-available/#{name}&quot;</span>, <span class="ruby-identifier">:template</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">file</span>})
+        <span class="ruby-keyword kw">else</span>
+          <span class="ruby-identifier">has_file</span>({<span class="ruby-identifier">:content</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">file</span>, <span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;/etc/apache2/sites-available/#{name}&quot;</span> })
+        <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000169" class="method-detail">
+        <a name="M000169"></a>
+
+        <div class="method-heading">
+          <a href="#M000169" class="method-signature">
+          <span class="method-name">site_directory</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000169-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000169-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/plugins/apache2/passenger_site.rb, line 77</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">site_directory</span>
+        <span class="ruby-node">&quot;#{dir}/#{name}%s&quot;</span> <span class="ruby-operator">%</span> [<span class="ruby-identifier">appended_path</span> <span class="ruby-value">? </span><span class="ruby-value str">&quot;/&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">appended_path</span> <span class="ruby-operator">:</span> <span class="ruby-value str">&quot;&quot;</span>]
+      <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>

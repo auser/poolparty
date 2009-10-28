@@ -1,0 +1,416 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Class: PoolParty::Installer</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+    <div id="classHeader">
+        <table class="header-table">
+        <tr class="top-aligned-row">
+          <td><strong>Class</strong></td>
+          <td class="class-name-in-header">PoolParty::Installer</td>
+        </tr>
+        <tr class="top-aligned-row">
+            <td><strong>In:</strong></td>
+            <td>
+                <a href="../../files/lib/poolparty/installer_rb.html">
+                lib/poolparty/installer.rb
+                </a>
+        <br />
+            </td>
+        </tr>
+
+        <tr class="top-aligned-row">
+            <td><strong>Parent:</strong></td>
+            <td>
+                <a href="../Object.html">
+                Object
+               </a>
+            </td>
+        </tr>
+        </table>
+    </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+
+
+   </div>
+
+    <div id="method-list">
+      <h3 class="section-bar">Methods</h3>
+
+      <div class="name-list">
+      <a href="#M000330">all</a>&nbsp;&nbsp;
+      <a href="#M000323">closing_message</a>&nbsp;&nbsp;
+      <a href="#M000327">description</a>&nbsp;&nbsp;
+      <a href="#M000324">exit_msg</a>&nbsp;&nbsp;
+      <a href="#M000331">find_by_name</a>&nbsp;&nbsp;
+      <a href="#M000329">inherited</a>&nbsp;&nbsp;
+      <a href="#M000326">name</a>&nbsp;&nbsp;
+      <a href="#M000321">run</a>&nbsp;&nbsp;
+      <a href="#M000325">steps</a>&nbsp;&nbsp;
+      <a href="#M000328">to_s</a>&nbsp;&nbsp;
+      <a href="#M000322">welcome_message</a>&nbsp;&nbsp;
+      </div>
+    </div>
+
+  </div>
+
+
+    <!-- if includes -->
+    <div id="includes">
+      <h3 class="section-bar">Included Modules</h3>
+
+      <div id="includes-list">
+        <span class="include-name"><a href="Pinger.html">PoolParty::Pinger</a></span>
+        <span class="include-name"><a href="../Askable.html">Askable</a></span>
+      </div>
+    </div>
+
+    <div id="section">
+
+
+
+
+
+      
+
+
+    <!-- if method_list -->
+    <div id="methods">
+      <h3 class="section-bar">Public Class methods</h3>
+
+      <div id="method-M000330" class="method-detail">
+        <a name="M000330"></a>
+
+        <div class="method-heading">
+          <a href="#M000330" class="method-signature">
+          <span class="method-name">all</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000330-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000330-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/installer.rb, line 101</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">all</span>
+      <span class="ruby-ivar">@all</span> <span class="ruby-operator">||=</span> []
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000327" class="method-detail">
+        <a name="M000327"></a>
+
+        <div class="method-heading">
+          <a href="#M000327" class="method-signature">
+          <span class="method-name">description</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000327-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000327-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/installer.rb, line 90</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">description</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000331" class="method-detail">
+        <a name="M000331"></a>
+
+        <div class="method-heading">
+          <a href="#M000331" class="method-signature">
+          <span class="method-name">find_by_name</span><span class="method-args">(nm)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000331-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000331-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/installer.rb, line 105</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">find_by_name</span>(<span class="ruby-identifier">nm</span>)
+      <span class="ruby-identifier">all</span>.<span class="ruby-identifier">detect</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">i</span><span class="ruby-operator">|</span>
+        <span class="ruby-identifier">i</span>.<span class="ruby-identifier">name</span> <span class="ruby-operator">=~</span> <span class="ruby-node">/#{nm}/i</span>
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000329" class="method-detail">
+        <a name="M000329"></a>
+
+        <div class="method-heading">
+          <a href="#M000329" class="method-signature">
+          <span class="method-name">inherited</span><span class="method-args">(subclass)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000329-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000329-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/installer.rb, line 97</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">inherited</span>(<span class="ruby-identifier">subclass</span>)
+      <span class="ruby-identifier">all</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">subclass</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000326" class="method-detail">
+        <a name="M000326"></a>
+
+        <div class="method-heading">
+          <a href="#M000326" class="method-signature">
+          <span class="method-name">name</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000326-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000326-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/installer.rb, line 87</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">name</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000328" class="method-detail">
+        <a name="M000328"></a>
+
+        <div class="method-heading">
+          <a href="#M000328" class="method-signature">
+          <span class="method-name">to_s</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000328-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000328-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/installer.rb, line 93</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">to_s</span>
+      <span class="ruby-node">&quot;#{name} - #{description}&quot;</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="section-bar">Public Instance methods</h3>
+
+      <div id="method-M000323" class="method-detail">
+        <a name="M000323"></a>
+
+        <div class="method-heading">
+          <a href="#M000323" class="method-signature">
+          <span class="method-name">closing_message</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000323-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000323-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/installer.rb, line 52</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">closing_message</span>
+<span class="ruby-identifier">closing_message</span> = <span class="ruby-value str">&quot;\n&lt;line&gt;\nYou are now set to &lt;blue&gt;ride the waves&lt;/blue&gt; with PoolParty! You'll notice there is a &lt;blue&gt;clouds.rb&lt;/blue&gt; file in your current directory.\n\nYou can start your new cloud by typing in this directory:\n\n&lt;blue&gt;cloud start [-v]&lt;/blue&gt;\n\nYou can start your clouds.rb. More samples are available here:\n&lt;yellow&gt;http://github.com/auser/poolparty-examples/tree/master&lt;/yellow&gt;\n\n&lt;line&gt;\n&quot;</span>
+      <span class="ruby-identifier">colored_say</span> <span class="ruby-identifier">closing_message</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000324" class="method-detail">
+        <a name="M000324"></a>
+
+        <div class="method-heading">
+          <a href="#M000324" class="method-signature">
+          <span class="method-name">exit_msg</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000324-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000324-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/installer.rb, line 71</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">exit_msg</span>
+      <span class="ruby-ivar">@exit_msg</span> <span class="ruby-operator">||</span> <span class="ruby-value str">&quot;&lt;red&gt;--- quiting ---&lt;/red&gt;\nYou can always restart the installer by typing \#{$0}.\n\nIf you need help, feel free to stop by the irc room:\nirc.freenode.net / #poolpartyrb\n&quot;</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000321" class="method-detail">
+        <a name="M000321"></a>
+
+        <div class="method-heading">
+          <a href="#M000321" class="method-signature">
+          <span class="method-name">run</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000321-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000321-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/installer.rb, line 12</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">run</span>
+      <span class="ruby-keyword kw">begin</span>
+        <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">__send__</span> <span class="ruby-identifier">:welcome_message</span>
+        <span class="ruby-identifier">steps</span>.<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">c</span><span class="ruby-operator">|</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">__send__</span> <span class="ruby-identifier">c</span>.<span class="ruby-identifier">to_sym</span> }
+        <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">__send__</span> <span class="ruby-identifier">:closing_message</span>
+      <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
+        <span class="ruby-identifier">colored_say</span> <span class="ruby-identifier">e</span>.<span class="ruby-identifier">inspect</span>
+        <span class="ruby-identifier">colored_say</span> <span class="ruby-identifier">exit_msg</span>
+      <span class="ruby-keyword kw">ensure</span>
+        <span class="ruby-constant">Colors</span>.<span class="ruby-identifier">reset!</span>
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000325" class="method-detail">
+        <a name="M000325"></a>
+
+        <div class="method-heading">
+          <a href="#M000325" class="method-signature">
+          <span class="method-name">steps</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000325-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000325-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/installer.rb, line 83</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">steps</span>
+      <span class="ruby-ivar">@steps</span> <span class="ruby-operator">||=</span> []
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000322" class="method-detail">
+        <a name="M000322"></a>
+
+        <div class="method-heading">
+          <a href="#M000322" class="method-signature">
+          <span class="method-name">welcome_message</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000322-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000322-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/installer.rb, line 25</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">welcome_message</span>
+      <span class="ruby-identifier">welcome_msg</span> = <span class="ruby-value str">&quot;We are going to take you through the installation process of PoolParty.\n\nFirst, we'll setup your environment so using PoolParty will be a &lt;blue&gt;breeze&lt;/blue&gt;\n&quot;</span>
+
+        <span class="ruby-ivar">@exit_msg</span> = <span class="ruby-value str">&quot;\n&lt;line&gt;\n&lt;yellow&gt;Cancelled PoolParty installation&lt;/yellow&gt;\n\nYou can always restart this by typing:\n&lt;blue&gt;cloud setup&lt;/blue&gt;\n\n&lt;line&gt;\n&quot;</span>
+
+
+      <span class="ruby-identifier">colored_say</span> <span class="ruby-value str">&quot;&lt;yellow&gt;Welcome to PoolParty!&lt;/yellow&gt;&quot;</span>
+      <span class="ruby-identifier">colored_say</span> <span class="ruby-identifier">welcome_msg</span>
+      <span class="ruby-identifier">colored_ask</span> <span class="ruby-value str">&quot;Press enter to continue or Ctrl+C to exit&quot;</span>, <span class="ruby-identifier">:no_value</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">true</span>
+      
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>

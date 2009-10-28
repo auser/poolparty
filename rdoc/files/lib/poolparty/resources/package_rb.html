@@ -56,7 +56,7 @@
     </tr>
     <tr class="top-aligned-row">
       <td><strong>Last Update:</strong></td>
-      <td>Tue May 12 15:02:00 -0700 2009</td>
+      <td>Thu Aug 27 18:44:25 -0700 2009</td>
     </tr>
     </table>
   </div>
@@ -68,6 +68,34 @@
 
   <div id="contextContent">
 
+    <div id="description">
+      <h2>Package</h2>
+<p>
+The package resources defines a package that must be present on all of the
+instances This will install the &quot;name_of_package&quot; package with
+the package provider (apt, yum, etc)
+</p>
+<h2>Usage</h2>
+<pre>
+  has_package &quot;name_of_package&quot;
+  has_package(:name =&gt; '...') do
+    # More options.
+    # This block is optional
+  end
+</pre>
+<h2>Options</h2>
+<ul>
+<li><tt>name</tt> The package name. The default provider for your OS will be
+picked by the dependency resolver
+
+</li>
+</ul>
+<h2>Examples</h2>
+<pre>
+  has_package(:name =&gt; 'apache2')
+</pre>
+
+    </div>
 
 
    </div>

@@ -55,8 +55,8 @@
         <tr class="top-aligned-row">
             <td><strong>In:</strong></td>
             <td>
-                <a href="../../../files/lib/poolparty/modules/pinger_rb.html">
-                lib/poolparty/modules/pinger.rb
+                <a href="../../../files/lib/mixins/pinger_rb.html">
+                lib/mixins/pinger.rb
                 </a>
         <br />
             </td>
@@ -80,7 +80,7 @@
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000228">ping_port</a>&nbsp;&nbsp;
+      <a href="#M000142">ping_port</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -102,11 +102,11 @@
     <div id="methods">
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000228" class="method-detail">
-        <a name="M000228"></a>
+      <div id="method-M000142" class="method-detail">
+        <a name="M000142"></a>
 
         <div class="method-heading">
-          <a href="#M000228" class="method-signature">
+          <a href="#M000142" class="method-signature">
           <span class="method-name">ping_port</span><span class="method-args">(host, port=22, retry_times=400)</span>
           </a>
         </div>
@@ -116,10 +116,10 @@
 Test to see if the host has the available port open for response.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000228-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000228-source">
+            onclick="toggleCode('M000142-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000142-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/modules/pinger.rb, line 6</span>
+<span class="ruby-comment cmt"># File lib/mixins/pinger.rb, line 6</span>
       <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">ping_port</span>(<span class="ruby-identifier">host</span>, <span class="ruby-identifier">port</span>=<span class="ruby-value">22</span>, <span class="ruby-identifier">retry_times</span>=<span class="ruby-value">400</span>)
         <span class="ruby-identifier">connected</span> = <span class="ruby-keyword kw">false</span>
         <span class="ruby-identifier">retry_times</span>.<span class="ruby-identifier">times</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">i</span><span class="ruby-operator">|</span>

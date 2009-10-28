@@ -56,7 +56,7 @@
     </tr>
     <tr class="top-aligned-row">
       <td><strong>Last Update:</strong></td>
-      <td>Tue May 12 15:04:18 -0700 2009</td>
+      <td>Thu Aug 27 18:44:25 -0700 2009</td>
     </tr>
     </table>
   </div>
@@ -68,6 +68,54 @@
 
   <div id="contextContent">
 
+    <div id="description">
+      <h2>File</h2>
+<p>
+The file resource is used to describe a file that should be present on all
+of the instances.
+</p>
+<h2>Usage</h2>
+<pre>
+  has_file(:name =&gt; '...') do
+    # More options.
+    # This block is optional
+  end
+</pre>
+<h2>Options</h2>
+<ul>
+<li><tt>name</tt> Describe the location of the file with the name
+
+</li>
+<li><tt>mode</tt> Describe the mode of the file (default: 644)
+
+</li>
+<li><tt>owner</tt> The owner of the file (default: poolparty user)
+
+</li>
+<li><tt>content</tt> The contents of the file
+
+</li>
+<li><tt>source</tt> Used to describe a file that is hosted on the master
+instance.
+
+</li>
+<li><tt>template</tt> The file contents are described with the template. The
+location given must be readable
+
+</li>
+</ul>
+<p>
+To write a file to the template directory, use:
+</p>
+<pre>
+  copy_template_to_storage_directory(filepath)
+</pre>
+<h2>Example</h2>
+<pre>
+  has_file(:name =&gt; '/etc/motd', :content =&gt; 'Hey and welcome to your node today!')
+</pre>
+
+    </div>
 
 
    </div>

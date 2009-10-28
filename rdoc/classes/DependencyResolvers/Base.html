@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Class: DependencyResolvers::Base</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+    <div id="classHeader">
+        <table class="header-table">
+        <tr class="top-aligned-row">
+          <td><strong>Class</strong></td>
+          <td class="class-name-in-header">DependencyResolvers::Base</td>
+        </tr>
+        <tr class="top-aligned-row">
+            <td><strong>In:</strong></td>
+            <td>
+                <a href="../../files/lib/dependency_resolvers/base_rb.html">
+                lib/dependency_resolvers/base.rb
+                </a>
+        <br />
+            </td>
+        </tr>
+
+        <tr class="top-aligned-row">
+            <td><strong>Parent:</strong></td>
+            <td>
+                <a href="../Object.html">
+                Object
+               </a>
+            </td>
+        </tr>
+        </table>
+    </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+
+
+   </div>
+
+    <div id="method-list">
+      <h3 class="section-bar">Methods</h3>
+
+      <div class="name-list">
+      <a href="#M000463">after_compile</a>&nbsp;&nbsp;
+      <a href="#M000462">before_compile</a>&nbsp;&nbsp;
+      <a href="#M000460">caller</a>&nbsp;&nbsp;
+      <a href="#M000461">compile</a>&nbsp;&nbsp;
+      <a href="#M000464">compile_method_name</a>&nbsp;&nbsp;
+      <a href="#M000459">compile_to</a>&nbsp;&nbsp;
+      <a href="#M000458">inherited</a>&nbsp;&nbsp;
+      </div>
+    </div>
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+
+
+
+
+      
+
+
+    <!-- if method_list -->
+    <div id="methods">
+      <h3 class="section-bar">Public Class methods</h3>
+
+      <div id="method-M000463" class="method-detail">
+        <a name="M000463"></a>
+
+        <div class="method-heading">
+          <a href="#M000463" class="method-signature">
+          <span class="method-name">after_compile</span><span class="method-args">(o)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Called after everything is compiled
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000463-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000463-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/dependency_resolvers/base.rb, line 41</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">after_compile</span>(<span class="ruby-identifier">o</span>)
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000462" class="method-detail">
+        <a name="M000462"></a>
+
+        <div class="method-heading">
+          <a href="#M000462" class="method-signature">
+          <span class="method-name">before_compile</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+CALLBACKS Called before anything is compiled
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000462-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000462-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/dependency_resolvers/base.rb, line 38</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">before_compile</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000460" class="method-detail">
+        <a name="M000460"></a>
+
+        <div class="method-heading">
+          <a href="#M000460" class="method-signature">
+          <span class="method-name">caller</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000460-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000460-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/dependency_resolvers/base.rb, line 18</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">caller</span>
+      <span class="ruby-ivar">@caller</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000461" class="method-detail">
+        <a name="M000461"></a>
+
+        <div class="method-heading">
+          <a href="#M000461" class="method-signature">
+          <span class="method-name">compile</span><span class="method-args">(resources=[])</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000461-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000461-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/dependency_resolvers/base.rb, line 22</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">compile</span>(<span class="ruby-identifier">resources</span>=[])
+      <span class="ruby-identifier">before_compile</span>
+      <span class="ruby-identifier">o</span> = <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">resources</span>
+      <span class="ruby-keyword kw">when</span> <span class="ruby-constant">PoolParty</span><span class="ruby-operator">::</span><span class="ruby-constant">Cloud</span>
+        <span class="ruby-identifier">compile</span>(<span class="ruby-identifier">resources</span>.<span class="ruby-identifier">ordered_resources</span>)
+      <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Array</span>
+        <span class="ruby-identifier">compile_array</span>(<span class="ruby-identifier">resources</span>)
+      <span class="ruby-keyword kw">when</span> <span class="ruby-constant">PoolParty</span><span class="ruby-operator">::</span><span class="ruby-constant">Resource</span>
+        <span class="ruby-identifier">compile_resource</span>(<span class="ruby-identifier">resources</span>)
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-identifier">after_compile</span>(<span class="ruby-identifier">o</span>)
+      <span class="ruby-identifier">o</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000464" class="method-detail">
+        <a name="M000464"></a>
+
+        <div class="method-heading">
+          <a href="#M000464" class="method-signature">
+          <span class="method-name">compile_method_name</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+The name of the method that the resource should respond to to <a
+href="Base.html#M000461">compile</a> Format:
+</p>
+<pre>
+  print_to_&lt;dependency_resolver.name&gt;
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000464-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000464-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/dependency_resolvers/base.rb, line 48</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">compile_method_name</span>
+      <span class="ruby-ivar">@compile_method_name</span> <span class="ruby-operator">||=</span> <span class="ruby-node">&quot;print_to_#{name.to_s.top_level_class}&quot;</span>.<span class="ruby-identifier">to_sym</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000459" class="method-detail">
+        <a name="M000459"></a>
+
+        <div class="method-heading">
+          <a href="#M000459" class="method-signature">
+          <span class="method-name">compile_to</span><span class="method-args">(resources=[], outdir=Dir.pwd, caller=nil)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000459-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000459-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/dependency_resolvers/base.rb, line 12</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">compile_to</span>(<span class="ruby-identifier">resources</span>=[], <span class="ruby-identifier">outdir</span>=<span class="ruby-constant">Dir</span>.<span class="ruby-identifier">pwd</span>, <span class="ruby-identifier">caller</span>=<span class="ruby-keyword kw">nil</span>)
+      <span class="ruby-ivar">@compile_directory</span> = <span class="ruby-identifier">outdir</span>
+      <span class="ruby-ivar">@caller</span> = <span class="ruby-identifier">caller</span>
+      <span class="ruby-identifier">compile</span>(<span class="ruby-identifier">resources</span>)
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000458" class="method-detail">
+        <a name="M000458"></a>
+
+        <div class="method-heading">
+          <a href="#M000458" class="method-signature">
+          <span class="method-name">inherited</span><span class="method-args">(subclass)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000458-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000458-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/dependency_resolvers/base.rb, line 8</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">inherited</span>(<span class="ruby-identifier">subclass</span>)
+      <span class="ruby-constant">DependencyResolvers</span>.<span class="ruby-identifier">all</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">subclass</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-constant">DependencyResolvers</span>.<span class="ruby-identifier">all</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">subclass</span>)
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>

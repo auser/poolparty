@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Class: PoolParty::Installers::Ec2</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+    <div id="classHeader">
+        <table class="header-table">
+        <tr class="top-aligned-row">
+          <td><strong>Class</strong></td>
+          <td class="class-name-in-header">PoolParty::Installers::Ec2</td>
+        </tr>
+        <tr class="top-aligned-row">
+            <td><strong>In:</strong></td>
+            <td>
+                <a href="../../../files/lib/poolparty/installers/ec2_rb.html">
+                lib/poolparty/installers/ec2.rb
+                </a>
+        <br />
+            </td>
+        </tr>
+
+        <tr class="top-aligned-row">
+            <td><strong>Parent:</strong></td>
+            <td>
+                Installer
+            </td>
+        </tr>
+        </table>
+    </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+
+
+   </div>
+
+    <div id="method-list">
+      <h3 class="section-bar">Methods</h3>
+
+      <div class="name-list">
+      <a href="#M000137">ask_for_access_key</a>&nbsp;&nbsp;
+      <a href="#M000139">ask_for_ec2_directory</a>&nbsp;&nbsp;
+      <a href="#M000138">ask_for_private_access_key</a>&nbsp;&nbsp;
+      <a href="#M000135">description</a>&nbsp;&nbsp;
+      <a href="#M000136">find_ec2_directory</a>&nbsp;&nbsp;
+      <a href="#M000134">name</a>&nbsp;&nbsp;
+      <a href="#M000140">show_env_setup</a>&nbsp;&nbsp;
+      <a href="#M000133">steps</a>&nbsp;&nbsp;
+      </div>
+    </div>
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+
+
+
+
+      
+
+
+    <!-- if method_list -->
+    <div id="methods">
+      <h3 class="section-bar">Public Class methods</h3>
+
+      <div id="method-M000135" class="method-detail">
+        <a name="M000135"></a>
+
+        <div class="method-heading">
+          <a href="#M000135" class="method-signature">
+          <span class="method-name">description</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000135-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000135-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/installers/ec2.rb, line 16</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">description</span>
+        <span class="ruby-value str">&quot;Ec2 installer&quot;</span>
+      <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000134" class="method-detail">
+        <a name="M000134"></a>
+
+        <div class="method-heading">
+          <a href="#M000134" class="method-signature">
+          <span class="method-name">name</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000134-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000134-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/installers/ec2.rb, line 12</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">name</span>
+        <span class="ruby-value str">&quot;Ec2&quot;</span>
+      <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="section-bar">Public Instance methods</h3>
+
+      <div id="method-M000137" class="method-detail">
+        <a name="M000137"></a>
+
+        <div class="method-heading">
+          <a href="#M000137" class="method-signature">
+          <span class="method-name">ask_for_access_key</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000137-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000137-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/installers/ec2.rb, line 32</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">ask_for_access_key</span>
+        <span class="ruby-identifier">access_key_help</span> =<span class="ruby-value str">&quot;EC2 uses an access key to identify you and allows you to start and stop instances.\n&quot;</span>
+
+        <span class="ruby-identifier">access_key</span> = <span class="ruby-value str">&quot;What is your access key?\n&quot;</span>
+        <span class="ruby-identifier">ask_with_help</span> <span class="ruby-identifier">:message</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">access_key</span>, <span class="ruby-identifier">:help</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">access_key_help</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">k</span><span class="ruby-operator">|</span>
+          <span class="ruby-ivar">@access_key</span> = <span class="ruby-identifier">k</span>
+        <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000139" class="method-detail">
+        <a name="M000139"></a>
+
+        <div class="method-heading">
+          <a href="#M000139" class="method-signature">
+          <span class="method-name">ask_for_ec2_directory</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000139-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000139-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/installers/ec2.rb, line 63</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">ask_for_ec2_directory</span>
+        <span class="ruby-identifier">ec2_directory_help</span> =<span class="ruby-value str">&quot;Ec2 needs to know where you store your certificates and private keys. Amazon expects these to be in the ~/.ec2 directory. We suggest a subdirectory of the ~/.ec2 directory so you can separate ec2 accounts.\n&quot;</span>
+
+        <span class="ruby-identifier">ec2_directory_msg</span> = <span class="ruby-value str">&quot;What's path to your ec2 directory with your cert and pk files?\n&quot;</span>
+        <span class="ruby-identifier">ask_with_help</span> <span class="ruby-identifier">:message</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">ec2_directory_msg</span>, <span class="ruby-identifier">:help</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">ec2_directory_help</span>
+      <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000138" class="method-detail">
+        <a name="M000138"></a>
+
+        <div class="method-heading">
+          <a href="#M000138" class="method-signature">
+          <span class="method-name">ask_for_private_access_key</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000138-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000138-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/installers/ec2.rb, line 47</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">ask_for_private_access_key</span>
+        <span class="ruby-identifier">private_access_key_help</span> =<span class="ruby-value str">&quot;EC2 uses a private access key to identify you and allows you to start and stop instances.\n&quot;</span>
+
+        <span class="ruby-identifier">private_access_key</span> = <span class="ruby-value str">&quot;What is your private access key?\n&quot;</span>
+        <span class="ruby-identifier">ask_with_help</span> <span class="ruby-identifier">:message</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">private_access_key</span>, <span class="ruby-identifier">:help</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">private_access_key_help</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">k</span><span class="ruby-operator">|</span>
+          <span class="ruby-ivar">@secret_access_key</span> = <span class="ruby-identifier">k</span>
+        <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000136" class="method-detail">
+        <a name="M000136"></a>
+
+        <div class="method-heading">
+          <a href="#M000136" class="method-signature">
+          <span class="method-name">find_ec2_directory</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000136-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000136-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/installers/ec2.rb, line 20</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">find_ec2_directory</span>
+        <span class="ruby-identifier">msg</span> = <span class="ruby-value str">&quot;We found the following vmware files in the default vmware directory.\nChoose one of these to use as your vmrun file or select other\n&lt;line&gt;&quot;</span>
+        
+        <span class="ruby-identifier">directories</span> = {}
+        <span class="ruby-identifier">default_ec2_directories</span>.<span class="ruby-identifier">each_with_index</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">file</span>,<span class="ruby-identifier">idx</span><span class="ruby-operator">|</span>
+          <span class="ruby-identifier">directories</span>.<span class="ruby-identifier">merge!</span>(<span class="ruby-identifier">idx</span><span class="ruby-operator">+</span><span class="ruby-value">1</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">file</span>)
+        <span class="ruby-keyword kw">end</span>
+        
+        <span class="ruby-identifier">base</span> = <span class="ruby-identifier">choose</span>(<span class="ruby-identifier">msg</span>, <span class="ruby-identifier">directories</span>)
+        <span class="ruby-ivar">@ec2_directory</span> = <span class="ruby-identifier">base</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:other</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">ask_for_ec2_directory</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">base</span>
+      <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000140" class="method-detail">
+        <a name="M000140"></a>
+
+        <div class="method-heading">
+          <a href="#M000140" class="method-signature">
+          <span class="method-name">show_env_setup</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000140-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000140-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/installers/ec2.rb, line 77</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">show_env_setup</span>
+        <span class="ruby-identifier">colored_say</span> <span class="ruby-value str">&quot;&lt;line&gt;\n\nSetup your environment:\n\nexport EC2_ACCESS_KEY=\#{@access_key}\nexport EC2_SECRET_KEY=\#{@secret_access_key}\n\nexport EC2_PRIVATE_KEY=$(ls \#{@ec2_directory}/pk-*.pem)\nexport EC2_CERT=$(ls \#{@ec2_directory}/cert-*.pem)\n\n&lt;line&gt;\n&quot;</span>
+        <span class="ruby-identifier">exit</span> <span class="ruby-value">0</span>
+      <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000133" class="method-detail">
+        <a name="M000133"></a>
+
+        <div class="method-heading">
+          <a href="#M000133" class="method-signature">
+          <span class="method-name">steps</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000133-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000133-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/installers/ec2.rb, line 5</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">steps</span>
+        [
+          <span class="ruby-identifier">:find_ec2_directory</span>, <span class="ruby-identifier">:ask_for_access_key</span>, <span class="ruby-identifier">:ask_for_private_access_key</span>,
+          <span class="ruby-identifier">:show_env_setup</span>
+        ]
+      <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>

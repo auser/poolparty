@@ -49,27 +49,25 @@
               <span>Simplified.</span>
             </p>
             <p class='intro'>
-              PoolParty is a
-              <span class='emphasis'>cloud management system.</span>
-              PoolParty makes it easy
-              to manage powerful and
-              <span class='emphasis'>complex deployments</span>
-              on
+              PoolParty is a declarative
+              <span class='emphasis'>cloud infrastructure.</span>
+              PoolParty provides an executable
+              description of a
               <span class='emphasis'>cloud computing</span>
-              services such as Amazon EC2.
+              infrastructure in a single file.
             </p>
           </div>
           <div class='intro-right'>
-            <img alt="Syntax sample 2" src="images/syntax_sample_2.png"/>
+            <img alt="Syntax sample 3" src="images/syntax_sample_3.png"/>
           </div>
         </div>
         <div class='features'>
           <h2>Features:</h2>
           <ul>
-            <li>built-in scaling, self-healing, monitoring, and load-balancing</li>
-            <li>support for VMware, for testing clouds</li>
+            <li>Git-style binaries</li>
+            <li>support for ec2, load-balancers, autoscalers, security groups</li>
             <li>
-              dependency resolution is based on
+              dependency resolution support built-in for
               <a href='docs/chef.html'>Chef</a>
             </li>
             <li>clear and extensible configuration</li>
@@ -80,8 +78,6 @@
         <p class='step'>
           Setup
           <a href="amazon_ec2_setup.html">Amazon EC2</a>
-          or
-          <a href="vmware_setup.html">VMware (Fusion)</a>
         </p>
         <h2>1. Install PoolParty gem</h2>
         <div class='tip-box'><div class='crab-wrapper'><img src='http://fairchild.github.com/poolparty/images/site/i/examples.png' class='crab'/></div>Interested in developing PoolParty? Checkout
@@ -94,14 +90,20 @@
           2. Run the installer
         </h2>
         <p class='step'>
-          Now run the PoolParty installer
-          <pre class="blackboard">  install-poolparty&#x000A;</pre>
+          Write your clouds.rb
+          <pre class="blackboard">pool <span class="String"><span class="String">&quot;</span>myapp<span class="String">&quot;</span></span> <span class="Keyword">do</span>&#x000A;  cloud <span class="String"><span class="String">&quot;</span>app<span class="String">&quot;</span></span> <span class="Keyword">do</span>&#x000A;    using <span class="Constant"><span class="Constant">:</span>ec2</span>&#x000A;    instances <span class="Constant">1</span>..<span class="Constant">1</span>&#x000A;    security_group <span class="Keyword">do</span>&#x000A;      authorize <span class="Constant"><span class="Constant">:</span>from_port</span> =&gt; <span class="Constant">22</span>, <span class="Constant"><span class="Constant">:</span>to_port</span> =&gt; <span class="Constant">22</span>&#x000A;    <span class="Keyword">end</span>&#x000A;  <span class="Keyword">end</span>&#x000A;<span class="Keyword">end</span>&#x000A;</pre>
         </p>
         <h2>
-          3. Start your cloud!
+          3. View your cloud
         </h2>
         <p class='step'>
-          <pre class="blackboard">  cloud start -v&#x000A;</pre>
+          <pre class="blackboard">  cloud show&#x000A;</pre>
+        </p>
+        <h2>
+          4. Start your cloud!
+        </h2>
+        <p class='step'>
+          <pre class="blackboard">  cloud start&#x000A;</pre>
         </p>
         <h2>
           What next?

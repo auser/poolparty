@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Class: CloudProviders::CloudProvider</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+    <div id="classHeader">
+        <table class="header-table">
+        <tr class="top-aligned-row">
+          <td><strong>Class</strong></td>
+          <td class="class-name-in-header">CloudProviders::CloudProvider</td>
+        </tr>
+        <tr class="top-aligned-row">
+            <td><strong>In:</strong></td>
+            <td>
+                <a href="../../files/lib/cloud_providers/cloud_provider_rb.html">
+                lib/cloud_providers/cloud_provider.rb
+                </a>
+        <br />
+            </td>
+        </tr>
+
+        <tr class="top-aligned-row">
+            <td><strong>Parent:</strong></td>
+            <td>
+                <a href="../Object.html">
+                Object
+               </a>
+            </td>
+        </tr>
+        </table>
+    </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+
+
+   </div>
+
+    <div id="method-list">
+      <h3 class="section-bar">Methods</h3>
+
+      <div class="name-list">
+      <a href="#M000382">describe_instance</a>&nbsp;&nbsp;
+      <a href="#M000383">describe_instances</a>&nbsp;&nbsp;
+      <a href="#M000378">inherited</a>&nbsp;&nbsp;
+      <a href="#M000384">keypair</a>&nbsp;&nbsp;
+      <a href="#M000385">keypair=</a>&nbsp;&nbsp;
+      <a href="#M000379">new</a>&nbsp;&nbsp;
+      <a href="#M000386">nodes</a>&nbsp;&nbsp;
+      <a href="#M000380">run_instance</a>&nbsp;&nbsp;
+      <a href="#M000381">terminate_instance!</a>&nbsp;&nbsp;
+      </div>
+    </div>
+
+  </div>
+
+
+    <!-- if includes -->
+    <div id="includes">
+      <h3 class="section-bar">Included Modules</h3>
+
+      <div id="includes-list">
+        <span class="include-name">Dslify</span>
+        <span class="include-name"><a href="../Callbacks.html">Callbacks</a></span>
+      </div>
+    </div>
+
+    <div id="section">
+
+
+
+
+
+      
+
+
+    <!-- if method_list -->
+    <div id="methods">
+      <h3 class="section-bar">Public Class methods</h3>
+
+      <div id="method-M000378" class="method-detail">
+        <a name="M000378"></a>
+
+        <div class="method-heading">
+          <a href="#M000378" class="method-signature">
+          <span class="method-name">inherited</span><span class="method-args">(subclass)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+All <a href="../CloudProviders.html">CloudProviders</a> are added to the <a
+href="../CloudProviders.html#M000338">CloudProviders.all</a> array
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000378-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000378-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/cloud_providers/cloud_provider.rb, line 16</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">inherited</span>(<span class="ruby-identifier">subclass</span>)
+      <span class="ruby-keyword kw">unless</span> <span class="ruby-constant">CloudProviders</span>.<span class="ruby-identifier">all</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">subclass</span>)
+        <span class="ruby-constant">CloudProviders</span>.<span class="ruby-identifier">all</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">subclass</span>
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000379" class="method-detail">
+        <a name="M000379"></a>
+
+        <div class="method-heading">
+          <a href="#M000379" class="method-signature">
+          <span class="method-name">new</span><span class="method-args">(opts={}, &amp;block)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000379-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000379-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/cloud_providers/cloud_provider.rb, line 22</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">opts</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+      <span class="ruby-identifier">set_vars_from_options</span>(<span class="ruby-identifier">opts</span>)
+      <span class="ruby-identifier">instance_eval</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">block</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="section-bar">Public Instance methods</h3>
+
+      <div id="method-M000382" class="method-detail">
+        <a name="M000382"></a>
+
+        <div class="method-heading">
+          <a href="#M000382" class="method-signature">
+          <span class="method-name">describe_instance</span><span class="method-args">(hash_of_criteria_to_select_instance_against)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Describe an instance&#8216;s status. Should return a hash like object
+Required keys are: :image_id :keypair_name :instance_id :status
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000382-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000382-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/cloud_providers/cloud_provider.rb, line 51</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">describe_instance</span>(<span class="ruby-identifier">hash_of_criteria_to_select_instance_against</span>)
+      <span class="ruby-identifier">raise</span> <span class="ruby-constant">StandardError</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value str">&quot;method_not_defined :describe_instance&quot;</span>)
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000383" class="method-detail">
+        <a name="M000383"></a>
+
+        <div class="method-heading">
+          <a href="#M000383" class="method-signature">
+          <span class="method-name">describe_instances</span><span class="method-args">(o={})</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Get instances The instances must return an object responding to each Each
+yielded object must respond to [:status]
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000383-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000383-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/cloud_providers/cloud_provider.rb, line 58</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">describe_instances</span>(<span class="ruby-identifier">o</span>={})
+      <span class="ruby-identifier">raise</span> <span class="ruby-constant">StandardError</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value str">&quot;method_not_defined :describe_instances&quot;</span>)
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000384" class="method-detail">
+        <a name="M000384"></a>
+
+        <div class="method-heading">
+          <a href="#M000384" class="method-signature">
+          <span class="method-name">keypair</span><span class="method-args">(n=keypair_name)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Returns an instance of <a href="../Keypair.html">Keypair</a> You can pass
+either a filename which will be searched for in ~/.ec2/ and ~/.ssh/ or you
+can pass a full filepath
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000384-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000384-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/cloud_providers/cloud_provider.rb, line 67</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">keypair</span>(<span class="ruby-identifier">n</span>=<span class="ruby-identifier">keypair_name</span>)
+      <span class="ruby-ivar">@keypair</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">Keypair</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">n</span>)
+      <span class="ruby-identifier">keypair_name</span> <span class="ruby-ivar">@keypair</span>.<span class="ruby-identifier">basename</span>
+      <span class="ruby-ivar">@keypair</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000385" class="method-detail">
+        <a name="M000385"></a>
+
+        <div class="method-heading">
+          <a href="#M000385" class="method-signature">
+          <span class="method-name">keypair=</span><span class="method-args">(n)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000385-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000385-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/cloud_providers/cloud_provider.rb, line 72</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">keypair=</span>(<span class="ruby-identifier">n</span>)
+      <span class="ruby-ivar">@keypair</span> = <span class="ruby-identifier">n</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000386" class="method-detail">
+        <a name="M000386"></a>
+
+        <div class="method-heading">
+          <a href="#M000386" class="method-signature">
+          <span class="method-name">nodes</span><span class="method-args">(hsh={})</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Nodes returns <a href="CloudProvider.html#M000386">nodes</a> from the <a
+href="CloudProvider.html#M000383">describe_instances</a> array These can be
+selected on by passing a hash
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000386-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000386-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/cloud_providers/cloud_provider.rb, line 79</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">nodes</span>(<span class="ruby-identifier">hsh</span>={})
+      <span class="ruby-identifier">results</span> = <span class="ruby-identifier">describe_instances</span>(<span class="ruby-identifier">:status=</span><span class="ruby-operator">&gt;</span><span class="ruby-value str">'running'</span>).<span class="ruby-identifier">select_with_hash</span>({<span class="ruby-identifier">:keypair_name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">keypair</span>.<span class="ruby-identifier">basename</span>})
+      <span class="ruby-identifier">results</span>.<span class="ruby-identifier">select_with_hash</span>(<span class="ruby-identifier">hsh</span>)
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000380" class="method-detail">
+        <a name="M000380"></a>
+
+        <div class="method-heading">
+          <a href="#M000380" class="method-signature">
+          <span class="method-name">run_instance</span><span class="method-args">(o={})</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Launch a <a href="CloudProvider.html#M000379">new</a> instance
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000380-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000380-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/cloud_providers/cloud_provider.rb, line 34</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">run_instance</span>(<span class="ruby-identifier">o</span>={})
+      <span class="ruby-identifier">raise</span> <span class="ruby-constant">StandardError</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value str">&quot;method_not_defined :launch_new_instance&quot;</span>)
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000381" class="method-detail">
+        <a name="M000381"></a>
+
+        <div class="method-heading">
+          <a href="#M000381" class="method-signature">
+          <span class="method-name">terminate_instance!</span><span class="method-args">(o={})</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Terminate an instance by id Required params:
+</p>
+<pre>
+  instance_id or instance_ids
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000381-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000381-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/cloud_providers/cloud_provider.rb, line 41</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">terminate_instance!</span>(<span class="ruby-identifier">o</span>={})
+      <span class="ruby-identifier">raise</span> <span class="ruby-constant">StandardError</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value str">&quot;method_not_defined :terminate_instance!&quot;</span>)
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>

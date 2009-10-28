@@ -5,7 +5,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-  <title>Module: PoolParty::Pool</title>
+  <title>Class: PoolParty::Pool</title>
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
   <meta http-equiv="Content-Script-Type" content="text/javascript" />
   <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
@@ -49,19 +49,27 @@
     <div id="classHeader">
         <table class="header-table">
         <tr class="top-aligned-row">
-          <td><strong>Module</strong></td>
+          <td><strong>Class</strong></td>
           <td class="class-name-in-header">PoolParty::Pool</td>
         </tr>
         <tr class="top-aligned-row">
             <td><strong>In:</strong></td>
             <td>
-                <a href="../../files/lib/poolparty/poolparty/pool_rb.html">
-                lib/poolparty/poolparty/pool.rb
+                <a href="../../files/lib/poolparty/pool_rb.html">
+                lib/poolparty/pool.rb
                 </a>
         <br />
             </td>
         </tr>
 
+        <tr class="top-aligned-row">
+            <td><strong>Parent:</strong></td>
+            <td>
+                <a href="DslBase.html">
+                DslBase
+               </a>
+            </td>
+        </tr>
         </table>
     </div>
   <!-- banner header -->
@@ -80,13 +88,19 @@
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000396">pool</a>&nbsp;&nbsp;
-      <a href="#M000400">pool_specfile</a>&nbsp;&nbsp;
-      <a href="#M000397">pools</a>&nbsp;&nbsp;
-      <a href="#M000402">remove_pool</a>&nbsp;&nbsp;
-      <a href="#M000401">reset!</a>&nbsp;&nbsp;
-      <a href="#M000399">set_pool_specfile</a>&nbsp;&nbsp;
-      <a href="#M000398">with_pool</a>&nbsp;&nbsp;
+      <a href="#M000320">after_file_load</a>&nbsp;&nbsp;
+      <a href="#M000318">before_file_load</a>&nbsp;&nbsp;
+      <a href="#M000309">cloud</a>&nbsp;&nbsp;
+      <a href="#M000314">clouds_dot_rb_dir</a>&nbsp;&nbsp;
+      <a href="#M000313">clouds_dot_rb_file</a>&nbsp;&nbsp;
+      <a href="#M000317">default_clouds_dot_rb_locations</a>&nbsp;&nbsp;
+      <a href="#M000315">find_and_load_default_clouds_dot_rb</a>&nbsp;&nbsp;
+      <a href="#M000316">find_default_clouds_dot_rb</a>&nbsp;&nbsp;
+      <a href="#M000311">form_clouds</a>&nbsp;&nbsp;
+      <a href="#M000319">init</a>&nbsp;&nbsp;
+      <a href="#M000312">load_from_file</a>&nbsp;&nbsp;
+      <a href="#M000308">new</a>&nbsp;&nbsp;
+      <a href="#M000310">soakable_options</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -97,12 +111,6 @@
 
     <div id="section">
 
-    <div id="class-list">
-      <h3 class="section-bar">Classes and Modules</h3>
-
-      Class <a href="Pool/Pool.html" class="link">PoolParty::Pool::Pool</a><br />
-
-    </div>
 
 
 
@@ -112,168 +120,447 @@
 
     <!-- if method_list -->
     <div id="methods">
-      <h3 class="section-bar">Public Instance methods</h3>
+      <h3 class="section-bar">Public Class methods</h3>
 
-      <div id="method-M000396" class="method-detail">
-        <a name="M000396"></a>
-
-        <div class="method-heading">
-          <a href="#M000396" class="method-signature">
-          <span class="method-name">pool</span><span class="method-args">(name, &amp;block)</span>
-          </a>
-        </div>
-      
-        <div class="method-description">
-          <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000396-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000396-source">
-<pre>
-<span class="ruby-comment cmt"># File lib/poolparty/poolparty/pool.rb, line 4</span>
-    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">pool</span>(<span class="ruby-identifier">name</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
-      <span class="ruby-identifier">pools</span>[<span class="ruby-identifier">name</span>] <span class="ruby-operator">||=</span> <span class="ruby-constant">Pool</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">name</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
-    <span class="ruby-keyword kw">end</span>
-</pre>
-          </div>
-        </div>
-      </div>
-
-      <div id="method-M000400" class="method-detail">
-        <a name="M000400"></a>
+      <div id="method-M000320" class="method-detail">
+        <a name="M000320"></a>
 
         <div class="method-heading">
-          <a href="#M000400" class="method-signature">
-          <span class="method-name">pool_specfile</span><span class="method-args">()</span>
-          </a>
-        </div>
-      
-        <div class="method-description">
-          <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000400-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000400-source">
-<pre>
-<span class="ruby-comment cmt"># File lib/poolparty/poolparty/pool.rb, line 22</span>
-    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">pool_specfile</span>
-      <span class="ruby-identifier">$pool_specfile</span>
-    <span class="ruby-keyword kw">end</span>
-</pre>
-          </div>
-        </div>
-      </div>
-
-      <div id="method-M000397" class="method-detail">
-        <a name="M000397"></a>
-
-        <div class="method-heading">
-          <a href="#M000397" class="method-signature">
-          <span class="method-name">pools</span><span class="method-args">()</span>
-          </a>
-        </div>
-      
-        <div class="method-description">
-          <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000397-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000397-source">
-<pre>
-<span class="ruby-comment cmt"># File lib/poolparty/poolparty/pool.rb, line 8</span>
-    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">pools</span>
-      <span class="ruby-identifier">$pools</span> <span class="ruby-operator">||=</span> {}
-    <span class="ruby-keyword kw">end</span>
-</pre>
-          </div>
-        </div>
-      </div>
-
-      <div id="method-M000402" class="method-detail">
-        <a name="M000402"></a>
-
-        <div class="method-heading">
-          <a href="#M000402" class="method-signature">
-          <span class="method-name">remove_pool</span><span class="method-args">(name)</span>
+          <a href="#M000320" class="method-signature">
+          <span class="method-name">after_file_load</span><span class="method-args">(filepath)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Helpers
+CALLBACKS After the entire <a href="Pool.html#M000309">cloud</a> is loaded
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000402-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000402-source">
+            onclick="toggleCode('M000320-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000320-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/poolparty/pool.rb, line 76</span>
-    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">remove_pool</span>(<span class="ruby-identifier">name</span>)
-      <span class="ruby-identifier">pools</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">name</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">pools</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-identifier">name</span>)
+<span class="ruby-comment cmt"># File lib/poolparty/pool.rb, line 176</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">after_file_load</span>(<span class="ruby-identifier">filepath</span>)
     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000401" class="method-detail">
-        <a name="M000401"></a>
+      <div id="method-M000318" class="method-detail">
+        <a name="M000318"></a>
 
         <div class="method-heading">
-          <a href="#M000401" class="method-signature">
-          <span class="method-name">reset!</span><span class="method-args">()</span>
+          <a href="#M000318" class="method-signature">
+          <span class="method-name">before_file_load</span><span class="method-args">(filepath)</span>
           </a>
         </div>
       
         <div class="method-description">
-          <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000401-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000401-source">
+          <p>
+Before the specfile is loaded this method is called It&#8230;
+</p>
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/poolparty/pool.rb, line 26</span>
-    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">reset!</span>
-      <span class="ruby-identifier">$pools</span> = <span class="ruby-identifier">$clouds</span> = <span class="ruby-identifier">$plugins</span> = <span class="ruby-ivar">@describe_instances</span> = <span class="ruby-keyword kw">nil</span>
+  + loads the plugin paths local to the clouds_dot_rb_file into the load_path
+  + calls the resource define_resource_methods to define the resource methods
+  + sets up the log
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000318-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000318-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/pool.rb, line 153</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">before_file_load</span>(<span class="ruby-identifier">filepath</span>)
+      <span class="ruby-identifier">$:</span>.<span class="ruby-identifier">unshift</span>(<span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">dirname</span>(<span class="ruby-identifier">filepath</span>))
+      <span class="ruby-constant">Dir</span>[<span class="ruby-node">&quot;#{ ::File.dirname(filepath)}/plugins/*&quot;</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">plugin_path</span><span class="ruby-operator">|</span> 
+        <span class="ruby-keyword kw">if</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">directory?</span>(<span class="ruby-identifier">plugin_path</span>)
+          <span class="ruby-identifier">$:</span>.<span class="ruby-identifier">unshift</span>(<span class="ruby-identifier">plugin_path</span>)
+          <span class="ruby-identifier">require</span> <span class="ruby-node">&quot;#{plugin_path}/#{File.basename(plugin_path)}&quot;</span>
+        <span class="ruby-keyword kw">elsif</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">file?</span>(<span class="ruby-identifier">plugin_path</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">plugin_path</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp re">/.rb$/</span>)
+          <span class="ruby-identifier">require</span> <span class="ruby-identifier">plugin_path</span>
+        <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">end</span>
     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000399" class="method-detail">
-        <a name="M000399"></a>
+      <div id="method-M000314" class="method-detail">
+        <a name="M000314"></a>
 
         <div class="method-heading">
-          <a href="#M000399" class="method-signature">
-          <span class="method-name">set_pool_specfile</span><span class="method-args">(filename)</span>
+          <a href="#M000314" class="method-signature">
+          <span class="method-name">clouds_dot_rb_dir</span><span class="method-args">(n=nil)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000399-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000399-source">
+            onclick="toggleCode('M000314-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000314-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/poolparty/pool.rb, line 18</span>
-    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">set_pool_specfile</span>(<span class="ruby-identifier">filename</span>)
-      <span class="ruby-identifier">$pool_specfile</span> = <span class="ruby-identifier">filename</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">$pool_specfile</span>
+<span class="ruby-comment cmt"># File lib/poolparty/pool.rb, line 99</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">clouds_dot_rb_dir</span>(<span class="ruby-identifier">n</span>=<span class="ruby-keyword kw">nil</span>)
+      <span class="ruby-constant">File</span>.<span class="ruby-identifier">dirname</span>(<span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">clouds_dot_rb_file</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">clouds_dot_rb_file</span>
     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000398" class="method-detail">
-        <a name="M000398"></a>
+      <div id="method-M000313" class="method-detail">
+        <a name="M000313"></a>
 
         <div class="method-heading">
-          <a href="#M000398" class="method-signature">
-          <span class="method-name">with_pool</span><span class="method-args">(pl, opts={}, &amp;block)</span>
+          <a href="#M000313" class="method-signature">
+          <span class="method-name">clouds_dot_rb_file</span><span class="method-args">(n=nil)</span>
           </a>
         </div>
       
         <div class="method-description">
+          <p>
+Store the <a href="Pool.html#M000313">clouds_dot_rb_file</a> location
+</p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000398-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000398-source">
+            onclick="toggleCode('M000313-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000313-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/poolparty/pool.rb, line 12</span>
-    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">with_pool</span>(<span class="ruby-identifier">pl</span>, <span class="ruby-identifier">opts</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
-      <span class="ruby-identifier">raise</span> <span class="ruby-constant">CloudNotFoundException</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value str">&quot;Pool not found&quot;</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">pl</span>
-      <span class="ruby-identifier">pl</span>.<span class="ruby-identifier">options</span>.<span class="ruby-identifier">merge!</span>(<span class="ruby-identifier">opts</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">pl</span>.<span class="ruby-identifier">options</span>
-      <span class="ruby-identifier">pl</span>.<span class="ruby-identifier">run_in_context</span> <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">block</span>
+<span class="ruby-comment cmt"># File lib/poolparty/pool.rb, line 91</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">clouds_dot_rb_file</span>(<span class="ruby-identifier">n</span>=<span class="ruby-keyword kw">nil</span>)
+      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">n</span>
+        <span class="ruby-ivar">@clouds_dot_rb_file</span> = <span class="ruby-identifier">n</span>
+      <span class="ruby-keyword kw">else</span>
+        <span class="ruby-ivar">@clouds_dot_rb_file</span>
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000317" class="method-detail">
+        <a name="M000317"></a>
+
+        <div class="method-heading">
+          <a href="#M000317" class="method-signature">
+          <span class="method-name">default_clouds_dot_rb_locations</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+<a href="Default.html">Default</a> <a
+href="Pool.html#M000313">clouds_dot_rb_file</a> locations
+</p>
+<pre>
+  + CWD/clouds.rb
+  + ENV[&quot;CLOUDS_DOT_RB&quot;]
+  + ENV[&quot;HOME&quot;]/clouds.rb
+  + /etc/poolparty/clouds.rb
+  + /var/poolparty/clouds.rb
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000317-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000317-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/pool.rb, line 138</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">default_clouds_dot_rb_locations</span>
+      <span class="ruby-ivar">@default_clouds_dot_rb_locations</span> <span class="ruby-operator">||=</span> [
+        <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">pwd</span>,
+        <span class="ruby-constant">ENV</span>[<span class="ruby-value str">&quot;CLOUDS_DOT_RB&quot;</span>],
+        <span class="ruby-constant">PoolParty</span><span class="ruby-operator">::</span><span class="ruby-constant">Default</span>.<span class="ruby-identifier">poolparty_home_path</span>,
+        <span class="ruby-constant">PoolParty</span><span class="ruby-operator">::</span><span class="ruby-constant">Default</span>.<span class="ruby-identifier">base_config_directory</span>,
+        <span class="ruby-constant">PoolParty</span><span class="ruby-operator">::</span><span class="ruby-constant">Default</span>.<span class="ruby-identifier">remote_storage_path</span>
+      ].<span class="ruby-identifier">flatten</span>.<span class="ruby-identifier">reject</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">a</span><span class="ruby-operator">|</span> <span class="ruby-identifier">a</span>.<span class="ruby-identifier">nil?</span>}
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000315" class="method-detail">
+        <a name="M000315"></a>
+
+        <div class="method-heading">
+          <a href="#M000315" class="method-signature">
+          <span class="method-name">find_and_load_default_clouds_dot_rb</span><span class="method-args">(filename=&quot;clouds.rb&quot;)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Load the default clouds.rb file If a full filepath is given, then load the
+given path if it is given, but not found or is not given entirely, then
+search the following locations, in preferential order for the <a
+href="Pool.html#M000313">clouds_dot_rb_file</a> and load the first one
+found
+</p>
+<pre>
+  + CWD/clouds.rb
+  + ENV[&quot;CLOUDS_DOT_RB&quot;]
+  + ENV[&quot;HOME&quot;]/clouds.rb
+  + /etc/poolparty/clouds.rb
+  + /var/poolparty/clouds.rb
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000315-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000315-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/pool.rb, line 113</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">find_and_load_default_clouds_dot_rb</span>(<span class="ruby-identifier">filename</span>=<span class="ruby-value str">&quot;clouds.rb&quot;</span>)
+      <span class="ruby-identifier">f</span> = <span class="ruby-keyword kw">if</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">file?</span>(<span class="ruby-identifier">filename</span>) 
+          <span class="ruby-identifier">filename</span>
+        <span class="ruby-keyword kw">else</span>
+          <span class="ruby-identifier">find_default_clouds_dot_rb</span>(<span class="ruby-identifier">filename</span>)
+        <span class="ruby-keyword kw">end</span>
+      <span class="ruby-constant">ENV</span>[<span class="ruby-value str">&quot;CLOUDS_DOT_RB&quot;</span>] = <span class="ruby-identifier">f</span>
+      <span class="ruby-identifier">load_from_file</span>(<span class="ruby-identifier">f</span>)
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000316" class="method-detail">
+        <a name="M000316"></a>
+
+        <div class="method-heading">
+          <a href="#M000316" class="method-signature">
+          <span class="method-name">find_default_clouds_dot_rb</span><span class="method-args">(filename)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Look for the default <a href="Pool.html#M000313">clouds_dot_rb_file</a>
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000316-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000316-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/pool.rb, line 124</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">find_default_clouds_dot_rb</span>(<span class="ruby-identifier">filename</span>)      
+      <span class="ruby-identifier">path</span> = <span class="ruby-identifier">default_clouds_dot_rb_locations</span>.<span class="ruby-identifier">detect</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">dir</span><span class="ruby-operator">|</span>
+        <span class="ruby-constant">File</span>.<span class="ruby-identifier">file?</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">dir</span> <span class="ruby-operator">/</span> <span class="ruby-identifier">filename</span>))
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-identifier">raise</span> <span class="ruby-constant">PoolPartyError</span>.<span class="ruby-identifier">create</span>(<span class="ruby-value str">&quot;CloudsConfigFile&quot;</span>, <span class="ruby-value str">&quot;Cannot find your config file&quot;</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">path</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">filename</span>
+      <span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">path</span>, <span class="ruby-identifier">filename</span>))
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000319" class="method-detail">
+        <a name="M000319"></a>
+
+        <div class="method-heading">
+          <a href="#M000319" class="method-signature">
+          <span class="method-name">init</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Call <a href="Pool.html#M000319">init</a> to the resource methods and <a
+href="Pool.html#M000319">init</a> the log It pulls the requires for chef
+TODO: Pull require_chef_only_resources out
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000319-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000319-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/pool.rb, line 168</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">init</span>
+      <span class="ruby-constant">DependencyResolvers</span><span class="ruby-operator">::</span><span class="ruby-constant">Chef</span>.<span class="ruby-identifier">require_chef_only_resources</span>
+      <span class="ruby-constant">PoolParty</span><span class="ruby-operator">::</span><span class="ruby-constant">Resource</span>.<span class="ruby-identifier">define_resource_methods</span>
+      <span class="ruby-constant">PoolParty</span><span class="ruby-operator">::</span><span class="ruby-constant">PoolPartyLog</span>.<span class="ruby-identifier">init</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000312" class="method-detail">
+        <a name="M000312"></a>
+
+        <div class="method-heading">
+          <a href="#M000312" class="method-signature">
+          <span class="method-name">load_from_file</span><span class="method-args">(filename=nil)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Load a clouds.rb Call the prerequisites (<a
+href="Pool.html#M000318">before_file_load</a>) and then instance_eval the
+contents finally, call <a href="Pool.html#M000320">after_file_load</a>
+callback after the clouds.rb is loaded Arguments:
+</p>
+<pre>
+  + file on the filesystem
+  + open-uri url (http)
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000312-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000312-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/pool.rb, line 80</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">load_from_file</span>(<span class="ruby-identifier">filename</span>=<span class="ruby-keyword kw">nil</span>)
+      <span class="ruby-identifier">raise</span> <span class="ruby-constant">PoolPartyError</span>.<span class="ruby-identifier">create</span>(<span class="ruby-value str">&quot;CloudsDotRbLoadError&quot;</span>, <span class="ruby-node">&quot;Cannot load the specified clouds.rb: #{filename}. Check to make sure it exists&quot;</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">filename</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">file?</span>(<span class="ruby-identifier">filename</span>)
+      <span class="ruby-identifier">ddputs</span> <span class="ruby-node">&quot;Loading #{filename} from file in Pool&quot;</span>
+      <span class="ruby-ivar">@clouds_dot_rb_file</span> = <span class="ruby-identifier">filename</span>
+      <span class="ruby-identifier">before_file_load</span>(<span class="ruby-identifier">clouds_dot_rb_file</span>)
+      <span class="ruby-identifier">o</span> = <span class="ruby-identifier">instance_eval</span> <span class="ruby-identifier">open</span>(<span class="ruby-identifier">clouds_dot_rb_file</span>).<span class="ruby-identifier">read</span>, <span class="ruby-identifier">clouds_dot_rb_file</span>
+      <span class="ruby-identifier">after_file_load</span>(<span class="ruby-identifier">clouds_dot_rb_file</span>)
+      <span class="ruby-identifier">o</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000308" class="method-detail">
+        <a name="M000308"></a>
+
+        <div class="method-heading">
+          <a href="#M000308" class="method-signature">
+          <span class="method-name">new</span><span class="method-args">(n, &amp;block)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Freeze the pool_name so we can&#8216;t modify it at all call and run
+instance_eval on the block and then call the after_create callback
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000308-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000308-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/pool.rb, line 12</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">n</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+      <span class="ruby-constant">PoolParty</span><span class="ruby-operator">::</span><span class="ruby-constant">Pool</span>.<span class="ruby-identifier">init</span>
+      
+      <span class="ruby-identifier">context_stack</span>.<span class="ruby-identifier">clear</span>
+      
+      <span class="ruby-ivar">@pool_name</span> = <span class="ruby-identifier">n</span>.<span class="ruby-identifier">to_s</span>
+      <span class="ruby-ivar">@pool_name</span>.<span class="ruby-identifier">freeze</span>
+      
+      <span class="ruby-keyword kw">super</span> <span class="ruby-keyword kw">do</span>
+        <span class="ruby-identifier">instance_eval</span> <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>
+        <span class="ruby-identifier">form_clouds</span>
+        <span class="ruby-identifier">clouds</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">name</span>, <span class="ruby-identifier">cld</span><span class="ruby-operator">|</span>
+          <span class="ruby-identifier">cld</span>.<span class="ruby-identifier">after_all_loaded</span>
+        <span class="ruby-keyword kw">end</span>
+        
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="section-bar">Public Instance methods</h3>
+
+      <div id="method-M000309" class="method-detail">
+        <a name="M000309"></a>
+
+        <div class="method-heading">
+          <a href="#M000309" class="method-signature">
+          <span class="method-name">cloud</span><span class="method-args">(name, o={}, &amp;block)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+<a href="Pool.html#M000309">cloud</a> Define a <a
+href="Pool.html#M000309">cloud</a> by a name and a block
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000309-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000309-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/pool.rb, line 32</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cloud</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">o</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">block</span>
+        <span class="ruby-identifier">clouds</span>[<span class="ruby-identifier">name</span>.<span class="ruby-identifier">to_s</span>] <span class="ruby-operator">||=</span> <span class="ruby-constant">PoolParty</span><span class="ruby-operator">::</span><span class="ruby-constant">Cloud</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">soakable_options</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">o</span>), <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+      <span class="ruby-keyword kw">else</span>
+        <span class="ruby-identifier">raise</span> <span class="ruby-constant">PoolPartyError</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value str">&quot;CloudError&quot;</span>, <span class="ruby-value str">&quot;You must pass a block when defining a cloud&quot;</span>)
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000311" class="method-detail">
+        <a name="M000311"></a>
+
+        <div class="method-heading">
+          <a href="#M000311" class="method-signature">
+          <span class="method-name">form_clouds</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Run twice to catch the errors on the first run TODO: CHANGE ME!
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000311-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000311-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/pool.rb, line 55</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">form_clouds</span>
+      <span class="ruby-identifier">failed_clouds</span> = []
+      <span class="ruby-identifier">clouds</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">name</span>, <span class="ruby-identifier">cld</span><span class="ruby-operator">|</span>
+        <span class="ruby-keyword kw">begin</span>
+          <span class="ruby-identifier">clouds</span>[<span class="ruby-identifier">name</span>].<span class="ruby-identifier">form_clouds</span>
+        <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
+          <span class="ruby-identifier">failed_clouds</span> <span class="ruby-operator">&lt;&lt;</span> [<span class="ruby-identifier">name</span>, <span class="ruby-identifier">cld</span>]
+          <span class="ruby-keyword kw">next</span>
+        <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-identifier">failed_clouds</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">name</span>, <span class="ruby-identifier">cld</span><span class="ruby-operator">|</span>
+        <span class="ruby-identifier">clouds</span>[<span class="ruby-identifier">name</span>].<span class="ruby-identifier">form_clouds</span>
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000310" class="method-detail">
+        <a name="M000310"></a>
+
+        <div class="method-heading">
+          <a href="#M000310" class="method-signature">
+          <span class="method-name">soakable_options</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Soaked options These are options that can be set on the pool that will be
+grabbed from the pool that can be set to the <a
+href="Pool.html#M000309">cloud</a>. Soakable options:
+</p>
+<pre>
+  minimum_instances
+  maximum_instances
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000310-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000310-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/pool.rb, line 46</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">soakable_options</span>
+      <span class="ruby-identifier">soaked_options</span> = {}
+      <span class="ruby-identifier">soaked_options</span>.<span class="ruby-identifier">merge!</span>(<span class="ruby-identifier">:minimum_instances</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">minimum_instances</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">minimum_instances</span>
+      <span class="ruby-identifier">soaked_options</span>.<span class="ruby-identifier">merge!</span>(<span class="ruby-identifier">:maximum_instances</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">maximum_instances</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">maximum_instances</span>
+      <span class="ruby-identifier">soaked_options</span>
     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>

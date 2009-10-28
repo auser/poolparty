@@ -65,9 +65,7 @@
         <tr class="top-aligned-row">
             <td><strong>Parent:</strong></td>
             <td>
-                <a href="Resource.html">
                 Resource
-               </a>
             </td>
         </tr>
         </table>
@@ -80,41 +78,6 @@
 
   <div id="contextContent">
 
-    <div id="description">
-      <h2><a href="Mount.html">Mount</a></h2>
-<p>
-The mount specifies a mount that is to be mounted on the instances
-</p>
-<h2>Usage</h2>
-<pre>
-  has_mount(:name =&gt; '...') do
-    # More options.
-    # This block is optional
-  end
-</pre>
-<h2>Options</h2>
-<ul>
-<li><tt>name</tt> The location of the mount (default: /data)
-
-</li>
-<li><tt>device</tt> The device location for the mount. This mounts at the
-directory set by the name
-
-</li>
-<li><tt>options</tt> The options to be set in the mount file fstab (default:
-rw,nosuid,noquota)
-
-</li>
-<li><tt>fstype</tt> The Type of mount (default: xfs)
-
-</li>
-</ul>
-<h2>Examples</h2>
-<pre>
-  has_mount(:name =&gt; &quot;/data&quot;, :device =&gt; &quot;/dev/sda100&quot;)
-</pre>
-
-    </div>
 
 
    </div>
@@ -123,7 +86,7 @@ rw,nosuid,noquota)
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000361">disallowed_options</a>&nbsp;&nbsp;
+      <a href="#M000197">print_to_chef</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -145,23 +108,29 @@ rw,nosuid,noquota)
     <div id="methods">
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000361" class="method-detail">
-        <a name="M000361"></a>
+      <div id="method-M000197" class="method-detail">
+        <a name="M000197"></a>
 
         <div class="method-heading">
-          <a href="#M000361" class="method-signature">
-          <span class="method-name">disallowed_options</span><span class="method-args">()</span>
+          <a href="#M000197" class="method-signature">
+          <span class="method-name">print_to_chef</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000361-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000361-source">
+            onclick="toggleCode('M000197-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000197-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/resources/mount.rb, line 38</span>
-      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">disallowed_options</span>
-        [<span class="ruby-identifier">:name</span>]
+<span class="ruby-comment cmt"># File lib/poolparty/resources/mount.rb, line 40</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">print_to_chef</span>
+        <span class="ruby-identifier">str</span> = <span class="ruby-value str">&quot;mount \&quot;&lt;%= name %&gt;\&quot; do\naction &lt;%= print_variable(action ? action : (exists ? :mount : :unmount)) %&gt;\ndevice_type &lt;%= print_variable(device_type) %&gt;\n&quot;</span>
+        <span class="ruby-identifier">str</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;  device &lt;%= print_variable(device) %&gt;\n&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">device</span>
+        <span class="ruby-identifier">str</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;  fstype &lt;%= print_variable(fstype) %&gt;\n&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">fstype</span>
+        <span class="ruby-identifier">str</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;  options &lt;%= print_variable(options) %&gt;\n&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">options</span>
+        <span class="ruby-identifier">str</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;  dump &lt;%= print_variable(dump) %&gt;\n&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">dump</span>
+        <span class="ruby-identifier">str</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;  pass &lt;%= print_variable(pass) %&gt;\n&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">pass</span>
+        <span class="ruby-identifier">str</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;end&quot;</span>
       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>

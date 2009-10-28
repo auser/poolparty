@@ -65,9 +65,7 @@
         <tr class="top-aligned-row">
             <td><strong>Parent:</strong></td>
             <td>
-                <a href="Resource.html">
                 Resource
-               </a>
             </td>
         </tr>
         </table>
@@ -88,8 +86,7 @@
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000348">absent</a>&nbsp;&nbsp;
-      <a href="#M000347">present</a>&nbsp;&nbsp;
+      <a href="#M000154">print_to_chef</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -111,46 +108,27 @@
     <div id="methods">
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000348" class="method-detail">
-        <a name="M000348"></a>
+      <div id="method-M000154" class="method-detail">
+        <a name="M000154"></a>
 
         <div class="method-heading">
-          <a href="#M000348" class="method-signature">
-          <span class="method-name">absent</span><span class="method-args">()</span>
+          <a href="#M000154" class="method-signature">
+          <span class="method-name">print_to_chef</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000348-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000348-source">
+            onclick="toggleCode('M000154-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000154-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/resources/group.rb, line 14</span>
-      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">absent</span>
-        <span class="ruby-identifier">:remove</span>
-      <span class="ruby-keyword kw">end</span>
-</pre>
-          </div>
-        </div>
-      </div>
-
-      <div id="method-M000347" class="method-detail">
-        <a name="M000347"></a>
-
-        <div class="method-heading">
-          <a href="#M000347" class="method-signature">
-          <span class="method-name">present</span><span class="method-args">()</span>
-          </a>
-        </div>
-      
-        <div class="method-description">
-          <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000347-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000347-source">
-<pre>
-<span class="ruby-comment cmt"># File lib/poolparty/resources/group.rb, line 10</span>
-      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">present</span>
-        <span class="ruby-identifier">:manage</span>
+<span class="ruby-comment cmt"># File lib/poolparty/resources/group.rb, line 35</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">print_to_chef</span>
+        <span class="ruby-identifier">str</span> = <span class="ruby-value str">&quot;group \&quot;&lt;%= name %&gt;\&quot; do\n   action :&lt;%= (action ? action : (exists ? :create : :remove)) %&gt;&quot;</span>
+        <span class="ruby-identifier">str</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;  gid &lt;%= print_variable(gid) %&gt;\n&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">gid</span>
+        <span class="ruby-identifier">str</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;  members &lt;%= print_variable(members) %&gt;\n&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">members</span>
+        <span class="ruby-identifier">str</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;  append &lt;%= print_variable(append) %&gt;\n&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">append</span>
+        <span class="ruby-identifier">str</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;\nend&quot;</span>
       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>

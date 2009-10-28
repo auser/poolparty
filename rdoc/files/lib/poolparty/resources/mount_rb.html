@@ -56,7 +56,7 @@
     </tr>
     <tr class="top-aligned-row">
       <td><strong>Last Update:</strong></td>
-      <td>Tue May 12 15:04:18 -0700 2009</td>
+      <td>Thu Aug 27 18:44:25 -0700 2009</td>
     </tr>
     </table>
   </div>
@@ -68,6 +68,41 @@
 
   <div id="contextContent">
 
+    <div id="description">
+      <h2>Mount</h2>
+<p>
+The mount specifies a mount that is to be mounted on the instances
+</p>
+<h2>Usage</h2>
+<pre>
+  has_mount(:name =&gt; '...') do
+    # More options.
+    # This block is optional
+  end
+</pre>
+<h2>Options</h2>
+<ul>
+<li><tt>name</tt> The location of the mount (default: /data)
+
+</li>
+<li><tt>device</tt> The device location for the mount. This mounts at the
+directory set by the name
+
+</li>
+<li><tt>options</tt> The options to be set in the mount file fstab (default:
+rw,nosuid,noquota)
+
+</li>
+<li><tt>fstype</tt> The Type of mount (default: xfs)
+
+</li>
+</ul>
+<h2>Examples</h2>
+<pre>
+  has_mount(:name =&gt; &quot;/data&quot;, :device =&gt; &quot;/dev/sda100&quot;)
+</pre>
+
+    </div>
 
 
    </div>

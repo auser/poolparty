@@ -65,9 +65,7 @@
         <tr class="top-aligned-row">
             <td><strong>Parent:</strong></td>
             <td>
-                <a href="Resource.html">
                 Resource
-               </a>
             </td>
         </tr>
         </table>
@@ -80,40 +78,6 @@
 
   <div id="contextContent">
 
-    <div id="description">
-      <h2><a href="Exec.html">Exec</a></h2>
-<p>
-Ensure a command is run on the instances
-</p>
-<h2>Usage</h2>
-<pre>
-  has_exec(:name =&gt; '...') do
-    # More options.
-    # This block is optional
-  end
-</pre>
-<h2>Options</h2>
-<ul>
-<li><tt>name</tt> The name of your exec. This is optional, but nice for
-debugging purposes
-
-</li>
-<li><tt>cwd</tt> Current working directory to execute the command (optional)
-
-</li>
-<li><tt>command</tt> This describes the command to run
-
-</li>
-<li><tt>path</tt> The path to run the command with (optional)
-
-</li>
-</ul>
-<h2>Examples</h2>
-<pre>
-  has_exec(:name =&gt; 'start messenger', :command =&gt; 'server-start-node', :requires =&gt; get_gempackage('poolparty-latest', :onlyif =&gt; 'ps aux | grep beam | grep master')
-</pre>
-
-    </div>
 
 
    </div>
@@ -122,9 +86,7 @@ debugging purposes
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000394">absent</a>&nbsp;&nbsp;
-      <a href="#M000395">after_create</a>&nbsp;&nbsp;
-      <a href="#M000393">present</a>&nbsp;&nbsp;
+      <a href="#M000213">print_to_chef</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -146,69 +108,35 @@ debugging purposes
     <div id="methods">
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000394" class="method-detail">
-        <a name="M000394"></a>
+      <div id="method-M000213" class="method-detail">
+        <a name="M000213"></a>
 
         <div class="method-heading">
-          <a href="#M000394" class="method-signature">
-          <span class="method-name">absent</span><span class="method-args">()</span>
+          <a href="#M000213" class="method-signature">
+          <span class="method-name">print_to_chef</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000394-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000394-source">
+            onclick="toggleCode('M000213-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000213-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/resources/exec.rb, line 36</span>
-      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">absent</span>
-        <span class="ruby-keyword kw">nil</span>
-      <span class="ruby-keyword kw">end</span>
-</pre>
-          </div>
-        </div>
-      </div>
-
-      <div id="method-M000395" class="method-detail">
-        <a name="M000395"></a>
-
-        <div class="method-heading">
-          <a href="#M000395" class="method-signature">
-          <span class="method-name">after_create</span><span class="method-args">()</span>
-          </a>
-        </div>
+<span class="ruby-comment cmt"># File lib/poolparty/resources/exec.rb, line 42</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">print_to_chef</span>
+<span class="ruby-identifier">str</span> = <span class="ruby-value str">'execute &quot;&lt;%= name %&gt;&quot; do
+  command &lt;%= print_variable(command || name) %&gt;
+  path &lt;%= print_variable(path) %&gt;
+  action &lt;%= print_variable(action ? action : (exists ? :run : :nothing)) %&gt;
+'</span>
+      <span class="ruby-identifier">str</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;  creates &lt;%= print_variable(creates) %&gt;\n&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">creates</span>
+      <span class="ruby-identifier">str</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;  cwd &lt;%= print_variable(cwd) %&gt;\n&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">cwd</span>
+      <span class="ruby-identifier">str</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;  environment &lt;%= print_variable(environment) %&gt;\n&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">environment</span>
+      <span class="ruby-identifier">str</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;  group &lt;%= print_variable(group) %&gt;\n&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">group</span>
+      <span class="ruby-identifier">str</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;  returns &lt;%= print_variable(returns) %&gt;\n&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">returns</span>
+      <span class="ruby-identifier">str</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;  user &lt;%= print_variable(user) %&gt;\n&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">user</span>
       
-        <div class="method-description">
-          <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000395-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000395-source">
-<pre>
-<span class="ruby-comment cmt"># File lib/poolparty/resources/exec.rb, line 40</span>
-      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">after_create</span>
-        <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:name</span>] = <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:command</span>] <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">options</span>.<span class="ruby-identifier">name</span>
-      <span class="ruby-keyword kw">end</span>
-</pre>
-          </div>
-        </div>
-      </div>
-
-      <div id="method-M000393" class="method-detail">
-        <a name="M000393"></a>
-
-        <div class="method-heading">
-          <a href="#M000393" class="method-signature">
-          <span class="method-name">present</span><span class="method-args">()</span>
-          </a>
-        </div>
-      
-        <div class="method-description">
-          <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000393-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000393-source">
-<pre>
-<span class="ruby-comment cmt"># File lib/poolparty/resources/exec.rb, line 32</span>
-      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">present</span>
-        <span class="ruby-keyword kw">nil</span>
+      <span class="ruby-identifier">str</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;end&quot;</span>
       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>

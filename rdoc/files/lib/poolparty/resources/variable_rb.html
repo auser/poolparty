@@ -56,7 +56,7 @@
     </tr>
     <tr class="top-aligned-row">
       <td><strong>Last Update:</strong></td>
-      <td>Tue May 12 15:04:18 -0700 2009</td>
+      <td>Thu Aug 27 18:44:25 -0700 2009</td>
     </tr>
     </table>
   </div>
@@ -68,6 +68,40 @@
 
   <div id="contextContent">
 
+    <div id="description">
+      <h2>Variable</h2>
+<p>
+Describes a variable to use in a template. One of the powerful hidden
+features behind puppet is that you can use templating for your templates
+</p>
+<h2>Usage</h2>
+<pre>
+  has_variable(:name =&gt; '...') do
+    # More options.
+    # This block is optional
+  end
+</pre>
+<h2>Options</h2>
+<ul>
+<li><tt>name</tt> The name of the variable to use in the template
+
+</li>
+<li><tt>value</tt> The value of the variable in the template
+
+</li>
+</ul>
+<p>
+To use these variables, in your Erb template, reference them like so
+</p>
+<pre>
+  name: &lt;%= variablename %&gt;
+</pre>
+<h2>Examples</h2>
+<pre>
+  has_variable(:name =&gt; &quot;name&quot;, :value =&gt; &quot;#{cloud.name}&quot;)
+</pre>
+
+    </div>
 
 
    </div>

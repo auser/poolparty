@@ -55,8 +55,8 @@
         <tr class="top-aligned-row">
             <td><strong>In:</strong></td>
             <td>
-                <a href="../files/lib/poolparty/core/time_rb.html">
-                lib/poolparty/core/time.rb
+                <a href="../files/lib/core/time_rb.html">
+                lib/core/time.rb
                 </a>
         <br />
             </td>
@@ -95,24 +95,24 @@ ability to use nice phrases such as 30.seconds, 5.days, etc.
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000084">ago</a>&nbsp;&nbsp;
-      <a href="#M000095">day</a>&nbsp;&nbsp;
-      <a href="#M000094">days</a>&nbsp;&nbsp;
-      <a href="#M000087">from_now</a>&nbsp;&nbsp;
-      <a href="#M000093">hour</a>&nbsp;&nbsp;
-      <a href="#M000092">hours</a>&nbsp;&nbsp;
-      <a href="#M000091">minute</a>&nbsp;&nbsp;
-      <a href="#M000090">minutes</a>&nbsp;&nbsp;
-      <a href="#M000099">month</a>&nbsp;&nbsp;
-      <a href="#M000098">months</a>&nbsp;&nbsp;
-      <a href="#M000089">second</a>&nbsp;&nbsp;
-      <a href="#M000088">seconds</a>&nbsp;&nbsp;
-      <a href="#M000086">since</a>&nbsp;&nbsp;
-      <a href="#M000100">time_ago</a>&nbsp;&nbsp;
-      <a href="#M000101">units_ago</a>&nbsp;&nbsp;
-      <a href="#M000085">until</a>&nbsp;&nbsp;
-      <a href="#M000097">week</a>&nbsp;&nbsp;
-      <a href="#M000096">weeks</a>&nbsp;&nbsp;
+      <a href="#M000061">ago</a>&nbsp;&nbsp;
+      <a href="#M000072">day</a>&nbsp;&nbsp;
+      <a href="#M000071">days</a>&nbsp;&nbsp;
+      <a href="#M000064">from_now</a>&nbsp;&nbsp;
+      <a href="#M000070">hour</a>&nbsp;&nbsp;
+      <a href="#M000069">hours</a>&nbsp;&nbsp;
+      <a href="#M000068">minute</a>&nbsp;&nbsp;
+      <a href="#M000067">minutes</a>&nbsp;&nbsp;
+      <a href="#M000076">month</a>&nbsp;&nbsp;
+      <a href="#M000075">months</a>&nbsp;&nbsp;
+      <a href="#M000066">second</a>&nbsp;&nbsp;
+      <a href="#M000065">seconds</a>&nbsp;&nbsp;
+      <a href="#M000063">since</a>&nbsp;&nbsp;
+      <a href="#M000077">time_ago</a>&nbsp;&nbsp;
+      <a href="#M000078">units_ago</a>&nbsp;&nbsp;
+      <a href="#M000062">until</a>&nbsp;&nbsp;
+      <a href="#M000074">week</a>&nbsp;&nbsp;
+      <a href="#M000073">weeks</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -134,21 +134,21 @@ ability to use nice phrases such as 30.seconds, 5.days, etc.
     <div id="methods">
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000084" class="method-detail">
-        <a name="M000084"></a>
+      <div id="method-M000061" class="method-detail">
+        <a name="M000061"></a>
 
         <div class="method-heading">
-          <a href="#M000084" class="method-signature">
+          <a href="#M000061" class="method-signature">
           <span class="method-name">ago</span><span class="method-args">(time = Time.now)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000084-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000084-source">
+            onclick="toggleCode('M000061-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000061-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/core/time.rb, line 7</span>
+<span class="ruby-comment cmt"># File lib/core/time.rb, line 7</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">ago</span>(<span class="ruby-identifier">time</span> = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>)
     <span class="ruby-identifier">time</span> <span class="ruby-operator">-</span> <span class="ruby-keyword kw">self</span>
   <span class="ruby-keyword kw">end</span>
@@ -157,8 +157,8 @@ ability to use nice phrases such as 30.seconds, 5.days, etc.
         </div>
       </div>
 
-      <div id="method-M000095" class="method-detail">
-        <a name="M000095"></a>
+      <div id="method-M000072" class="method-detail">
+        <a name="M000072"></a>
 
         <div class="method-heading">
           <span class="method-name">day</span><span class="method-args">()</span>
@@ -166,26 +166,26 @@ ability to use nice phrases such as 30.seconds, 5.days, etc.
       
         <div class="method-description">
           <p>
-Alias for <a href="Numeric.html#M000094">days</a>
+Alias for <a href="Numeric.html#M000071">days</a>
 </p>
         </div>
       </div>
 
-      <div id="method-M000094" class="method-detail">
-        <a name="M000094"></a>
+      <div id="method-M000071" class="method-detail">
+        <a name="M000071"></a>
 
         <div class="method-heading">
-          <a href="#M000094" class="method-signature">
+          <a href="#M000071" class="method-signature">
           <span class="method-name">days</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000094-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000094-source">
+            onclick="toggleCode('M000071-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000071-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/core/time.rb, line 32</span>
+<span class="ruby-comment cmt"># File lib/core/time.rb, line 32</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">days</span>
     <span class="ruby-keyword kw">self</span> <span class="ruby-operator">*</span> <span class="ruby-value">24</span>.<span class="ruby-identifier">hours</span>
   <span class="ruby-keyword kw">end</span>
@@ -194,8 +194,8 @@ Alias for <a href="Numeric.html#M000094">days</a>
         </div>
       </div>
 
-      <div id="method-M000087" class="method-detail">
-        <a name="M000087"></a>
+      <div id="method-M000064" class="method-detail">
+        <a name="M000064"></a>
 
         <div class="method-heading">
           <span class="method-name">from_now</span><span class="method-args">(time = Time.now)</span>
@@ -203,13 +203,13 @@ Alias for <a href="Numeric.html#M000094">days</a>
       
         <div class="method-description">
           <p>
-Alias for <a href="Numeric.html#M000086">since</a>
+Alias for <a href="Numeric.html#M000063">since</a>
 </p>
         </div>
       </div>
 
-      <div id="method-M000093" class="method-detail">
-        <a name="M000093"></a>
+      <div id="method-M000070" class="method-detail">
+        <a name="M000070"></a>
 
         <div class="method-heading">
           <span class="method-name">hour</span><span class="method-args">()</span>
@@ -217,26 +217,26 @@ Alias for <a href="Numeric.html#M000086">since</a>
       
         <div class="method-description">
           <p>
-Alias for <a href="Numeric.html#M000092">hours</a>
+Alias for <a href="Numeric.html#M000069">hours</a>
 </p>
         </div>
       </div>
 
-      <div id="method-M000092" class="method-detail">
-        <a name="M000092"></a>
+      <div id="method-M000069" class="method-detail">
+        <a name="M000069"></a>
 
         <div class="method-heading">
-          <a href="#M000092" class="method-signature">
+          <a href="#M000069" class="method-signature">
           <span class="method-name">hours</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000092-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000092-source">
+            onclick="toggleCode('M000069-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000069-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/core/time.rb, line 27</span>
+<span class="ruby-comment cmt"># File lib/core/time.rb, line 27</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">hours</span>
     <span class="ruby-keyword kw">self</span> <span class="ruby-operator">*</span> <span class="ruby-value">60</span>.<span class="ruby-identifier">minutes</span>
   <span class="ruby-keyword kw">end</span>
@@ -245,8 +245,8 @@ Alias for <a href="Numeric.html#M000092">hours</a>
         </div>
       </div>
 
-      <div id="method-M000091" class="method-detail">
-        <a name="M000091"></a>
+      <div id="method-M000068" class="method-detail">
+        <a name="M000068"></a>
 
         <div class="method-heading">
           <span class="method-name">minute</span><span class="method-args">()</span>
@@ -254,26 +254,26 @@ Alias for <a href="Numeric.html#M000092">hours</a>
       
         <div class="method-description">
           <p>
-Alias for <a href="Numeric.html#M000090">minutes</a>
+Alias for <a href="Numeric.html#M000067">minutes</a>
 </p>
         </div>
       </div>
 
-      <div id="method-M000090" class="method-detail">
-        <a name="M000090"></a>
+      <div id="method-M000067" class="method-detail">
+        <a name="M000067"></a>
 
         <div class="method-heading">
-          <a href="#M000090" class="method-signature">
+          <a href="#M000067" class="method-signature">
           <span class="method-name">minutes</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000090-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000090-source">
+            onclick="toggleCode('M000067-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000067-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/core/time.rb, line 22</span>
+<span class="ruby-comment cmt"># File lib/core/time.rb, line 22</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">minutes</span>
     <span class="ruby-keyword kw">self</span> <span class="ruby-operator">*</span> <span class="ruby-value">60</span>
   <span class="ruby-keyword kw">end</span>
@@ -282,8 +282,8 @@ Alias for <a href="Numeric.html#M000090">minutes</a>
         </div>
       </div>
 
-      <div id="method-M000099" class="method-detail">
-        <a name="M000099"></a>
+      <div id="method-M000076" class="method-detail">
+        <a name="M000076"></a>
 
         <div class="method-heading">
           <span class="method-name">month</span><span class="method-args">()</span>
@@ -291,26 +291,26 @@ Alias for <a href="Numeric.html#M000090">minutes</a>
       
         <div class="method-description">
           <p>
-Alias for <a href="Numeric.html#M000098">months</a>
+Alias for <a href="Numeric.html#M000075">months</a>
 </p>
         </div>
       </div>
 
-      <div id="method-M000098" class="method-detail">
-        <a name="M000098"></a>
+      <div id="method-M000075" class="method-detail">
+        <a name="M000075"></a>
 
         <div class="method-heading">
-          <a href="#M000098" class="method-signature">
+          <a href="#M000075" class="method-signature">
           <span class="method-name">months</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000098-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000098-source">
+            onclick="toggleCode('M000075-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000075-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/core/time.rb, line 42</span>
+<span class="ruby-comment cmt"># File lib/core/time.rb, line 42</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">months</span>
     <span class="ruby-keyword kw">self</span> <span class="ruby-operator">*</span> <span class="ruby-value">31</span>.<span class="ruby-identifier">days</span>
   <span class="ruby-keyword kw">end</span>
@@ -319,8 +319,8 @@ Alias for <a href="Numeric.html#M000098">months</a>
         </div>
       </div>
 
-      <div id="method-M000089" class="method-detail">
-        <a name="M000089"></a>
+      <div id="method-M000066" class="method-detail">
+        <a name="M000066"></a>
 
         <div class="method-heading">
           <span class="method-name">second</span><span class="method-args">()</span>
@@ -328,26 +328,26 @@ Alias for <a href="Numeric.html#M000098">months</a>
       
         <div class="method-description">
           <p>
-Alias for <a href="Numeric.html#M000088">seconds</a>
+Alias for <a href="Numeric.html#M000065">seconds</a>
 </p>
         </div>
       </div>
 
-      <div id="method-M000088" class="method-detail">
-        <a name="M000088"></a>
+      <div id="method-M000065" class="method-detail">
+        <a name="M000065"></a>
 
         <div class="method-heading">
-          <a href="#M000088" class="method-signature">
+          <a href="#M000065" class="method-signature">
           <span class="method-name">seconds</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000088-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000088-source">
+            onclick="toggleCode('M000065-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000065-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/core/time.rb, line 17</span>
+<span class="ruby-comment cmt"># File lib/core/time.rb, line 17</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">seconds</span>
     <span class="ruby-keyword kw">self</span>
   <span class="ruby-keyword kw">end</span>
@@ -356,21 +356,21 @@ Alias for <a href="Numeric.html#M000088">seconds</a>
         </div>
       </div>
 
-      <div id="method-M000086" class="method-detail">
-        <a name="M000086"></a>
+      <div id="method-M000063" class="method-detail">
+        <a name="M000063"></a>
 
         <div class="method-heading">
-          <a href="#M000086" class="method-signature">
+          <a href="#M000063" class="method-signature">
           <span class="method-name">since</span><span class="method-args">(time = Time.now)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000086-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000086-source">
+            onclick="toggleCode('M000063-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000063-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/core/time.rb, line 12</span>
+<span class="ruby-comment cmt"># File lib/core/time.rb, line 12</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">since</span>(<span class="ruby-identifier">time</span> = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>)
     <span class="ruby-identifier">time</span> <span class="ruby-operator">+</span> <span class="ruby-keyword kw">self</span>
   <span class="ruby-keyword kw">end</span>
@@ -379,21 +379,21 @@ Alias for <a href="Numeric.html#M000088">seconds</a>
         </div>
       </div>
 
-      <div id="method-M000100" class="method-detail">
-        <a name="M000100"></a>
+      <div id="method-M000077" class="method-detail">
+        <a name="M000077"></a>
 
         <div class="method-heading">
-          <a href="#M000100" class="method-signature">
+          <a href="#M000077" class="method-signature">
           <span class="method-name">time_ago</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000100-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000100-source">
+            onclick="toggleCode('M000077-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000077-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/core/time.rb, line 47</span>
+<span class="ruby-comment cmt"># File lib/core/time.rb, line 47</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">time_ago</span>
     <span class="ruby-identifier">out</span> = <span class="ruby-node">%w(year month week day hour minute)</span>.<span class="ruby-identifier">detect</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">unit</span><span class="ruby-operator">|</span> <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">1</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">unit</span>) }
     <span class="ruby-identifier">units_ago</span>(<span class="ruby-identifier">out</span>, <span class="ruby-keyword kw">self</span>) <span class="ruby-keyword kw">rescue</span> <span class="ruby-value str">&quot;Less than a minute ago&quot;</span>
@@ -403,21 +403,21 @@ Alias for <a href="Numeric.html#M000088">seconds</a>
         </div>
       </div>
 
-      <div id="method-M000101" class="method-detail">
-        <a name="M000101"></a>
+      <div id="method-M000078" class="method-detail">
+        <a name="M000078"></a>
 
         <div class="method-heading">
-          <a href="#M000101" class="method-signature">
+          <a href="#M000078" class="method-signature">
           <span class="method-name">units_ago</span><span class="method-args">(unit,seconds)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000101-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000101-source">
+            onclick="toggleCode('M000078-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000078-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/core/time.rb, line 52</span>
+<span class="ruby-comment cmt"># File lib/core/time.rb, line 52</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">units_ago</span>(<span class="ruby-identifier">unit</span>,<span class="ruby-identifier">seconds</span>)
     <span class="ruby-identifier">in_units</span> = (<span class="ruby-identifier">seconds</span> <span class="ruby-operator">/</span> <span class="ruby-value">1</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">unit</span>))
     <span class="ruby-node">&quot;#{in_units.to_i} #{in_units != 1 ? unit.to_s.pluralize : unit} ago&quot;</span> 
@@ -427,8 +427,8 @@ Alias for <a href="Numeric.html#M000088">seconds</a>
         </div>
       </div>
 
-      <div id="method-M000085" class="method-detail">
-        <a name="M000085"></a>
+      <div id="method-M000062" class="method-detail">
+        <a name="M000062"></a>
 
         <div class="method-heading">
           <span class="method-name">until</span><span class="method-args">(time = Time.now)</span>
@@ -436,13 +436,13 @@ Alias for <a href="Numeric.html#M000088">seconds</a>
       
         <div class="method-description">
           <p>
-Alias for <a href="Numeric.html#M000084">ago</a>
+Alias for <a href="Numeric.html#M000061">ago</a>
 </p>
         </div>
       </div>
 
-      <div id="method-M000097" class="method-detail">
-        <a name="M000097"></a>
+      <div id="method-M000074" class="method-detail">
+        <a name="M000074"></a>
 
         <div class="method-heading">
           <span class="method-name">week</span><span class="method-args">()</span>
@@ -450,26 +450,26 @@ Alias for <a href="Numeric.html#M000084">ago</a>
       
         <div class="method-description">
           <p>
-Alias for <a href="Numeric.html#M000096">weeks</a>
+Alias for <a href="Numeric.html#M000073">weeks</a>
 </p>
         </div>
       </div>
 
-      <div id="method-M000096" class="method-detail">
-        <a name="M000096"></a>
+      <div id="method-M000073" class="method-detail">
+        <a name="M000073"></a>
 
         <div class="method-heading">
-          <a href="#M000096" class="method-signature">
+          <a href="#M000073" class="method-signature">
           <span class="method-name">weeks</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000096-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000096-source">
+            onclick="toggleCode('M000073-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000073-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/core/time.rb, line 37</span>
+<span class="ruby-comment cmt"># File lib/core/time.rb, line 37</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">weeks</span>
     <span class="ruby-keyword kw">self</span> <span class="ruby-operator">*</span> <span class="ruby-value">7</span>.<span class="ruby-identifier">days</span>
   <span class="ruby-keyword kw">end</span>

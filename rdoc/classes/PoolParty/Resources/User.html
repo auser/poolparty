@@ -65,9 +65,7 @@
         <tr class="top-aligned-row">
             <td><strong>Parent:</strong></td>
             <td>
-                <a href="Resource.html">
                 Resource
-               </a>
             </td>
         </tr>
         </table>
@@ -84,6 +82,13 @@
 
    </div>
 
+    <div id="method-list">
+      <h3 class="section-bar">Methods</h3>
+
+      <div class="name-list">
+      <a href="#M000153">print_to_chef</a>&nbsp;&nbsp;
+      </div>
+    </div>
 
   </div>
 
@@ -100,6 +105,45 @@
 
 
     <!-- if method_list -->
+    <div id="methods">
+      <h3 class="section-bar">Public Instance methods</h3>
+
+      <div id="method-M000153" class="method-detail">
+        <a name="M000153"></a>
+
+        <div class="method-heading">
+          <a href="#M000153" class="method-signature">
+          <span class="method-name">print_to_chef</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000153-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000153-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/resources/user.rb, line 45</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">print_to_chef</span>
+<span class="ruby-identifier">str</span> = <span class="ruby-value str">'user &quot;&lt;%= name %&gt;&quot; do
+  action &lt;%= print_variable(action ? action : (exists ? :create : :remove)) %&gt;
+'</span>
+        <span class="ruby-identifier">str</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;  comment &lt;%= print_variable(comment) %&gt;\n&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">comment</span>
+        <span class="ruby-identifier">str</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;  uid &lt;%= print_variable(uid) %&gt;\n&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">uid</span>
+        <span class="ruby-identifier">str</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;  gid &lt;%= print_variable(gid) %&gt;\n&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">gid</span>
+        <span class="ruby-identifier">str</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;  home &lt;%= print_variable(home) %&gt;\n&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">home</span>
+        <span class="ruby-identifier">str</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;  shell &lt;%= print_variable(shell) %&gt;\n&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">shell</span>
+        <span class="ruby-identifier">str</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;  password &lt;%= print_variable(password) %&gt;\n&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">password</span>
+        <span class="ruby-identifier">str</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;  supports &lt;%= print_variable(supports) %&gt;\n&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">supports</span>
+        
+        <span class="ruby-identifier">str</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;end&quot;</span>
+      <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
 
 
   </div>

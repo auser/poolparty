@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Class: PoolParty::Resources::VirtualHost</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+    <div id="classHeader">
+        <table class="header-table">
+        <tr class="top-aligned-row">
+          <td><strong>Class</strong></td>
+          <td class="class-name-in-header">PoolParty::Resources::VirtualHost</td>
+        </tr>
+        <tr class="top-aligned-row">
+            <td><strong>In:</strong></td>
+            <td>
+                <a href="../../../files/lib/poolparty/plugins/apache2/virtual_host_rb.html">
+                lib/poolparty/plugins/apache2/virtual_host.rb
+                </a>
+        <br />
+            </td>
+        </tr>
+
+        <tr class="top-aligned-row">
+            <td><strong>Parent:</strong></td>
+            <td>
+                <a href="Apache.html">
+                Apache
+               </a>
+            </td>
+        </tr>
+        </table>
+    </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+
+
+   </div>
+
+    <div id="method-list">
+      <h3 class="section-bar">Methods</h3>
+
+      <div class="name-list">
+      <a href="#M000216">after_loaded</a>&nbsp;&nbsp;
+      <a href="#M000214">listen</a>&nbsp;&nbsp;
+      <a href="#M000215">virtual_host_entry</a>&nbsp;&nbsp;
+      </div>
+    </div>
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+
+
+
+
+      
+
+
+    <!-- if method_list -->
+    <div id="methods">
+      <h3 class="section-bar">Public Instance methods</h3>
+
+      <div id="method-M000216" class="method-detail">
+        <a name="M000216"></a>
+
+        <div class="method-heading">
+          <a href="#M000216" class="method-signature">
+          <span class="method-name">after_loaded</span><span class="method-args">(opts={}, parent=self)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000216-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000216-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/plugins/apache2/virtual_host.rb, line 30</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">after_loaded</span>(<span class="ruby-identifier">opts</span>={}, <span class="ruby-identifier">parent</span>=<span class="ruby-keyword kw">self</span>)
+        <span class="ruby-identifier">has_directory</span>(<span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;#{www_dir}/#{name}&quot;</span>, <span class="ruby-identifier">:owner</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">www_user</span>, <span class="ruby-identifier">:mode=</span><span class="ruby-operator">&gt;</span><span class="ruby-value str">'0744'</span>)
+        <span class="ruby-identifier">has_directory</span>(<span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;#{www_dir}/#{name}/logs&quot;</span>, <span class="ruby-identifier">:owner</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">www_user</span>, <span class="ruby-identifier">:mode=</span><span class="ruby-operator">&gt;</span><span class="ruby-value str">'0744'</span>)
+
+        <span class="ruby-identifier">has_variable</span>(<span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;sitename&quot;</span>, <span class="ruby-identifier">:value</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;#{name}&quot;</span>)
+
+        <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@virtual_host_entry</span>
+          <span class="ruby-identifier">vf</span> = <span class="ruby-value str">&quot;&lt;VirtualHost *:\#{port}&gt;\nServerName     \#{name}\nDocumentRoot   /var/www/\#{name}\n&lt;/VirtualHost&gt;\n&quot;</span>
+        <span class="ruby-identifier">virtual_host_entry</span> <span class="ruby-identifier">vf</span>
+        <span class="ruby-keyword kw">end</span>
+
+        <span class="ruby-identifier">has_exec</span>(<span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;insert-site-#{name}&quot;</span>, 
+                 <span class="ruby-identifier">:command</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;/usr/sbin/a2ensite #{name}&quot;</span>, 
+                 <span class="ruby-identifier">:requires</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">get_file</span>(<span class="ruby-node">&quot;/etc/apache2/sites-available/#{name}&quot;</span>)) <span class="ruby-keyword kw">do</span>
+          <span class="ruby-identifier">requires</span> <span class="ruby-identifier">get_package</span>(<span class="ruby-value str">&quot;apache2&quot;</span>)
+          <span class="ruby-identifier">notifies</span> <span class="ruby-identifier">get_exec</span>(<span class="ruby-value str">&quot;reload-apache2&quot;</span>), <span class="ruby-identifier">:run</span>
+          <span class="ruby-identifier">not_if</span> <span class="ruby-node">&quot;/bin/sh -c '[ -L /etc/apache2/sites-enabled/#{parent.name} ] &amp;&amp; [ /etc/apache2/sites-enabled/#{parent.name} -ef /etc/apache2/sites-available/#{parent.name} ]'&quot;</span>
+        <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000214" class="method-detail">
+        <a name="M000214"></a>
+
+        <div class="method-heading">
+          <a href="#M000214" class="method-signature">
+          <span class="method-name">listen</span><span class="method-args">(port=&quot;80&quot;)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000214-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000214-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/plugins/apache2/virtual_host.rb, line 11</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">listen</span>(<span class="ruby-identifier">port</span>=<span class="ruby-value str">&quot;80&quot;</span>)
+        <span class="ruby-identifier">has_variable</span>(<span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;port&quot;</span>, <span class="ruby-identifier">:value</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">port</span>)
+        <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">port</span> = <span class="ruby-identifier">port</span>
+      <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000215" class="method-detail">
+        <a name="M000215"></a>
+
+        <div class="method-heading">
+          <a href="#M000215" class="method-signature">
+          <span class="method-name">virtual_host_entry</span><span class="method-args">(file)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000215-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000215-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/plugins/apache2/virtual_host.rb, line 16</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">virtual_host_entry</span>(<span class="ruby-identifier">file</span>)
+        <span class="ruby-ivar">@virtual_host_entry</span> = <span class="ruby-keyword kw">true</span>
+        <span class="ruby-keyword kw">if</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">file?</span>(<span class="ruby-identifier">file</span>)
+          <span class="ruby-identifier">has_file</span>( <span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;/etc/apache2/sites-available/#{name}&quot;</span>, 
+                    <span class="ruby-identifier">:template</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">file</span>, 
+                    <span class="ruby-identifier">:requires</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">get_package</span>(<span class="ruby-value str">&quot;apache2&quot;</span>))
+        <span class="ruby-keyword kw">else</span>          
+          <span class="ruby-identifier">has_file</span>( <span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">&quot;/etc/apache2/sites-available/#{name}&quot;</span>, 
+                    <span class="ruby-identifier">:content</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">file</span>, 
+                    <span class="ruby-identifier">:requires</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">get_package</span>(<span class="ruby-value str">&quot;apache2&quot;</span>))
+        <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>

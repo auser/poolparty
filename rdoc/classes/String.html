@@ -55,20 +55,8 @@
         <tr class="top-aligned-row">
             <td><strong>In:</strong></td>
             <td>
-                <a href="../files/lib/poolparty/core/string_rb.html">
-                lib/poolparty/core/string.rb
-                </a>
-        <br />
-                <a href="../files/lib/poolparty/lite_rb.html">
-                lib/poolparty/lite.rb
-                </a>
-        <br />
-                <a href="../files/lib/poolparty/modules/s3_string_rb.html">
-                lib/poolparty/modules/s3_string.rb
-                </a>
-        <br />
-                <a href="../files/lib/poolparty/net/remoter_bases/ec2/ec2_rb.html">
-                lib/poolparty/net/remoter_bases/ec2/ec2.rb
+                <a href="../files/lib/core/string_rb.html">
+                lib/core/string.rb
                 </a>
         <br />
             </td>
@@ -100,36 +88,23 @@
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000170">/</a>&nbsp;&nbsp;
-      <a href="#M000145">^</a>&nbsp;&nbsp;
-      <a href="#M000147">arrayable</a>&nbsp;&nbsp;
-      <a href="#M000157">camelcase</a>&nbsp;&nbsp;
-      <a href="#M000171">camelcase</a>&nbsp;&nbsp;
-      <a href="#M000158">camelize</a>&nbsp;&nbsp;
-      <a href="#M000155">class_constant</a>&nbsp;&nbsp;
-      <a href="#M000162">classify</a>&nbsp;&nbsp;
-      <a href="#M000167">collect_each_line_with_index</a>&nbsp;&nbsp;
-      <a href="#M000163">constantize</a>&nbsp;&nbsp;
-      <a href="#M000172">convert_from_ec2_to_ip</a>&nbsp;&nbsp;
-      <a href="#M000161">dasherize</a>&nbsp;&nbsp;
-      <a href="#M000152">dir_safe</a>&nbsp;&nbsp;
-      <a href="#M000146">grab_filename_from_caller_trace</a>&nbsp;&nbsp;
-      <a href="#M000144">hasherize</a>&nbsp;&nbsp;
-      <a href="#M000151">keyerize</a>&nbsp;&nbsp;
-      <a href="#M000169">macify</a>&nbsp;&nbsp;
-      <a href="#M000165">module_constant</a>&nbsp;&nbsp;
-      <a href="#M000156">new_resource_class</a>&nbsp;&nbsp;
-      <a href="#M000154">nice_runnable</a>&nbsp;&nbsp;
-      <a href="#M000173">parse_datetime</a>&nbsp;&nbsp;
-      <a href="#M000164">preserved_class_constant</a>&nbsp;&nbsp;
-      <a href="#M000166">preserved_module_constant</a>&nbsp;&nbsp;
-      <a href="#M000148">runnable</a>&nbsp;&nbsp;
-      <a href="#M000153">safe_quote</a>&nbsp;&nbsp;
-      <a href="#M000150">sanitize</a>&nbsp;&nbsp;
-      <a href="#M000159">snake_case</a>&nbsp;&nbsp;
-      <a href="#M000168">to_hash</a>&nbsp;&nbsp;
-      <a href="#M000149">top_level_class</a>&nbsp;&nbsp;
-      <a href="#M000160">underscore</a>&nbsp;&nbsp;
+      <a href="#M000093">/</a>&nbsp;&nbsp;
+      <a href="#M000079">^</a>&nbsp;&nbsp;
+      <a href="#M000085">camelcase</a>&nbsp;&nbsp;
+      <a href="#M000088">classify</a>&nbsp;&nbsp;
+      <a href="#M000090">collect_each_line_with_index</a>&nbsp;&nbsp;
+      <a href="#M000089">constantize</a>&nbsp;&nbsp;
+      <a href="#M000087">dasherize</a>&nbsp;&nbsp;
+      <a href="#M000094">json_parse</a>&nbsp;&nbsp;
+      <a href="#M000082">keyerize</a>&nbsp;&nbsp;
+      <a href="#M000092">macify</a>&nbsp;&nbsp;
+      <a href="#M000084">path_quote</a>&nbsp;&nbsp;
+      <a href="#M000095">pluralize</a>&nbsp;&nbsp;
+      <a href="#M000083">safe_quote</a>&nbsp;&nbsp;
+      <a href="#M000081">sanitize</a>&nbsp;&nbsp;
+      <a href="#M000086">snake_case</a>&nbsp;&nbsp;
+      <a href="#M000091">to_hash</a>&nbsp;&nbsp;
+      <a href="#M000080">top_level_class</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -137,13 +112,6 @@
 
 
     <!-- if includes -->
-    <div id="includes">
-      <h3 class="section-bar">Included Modules</h3>
-
-      <div id="includes-list">
-        <span class="include-name"><a href="S3String.html">S3String</a></span>
-      </div>
-    </div>
 
     <div id="section">
 
@@ -158,11 +126,11 @@
     <div id="methods">
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000170" class="method-detail">
-        <a name="M000170"></a>
+      <div id="method-M000093" class="method-detail">
+        <a name="M000093"></a>
 
         <div class="method-heading">
-          <a href="#M000170" class="method-signature">
+          <a href="#M000093" class="method-signature">
           <span class="method-name">/</span><span class="method-args">(o)</span>
           </a>
         </div>
@@ -183,10 +151,10 @@ concatenated with o.
   &quot;merb&quot;/&quot;core_ext&quot; #=&gt; &quot;merb/core_ext&quot;
 </pre>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000170-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000170-source">
+            onclick="toggleCode('M000093-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000093-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/core/string.rb, line 189</span>
+<span class="ruby-comment cmt"># File lib/core/string.rb, line 132</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-operator">/</span>(<span class="ruby-identifier">o</span>)
     <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-keyword kw">self</span>, <span class="ruby-identifier">o</span>.<span class="ruby-identifier">to_s</span>)
   <span class="ruby-keyword kw">end</span>
@@ -195,21 +163,27 @@ concatenated with o.
         </div>
       </div>
 
-      <div id="method-M000145" class="method-detail">
-        <a name="M000145"></a>
+      <div id="method-M000079" class="method-detail">
+        <a name="M000079"></a>
 
         <div class="method-heading">
-          <a href="#M000145" class="method-signature">
+          <a href="#M000079" class="method-signature">
           <span class="method-name">^</span><span class="method-args">(h={})</span>
           </a>
         </div>
       
         <div class="method-description">
-          <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000145-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000145-source">
+          <p>
+Quick replacement of variables in a string with the hash equivalent Usage:
+</p>
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/core/string.rb, line 14</span>
+  &quot;:god bless :country&quot; ^ {:god =&gt; &quot;Budda&quot;, :country =&gt; &quot;India&quot;} #=&gt; &quot;Budda bless India&quot;
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000079-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000079-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/core/string.rb, line 7</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-operator">^</span>(<span class="ruby-identifier">h</span>={})
     <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/:([\w]+)/</span>) {<span class="ruby-identifier">h</span>[<span class="ruby-identifier">$1</span>.<span class="ruby-identifier">to_sym</span>] <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">h</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">$1</span>.<span class="ruby-identifier">to_sym</span>)}
   <span class="ruby-keyword kw">end</span>
@@ -218,172 +192,83 @@ concatenated with o.
         </div>
       </div>
 
-      <div id="method-M000147" class="method-detail">
-        <a name="M000147"></a>
+      <div id="method-M000085" class="method-detail">
+        <a name="M000085"></a>
 
         <div class="method-heading">
-          <a href="#M000147" class="method-signature">
-          <span class="method-name">arrayable</span><span class="method-args">()</span>
-          </a>
-        </div>
-      
-        <div class="method-description">
-          <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000147-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000147-source">
-<pre>
-<span class="ruby-comment cmt"># File lib/poolparty/core/string.rb, line 20</span>
-  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">arrayable</span>
-    <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">strip</span>.<span class="ruby-identifier">split</span>(<span class="ruby-regexp re">/\n/</span>)
-  <span class="ruby-keyword kw">end</span>
-</pre>
-          </div>
-        </div>
-      </div>
-
-      <div id="method-M000157" class="method-detail">
-        <a name="M000157"></a>
-
-        <div class="method-heading">
-          <a href="#M000157" class="method-signature">
+          <a href="#M000085" class="method-signature">
           <span class="method-name">camelcase</span><span class="method-args">()</span>
-          </a>
-        </div>
-      
-        <div class="method-description">
-          <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000157-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000157-source">
-<pre>
-<span class="ruby-comment cmt"># File lib/poolparty/core/string.rb, line 86</span>
-  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">camelcase</span>
-    <span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/(^|_|-)(.)/</span>) { <span class="ruby-identifier">$2</span>.<span class="ruby-identifier">upcase</span> }
-  <span class="ruby-keyword kw">end</span>
-</pre>
-          </div>
-        </div>
-      </div>
-
-      <div id="method-M000171" class="method-detail">
-        <a name="M000171"></a>
-
-        <div class="method-heading">
-          <a href="#M000171" class="method-signature">
-          <span class="method-name">camelcase</span><span class="method-args">()</span>
-          </a>
-        </div>
-      
-        <div class="method-description">
-          <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000171-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000171-source">
-<pre>
-<span class="ruby-comment cmt"># File lib/poolparty/lite.rb, line 27</span>
-  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">camelcase</span>
-    <span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/(^|_|-)(.)/</span>) { <span class="ruby-identifier">$2</span>.<span class="ruby-identifier">upcase</span> }
-  <span class="ruby-keyword kw">end</span>
-</pre>
-          </div>
-        </div>
-      </div>
-
-      <div id="method-M000158" class="method-detail">
-        <a name="M000158"></a>
-
-        <div class="method-heading">
-          <a href="#M000158" class="method-signature">
-          <span class="method-name">camelize</span><span class="method-args">()</span>
-          </a>
-        </div>
-      
-        <div class="method-description">
-          <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000158-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000158-source">
-<pre>
-<span class="ruby-comment cmt"># File lib/poolparty/core/string.rb, line 89</span>
-  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">camelize</span>
-    <span class="ruby-identifier">camelcase</span>
-  <span class="ruby-keyword kw">end</span>
-</pre>
-          </div>
-        </div>
-      </div>
-
-      <div id="method-M000155" class="method-detail">
-        <a name="M000155"></a>
-
-        <div class="method-heading">
-          <a href="#M000155" class="method-signature">
-          <span class="method-name">class_constant</span><span class="method-args">(superclass=nil, opts={}, &amp;block)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Refactor this guy to get the class if the class is defined, and not always
-create a new one although, it doesn&#8216;t really matter as ruby will just
-reopen the class
+Turn a downcased string and capitalize it so that it can be a class
+doc_river #=&gt; DocRiver
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000155-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000155-source">
+            onclick="toggleCode('M000085-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000085-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/core/string.rb, line 55</span>
-  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">class_constant</span>(<span class="ruby-identifier">superclass</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">opts</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
-    <span class="ruby-identifier">symc</span> = ((<span class="ruby-identifier">opts</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:preserve</span>]) <span class="ruby-operator">?</span> (<span class="ruby-node">&quot;#{self.camelcase}Class&quot;</span>) <span class="ruby-operator">:</span> <span class="ruby-node">&quot;PoolParty#{self.camelcase}Class&quot;</span>).<span class="ruby-identifier">classify</span>
-
-    <span class="ruby-identifier">kla</span>=<span class="ruby-value str">&quot;class \#{symc} \#{\&quot;&lt; \#{superclass}\&quot; if superclass}\nend\n&quot;</span>
-    
-    <span class="ruby-constant">Kernel</span>.<span class="ruby-identifier">module_eval</span> <span class="ruby-identifier">kla</span>
-    <span class="ruby-identifier">klass</span> = <span class="ruby-identifier">symc</span>.<span class="ruby-identifier">constantize</span>
-    <span class="ruby-identifier">klass</span>.<span class="ruby-identifier">module_eval</span> <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">block</span>
-    
-    <span class="ruby-identifier">klass</span>
+<span class="ruby-comment cmt"># File lib/core/string.rb, line 45</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">camelcase</span>
+    <span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/(^|_|-)(.)/</span>) { <span class="ruby-identifier">$2</span>.<span class="ruby-identifier">upcase</span> }
   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000162" class="method-detail">
-        <a name="M000162"></a>
+      <div id="method-M000088" class="method-detail">
+        <a name="M000088"></a>
 
         <div class="method-heading">
-          <a href="#M000162" class="method-signature">
+          <a href="#M000088" class="method-signature">
           <span class="method-name">classify</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
-          <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000162-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000162-source">
+          <p>
+Turn a string from lowercased with a . to a classified classname
+rice_and_beans #=&gt; &quot;RiceAndBeans&quot; handles subclassed and
+namespaced classes as well for instance
+</p>
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/core/string.rb, line 106</span>
-    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">classify</span>
-      <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">sub</span>(<span class="ruby-regexp re">/.*\./</span>, <span class="ruby-value str">''</span>).<span class="ruby-identifier">camelcase</span>
-    <span class="ruby-keyword kw">end</span>
+  rice::and::beans #=&gt; Rice::And::Beans
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000088-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000088-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/core/string.rb, line 65</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">classify</span>
+    <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">sub</span>(<span class="ruby-regexp re">/.*\./</span>, <span class="ruby-value str">''</span>).<span class="ruby-identifier">split</span>(<span class="ruby-value str">&quot;::&quot;</span>).<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">ele</span><span class="ruby-operator">|</span> <span class="ruby-identifier">ele</span>.<span class="ruby-identifier">camelcase</span> }.<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot;::&quot;</span>)
+  <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000167" class="method-detail">
-        <a name="M000167"></a>
+      <div id="method-M000090" class="method-detail">
+        <a name="M000090"></a>
 
         <div class="method-heading">
-          <a href="#M000167" class="method-signature">
+          <a href="#M000090" class="method-signature">
           <span class="method-name">collect_each_line_with_index</span><span class="method-args">(&amp;block)</span>
           </a>
         </div>
       
         <div class="method-description">
+          <p>
+Collect every line in the the array of the string split by newlines and
+assign an index with the line on the enumeration
+</p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000167-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000167-source">
+            onclick="toggleCode('M000090-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000090-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/core/string.rb, line 151</span>
+<span class="ruby-comment cmt"># File lib/core/string.rb, line 94</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">collect_each_line_with_index</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
     <span class="ruby-identifier">returning</span> [] <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">arr</span><span class="ruby-operator">|</span>
       <span class="ruby-identifier">arr</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">split</span>(<span class="ruby-regexp re">/\n/</span>).<span class="ruby-identifier">collect_with_index</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
@@ -394,11 +279,11 @@ reopen the class
         </div>
       </div>
 
-      <div id="method-M000163" class="method-detail">
-        <a name="M000163"></a>
+      <div id="method-M000089" class="method-detail">
+        <a name="M000089"></a>
 
         <div class="method-heading">
-          <a href="#M000163" class="method-signature">
+          <a href="#M000089" class="method-signature">
           <span class="method-name">constantize</span><span class="method-args">(mod=Object)</span>
           </a>
         </div>
@@ -417,16 +302,15 @@ Examples
   &quot;Class&quot;.constantize #=&gt; Class
 </pre>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000163-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000163-source">
+            onclick="toggleCode('M000089-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000089-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/core/string.rb, line 124</span>
+<span class="ruby-comment cmt"># File lib/core/string.rb, line 83</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">constantize</span>(<span class="ruby-identifier">mod</span>=<span class="ruby-constant">Object</span>)
-    <span class="ruby-identifier">camelcased_word</span> = <span class="ruby-identifier">camelcase</span>
+    <span class="ruby-identifier">camelcased_word</span> = <span class="ruby-identifier">classify</span>
     <span class="ruby-keyword kw">begin</span>
       <span class="ruby-identifier">mod</span>.<span class="ruby-identifier">module_eval</span>(<span class="ruby-identifier">camelcased_word</span>, <span class="ruby-keyword kw">__FILE__</span>, <span class="ruby-keyword kw">__LINE__</span>)
     <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">NameError</span>
-      <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;#{camelcased_word} is not defined.&quot;</span>
       <span class="ruby-keyword kw">nil</span>
     <span class="ruby-keyword kw">end</span>
   <span class="ruby-keyword kw">end</span>
@@ -435,156 +319,86 @@ Examples
         </div>
       </div>
 
-      <div id="method-M000172" class="method-detail">
-        <a name="M000172"></a>
+      <div id="method-M000087" class="method-detail">
+        <a name="M000087"></a>
 
         <div class="method-heading">
-          <a href="#M000172" class="method-signature">
-          <span class="method-name">convert_from_ec2_to_ip</span><span class="method-args">()</span>
-          </a>
-        </div>
-      
-        <div class="method-description">
-          <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000172-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000172-source">
-<pre>
-<span class="ruby-comment cmt"># File lib/poolparty/net/remoter_bases/ec2/ec2.rb, line 28</span>
-  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">convert_from_ec2_to_ip</span>
-    <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/.compute-1.amazonaws.com*/</span>, <span class="ruby-value str">''</span>).<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/ec2-/</span>, <span class="ruby-value str">''</span>).<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/-/</span>, <span class="ruby-value str">'.'</span>)
-  <span class="ruby-keyword kw">end</span>
-</pre>
-          </div>
-        </div>
-      </div>
-
-      <div id="method-M000161" class="method-detail">
-        <a name="M000161"></a>
-
-        <div class="method-heading">
-          <a href="#M000161" class="method-signature">
+          <a href="#M000087" class="method-signature">
           <span class="method-name">dasherize</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-&quot;FooBar&quot;.<a href="String.html#M000161">dasherize</a> #=&gt;
+&quot;FooBar&quot;.<a href="String.html#M000087">dasherize</a> #=&gt;
 &quot;foo-bar&quot;
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000161-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000161-source">
+            onclick="toggleCode('M000087-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000087-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/core/string.rb, line 102</span>
-    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">dasherize</span>
-      <span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/\B[A-Z]+/</span>, <span class="ruby-value str">'-\&amp;'</span>).<span class="ruby-identifier">downcase</span>
+<span class="ruby-comment cmt"># File lib/core/string.rb, line 55</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">dasherize</span>
+    <span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/\B[A-Z]+/</span>, <span class="ruby-value str">'-\&amp;'</span>).<span class="ruby-identifier">downcase</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000094" class="method-detail">
+        <a name="M000094"></a>
+
+        <div class="method-heading">
+          <a href="#M000094" class="method-signature">
+          <span class="method-name">json_parse</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Parse json string to a ruby object
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000094-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000094-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/core/string.rb, line 137</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">json_parse</span>
+    <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">nil</span> <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">self</span> <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;null&quot;</span> <span class="ruby-operator">||</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">empty?</span>
+    <span class="ruby-identifier">result</span> = <span class="ruby-constant">JSON</span>.<span class="ruby-identifier">parse</span> <span class="ruby-keyword kw">self</span>
+    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">result</span>.<span class="ruby-identifier">respond_to?</span> <span class="ruby-identifier">:keys</span>
+      <span class="ruby-identifier">result</span>.<span class="ruby-identifier">symbolize_keys!</span>
     <span class="ruby-keyword kw">end</span>
-</pre>
-          </div>
-        </div>
-      </div>
-
-      <div id="method-M000152" class="method-detail">
-        <a name="M000152"></a>
-
-        <div class="method-heading">
-          <a href="#M000152" class="method-signature">
-          <span class="method-name">dir_safe</span><span class="method-args">()</span>
-          </a>
-        </div>
-      
-        <div class="method-description">
-          <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000152-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000152-source">
-<pre>
-<span class="ruby-comment cmt"># File lib/poolparty/core/string.rb, line 42</span>
-  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">dir_safe</span>
-    <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">downcase</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/[ ]/</span>, <span class="ruby-value str">'_'</span>)
   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000146" class="method-detail">
-        <a name="M000146"></a>
+      <div id="method-M000082" class="method-detail">
+        <a name="M000082"></a>
 
         <div class="method-heading">
-          <a href="#M000146" class="method-signature">
-          <span class="method-name">grab_filename_from_caller_trace</span><span class="method-args">()</span>
-          </a>
-        </div>
-      
-        <div class="method-description">
-          <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000146-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000146-source">
-<pre>
-<span class="ruby-comment cmt"># File lib/poolparty/core/string.rb, line 17</span>
-  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">grab_filename_from_caller_trace</span>
-    <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/\.rb(.*)/</span>, <span class="ruby-value str">'.rb'</span>)
-  <span class="ruby-keyword kw">end</span>
-</pre>
-          </div>
-        </div>
-      </div>
-
-      <div id="method-M000144" class="method-detail">
-        <a name="M000144"></a>
-
-        <div class="method-heading">
-          <a href="#M000144" class="method-signature">
-          <span class="method-name">hasherize</span><span class="method-args">(format=[])</span>
-          </a>
-        </div>
-      
-        <div class="method-description">
-          <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000144-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000144-source">
-<pre>
-<span class="ruby-comment cmt"># File lib/poolparty/core/string.rb, line 2</span>
-  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">hasherize</span>(<span class="ruby-identifier">format</span>=[])
-    <span class="ruby-identifier">hash</span> = {}
-    <span class="ruby-identifier">i</span> = <span class="ruby-value">0</span>
-    <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">split</span>(<span class="ruby-regexp re">%r{[\n|\t|\s| ]+}</span>).<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">a</span><span class="ruby-operator">|</span> <span class="ruby-identifier">a</span>.<span class="ruby-identifier">strip</span>}.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>
-      <span class="ruby-keyword kw">next</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">format</span>[<span class="ruby-identifier">i</span>]
-      <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">f</span> <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;&quot;</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">f</span>.<span class="ruby-identifier">nil?</span>
-        <span class="ruby-identifier">hash</span>[<span class="ruby-identifier">format</span>[<span class="ruby-identifier">i</span>].<span class="ruby-identifier">to_sym</span>] = <span class="ruby-identifier">f</span>
-        <span class="ruby-identifier">i</span><span class="ruby-operator">+=</span><span class="ruby-value">1</span>
-      <span class="ruby-keyword kw">end</span>      
-    <span class="ruby-keyword kw">end</span>
-    <span class="ruby-identifier">hash</span>
-  <span class="ruby-keyword kw">end</span>
-</pre>
-          </div>
-        </div>
-      </div>
-
-      <div id="method-M000151" class="method-detail">
-        <a name="M000151"></a>
-
-        <div class="method-heading">
-          <a href="#M000151" class="method-signature">
+          <a href="#M000082" class="method-signature">
           <span class="method-name">keyerize</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
+          <p>
+Generate a unique integer key for this string
+</p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000151-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000151-source">
+            onclick="toggleCode('M000082-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000082-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/core/string.rb, line 33</span>
+<span class="ruby-comment cmt"># File lib/core/string.rb, line 24</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">keyerize</span>
     <span class="ruby-identifier">signed_short</span> = <span class="ruby-value">0x7</span><span class="ruby-constant">FFFFFFF</span>
     <span class="ruby-identifier">len</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">sanitize</span>.<span class="ruby-identifier">length</span>
     <span class="ruby-identifier">hash</span> = <span class="ruby-value">0</span> 
-    <span class="ruby-identifier">len</span>.<span class="ruby-identifier">times</span>{ <span class="ruby-operator">|</span><span class="ruby-identifier">i</span><span class="ruby-operator">|</span> 
-      <span class="ruby-identifier">hash</span> = <span class="ruby-keyword kw">self</span>[<span class="ruby-identifier">i</span>] <span class="ruby-operator">+</span> ( <span class="ruby-identifier">hash</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value">6</span> ) <span class="ruby-operator">+</span> ( <span class="ruby-identifier">hash</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value">16</span> ) <span class="ruby-operator">-</span> <span class="ruby-identifier">hash</span> 
-    } 
+    <span class="ruby-identifier">len</span>.<span class="ruby-identifier">times</span>{ <span class="ruby-operator">|</span><span class="ruby-identifier">i</span><span class="ruby-operator">|</span>  <span class="ruby-identifier">hash</span> = <span class="ruby-keyword kw">self</span>[<span class="ruby-identifier">i</span>] <span class="ruby-operator">+</span> ( <span class="ruby-identifier">hash</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value">6</span> ) <span class="ruby-operator">+</span> ( <span class="ruby-identifier">hash</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value">16</span> ) <span class="ruby-operator">-</span> <span class="ruby-identifier">hash</span> }
     <span class="ruby-identifier">hash</span> <span class="ruby-operator">&amp;</span> <span class="ruby-identifier">signed_short</span>
   <span class="ruby-keyword kw">end</span>
 </pre>
@@ -592,11 +406,11 @@ Examples
         </div>
       </div>
 
-      <div id="method-M000169" class="method-detail">
-        <a name="M000169"></a>
+      <div id="method-M000092" class="method-detail">
+        <a name="M000092"></a>
 
         <div class="method-heading">
-          <a href="#M000169" class="method-signature">
+          <a href="#M000092" class="method-signature">
           <span class="method-name">macify</span><span class="method-args">()</span>
           </a>
         </div>
@@ -607,10 +421,10 @@ Take a mac address and split it to map to the arp -a response Just rip off
 the first 0 if the first char is 0
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000169-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000169-source">
+            onclick="toggleCode('M000092-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000092-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/core/string.rb, line 178</span>
+<span class="ruby-comment cmt"># File lib/core/string.rb, line 121</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">macify</span>
     <span class="ruby-identifier">split</span>(<span class="ruby-value str">&quot;:&quot;</span>).<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">a</span><span class="ruby-operator">|</span> <span class="ruby-identifier">a</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">chr</span> <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;0&quot;</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">a</span>[<span class="ruby-value">1</span>].<span class="ruby-identifier">chr</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">a</span>}.<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot;:&quot;</span>)
   <span class="ruby-keyword kw">end</span>
@@ -619,221 +433,102 @@ the first 0 if the first char is 0
         </div>
       </div>
 
-      <div id="method-M000165" class="method-detail">
-        <a name="M000165"></a>
+      <div id="method-M000084" class="method-detail">
+        <a name="M000084"></a>
 
         <div class="method-heading">
-          <a href="#M000165" class="method-signature">
-          <span class="method-name">module_constant</span><span class="method-args">(append=&quot;&quot;, &amp;block)</span>
+          <a href="#M000084" class="method-signature">
+          <span class="method-name">path_quote</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
+          <p>
+Substitute spaces in a path for &#8217;\ &#8217; spaces
+</p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000165-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000165-source">
+            onclick="toggleCode('M000084-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000084-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/core/string.rb, line 139</span>
-  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">module_constant</span>(<span class="ruby-identifier">append</span>=<span class="ruby-value str">&quot;&quot;</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
-    <span class="ruby-identifier">symc</span> = <span class="ruby-node">&quot;#{self}_Module#{append}&quot;</span>.<span class="ruby-identifier">camelcase</span>
-    <span class="ruby-identifier">mod</span> = <span class="ruby-constant">Object</span>.<span class="ruby-identifier">const_defined?</span>(<span class="ruby-identifier">symc</span>) <span class="ruby-operator">?</span> <span class="ruby-constant">Object</span>.<span class="ruby-identifier">const_get</span>(<span class="ruby-identifier">symc</span>.<span class="ruby-identifier">to_sym</span>) <span class="ruby-operator">:</span> <span class="ruby-constant">Module</span>.<span class="ruby-identifier">new</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
-    <span class="ruby-constant">Object</span>.<span class="ruby-identifier">const_set</span>(<span class="ruby-identifier">symc</span>, <span class="ruby-identifier">mod</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-constant">Object</span>.<span class="ruby-identifier">const_defined?</span>(<span class="ruby-identifier">symc</span>)
-    <span class="ruby-identifier">symc</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">constantize</span>
+<span class="ruby-comment cmt"># File lib/core/string.rb, line 38</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">path_quote</span>
+    <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">safe_quote</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/[ ]/</span>, <span class="ruby-value str">'\ '</span>)
   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000156" class="method-detail">
-        <a name="M000156"></a>
+      <div id="method-M000095" class="method-detail">
+        <a name="M000095"></a>
 
         <div class="method-heading">
-          <a href="#M000156" class="method-signature">
-          <span class="method-name">new_resource_class</span><span class="method-args">(superclass=nil, opts={}, &amp;block)</span>
+          <a href="#M000095" class="method-signature">
+          <span class="method-name">pluralize</span><span class="method-args">(count=2)</span>
           </a>
         </div>
       
         <div class="method-description">
+          <p>
+dumb and ugly <a href="String.html#M000095">pluralize</a>
+</p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000156-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000156-source">
+            onclick="toggleCode('M000095-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000095-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/core/string.rb, line 71</span>
-  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">new_resource_class</span>(<span class="ruby-identifier">superclass</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">opts</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
-    <span class="ruby-identifier">symc</span> = <span class="ruby-node">&quot;::PoolParty::Resources::#{self.camelcase}&quot;</span>
-    <span class="ruby-identifier">kla</span>=<span class="ruby-value str">&quot;class \#{symc} &lt; ::PoolParty::Resources::Resource\nend\n&quot;</span>
-    
-    <span class="ruby-constant">Kernel</span>.<span class="ruby-identifier">module_eval</span> <span class="ruby-identifier">kla</span>
-    <span class="ruby-identifier">klass</span> = <span class="ruby-identifier">symc</span>.<span class="ruby-identifier">constantize</span>
-    <span class="ruby-identifier">klass</span>.<span class="ruby-identifier">module_eval</span> <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">block</span>
-
-    <span class="ruby-identifier">klass</span>
+<span class="ruby-comment cmt"># File lib/core/string.rb, line 146</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">pluralize</span>(<span class="ruby-identifier">count</span>=<span class="ruby-value">2</span>)
+    <span class="ruby-identifier">count</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">1</span> <span class="ruby-operator">?</span> <span class="ruby-keyword kw">self</span> <span class="ruby-operator">+</span> <span class="ruby-value str">&quot;s&quot;</span> <span class="ruby-operator">:</span> <span class="ruby-keyword kw">self</span> 
   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000154" class="method-detail">
-        <a name="M000154"></a>
+      <div id="method-M000083" class="method-detail">
+        <a name="M000083"></a>
 
         <div class="method-heading">
-          <a href="#M000154" class="method-signature">
-          <span class="method-name">nice_runnable</span><span class="method-args">(quite=true)</span>
-          </a>
-        </div>
-      
-        <div class="method-description">
-          <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000154-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000154-source">
-<pre>
-<span class="ruby-comment cmt"># File lib/poolparty/core/string.rb, line 49</span>
-  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">nice_runnable</span>(<span class="ruby-identifier">quite</span>=<span class="ruby-keyword kw">true</span>)
-    <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">split</span>(<span class="ruby-regexp re">/ &amp;&amp; /</span>).<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot;\n&quot;</span>)
-  <span class="ruby-keyword kw">end</span>
-</pre>
-          </div>
-        </div>
-      </div>
-
-      <div id="method-M000173" class="method-detail">
-        <a name="M000173"></a>
-
-        <div class="method-heading">
-          <a href="#M000173" class="method-signature">
-          <span class="method-name">parse_datetime</span><span class="method-args">()</span>
-          </a>
-        </div>
-      
-        <div class="method-description">
-          <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000173-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000173-source">
-<pre>
-<span class="ruby-comment cmt"># File lib/poolparty/net/remoter_bases/ec2/ec2.rb, line 31</span>
-  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">parse_datetime</span>
-    <span class="ruby-constant">DateTime</span>.<span class="ruby-identifier">parse</span>( <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">chomp</span> ) <span class="ruby-keyword kw">rescue</span> <span class="ruby-keyword kw">self</span>
-  <span class="ruby-keyword kw">end</span>
-</pre>
-          </div>
-        </div>
-      </div>
-
-      <div id="method-M000164" class="method-detail">
-        <a name="M000164"></a>
-
-        <div class="method-heading">
-          <a href="#M000164" class="method-signature">
-          <span class="method-name">preserved_class_constant</span><span class="method-args">(append=&quot;&quot;)</span>
-          </a>
-        </div>
-      
-        <div class="method-description">
-          <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000164-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000164-source">
-<pre>
-<span class="ruby-comment cmt"># File lib/poolparty/core/string.rb, line 134</span>
-  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">preserved_class_constant</span>(<span class="ruby-identifier">append</span>=<span class="ruby-value str">&quot;&quot;</span>)
-    <span class="ruby-identifier">klass</span> = <span class="ruby-node">&quot;#{self}#{append}&quot;</span>.<span class="ruby-identifier">classify</span>
-    <span class="ruby-constant">Object</span>.<span class="ruby-identifier">const_defined?</span>(<span class="ruby-identifier">klass</span>.<span class="ruby-identifier">to_sym</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">klass</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">constantize</span> <span class="ruby-operator">:</span> <span class="ruby-keyword kw">nil</span>
-  <span class="ruby-keyword kw">end</span>
-</pre>
-          </div>
-        </div>
-      </div>
-
-      <div id="method-M000166" class="method-detail">
-        <a name="M000166"></a>
-
-        <div class="method-heading">
-          <a href="#M000166" class="method-signature">
-          <span class="method-name">preserved_module_constant</span><span class="method-args">(ext=&quot;&quot;, from=&quot;PoolParty::&quot;, &amp;block)</span>
-          </a>
-        </div>
-      
-        <div class="method-description">
-          <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000166-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000166-source">
-<pre>
-<span class="ruby-comment cmt"># File lib/poolparty/core/string.rb, line 145</span>
-  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">preserved_module_constant</span>(<span class="ruby-identifier">ext</span>=<span class="ruby-value str">&quot;&quot;</span>, <span class="ruby-identifier">from</span>=<span class="ruby-value str">&quot;PoolParty::&quot;</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
-    <span class="ruby-identifier">symc</span> = <span class="ruby-node">&quot;#{self}#{ext}&quot;</span>.<span class="ruby-identifier">camelcase</span>
-    <span class="ruby-identifier">mod</span> = <span class="ruby-constant">Kernel</span>.<span class="ruby-identifier">const_defined?</span>(<span class="ruby-identifier">symc</span>) <span class="ruby-operator">?</span> <span class="ruby-constant">Kernel</span>.<span class="ruby-identifier">const_get</span>(<span class="ruby-identifier">symc</span>.<span class="ruby-identifier">to_sym</span>) <span class="ruby-operator">:</span> <span class="ruby-constant">Module</span>.<span class="ruby-identifier">new</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
-    <span class="ruby-constant">Kernel</span>.<span class="ruby-identifier">const_set</span>(<span class="ruby-identifier">symc</span>, <span class="ruby-identifier">mod</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-constant">Kernel</span>.<span class="ruby-identifier">const_defined?</span>(<span class="ruby-identifier">symc</span>)
-    <span class="ruby-identifier">symc</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">constantize</span>
-  <span class="ruby-keyword kw">end</span>
-</pre>
-          </div>
-        </div>
-      </div>
-
-      <div id="method-M000148" class="method-detail">
-        <a name="M000148"></a>
-
-        <div class="method-heading">
-          <a href="#M000148" class="method-signature">
-          <span class="method-name">runnable</span><span class="method-args">(quite=true)</span>
-          </a>
-        </div>
-      
-        <div class="method-description">
-          <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000148-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000148-source">
-<pre>
-<span class="ruby-comment cmt"># File lib/poolparty/core/string.rb, line 23</span>
-  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">runnable</span>(<span class="ruby-identifier">quite</span>=<span class="ruby-keyword kw">true</span>)
-    <span class="ruby-comment cmt"># map {|l| l &lt;&lt; &quot;#{&quot; &gt;/dev/null 2&gt;/dev/null&quot; if quite}&quot; }.</span>
-    <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">strip</span>.<span class="ruby-identifier">split</span>(<span class="ruby-regexp re">/\n/</span>).<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot; &amp;&amp; &quot;</span>)
-  <span class="ruby-keyword kw">end</span>
-</pre>
-          </div>
-        </div>
-      </div>
-
-      <div id="method-M000153" class="method-detail">
-        <a name="M000153"></a>
-
-        <div class="method-heading">
-          <a href="#M000153" class="method-signature">
+          <a href="#M000083" class="method-signature">
           <span class="method-name">safe_quote</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
+          <p>
+Strip quotes from the string and replaced them with backslashed quotes
+</p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000153-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000153-source">
+            onclick="toggleCode('M000083-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000083-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/core/string.rb, line 45</span>
+<span class="ruby-comment cmt"># File lib/core/string.rb, line 33</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">safe_quote</span>
     <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/['&quot;]/</span>, <span class="ruby-value str">'\\\&quot;'</span>)
-    <span class="ruby-comment cmt"># self.gsub(/[&quot;']/, &quot;\\\&quot;&quot;)</span>
   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000150" class="method-detail">
-        <a name="M000150"></a>
+      <div id="method-M000081" class="method-detail">
+        <a name="M000081"></a>
 
         <div class="method-heading">
-          <a href="#M000150" class="method-signature">
+          <a href="#M000081" class="method-signature">
           <span class="method-name">sanitize</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
+          <p>
+Strip ugly characters out of a string
+</p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000150-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000150-source">
+            onclick="toggleCode('M000081-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000081-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/core/string.rb, line 30</span>
+<span class="ruby-comment cmt"># File lib/core/string.rb, line 19</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">sanitize</span>
     <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/[ \.\/\-]*/</span>, <span class="ruby-value str">''</span>)
   <span class="ruby-keyword kw">end</span>
@@ -842,38 +537,38 @@ the first 0 if the first char is 0
         </div>
       </div>
 
-      <div id="method-M000159" class="method-detail">
-        <a name="M000159"></a>
+      <div id="method-M000086" class="method-detail">
+        <a name="M000086"></a>
 
         <div class="method-heading">
-          <a href="#M000159" class="method-signature">
+          <a href="#M000086" class="method-signature">
           <span class="method-name">snake_case</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-&quot;FooBar&quot;.<a href="String.html#M000159">snake_case</a> #=&gt;
+&quot;FooBar&quot;.<a href="String.html#M000086">snake_case</a> #=&gt;
 &quot;foo_bar&quot;
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000159-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000159-source">
+            onclick="toggleCode('M000086-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000086-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/core/string.rb, line 94</span>
-   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">snake_case</span>
-     <span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/\B[A-Z]+/</span>, <span class="ruby-value str">'_\&amp;'</span>).<span class="ruby-identifier">downcase</span>
-   <span class="ruby-keyword kw">end</span>
+<span class="ruby-comment cmt"># File lib/core/string.rb, line 50</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">snake_case</span>
+   <span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/\B[A-Z]+/</span>, <span class="ruby-value str">'_\&amp;'</span>).<span class="ruby-identifier">downcase</span>
+  <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000168" class="method-detail">
-        <a name="M000168"></a>
+      <div id="method-M000091" class="method-detail">
+        <a name="M000091"></a>
 
         <div class="method-heading">
-          <a href="#M000168" class="method-signature">
+          <a href="#M000091" class="method-signature">
           <span class="method-name">to_hash</span><span class="method-args">()</span>
           </a>
         </div>
@@ -893,10 +588,10 @@ into a hash
  {:a =&gt; &quot;b&quot;, :b =&gt; &quot;c&quot;}
 </pre>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000168-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000168-source">
+            onclick="toggleCode('M000091-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000091-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/core/string.rb, line 163</span>
+<span class="ruby-comment cmt"># File lib/core/string.rb, line 106</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_hash</span>
     <span class="ruby-identifier">split</span>(<span class="ruby-value str">&quot;\n&quot;</span>).<span class="ruby-identifier">inject</span>({}) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">sum</span>,<span class="ruby-identifier">line</span><span class="ruby-operator">|</span> 
       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">line</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-value str">&quot;=&quot;</span>)
@@ -914,47 +609,30 @@ into a hash
         </div>
       </div>
 
-      <div id="method-M000149" class="method-detail">
-        <a name="M000149"></a>
+      <div id="method-M000080" class="method-detail">
+        <a name="M000080"></a>
 
         <div class="method-heading">
-          <a href="#M000149" class="method-signature">
+          <a href="#M000080" class="method-signature">
           <span class="method-name">top_level_class</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
-          <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000149-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000149-source">
+          <p>
+Get the top level class such as:
+</p>
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/core/string.rb, line 27</span>
-  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">top_level_class</span>
-    <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">split</span>(<span class="ruby-value str">&quot;::&quot;</span>)[<span class="ruby-value">-1</span>].<span class="ruby-identifier">underscore</span>.<span class="ruby-identifier">downcase</span> <span class="ruby-keyword kw">rescue</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">to_s</span>
-  <span class="ruby-keyword kw">end</span>
+  Dr::Pepper #=&gt; pepper
 </pre>
-          </div>
-        </div>
-      </div>
-
-      <div id="method-M000160" class="method-detail">
-        <a name="M000160"></a>
-
-        <div class="method-heading">
-          <a href="#M000160" class="method-signature">
-          <span class="method-name">underscore</span><span class="method-args">()</span>
-          </a>
-        </div>
-      
-        <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000160-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000160-source">
+            onclick="toggleCode('M000080-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000080-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/core/string.rb, line 97</span>
-   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">underscore</span>
-     <span class="ruby-identifier">snake_case</span>
-   <span class="ruby-keyword kw">end</span>
+<span class="ruby-comment cmt"># File lib/core/string.rb, line 14</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">top_level_class</span>
+    <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">classify</span>.<span class="ruby-identifier">split</span>(<span class="ruby-value str">&quot;::&quot;</span>).<span class="ruby-identifier">last</span>.<span class="ruby-identifier">snake_case</span>
+  <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>

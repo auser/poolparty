@@ -5,7 +5,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-  <title>Module: PoolParty::Cloud</title>
+  <title>Class: PoolParty::Cloud</title>
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
   <meta http-equiv="Content-Script-Type" content="text/javascript" />
   <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
@@ -49,19 +49,27 @@
     <div id="classHeader">
         <table class="header-table">
         <tr class="top-aligned-row">
-          <td><strong>Module</strong></td>
+          <td><strong>Class</strong></td>
           <td class="class-name-in-header">PoolParty::Cloud</td>
         </tr>
         <tr class="top-aligned-row">
             <td><strong>In:</strong></td>
             <td>
-                <a href="../../files/lib/poolparty/poolparty/cloud_rb.html">
-                lib/poolparty/poolparty/cloud.rb
+                <a href="../../files/lib/poolparty/cloud_rb.html">
+                lib/poolparty/cloud.rb
                 </a>
         <br />
             </td>
         </tr>
 
+        <tr class="top-aligned-row">
+            <td><strong>Parent:</strong></td>
+            <td>
+                <a href="DslBase.html">
+                DslBase
+               </a>
+            </td>
+        </tr>
         </table>
     </div>
   <!-- banner header -->
@@ -80,9 +88,37 @@
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000247">cloud</a>&nbsp;&nbsp;
-      <a href="#M000248">clouds</a>&nbsp;&nbsp;
-      <a href="#M000249">with_cloud</a>&nbsp;&nbsp;
+      <a href="#M000244">after_all_loaded</a>&nbsp;&nbsp;
+      <a href="#M000217">before_compile</a>&nbsp;&nbsp;
+      <a href="#M000227">cloud_provider</a>&nbsp;&nbsp;
+      <a href="#M000236">compile</a>&nbsp;&nbsp;
+      <a href="#M000230">configure!</a>&nbsp;&nbsp;
+      <a href="#M000229">contract!</a>&nbsp;&nbsp;
+      <a href="#M000235">dependency_resolver</a>&nbsp;&nbsp;
+      <a href="#M000225">describe_instance</a>&nbsp;&nbsp;
+      <a href="#M000224">describe_instances</a>&nbsp;&nbsp;
+      <a href="#M000247">ensure_meta_fun_are_resources</a>&nbsp;&nbsp;
+      <a href="#M000246">ensure_not_cyclic</a>&nbsp;&nbsp;
+      <a href="#M000228">expand</a>&nbsp;&nbsp;
+      <a href="#M000243">form_clouds</a>&nbsp;&nbsp;
+      <a href="#M000219">keypair</a>&nbsp;&nbsp;
+      <a href="#M000240">monitor</a>&nbsp;&nbsp;
+      <a href="#M000242">monitors</a>&nbsp;&nbsp;
+      <a href="#M000218">new</a>&nbsp;&nbsp;
+      <a href="#M000221">nodes</a>&nbsp;&nbsp;
+      <a href="#M000237">os</a>&nbsp;&nbsp;
+      <a href="#M000238">platform</a>&nbsp;&nbsp;
+      <a href="#M000233">pool</a>&nbsp;&nbsp;
+      <a href="#M000239">public_ip</a>&nbsp;&nbsp;
+      <a href="#M000234">resolve_with</a>&nbsp;&nbsp;
+      <a href="#M000231">run</a>&nbsp;&nbsp;
+      <a href="#M000222">run_instance</a>&nbsp;&nbsp;
+      <a href="#M000241">run_monitor</a>&nbsp;&nbsp;
+      <a href="#M000226">terminate!</a>&nbsp;&nbsp;
+      <a href="#M000223">terminate_instance!</a>&nbsp;&nbsp;
+      <a href="#M000232">tmp_path</a>&nbsp;&nbsp;
+      <a href="#M000220">using</a>&nbsp;&nbsp;
+      <a href="#M000245">validate_all_resources</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -93,12 +129,6 @@
 
     <div id="section">
 
-    <div id="class-list">
-      <h3 class="section-bar">Classes and Modules</h3>
-
-      Class <a href="Cloud/Cloud.html" class="link">PoolParty::Cloud::Cloud</a><br />
-
-    </div>
 
 
 
@@ -108,82 +138,893 @@
 
     <!-- if method_list -->
     <div id="methods">
+      <h3 class="section-bar">Public Class methods</h3>
+
+      <div id="method-M000218" class="method-detail">
+        <a name="M000218"></a>
+
+        <div class="method-heading">
+          <a href="#M000218" class="method-signature">
+          <span class="method-name">new</span><span class="method-args">(n, o={}, &amp;block)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Freeze the cloud_name so we can&#8216;t modify it at all, set the
+plugin_directory call and <a href="Cloud.html#M000231">run</a>
+instance_eval on the block and then call the after_create callback
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000218-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000218-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/cloud.rb, line 35</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">n</span>, <span class="ruby-identifier">o</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+      <span class="ruby-ivar">@cloud_name</span> = <span class="ruby-identifier">n</span>
+      <span class="ruby-ivar">@cloud_name</span>.<span class="ruby-identifier">freeze</span>
+      
+      <span class="ruby-comment cmt"># @init_block = block</span>
+      <span class="ruby-ivar">@init_opts</span> = <span class="ruby-identifier">compile_opts</span>(<span class="ruby-identifier">o</span>)
+      
+      <span class="ruby-ivar">@init_block</span> = <span class="ruby-constant">Proc</span>.<span class="ruby-identifier">new</span> <span class="ruby-keyword kw">do</span>
+        <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">n</span>,<span class="ruby-identifier">o</span>,<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+      <span class="ruby-keyword kw">end</span>
+      
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
       <h3 class="section-bar">Public Instance methods</h3>
+
+      <div id="method-M000244" class="method-detail">
+        <a name="M000244"></a>
+
+        <div class="method-heading">
+          <a href="#M000244" class="method-signature">
+          <span class="method-name">after_all_loaded</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000244-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000244-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/cloud.rb, line 250</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">after_all_loaded</span>
+      <span class="ruby-identifier">run_after_loaded</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">b</span><span class="ruby-operator">|</span>
+        <span class="ruby-identifier">run_in_context</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">b</span>)
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000217" class="method-detail">
+        <a name="M000217"></a>
+
+        <div class="method-heading">
+          <a href="#M000217" class="method-signature">
+          <span class="method-name">before_compile</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000217-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000217-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/cloud.rb, line 29</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">before_compile</span>
+      <span class="ruby-identifier">validate_all_resources</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000227" class="method-detail">
+        <a name="M000227"></a>
+
+        <div class="method-heading">
+          <a href="#M000227" class="method-signature">
+          <span class="method-name">cloud_provider</span><span class="method-args">(opts={}, &amp;block)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+The actual <a href="Cloud.html#M000227">cloud_provider</a> instance
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000227-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000227-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/cloud.rb, line 76</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cloud_provider</span>(<span class="ruby-identifier">opts</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+      <span class="ruby-keyword kw">return</span> <span class="ruby-ivar">@cloud_provider</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@cloud_provider</span>
+      <span class="ruby-identifier">klass_name</span> = <span class="ruby-node">&quot;CloudProviders::#{cloud_provider_name}&quot;</span>.<span class="ruby-identifier">classify</span>
+      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">provider_klass</span> = <span class="ruby-constant">CloudProviders</span>.<span class="ruby-identifier">all</span>.<span class="ruby-identifier">detect</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">k</span><span class="ruby-operator">|</span> <span class="ruby-identifier">k</span>.<span class="ruby-identifier">to_s</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">klass_name</span> }
+        <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">merge!</span>(<span class="ruby-identifier">:cloud</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">self</span>, <span class="ruby-identifier">:keypair_name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">keypair</span>.<span class="ruby-identifier">basename</span>)
+        <span class="ruby-ivar">@cloud_provider</span> = <span class="ruby-identifier">provider_klass</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">dsl_options</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">opts</span>), <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+      <span class="ruby-keyword kw">else</span>
+        <span class="ruby-identifier">raise</span> <span class="ruby-constant">PoolParty</span><span class="ruby-operator">::</span><span class="ruby-constant">PoolPartyError</span>.<span class="ruby-identifier">create</span>(<span class="ruby-value str">&quot;UnknownCloudProviderError&quot;</span>, <span class="ruby-node">&quot;Unknown cloud_provider: #{cloud_provider_name}&quot;</span>)
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-ivar">@cloud_provider</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000236" class="method-detail">
+        <a name="M000236"></a>
+
+        <div class="method-heading">
+          <a href="#M000236" class="method-signature">
+          <span class="method-name">compile</span><span class="method-args">(caller=nil)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Take the cloud&#8216;s resources and <a
+href="Cloud.html#M000236">compile</a> them down <a
+href="Cloud.html#M000220">using</a> the defined (or the default <a
+href="Cloud.html#M000235">dependency_resolver</a>, chef)
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000236-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000236-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/cloud.rb, line 182</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">compile</span>(<span class="ruby-identifier">caller</span>=<span class="ruby-keyword kw">nil</span>)
+      <span class="ruby-identifier">callback</span> <span class="ruby-identifier">:before_compile</span>
+      <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">mkdir_p</span> <span class="ruby-identifier">tmp_path</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">directory?</span>(<span class="ruby-identifier">tmp_path</span>)
+      <span class="ruby-identifier">ddputs</span> <span class="ruby-value str">&quot;Compiling cloud \#{self.name} to \#{tmp_path/\&quot;etc\&quot;/\&quot;\#{dependency_resolver_name}\&quot;}\nnumber of resources: \#{ordered_resources.size}\n&quot;</span>
+      <span class="ruby-identifier">out</span> = <span class="ruby-identifier">dependency_resolver</span>.<span class="ruby-identifier">compile_to</span>(<span class="ruby-identifier">ordered_resources</span>, <span class="ruby-identifier">tmp_path</span><span class="ruby-operator">/</span><span class="ruby-value str">&quot;etc&quot;</span><span class="ruby-operator">/</span><span class="ruby-node">&quot;#{dependency_resolver_name}&quot;</span>, <span class="ruby-identifier">caller</span>)
+      <span class="ruby-identifier">callback</span> <span class="ruby-identifier">:after_compile</span>
+      <span class="ruby-identifier">out</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000230" class="method-detail">
+        <a name="M000230"></a>
+
+        <div class="method-heading">
+          <a href="#M000230" class="method-signature">
+          <span class="method-name">configure!</span><span class="method-args">(opts={}, threaded=true)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+convenience method to loop thru all the <a
+href="Cloud.html#M000221">nodes</a> and configure them
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000230-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000230-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/cloud.rb, line 128</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">configure!</span>(<span class="ruby-identifier">opts</span>={}, <span class="ruby-identifier">threaded</span>=<span class="ruby-keyword kw">true</span>)
+      <span class="ruby-identifier">nodes</span>.<span class="ruby-identifier">collect</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">n</span><span class="ruby-operator">|</span> <span class="ruby-identifier">n</span>.<span class="ruby-identifier">configure!</span> }
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000229" class="method-detail">
+        <a name="M000229"></a>
+
+        <div class="method-heading">
+          <a href="#M000229" class="method-signature">
+          <span class="method-name">contract!</span><span class="method-args">(hsh={})</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Contract the cloud
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000229-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000229-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/cloud.rb, line 119</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">contract!</span>(<span class="ruby-identifier">hsh</span>={})
+      <span class="ruby-identifier">inst</span>=<span class="ruby-identifier">nodes</span>(<span class="ruby-identifier">hsh</span>).<span class="ruby-identifier">last</span>
+      <span class="ruby-identifier">inst</span>.<span class="ruby-identifier">callback</span> <span class="ruby-identifier">:before_terminate</span>
+      <span class="ruby-identifier">inst</span>.<span class="ruby-identifier">terminate!</span>
+      <span class="ruby-identifier">inst</span>.<span class="ruby-identifier">callback</span> <span class="ruby-identifier">:after_terminate</span>
+      <span class="ruby-identifier">inst</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000235" class="method-detail">
+        <a name="M000235"></a>
+
+        <div class="method-heading">
+          <a href="#M000235" class="method-signature">
+          <span class="method-name">dependency_resolver</span><span class="method-args">(sym=nil)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Set the dependency resolver
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000235-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000235-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/cloud.rb, line 172</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">dependency_resolver</span>(<span class="ruby-identifier">sym</span>=<span class="ruby-keyword kw">nil</span>)
+      <span class="ruby-ivar">@dependency_resolver</span> <span class="ruby-operator">||=</span> <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">sym</span>
+      <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:chef</span>, <span class="ruby-keyword kw">nil</span>
+        <span class="ruby-identifier">dsl_options</span>[<span class="ruby-identifier">:dependency_resolver_name</span>] = <span class="ruby-identifier">:chef</span>
+        <span class="ruby-constant">DependencyResolvers</span><span class="ruby-operator">::</span><span class="ruby-constant">Chef</span>
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000225" class="method-detail">
+        <a name="M000225"></a>
+
+        <div class="method-heading">
+          <a href="#M000225" class="method-signature">
+          <span class="method-name">describe_instance</span><span class="method-args">(o={})</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000225-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000225-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/cloud.rb, line 68</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">describe_instance</span>(<span class="ruby-identifier">o</span>={}); <span class="ruby-identifier">cloud_provider</span>.<span class="ruby-identifier">describe_instance</span>(<span class="ruby-identifier">o</span>);<span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000224" class="method-detail">
+        <a name="M000224"></a>
+
+        <div class="method-heading">
+          <a href="#M000224" class="method-signature">
+          <span class="method-name">describe_instances</span><span class="method-args">(o={})</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000224-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000224-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/cloud.rb, line 67</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">describe_instances</span>(<span class="ruby-identifier">o</span>={}); <span class="ruby-identifier">cloud_provider</span>.<span class="ruby-identifier">describe_instances</span>(<span class="ruby-identifier">o</span>);<span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
 
       <div id="method-M000247" class="method-detail">
         <a name="M000247"></a>
 
         <div class="method-heading">
           <a href="#M000247" class="method-signature">
-          <span class="method-name">cloud</span><span class="method-args">(name, &amp;block)</span>
+          <span class="method-name">ensure_meta_fun_are_resources</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
-          <p>
-Instantiate a new <a href="Cloud.html#M000247">cloud</a>
-</p>
           <p><a class="source-toggle" href="#"
             onclick="toggleCode('M000247-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000247-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/poolparty/cloud.rb, line 7</span>
-    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cloud</span>(<span class="ruby-identifier">name</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
-      <span class="ruby-identifier">clouds</span>[<span class="ruby-identifier">name</span>] <span class="ruby-operator">||=</span> <span class="ruby-constant">Cloud</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">name</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+<span class="ruby-comment cmt"># File lib/poolparty/cloud.rb, line 288</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">ensure_meta_fun_are_resources</span>
+      <span class="ruby-identifier">resources</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">res</span><span class="ruby-operator">|</span>
+        
+        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">res</span>.<span class="ruby-identifier">meta_notifies</span>
+          <span class="ruby-identifier">res</span>.<span class="ruby-identifier">meta_notifies</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">ty</span>, <span class="ruby-identifier">arr</span><span class="ruby-operator">|</span>
+            <span class="ruby-identifier">arr</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">nm</span>, <span class="ruby-identifier">action</span><span class="ruby-operator">|</span>
+              <span class="ruby-identifier">raise</span> <span class="ruby-constant">PoolPartyError</span>.<span class="ruby-identifier">create</span>(<span class="ruby-value str">&quot;ResourceNotFound&quot;</span>, <span class="ruby-node">&quot;A resource required for #{ty}(#{nm}) was not found: #{ty}(#{nm}). Please make sure you've specified this in your configuration.&quot;</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">get_resource</span>(<span class="ruby-identifier">ty</span>, <span class="ruby-identifier">nm</span>)
+            <span class="ruby-keyword kw">end</span>
+          <span class="ruby-keyword kw">end</span>
+        <span class="ruby-keyword kw">end</span>
+        
+      <span class="ruby-keyword kw">end</span>
     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000248" class="method-detail">
-        <a name="M000248"></a>
+      <div id="method-M000246" class="method-detail">
+        <a name="M000246"></a>
 
         <div class="method-heading">
-          <a href="#M000248" class="method-signature">
-          <span class="method-name">clouds</span><span class="method-args">()</span>
+          <a href="#M000246" class="method-signature">
+          <span class="method-name">ensure_not_cyclic</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
-          <p>
-Global hash of <a href="Cloud.html#M000248">clouds</a>
-</p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000248-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000248-source">
+            onclick="toggleCode('M000246-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000246-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/poolparty/cloud.rb, line 12</span>
-    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">clouds</span>
-      <span class="ruby-identifier">$clouds</span> <span class="ruby-operator">||=</span> {}
+<span class="ruby-comment cmt"># File lib/poolparty/cloud.rb, line 263</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">ensure_not_cyclic</span>
+      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">resources_graph</span>.<span class="ruby-identifier">cyclic?</span>
+        <span class="ruby-identifier">cycles</span> = []
+        
+        <span class="ruby-identifier">resources_graph</span>.<span class="ruby-identifier">edges</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">edge</span><span class="ruby-operator">|</span>
+          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">resources_graph</span>.<span class="ruby-identifier">adjacent?</span>(<span class="ruby-identifier">edge</span>.<span class="ruby-identifier">source</span>, <span class="ruby-identifier">edge</span>.<span class="ruby-identifier">target</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">resources_graph</span>.<span class="ruby-identifier">adjacent?</span>(<span class="ruby-identifier">edge</span>.<span class="ruby-identifier">target</span>, <span class="ruby-identifier">edge</span>.<span class="ruby-identifier">source</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">cycles</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">edge</span>.<span class="ruby-identifier">source</span>)
+            <span class="ruby-identifier">cycles</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;#{edge.source.class}(#{edge.source.name}) depends on #{edge.target.class}(#{edge.target.name})&quot;</span>
+          <span class="ruby-keyword kw">end</span>
+        <span class="ruby-keyword kw">end</span>
+        <span class="ruby-identifier">msg</span> =<span class="ruby-value str">&quot;\nYour resource graph is cyclic. Two resources depend on each other, Cannot decide which resource\nto go first. Dying instead. Correct this and then try again.\n\n\#{cycles.join(\&quot;\\n          \&quot;)}\n\nHint: You can see the resource graph by generating it with:\ncloud compile -g name\n\n&quot;</span>
+        <span class="ruby-identifier">raise</span> <span class="ruby-constant">PoolPartyError</span>.<span class="ruby-identifier">create</span>(<span class="ruby-value str">&quot;CyclicResourceGraphError&quot;</span>, <span class="ruby-identifier">msg</span>)
+      <span class="ruby-keyword kw">end</span>
     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
         </div>
       </div>
 
-      <div id="method-M000249" class="method-detail">
-        <a name="M000249"></a>
+      <div id="method-M000228" class="method-detail">
+        <a name="M000228"></a>
 
         <div class="method-heading">
-          <a href="#M000249" class="method-signature">
-          <span class="method-name">with_cloud</span><span class="method-args">(cl, opts={}, &amp;block)</span>
+          <a href="#M000228" class="method-signature">
+          <span class="method-name">expand</span><span class="method-args">(opts={}, &amp;block)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-TODO: Deprecate
+1.) Launches a <a href="Cloud.html#M000218">new</a> instance, 2.) Waits for
+the instance to get an ip address 3.) Waits for port 22 to be open 4.)
+Calls call_after_launch_instance callbacks 5.) Executes passed &amp;block,
+if any 6.) Returns the <a href="Cloud.html#M000218">new</a> instance object
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000249-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000249-source">
+            onclick="toggleCode('M000228-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000228-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/poolparty/cloud.rb, line 17</span>
-    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">with_cloud</span>(<span class="ruby-identifier">cl</span>, <span class="ruby-identifier">opts</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
-      <span class="ruby-identifier">raise</span> <span class="ruby-constant">CloudNotFoundException</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value str">&quot;Cloud not found&quot;</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">cl</span>
-      <span class="ruby-identifier">cl</span>.<span class="ruby-identifier">options</span>.<span class="ruby-identifier">merge!</span>(<span class="ruby-identifier">opts</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">opts</span>
-      <span class="ruby-identifier">cl</span>.<span class="ruby-identifier">run_in_context</span> <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">block</span>
+<span class="ruby-comment cmt"># File lib/poolparty/cloud.rb, line 94</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">expand</span>(<span class="ruby-identifier">opts</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+      <span class="ruby-identifier">timeout</span> = <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:timeout</span>) <span class="ruby-operator">||</span> <span class="ruby-value">300</span>
+      <span class="ruby-identifier">callback</span> <span class="ruby-identifier">:before_launch_instance</span>
+      <span class="ruby-identifier">instance</span> = <span class="ruby-identifier">cloud_provider</span>.<span class="ruby-identifier">run_instance</span>(<span class="ruby-identifier">opts</span>)
+      <span class="ruby-identifier">instance</span>.<span class="ruby-identifier">cloud</span> = <span class="ruby-keyword kw">self</span>
+      <span class="ruby-ivar">@instance</span> = <span class="ruby-identifier">instance</span>
+      <span class="ruby-comment cmt">#wait for an ip and then wait for ssh port, then configure instance</span>
+      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">instance</span>.<span class="ruby-identifier">wait_for_public_ip</span>(<span class="ruby-identifier">timeout</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">instance</span>.<span class="ruby-identifier">wait_for_port</span>(<span class="ruby-value">22</span>, <span class="ruby-identifier">:timeout=</span><span class="ruby-operator">&gt;</span><span class="ruby-identifier">timeout</span>)
+        <span class="ruby-identifier">callback</span> <span class="ruby-identifier">:after_launch_instance</span>
+        <span class="ruby-identifier">instance</span>.<span class="ruby-identifier">callback</span> <span class="ruby-identifier">:before_bootstrap</span>
+        <span class="ruby-identifier">instance</span>.<span class="ruby-identifier">bootstrap!</span>
+        <span class="ruby-identifier">instance</span>.<span class="ruby-identifier">callback</span> <span class="ruby-identifier">:after_bootstrap</span>
+        <span class="ruby-identifier">instance</span>.<span class="ruby-identifier">callback</span> <span class="ruby-identifier">:before_configure</span>
+        <span class="ruby-identifier">instance</span>.<span class="ruby-identifier">configure!</span>
+        <span class="ruby-identifier">instance</span>.<span class="ruby-identifier">callback</span> <span class="ruby-identifier">:after_configure</span>
+        <span class="ruby-identifier">block</span>.<span class="ruby-identifier">call</span>(<span class="ruby-identifier">instance</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">block</span>
+        <span class="ruby-identifier">instance</span>
+      <span class="ruby-keyword kw">else</span>
+         <span class="ruby-identifier">raise</span> <span class="ruby-constant">StandardError</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value str">&quot;Instance port 22 not available&quot;</span>)
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-identifier">instance</span>.<span class="ruby-identifier">refresh!</span>
+      <span class="ruby-identifier">instance</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000243" class="method-detail">
+        <a name="M000243"></a>
+
+        <div class="method-heading">
+          <a href="#M000243" class="method-signature">
+          <span class="method-name">form_clouds</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Form the cloud Run the init block with the init_opts on the cloud This is
+<a href="Cloud.html#M000231">run</a> after the cloud.rb file has been
+consumed
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000243-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000243-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/cloud.rb, line 245</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">form_clouds</span>
+      <span class="ruby-identifier">run_with_callbacks</span>(<span class="ruby-ivar">@init_opts</span>, <span class="ruby-operator">&amp;</span><span class="ruby-ivar">@init_block</span>)
+      <span class="ruby-identifier">loaded!</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000219" class="method-detail">
+        <a name="M000219"></a>
+
+        <div class="method-heading">
+          <a href="#M000219" class="method-signature">
+          <span class="method-name">keypair</span><span class="method-args">(n=nil)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+returns an instance of <a href="../Keypair.html">Keypair</a> You can pass
+either a filename which will be searched for in ~/.ec2/ and ~/.ssh/ Or you
+can pass a full filepath
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000219-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000219-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/cloud.rb, line 51</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">keypair</span>(<span class="ruby-identifier">n</span>=<span class="ruby-keyword kw">nil</span>)
+      <span class="ruby-ivar">@keypair</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">Keypair</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">n</span>)
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000240" class="method-detail">
+        <a name="M000240"></a>
+
+        <div class="method-heading">
+          <a href="#M000240" class="method-signature">
+          <span class="method-name">monitor</span><span class="method-args">(monitor_symbol, &amp;block)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <pre>
+  MONITORS ###
+</pre>
+<p>
+Create a <a href="Cloud.html#M000218">new</a> <a
+href="Cloud.html#M000240">monitor</a> on the cloud
+</p>
+<h2>Usage</h2>
+<pre>
+  monitor :cpu do |v|
+    vote_for(:expand) if v &gt; 0.8
+  end
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000240-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000240-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/cloud.rb, line 218</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">monitor</span>(<span class="ruby-identifier">monitor_symbol</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+      <span class="ruby-identifier">monitors</span>[<span class="ruby-identifier">monitor_symbol</span>] <span class="ruby-operator">||=</span> <span class="ruby-constant">PoolParty</span><span class="ruby-operator">::</span><span class="ruby-constant">Monitor</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">monitor_symbol</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000242" class="method-detail">
+        <a name="M000242"></a>
+
+        <div class="method-heading">
+          <a href="#M000242" class="method-signature">
+          <span class="method-name">monitors</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Store the <a href="Cloud.html#M000242">monitors</a> in an array
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000242-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000242-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/cloud.rb, line 233</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">monitors</span>
+      <span class="ruby-ivar">@monitors</span> <span class="ruby-operator">||=</span> {}
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000221" class="method-detail">
+        <a name="M000221"></a>
+
+        <div class="method-heading">
+          <a href="#M000221" class="method-signature">
+          <span class="method-name">nodes</span><span class="method-args">(o={})</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+<a href="Cloud.html">Cloud</a> provider methods
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000221-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000221-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/cloud.rb, line 64</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">nodes</span>(<span class="ruby-identifier">o</span>={}); <span class="ruby-identifier">delayed_action</span> {<span class="ruby-identifier">cloud_provider</span>.<span class="ruby-identifier">nodes</span>(<span class="ruby-identifier">o</span>)}; <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000237" class="method-detail">
+        <a name="M000237"></a>
+
+        <div class="method-heading">
+          <a href="#M000237" class="method-signature">
+          <span class="method-name">os</span><span class="method-args">(sym=nil)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Get the <a href="Cloud.html#M000237">os</a> of the first node if it was not
+explicity defined, we&#8216;ll assume they are all homogenous
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000237-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000237-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/cloud.rb, line 197</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">os</span>(<span class="ruby-identifier">sym</span>=<span class="ruby-keyword kw">nil</span>)
+      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">sym</span>
+        <span class="ruby-identifier">dsl_options</span>[<span class="ruby-identifier">:os</span>] = <span class="ruby-identifier">sym</span>
+      <span class="ruby-keyword kw">else</span>
+        <span class="ruby-identifier">nodes</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">nodes</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">os</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">dsl_options</span>[<span class="ruby-identifier">:os</span>]
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000238" class="method-detail">
+        <a name="M000238"></a>
+
+        <div class="method-heading">
+          <span class="method-name">platform</span><span class="method-args">(sym=nil)</span>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Alias for <a href="Cloud.html#M000237">os</a>
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000233" class="method-detail">
+        <a name="M000233"></a>
+
+        <div class="method-heading">
+          <a href="#M000233" class="method-signature">
+          <span class="method-name">pool</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+The <a href="Cloud.html#M000233">pool</a> this cloud belongs to
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000233-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000233-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/cloud.rb, line 156</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">pool</span>
+      <span class="ruby-identifier">parent</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000239" class="method-detail">
+        <a name="M000239"></a>
+
+        <div class="method-heading">
+          <a href="#M000239" class="method-signature">
+          <span class="method-name">public_ip</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+The <a href="Cloud.html#M000239">public_ip</a> of the cloud is equivalent
+to the <a href="Cloud.html#M000239">public_ip</a> of the cloud&#8216;s
+oldest node
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000239-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000239-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/cloud.rb, line 208</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">public_ip</span>
+      <span class="ruby-identifier">nodes</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">public_ip</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000234" class="method-detail">
+        <a name="M000234"></a>
+
+        <div class="method-heading">
+          <a href="#M000234" class="method-signature">
+          <span class="method-name">resolve_with</span><span class="method-args">(a)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Resolve with the dependency resolver
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000234-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000234-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/cloud.rb, line 163</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">resolve_with</span>(<span class="ruby-identifier">a</span>)
+      <span class="ruby-keyword kw">if</span> <span class="ruby-constant">DependencyResolvers</span>.<span class="ruby-identifier">const_defined?</span>(<span class="ruby-identifier">a</span>.<span class="ruby-identifier">classify</span>)        
+        <span class="ruby-identifier">dependency_resolver</span> <span class="ruby-constant">DependencyResolvers</span>.<span class="ruby-identifier">module_eval</span>(<span class="ruby-node">&quot;#{a.classify}&quot;</span>)
+      <span class="ruby-keyword kw">else</span>
+        <span class="ruby-identifier">raise</span> <span class="ruby-constant">PoolParty</span><span class="ruby-operator">::</span><span class="ruby-constant">PoolPartyError</span>.<span class="ruby-identifier">create</span>(<span class="ruby-value str">&quot;DependencyResolverError&quot;</span>, <span class="ruby-node">&quot;Undefined dependency resolver: #{a}. Please specify one of the following: #{DependencyResolvers.all.join(&quot;, &quot;)}&quot;</span>)
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000231" class="method-detail">
+        <a name="M000231"></a>
+
+        <div class="method-heading">
+          <a href="#M000231" class="method-signature">
+          <span class="method-name">run</span><span class="method-args">(commands, opts={})</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Run command/s on all <a href="Cloud.html#M000221">nodes</a> in the cloud.
+Returns a hash of instance_id=&gt;result pairs
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000231-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000231-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/cloud.rb, line 134</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">run</span>(<span class="ruby-identifier">commands</span>, <span class="ruby-identifier">opts</span>={})
+      <span class="ruby-identifier">results</span> = {}
+      <span class="ruby-identifier">threads</span> = <span class="ruby-identifier">nodes</span>.<span class="ruby-identifier">collect</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">n</span><span class="ruby-operator">|</span>
+         <span class="ruby-constant">Thread</span>.<span class="ruby-identifier">new</span>{ <span class="ruby-identifier">results</span>[<span class="ruby-identifier">n</span>.<span class="ruby-identifier">name</span>] = <span class="ruby-identifier">n</span>.<span class="ruby-identifier">run</span>(<span class="ruby-identifier">commands</span>, <span class="ruby-identifier">opts</span>)  }
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-identifier">threads</span>.<span class="ruby-identifier">each</span>{ <span class="ruby-operator">|</span><span class="ruby-identifier">aThread</span><span class="ruby-operator">|</span>  <span class="ruby-identifier">aThread</span>.<span class="ruby-identifier">join</span> }
+      <span class="ruby-identifier">results</span>
+      <span class="ruby-comment cmt"># Serial implementation #</span>
+      <span class="ruby-comment cmt"># nodes.inject({})do |results, n|</span>
+      <span class="ruby-comment cmt">#   results[n.instance_id] = n.run(commands, opts)</span>
+      <span class="ruby-comment cmt">#   results</span>
+      <span class="ruby-comment cmt"># end</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000222" class="method-detail">
+        <a name="M000222"></a>
+
+        <div class="method-heading">
+          <a href="#M000222" class="method-signature">
+          <span class="method-name">run_instance</span><span class="method-args">(o={})</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000222-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000222-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/cloud.rb, line 65</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">run_instance</span>(<span class="ruby-identifier">o</span>={}); <span class="ruby-identifier">cloud_provider</span>.<span class="ruby-identifier">run_instance</span>(<span class="ruby-identifier">o</span>);<span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000241" class="method-detail">
+        <a name="M000241"></a>
+
+        <div class="method-heading">
+          <a href="#M000241" class="method-signature">
+          <span class="method-name">run_monitor</span><span class="method-args">(monitor_name, value)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Run the <a href="Cloud.html#M000240">monitor</a> logic
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000241-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000241-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/cloud.rb, line 223</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">run_monitor</span>(<span class="ruby-identifier">monitor_name</span>, <span class="ruby-identifier">value</span>)
+      <span class="ruby-identifier">mon</span> = <span class="ruby-identifier">monitors</span>[<span class="ruby-identifier">monitor_name</span>.<span class="ruby-identifier">to_sym</span>]
+      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">mon</span>
+        <span class="ruby-identifier">mon</span>.<span class="ruby-identifier">run</span>(<span class="ruby-identifier">value</span>.<span class="ruby-identifier">to_f</span>)
+      <span class="ruby-keyword kw">else</span>
+        <span class="ruby-value str">&quot;unhandled monitor&quot;</span>
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000226" class="method-detail">
+        <a name="M000226"></a>
+
+        <div class="method-heading">
+          <a href="#M000226" class="method-signature">
+          <span class="method-name">terminate!</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Terminate all instances in the cloud
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000226-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000226-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/cloud.rb, line 71</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">terminate!</span>
+      <span class="ruby-identifier">nodes</span>.<span class="ruby-identifier">collect</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">n</span><span class="ruby-operator">|</span> <span class="ruby-identifier">n</span>.<span class="ruby-identifier">terminate!</span> }
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000223" class="method-detail">
+        <a name="M000223"></a>
+
+        <div class="method-heading">
+          <a href="#M000223" class="method-signature">
+          <span class="method-name">terminate_instance!</span><span class="method-args">(o={})</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000223-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000223-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/cloud.rb, line 66</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">terminate_instance!</span>(<span class="ruby-identifier">o</span>={}); <span class="ruby-identifier">cloud_provider</span>.<span class="ruby-identifier">terminate_instance!</span>(<span class="ruby-identifier">o</span>);<span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000232" class="method-detail">
+        <a name="M000232"></a>
+
+        <div class="method-heading">
+          <a href="#M000232" class="method-signature">
+          <span class="method-name">tmp_path</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Temporary path Starts at the global default tmp path and appends the <a
+href="Cloud.html#M000233">pool</a> name and the cloud name
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000232-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000232-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/cloud.rb, line 151</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">tmp_path</span>
+      <span class="ruby-constant">Default</span>.<span class="ruby-identifier">tmp_path</span> <span class="ruby-operator">/</span> <span class="ruby-identifier">pool</span>.<span class="ruby-identifier">name</span> <span class="ruby-operator">/</span> <span class="ruby-identifier">name</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000220" class="method-detail">
+        <a name="M000220"></a>
+
+        <div class="method-heading">
+          <a href="#M000220" class="method-signature">
+          <span class="method-name">using</span><span class="method-args">(provider_symbol, o={}, &amp;block)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Declare the CloudProvider for a cloud
+</p>
+<pre>
+ Create an instance of the cloud provider this cloud is using
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000220-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000220-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/cloud.rb, line 57</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">using</span>(<span class="ruby-identifier">provider_symbol</span>, <span class="ruby-identifier">o</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+      <span class="ruby-keyword kw">return</span> <span class="ruby-ivar">@cloud_provider</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@cloud_provider</span>
+      <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">cloud_provider_name</span> = <span class="ruby-identifier">provider_symbol</span>
+      <span class="ruby-identifier">cloud_provider</span>(<span class="ruby-identifier">o</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000245" class="method-detail">
+        <a name="M000245"></a>
+
+        <div class="method-heading">
+          <a href="#M000245" class="method-signature">
+          <span class="method-name">validate_all_resources</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000245-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000245-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/poolparty/cloud.rb, line 256</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">validate_all_resources</span>
+      <span class="ruby-identifier">ddputs</span>(<span class="ruby-value str">&quot;Validating all the resources&quot;</span>)
+      [<span class="ruby-identifier">:ensure_not_cyclic</span>, <span class="ruby-identifier">:ensure_meta_fun_are_resources</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">meth</span><span class="ruby-operator">|</span>
+        <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">send</span> <span class="ruby-identifier">meth</span>
+      <span class="ruby-keyword kw">end</span>
     <span class="ruby-keyword kw">end</span>
 </pre>
           </div>

@@ -56,7 +56,7 @@
     </tr>
     <tr class="top-aligned-row">
       <td><strong>Last Update:</strong></td>
-      <td>Tue May 12 15:04:18 -0700 2009</td>
+      <td>Thu Aug 27 18:44:25 -0700 2009</td>
     </tr>
     </table>
   </div>
@@ -68,6 +68,42 @@
 
   <div id="contextContent">
 
+    <div id="description">
+      <h2>Exec</h2>
+<p>
+Ensure a command is run on the instances
+</p>
+<h2>Usage</h2>
+<pre>
+  has_exec(:name =&gt; '...') do
+    # More options.
+    # This block is optional
+  end
+</pre>
+<h2>Options</h2>
+<ul>
+<li><tt>name</tt> The name of your exec. This is optional, but nice for
+debugging purposes
+
+</li>
+<li><tt>cwd</tt> Current working directory to execute the command (optional)
+
+</li>
+<li><tt>command</tt> This describes the command to run
+
+</li>
+<li><tt>path</tt> The path to run the command with (optional)
+
+</li>
+</ul>
+<h2>Examples</h2>
+<pre>
+  has_exec 'ps aux | grep erl | mail -s &quot;running commands&quot; root@root.com' do
+    onlyif =&gt; 'ps aux | grep beam'
+  end
+</pre>
+
+    </div>
 
 
    </div>

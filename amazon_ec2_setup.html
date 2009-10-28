@@ -111,13 +111,11 @@
             <h4>clouds.rb</h4>
             <p>
               You can explicitely set them in your clouds.rb like so:
-              <pre><code>
-                cloud :app do
-                  access_key "AAAAAAAAAABBBBBB"
-                  secret_access_key "NRLSKDM@$@$/4@$%%NNNSN"
-                  # ...
-                end
-              </code></pre>
+              <pre><code>cloud :app do
+                access_key "AAAAAAAAAABBBBBB"
+                secret_access_key "NRLSKDM@$@$/4@$%%NNNSN"
+                # ...
+              end</code></pre>
               Of course, this works if you are going to keep your spec local and private, but that doesn't really work well for sharing, so instead, let's set them as environment variables.
             </p>
             <h4>
@@ -132,16 +130,10 @@
             </p>
             <ul>
               <li>
-                <tt>AWS_ACCESS_KEY</tt>
+                <tt>EC2_ACCESS_KEY</tt>
               </li>
               <li>
-                <tt>AWS_SECRET_ACCESS_KEY</tt>
-              </li>
-              <li>
-                <tt>EC2_PRIVATE_KEY</tt>
-              </li>
-              <li>
-                <tt>EC2_CERT</tt>
+                <tt>EC2_SECRET_KEY</tt>
               </li>
             </ul>
             <p>
@@ -163,18 +155,14 @@
               in your
               <tt>~/.profile)</tt>
             </p>
-            <pre><code>
-              #!/bin/sh
-              export AWS_ACCESS_KEY="AAAAAAAAAABBBBBB"
-              export AWS_SECRET_ACCESS_KEY="NRLSKDM@$@$/4@$%%NNNSN"
-              export EC2_PRIVATE_KEY="/path/to/pk-XXX.pem"
-              export EC2_CERT="/path/to/cert-XXX.pem"
-            </code></pre>
+            <pre><code>#!/bin/sh
+            export EC2_ACCESS_KEY="AAAAAAAAAABBBBBB"
+            export EC2_SECRET_KEY="NRLSKDM@$@$/4@$%%NNNSN"
+            export EC2_PRIVATE_KEY="/path/to/pk-XXX.pem"
+            export EC2_CERT="/path/to/cert-XXX.pem"</code></pre>
             <p>
               Be sure to open a new terminal before you continue so that your changes are re-loaded (or reload your profile from the command-line with
-              <code>
-                source ~/.profile
-              </code>
+              <code>source ~/.profile</code>
               ).
             </p>
             <p></p>
@@ -183,107 +171,33 @@
             Keypair
           </h3>
           <p>
-            If you haven't done so already, generate the keypair
+            Keypairs are generated automatically for you if your keypair does not exist. The naming
+            convention is in the format:
             <br />
           </p>
-          <pre><code>
-            ec2-add-keypair poolparty-example > ~/.ssh/poolparty-example
-            chmod 600 ~/.ssh/poolparty-example
-          </code></pre>
-          (Hint, this means you will add the following directive to your
-          <tt>clouds.rb)</tt>
-          <pre class="blackboard">keypair <span class="String"><span class="String">&quot;</span>poolparty-example<span class="String">&quot;</span></span>&#x000A;</pre>
-          <p></p>
-          <h3>Ports</h3>
-          <div class='tip-box'><div class='crab-wrapper'><img src='http://fairchild.github.com/poolparty/images/site/i/examples.png' class='crab'/></div>Wondering why do you have to open these ports? No idea what a 'security group' is? Checkout the
-          <a href="amazon.html">Amazon EC2 Foundations</a>
-          page</div>
+          <pre class="blackboard">  [poolname]<span class="Keyword">-</span>[cloudname]&#x000A;</pre>
+          <h3>
+            Security groups
+          </h3>
           <p>
-            Finally, make sure the following ports are open in your
-            <a href="amazon.html#security_groups">EC2 security group:</a>
+            Security groups are how the clouds distinguish each other. You can specify security groups in your clouds.rb in the format:
+            <pre class="blackboard">security_group <span class="Keyword">do</span>&#x000A;  authorize <span class="Constant"><span class="Constant">:</span>from_port</span> =&gt; <span class="Constant">22</span>, <span class="Constant"><span class="Constant">:</span>to_port</span> =&gt; <span class="Constant">22</span>&#x000A;<span class="Keyword">end</span>&#x000A;</pre>
+            PoolParty will take care of ensuring this security group with the specified ports open as well as it will close the ports that are open that are not specified to keep the security groups
+            <span class='emphasis'>declarative.</span>
+            You can also provide a name for the security groups:
+            <pre class="blackboard">security_group <span class="String"><span class="String">&quot;</span>my-custom-named-security-group<span class="String">&quot;</span></span> <span class="Keyword">do</span>&#x000A;  authorize <span class="Constant"><span class="Constant">:</span>from_port</span> =&gt; <span class="Constant">22</span>, <span class="Constant"><span class="Constant">:</span>to_port</span> =&gt; <span class="Constant">22</span>&#x000A;<span class="Keyword">end</span>&#x000A;</pre>
           </p>
-          <ol>
-            <li>
-              22
-            </li>
-            <li>
-              8642
-            </li>
-          </ol>
-          <p>
-            If these ports aren't open, your cloud will fail.
+          <p class='emphasis'>
+            Note, to use the anything command that requires ssh access, you must allow port 22 to be opened in your security_group declaration.
           </p>
-          <pre><code>
-            ec2-authorize -p 22 default
-            ec2-authorize -p 8642 default
-          </code></pre>
-          <p>
-            Sometimes it's nice to ping your machine, but ping doesn't need to be open, so this step is optional:
-            <br />
-          </p>
-          <pre><code>
-            ec2-authorize -P icmp -t -1:-1 default
-          </code></pre>
-          <p>
-            Also, if you plan on using apache, you'll want port 80 to be open:
-            <br />
-          </p>
-          <pre><code>
-            ec2-authorize -p 80 default
-          </code></pre>
-          <p>
-            Old ports
-            <strong>
-              not
-            </strong>
-            required for release 1.1 and after
-          </p>
-          <ol>
-            <li>
-              4369 (erlang daemon)
-            </li>
-            <li>
-              8140 (puppet)
-            </li>
-            <li>
-              7050 (cloud management)
-            </li>
-          </ol>
           <h2>clouds.rb file location</h2>
           <p>
-            If you are going to point to one clouds.rb file more often than any other, you can add it as an environment variable as well, like so
-            <br />
+            Your clouds.rb must be accessible to the command-line. It will try to require the clouds.rb from the current working directory if the clouds.rb is in the current directory. If it is not, you can specify the location with the -c switch with any cloud command.
+            <pre class="blackboard">cloud show <span class="Keyword">-</span>c examples<span class="Keyword">/</span>simple.rb&#x000A;</pre>
           </p>
-          <pre><code>
-            export POOL_SPEC=/home/auser/Sites/pp/clouds.rb
-          </code></pre>
-          <p></p>
           <p>
-            This will save a lot of headache if you export this in the file. PoolParty expects to be able to find the clouds.rb in one of several locations.
-          </p>
-          <ol>
-            <li>
-              the current directory
-            </li>
-            <li>
-              the file pointed to by the
-              <tt>POOL_SPEC</tt>
-              environment variable
-            </li>
-            <li>
-              <tt>~/.poolparty/clouds.rb</tt>
-            </li>
-            <li>
-              <tt>/etc/poolparty/clouds.rb</tt>
-            </li>
-          </ol>
-          You can also explicitly set these when calling
-          <tt>pool</tt>
-          commands with the
-          <tt>-n</tt>
-          switch, but that gets old fast.
-          <p>
-            Note, that if you are in the same directory as your clouds.rb file, then PoolParty will assume you are working with that file.
+            The clouds.rb is also "requireable" from ruby, so you can operate with the cloud from irb or any other ruby program, i.e.:
+            <pre class="blackboard">irb <span class="Keyword">-</span>r poolparty<span class="Keyword">/</span>clouds.rb&#x000A;</pre>
           </p>
           <h3>External links</h3>
           <p>

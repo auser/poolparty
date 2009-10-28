@@ -55,8 +55,8 @@
         <tr class="top-aligned-row">
             <td><strong>In:</strong></td>
             <td>
-                <a href="../files/lib/poolparty/core/module_rb.html">
-                lib/poolparty/core/module.rb
+                <a href="../files/lib/core/module_rb.html">
+                lib/core/module.rb
                 </a>
         <br />
             </td>
@@ -80,12 +80,6 @@
 
   <div id="contextContent">
 
-    <div id="description">
-      <p>
-<a href="Module.html">Module</a> overloads
-</p>
-
-    </div>
 
 
    </div>
@@ -94,9 +88,7 @@
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000080">alias_method_chain</a>&nbsp;&nbsp;
-      <a href="#M000081">attr_accessor_with_default</a>&nbsp;&nbsp;
-      <a href="#M000082">instance_variables_from_hash</a>&nbsp;&nbsp;
+      <a href="#M000031">default_attr_reader</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -118,99 +110,32 @@
     <div id="methods">
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000080" class="method-detail">
-        <a name="M000080"></a>
+      <div id="method-M000031" class="method-detail">
+        <a name="M000031"></a>
 
         <div class="method-heading">
-          <a href="#M000080" class="method-signature">
-          <span class="method-name">alias_method_chain</span><span class="method-args">(target, feature) {|aliased_target, punctuation| ...}</span>
+          <a href="#M000031" class="method-signature">
+          <span class="method-name">default_attr_reader</span><span class="method-args">(sym, default)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Gives us <a href="Module.html#M000080">alias_method_chain</a> from rails
+Default accessors Provides an accessor with a default class Usage:
 </p>
-          <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000080-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000080-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/core/module.rb, line 4</span>
-  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">alias_method_chain</span>(<span class="ruby-identifier">target</span>, <span class="ruby-identifier">feature</span>)
-    <span class="ruby-identifier">aliased_target</span>, <span class="ruby-identifier">punctuation</span> = <span class="ruby-identifier">target</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">sub</span>(<span class="ruby-regexp re">/([?!=])$/</span>, <span class="ruby-value str">''</span>), <span class="ruby-identifier">$1</span>
-    <span class="ruby-keyword kw">yield</span>(<span class="ruby-identifier">aliased_target</span>, <span class="ruby-identifier">punctuation</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">block_given?</span>
-
-    <span class="ruby-identifier">with_method</span>, <span class="ruby-identifier">without_method</span> = <span class="ruby-node">&quot;#{aliased_target}_with_#{feature}#{punctuation}&quot;</span>, <span class="ruby-node">&quot;#{aliased_target}_without_#{feature}#{punctuation}&quot;</span>
-
-    <span class="ruby-identifier">alias_method</span> <span class="ruby-identifier">without_method</span>, <span class="ruby-identifier">target</span>
-    <span class="ruby-identifier">alias_method</span> <span class="ruby-identifier">target</span>, <span class="ruby-identifier">with_method</span>
-
-    <span class="ruby-keyword kw">case</span>
-      <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">public_method_defined?</span>(<span class="ruby-identifier">without_method</span>)
-        <span class="ruby-identifier">public</span> <span class="ruby-identifier">target</span>
-      <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">protected_method_defined?</span>(<span class="ruby-identifier">without_method</span>)
-        <span class="ruby-identifier">protected</span> <span class="ruby-identifier">target</span>
-      <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">private_method_defined?</span>(<span class="ruby-identifier">without_method</span>)
-        <span class="ruby-identifier">private</span> <span class="ruby-identifier">target</span>
-    <span class="ruby-keyword kw">end</span>
-  <span class="ruby-keyword kw">end</span>
+  default_attr_reader :a, [&quot;b&quot;]
 </pre>
-          </div>
-        </div>
-      </div>
-
-      <div id="method-M000081" class="method-detail">
-        <a name="M000081"></a>
-
-        <div class="method-heading">
-          <a href="#M000081" class="method-signature">
-          <span class="method-name">attr_accessor_with_default</span><span class="method-args">( *syms, &amp;block )</span>
-          </a>
-        </div>
-      
-        <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000081-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000081-source">
+            onclick="toggleCode('M000031-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000031-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/core/module.rb, line 22</span>
-  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">attr_accessor_with_default</span>( <span class="ruby-operator">*</span><span class="ruby-identifier">syms</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span> )
-    <span class="ruby-identifier">raise</span> <span class="ruby-value str">'Default value in block required'</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">block</span>
-    <span class="ruby-identifier">syms</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span> <span class="ruby-identifier">sym</span> <span class="ruby-operator">|</span>
-      <span class="ruby-identifier">module_eval</span> <span class="ruby-keyword kw">do</span>
-        <span class="ruby-identifier">attr_writer</span>( <span class="ruby-identifier">sym</span> )
-        <span class="ruby-identifier">define_method</span>( <span class="ruby-identifier">sym</span> ) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span> <span class="ruby-operator">|</span>
-          <span class="ruby-keyword kw">class</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-keyword kw">self</span>; <span class="ruby-keyword kw">self</span>; <span class="ruby-keyword kw">end</span>.<span class="ruby-identifier">class_eval</span> <span class="ruby-keyword kw">do</span>
-            <span class="ruby-identifier">attr_reader</span>( <span class="ruby-identifier">sym</span> )
-          <span class="ruby-keyword kw">end</span>
-          <span class="ruby-identifier">instance_variables</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-node">&quot;@#{sym}&quot;</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">instance_variable_get</span>( <span class="ruby-node">&quot;@#{sym}&quot;</span> ) <span class="ruby-operator">:</span> <span class="ruby-identifier">instance_variable_set</span>( <span class="ruby-node">&quot;@#{sym}&quot;</span>, <span class="ruby-identifier">block</span>.<span class="ruby-identifier">call</span> )
-        <span class="ruby-keyword kw">end</span>
-      <span class="ruby-keyword kw">end</span>
+<span class="ruby-comment cmt"># File lib/core/module.rb, line 7</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">default_attr_reader</span>(<span class="ruby-identifier">sym</span>, <span class="ruby-identifier">default</span>)
+    <span class="ruby-identifier">define_method</span> <span class="ruby-node">&quot;#{sym}_default&quot;</span><span class="ruby-node">&quot;#{sym}_default&quot;</span> <span class="ruby-keyword kw">do</span>
+      <span class="ruby-identifier">default</span>
     <span class="ruby-keyword kw">end</span>
-    <span class="ruby-keyword kw">nil</span>
-  <span class="ruby-keyword kw">end</span>
-</pre>
-          </div>
-        </div>
-      </div>
-
-      <div id="method-M000082" class="method-detail">
-        <a name="M000082"></a>
-
-        <div class="method-heading">
-          <a href="#M000082" class="method-signature">
-          <span class="method-name">instance_variables_from_hash</span><span class="method-args">(h={})</span>
-          </a>
-        </div>
-      
-        <div class="method-description">
-          <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000082-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000082-source">
-<pre>
-<span class="ruby-comment cmt"># File lib/poolparty/core/module.rb, line 37</span>
-  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">instance_variables_from_hash</span>(<span class="ruby-identifier">h</span>={})
-    <span class="ruby-identifier">h</span>.<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">instance_eval</span> <span class="ruby-node">&quot;@#{k} = #{v}&quot;</span>}
+    <span class="ruby-identifier">module_eval</span> <span class="ruby-node">&quot;def #{sym};@#{sym} ||= #{sym}_default;end&quot;</span>
   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>

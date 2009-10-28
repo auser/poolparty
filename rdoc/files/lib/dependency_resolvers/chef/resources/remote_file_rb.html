@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>File: remote_file.rb</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href="../../../../.././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+  <div id="fileHeader">
+    <h1>remote_file.rb</h1>
+    <table class="header-table">
+    <tr class="top-aligned-row">
+      <td><strong>Path:</strong></td>
+      <td>lib/dependency_resolvers/chef/resources/remote_file.rb
+      </td>
+    </tr>
+    <tr class="top-aligned-row">
+      <td><strong>Last Update:</strong></td>
+      <td>Thu Aug 27 18:44:24 -0700 2009</td>
+    </tr>
+    </table>
+  </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+    <div id="description">
+      <h2>Remote File</h2>
+<p>
+The remote_file resource is used to describe a file that is hosted on the
+master instance and propagated to the other instances
+</p>
+<h2>Usage</h2>
+<pre>
+  has_remote_file(:name =&gt; '...') do
+    # More options.
+    # This block is optional
+  end
+</pre>
+<h2>Options</h2>
+<ul>
+<li><tt>name</tt> Describe the location of the file with the name
+
+</li>
+<li><tt>mode</tt> Describe the mode of the file (default: 644)
+
+</li>
+<li><tt>owner</tt> The owner of the file (default: poolparty user)
+
+</li>
+<li><tt>content</tt> The contents of the file
+
+</li>
+<li><tt>source</tt> Used to describe a file that is hosted on the master
+instance.
+
+</li>
+<li><tt>template</tt> The file contents are described with the template. The
+location given must be readable
+
+</li>
+</ul>
+<p>
+To write a file to the template directory, use:
+</p>
+<pre>
+    copy_template_to_storage_directory(filepath)
+</pre>
+<h2>Example</h2>
+<pre>
+  has_remote_file(:name =&gt; &quot;/etc/haproxy.cfg&quot;) do
+    mode 644
+    template File.join(File.dirname(__FILE__), &quot;..&quot;, &quot;templates/haproxy.conf&quot;)
+  end
+</pre>
+
+    </div>
+
+
+   </div>
+
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+
+
+
+
+      
+
+
+    <!-- if method_list -->
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>

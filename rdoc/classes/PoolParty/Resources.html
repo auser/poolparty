@@ -55,8 +55,68 @@
         <tr class="top-aligned-row">
             <td><strong>In:</strong></td>
             <td>
-                <a href="../../files/lib/poolparty/poolparty/resource_rb.html">
-                lib/poolparty/poolparty/resource.rb
+                <a href="../../files/lib/dependency_resolvers/chef/resources/chef_attributes_file_rb.html">
+                lib/dependency_resolvers/chef/resources/chef_attributes_file.rb
+                </a>
+        <br />
+                <a href="../../files/lib/dependency_resolvers/chef/resources/chef_recipe_rb.html">
+                lib/dependency_resolvers/chef/resources/chef_recipe.rb
+                </a>
+        <br />
+                <a href="../../files/lib/dependency_resolvers/chef/resources/http_request_rb.html">
+                lib/dependency_resolvers/chef/resources/http_request.rb
+                </a>
+        <br />
+                <a href="../../files/lib/dependency_resolvers/chef/resources/remote_directory_rb.html">
+                lib/dependency_resolvers/chef/resources/remote_directory.rb
+                </a>
+        <br />
+                <a href="../../files/lib/dependency_resolvers/chef/resources/remote_file_rb.html">
+                lib/dependency_resolvers/chef/resources/remote_file.rb
+                </a>
+        <br />
+                <a href="../../files/lib/dependency_resolvers/chef/resources/route_rb.html">
+                lib/dependency_resolvers/chef/resources/route.rb
+                </a>
+        <br />
+                <a href="../../files/lib/dependency_resolvers/chef/resources/script_rb.html">
+                lib/dependency_resolvers/chef/resources/script.rb
+                </a>
+        <br />
+                <a href="../../files/lib/poolparty/plugins/apache_rb.html">
+                lib/poolparty/plugins/apache.rb
+                </a>
+        <br />
+                <a href="../../files/lib/poolparty/plugins/apache2/passenger_site_rb.html">
+                lib/poolparty/plugins/apache2/passenger_site.rb
+                </a>
+        <br />
+                <a href="../../files/lib/poolparty/plugins/apache2/php5_rb.html">
+                lib/poolparty/plugins/apache2/php5.rb
+                </a>
+        <br />
+                <a href="../../files/lib/poolparty/plugins/apache2/virtual_host_rb.html">
+                lib/poolparty/plugins/apache2/virtual_host.rb
+                </a>
+        <br />
+                <a href="../../files/lib/poolparty/plugins/git/git_repository_rb.html">
+                lib/poolparty/plugins/git/git_repository.rb
+                </a>
+        <br />
+                <a href="../../files/lib/poolparty/plugins/git_rb.html">
+                lib/poolparty/plugins/git.rb
+                </a>
+        <br />
+                <a href="../../files/lib/poolparty/plugins/rails/app_rb.html">
+                lib/poolparty/plugins/rails/app.rb
+                </a>
+        <br />
+                <a href="../../files/lib/poolparty/plugins/rails_rb.html">
+                lib/poolparty/plugins/rails.rb
+                </a>
+        <br />
+                <a href="../../files/lib/poolparty/resources/conditional_rb.html">
+                lib/poolparty/resources/conditional.rb
                 </a>
         <br />
                 <a href="../../files/lib/poolparty/resources/cron_rb.html">
@@ -75,12 +135,20 @@
                 lib/poolparty/resources/file.rb
                 </a>
         <br />
+                <a href="../../files/lib/poolparty/resources/gem_package_rb.html">
+                lib/poolparty/resources/gem_package.rb
+                </a>
+        <br />
                 <a href="../../files/lib/poolparty/resources/group_rb.html">
                 lib/poolparty/resources/group.rb
                 </a>
         <br />
-                <a href="../../files/lib/poolparty/resources/host_rb.html">
-                lib/poolparty/resources/host.rb
+                <a href="../../files/lib/poolparty/resources/line_rb.html">
+                lib/poolparty/resources/line.rb
+                </a>
+        <br />
+                <a href="../../files/lib/poolparty/resources/link_rb.html">
+                lib/poolparty/resources/link.rb
                 </a>
         <br />
                 <a href="../../files/lib/poolparty/resources/mount_rb.html">
@@ -91,20 +159,8 @@
                 lib/poolparty/resources/package.rb
                 </a>
         <br />
-                <a href="../../files/lib/poolparty/resources/remote_file_rb.html">
-                lib/poolparty/resources/remote_file.rb
-                </a>
-        <br />
                 <a href="../../files/lib/poolparty/resources/service_rb.html">
                 lib/poolparty/resources/service.rb
-                </a>
-        <br />
-                <a href="../../files/lib/poolparty/resources/sshkey_rb.html">
-                lib/poolparty/resources/sshkey.rb
-                </a>
-        <br />
-                <a href="../../files/lib/poolparty/resources/symlink_rb.html">
-                lib/poolparty/resources/symlink.rb
                 </a>
         <br />
                 <a href="../../files/lib/poolparty/resources/user_rb.html">
@@ -113,10 +169,6 @@
         <br />
                 <a href="../../files/lib/poolparty/resources/variable_rb.html">
                 lib/poolparty/resources/variable.rb
-                </a>
-        <br />
-                <a href="../../files/lib/poolparty/resources_rb.html">
-                lib/poolparty/resources.rb
                 </a>
         <br />
             </td>
@@ -132,104 +184,10 @@
 
   <div id="contextContent">
 
-    <div id="description">
-      <p>
-<a href="Resources.html">Resources</a> are items that poolparty can make
-available in your clouds. <a href="Resources.html">Resources</a> are used
-in the <tt>clouds.rb</tt>, and in Plugins. Plugins are collections of
-resources.
-</p>
-<p>
-All of these resources can be defined as <tt>has_resource</tt> and
-<tt>does_not_have_resource</tt>:
-</p>
-<ul>
-<li><tt>has_</tt> example <tt>has_file(&#8230;)</tt>
-
-</li>
-<li><tt>does_not_have_</tt> For example: <tt>does_not_have_file(&#8230;)</tt>
-
-</li>
-</ul>
-<h2><a href="Resources.html">Resources</a></h2>
-<p>
-see <a href="Resources/File.html">PoolParty::Resources::File</a>
-</p>
-<ul>
-<li><tt>has_file</tt> <a
-href="Resources/File.html">PoolParty::Resources::File</a>
-
-</li>
-<li><tt>has_package</tt> <a
-href="Resources/Package.html">PoolParty::Resources::Package</a>
-
-</li>
-<li><tt>has_gempackage</tt> <a
-href="GempackageResource.html">PoolParty::Resources::GempackageResource</a>
-
-</li>
-<li><tt>has_exec</tt> <a
-href="Resources/Exec.html">PoolParty::Resources::Exec</a>
-
-</li>
-<li><tt>has_variable</tt> (for templates) <a
-href="Resources/Variable.html">PoolParty::Resources::Variable</a>
-
-</li>
-<li><tt>has_line_in_file</tt> <a
-href="LineInFile.html">PoolParty::Resources::LineInFile</a>
-
-</li>
-<li><tt>has_remotefile</tt> <a
-href="Resources/Remotefile.html">PoolParty::Resources::Remotefile</a>
-
-</li>
-<li><tt>hash_cron</tt> <a
-href="Resources/Cron.html">PoolParty::Resources::Cron</a>
-
-</li>
-<li><tt>has_host</tt> <a
-href="Resources/Host.html">PoolParty::Resources::Host</a>
-
-</li>
-<li><tt>has_service</tt> <a
-href="Resources/Service.html">PoolParty::Resources::Service</a>
-
-</li>
-<li><tt>has_symlink</tt> <a
-href="Resources/Symlink.html">PoolParty::Resources::Symlink</a>
-
-</li>
-<li><tt>has_directory</tt> <a
-href="Resources/Directory.html">PoolParty::Resources::Directory</a>
-
-</li>
-<li><tt>has_deploy_directory</tt> <a
-href="Deploydirectory.html">PoolParty::Resources::Deploydirectory</a>
-
-</li>
-<li><tt>has_mount</tt> <a
-href="Resources/Mount.html">PoolParty::Resources::Mount</a>
-
-</li>
-</ul>
-<h2>Helper methods</h2>
-<pre>
-    * execute_if
-</pre>
-
-    </div>
 
 
    </div>
 
-    <div id="method-list">
-      <h3 class="section-bar">Methods</h3>
-
-      <div class="name-list">
-      <a href="#M000346">custom_file</a>&nbsp;&nbsp;
-      </div>
-    </div>
 
   </div>
 
@@ -241,21 +199,35 @@ href="Resources/Mount.html">PoolParty::Resources::Mount</a>
     <div id="class-list">
       <h3 class="section-bar">Classes and Modules</h3>
 
-      Class <a href="Resources/Cron.html" class="link">PoolParty::Resources::Cron</a><br />
+      Class <a href="Resources/Apache.html" class="link">PoolParty::Resources::Apache</a><br />
+Class <a href="Resources/App.html" class="link">PoolParty::Resources::App</a><br />
+Class <a href="Resources/ChefAttributesFile.html" class="link">PoolParty::Resources::ChefAttributesFile</a><br />
+Class <a href="Resources/ChefRecipe.html" class="link">PoolParty::Resources::ChefRecipe</a><br />
+Class <a href="Resources/Conditional.html" class="link">PoolParty::Resources::Conditional</a><br />
+Class <a href="Resources/Cron.html" class="link">PoolParty::Resources::Cron</a><br />
 Class <a href="Resources/Directory.html" class="link">PoolParty::Resources::Directory</a><br />
 Class <a href="Resources/Exec.html" class="link">PoolParty::Resources::Exec</a><br />
-Class <a href="Resources/File.html" class="link">PoolParty::Resources::File</a><br />
+Class <a href="Resources/FileResource.html" class="link">PoolParty::Resources::FileResource</a><br />
+Class <a href="Resources/GemPackage.html" class="link">PoolParty::Resources::GemPackage</a><br />
+Class <a href="Resources/Git.html" class="link">PoolParty::Resources::Git</a><br />
+Class <a href="Resources/GitRepository.html" class="link">PoolParty::Resources::GitRepository</a><br />
 Class <a href="Resources/Group.html" class="link">PoolParty::Resources::Group</a><br />
-Class <a href="Resources/Host.html" class="link">PoolParty::Resources::Host</a><br />
+Class <a href="Resources/HttpRequest.html" class="link">PoolParty::Resources::HttpRequest</a><br />
+Class <a href="Resources/Line.html" class="link">PoolParty::Resources::Line</a><br />
+Class <a href="Resources/Link.html" class="link">PoolParty::Resources::Link</a><br />
 Class <a href="Resources/Mount.html" class="link">PoolParty::Resources::Mount</a><br />
 Class <a href="Resources/Package.html" class="link">PoolParty::Resources::Package</a><br />
-Class <a href="Resources/Remotefile.html" class="link">PoolParty::Resources::Remotefile</a><br />
-Class <a href="Resources/Resource.html" class="link">PoolParty::Resources::Resource</a><br />
+Class <a href="Resources/PassengerSite.html" class="link">PoolParty::Resources::PassengerSite</a><br />
+Class <a href="Resources/Php.html" class="link">PoolParty::Resources::Php</a><br />
+Class <a href="Resources/Rails.html" class="link">PoolParty::Resources::Rails</a><br />
+Class <a href="Resources/RemoteDirectory.html" class="link">PoolParty::Resources::RemoteDirectory</a><br />
+Class <a href="Resources/RemoteFile.html" class="link">PoolParty::Resources::RemoteFile</a><br />
+Class <a href="Resources/Route.html" class="link">PoolParty::Resources::Route</a><br />
+Class <a href="Resources/Script.html" class="link">PoolParty::Resources::Script</a><br />
 Class <a href="Resources/Service.html" class="link">PoolParty::Resources::Service</a><br />
-Class <a href="Resources/Sshkey.html" class="link">PoolParty::Resources::Sshkey</a><br />
-Class <a href="Resources/Symlink.html" class="link">PoolParty::Resources::Symlink</a><br />
 Class <a href="Resources/User.html" class="link">PoolParty::Resources::User</a><br />
 Class <a href="Resources/Variable.html" class="link">PoolParty::Resources::Variable</a><br />
+Class <a href="Resources/VirtualHost.html" class="link">PoolParty::Resources::VirtualHost</a><br />
 
     </div>
 
@@ -266,34 +238,6 @@ Class <a href="Resources/Variable.html" class="link">PoolParty::Resources::Varia
 
 
     <!-- if method_list -->
-    <div id="methods">
-      <h3 class="section-bar">Public Instance methods</h3>
-
-      <div id="method-M000346" class="method-detail">
-        <a name="M000346"></a>
-
-        <div class="method-heading">
-          <a href="#M000346" class="method-signature">
-          <span class="method-name">custom_file</span><span class="method-args">(path, str)</span>
-          </a>
-        </div>
-      
-        <div class="method-description">
-          <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000346-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000346-source">
-<pre>
-<span class="ruby-comment cmt"># File lib/poolparty/poolparty/resource.rb, line 13</span>
-    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">custom_file</span>(<span class="ruby-identifier">path</span>, <span class="ruby-identifier">str</span>)
-      <span class="ruby-identifier">write_to_file_in_storage_directory</span>(<span class="ruby-identifier">path</span>, <span class="ruby-identifier">str</span>)
-    <span class="ruby-keyword kw">end</span>
-</pre>
-          </div>
-        </div>
-      </div>
-
-
-    </div>
 
 
   </div>

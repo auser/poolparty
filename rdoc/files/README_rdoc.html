@@ -1,0 +1,473 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>File: README.rdoc</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+  <div id="fileHeader">
+    <h1>README.rdoc</h1>
+    <table class="header-table">
+    <tr class="top-aligned-row">
+      <td><strong>Path:</strong></td>
+      <td>README.rdoc
+      </td>
+    </tr>
+    <tr class="top-aligned-row">
+      <td><strong>Last Update:</strong></td>
+      <td>Thu Aug 27 18:44:22 -0700 2009</td>
+    </tr>
+    </table>
+  </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+    <div id="description">
+      <h1><a href="../classes/PoolParty.html">PoolParty</a></h1>
+<p>
+<a href="http://poolpartyrb.com">poolpartyrb.com</a>
+</p>
+<h2>DESCRIPTION:</h2>
+<p>
+<a href="../classes/PoolParty.html">PoolParty</a> makes cloud provisioning
+and management easy. <a href="../classes/PoolParty.html">PoolParty</a>
+provides a unified interface for provisioning, management and cloud
+life-cycle on many different cloud providers, such as EC2 and vmware.
+</p>
+<p>
+Code your cloud!
+</p>
+<h2>SYNOPSIS:</h2>
+<p>
+<a href="../classes/PoolParty.html">PoolParty</a> is written with the
+intention of being as application-agnostic as possible. It installs only
+the basic required software to glue the cloud together on the instances as
+listed below.
+</p>
+<h2>Quickstart</h2>
+<p>
+For instance, to start a basic cloud, let&#8216;s write one:
+</p>
+<pre>
+  pool &quot;demo&quot; do
+    cloud &quot;app&quot; do
+      instances 2..10
+      keypair &quot;cloud_demo&quot;
+
+      using :ec2
+
+      has_file &quot;/etc/motd&quot;, :content =&gt; &quot;Hello from your cloud&quot;
+    end
+  end
+</pre>
+<p>
+Simply by issuing the command:
+</p>
+<pre>
+  cloud start
+</pre>
+<p>
+The app cloud in the demo pool will be started, bootstrapped and
+provisioned to your liking. If the platform is not specified, then
+it&#8216;s assumed to be ubuntu. However, if a node is running, then <a
+href="../classes/PoolParty.html">PoolParty</a> will introspect the node and
+determine the operating system. This can be specified in the clouds.rb.
+</p>
+<p>
+There are a number of commands <a
+href="../classes/PoolParty.html">PoolParty</a> offers to interact with your
+cloud. They include:
+</p>
+<ul>
+<li><tt>cloud start</tt>
+
+</li>
+<li><tt>cloud terminate</tt>
+
+</li>
+<li><tt>cloud bootstrap</tt>
+
+</li>
+<li><tt>cloud configure</tt>
+
+</li>
+<li><tt>cloud compile</tt>
+
+</li>
+<li><tt>cloud console</tt>
+
+</li>
+<li><tt>cloud expand</tt>
+
+</li>
+<li><tt>cloud contract</tt>
+
+</li>
+<li><tt>cloud list</tt>
+
+</li>
+<li><tt>cloud show</tt>
+
+</li>
+<li><tt>cloud ssh</tt>
+
+</li>
+</ul>
+<p>
+There is also a helper installer script. This is an easy way to get started
+bootstrapping your environment:
+</p>
+<ul>
+<li><tt>install-poolparty</tt>
+
+</li>
+</ul>
+<p>
+We can change the cloud provider simply by changing the using line. For
+instance:
+</p>
+<pre>
+  pool &quot;demo&quot; do
+    cloud &quot;app&quot; do
+      #...
+      using :rackspace # coming soon
+      #...
+</pre>
+<p>
+Clouds are distinguished by keypairs, so to create multiple clouds, create
+a new keypair. For instance:
+</p>
+<pre>
+  pool &quot;demo&quot; do
+    cloud &quot;app&quot; do
+      keypair &quot;demo_app&quot;
+      #...
+    end
+    cloud &quot;db&quot; do
+      keypair &quot;demo_db&quot;
+      #...
+    end
+  end
+</pre>
+<h2>Resources</h2>
+<p>
+As you probably noticed from above, you provision your system with
+resources. There are native resources, plugins (which are basically
+resources) and you can write your own. The base resources included in <a
+href="../classes/PoolParty.html">PoolParty</a> are as follows:
+</p>
+<ul>
+<li><tt>file</tt>
+
+</li>
+<li><tt>directory</tt>
+
+</li>
+<li><tt>exec</tt>
+
+</li>
+<li><tt>variable</tt>
+
+</li>
+<li><tt>service</tt>
+
+</li>
+<li><tt>package</tt>
+
+</li>
+<li><tt>user</tt>
+
+</li>
+<li><tt>group</tt>
+
+</li>
+<li><tt>link (symlink)</tt>
+
+</li>
+<li><tt>line (line in file)</tt>
+
+</li>
+<li><tt>gem_package</tt>
+
+</li>
+<li><tt>cron</tt>
+
+</li>
+</ul>
+<p>
+There are also dependency_resolver specific resources. For instance,
+*<b>chef</b>* specific resources are as follows:
+</p>
+<ul>
+<li><tt>chef_attribute</tt>
+
+</li>
+<li><tt>http_request</tt>
+
+</li>
+<li><tt>remote_directory</tt>
+
+</li>
+<li><tt>remote_file</tt>
+
+</li>
+<li><tt>route</tt>
+
+</li>
+<li><tt>script</tt>
+
+</li>
+</ul>
+<p>
+To use these resources in your config file (clouds.rb), simply
+&quot;assert&quot; (call) the method with has_ or does_not_have prepended.
+For instance:
+</p>
+<pre>
+  pool &quot;demo&quot; do
+    cloud &quot;app&quot; do
+      has_file &quot;/etc/motd&quot;, :requires =&gt; get_package(&quot;apache2&quot;)
+      has_package &quot;apache2&quot; do
+        action :install
+      end
+    end
+  end
+</pre>
+<p>
+As you can see, there are many different ways to call a resource. All the
+following resource calls are identical:
+</p>
+<pre>
+  has_file &quot;/etc/motd&quot;, :content =&gt; &quot;Hello world&quot;, :owner =&gt; &quot;ari&quot;
+  has_file :name =&gt; &quot;/etc/motd&quot;, :content =&gt; &quot;Hello world&quot;, :owner =&gt; &quot;ari&quot;
+  has_file &quot;/etc/motd&quot; do
+    content &quot;Hello world&quot;
+    owner &quot;ari&quot;
+  end
+  has_file &quot;/etc/motd&quot;, :content =&gt; &quot;Hello world&quot; do
+    owner &quot;ari&quot;
+  end
+</pre>
+<p>
+All resources can contain their own resources as well. This sets up a
+dependency on the parent dependency. For instance
+</p>
+<pre>
+  has_directory &quot;/etc/configs&quot; do
+    has_file &quot;/etc/configs/configger&quot;, :content =&gt; &quot;Stuff&quot;
+  end
+</pre>
+<p>
+This says that the directory must exist before the file can be created.
+</p>
+<p>
+You can see the dependency graph setup by your clouds.rb by calling
+</p>
+<pre>
+  cloud compile -g output
+</pre>
+<p>
+That will generate a output.dot and output.png in the current directory.
+For this to work, you must have dot installed. Try it!
+</p>
+<p>
+Resources can be built on top of other resources as well. This is the
+definition of a resource plugin. This is covered more in-depth on the
+homepage. For the curious, take a look at lib/poolparty/plugins/apache.rb
+for an example plugin.
+</p>
+<p>
+There are currently several plugins that ship with <a
+href="../classes/PoolParty.html">PoolParty</a>. Those include:
+</p>
+<ul>
+<li><tt>apache (this includes passenger, virtual_hosts, php5)</tt>
+
+</li>
+<li><tt>git</tt>
+
+</li>
+<li><tt>rails</tt>
+
+</li>
+</ul>
+<p>
+This is list likely to expand as plugins are simply resources built on top
+of other resources. There is an external project called
+poolparty-extensions (&lt;a href=&quot;<a
+href="http://github.com/auser/poolparty-extensions/tree/master">http://github.com/auser/poolparty-extensions/tree/master</a">github.com/auser/poolparty-extensions/tree/master">http://github.com/auser/poolparty-extensions/tree/master</a</a>&gt;)
+that has quite a few external plugins, including hadoop, ganglia and more.
+</p>
+<h2>Extending</h2>
+<p>
+To add a cloud_provider, there are four methods that need to be
+implemented. Simply sublcass the <a
+href="../classes/CloudProviders.html">CloudProviders</a> module and require
+it in your clouds.rb (or commit it back to <a
+href="../classes/PoolParty.html">PoolParty</a>). Those four methods are:
+</p>
+<ul>
+<li><tt>run_instance</tt>
+
+</li>
+<li><tt>terminate_instance</tt>
+
+</li>
+<li><tt>describe_instances</tt>
+
+</li>
+<li><tt>describe_instance</tt>
+
+</li>
+</ul>
+<p>
+That&#8216;s it!
+</p>
+<p>
+Each resource is documented in the code and more documentation can be found
+at the site: &lt;a href=&quot;<a
+href="http://poolpartyrb.com">http://poolpartyrb.com</a">poolpartyrb.com">http://poolpartyrb.com</a</a>&gt;.
+</p>
+<h2>FEATURES/PROBLEMS:</h2>
+<ul>
+<li>Written in Ruby and Erlang (Internal node communication handled by &lt;a
+href=&quot;<a
+href="https://github.com/auser/hermes/tree/master">Hermes</a">github.com/auser/hermes/tree/master">Hermes</a</a>&gt;)
+
+</li>
+<li>Thrift interface (Connect to your cloud in ANY language supported by &lt;a
+href=&quot;<a
+href="http://incubator.apache.org/thrift/">Thrift</a">incubator.apache.org/thrift/">Thrift</a</a>&gt;)
+
+</li>
+<li>Written from the ground up to be extensible with plugins
+
+</li>
+<li>Easy git-style commands to communicate with your clouds
+
+</li>
+<li>Much much more
+
+</li>
+</ul>
+<h2>REQUIREMENTS:</h2>
+<ul>
+<li>Ruby
+
+</li>
+<li>Erlang
+
+</li>
+</ul>
+<h2>INSTALL:</h2>
+<p>
+sudo gem install auser-poolparty
+</p>
+<h2>LICENSE:</h2>
+<p>
+(The MIT License)
+</p>
+<p>
+Copyright (c) 2009 Ari Lerner, CloudTeam
+</p>
+<p>
+Permission is hereby granted, free of charge, to any person obtaining a
+copy of this software and associated documentation files (the
+&#8216;Software&#8217;), to deal in the Software without restriction,
+including without limitation the rights to use, copy, modify, merge,
+publish, distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to the
+following conditions:
+</p>
+<p>
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+</p>
+<p>
+THE SOFTWARE IS PROVIDED &#8216;AS IS&#8217;, WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+USE OR OTHER DEALINGS IN THE SOFTWARE.
+</p>
+
+    </div>
+
+
+   </div>
+
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+
+
+
+
+      
+
+
+    <!-- if method_list -->
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>

@@ -56,7 +56,7 @@
     </tr>
     <tr class="top-aligned-row">
       <td><strong>Last Update:</strong></td>
-      <td>Tue May 12 15:02:00 -0700 2009</td>
+      <td>Thu Aug 27 18:44:25 -0700 2009</td>
     </tr>
     </table>
   </div>
@@ -68,6 +68,36 @@
 
   <div id="contextContent">
 
+    <div id="description">
+      <h2>Group</h2>
+<p>
+The group resource ensures there is a group created on the nodes
+</p>
+<h2>Usage</h2>
+<pre>
+  has_group(:name =&gt; '...') do
+    # More options.
+    # This block is optional
+  end
+</pre>
+<h2>Options</h2>
+<ul>
+<li><tt>name</tt> Name of the service to be running
+
+</li>
+<li><tt>gid</tt> gid of the user
+
+</li>
+<li><tt>members</tt> Members that belong in the group
+
+</li>
+</ul>
+<h2>Examples</h2>
+<pre>
+  has_group &quot;admins&quot;
+</pre>
+
+    </div>
 
 
    </div>

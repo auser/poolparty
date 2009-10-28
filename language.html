@@ -49,17 +49,14 @@
           into the cloud computing space.
         </p>
         <h2>Terminology</h2>
-        <div class='term'><a name='remoter base' class='term-name'>remoter base</a>
+        <div class='term'><a name='cloud_provider' class='term-name'>cloud_provider</a>
         <div class='term-def'>a
         <em>remoter base</em>
         is also known as Cloud Provider, such as Amazon EC2. Remoter bases are
         responsible for creating and destroying instances. Currently, support exists
         for
         <a href="amazon_ec2_setup.html">Amazon EC2</a>
-        and
-        <a href="vmware_setup.html">VMware</a>
-        instances. Support is planned for disk images and other backends (Slicehost,
-        Eucalyptus, libvirt, etc.). Please update
+        Please update
         <a href="http://wiki.github.com/auser/poolparty/requested-features">Requested features</a>
         with specific requests.</div></div>
         <div class='term'><a name='instance' class='term-name'>instance</a>
@@ -68,44 +65,10 @@
         (or
         <em>node</em>
         ) is a logical self-contained machine. Each instance has its own copy of the operating system and its own memory space.</div></div>
-        <div class='term'><a name='provision' class='term-name'>provision</a>
-        <div class='term-def'><em>provisioning</em>
-        is the process of transfering all software and assets to an
-        <a href="#instance">instance</a></div></div>
-        <div class='term'><a name='provisioner' class='term-name'>provisioner</a>
-        <div class='term-def'>A
-        <em>provisioner</em>
-        allows communication between the host where the cloud commands
-        are being run (i.e. your laptop) and the
-        <a href="#instance">instances</a>
-        created using
-        <a href="#remoter_base">remoter bases.</a>
-        Examples include Capistrano and SSH. Their primary use is transfer
-        dependency files, templates, deploy_directory (if being used) and chef
-        recipes to the cloud.</div></div>
         <div class='term'><a name='dependency resolver' class='term-name'>dependency resolver</a>
         <div class='term-def'>These are host configuration management tools such as Chef and Puppet. The
         default dependency resolver for PoolParty is
         <a href="docs/chef.html">Chef.</a></div></div>
-        <div class='term'><a name='resources' class='term-name'>resources</a>
-        <div class='term-def'>entities that can be addressed and manipulated such as files, directories and
-        packages.</div></div>
-        <div class='term'><a name='plugin' class='term-name'>plugin</a>
-        <div class='term-def'>Plugins are collections of resources. Use of PoolParty plugins and resources ensures that the cloud configuration does not change when the
-        <a href="#dependency resolver">dependency resolver</a>
-        changes.</div></div>
-        <div class='term'><a name='monitors' class='term-name'>monitors</a>
-        <div class='term-def'>This is set of monitoring services written as a Rack application running on
-        port 8642. In the near future Monitors will support a plugin interface that
-        will allow users to write cloud-specific or application-specific monitors.</div></div>
-        <div class='term'><a name='cookbook' class='term-name'>cookbook</a>
-        <div class='term-def'>todo</div></div>
-        <div class='term'><a name='recipe' class='term-name'>recipe</a>
-        <div class='term-def'>todo</div></div>
-        <div class='term'><a name='bootstrap' class='term-name'>bootstrap</a>
-        <div class='term-def'>todo</div></div>
-        <div class='term'><a name='configure' class='term-name'>configure</a>
-        <div class='term-def'>todo</div></div>
       </div>
       <div id='footer'>
         Copyright &copy; 2008-2009 - Ari Lerner and Cloudteam at AT&T Interactive

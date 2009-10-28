@@ -56,7 +56,7 @@
     </tr>
     <tr class="top-aligned-row">
       <td><strong>Last Update:</strong></td>
-      <td>Tue May 12 15:04:18 -0700 2009</td>
+      <td>Thu Aug 27 18:44:25 -0700 2009</td>
     </tr>
     </table>
   </div>
@@ -68,6 +68,30 @@
 
   <div id="contextContent">
 
+    <div id="description">
+      <h2>Service</h2>
+<p>
+The service resource specifies a service that must be running on the nodes
+</p>
+<h2>Usage</h2>
+<pre>
+  has_service(:name =&gt; '...') do
+    # More options.
+    # This block is optional
+  end
+</pre>
+<h2>Options</h2>
+<ul>
+<li><tt>name</tt> Name of the service to be running
+
+</li>
+</ul>
+<h2>Examples</h2>
+<pre>
+  has_service(:name =&gt; &quot;apache2&quot;)
+</pre>
+
+    </div>
 
 
    </div>

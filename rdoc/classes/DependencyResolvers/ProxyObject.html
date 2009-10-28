@@ -1,0 +1,390 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Class: DependencyResolvers::ProxyObject</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+    <div id="classHeader">
+        <table class="header-table">
+        <tr class="top-aligned-row">
+          <td><strong>Class</strong></td>
+          <td class="class-name-in-header">DependencyResolvers::ProxyObject</td>
+        </tr>
+        <tr class="top-aligned-row">
+            <td><strong>In:</strong></td>
+            <td>
+                <a href="../../files/lib/dependency_resolvers/proxy_object_rb.html">
+                lib/dependency_resolvers/proxy_object.rb
+                </a>
+        <br />
+            </td>
+        </tr>
+
+        <tr class="top-aligned-row">
+            <td><strong>Parent:</strong></td>
+            <td>
+                <a href="../Object.html">
+                Object
+               </a>
+            </td>
+        </tr>
+        </table>
+    </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+
+
+   </div>
+
+    <div id="method-list">
+      <h3 class="section-bar">Methods</h3>
+
+      <div class="name-list">
+      <a href="#M000452">compile</a>&nbsp;&nbsp;
+      <a href="#M000455">handle_print_variable</a>&nbsp;&nbsp;
+      <a href="#M000456">instance</a>&nbsp;&nbsp;
+      <a href="#M000457">method_missing</a>&nbsp;&nbsp;
+      <a href="#M000451">new</a>&nbsp;&nbsp;
+      <a href="#M000453">print_dsl_options</a>&nbsp;&nbsp;
+      <a href="#M000454">print_resources</a>&nbsp;&nbsp;
+      </div>
+    </div>
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+
+
+
+
+    <div id="attribute-list">
+      <h3 class="section-bar">Attributes</h3>
+
+      <div class="name-list">
+        <table>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">caller</td>
+          <td class="context-item-value">&nbsp;[R]&nbsp;</td>
+          <td class="context-item-desc"></td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">current_printing_method</td>
+          <td class="context-item-value">&nbsp;[R]&nbsp;</td>
+          <td class="context-item-desc"></td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">proxy</td>
+          <td class="context-item-value">&nbsp;[RW]&nbsp;</td>
+          <td class="context-item-desc"></td>
+        </tr>
+        </table>
+      </div>
+    </div>
+      
+
+
+    <!-- if method_list -->
+    <div id="methods">
+      <h3 class="section-bar">Public Class methods</h3>
+
+      <div id="method-M000451" class="method-detail">
+        <a name="M000451"></a>
+
+        <div class="method-heading">
+          <a href="#M000451" class="method-signature">
+          <span class="method-name">new</span><span class="method-args">(proxy, caller=nil)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000451-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000451-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/dependency_resolvers/proxy_object.rb, line 14</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">proxy</span>, <span class="ruby-identifier">caller</span>=<span class="ruby-keyword kw">nil</span>)
+      <span class="ruby-ivar">@proxy</span> = <span class="ruby-identifier">proxy</span>
+      <span class="ruby-ivar">@caller</span> = <span class="ruby-identifier">caller</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="section-bar">Public Instance methods</h3>
+
+      <div id="method-M000452" class="method-detail">
+        <a name="M000452"></a>
+
+        <div class="method-heading">
+          <a href="#M000452" class="method-signature">
+          <span class="method-name">compile</span><span class="method-args">(meth_name)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+<tt>Compile</tt> Arguments:
+</p>
+<pre>
+  * String
+    If a string is passed, it is assumed to be an erb template and
+    is rendered in the binding of this object (the proxy is contained)
+  * Symbol
+    If a symbol is passed, it is assumed to be a method, primarily
+    used for &lt;tt&gt;print_to_&lt;resolver_name&gt;&lt;/tt&gt; methods
+</pre>
+<p>
+The output of <a href="ProxyObject.html#M000452">compile</a> is an erb
+template that is rendered in the context of this proxy object
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000452-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000452-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/dependency_resolvers/proxy_object.rb, line 29</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">compile</span>(<span class="ruby-identifier">meth_name</span>)
+      <span class="ruby-identifier">str</span> = <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">meth_name</span>
+      <span class="ruby-keyword kw">when</span> <span class="ruby-constant">String</span>
+        <span class="ruby-identifier">meth_name</span>
+      <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Symbol</span>
+        <span class="ruby-ivar">@current_printing_method</span> = <span class="ruby-identifier">meth_name</span>
+        <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">meth_name</span>)
+      <span class="ruby-keyword kw">else</span>
+        <span class="ruby-identifier">raise</span> <span class="ruby-constant">PoolParty</span><span class="ruby-operator">::</span><span class="ruby-constant">PoolPartyError</span>.<span class="ruby-identifier">create</span>(<span class="ruby-value str">&quot;ProxyObjectError&quot;</span>, <span class="ruby-node">&quot;Compilation of #{proxy.inspect} error. Strings and symbols are supported&quot;</span>)
+      <span class="ruby-keyword kw">end</span>
+      
+      <span class="ruby-identifier">str</span> = <span class="ruby-identifier">handle_print_variable</span>(<span class="ruby-identifier">str</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">proxy</span>.<span class="ruby-identifier">class</span> <span class="ruby-operator">==</span> <span class="ruby-constant">PoolParty</span><span class="ruby-operator">::</span><span class="ruby-constant">Resources</span><span class="ruby-operator">::</span><span class="ruby-constant">Variable</span>
+      
+      <span class="ruby-keyword kw">begin</span>
+        <span class="ruby-constant">ERB</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">str</span>).<span class="ruby-identifier">result</span>(<span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">:binding</span>))
+      <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
+        <span class="ruby-value str">&quot;&quot;</span>
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000455" class="method-detail">
+        <a name="M000455"></a>
+
+        <div class="method-heading">
+          <a href="#M000455" class="method-signature">
+          <span class="method-name">handle_print_variable</span><span class="method-args">(var)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Print variables
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000455-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000455-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/dependency_resolvers/proxy_object.rb, line 80</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">handle_print_variable</span>(<span class="ruby-identifier">var</span>)
+      <span class="ruby-constant">DependencyResolvers</span><span class="ruby-operator">::</span><span class="ruby-constant">Base</span>.<span class="ruby-identifier">handle_print_variable</span>(<span class="ruby-identifier">var</span>)
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000456" class="method-detail">
+        <a name="M000456"></a>
+
+        <div class="method-heading">
+          <a href="#M000456" class="method-signature">
+          <span class="method-name">instance</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000456-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000456-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/dependency_resolvers/proxy_object.rb, line 84</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">instance</span>
+      <span class="ruby-ivar">@caller</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000457" class="method-detail">
+        <a name="M000457"></a>
+
+        <div class="method-heading">
+          <a href="#M000457" class="method-signature">
+          <span class="method-name">method_missing</span><span class="method-args">(m,*a,&amp;block)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+<a href="ProxyObject.html#M000457">method_missing</a> Because this <a
+href="ProxyObject.html">ProxyObject</a> is responsible for proxying methods
+to the proxy object, the <a
+href="ProxyObject.html#M000457">method_missing</a> method is used to curry
+methods across
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000457-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000457-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/dependency_resolvers/proxy_object.rb, line 92</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">method_missing</span>(<span class="ruby-identifier">m</span>,<span class="ruby-operator">*</span><span class="ruby-identifier">a</span>,<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+      <span class="ruby-identifier">proxy</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">m</span>,<span class="ruby-operator">*</span><span class="ruby-identifier">a</span>,<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000453" class="method-detail">
+        <a name="M000453"></a>
+
+        <div class="method-heading">
+          <a href="#M000453" class="method-signature">
+          <span class="method-name">print_dsl_options</span><span class="method-args">(str)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Print the dsl options in the Erb string format given by the method <a
+href="ProxyObject.html#M000453">print_dsl_options</a>(str) To use <a
+href="ProxyObject.html#M000453">print_dsl_options</a>, the format is: <a
+href="ProxyObject.html#M000453">print_dsl_options</a>(&quot;print :key =
+&#8217;:value&#8217;&quot;) The string substitution uses the ^ substitution
+found in string.rb This will substitute the key and the value in the format
+given by the string passed. For <a
+href="ProxyObject.html#M000456">instance</a>
+</p>
+<pre>
+  dsl_options = {:to =&gt; &quot;world&quot;, :message =&gt; &quot;hello&quot;}
+  print_dsl_options(&quot;:key =&gt; :value&quot;) =
+    message =&gt; hello
+    to =&gt; world
+</pre>
+<p>
+This should be used if all the dsl_options are to printed in the same
+format
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000453-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000453-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/dependency_resolvers/proxy_object.rb, line 62</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">print_dsl_options</span>(<span class="ruby-identifier">str</span>)
+      <span class="ruby-identifier">dsl_options</span>.<span class="ruby-identifier">map</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span>
+        <span class="ruby-identifier">v</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-value">? </span><span class="ruby-keyword kw">nil</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">str</span> <span class="ruby-operator">^</span> {<span class="ruby-identifier">:key</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">k</span>, <span class="ruby-identifier">:value</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">v</span>}
+      <span class="ruby-keyword kw">end</span>.<span class="ruby-identifier">compact</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot;\n&quot;</span>)
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000454" class="method-detail">
+        <a name="M000454"></a>
+
+        <div class="method-heading">
+          <a href="#M000454" class="method-signature">
+          <span class="method-name">print_resources</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Take all the ordered_resources of the proxy object and print them with the
+current_printing_method, aka :chef for print_to_chef This creates a <a
+href="ProxyObject.html#M000451">new</a> proxy object with each resource and
+sends it :<a href="ProxyObject.html#M000452">compile</a> with the current
+printing method, collects the output and joins them with a newline
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000454-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000454-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/dependency_resolvers/proxy_object.rb, line 73</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">print_resources</span>
+      <span class="ruby-identifier">resources</span>.<span class="ruby-identifier">map</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">res</span><span class="ruby-operator">|</span>
+        <span class="ruby-constant">ProxyObject</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">res</span>).<span class="ruby-identifier">compile</span>(<span class="ruby-identifier">current_printing_method</span>)
+      <span class="ruby-keyword kw">end</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot;\n&quot;</span>)
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>

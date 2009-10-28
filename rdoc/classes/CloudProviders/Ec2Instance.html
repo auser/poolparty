@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Class: CloudProviders::Ec2Instance</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+    <div id="classHeader">
+        <table class="header-table">
+        <tr class="top-aligned-row">
+          <td><strong>Class</strong></td>
+          <td class="class-name-in-header">CloudProviders::Ec2Instance</td>
+        </tr>
+        <tr class="top-aligned-row">
+            <td><strong>In:</strong></td>
+            <td>
+                <a href="../../files/lib/cloud_providers/ec2/ec2_instance_rb.html">
+                lib/cloud_providers/ec2/ec2_instance.rb
+                </a>
+        <br />
+            </td>
+        </tr>
+
+        <tr class="top-aligned-row">
+            <td><strong>Parent:</strong></td>
+            <td>
+                <a href="CloudProviderInstance.html">
+                CloudProviderInstance
+               </a>
+            </td>
+        </tr>
+        </table>
+    </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+
+
+   </div>
+
+    <div id="method-list">
+      <h3 class="section-bar">Methods</h3>
+
+      <div class="name-list">
+      <a href="#M000354">cloud_provider</a>&nbsp;&nbsp;
+      <a href="#M000356">configure!</a>&nbsp;&nbsp;
+      <a href="#M000358">make_image</a>&nbsp;&nbsp;
+      <a href="#M000352">new</a>&nbsp;&nbsp;
+      <a href="#M000355">right_aws</a>&nbsp;&nbsp;
+      <a href="#M000357">rsync_excludes</a>&nbsp;&nbsp;
+      <a href="#M000353">to_s</a>&nbsp;&nbsp;
+      </div>
+    </div>
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+
+
+
+
+      
+
+
+    <!-- if method_list -->
+    <div id="methods">
+      <h3 class="section-bar">Public Class methods</h3>
+
+      <div id="method-M000352" class="method-detail">
+        <a name="M000352"></a>
+
+        <div class="method-heading">
+          <a href="#M000352" class="method-signature">
+          <span class="method-name">new</span><span class="method-args">(opts={}, &amp;block)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+A <a href="Ec2Instance.html#M000352">new</a> instance will be created from
+a hash. The parent clouds describe_instances list will be searched for the
+first one matching any of this instance&#8216;s provided unique
+identifiers. If an instance is found, this instance&#8216;s properties will
+be set to the properties provided If the found instance has properties of
+the same key as the provided options, the found instance&#8216;s values
+will override the passed in options
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000352-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000352-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/cloud_providers/ec2/ec2_instance.rb, line 26</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">opts</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+      <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:id</span>)  <span class="ruby-comment cmt"># metavirt (in case your using it) passes an id that we do not want to set</span>
+      <span class="ruby-identifier">set_vars_from_options</span>(<span class="ruby-identifier">opts</span>)
+      <span class="ruby-keyword kw">super</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="section-bar">Public Instance methods</h3>
+
+      <div id="method-M000354" class="method-detail">
+        <a name="M000354"></a>
+
+        <div class="method-heading">
+          <a href="#M000354" class="method-signature">
+          <span class="method-name">cloud_provider</span><span class="method-args">(o={}, &amp;block)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+TODO: test or remove def hosts_file_listing_for(cl)
+</p>
+<pre>
+  string = (cl.name == cloud.name) ? &quot;#{name}.#{my_cloud.name}\t#{name}&quot; : &quot;#{name}.#{my_cloud.name}&quot;
+  &quot;#{internal_ip}\t#{string}&quot;
+</pre>
+<p>
+end
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000354-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000354-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/cloud_providers/ec2/ec2_instance.rb, line 44</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cloud_provider</span>(<span class="ruby-identifier">o</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+      <span class="ruby-ivar">@cloud_provider</span> <span class="ruby-operator">||=</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">cloud</span>
+        <span class="ruby-identifier">cloud</span>.<span class="ruby-identifier">cloud_provider</span>
+      <span class="ruby-keyword kw">else</span>
+        <span class="ruby-identifier">options_for_cloud_provider</span> = <span class="ruby-identifier">o</span>.<span class="ruby-identifier">choose</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-constant">Ec2</span>.<span class="ruby-identifier">default_options</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-identifier">k</span>)}
+        <span class="ruby-constant">Ec2</span>.<span class="ruby-identifier">new</span>( <span class="ruby-identifier">options_for_cloud_provider</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000356" class="method-detail">
+        <a name="M000356"></a>
+
+        <div class="method-heading">
+          <a href="#M000356" class="method-signature">
+          <span class="method-name">configure!</span><span class="method-args">(opts={})</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+add ec2 specific configuration steps
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000356-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000356-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/cloud_providers/ec2/ec2_instance.rb, line 59</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">configure!</span>(<span class="ruby-identifier">opts</span>={})
+      <span class="ruby-identifier">cloud</span> <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:cloud</span>] <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:cloud</span>]
+      <span class="ruby-identifier">raise</span> <span class="ruby-constant">StandardError</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value str">&quot;cloud is not defined.  It must be defined to run configure on the instance&quot;</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">cloud</span>
+      <span class="ruby-identifier">vputs</span> <span class="ruby-node">&quot;configuring ec2 instance #{instance_id}.&quot;</span>
+      <span class="ruby-identifier">ec2_dir</span> = <span class="ruby-value str">&quot;/etc/poolparty/ec2&quot;</span>
+      <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">mkdir_p</span>(<span class="ruby-identifier">cloud</span>.<span class="ruby-identifier">tmp_path</span><span class="ruby-operator">/</span><span class="ruby-identifier">ec2_dir</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">directory?</span>(<span class="ruby-identifier">cloud</span>.<span class="ruby-identifier">tmp_path</span><span class="ruby-operator">/</span><span class="ruby-identifier">ec2_dir</span>)
+      <span class="ruby-identifier">run</span> [<span class="ruby-node">&quot;mkdir -p #{ec2_dir}&quot;</span>]
+      <span class="ruby-comment cmt"># Save a yaml file of aws varibles and send to the instance</span>
+      <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">cloud</span>.<span class="ruby-identifier">tmp_path</span><span class="ruby-operator">/</span><span class="ruby-identifier">ec2_dir</span><span class="ruby-operator">/</span><span class="ruby-value str">'aws.yml'</span>, <span class="ruby-value str">'w'</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>
+        <span class="ruby-identifier">f</span><span class="ruby-operator">&lt;&lt;</span><span class="ruby-constant">YAML</span><span class="ruby-operator">::</span><span class="ruby-identifier">dump</span>(<span class="ruby-identifier">cloud_provider</span>.<span class="ruby-identifier">aws_hash</span>(<span class="ruby-identifier">ec2_dir</span>))  <span class="ruby-comment cmt">#TODO: don't save sensitive info in /tmp</span>
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-comment cmt"># We scp these files directly to the instance so to reduce the risk of accidentally leaving them in an insecure location</span>
+      <span class="ruby-identifier">scp</span>(<span class="ruby-identifier">:source=</span><span class="ruby-operator">&gt;</span><span class="ruby-identifier">cert</span>,        <span class="ruby-identifier">:destination=</span><span class="ruby-operator">&gt;</span><span class="ruby-identifier">ec2_dir</span><span class="ruby-operator">/</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">basename</span>(<span class="ruby-identifier">cert</span>)) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">cert</span>
+      <span class="ruby-identifier">scp</span>(<span class="ruby-identifier">:source=</span><span class="ruby-operator">&gt;</span><span class="ruby-identifier">private_key</span>, <span class="ruby-identifier">:destination=</span><span class="ruby-operator">&gt;</span><span class="ruby-identifier">ec2_dir</span><span class="ruby-operator">/</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">basename</span>(<span class="ruby-identifier">private_key</span>)) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">private_key</span>
+      <span class="ruby-identifier">scp</span>(<span class="ruby-identifier">:source=</span><span class="ruby-operator">&gt;</span><span class="ruby-identifier">cloud_cert</span>,  <span class="ruby-identifier">:destination=</span><span class="ruby-operator">&gt;</span><span class="ruby-identifier">ec2_dir</span><span class="ruby-operator">/</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">basename</span>(<span class="ruby-identifier">cloud_cert</span>)) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">cloud_cert</span>
+      <span class="ruby-comment cmt"># TODO: install_ec2_tools</span>
+      <span class="ruby-keyword kw">super</span> <span class="ruby-identifier">opts</span>
+      <span class="ruby-identifier">vputs</span> <span class="ruby-node">&quot;completed configuring instance  #{instance_id}.&quot;</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000358" class="method-detail">
+        <a name="M000358"></a>
+
+        <div class="method-heading">
+          <a href="#M000358" class="method-signature">
+          <span class="method-name">make_image</span><span class="method-args">(opts={})</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+create an image file and copy this instance to the image file.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000358-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000358-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/cloud_providers/ec2/ec2_instance.rb, line 95</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">make_image</span>(<span class="ruby-identifier">opts</span>={})
+      <span class="ruby-identifier">opts</span> = {<span class="ruby-identifier">:volume</span>       =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'/'</span>,
+              <span class="ruby-identifier">:size</span>         =<span class="ruby-operator">&gt;</span> <span class="ruby-value">6000</span>,
+              <span class="ruby-identifier">:destination</span>  =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'/mnt/bundle'</span>,
+              <span class="ruby-identifier">:prefix</span>       =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">image_id</span>,
+              <span class="ruby-identifier">:cert</span>         =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">cert</span>,
+              <span class="ruby-identifier">:exclude</span>      =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">nil</span>,
+              <span class="ruby-identifier">:kernel</span>       =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">kernel_id</span>,
+              <span class="ruby-identifier">:ramdisk</span>      =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">ramdisk_id</span>,
+              <span class="ruby-identifier">:ec2cert</span>      =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">cloud_cert</span>
+              }.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">opts</span>)
+      <span class="ruby-identifier">image_file</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:destination</span>], <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:prefix</span>] )
+      <span class="ruby-identifier">cmds</span> = [<span class="ruby-node">&quot;mkdir -p #{opts[:destination]}&quot;</span>]
+      <span class="ruby-identifier">cmds</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;dd if=/dev/zero of=#{image_file} bs=1M count=#{opts[:size]}&quot;</span>
+      <span class="ruby-identifier">cmds</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;mkfs.ext3 -F -j  #{image_file}&quot;</span>
+      <span class="ruby-identifier">cmds</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;mkdir -p #{opts[:destination]}/loop&quot;</span>
+      <span class="ruby-identifier">cmds</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;mount -o loop #{image_file} #{opts[:destination]}/loop&quot;</span>
+      <span class="ruby-identifier">cmds</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;rsync -ax #{rsync_excludes(opts[:exclude])} #{opts[:volume]}/ #{opts[:destination]}/loop/&quot;</span>
+      <span class="ruby-identifier">cmds</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;umount #{opts[:destination]}/loop&quot;</span>
+      <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">run</span> <span class="ruby-identifier">cmds</span>
+      <span class="ruby-identifier">image_file</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000355" class="method-detail">
+        <a name="M000355"></a>
+
+        <div class="method-heading">
+          <a href="#M000355" class="method-signature">
+          <span class="method-name">right_aws</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Access the <a href="Ec2Instance.html#M000355">right_aws</a> instance
+directly
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000355-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000355-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/cloud_providers/ec2/ec2_instance.rb, line 54</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">right_aws</span>
+      <span class="ruby-identifier">cloud_provider</span>.<span class="ruby-identifier">ec2</span>.<span class="ruby-identifier">describe_instances</span> <span class="ruby-identifier">instance_id</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000357" class="method-detail">
+        <a name="M000357"></a>
+
+        <div class="method-heading">
+          <a href="#M000357" class="method-signature">
+          <span class="method-name">rsync_excludes</span><span class="method-args">(array_of_abs_paths_to_exclude=nil)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000357-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000357-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/cloud_providers/ec2/ec2_instance.rb, line 79</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">rsync_excludes</span>(<span class="ruby-identifier">array_of_abs_paths_to_exclude</span>=<span class="ruby-keyword kw">nil</span>)
+      <span class="ruby-identifier">array_of_abs_paths_to_exclude</span> <span class="ruby-operator">||=</span> <span class="ruby-node">%w( /sys
+                             /proc
+                             /dev/pts
+                             /dev
+                             /media
+                             /mnt
+                             /proc
+                             /sys
+                             /etc/udev/rules.d/70-persistent-net.rules
+                             /etc/udev/rules.d/z25_persistent-net.rules
+                            )</span>
+      <span class="ruby-identifier">array_of_abs_paths_to_exclude</span>.<span class="ruby-identifier">inject</span>(<span class="ruby-value str">''</span>){<span class="ruby-operator">|</span><span class="ruby-identifier">str</span>, <span class="ruby-identifier">path</span><span class="ruby-operator">|</span> <span class="ruby-identifier">str</span><span class="ruby-operator">&lt;&lt;</span><span class="ruby-node">&quot;--exclude=#{path}&quot;</span>; <span class="ruby-identifier">str</span>}
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000353" class="method-detail">
+        <a name="M000353"></a>
+
+        <div class="method-heading">
+          <a href="#M000353" class="method-signature">
+          <span class="method-name">to_s</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+<a href="../Printing.html">Printing</a>. This is how we extract the
+instances into the listing on the local side into the local listing file
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000353-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000353-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/cloud_providers/ec2/ec2_instance.rb, line 34</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_s</span>
+      <span class="ruby-node">&quot;#{name}\t#{dns_name}\t#{instance_id}&quot;</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>

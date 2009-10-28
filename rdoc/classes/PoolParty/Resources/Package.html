@@ -65,9 +65,7 @@
         <tr class="top-aligned-row">
             <td><strong>Parent:</strong></td>
             <td>
-                <a href="Resource.html">
                 Resource
-               </a>
             </td>
         </tr>
         </table>
@@ -80,35 +78,6 @@
 
   <div id="contextContent">
 
-    <div id="description">
-      <h2><a href="Package.html">Package</a></h2>
-<p>
-The package resources defines a package that must be <a
-href="Package.html#M000358">present</a> on all of the instances This will
-install the &quot;name_of_package&quot; package with the package provider
-(apt, yum, etc)
-</p>
-<h2>Usage</h2>
-<pre>
-  has_package &quot;name_of_package&quot;
-  has_package(:name =&gt; '...') do
-    # More options.
-    # This block is optional
-  end
-</pre>
-<h2>Options</h2>
-<ul>
-<li><tt>name</tt> The package name. The default provider for your OS will be
-picked by the dependency resolver
-
-</li>
-</ul>
-<h2>Examples</h2>
-<pre>
-  has_package(:name =&gt; 'apache2')
-</pre>
-
-    </div>
 
 
    </div>
@@ -117,8 +86,7 @@ picked by the dependency resolver
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000359">absent</a>&nbsp;&nbsp;
-      <a href="#M000358">present</a>&nbsp;&nbsp;
+      <a href="#M000195">print_to_chef</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -140,46 +108,28 @@ picked by the dependency resolver
     <div id="methods">
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000359" class="method-detail">
-        <a name="M000359"></a>
+      <div id="method-M000195" class="method-detail">
+        <a name="M000195"></a>
 
         <div class="method-heading">
-          <a href="#M000359" class="method-signature">
-          <span class="method-name">absent</span><span class="method-args">()</span>
+          <a href="#M000195" class="method-signature">
+          <span class="method-name">print_to_chef</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000359-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000359-source">
+            onclick="toggleCode('M000195-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000195-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/resources/package.rb, line 34</span>
-      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">absent</span>
-        <span class="ruby-identifier">:remove</span>
-      <span class="ruby-keyword kw">end</span>
-</pre>
-          </div>
-        </div>
-      </div>
-
-      <div id="method-M000358" class="method-detail">
-        <a name="M000358"></a>
-
-        <div class="method-heading">
-          <a href="#M000358" class="method-signature">
-          <span class="method-name">present</span><span class="method-args">()</span>
-          </a>
-        </div>
-      
-        <div class="method-description">
-          <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000358-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000358-source">
-<pre>
-<span class="ruby-comment cmt"># File lib/poolparty/resources/package.rb, line 30</span>
-      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">present</span>
-        <span class="ruby-identifier">:install</span>
+<span class="ruby-comment cmt"># File lib/poolparty/resources/package.rb, line 40</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">print_to_chef</span>
+        <span class="ruby-identifier">str</span> = <span class="ruby-value str">&quot;package \&quot;&lt;%= name %&gt;\&quot; do\naction &lt;%= print_variable(action ? action : (exists ? :install : :remove)) %&gt;\n&quot;</span>
+        <span class="ruby-identifier">str</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;  options &lt;%= print_variable(options) %&gt;\n&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">options</span>
+        <span class="ruby-identifier">str</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;  version &lt;%= print_variable(version) %&gt;\n&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">version</span>
+        <span class="ruby-identifier">str</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;  source &lt;%= print_variable(source) %&gt;\n&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">source</span>
+        <span class="ruby-identifier">str</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;  response_file &lt;%= print_variable(response_file) %&gt;\n&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">response_file</span>
+        <span class="ruby-identifier">str</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;end&quot;</span>
       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>

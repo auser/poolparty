@@ -65,9 +65,7 @@
         <tr class="top-aligned-row">
             <td><strong>Parent:</strong></td>
             <td>
-                <a href="Resource.html">
                 Resource
-               </a>
             </td>
         </tr>
         </table>
@@ -80,30 +78,6 @@
 
   <div id="contextContent">
 
-    <div id="description">
-      <h2><a href="Service.html">Service</a></h2>
-<p>
-The service resource specifies a service that must be running on the nodes
-</p>
-<h2>Usage</h2>
-<pre>
-  has_service(:name =&gt; '...') do
-    # More options.
-    # This block is optional
-  end
-</pre>
-<h2>Options</h2>
-<ul>
-<li><tt>name</tt> Name of the service to be running
-
-</li>
-</ul>
-<h2>Examples</h2>
-<pre>
-  has_service(:name =&gt; &quot;apache2&quot;)
-</pre>
-
-    </div>
 
 
    </div>
@@ -112,8 +86,7 @@ The service resource specifies a service that must be running on the nodes
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000387">absent</a>&nbsp;&nbsp;
-      <a href="#M000386">present</a>&nbsp;&nbsp;
+      <a href="#M000212">print_to_chef</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -135,46 +108,35 @@ The service resource specifies a service that must be running on the nodes
     <div id="methods">
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000387" class="method-detail">
-        <a name="M000387"></a>
+      <div id="method-M000212" class="method-detail">
+        <a name="M000212"></a>
 
         <div class="method-heading">
-          <a href="#M000387" class="method-signature">
-          <span class="method-name">absent</span><span class="method-args">()</span>
+          <a href="#M000212" class="method-signature">
+          <span class="method-name">print_to_chef</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000387-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000387-source">
+            onclick="toggleCode('M000212-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000212-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/poolparty/resources/service.rb, line 34</span>
-      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">absent</span>
-        <span class="ruby-identifier">:stop</span>
-      <span class="ruby-keyword kw">end</span>
-</pre>
-          </div>
-        </div>
-      </div>
-
-      <div id="method-M000386" class="method-detail">
-        <a name="M000386"></a>
-
-        <div class="method-heading">
-          <a href="#M000386" class="method-signature">
-          <span class="method-name">present</span><span class="method-args">()</span>
-          </a>
-        </div>
-      
-        <div class="method-description">
-          <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000386-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000386-source">
-<pre>
-<span class="ruby-comment cmt"># File lib/poolparty/resources/service.rb, line 31</span>
-      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">present</span>
-        <span class="ruby-identifier">:start</span>
+<span class="ruby-comment cmt"># File lib/poolparty/resources/service.rb, line 39</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">print_to_chef</span>
+<span class="ruby-identifier">str</span> = <span class="ruby-value str">'service &quot;&lt;%= name %&gt;&quot; do
+  pattern &lt;%= print_variable(pattern || name) %&gt;
+  action &lt;%= print_variable(action ? action : (exists ? :enable : :disable)) %&gt;
+'</span>
+        <span class="ruby-identifier">str</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;  running &lt;%= print_variable(running) %&gt;\n&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">running</span>
+        <span class="ruby-identifier">str</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;  start_command &lt;%= print_variable(start_command) %&gt;\n&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">start_command</span>
+        <span class="ruby-identifier">str</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;  stop_command &lt;%= print_variable(stop_command) %&gt;\n&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">stop_command</span>
+        <span class="ruby-identifier">str</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;  status_command &lt;%= print_variable(status_command) %&gt;\n&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">status_command</span>
+        <span class="ruby-identifier">str</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;  restart_command &lt;%= print_variable(restart_command) %&gt;\n&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">restart_command</span>
+        <span class="ruby-identifier">str</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;  reload_command &lt;%= print_variable(reload_command) %&gt;\n&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">reload_command</span>
+        <span class="ruby-identifier">str</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;  supports &lt;%= print_variable(supports) %&gt;\n&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">supports</span>
+        
+        <span class="ruby-identifier">str</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;end&quot;</span>
       <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
