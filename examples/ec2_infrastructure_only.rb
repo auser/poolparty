@@ -20,20 +20,20 @@ pool "CloudteamExample" do
   #                  {:external_port=>443, :internal_port=>8443, :protocol=>'tcp'} ]
   
   cloud "basic" do
+    minimum_instances 1
+    maximum_instances 2
     #keypair 'keyname' #keypair will be generated if it does not exist
+    using :ec2
+    security_group "chaca_thin_test_group" do
+      revoke :from_port => "8080", :to_port => "8081"  #NOTE: why have a revoke method?  closed by default, and only what is declared is open
+      authorize :from_port => "22", :to_port => "22"
+    end
+    availability_zones ['us-east-1b', 'us-east-1c']
+    end
     load_balancer do
       listener :external_port => 8080, :internal_port => 8080, :protocol => 'tcp'
     end
     autoscaler
-    using :ec2 do
-      security_group "chaca_thin_test_group" do
-        revoke :from_port => "8080", :to_port => "8081"  #NOTE: why have a revoke method?  closed by default, and only what is declared is open
-        authorize :from_port => "22", :to_port => "22"
-      end
-      availability_zones ['us-east-1b', 'us-east-1c']
-      minimum_instances 1
-      maximum_instances 2
-    end
   end
   
 end
