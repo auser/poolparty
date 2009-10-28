@@ -4,7 +4,7 @@ module CloudProviders
     def initialize(name=cloud.proper_name, init_opts={}, &block)
       @name = name
       if name.is_a?(Hash)
-        @name = name[:name] && !name[:name].to_s.empty? ? name[:name] : cloud.proper_name
+        @name = name[:name]
         @init_opts = name if init_opts.empty?
       else
         @init_opts = init_opts
