@@ -87,10 +87,9 @@
           <pre class="blackboard">  gem install --source http://gems.github.com auser-poolparty&#x000A;</pre>
         </p>
         <h2>
-          2. Run the installer
+          2. Write your clouds.rb
         </h2>
         <p class='step'>
-          Write your clouds.rb
           <pre class="blackboard">pool <span class="String"><span class="String">&quot;</span>myapp<span class="String">&quot;</span></span> <span class="Keyword">do</span>&#x000A;  cloud <span class="String"><span class="String">&quot;</span>app<span class="String">&quot;</span></span> <span class="Keyword">do</span>&#x000A;    using <span class="Constant"><span class="Constant">:</span>ec2</span>&#x000A;    instances <span class="Constant">1</span>..<span class="Constant">1</span>&#x000A;    security_group <span class="Keyword">do</span>&#x000A;      authorize <span class="Constant"><span class="Constant">:</span>from_port</span> =&gt; <span class="Constant">22</span>, <span class="Constant"><span class="Constant">:</span>to_port</span> =&gt; <span class="Constant">22</span>&#x000A;    <span class="Keyword">end</span>&#x000A;  <span class="Keyword">end</span>&#x000A;<span class="Keyword">end</span>&#x000A;</pre>
         </p>
         <h2>
