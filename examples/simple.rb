@@ -10,7 +10,7 @@ pool "poolparty" do
     using :ec2
     autoscale
     image_id "ami-ccf615a5" #alestic jaunty
-    availability_zones ['us-east-1c']
+    availability_zones ['us-east-1b']
     #TODO: accept array of hashes defining security group rules
     # security_gropup [
     #   {:port=>22, :protocol=>'tcp' },

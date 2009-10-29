@@ -213,7 +213,7 @@ module AWS
           req = Net::HTTP::Post.new("/")
           req.content_type = 'application/x-www-form-urlencoded'
           req['User-Agent'] = "github-amazon-ec2-ruby-gem"
-
+          
           response = @http.request(req, query)
           
           # Make a call to see if we need to throw an error based on the response given by EC2
@@ -241,8 +241,9 @@ module AWS
         }.merge(options)
 
         raise ArgumentError, ":action must be provided to response_generator" if options[:action].nil? || options[:action].empty?
-
+        
         http_response = make_request(options[:action], options[:params])
+
         http_xml = http_response.body
         return Response.parse(:xml => http_xml)
 

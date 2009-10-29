@@ -13,7 +13,6 @@ module CloudProviders
     def run
       create! # Just for now, while we migrate to 2 commands
       if should_update_load_balancer?
-        puts "Should update!"
         create_load_balancer!
       end
       _health_checks.each do |ck|

@@ -79,7 +79,7 @@ module CloudProviders
     
     # Called when the create command is called on the cloud
     def create!
-      [:_security_groups, :load_balancers].each do |type|
+      [:security_groups, :load_balancers].each do |type|
         self.send(type).each {|ele| ele.create! }
       end
     end
@@ -88,10 +88,10 @@ module CloudProviders
       puts "  for cloud: #{cloud.name}"
       puts "  minimum_instances: #{minimum_instances}"
       puts "  maximum_instances: #{maximum_instances}"
-      puts "  security_groups: #{security_groups.join(", ")}"
+      puts "  security_groups: #{security_group_names.join(", ")}"
       puts "  running on keypair: #{keypair}"
             
-      _security_groups.each do |sg|
+      security_groups.each do |sg|
         sg.run
       end
       
@@ -141,14 +141,6 @@ module CloudProviders
             reset!
           end
         end
-        reset!
-        progress_bar_until("Waiting for the instances to be accessible by ssh") do
-          running_nodes = nodes.select {|n| n.running? }
-          accessible_count = running_nodes.map do |node|
-            node.accessible?
-          end.size
-          accessible_count == running_nodes.size
-        end
       else
         autoscalers.each do |a|
           puts "    autoscaler: #{a.name}"
@@ -158,11 +150,25 @@ module CloudProviders
           progress_bar_until("Waiting for autoscaler to launch instances") do
             reset!
             running_nodes = nodes.select {|n| n.running? }
-            minimum_instances == running_nodes.size
+            running_nodes.size >= minimum_instances
           end
           reset!
         end
-      end     
+      end
+      
+      reset!
+      from_ports = security_groups.map {|a| a.authorizes.map {|t| t.from_port.to_i }.flatten }.flatten
+      
+      if from_ports.include?(22)
+        progress_bar_until("Waiting for the instances to be accessible by ssh") do
+          running_nodes = nodes.select {|n| n.running? }
+          accessible_count = running_nodes.map do |node|
+            node.accessible?
+          end.size
+          accessible_count == running_nodes.size
+        end
+      end
+      
     end
     
     def teardown
@@ -225,7 +231,7 @@ module CloudProviders
     def all_nodes
       #TODO: need to sort by launch time
       # 
-      @nodes ||= describe_instances.select {|i| security_groups.include?(i.security_groups) }
+      @nodes ||= describe_instances.select {|i| security_group_names.include?(i.security_groups) }
     end
     
     # Describe instances
@@ -252,7 +258,7 @@ module CloudProviders
       autoscalers << ElasticAutoScaler.new(name, sub_opts.merge(o || {}), &block)
     end
     def security_group(name=cloud.proper_name, o={}, &block)
-      _security_groups << SecurityGroup.new(name, sub_opts.merge(o || {}), &block)
+      security_groups << SecurityGroup.new(name, sub_opts.merge(o || {}), &block)
     end
     def elastic_ip(*ips)
       ips.each {|ip| _elastic_ips << ip}
@@ -272,10 +278,10 @@ module CloudProviders
     def elb
       @elb ||= AWS::ELB::Base.new( :access_key_id => access_key, :secret_access_key => secret_access_key )
     end
-    def security_groups
-      _security_groups.map {|a| a.to_s }
+    def security_group_names
+      security_groups.map {|a| a.to_s }
     end
-    def _security_groups
+    def security_groups
       @security_groups ||= []
     end
     def load_balancers

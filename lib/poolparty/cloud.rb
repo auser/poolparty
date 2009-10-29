@@ -36,7 +36,7 @@ You did not specify a cloud provider in your clouds.rb. Make sure you have a blo
   using :ec2
       EOE
       ) unless cloud_provider
-      security_group(proper_name) if security_groups.empty?
+      security_group(proper_name, :authorize => {:from_port => 22, :to_port => 22}) if security_groups.empty?
     end
     
     public
@@ -175,8 +175,7 @@ log_level         :info
       #   puts "! Deleting load_balaner #{lb_name}"
       #   lb.teardown
       # end
-      setup_extras
-      cloud_provider.load_balancers.each do |lb|
+      load_balancers.each do |lb|
         puts "-----> Tearing down load balancer: #{lb.name}"
         lb.teardown
       end
@@ -188,7 +187,7 @@ log_level         :info
           node.terminate!
         end
       else
-        cloud_provider.autoscalers.each do |a|
+        autoscalers.each do |a|
           puts "-----> Tearing down autoscaler #{a.name}"
           a.teardown
         end
@@ -264,10 +263,7 @@ No autoscalers defined
     def nodes
       cloud_provider.nodes.select {|a| a.in_service? }
     end
-    def all_nodes
-      cloud_provider.all_nodes
-    end
-    
+        
     # Run command/s on all nodes in the cloud.
     # Returns a hash of instance_id=>result pairs
     def cmd(commands, opts={})

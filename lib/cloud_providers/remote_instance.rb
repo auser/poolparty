@@ -29,7 +29,7 @@ module CloudProviders
     end
     
     def accessible?
-      ping_port(public_ip, 22)
+      ping_port(public_ip, 22, 40)
     end
     
     def rsync_dir(dir)

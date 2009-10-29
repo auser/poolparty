@@ -1,6 +1,6 @@
 module CloudProviders
   class SecurityGroup < Ec2Helper
-        
+    
     def run
       if should_create_security_group?
         create_security_group!
@@ -54,13 +54,13 @@ module CloudProviders
       revokes << Revoke.new("#{name}", o.merge(:parent => parent, :cloud => cloud), &block)
     end
     def create_security_group!
-      ec2.create_security_group(:group_name => cloud.proper_name, :group_description => "PoolParty generated security group: #{cloud.proper_name}")
+      ec2.create_security_group(:group_name => name, :group_description => "PoolParty generated security group: #{name}")
     end
     def should_create_security_group?
       security_groups.empty?
     end
     def security_groups
-      @security_groups ||= all_security_groups.select {|sg| sg[:name] == cloud.proper_name }
+      @security_groups ||= all_security_groups.select {|sg| sg[:name] == name }
     end
     def all_security_groups
       @all_security_groups ||= ec2.describe_security_groups.securityGroupInfo.item.map do |sg|

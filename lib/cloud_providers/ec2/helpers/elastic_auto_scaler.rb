@@ -75,7 +75,7 @@ module CloudProviders
       #     sleep 1
       #   end
       # end
-      progress_bar_until("") do
+      progress_bar_until do
         reset!
         activities = scaling_activities.select {|a| !a[:complete] }
         running_nodes = cloud.nodes.select {|n| n.running? }
@@ -110,7 +110,7 @@ module CloudProviders
           t = k.diff({
             :image_id => image_id,
             :instance_type => instance_type,
-            :security_groups => parent.security_groups.flatten,
+            :security_groups => parent.security_group_names.flatten,
             :key_name => keypair.to_s,
             :user_data => user_data,
             }, :user_data, :image_id, :instance_type, :security_groups, :key_name)
@@ -134,7 +134,7 @@ module CloudProviders
           :launch_configuration_name => new_launch_configuration_name,
           :image_id => image_id,
           :instance_type => instance_type,
-          :security_groups => parent.security_groups,
+          :security_groups => parent.security_group_names,
           :key_name => keypair.to_s,
           :user_data => user_data,
           :kernel_id => kernel_id,
@@ -170,7 +170,7 @@ module CloudProviders
         :launch_configuration_name => new_launch_configuration_name,
         :min_size => minimum_instances.to_s,
         :max_size => maximum_instances.to_s,
-        :load_balancer_names => load_balancers.map {|k,v| k }
+        :load_balancer_names => load_balancers.map {|lb| lb.name }
       })
       reset!
     end
@@ -212,7 +212,7 @@ module CloudProviders
         :min_size => minimum_instances.to_s,
         :max_size => maximum_instances.to_s,
         :cooldown => cooldown.to_s,
-        :load_balancer_names => load_balancers.map {|k,v| k }
+        :load_balancer_names => load_balancers.map {|lb| lb.name }
       )
     end
     
