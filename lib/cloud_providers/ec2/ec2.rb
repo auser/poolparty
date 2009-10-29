@@ -150,7 +150,7 @@ module CloudProviders
           progress_bar_until("Waiting for autoscaler to launch instances") do
             reset!
             running_nodes = nodes.select {|n| n.running? }
-            minimum_instances >= running_nodes.size
+            running_nodes.size >= minimum_instances
           end
           reset!
         end
