@@ -156,9 +156,7 @@ module CloudProviders
         end
       end
       
-      reset!
-      from_ports = security_groups.map {|a| a.authorizes.map {|t| t.from_port.to_i }.flatten }.flatten
-      
+      from_ports = security_groups.map {|a| a.authorizes.map {|t| t.from_port.to_i }.flatten }.flatten      
       if from_ports.include?(22)
         progress_bar_until("Waiting for the instances to be accessible by ssh") do
           running_nodes = nodes.select {|n| n.running? }
@@ -251,14 +249,14 @@ module CloudProviders
     
     # Extras!
     
-    def load_balancer(name=cloud.proper_name, o={}, &block)
-      load_balancers << ElasticLoadBalancer.new(name, sub_opts.merge(o || {}), &block)
+    def load_balancer(given_name=cloud.proper_name, o={}, &block)
+      load_balancers << ElasticLoadBalancer.new(given_name, sub_opts.merge(o || {}), &block)
     end
-    def autoscale(name=cloud.proper_name, o={}, &block)
-      autoscalers << ElasticAutoScaler.new(name, sub_opts.merge(o || {}), &block)
+    def autoscale(given_name=cloud.proper_name, o={}, &block)
+      autoscalers << ElasticAutoScaler.new(given_name, sub_opts.merge(o || {}), &block)
     end
-    def security_group(name=cloud.proper_name, o={}, &block)
-      security_groups << SecurityGroup.new(name, sub_opts.merge(o || {}), &block)
+    def security_group(given_name=cloud.proper_name, o={}, &block)
+      security_groups << SecurityGroup.new(given_name, sub_opts.merge(o || {}), &block)
     end
     def elastic_ip(*ips)
       ips.each {|ip| _elastic_ips << ip}

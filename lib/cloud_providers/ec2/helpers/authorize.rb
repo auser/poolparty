@@ -9,7 +9,7 @@ module CloudProviders
                 :owner_id   => nil})
 
     def run
-      puts "Authorizing: #{cloud.proper_name} for #{protocol} to #{from_port}:#{to_port} #{network}"
+      puts "Authorizing: #{name} for #{protocol} to #{from_port}:#{to_port} #{network}"
       options = 
       if group_name
         {:authorize_security_group_ingress => group_name, :source_security_group_owner_id => owner_id}
@@ -21,7 +21,7 @@ module CloudProviders
     
     def to_hash
       {
-        :group_name   => cloud.proper_name,
+        :group_name   => name,
         :ip_protocol  => protocol,
         :from_port    => from_port,
         :to_port      => to_port,
