@@ -4,7 +4,7 @@ http://poolpartyrb.com
 
 == DESCRIPTION:
 
-PoolParty makes cloud provisioning and management easy. PoolParty provides a unified interface for provisioning, management and cloud life-cycle on many different cloud providers, such as EC2 and vmware.
+PoolParty makes cloud provisioning and management easy. PoolParty provides a unified interface for defining and managing cloud infrasturcure on different cloud providers (just Ec2 for now).  Poolp
 
 Code your cloud! 
 
@@ -21,10 +21,7 @@ For instance, to start a basic cloud, let's write one:
     cloud "app" do
       instances 2..10
       keypair "cloud_demo"
-      
       using :ec2
-      
-      has_file "/etc/motd", :content => "Hello from your cloud"
     end
   end
   
@@ -82,9 +79,12 @@ To add a cloud_provider, there are four methods that need to be implemented. Sim
 * <tt>describe_instances</tt>
 * <tt>describe_instance</tt>
 
+== Examples
+Checkout the [examples](examples/) directory and its README for some more ideas and examples.
+
 That's it!
 
-Each resource is documented in the code and more documentation can be found at the site: <a href="http://poolpartyrb.com">http://poolpartyrb.com</a>.
+More documentation can be found at the site: <a href="http://poolpartyrb.com">http://poolpartyrb.com</a>.
 
 == REQUIREMENTS:
 
