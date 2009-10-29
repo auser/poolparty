@@ -4,7 +4,7 @@ http://poolpartyrb.com
 
 == DESCRIPTION:
 
-PoolParty makes cloud provisioning and management easy. PoolParty provides a unified interface for provisioning, management and cloud life-cycle on many different cloud providers, such as EC2 and vmware.
+PoolParty makes cloud provisioning and management easy. PoolParty provides a unified interface for defining and managing cloud infrasturcure on different cloud providers (just Ec2 for now).
 
 Code your cloud! 
 
@@ -19,9 +19,15 @@ For instance, to start a basic cloud, let's write one:
 
   pool "demo" do
     cloud "app" do
+      instances 2..10
       using :ec2
-      instances 1
-      keypair "cloud_demo"
+      autscale
+      security_group do
+        authorize :from_port => 22, :to_port => 22
+      end
+      load_balancer do
+        listener :external_port => 8080, :internal_port => 8080, :protocol => 'tcp'
+      end
     end
   end
   
@@ -29,13 +35,12 @@ Simply by issuing the command:
   
   cloud start
   
-The app cloud in the demo pool will be started, bootstrapped and provisioned to your liking. If the platform is not specified, then it's assumed to be ubuntu. However, if a node is running, then PoolParty will introspect the node and determine the operating system. This can be specified in the clouds.rb.
-
+This will create an ec2 auto scaling group that will launch the minimum_instances (2 in this case,) inside a security group. The default naming of most objects, such as security_groups, auto scaling groups, launch_configurations, load_balancers and keypairs follow the poolname-cloudname convention.
 There are a number of commands PoolParty offers to interact with your cloud. They include:
 
 * <tt>cloud start</tt>
 * <tt>cloud terminate</tt>
-* <tt>cloud bootstrap</tt>
+* <tt>cloud reboot</tt>
 * <tt>cloud configure</tt>
 * <tt>cloud compile</tt>
 * <tt>cloud console</tt>
@@ -45,31 +50,8 @@ There are a number of commands PoolParty offers to interact with your cloud. The
 * <tt>cloud show</tt>
 * <tt>cloud ssh</tt>
 
-There is also a helper installer script. This is an easy way to get started bootstrapping your environment:
+Clouds are distinguished by security groups. If a security group is not specified in your cloud block, one will be created based on the naming convention poolname-cloudname.
 
-* <tt>install-poolparty</tt>
-
-We can change the cloud provider simply by changing the using line. For instance:
-
-  pool "demo" do
-    cloud "app" do
-      #...
-      using :rackspace # coming soon
-      #...
-
-Clouds are distinguished by keypairs, so to create multiple clouds, create a new keypair. For instance:
-
-  pool "demo" do
-    cloud "app" do
-      keypair "demo_app"
-      #...
-    end
-    cloud "db" do
-      keypair "demo_db"
-      #...
-    end
-  end
-  
 == Extending
 
 To add a cloud_provider, there are four methods that need to be implemented. Simply sublcass the CloudProviders module and require it in your clouds.rb (or commit it back to PoolParty). Those four methods are:
@@ -79,17 +61,21 @@ To add a cloud_provider, there are four methods that need to be implemented. Sim
 * <tt>describe_instances</tt>
 * <tt>describe_instance</tt>
 
+== Examples
+Checkout the [examples](examples/) directory and its README for some more ideas and examples.
+
 That's it!
 
-Each resource is documented in the code and more documentation can be found at the site: <a href="http://poolpartyrb.com">http://poolpartyrb.com</a>.
+More documentation can be found at the site: <a href="http://poolpartyrb.com">http://poolpartyrb.com</a>.
 
 == REQUIREMENTS:
 
 * Ruby
 
 == INSTALL:
+from gemcutter.org;
 
-sudo gem install auser-poolparty
+    sudo gem install poolparty
 
 == LICENSE:
 
