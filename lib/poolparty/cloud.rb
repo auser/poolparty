@@ -3,8 +3,7 @@ module PoolParty
     default_options(
       :description            => "PoolParty cloud",
       :minimum_instances      => 1,
-      :maximum_instances      => 3,
-      :user                   => "root"
+      :maximum_instances      => 3
     )
     
     # returns an instance of Keypair
