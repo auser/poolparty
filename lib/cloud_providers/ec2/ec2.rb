@@ -54,7 +54,6 @@ module CloudProviders
     end
     
     default_options(
-      :image_id               => 'ami-ed46a784',
       :instance_type          => 'm1.small',
       :addressing_type        => "public",
       :availability_zones     => ["us-east-1a"],
