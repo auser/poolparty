@@ -72,7 +72,6 @@ module CloudProviders
       :kernel_id              => nil,
       :ramdisk_id             => nil,
       :block_device_mappings  => nil,
-      :elastic_ips            => [],  # An array of the elastic ips
       :ebs_volumes            => []   # The volume id of an ebs volume # TODO: ensure this is consistent with :block_device_mappings
     )
     
@@ -83,7 +82,7 @@ module CloudProviders
       end
     end
     
-    def run
+    def run      
       puts "  for cloud: #{cloud.name}"
       puts "  minimum_instances: #{minimum_instances}"
       puts "  maximum_instances: #{maximum_instances}"
@@ -119,27 +118,6 @@ module CloudProviders
         end
         reset!
         # ELASTIC IPS
-        unless _elastic_ips.empty?
-          unused_elastic_ip_addresses = ElasticIp.unused_elastic_ips(self).map {|i| i.public_ip }
-          used_elastic_ip_addresses = ElasticIp.elastic_ips(self).map {|i| i.public_ip }
-
-          elastic_ip_objects = ElasticIp.unused_elastic_ips(self).select {|ip_obj| _elastic_ips.include?(ip_obj.public_ip) }
-
-          assignee_nodes = nodes.select {|n| !ElasticIp.elastic_ips(self).include?(n.public_ip) }
-
-          elastic_ip_objects.each_with_index do |eip, idx|
-            # Only get the nodes that do not have elastic ips associated with them
-            begin
-              if assignee_nodes[idx]
-                puts "Assigning elastic ip: #{eip.public_ip} to node: #{assignee_nodes[idx].instance_id}"
-                ec2.associate_address(:instance_id => assignee_nodes[idx].instance_id, :public_ip => eip.public_ip)
-              end
-            rescue Exception => e
-              p [:error, e.inspect]
-            end
-            reset!
-          end
-        end
       else
         autoscalers.each do |a|
           puts "    autoscaler: #{a.name}"
@@ -166,6 +144,7 @@ module CloudProviders
         end
       end
       
+      assign_elastic_ips
     end
     
     def teardown
@@ -221,6 +200,30 @@ module CloudProviders
       end
     end
     
+    def assign_elastic_ips
+      unless elastic_ips.empty?
+        unused_elastic_ip_addresses = ElasticIp.unused_elastic_ips(self).map {|i| i.public_ip }
+        used_elastic_ip_addresses = ElasticIp.elastic_ips(self).map {|i| i.public_ip }
+
+        elastic_ip_objects = ElasticIp.unused_elastic_ips(self).select {|ip_obj| elastic_ips.include?(ip_obj.public_ip) }
+
+        assignee_nodes = nodes.select {|n| !ElasticIp.elastic_ips(self).include?(n.public_ip) }
+
+        elastic_ip_objects.each_with_index do |eip, idx|
+          # Only get the nodes that do not have elastic ips associated with them
+          begin
+            if assignee_nodes[idx]
+              puts "Assigning elastic ip: #{eip.public_ip} to node: #{assignee_nodes[idx].instance_id}"
+              ec2.associate_address(:instance_id => assignee_nodes[idx].instance_id, :public_ip => eip.public_ip)
+            end
+          rescue Exception => e
+            p [:error, e.inspect]
+          end
+          reset!
+        end
+      end
+    end
+    
     def nodes
       all_nodes.select {|i| i.in_service? }#describe_instances.select {|i| i.in_service? && security_groups.include?(i.security_groups) }
     end
@@ -258,7 +261,7 @@ module CloudProviders
       security_groups << SecurityGroup.new(given_name, sub_opts.merge(o || {}), &block)
     end
     def elastic_ip(*ips)
-      ips.each {|ip| _elastic_ips << ip}
+      ips.each {|ip| elastic_ips << ip}
     end
         
     # Proxy to the raw Grempe amazon-aws @ec2 instance
@@ -287,6 +290,9 @@ module CloudProviders
     def autoscalers
       @autoscalers ||= []
     end
+    def elastic_ips
+      @elastic_ips ||= []
+    end
     
     # Clear the cache
     def reset!
@@ -297,9 +303,6 @@ module CloudProviders
     # Helper to get the options with self as parent
     def sub_opts
       dsl_options.merge(:parent => self, :cloud => cloud)
-    end
-    def _elastic_ips
-      @_elastic_ips ||= []
     end
     def generate_keypair(n=nil)
       puts "[EC2] generate_keypair is called with #{default_keypair_path/n}"
