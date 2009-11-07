@@ -91,7 +91,9 @@ You did not specify a cloud provider in your clouds.rb. Make sure you have a blo
       puts "Copying the chef-repo into the base directory from #{chef_repo}"
       FileUtils.mkdir_p base_directory/"roles"   
       if File.directory?(chef_repo)
-        FileUtils.cp_r chef_repo, base_directory 
+        FileUtils.cp_r "#{chef_repo}/.", base_directory 
+      else
+        raise "#{chef_repo} chef repo directory does not exist"
       end
       puts "Creating the dna.json"
       chef_attributes.to_dna [], base_directory/"dna.json", {:run_list => ["role[#{name}]"]}
@@ -101,7 +103,7 @@ You did not specify a cloud provider in your clouds.rb. Make sure you have a blo
     
     def write_solo_dot_rb(to=tmp_path/"etc"/"chef"/"solo.rb")
       content = <<-EOE
-cookbook_path     ["/etc/chef/chef-repo/site-cookbooks", "/etc/chef/chef-repo/cookbooks"]
+cookbook_path     ["/etc/chef/site-cookbooks", "/etc/chef/cookbooks"]
 role_path         "/etc/chef/roles"
 log_level         :info
       EOE
