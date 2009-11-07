@@ -18,7 +18,7 @@ pool "poolparty" do
     #   {:port=>3000..3006, :protocol=>'tcp'  :group=>'monitor' },
     #   {:port=>53, :protocol=>'udp' }
     # ]
-    security_group do
+    security_group "dummy-test-security-group" do
       %w(22 80 443 8642).each {|port|  authorize :from_port => port, :to_port => port}
     end
     load_balancer do

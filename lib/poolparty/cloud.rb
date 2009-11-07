@@ -231,6 +231,7 @@ No autoscalers defined
           end
         end
       end
+      run
       puts ""
     end
     

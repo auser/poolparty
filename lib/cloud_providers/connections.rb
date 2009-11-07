@@ -2,15 +2,7 @@ require "open3"
 
 module CloudProviders
   module Connections
-    
-    def user(n=nil)
-      if n.nil? 
-        @user ||= 'root'
-      else
-        @user = n
-      end
-    end
-    
+        
     # hostname or ip to use when running remote commands
     def host(n=nil)
       if n.nil? 

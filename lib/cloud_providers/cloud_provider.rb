@@ -5,6 +5,11 @@ module CloudProviders
   class CloudProvider
     include Dslify
     
+    default_options(
+      :image_id    => 'ami-ed46a784',
+      :user        => "root"
+    )
+    
     attr_reader :name, :init_opts
     
     def initialize(name, init_opts={}, &block)

@@ -30,7 +30,8 @@ EOS
         "Running on:          #{cld.cloud_provider.name}",
         "Keypair:             #{cld.keypair.basename}",
         "Security group:      #{cld.cloud_provider.security_group_names}",
-        "Availability zones:  #{cld.cloud_provider.availability_zones}"
+        "Availability zones:  #{cld.cloud_provider.availability_zones}",
+        "User:  #{cld.user}"
       ]
       
       if cld.load_balancers.size > 0

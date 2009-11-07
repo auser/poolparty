@@ -11,13 +11,11 @@ Usage: #{$0} #{all_options_string}
   Cycle through nodes in the cloud and wait for the autoscaler to reboot 
 EOS
   
-  opt :configure, "Configure the cloud before rebooting", :type => :bool, :default => false
   short_desc "Cycle the instances"
 
   run do |command|
     
     @loaded_clouds.each do |cld|
-      cld.run if command[:configure]
       cld.reboot!
     end
     
