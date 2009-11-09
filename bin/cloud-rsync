@@ -1,0 +1,28 @@
+#!/usr/bin/env ruby
+$:.unshift(File.dirname(__FILE__) + "/../lib")
+require "poolparty"
+
+require 'git-style-binary/command'
+
+GitStyleBinary.command do
+  banner <<-EOS
+Usage: #{$0} #{all_options_string}
+
+  ssh into an instance of the cloud
+EOS
+
+  short_desc "ssh into an instance of the cloud"
+  opt :to, "To this directory", :default => "~"
+    
+  run do |command|
+    cloud = @loaded_clouds.first
+    dir = command.argv.pop
+    
+    if !cloud.nodes.empty?
+      cloud.rsync(dir, command[:to])
+    else
+      puts "No running instances can be found"
+    end
+    
+  end
+end
