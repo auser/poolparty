@@ -140,9 +140,11 @@ log_level         :info
         (class << self; self; end).class_eval do
           @cloud_provider.public_methods(false).each do |meth|
             next if respond_to?(meth) || method_defined?(meth) || private_method_defined?(meth)
-            define_method meth.to_sym do |*args, &block|
-              @cloud_provider.send(meth, *args, &block)
-            end 
+            eval <<-EOE
+              def #{meth}(*args, &block)
+                @cloud_provider.send(:#{meth}, *args, &block)
+              end
+            EOE
         end
       end
     end
