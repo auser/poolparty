@@ -41,7 +41,7 @@ module CloudProviders
     end
     
     def run!
-      cloud_provider.ec2.run_instances(:image_id => image_id,
+      r = cloud_provider.ec2.run_instances(:image_id => image_id,
       :min_count => min_count,
       :max_count => max_count,
       :key_name => keypair.basename,
@@ -50,6 +50,10 @@ module CloudProviders
       :instance_type => instance_type,
       :availability_zone => availability_zone,
       :base64_encoded => true)
+      r.instancesSet.item.map do |i|
+        inst_options = i.merge(r.merge(:cloud => cloud)).merge(cloud.cloud_provider.dsl_options)
+        Ec2Instance.new(inst_options)
+      end.first
     end
     def self.run!(hsh); new(hsh).run!; end
     

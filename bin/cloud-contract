@@ -21,6 +21,7 @@ EOS
       
       msg = [
         "Contracting cloud #{cld.name} (#{cld.keypair}) by 1",
+        "#{cld.nodes.size} running instances (#{cld.minimum_instances} - #{cld.maximum_instances})",
         " node: #{node_to_terminate.public_ip}"
       ]
       

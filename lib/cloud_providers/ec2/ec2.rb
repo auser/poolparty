@@ -81,7 +81,7 @@ module CloudProviders
         self.send(type).each {|ele| ele.create! }
       end
     end
-    
+        
     def run      
       puts "  for cloud: #{cloud.name}"
       puts "  minimum_instances: #{minimum_instances}"
@@ -167,8 +167,16 @@ module CloudProviders
         :base64_encoded => true,
         :cloud => cloud
       })
+      progress_bar_until("Waiting for node to launch...") do
+        wait_for_node(e)
+      end
+      all_nodes.select {|n| n.instance_id == e.instance_id }.first
+    end
+    
+    def wait_for_node(instance)
       reset!
-      e
+      inst = all_nodes.select {|n| n.instance_id == instance.instance_id }.first
+      inst.running?
     end
     
     def contract_by(num=1)

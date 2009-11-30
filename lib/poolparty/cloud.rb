@@ -205,17 +205,19 @@ log_level         :info
     
     def reboot!
       orig_nodes = nodes
-      num_nodes = nodes.size
       if autoscalers.empty?
         puts <<-EOE
 No autoscalers defined
   Launching new nodes and then shutting down original nodes
         EOE
-        # Start new nodes
-        expand_by(num_nodes)
         # Terminate the nodes
-        orig_nodes.each do |node|
+        orig_nodes.each_with_index do |node, i|
+          # Start new nodes
+          print "Starting node: #{i}...\n"
+          expand_by(1)
+          print "Terminating node: #{i}...\n"
           node.terminate!
+          puts ""
         end
       else
         # Terminate the nodes

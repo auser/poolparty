@@ -60,20 +60,5 @@ module CloudProviders
       init_opts.has_key?(:cloud) ? init_opts[:cloud] : nil
     end
     
-    def progress_bar_until(msg=nil, &block)
-      print "#{msg}" if msg
-      loop do
-        if block.call
-          break
-        else
-          $stdout.print "."
-          $stdout.flush
-          sleep 1
-        end
-      end
-      print " OK" if msg
-      puts "" if msg
-    end
-    
   end
 end
