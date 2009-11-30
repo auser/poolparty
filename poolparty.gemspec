@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{poolparty}
-  s.version = "1.4.0"
+  s.version = "1.4.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Ari Lerner", "Michael Fairchild", "Nate Murray"]
@@ -469,7 +469,8 @@ Gem::Specification.new do |s|
      "vendor/gems/trollop/lib/trollop.rb",
      "vendor/gems/trollop/release-script.txt",
      "vendor/gems/trollop/test/test_trollop.rb",
-     "vendor/gems/trollop/www/index.html"
+     "vendor/gems/trollop/www/index.html",
+     "vendor/gems/xml-simple/lib/xmlsimple.rb"
   ]
   s.homepage = %q{http://poolpartyrb.com}
   s.rdoc_options = ["--quiet", "--title", "PoolParty documentation", "--line-numbers", "--main", "README"]
