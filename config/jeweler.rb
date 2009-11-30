@@ -25,14 +25,9 @@ end
     s.test_files = Dir["test/**/test_*.rb"]
 
     s.files = (%w(Rakefile README.rdoc License.txt VERSION.yml) + Dir["{config,examples,lib,test,tasks,script,generators,bin,vendor}/**/*"])
-    s.files += ["vendor/erlang/hermes/ebin/*.tar.gz"]
-    
-    s.files.exclude 'vendor/erlang/hermes'
-    s.files.exclude 'examples/thrift/**/*.beam'
     # s.files.exclude "**/*/erl_crash.dump"
     
     s.has_rdoc = true
-    s.extra_rdoc_files = ["README.rdoc", "License.txt", 'History.txt']
     s.require_paths = ["lib"]
     s.rdoc_options = ['--quiet', '--title', 'PoolParty documentation',
         # "index.html",
