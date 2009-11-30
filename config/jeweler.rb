@@ -32,7 +32,7 @@ end
     s.rdoc_options = ['--quiet', '--title', 'PoolParty documentation',
         # "index.html",
         "--line-numbers",
-        "--main", "README"
+        "--main", "README.rdoc"
         ]
     
   end
