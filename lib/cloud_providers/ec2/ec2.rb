@@ -248,13 +248,16 @@ module CloudProviders
     #   with the id given will be returned
     #   if not given, details for all instances will be returned
     def describe_instances(id=nil)
-      @describe_instances = ec2.describe_instances.reservationSet.item.map do |r|
-        r.instancesSet.item.map do |i|
-          inst_options = i.merge(r.merge(:cloud => cloud)).merge(cloud.cloud_provider.dsl_options)
-          Ec2Instance.new(inst_options)
-        end
-      end.flatten
-      # id.nil? ? @describe_instances : @describe_instances.select {|a| a.instance_id == id }.first
+      begin
+        @describe_instances = ec2.describe_instances.reservationSet.item.map do |r|
+          r.instancesSet.item.map do |i|
+            inst_options = i.merge(r.merge(:cloud => cloud)).merge(cloud.cloud_provider.dsl_options)
+            Ec2Instance.new(inst_options)
+          end
+        end.flatten
+      rescue Exception => e
+        []
+      end
     end
     
     # Extras!
