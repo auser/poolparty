@@ -113,31 +113,35 @@ module CloudProviders
       elastic_load_balancers.select {|lc| lc.name =~ /#{name}/ }.flatten
     end
     def elastic_load_balancers
-      @elastic_load_balancers ||= elb.describe_load_balancers.DescribeLoadBalancersResult.LoadBalancerDescriptions.member.map do |lb|
-        {
-          :created_time => lb["CreatedTime"],
-          :availability_zones => (lb["AvailabilityZones"]["member"] rescue []),
-          :dns_name => lb["DNSName"],
-          :name => lb["LoadBalancerName"],
-          :instances => (g["Instances"]["member"] rescue []).map {|i| {:instance_id => i["InstanceId"]}},
-          :health_check => ([lb["HealthCheck"]] rescue []).map do |hc|
-            {
-              :healthy_threshold => hc["HealthyThreshold"],
-              :timeout => hc["Timeout"],
-              :unhealthy_threshold => hc["UnhealthyThreshold"],
-              :interval => hc["Interval"],
-              :target => hc["Target"]
-            }
-          end,
-          :listeners => (lb["Listeners"]["member"] rescue []).map do |listener|
-            {
-              :instance_port => listener["InstancePort"],
-              :protocol => listener["Protocol"],
-              :load_balancer_port => listener["LoadBalancerPort"]
-            }
-          end
-        }
-      end
+      begin
+        @elastic_load_balancers ||= elb.describe_load_balancers.DescribeLoadBalancersResult.LoadBalancerDescriptions.member.map do |lb|
+          {
+            :created_time => lb["CreatedTime"],
+            :availability_zones => (lb["AvailabilityZones"]["member"] rescue []),
+            :dns_name => lb["DNSName"],
+            :name => lb["LoadBalancerName"],
+            :instances => (g["Instances"]["member"] rescue []).map {|i| {:instance_id => i["InstanceId"]}},
+            :health_check => ([lb["HealthCheck"]] rescue []).map do |hc|
+              {
+                :healthy_threshold => hc["HealthyThreshold"],
+                :timeout => hc["Timeout"],
+                :unhealthy_threshold => hc["UnhealthyThreshold"],
+                :interval => hc["Interval"],
+                :target => hc["Target"]
+              }
+            end,
+            :listeners => (lb["Listeners"]["member"] rescue []).map do |listener|
+              {
+                :instance_port => listener["InstancePort"],
+                :protocol => listener["Protocol"],
+                :load_balancer_port => listener["LoadBalancerPort"]
+              }
+            end
+          }
+        end
+      rescue Exception => e
+        []
+      end      
     end
     def instance_healths
       @instance_healths ||= 
