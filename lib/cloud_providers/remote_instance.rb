@@ -54,7 +54,7 @@ module CloudProviders
     
     def run_chef!
       ssh([
-        "/var/lib/gems/1.8/bin/chef-solo -j /etc/chef/dna.json -c /etc/chef/solo.rb"
+        "chef-solo -j /etc/chef/dna.json -c /etc/chef/solo.rb"
       ])
     end
         
