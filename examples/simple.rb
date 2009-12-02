@@ -8,7 +8,9 @@ pool "poolparty" do
   cloud "simple" do
     instances 1..3
     using :ec2
-    autoscale
+    autoscale do      
+      trigger :lower_threshold => 0.3, :upper_threshold => 1.0, :measure => :cpu
+    end
     image_id "ami-ccf615a5" #alestic jaunty
     availability_zones ['us-east-1b']
     #TODO: accept array of hashes defining security group rules
