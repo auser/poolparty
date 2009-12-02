@@ -5,19 +5,20 @@
 
 Gem::Specification.new do |s|
   s.name = %q{poolparty}
-  s.version = "1.4.1"
+  s.version = "1.4.4"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Ari Lerner", "Michael Fairchild", "Nate Murray"]
-  s.date = %q{2009-11-30}
+  s.date = %q{2009-12-02}
   s.description = %q{PoolParty: The easy, open-source, cross-cloud management solution}
   s.email = %q{arilerner@mac.com}
   s.executables = ["cloud", "cloud-bootstrap", "cloud-compile", "cloud-configure", "cloud-console", "cloud-contract", "cloud-expand", "cloud-list", "cloud-reboot", "cloud-rsync", "cloud-show", "cloud-ssh", "cloud-start", "cloud-terminate"]
   s.extra_rdoc_files = [
-    "License.txt"
+    "README.rdoc"
   ]
   s.files = [
     "License.txt",
+     "README.rdoc",
      "Rakefile",
      "VERSION.yml",
      "bin/cloud",
@@ -473,7 +474,7 @@ Gem::Specification.new do |s|
      "vendor/gems/xml-simple/lib/xmlsimple.rb"
   ]
   s.homepage = %q{http://poolpartyrb.com}
-  s.rdoc_options = ["--quiet", "--title", "PoolParty documentation", "--line-numbers", "--main", "README"]
+  s.rdoc_options = ["--quiet", "--title", "PoolParty documentation", "--line-numbers", "--main", "README.rdoc"]
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.5}
   s.summary = %q{Self-healing, auto-scaling system administration, provisioning and maintaining tool that makes cloud computing easier.}
