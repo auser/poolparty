@@ -21,7 +21,9 @@ For instance, to start a basic cloud, let's write one:
     cloud "app" do
       instances 2..10
       using :ec2
-      autscale
+      autoscale do      
+        trigger :lower_threshold => 0.3, :upper_threshold => 1.0, :measure => :cpu
+      end
       security_group do
         authorize :from_port => 22, :to_port => 22
       end
