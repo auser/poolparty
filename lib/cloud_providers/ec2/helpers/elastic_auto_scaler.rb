@@ -150,17 +150,21 @@ module CloudProviders
       end
     end
     def launch_configurations
-      @launch_configurations ||= as.describe_launch_configurations.DescribeLaunchConfigurationsResult.LaunchConfigurations.member.map do |a|
-        {
-          :name => a["LaunchConfigurationName"],
-          :ramdisk_id => a["RamdiskId"],
-          :image_id => a["ImageId"],
-          :security_groups => (a["SecurityGroups"]["member"] rescue ["default"]),
-          :created_time => a["CreatedTime"],
-          :user_data => a["UserData"] || "",
-          :key_name => a["KeyName"],
-          :instance_type => a["InstanceType"]
-        }
+      begin
+        @launch_configurations ||= as.describe_launch_configurations.DescribeLaunchConfigurationsResult.LaunchConfigurations.member.map do |a|
+          {
+            :name => a["LaunchConfigurationName"],
+            :ramdisk_id => a["RamdiskId"],
+            :image_id => a["ImageId"],
+            :security_groups => (a["SecurityGroups"]["member"] rescue ["default"]),
+            :created_time => a["CreatedTime"],
+            :user_data => a["UserData"] || "",
+            :key_name => a["KeyName"],
+            :instance_type => a["InstanceType"]
+          }
+        end
+      rescue Exception => e
+        []
       end
     end
     def create_autoscaling_group!
