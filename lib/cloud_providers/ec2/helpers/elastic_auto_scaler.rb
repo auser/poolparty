@@ -21,12 +21,18 @@ module CloudProviders
           puts "Deleting old launch configuration: #{old_launch_configuration_name}"
           as.delete_launch_configuration(:launch_configuration_name => old_launch_configuration_name)
         end
-        
+      end
+      
+      triggers.each do |trigger|
+        trigger.run
       end
     end
     
     # First, change the min_count to 
     def teardown
+      triggers.each do |trigger|
+        trigger.teardown
+      end
       if autoscaling_groups.select {|n| n.name == name }.empty?
         puts "Cloud #{cloud.name} autoscaling group does not exist"
       else
@@ -292,13 +298,130 @@ module CloudProviders
       describe_autoscaling_groups.DescribeAutoScalingGroupsResult.AutoScalingGroups.member
     end
     
+    def trigger(*trigger_hashes)
+      trigger_hashes.each do |hsh, blk|
+        triggers << ElasticTrigger.new(name, hsh.merge(:cloud => cloud), &blk)
+      end
+    end
+    
     private
+    def triggers
+      @triggers ||= []
+    end
     def reset!
       @old_auto_scaling_group_name = 
         @new_auto_scaling_group_name = 
           @autoscaling_groups = @scaling_activities =
             @launch_configurations = nil
       cloud.reset!
+    end
+  end
+  class ElasticTrigger < Ec2Helper
+    default_options(
+      :measure => :cpu,
+      :period => 60,
+      :statistic => :average,
+      :unit => "Seconds",
+      :lower_threshold => 20,
+      :upper_threshold => 60,
+      :trigger_name => "CpuTrigger",
+      :lower_breach_scale_increment => -1,
+      :upper_breach_scale_increment => 1,
+      :breach_duration => 120
+    )
+    
+    def measure_names
+      {:cpu => "CPUUtilization"}
+    end
+    
+    def statistic_names
+      {:min => "Minimum", :max => "Maximum", :average => "Average", :sum => "Sum"}
+    end
+        
+    def run
+      if autoscaling_triggers.empty?
+        create_autoscaling_trigger!
+      else
+        t = autoscaling_triggers.map do |hsh|
+          diff(hsh)
+        end.flatten
+        unless t.empty?
+          puts "Creating or updating trigger: #{trigger_name}"
+          create_autoscaling_trigger!
+        end
+      end
+    end
+    
+    def teardown
+      autoscaling_triggers.each do |trigger|
+        puts "Deleting trigger: #{trigger[:trigger_name]}"
+        as.delete_trigger(:trigger_name => trigger[:trigger_name], :autoscaling_group_name => name)
+      end
+    end
+    
+    def diff(hsh={})
+      [ :measure_name, 
+        :period, 
+        :statistic, 
+        :lower_threshold, 
+        :lower_breach_scale_increment, 
+        :upper_threshold, 
+        :upper_breach_scale_increment,
+        :unit,
+        :trigger_name].reject do |k|
+        hsh[k].to_s.capitalize == self.send(k).to_s.capitalize
+      end
+    end
+    
+    private
+    
+    def autoscaling_triggers
+      begin
+        as.describe_triggers(:autoscaling_group_name => name).DescribeTriggersResult.Triggers.member.map do |trigger|
+          {
+            :trigger_name => trigger["TriggerName"],
+            :statistic => trigger["Statistic"],
+            :status => trigger["Status"],
+            :lower_threshold => trigger["LowerThreshold"],
+            :created_time => trigger["CreatedTime"],
+            :measure_name => trigger["MeasureName"],
+            :upper_threshold => trigger["UpperThreshold"],
+            :lower_breach_scale_increment => trigger["LowerBreachScaleIncrement"],
+            :period => trigger["Period"],
+            :upper_breach_scale_increment => trigger["UpperBreachScaleIncrement"],
+            :breach_duration => trigger["BreachDuration"],
+            :dimensions => trigger["Dimensions"],
+            :unit => trigger["Unit"],
+            :autoscaling_group_name => trigger["AutoScalingGroupName"]
+          }
+        end
+      rescue Exception => e
+        []
+      end
+    end
+    def create_autoscaling_trigger!
+      as.create_or_updated_scaling_trigger(
+        :autoscaling_group_name => name,
+        :dimensions => {:name => "AutoScalingGroupName", :value => name},
+        :measure_name => measure_name,
+        :period => "#{period}",
+        :trigger_name => trigger_name,
+        :statistic => (statistic_names[statistic] || statistic),
+        :unit => unit,
+        :breach_duration => breach_duration,
+        :lower_threshold => "#{lower_threshold}",
+        :lower_breach_scale_increment => "#{lower_breach_scale_increment}",
+        :upper_threshold => "#{upper_threshold}",
+        :upper_breach_scale_increment => "#{upper_breach_scale_increment}"
+      )
+    end
+    
+    def measure_name
+      measure_names[measure] || measure
+    end
+    
+    def trigger_name
+      "#{(measure_names[measure] || measure)}-#{name}" || name
     end
   end
 end
