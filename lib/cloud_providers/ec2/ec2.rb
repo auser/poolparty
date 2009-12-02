@@ -87,7 +87,8 @@ module CloudProviders
       puts "  minimum_instances: #{minimum_instances}"
       puts "  maximum_instances: #{maximum_instances}"
       puts "  security_groups: #{security_group_names.join(", ")}"
-      puts "  running on keypair: #{keypair}"
+      puts "  using keypair: #{keypair}"
+      puts "  user: #{user}\n"
             
       security_groups.each do |sg|
         sg.run
@@ -98,19 +99,19 @@ module CloudProviders
           puts "    load balancer: #{lb.name}"
           lb.run
         end
-      end     
-      if autoscalers.empty?
+      end
+      
+      if autoscalers.empty? # not using autoscaling
         puts "---- live, running instances (#{nodes.size}) ----"
         if nodes.size < minimum_instances
           expansion_count = minimum_instances - nodes.size
-          puts "-----> expanding the cloud because the minimum_instances is not satisified: #{expansion_count}"
+          puts "-----> expanding the cloud because the #{expansion_count} minimum_instances is not satisified: "
           expand_by(expansion_count)
         elsif nodes.size > maximum_instances
           contraction_count = nodes.size - maximum_instances
-          puts "-----> contracting the cloud because the instances count exceeds the maximum_instances by #{contraction_count}"
+          puts "-----> contracting the cloud because the instances count exceeds the #{maximum_instances} maximum_instances by #{contraction_count}"
           contract_by(contraction_count)
         end
-        
         progress_bar_until("Waiting for the instances to be launched") do
           reset!
           running_nodes = nodes.select {|n| n.running? }
@@ -170,12 +171,12 @@ module CloudProviders
       progress_bar_until("Waiting for node to launch...") do
         wait_for_node(e)
       end
-      all_nodes.select {|n| n.instance_id == e.instance_id }.first
+      all_nodes.detect {|n| n.instance_id == e.instance_id }
     end
     
     def wait_for_node(instance)
       reset!
-      inst = all_nodes.select {|n| n.instance_id == instance.instance_id }.first
+      inst = all_nodes.detect {|n| n.instance_id == instance.instance_id }
       inst.running?
     end
     

@@ -20,8 +20,7 @@ module CloudProviders
           update_autoscaling_group!
           puts "Deleting old launch configuration: #{old_launch_configuration_name}"
           as.delete_launch_configuration(:launch_configuration_name => old_launch_configuration_name)
-        end
-        
+        end 
       end
     end
     
