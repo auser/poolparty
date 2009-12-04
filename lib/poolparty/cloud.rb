@@ -125,6 +125,12 @@ log_level         :info
       ca.to_dna _recipes.map {|a| File.basename(a) }, to
     end
     
+    # The pool can either be the parent (the context where the object is declared)
+    # or the global pool object
+    def pool
+      parent || pool
+    end
+    
     def tmp_path
       "/tmp/poolparty" / pool.name / name
     end
@@ -148,16 +154,7 @@ log_level         :info
         end
       end
     end
-    
-    # proxy to cloud_provider
-    # def method_missing(m,*a,&block)
-    #   if cloud_provider.respond_to?(m)
-    #     cloud_provider.send(m,*a,&block)
-    #   else
-    #     super
-    #   end
-    # end
-    
+        
     # compile the cloud spec and execute the compiled system and remote calls
     def run
       puts "  running on #{cloud_provider.class}"
@@ -174,7 +171,7 @@ log_level         :info
     # security_groups, triggers and instances defined by this cloud
     def teardown
       raise "Only Ec2 teardown supported" unless cloud_provider.name.to_s == 'ec2'
-      puts "!! Tearing down cloud #{name}"
+      puts "! Tearing down cloud #{name}"
       # load_balancers.each do |name, lb|
       #   puts "! Deleting load_balaner #{lb_name}"
       #   lb.teardown
@@ -205,6 +202,7 @@ log_level         :info
     
     def reboot!
       orig_nodes = nodes
+      num_nodes = orig_nodes.size
       if autoscalers.empty?
         puts <<-EOE
 No autoscalers defined
