@@ -202,7 +202,6 @@ log_level         :info
     
     def reboot!
       orig_nodes = nodes
-      num_nodes = orig_nodes.size
       if autoscalers.empty?
         puts <<-EOE
 No autoscalers defined
@@ -219,6 +218,7 @@ No autoscalers defined
         end
       else
         # Terminate the nodes
+        @num_nodes = orig_nodes.size
         orig_nodes.each do |node|
           node.terminate!
           puts "----> Terminated node: #{node.instance_id}"
@@ -226,7 +226,7 @@ No autoscalers defined
           puts "----> Waiting for new node to boot via the autoscaler"
           loop do
             reset!
-            break if nodes.size == num_nodes
+            break if nodes.size == @num_nodes
             $stdout.print "."
             $stdout.flush
             sleep 1
