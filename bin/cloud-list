@@ -35,7 +35,7 @@ EOS
           msg << "#{k.capitalize} nodes"
           msg << line
           v.each do |a|
-            msg << "  #{a.instance_id}\t#{a.status}\t#{a.public_ip}\t#{a.dns_name}"
+            msg << "  #{a.instance_id}\t#{a.status}\t#{a.public_ip}\t#{a.private_ip}\t#{a.dns_name}"
           end
           msg << ""
         end
