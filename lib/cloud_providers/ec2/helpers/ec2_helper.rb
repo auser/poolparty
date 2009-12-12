@@ -26,5 +26,9 @@ module CloudProviders
       cloud.as
     end
     
+    def pool
+      cloud.parent
+    end
+    
   end
 end
