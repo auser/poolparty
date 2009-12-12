@@ -7,26 +7,31 @@ module CloudProviders
                 :network    => "0.0.0.0/0",
                 :group_name => nil,
                 :owner_id   => nil})
-
+    
     def run
-      puts "Authorizing: #{name} for #{protocol} to #{from_port}:#{to_port} #{network}"
       options = 
       if group_name
+        puts "Authorizing #{name} for group named: #{group_name} of owner id: #{owner_id}"
         {:authorize_security_group_ingress => group_name, :source_security_group_owner_id => owner_id}
       else
+        puts "Authorizing: #{name} for #{protocol} to #{from_port}:#{to_port} #{network}"
         to_hash
       end
       ec2.authorize_security_group_ingress(options) rescue nil
     end
     
     def to_hash
-      {
-        :group_name   => name,
-        :ip_protocol  => protocol,
-        :from_port    => from_port,
-        :to_port      => to_port,
-        :cidr_ip      => network
-      }
+      if group_name
+        {:group_name => group_name}
+      else
+        {
+          :group_name   => name,
+          :ip_protocol  => protocol,
+          :from_port    => from_port,
+          :to_port      => to_port,
+          :cidr_ip      => network
+        }
+      end
     end
     
   end

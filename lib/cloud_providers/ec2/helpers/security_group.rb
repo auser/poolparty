@@ -7,24 +7,30 @@ module CloudProviders
       end
       current_security_groups = security_groups.map {|a| 
         a[:ip_permissions].map do |perm|
-          if perm[:ip_ranges].size > 1
-            perm[:ip_ranges].map do |range|
+          if perm[:group_name]
+            {
+              :group_name => perm[:group_name]
+            }
+          else
+            if perm[:ip_ranges].size > 1
+              perm[:ip_ranges].map do |range|
+                {
+                  :group_name => a[:name],
+                  :from_port => perm[:from_port],
+                  :to_port => perm[:to_port],
+                  :cidr_ip => range,
+                  :ip_protocol => perm[:protocol]
+                }.flatten
+              end.flatten
+            else
               {
                 :group_name => a[:name],
-                :from_port => perm[:from_port],
+                :from_port => perm[:from_port], 
                 :to_port => perm[:to_port],
-                :cidr_ip => range,
+                :cidr_ip => perm[:ip_ranges].map {|c| c[:cidrIp] }.first, # first for simplicity for now...
                 :ip_protocol => perm[:protocol]
-              }.flatten
-            end.flatten
-          else
-            {
-              :group_name => a[:name],
-              :from_port => perm[:from_port], 
-              :to_port => perm[:to_port],
-              :cidr_ip => perm[:ip_ranges].map {|c| c[:cidrIp] }.first, # first for simplicity for now...
-              :ip_protocol => perm[:protocol]
-            }
+              }
+            end
           end
         end.flatten
       }.flatten
