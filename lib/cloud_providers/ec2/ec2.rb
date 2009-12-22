@@ -162,7 +162,7 @@ module CloudProviders
         :max_count => num,
         :key_name => keypair.basename,
         :security_groups => security_groups,
-        :user_data => user_data,
+        :user_data => decoded_user_data,
         :instance_type => instance_type,
         :availability_zone => availability_zones.first,
         :base64_encoded => true,
@@ -172,6 +172,16 @@ module CloudProviders
         wait_for_node(e)
       end
       all_nodes.detect {|n| n.instance_id == e.instance_id }
+    end
+    
+    def decoded_user_data
+      if user_data
+        if File.file?(user_data)
+          open(user_data).read
+        else
+          user_data
+        end
+      end
     end
     
     def wait_for_node(instance)
