@@ -49,7 +49,7 @@ module CloudProviders
       :min_count => min_count,
       :max_count => max_count,
       :key_name => keypair.basename,
-      :group_id => cloud.security_group_names,
+      :security_group => cloud.security_group_names,
       :user_data => user_data,
       :instance_type => instance_type,
       :availability_zone => availability_zone,
