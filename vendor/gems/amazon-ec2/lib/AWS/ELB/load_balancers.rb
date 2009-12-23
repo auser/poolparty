@@ -92,9 +92,7 @@ module AWS
         raise ArgumentError, "No :instances provided" if options[:instances].nil? || options[:instances].empty?
         raise ArgumentError, "No :load_balancer_name provided" if options[:load_balancer_name].nil? || options[:load_balancer_name].empty?
         params = {}
-        params.merge!(pathhashlist('Instances.member', [options[:instances]].flatten, {
-          :instance_id => 'InstanceId'
-        }))
+        params.merge!(pathhashlist('Instances.member', options[:instances].flatten.collect{|e| {:instance_id => e}}, {:instance_id => 'InstanceId'}))
         params['LoadBalancerName'] = options[:load_balancer_name]
         return response_generator(:action => "RegisterInstancesWithLoadBalancer", :params => params)
       end
@@ -116,12 +114,8 @@ module AWS
       def deregister_instances_from_load_balancer( options = {} )
         raise ArgumentError, "No :instances provided" if options[:instances].nil? || options[:instances].empty?
         raise ArgumentError, "No :load_balancer_name provided" if options[:load_balancer_name].nil? || options[:load_balancer_name].empty?
-        
         params = {}
-        params.merge!(pathhashlist('Instances.member', [options[:instances]].flatten, {
-          :instance_id => 'InstanceId'
-        }))
-        
+        params.merge!(pathlist('Instances.member', [options[:instances]].flatten))
         params['LoadBalancerName'] = options[:load_balancer_name]
         return response_generator(:action => "DeregisterInstancesFromLoadBalancer", :params => params)
       end
@@ -155,49 +149,28 @@ module AWS
         return response_generator(:action => "ConfigureHealthCheck", :params => params)
       end
 
+      # Not yet implemented
       #
-      # @todo Document this method
+      # @todo Implement this method
       #
       def describe_instance_health( options = {} )
-        raise ArgumentError, "No :load_balancer_name provided" if options[:load_balancer_name].nil? || options[:load_balancer_name].empty?
-        
-        params = {}
-        params['LoadBalancerName'] = options[:load_balancer_name]
-        return response_generator(:action => "DescribeInstanceHealth", :params => params)
+        raise "Not yet implemented"
       end
 
+      # Not yet implemented
       #
-      # @todo Document this method
+      # @todo Implement this method
       #
       def disable_availability_zones_for_load_balancer( options = {} )
-        raise ArgumentError, "No :load_balancer_name provided" if options[:load_balancer_name].nil? || options[:load_balancer_name].empty?
-        raise ArgumentError, "No availability_zones specified" unless options[:availability_zones]
-        
-        params = {}
-        params['LoadBalancerName'] = options[:load_balancer_name]
-        params.merge!(pathlist("AvailabilityZones.member", options[:availability_zones]))
-        
-        return response_generator(:action => "DisableAvailabilityZonesForLoadBalancer", :params => params)
+        raise "Not yet implemented"
       end
 
+      # Not yet implemented
       #
-      # @todo Document this method
+      # @todo Implement this method
       #
       def enable_availability_zones_for_load_balancer( options = {} )
-        raise ArgumentError, "No :load_balancer_name provided" if options[:load_balancer_name].nil? || options[:load_balancer_name].empty?
-        raise ArgumentError, "No availability_zones specified" unless options[:availability_zones]
-        
-        params = {}
-        params['LoadBalancerName'] = options[:load_balancer_name]
-        params.merge!(pathlist("AvailabilityZones.member", options[:availability_zones]))
-        
-        return response_generator(:action => "EnableAvailabilityZonesForLoadBalancer", :params => params)
-      end
-      
-      #convenience methods
-      # return an array of hashes describing the load_balancers
-      def list
-        describe_load_balancers.DescribeLoadBalancersResult.LoadBalancerDescriptions.member
+        raise "Not yet implemented"
       end
 
     end

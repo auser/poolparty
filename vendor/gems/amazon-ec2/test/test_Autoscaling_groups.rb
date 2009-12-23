@@ -78,11 +78,12 @@ context "autoscaling " do
     @as.stubs(:make_request).with("CreateAutoScalingGroup", {
       'AutoScalingGroupName' => 'CloudteamTestAutoscalingGroup1',
       'AvailabilityZones.member.1' => 'us-east-1a',
-      'LoadBalancerNames' => 'TestLoadBalancerName',
+      'LoadBalancerNames.member.1' => 'TestLoadBalancerName',
+      'LoadBalancerNames.member.2' => 'TestLoadBalancerName2',
       'LaunchConfigurationName' => 'CloudteamTestAutoscaling',
       'MinSize' => "1", 'MaxSize' => "3"
     }).returns stub(:body => @create_autoscaling_group_response, :is_a? => true)
-    response = @as.create_autoscaling_group(:autoscaling_group_name => "CloudteamTestAutoscalingGroup1", :availability_zones => "us-east-1a", :load_balancer_names => "TestLoadBalancerName", :launch_configuration_name => "CloudteamTestAutoscaling", :min_size => 1, :max_size => 3)
+    response = @as.create_autoscaling_group(:autoscaling_group_name => "CloudteamTestAutoscalingGroup1", :availability_zones => "us-east-1a", :load_balancer_names => ["TestLoadBalancerName", "TestLoadBalancerName2"], :launch_configuration_name => "CloudteamTestAutoscaling", :min_size => 1, :max_size => 3)
     response.should.be.an.instance_of Hash
   end
 

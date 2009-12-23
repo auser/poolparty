@@ -11,7 +11,6 @@
 %w[ base64 cgi openssl digest/sha1 net/https rexml/document time ostruct ].each { |f| require f }
 
 begin
-  require "rubygems"
   require 'xmlsimple' unless defined? XmlSimple
 rescue Exception => e
   require 'xml-simple' unless defined? XmlSimple
@@ -28,6 +27,14 @@ class Hash
     if args.size == 0
       self[meth.to_s] || self[meth.to_sym]
     end
+  end
+
+  def has?(key)
+    self[key] && !self[key].to_s.empty?
+  end
+
+  def does_not_have?(key)
+    self[key].nil? || self[key].to_s.empty?
   end
 end
 
@@ -178,10 +185,14 @@ module AWS
       # ("People", [{:name=>'jon', :age=>'22'}, {:name=>'chris'}], {:name => 'Name', :age => 'Age'}) you should get
       # {"People.1.Name"=>"jon", "People.1.Age"=>'22', 'People.2.Name'=>'chris'}
       def pathhashlist(key, arr_of_hashes, mappings)
-        params ={}
+        raise ArgumentError, "expected a key that is a String" unless key.is_a? String
+        raise ArgumentError, "expected a arr_of_hashes that is an Array" unless arr_of_hashes.is_a? Array
+        arr_of_hashes.each{|h| raise ArgumentError, "expected each element of arr_of_hashes to be a Hash" unless h.is_a?(Hash)}
+        raise ArgumentError, "expected a mappings that is an Hash" unless mappings.is_a? Hash
+        params = {}
         arr_of_hashes.each_with_index do |hash, i|
           hash.each do |attribute, value|
-            params["#{key}.#{i+1}.#{mappings[attribute]}"] = value
+            params["#{key}.#{i+1}.#{mappings[attribute]}"] = value.to_s
           end
         end
         params
@@ -213,9 +224,9 @@ module AWS
           req = Net::HTTP::Post.new("/")
           req.content_type = 'application/x-www-form-urlencoded'
           req['User-Agent'] = "github-amazon-ec2-ruby-gem"
-          
+
           response = @http.request(req, query)
-          
+
           # Make a call to see if we need to throw an error based on the response given by EC2
           # All error classes are defined in EC2/exceptions.rb
           aws_error?(response)
@@ -241,16 +252,15 @@ module AWS
         }.merge(options)
 
         raise ArgumentError, ":action must be provided to response_generator" if options[:action].nil? || options[:action].empty?
-        
-        http_response = make_request(options[:action], options[:params])
 
+        http_response = make_request(options[:action], options[:params])
         http_xml = http_response.body
         return Response.parse(:xml => http_xml)
 
       end
 
       # Raises the appropriate error if the specified Net::HTTPResponse object
-      # contains an Amazon EC2 error; returns +false+ otherwise.
+      # contains an AWS error; returns +false+ otherwise.
       def aws_error?(response)
 
         # return false if we got a HTTP 200 code,
@@ -271,7 +281,7 @@ module AWS
 
         # An valid error response looks like this:
         # <?xml version="1.0"?><Response><Errors><Error><Code>InvalidParameterCombination</Code><Message>Unknown parameter: foo</Message></Error></Errors><RequestID>291cef62-3e86-414b-900e-17246eccfae8</RequestID></Response>
-        # AWS EC2 throws some exception codes that look like Error.SubError.  Since we can't name classes this way
+        # AWS throws some exception codes that look like Error.SubError.  Since we can't name classes this way
         # we need to strip out the '.' in the error 'Code' and we name the error exceptions with this
         # non '.' name as well.
         error_code    = doc.root.elements['Errors'].elements['Error'].elements['Code'].text.gsub('.', '')
