@@ -6,11 +6,18 @@ Amazon Web Services offers a compute power on demand capability known as the Ela
 
 This 'amazon-ec2' Ruby Gem is an interface library that can be used to interact with the Amazon EC2 system and control server resources on demand from your Ruby scripts, or from applications written in your Ruby framework of choice (Ruby on Rails, Merb, etc.).
 
+More recently, support has been added for the following EC2 related AWS API's as well:
+
+* Autoscaling
+* Cloudwatch
+* Elastic Load Balancing (ELB)
+* Relational Database Service (RDS)
+
 For the most complete and up-to date README information please visit the project homepage at:
 
 http://github.com/grempe/amazon-ec2/tree/master
 
-or the EC2 website at http://aws.amazon.com/ec2
+or the official EC2 website at http://aws.amazon.com/ec2
 
 
 == Installation
@@ -30,41 +37,39 @@ The following gems should be installed automatically as part of your install of 
   Rcov (optional for testing)
   Test-Spec (optional for testing)
 
-=== Install the amazon-ec2 gem
 
-  # Install the stable release gem from Gemcutter ( learn more here : http://gemcutter.org/pages/faq )
+=== Install the amazon-ec2 gem (Canonical Release)
 
-  sudo gem install gemcutter (one time only)
+This is the standard install for stable releases from Gemcutter.
 
-  # Set Gemcutter to be your canonical gems source
+  # Install the stable release gem from Gemcutter (one time only) ( learn more here : http://gemcutter.org/pages/faq )
+  sudo gem install gemcutter
+
+  # Set Gemcutter to be your canonical gems source (one time only)
   sudo gem tumble
 
   # Install the gem
   sudo gem install amazon-ec2
 
-  # OR skip the Gemcutter setup
-
+  # OR if you want to skip the Gemcutter setup
   sudo gem install amazon-ec2 -s http://gemcutter.org
 
 
-=== Install the amazon-ec2 gem (for more bleeding edge versions)
+=== Install from local Git clone (for amazon-ec2 developers)
 
-For those who intend to do development on the gem, or want the bleeding edge.
+GitHub has unfortunately given up on the feature they had where they would build gems
+when pushed to git.  Too bad.  So to install from git, you'll need to clone and build.
 
-  # ONE TIME ONLY
-  # Execute this on each machine where you install gems to add GitHub as a gem source
-  # Do this only once or you'll end up with multiple entries in 'gem sources'
-  gem sources -a http://gems.github.com/
+  git clone git://github.com/grempe/amazon-ec2.git
+  cd amazon-ec2
+  rake gemspec
+  rake build
+  rake install
 
-  # Install the gem from the GitHub bleeding edge as a normal runtime install
-  sudo gem install grempe-amazon-ec2
 
-  # OR
+=== EXPERIMENTAL : Install the amazon-ec2 gem using Rip (for more bleeding edge versions)
 
-  # Install the gem from the GitHub bleeding edge with all developer dependencies
-  sudo gem install grempe-amazon-ec2 --development
-
-  # OR
+For those who intend to do development on the gem, or want the bleeding edge.  Install Rip as described at hellorip.com.
 
   # (Experimental) Install using Rip (hellorip.com) instead of RubyGems
   rip install git://github.com/grempe/amazon-ec2.git
@@ -83,9 +88,8 @@ The 'ec2sh' and 'ec2-gem-example.rb' scripts which will be introduced to you sho
 
 Edit the file ~/.bash_login and add the following to the existing contents:
 
+  # OPTIONAL : Why 'export RUBYOPT'? Because we leave loading libs up to you... See : http://gist.github.com/54177
   export RUBYOPT="rubygems"
-
-  Why 'export RUBYOPT'? Because we leave loading libs up to you... See : http://gist.github.com/54177
 
   # For amazon-ec2 and amazon s3 ruby gems
   export AMAZON_ACCESS_KEY_ID="YOUR_ACCESS_KEY_ID"
@@ -196,8 +200,7 @@ Try out the following bit of code. This should walk through each image returned 
 
   Rails::Initializer.run do |config|
    ...
-   # INSERT THIS LINE IN YOUR CONFIG
-   config.gem "amazon-ec2", :lib => "EC2"
+   config.gem "amazon-ec2", :lib => "AWS", :source => "http://gemcutter.org/"
    ...
   end
 

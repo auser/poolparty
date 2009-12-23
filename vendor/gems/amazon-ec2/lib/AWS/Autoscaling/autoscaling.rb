@@ -42,8 +42,8 @@ module AWS
       # @option options [String] :launch_configuration_name (nil) the name of the launch_configuration group
       # @option options [String] :min_size (nil) minimum size of the group
       # @option options [String] :max_size (nil) the maximum size of the group
-      # @option options [String] :load_balancer_names (nil) the names of the load balancers
-      # @option options [String] :cooldown (nil) the amount of time after a scaling activity complese before any further trigger-related scaling activities can start
+      # @option options [optional,Array] :load_balancer_names (nil) the names of the load balancers
+      # @option options [optional,String] :cooldown (nil) the amount of time after a scaling activity complese before any further trigger-related scaling activities can start
       def create_autoscaling_group( options = {} )
         raise ArgumentError, "No :autoscaling_group_name provided" if options[:autoscaling_group_name].nil? || options[:autoscaling_group_name].empty?
         raise ArgumentError, "No :availability_zones provided" if options[:availability_zones].nil? || options[:availability_zones].empty?
@@ -58,9 +58,9 @@ module AWS
         params['AutoScalingGroupName'] = options[:autoscaling_group_name]
         params['MinSize'] = options[:min_size].to_s
         params['MaxSize'] = options[:max_size].to_s
-        params.merge!(pathlist("LoadBalancerNames.member", options[:load_balancer_names])) if options[:load_balancer_names]
+        params.merge!(pathlist("LoadBalancerNames.member", [options[:load_balancer_names]].flatten)) if options.has_key?(:load_balancer_names)
         params['CoolDown'] = options[:cooldown] if options[:cooldown]
-        
+
         return response_generator(:action => "CreateAutoScalingGroup", :params => params)
       end
 
@@ -112,7 +112,7 @@ module AWS
           params["Dimensions.member.1.Name"] = options[:dimensions][:name]
           params["Dimensions.member.1.Value"] = options[:dimensions][:value]
         else
-          raise ArgumentError, "Dimensions must be either an array or a hash"
+          raise ArgumentError, "Dimensionss must be either an array or a hash"
         end
         params['MeasureName'] = options[:measure_name]
         params['Statistic'] = options[:statistic]
@@ -262,19 +262,9 @@ module AWS
         params['MinSize'] = options[:min_size] if options.has_key?(:min_size)
         params['MaxSize'] = options[:max_size] if options.has_key?(:max_size)
         params['CoolDown'] = options[:cooldown]  if options.has_key?(:cooldown)
-        
+
         return response_generator(:action => "UpdateAutoScalingGroup", :params => params)
 
-      end
-
-      # Convenience methods
-      # Return an array of hashes describing the autoscaling groups
-      def list
-        describe_autoscaling_groups.DescribeAutoScalingGroupsResult.AutoScalingGroups.member
-      end
-      # Return an array of autoscaling group names
-      def names
-        list.collect{|a| a.AutoScalingGroupName}
       end
 
     end

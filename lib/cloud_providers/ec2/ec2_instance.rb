@@ -12,7 +12,7 @@ module CloudProviders
       :availability_zones => []
     )
     
-    def initialize(raw_response={})      
+    def initialize(raw_response={})
       @raw_response = raw_response
       self.instance_id = raw_response["instanceId"] rescue nil
       self.security_groups = raw_response.groupSet.item[0].groupId rescue nil
@@ -30,6 +30,10 @@ module CloudProviders
     
     def keypair(n=nil)
       @keypair ||= Keypair.new(self.key_name)
+    end
+    
+    def zone
+      availability_zones.first
     end
     
     def reachable?
