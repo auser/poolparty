@@ -42,8 +42,12 @@ module CloudProviders
     end
     
     def self.default_cloud_cert
-     ENV['CLOUD_CERT'] || ENV['EUCALYPTUS_CERT'] || load_keys_from_file[:cloud_cert]
+      ENV['CLOUD_CERT'] || ENV['EUCALYPTUS_CERT'] || load_keys_from_file[:cloud_cert]
     end
+
+    def self.default_credential_file
+			ENV['AWS_CREDENTIAL_FILE'] || load_keys_from_file[:credential_file]
+		end
     
     # Load the yaml file containing keys.  If the file does not exist, return an empty hash
     def self.load_keys_from_file(filename="#{ENV["HOME"]}/.poolparty/aws", caching=true)
@@ -65,6 +69,7 @@ module CloudProviders
       :secret_access_key      => default_secret_access_key,
       :ec2_url                => default_ec2_url,
       :s3_url                 => default_s3_url,
+			:credential_file				=> default_credential_file,
       :min_count              => 1,
       :max_count              => 1,
       :user_data              => '',
@@ -320,6 +325,36 @@ module CloudProviders
     def reset!
       @nodes = @describe_instances = nil
     end
+
+		def access_key(n=nil)
+          if n.nil?
+						credential_file
+            fetch(:access_key)
+          else
+            self.access_key=n
+          end          
+		end
+		def secret_access_key(n=nil)
+          if n.nil?
+						credential_file
+						fetch(:secret_access_key)
+          else
+            self.secret_access_key=n
+          end          
+		end
+		def credential_file(file=nil)
+			# Read credentials from credential_file if one exists
+			dsl_options[:credential_file]=file unless file.nil?
+			if File.exists? dsl_options[:credential_file] and dsl_options[:access_key].nil? and dsl_options[:secret_access_key].nil?
+				File.open(dsl_options[:credential_file]).each_line {|line|
+								if line =~ /AWSAccessKeyId=([a-zA-Z0-9]+)$/
+												dsl_options[:access_key]=$1.chomp
+								elsif line =~ /AWSSecretKey=([^ 	]+)$/
+												dsl_options[:secret_access_key]=$1.chomp
+								end
+				}
+			end
+		end
     
     private
     # Helper to get the options with self as parent
