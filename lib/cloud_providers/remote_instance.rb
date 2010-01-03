@@ -53,9 +53,11 @@ module CloudProviders
     end
     
     def run_chef!
-      ssh([
-        "chef-solo -j /etc/chef/dna.json -c /etc/chef/solo.rb"
-      ])
+      chef_solo_cmd = <<-CMD
+        GEM_BIN=$(gem env | grep "EXECUTABLE DIRECTORY" | awk "{print \\$4}") \
+        && $GEM_BIN/chef-solo -j /etc/chef/dna.json -c /etc/chef/solo.rb
+      CMD
+      ssh([chef_solo_cmd.strip.squeeze(' ')])
     end
         
     def run
