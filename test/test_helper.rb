@@ -10,7 +10,7 @@ end
 require "test_methods"
 
 modify_env_with_hash(
-  "EC2_ACCESS_KEY" => "fake_access_key", 
+  "EC2_ACCESS_KEY" => "fake_access_key",
   "EC2_SECRET_KEY" => "fake_secret_key",
   "EC2_PRIVATE_KEY" => ::File.dirname(__FILE__) + "/fixtures/keys/test_key",
   "EC2_CERT"        => ::File.dirname(__FILE__) + "/fixtures/keys/test_key",
@@ -20,10 +20,9 @@ modify_env_with_hash(
 require 'poolparty'
 require "rubygems"
 require "test/unit"
-# TODO: Rip out shoulda and matchy
-require "matchy"
+# TODO: Rip out shoulda
 require "shoulda"
- 
+
 require 'git-style-binary/command'
 
 GitStyleBinary.run = true
