@@ -313,15 +313,13 @@ module CloudProviders
       @ec2 ||= begin
        AWS::EC2::Base.new( :access_key_id => access_key, :secret_access_key => secret_access_key )
       rescue AWS::ArgumentError => e # AWS credentials missing?
-	puts "ggg2"
-	p [:error, e]
-	nil
+	puts "Error contacting AWS: #{e}"
 	raise e
       rescue AWS::InvalidClientTokenId => e # AWS credentials invalid
-	puts "ggg3"
-	p [:error, e]
-	nil
+	puts "Error contacting AWS: #{e}"
 	raise e
+      rescue Exception => e
+	puts "some generic error #{e.class}: #{e}"
       end
     end
     
