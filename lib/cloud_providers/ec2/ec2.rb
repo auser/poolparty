@@ -270,7 +270,7 @@ module CloudProviders
     end
     
     def all_nodes
-      @nodes ||= describe_instances.select {|i| security_group_names.include?(i.security_groups) }.sort {|a,b| DateTime.parse(a['launchTime']) <=> DateTime.parse(b['launchTime'])}
+      @nodes ||= describe_instances.select {|i| security_group_names.include?(i.security_groups) }.sort {|a,b| DateTime.parse(a.launchTime) <=> DateTime.parse(b.launchTime)}
     end
     
     # Describe instances
