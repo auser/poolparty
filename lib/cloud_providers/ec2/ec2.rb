@@ -270,9 +270,7 @@ module CloudProviders
     end
     
     def all_nodes
-      #TODO: need to sort by launch time
-      # 
-      @nodes ||= describe_instances.select {|i| security_group_names.include?(i.security_groups) }
+      @nodes ||= describe_instances.select {|i| security_group_names.include?(i.security_groups) }.sort {|a,b| DateTime.parse(a['launchTime']) <=> DateTime.parse(b['launchTime'])}
     end
     
     # Describe instances
@@ -288,6 +286,9 @@ module CloudProviders
             Ec2Instance.new(inst_options)
           end
         end.flatten
+      rescue AWS::InvalidClientTokenId => e # AWS credentials invalid
+	puts "Error contacting AWS: #{e}"
+	raise e
       rescue Exception => e
         []
       end
@@ -315,11 +316,8 @@ module CloudProviders
       rescue AWS::ArgumentError => e # AWS credentials missing?
 	puts "Error contacting AWS: #{e}"
 	raise e
-      rescue AWS::InvalidClientTokenId => e # AWS credentials invalid
-	puts "Error contacting AWS: #{e}"
-	raise e
       rescue Exception => e
-	puts "some generic error #{e.class}: #{e}"
+	puts "Generic error #{e.class}: #{e}"
       end
     end
     
