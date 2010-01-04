@@ -14,11 +14,11 @@ module CloudProviders
   class Ec2 < CloudProvider
     # Set the aws keys from the environment, or load from /etc/poolparty/env.yml if the environment variable is not set
     def self.default_access_key
-      ENV['EC2_ACCESS_KEY'] || load_keys_from_file[:access_key]
+      ENV['EC2_ACCESS_KEY'] || load_keys_from_file[:access_key] || load_keys_from_credential_file[:access_key]
     end
     
     def self.default_secret_access_key
-      ENV['EC2_SECRET_KEY'] || load_keys_from_file[:secret_access_key]
+      ENV['EC2_SECRET_KEY'] || load_keys_from_file[:secret_access_key] || load_keys_from_credential_file[:secret_access_key]
     end
     
     def self.default_private_key
@@ -46,8 +46,8 @@ module CloudProviders
     end
 
     def self.default_credential_file
-			ENV['AWS_CREDENTIAL_FILE'] || load_keys_from_file[:credential_file]
-		end
+      ENV['AWS_CREDENTIAL_FILE'] || load_keys_from_file[:credential_file]
+    end
     
     # Load the yaml file containing keys.  If the file does not exist, return an empty hash
     def self.load_keys_from_file(filename="#{ENV["HOME"]}/.poolparty/aws", caching=true)
@@ -56,6 +56,22 @@ module CloudProviders
       puts("Reading keys from file: #{filename}")
       @aws_yml = YAML::load( open(filename).read ) || {}
     end
+
+    # Load credentials from file
+    def self.load_keys_from_credential_file(filename=default_credential_file, caching=true)
+      return {:access_key => @access_key, :secret_access_key => @secret_access_key} if @access_key and @secret_access_key
+      return {} if filename.nil? or not File.exists?(filename)
+      puts("Reading keys from file: #{filename}")
+      File.open(filename).each_line {|line|
+	if line =~ /AWSAccessKeyId=([a-zA-Z0-9]+)$/
+	  @access_key=$1.chomp
+	elsif line =~ /AWSSecretKey=([^ 	]+)$/
+	  @secret_access_key=$1.chomp
+	end
+      }
+      return {:access_key => @access_key, :secret_access_key => @secret_access_key}
+    end
+      
     
     default_options(
       :instance_type          => 'm1.small',
@@ -69,7 +85,7 @@ module CloudProviders
       :secret_access_key      => default_secret_access_key,
       :ec2_url                => default_ec2_url,
       :s3_url                 => default_s3_url,
-			:credential_file				=> default_credential_file,
+      :credential_file	      => default_credential_file,
       :min_count              => 1,
       :max_count              => 1,
       :user_data              => '',
@@ -196,6 +212,7 @@ module CloudProviders
     end
     
     def contract_by(num=1)
+      raise RuntimeError, "Contracting instances by #{num} will lower the number of instances below specified minimum" unless nodes.size - num > minimum_instances
       num.times do |i|
         id = nodes[-num].instance_id
         Ec2Instance.terminate!(:instance_id => id, :cloud => cloud)
@@ -293,7 +310,19 @@ module CloudProviders
         
     # Proxy to the raw Grempe amazon-aws @ec2 instance
     def ec2
-      @ec2 ||= AWS::EC2::Base.new( :access_key_id => access_key, :secret_access_key => secret_access_key )
+      @ec2 ||= begin
+       AWS::EC2::Base.new( :access_key_id => access_key, :secret_access_key => secret_access_key )
+      rescue AWS::ArgumentError => e # AWS credentials missing?
+	puts "ggg2"
+	p [:error, e]
+	nil
+	raise e
+      rescue AWS::InvalidClientTokenId => e # AWS credentials invalid
+	puts "ggg3"
+	p [:error, e]
+	nil
+	raise e
+      end
     end
     
     # Proxy to the raw Grempe amazon-aws autoscaling instance
@@ -326,35 +355,15 @@ module CloudProviders
       @nodes = @describe_instances = nil
     end
 
-		def access_key(n=nil)
-          if n.nil?
-						credential_file
-            fetch(:access_key)
-          else
-            self.access_key=n
-          end          
-		end
-		def secret_access_key(n=nil)
-          if n.nil?
-						credential_file
-						fetch(:secret_access_key)
-          else
-            self.secret_access_key=n
-          end          
-		end
-		def credential_file(file=nil)
-			# Read credentials from credential_file if one exists
-			dsl_options[:credential_file]=file unless file.nil?
-			if File.exists? dsl_options[:credential_file] and dsl_options[:access_key].nil? and dsl_options[:secret_access_key].nil?
-				File.open(dsl_options[:credential_file]).each_line {|line|
-								if line =~ /AWSAccessKeyId=([a-zA-Z0-9]+)$/
-												dsl_options[:access_key]=$1.chomp
-								elsif line =~ /AWSSecretKey=([^ 	]+)$/
-												dsl_options[:secret_access_key]=$1.chomp
-								end
-				}
-			end
-		end
+    # Read credentials from credential_file if one exists
+    def credential_file(file=nil)
+      unless file.nil?
+	dsl_options[:credential_file]=file 
+	dsl_options.merge((Ec2.load_keys_from_credential_file(file)))
+      else
+        fetch(:credential_file)
+      end
+    end
     
     private
     # Helper to get the options with self as parent
