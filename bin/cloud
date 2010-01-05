@@ -31,7 +31,12 @@ EOS
     $DEBUGGING      = true if command[:debug]
     $VERY_DEBUGGING = true if command[:very_debug]
     
-    require command[:clouds_dot_rb]
+    begin
+      require command[:clouds_dot_rb]
+    rescue LoadError => e
+      puts "Failed loading #{command[:clouds_dot_rb]}, try using -c to specify the location of your clouds.rb"
+      exit
+    end
     
     @loaded_pool = pool
     @loaded_clouds = command[:name] ? [pool.clouds[command[:name]]] : pool.clouds.map {|name,cld|cld}    
