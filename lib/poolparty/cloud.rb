@@ -180,6 +180,11 @@ log_level         :info
         puts "-----> Tearing down load balancer: #{lb.name}"
         lb.teardown
       end
+
+      rds_instances.each do |rds|
+        puts "-----> Tearing down RDS Instance: #{rds.name}"
+        rds.teardown
+      end
       # instances belonging to an auto_scaling group must be deleted before the auto_scaling group
       #THIS SCARES ME! nodes.each{|n| n.terminate_instance!}
       # loop {nodes.size>0 ? sleep(4) : break }

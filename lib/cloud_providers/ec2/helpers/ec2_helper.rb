@@ -1,6 +1,6 @@
 module CloudProviders
   class Ec2Helper < CloudProvider
-    
+
     def initialize(name=cloud.proper_name, init_opts={}, &block)
       @name = name
       if name.is_a?(Hash)
@@ -13,22 +13,35 @@ module CloudProviders
       instance_eval &block if block
       after_initialized
     end
-    
+
     def elb
       cloud.elb
     end
-    
+
     def ec2
       cloud.ec2
     end
-    
+
     def as
       cloud.as
     end
-    
+
+    def rds
+      cloud.awsrds
+    end
+
     def pool
       cloud.parent
     end
-    
+
+    def self.property(*names)
+      names.each do |name|
+        define_method name do |*args|
+          instance_variable_set("@#{name}", args.first) unless args.empty?
+          instance_variable_get("@#{name}")
+        end
+      end
+    end
+
   end
 end
