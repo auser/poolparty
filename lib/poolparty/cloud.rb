@@ -109,6 +109,7 @@ You did not specify a cloud provider in your clouds.rb. Make sure you have a blo
     # The NEW actual chef resolver.
     def build_tmp_dir
       base_directory = tmp_path/"etc"/"chef"
+      FileUtils.rm_rf base_directory
       puts "Copying the chef-repo into the base directory from #{chef_repo}"
       FileUtils.mkdir_p base_directory/"roles"   
       if File.directory?(chef_repo)
