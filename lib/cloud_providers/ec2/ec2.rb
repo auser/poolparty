@@ -276,8 +276,8 @@ module CloudProviders
     # Describe instances
     # Describe the instances that are available on this cloud
     # @params id (optional) if present, details about the instance
-    #   with the id given will be returned
-    #   if not given, details for all instances will be returned
+    # with the id given will be returned
+    # if not given, details for all instances will be returned
     def describe_instances(id=nil)
       begin
         @describe_instances = ec2.describe_instances.reservationSet.item.map do |r|
@@ -345,6 +345,22 @@ module CloudProviders
     def elastic_ips
       @elastic_ips ||= []
     end
+    # dsl method for EBS volumes. E.G. with volumes ids: 
+    #   ebs_volumes "vol-ddccbb41", "vol-ffaa6633" do
+    #     device "/dev/sdf"
+    #   end
+    # Or create new volumes: 
+    #   ebs_volumes do
+    #     device "/dev/sdf"
+    #     snapshot_id "snap-602030dd"
+    #     size 200
+    #   end
+    def ebs_volumes(volume_ids=nil, &block)
+        @ebs_volumes =+ ElasticBlockStoreGroup.new(volume_ids,block) 
+    end
+
+    def attach_ebs_volumes
+    end
     
     # Clear the cache
     def reset!
@@ -380,6 +396,13 @@ module CloudProviders
         puts "[EC2] The keypair exists in EC2, but we cannot find the keypair locally: #{n} (#{e.inspect})"
       end
       keypair n
+    end
+    # Get existing volumes on EC2
+    def volumes(filters=nil)
+      @volumes=ec2.describe_volumes.volumeSet.item unless @volumes_on_ec2
+      @volumes.map {|vol|
+        ElasticBlockStore.new vol if filters.nil? or vol.values_at(*filters.keys.map{|key| key.to_s})==filters.values
+      }.compact
     end
     
   end

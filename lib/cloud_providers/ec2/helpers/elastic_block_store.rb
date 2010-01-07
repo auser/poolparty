@@ -1,44 +1,35 @@
 module CloudProviders
   class ElasticBlockStore < Ec2Helper
 
-    default_options(:vol_id => nil, :availability_zone => nil, :instance_id => nil, :device_on_instance => nil)
-    
-    #Class methods
-    def self.volumes(filters=nil)
-      @all_volumes=ec2.describe_volumes.volumeSet.item unless @all_volumes
-      @all_volumes.map {|vol|
-        new vol if filters.nil? or vol.values_at(*filters.keys.map{|key| key.to_s})==filters.values
-      }.compact
-    end
-    def self.volumes_attached_to(instanceId)
-      volumes.select {|vol| attached? }
-    end
-
-    def self.create(options)
-      options.values.map!{|v| v.to_s}
-      new ec2.create_volume options
-    end
-
     # instance methods
-    attr_accessor :volumeId, :size, :snapshotId, :status, :availabilityZone, :createTime, :attachments
+    attr_accessor :volumeId, :size, :snapshotId, :status, :createTime, :attachments, :device, :availabilityZone
 
     alias :volume_id :volumeId
     alias :snapshot_id :snapshotId
-    alias :availability_zone :availabilityZone
+    alias :availability_zone :availabilityZone 
     alias :create_time :createTime
 
-    def initialize(raw_response)
+    def initialize(raw_response,init_opts={},&block)
       parse_raw_response(raw_response)
+      super(volumeId,init_opts,block)
     end
 
     def parse_raw_response(raw_response)
       @raw_respons = raw_response
       raw_response.each{|k,v| send k, v if respond_to?(k) }
-      @attachemnts=raw_response.attachmentSet.item
+      @attachments=raw_response.attachmentSet.item
+      @attachments.each{|attch| instance_id attch.instanceId if attch.status=="attached"}
     end
 
-    def attached?
-      @status=="in-use"
+    def attached?(fn_instance_id=nil)
+      return false unless @status=="in-use" or @status=="attaching"
+      return true if fn_instance_id.nil?
+      return true if fn_instance_id == instance_id
+      return false
+    end
+
+    def available?
+       @status=="available"
     end
 
     def attach(ec2_instance,device)
@@ -52,7 +43,7 @@ module CloudProviders
     end
 
     def update!
-      parse_raw_response volumes volume_id
+      parse_raw_response ElasticBlockStoreGroup.volumes_on_ec2 volume_id
     end
 
     def run
