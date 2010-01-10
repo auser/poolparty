@@ -367,6 +367,14 @@ module CloudProviders
       @nodes = @describe_instances = nil
     end
 
+    # Get existing volumes on EC2
+    def volumes(filters=nil)
+      @volumes=ec2.describe_volumes.volumeSet.item unless @volumes_on_ec2
+      @volumes.map {|vol|
+        ElasticBlockStore.new vol if filters.nil? or vol.values_at(*filters.keys.map{|key| key.to_s})==filters.values
+      }.compact
+    end
+
     # Read credentials from credential_file if one exists
     def credential_file(file=nil)
       unless file.nil?
@@ -396,13 +404,6 @@ module CloudProviders
         puts "[EC2] The keypair exists in EC2, but we cannot find the keypair locally: #{n} (#{e.inspect})"
       end
       keypair n
-    end
-    # Get existing volumes on EC2
-    def volumes(filters=nil)
-      @volumes=ec2.describe_volumes.volumeSet.item unless @volumes_on_ec2
-      @volumes.map {|vol|
-        ElasticBlockStore.new vol if filters.nil? or vol.values_at(*filters.keys.map{|key| key.to_s})==filters.values
-      }.compact
     end
     
   end
