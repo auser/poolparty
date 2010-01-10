@@ -2,7 +2,7 @@ module CloudProviders
   class ElasticBlockStore < Ec2Helper
 
     # instance methods
-    attr_accessor :volumeId, :size, :snapshotId, :status, :attachments, :device, :availabilityZone
+    attr_accessor :volumeId, :size, :snapshotId, :status, :attachments, :device, :availabilityZone, :instance_id
     attr_reader :createTime
 
     alias :volume_id :volumeId
@@ -19,14 +19,16 @@ module CloudProviders
     end
     def initialize(raw_response,init_opts={},&block)
       parse_raw_response(raw_response)
-      super(volumeId,init_opts,block)
+      super(volumeId,init_opts,&block)
     end
 
     def parse_raw_response(raw_response)
       @raw_respons = raw_response
       raw_response.each{|k,v| send k+"=", v if respond_to?(k+"=") }
-      @attachments=raw_response.attachmentSet.item
-      @attachments.each{|attch| instance_id=attch.instanceId if attch.status=="attached"}
+      if raw_response.attachmentSet.respond_to?(:item)
+        @attachments=raw_response.attachmentSet.item 
+        @attachments.each{|attch| instance_id=attch.instanceId if attch.status=="attached"}
+      end
     end
 
     def attached?(fn_instance_id=nil)

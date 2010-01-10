@@ -174,6 +174,8 @@ module CloudProviders
       end
       
       assign_elastic_ips
+      puts "Attaching EBS volumes"
+      assign_ebs_volumes # Assign EBS volumes
     end
     
     def teardown
@@ -361,7 +363,11 @@ module CloudProviders
     def elastic_ips
       @elastic_ips ||= []
     end
-<<<<<<< HEAD:lib/cloud_providers/ec2/ec2.rb
+
+    def ebs_volume_groups
+      @ebs_volume_groups ||= []
+    end
+
     # dsl method for EBS volumes. E.G. with volumes ids: 
     #   ebs_volumes "vol-ddccbb41", "vol-ffaa6633" do
     #     device "/dev/sdf"
@@ -373,28 +379,26 @@ module CloudProviders
     #     size 200
     #   end
     def ebs_volumes(volume_ids=nil, &block)
-        @ebs_volumes =+ ElasticBlockStoreGroup.new(volume_ids,block) 
+      ebs_volume_groups << ElasticBlockStoreGroup.new(sub_opts.merge(volume_ids ? {:volumes => volume_ids} : {}),&block) 
     end
 
-    def attach_ebs_volumes
+    def assign_ebs_volumes
+      ebs_volume_groups.each{|ebs_volume_group| ebs_volume_group.attach(nodes)}
     end
     
-=======
-
     def rds_instances
       @rds_instances ||= []
     end
 
->>>>>>> 6c6280b87a53768d624c9970b4957596996659d7:lib/cloud_providers/ec2/ec2.rb
     # Clear the cache
     def reset!
       @nodes = @describe_instances = nil
     end
 
     # Get existing volumes on EC2
-    def volumes(filters=nil)
-      @volumes=ec2.describe_volumes.volumeSet.item unless @volumes_on_ec2
-      @volumes.map {|vol|
+    def list_ec2_volumes(filters=nil)
+      @volumes_on_ec2=ec2.describe_volumes.volumeSet.item unless @volumes_on_ec2
+      @volumes_on_ec2.map {|vol|
         ElasticBlockStore.new vol if filters.nil? or vol.values_at(*filters.keys.map{|key| key.to_s})==filters.values
       }.compact
     end
@@ -402,8 +406,8 @@ module CloudProviders
     # Read credentials from credential_file if one exists
     def credential_file(file=nil)
       unless file.nil?
-	dsl_options[:credential_file]=file 
-	dsl_options.merge((Ec2.load_keys_from_credential_file(file)))
+	      dsl_options[:credential_file]=file 
+	      dsl_options.merge((Ec2.load_keys_from_credential_file(file)))
       else
         fetch(:credential_file)
       end
@@ -439,6 +443,7 @@ require "#{File.dirname(__FILE__)}/helpers/ec2_helper"
     authorize
     elastic_auto_scaler
     elastic_block_store
+    elastic_block_store_group
     elastic_load_balancer
     elastic_ip
     rds_instance
