@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DescribeSecurityGroupsResponse xmlns="http://ec2.amazonaws.com/doc/2007-03-01">
+  <securityGroupInfo>
+    <item>
+      <ownerId>1234567890</ownerId>
+      <groupName>poolparty-fake_cloud</groupName>
+      <groupDescription>poolparty-fake_cloud</groupDescription>
+      <ipPermissions>
+        <item>
+          <ipProtocol>tcp</ipProtocol>
+          <fromPort>80</fromPort>
+          <toPort>80</toPort>
+          <groups/>
+          <ipRanges>
+            <item>
+              <cidrIp>0.0.0.0/0</cidrIp>
+            </item>
+          </ipRanges>
+        </item>
+      </ipPermissions>
+    </item>
+  </securityGroupInfo>
+</DescribeSecurityGroupsResponse>

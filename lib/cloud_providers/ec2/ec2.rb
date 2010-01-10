@@ -95,33 +95,40 @@ module CloudProviders
       :block_device_mappings  => nil,
       :ebs_volumes            => []   # The volume id of an ebs volume # TODO: ensure this is consistent with :block_device_mappings
     )
-    
+
     # Called when the create command is called on the cloud
     def create!
-      [:security_groups, :load_balancers].each do |type|
+      [:security_groups, :load_balancers, :rds_instances].each do |type|
         self.send(type).each {|ele| ele.create! }
       end
     end
-        
-    def run      
+
+    def run
       puts "  for cloud: #{cloud.name}"
       puts "  minimum_instances: #{minimum_instances}"
       puts "  maximum_instances: #{maximum_instances}"
       puts "  security_groups: #{security_group_names.join(", ")}"
       puts "  using keypair: #{keypair}"
       puts "  user: #{user}\n"
-            
+
       security_groups.each do |sg|
         sg.run
       end
-      
+
       unless load_balancers.empty?
         load_balancers.each do |lb|
           puts "    load balancer: #{lb.name}"
           lb.run
         end
       end
-      
+
+      unless rds_instances.empty?
+        rds_instances.each do |rdsi|
+          puts "    rds instance: #{rdsi.name}"
+          rdsi.run
+        end
+      end
+
       if autoscalers.empty? # not using autoscaling
         puts "---- live, running instances (#{nodes.size}) ----"
         if nodes.size < minimum_instances
@@ -270,7 +277,7 @@ module CloudProviders
     end
     
     def all_nodes
-      @nodes ||= describe_instances.select {|i| security_group_names.include?(i.security_groups) }.sort {|a,b| DateTime.parse(a['launchTime']) <=> DateTime.parse(b['launchTime'])}
+      @nodes ||= describe_instances.select {|i| security_group_names.include?(i.security_groups) }.sort {|a,b| DateTime.parse(a.launchTime) <=> DateTime.parse(b.launchTime)}
     end
     
     # Describe instances
@@ -308,7 +315,11 @@ module CloudProviders
     def elastic_ip(*ips)
       ips.each {|ip| elastic_ips << ip}
     end
-        
+
+    def rds(given_name=cloud.proper_name, o={}, &block)
+      rds_instances << RdsInstance.new(given_name, sub_opts.merge(o || {}), &block)
+    end
+
     # Proxy to the raw Grempe amazon-aws @ec2 instance
     def ec2
       @ec2 ||= begin
@@ -320,16 +331,21 @@ module CloudProviders
 	puts "Generic error #{e.class}: #{e}"
       end
     end
-    
+
     # Proxy to the raw Grempe amazon-aws autoscaling instance
     def as
       @as = AWS::Autoscaling::Base.new( :access_key_id => access_key, :secret_access_key => secret_access_key )
     end
-    
+
     # Proxy to the raw Grempe amazon-aws elastic_load_balancing instance
     def elb
       @elb ||= AWS::ELB::Base.new( :access_key_id => access_key, :secret_access_key => secret_access_key )
     end
+
+    def awsrds
+      @awsrds ||= AWS::RDS::Base.new( :access_key_id => access_key, :secret_access_key => secret_access_key )
+    end
+
     def security_group_names
       security_groups.map {|a| a.to_s }
     end
@@ -345,6 +361,7 @@ module CloudProviders
     def elastic_ips
       @elastic_ips ||= []
     end
+<<<<<<< HEAD:lib/cloud_providers/ec2/ec2.rb
     # dsl method for EBS volumes. E.G. with volumes ids: 
     #   ebs_volumes "vol-ddccbb41", "vol-ffaa6633" do
     #     device "/dev/sdf"
@@ -362,6 +379,13 @@ module CloudProviders
     def attach_ebs_volumes
     end
     
+=======
+
+    def rds_instances
+      @rds_instances ||= []
+    end
+
+>>>>>>> 6c6280b87a53768d624c9970b4957596996659d7:lib/cloud_providers/ec2/ec2.rb
     # Clear the cache
     def reset!
       @nodes = @describe_instances = nil
@@ -405,18 +429,19 @@ module CloudProviders
       end
       keypair n
     end
-    
+
   end
 end
 
 require "#{File.dirname(__FILE__)}/ec2_instance"
 require "#{File.dirname(__FILE__)}/helpers/ec2_helper"
-%w( security_group 
-    authorize 
-    elastic_auto_scaler 
-    elastic_block_store 
-    elastic_load_balancer 
+%w( security_group
+    authorize
+    elastic_auto_scaler
+    elastic_block_store
+    elastic_load_balancer
     elastic_ip
+    rds_instance
     revoke).each do |lib|
   require "#{File.dirname(__FILE__)}/helpers/#{lib}"
 end

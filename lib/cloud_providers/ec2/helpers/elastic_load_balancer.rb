@@ -21,7 +21,7 @@ module CloudProviders
       # Remove old nodes that are no longer alive
       detach_instances_if_necessary
       # Try to unregister and reregister nodes that are out of service, perhaps it was just a setup bug that the setup took too long
-      out_of_service_node_listing = instance_healths.select {|a| a[:state] == "OutOfService" }.map {|a| {:instance_id => a[:instance_id]}}
+      out_of_service_node_listing = instance_healths.select {|a| a[:state] == "OutOfService" }.map {|a| a[:instance_id] }
       reset!
       out_of_service_nodes = nodes.select {|n| out_of_service_node_listing.include?(n.instance_id)}
       unless out_of_service_nodes.empty?
@@ -63,13 +63,13 @@ module CloudProviders
     public 
     def attach_instances_if_necessary
       parent.reset!
-      instances = parent.nodes.map {|a| {:instance_id => a.instance_id} }
+      instances = parent.nodes.map {|a| a.instance_id } # ec2 gem requires this be an array of names
       elb.register_instances_with_load_balancer(:instances => instances, :load_balancer_name => "#{name}") unless instances.empty?
     end
     def detach_instances_if_necessary
       parent.reset!
       begin
-        instances = parent.all_nodes.select {|a| !a.running? }.map {|a| {:instance_id => a.instance_id} }
+        instances = parent.all_nodes.select {|a| !a.running? }.map {|a| a.instance_id }
         elb.deregister_instances_from_load_balancer(:instances => instances, :load_balancer_name => "#{name}") unless instances.empty?
       rescue Exception => e
       end

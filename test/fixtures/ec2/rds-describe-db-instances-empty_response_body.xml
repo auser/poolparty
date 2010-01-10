@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DescribeDBInstancesResponse xmlns="http://rds.amazonaws.com/admin/2009-10-16/">
+  <DescribeDBInstancesResult>
+    <DBInstances/>
+  </DescribeDBInstancesResult>
+  <ResponseMetadata>
+    <RequestId>5e547870-fa2d-11de-8e05-53428aa3290f</RequestId>
+  </ResponseMetadata>
+</DescribeDBInstancesResponse>
