@@ -272,7 +272,7 @@ No autoscalers defined
     # Run command/s on all nodes in the cloud.
     # Returns a hash of instance_id=>result pairs
     def cmd(commands, opts={})      
-      key_by = opts[:key_by] || :instance_id 
+      key_by = opts.delete(:key_by) || :instance_id 
       results = {}
       threads = nodes.collect do |n|
          Thread.new{ results[ n.send(key_by) ] = n.ssh(commands, opts) }
