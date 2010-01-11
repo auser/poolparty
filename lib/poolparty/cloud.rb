@@ -275,7 +275,6 @@ No autoscalers defined
       key_by = opts[:key_by] || :instance_id 
       results = {}
       threads = nodes.collect do |n|
-        puts "result for #{n.instance_id} ==> #{n.ssh(commands, opts)}"
          Thread.new{ results[ n.send(key_by) ] = n.ssh(commands, opts) }
       end
       threads.each{ |aThread| aThread.join }
