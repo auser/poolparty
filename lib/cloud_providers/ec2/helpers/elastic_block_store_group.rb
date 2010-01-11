@@ -1,5 +1,11 @@
 
 module CloudProviders
+  # ElasticBlockStoreGroup class allows easy manipulation of EBS volumes matching defined criterias.
+  # Existing volumes in *cloud*'s availability zones that match the criterias will be selected for the group. When cloud instances need to attach EBS volumes from the group, the attach method should called.
+  # When attaching volumes the ElasticBlockStoreGroup will select existing (unattached) volumes until there are non, afterwhich the group will create new volumes according to the criterias given as needed.
+  #
+  # Currently, EBS volumes will not be deleted when tearing down a cloud. This is because poolparty is stateless and thus deleting drives from it will probably result in catastroph (deletions will be too general and delete stuff you don't want deleted).
+  # Hopefully, we will come up with a scheme for a deletion flag of some sort to solve this situation.
   class ElasticBlockStoreGroup < Ec2Helper
 
     default_options(:device => nil, :size => 0, :snapshot_id => nil)
@@ -7,12 +13,13 @@ module CloudProviders
     
     def after_initialized
       unless @volumes
-        filters={:size => size, :availability_zone => availability_zones}
-        filters[:snapshot_id]=snapshot_id if snapshot_id
+        filters={:size => size, :availabilityZone => availability_zones}
+        filters[:snapshotId]=snapshot_id if snapshot_id
         @volumes=cloud.list_ec2_volumes filters
       end
     end
     def volumes(*volume_ids)
+      return @volumes if volume_ids.size==0
       volume_ids.each{|volume_id| @volumes << cloud.list_ec2_volumes(:volume_id => volume_id)}
     end
     def volumes_attached_to(instanceId)

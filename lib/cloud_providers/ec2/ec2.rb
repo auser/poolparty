@@ -398,9 +398,18 @@ module CloudProviders
     # Get existing volumes on EC2
     def list_ec2_volumes(filters=nil)
       @volumes_on_ec2=ec2.describe_volumes.volumeSet.item unless @volumes_on_ec2
-      @volumes_on_ec2.map {|vol|
-        ElasticBlockStore.new vol if filters.nil? or vol.values_at(*filters.keys.map{|key| key.to_s})==filters.values
-      }.compact
+      return @volumes_on_ec2 if filters.nil? # no filter to check, so return at once
+      @volumes_on_ec2.select{|vol| # select volumes for which no filter failed
+        not filters.map {|filter_key, filter_val|
+          filter_key=filter_key.to_s if filter_key.is_a?(Symbol) # filter_key may be given as a symbol
+          raise ArgumentError, "Filter key #{filter_key} is invalid" unless vol.has_key?(filter_key)
+          if filter_val.is_a?(Array) # Deal with multiple filter values
+            filter_val.map{|val| val.is_a?(String) ? val : val.to_s}.member?(vol[filter_key]) # make sure fiter_val array values are Strings before checking for match
+          else
+            filter_val.is_a?(String) ? filter_val : filter_val.to_s==vol[filter_key] # make sure fiter_val is a String before comparing
+          end
+          }.member?(false) # Check if a filter failed, the 'not' statement at the beginning of the map block negates this so 'select' will choose only when no filter failed
+      }.compact # remove nil results from volume set.
     end
 
     # Read credentials from credential_file if one exists
