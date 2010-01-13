@@ -92,8 +92,7 @@ module CloudProviders
       :addressing_type        => nil,
       :kernel_id              => nil,
       :ramdisk_id             => nil,
-      :block_device_mappings  => nil,
-      :ebs_volumes            => []   # The volume id of an ebs volume # TODO: ensure this is consistent with :block_device_mappings
+      :block_device_mappings  => nil
     )
 
     # Called when the create command is called on the cloud
@@ -368,18 +367,15 @@ module CloudProviders
       @ebs_volume_groups ||= []
     end
 
-    # dsl method for EBS volumes. E.G. with volumes ids: 
-    #   ebs_volumes "vol-ddccbb41", "vol-ffaa6633" do
-    #     device "/dev/sdf"
-    #   end
-    # Or create new volumes: 
+    # dsl method for EBS volumes. E.G.: 
     #   ebs_volumes do
+    #     volumes "vol-001248ff", "vol-01ff4b85" # use existing volumes, not mandatory
     #     device "/dev/sdf"
     #     snapshot_id "snap-602030dd"
     #     size 200
     #   end
-    def ebs_volumes(volume_ids=nil, &block)
-      ebs_volume_groups << ElasticBlockStoreGroup.new(sub_opts.merge(volume_ids ? {:volumes => volume_ids} : {}),&block) 
+    def ebs_volumes(name=nil, &block)
+      ebs_volume_groups << ElasticBlockStoreGroup.new(sub_opts,&block) 
     end
 
     def assign_ebs_volumes
@@ -395,7 +391,8 @@ module CloudProviders
       @nodes = @describe_instances = nil
     end
 
-    # Get existing volumes on EC2
+    # Get existing volumes on EC2. filters is a hash of filters, either single valued or multivalued (value is an array of possible values).
+    # The function will return volumes matching *all* filters. A volume is a filter match if *any* one of the filter values equals the volume parameter value.
     def list_ec2_volumes(filters=nil)
       @volumes_on_ec2=ec2.describe_volumes.volumeSet.item unless @volumes_on_ec2
       return @volumes_on_ec2 if filters.nil? # no filter to check, so return at once

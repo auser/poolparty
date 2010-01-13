@@ -11,8 +11,12 @@ module CloudProviders
     default_options(:device => nil, :size => 0, :snapshot_id => nil)
     alias :snapshotId :snapshot_id
     
+    def initialize(name=cloud.proper_name, init_opts={}, &block)
+      @volumes=[]
+      super
+    end
     def after_initialized
-      unless @volumes
+      unless @volumes.size > 0 
         filters={:size => size, :availabilityZone => availability_zones}
         filters[:snapshotId]=snapshot_id if snapshot_id
         @volumes=cloud.list_ec2_volumes filters
@@ -20,7 +24,7 @@ module CloudProviders
     end
     def volumes(*volume_ids)
       return @volumes if volume_ids.size==0
-      volume_ids.each{|volume_id| @volumes << cloud.list_ec2_volumes(:volume_id => volume_id)}
+      volume_ids.each{|volume_id| @volumes << cloud.list_ec2_volumes(:volumeId => volume_id)}
     end
     def volumes_attached_to(instanceId)
       @volumes.select {|vol| vol.attached?(instanceId)}
