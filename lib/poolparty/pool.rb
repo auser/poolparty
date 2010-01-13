@@ -6,8 +6,20 @@ module PoolParty
     def cloud(name, &block)
       clouds[name.to_s] = Cloud.new(name.to_s, {:parent => self}, &block)
     end
+    
     def clouds
       @clouds ||= {}
+    end
+    
+    # Run command/s on all nodes in the pool.
+    # Returns a hash in the form of {cloud => [{instance_id=>result}]}
+    def cmd(commands, opts={})
+      results = {}
+      threads = clouds.collect do |name, c|
+        Thread.new{ results[ name ] = c.cmd(commands, opts) }
+      end
+      threads.each{ |aThread| aThread.join }
+      results
     end
         
     at_exit do
