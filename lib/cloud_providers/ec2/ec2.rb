@@ -247,6 +247,9 @@ module CloudProviders
         node.rsync_dir(tmp_path) if tmp_path
         node.run_chef!
       end
+      ebs_volume_groups.each do |vol_grp|
+        vol_grp.verify_attachments nodes
+      end
     end
     
     def assign_elastic_ips

@@ -69,5 +69,12 @@ module CloudProviders
         end
       }
     end
+    
+    def verify_attachments(nodes)
+      nodes_without_volume=nodes.select do |node|
+        volumes_attached_to(node.id).size=0
+      end
+      attach nodes_without_volume if nodes_without_volume.any?
+    end
   end
 end
