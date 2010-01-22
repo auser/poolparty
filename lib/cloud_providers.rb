@@ -10,11 +10,10 @@ module CloudProviders
 
 end
 
-%w(connections cloud_provider cloud_provider_instance 
-  load_balancer auto_scaler).each do |lib|
+%w(connections remote_instance cloud_provider).each do |lib|
   require File.dirname(__FILE__)+"/cloud_providers/#{lib}"
 end
 
-%w(ec2 vmware ssh).each do |lib|
+%w(ec2).each do |lib|
   require "cloud_providers/#{lib}/#{lib}"
 end

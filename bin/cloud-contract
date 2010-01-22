@@ -17,22 +17,24 @@ EOS
     @loaded_clouds.each do |cld|
       
       node_to_terminate = cld.nodes.last
-      node_to_terminate.cloud = cld
+      # node_to_terminate.cloud = cld
       
+      puts cld.nodes.size
+      if cld.nodes.size - 1 < cld.minimum_instances
+	puts "Contracting instances by 1 in cloud #{cld.name} will lower the number of instances below specified minimum (#{cld.minimum_instances})"
+	next
+      end
       msg = [
         "Contracting cloud #{cld.name} (#{cld.keypair}) by 1",
+        "#{cld.nodes.size} running instances (#{cld.minimum_instances} - #{cld.maximum_instances})",
         " node: #{node_to_terminate.public_ip}"
       ]
       
-      print_msg(msg)
+      puts msg.join("\n")
       
       node_to_terminate.terminate!
       
-      msg = [
-        "#{node_to_terminate.public_ip} has been terminated"
-      ]
-      
-      print_msg(msg)
+      puts "#{node_to_terminate.public_ip} has been terminated"
     end    
   end
 end

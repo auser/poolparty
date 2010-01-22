@@ -1,59 +1,10 @@
 module PoolParty  
-  class Cloud < DslBase
-    has_searchable_paths
-    
-    # Options we want on the output of the compiled script
-    # but want to take the options from the parent if they
-    # are nil on the cloud
+  class Cloud < Base
     default_options(
-      :minimum_instances        => 2,     # minimum_instances default
-      :maximum_instances        => 5,     # maximum_instances default
-      :minimum_runtime          => 3600,  # minimum_instances default: 1 hour
-      :contract_when            => nil,
-      :expand_when              => nil,
-      :cloud_provider_name      => :ec2,
-      :dependency_resolver_name => nil,
-      :os                       => nil,
-      :bootstrap_script         => nil
+      :description            => "PoolParty cloud",
+      :minimum_instances      => 1,
+      :maximum_instances      => 3
     )
-    
-    # Define what gets run on the callbacks
-    # This is where we can specify what gets called
-    # on callbacks
-    #   parameters: cld, time
-    #   cld - the cloud the callback came from
-    #   callback - the callback called (i.e. :after_provision)
-    callback_block do |cld, callback|
-    end
-    
-    def before_compile
-      validate_all_resources unless ENV["POOLPARTY_NO_VALIDATION"]
-    end
-    
-    def after_loaded
-      cloud_provider.keypair = keypair
-      create_load_balancers # Create the load balancers from the args
-    end
-    
-    # Before all instances are launched
-    def before_launch_instance
-      cloud_provider.before_launch_instance if cloud_provider.respond_to?(:before_launch_instance)
-    end
-    
-    # Freeze the cloud_name so we can't modify it at all, set the plugin_directory
-    # call and run instance_eval on the block and then call the after_create callback
-    def initialize(n, o={}, &block)
-      @cloud_name = n
-      @cloud_name.freeze
-      
-      # @init_block = block
-      @init_opts = compile_opts(o)
-      
-      @init_block = Proc.new do
-        super(n,o,&block)
-      end
-      
-    end
     
     # returns an instance of Keypair
     # You can pass either a filename which will be searched for in ~/.ec2/ and ~/.ssh/
@@ -64,54 +15,59 @@ module PoolParty
       when String
         Keypair.new(n, extra_paths)
       when nil
-        fpath = CloudProviders::CloudProvider.default_keypair_path/"#{pool.name}_#{name}"
-        if File.exists?(fpath)
-          Keypair.new(fpath, extra_paths)
-        else
-          generate_keypair(extra_paths)
-        end
+        fpath = CloudProviders::CloudProvider.default_keypair_path/"#{proper_name}"
+        File.exists?(fpath) ? Keypair.new(fpath, extra_paths) : generate_keypair(extra_paths)
       else
-        raise PoolPartyError.create("WTFERROR", "What the?")
+        raise ArgumentError, "There was an error when defining the keypair"
       end
     end
     
     private
     def generate_keypair(extra_paths=[])
-      tmp_keypair_name = "#{pool.name}_#{name}"
-      puts "Generate the keypair for this cloud because its not found: #{tmp_keypair_name}"
-      cloud_provider.send :generate_keypair, tmp_keypair_name
-      Keypair.new(tmp_keypair_name, extra_paths)
+      puts "Generate the keypair for this cloud because its not found: #{proper_name}"
+      cloud_provider.send :generate_keypair, proper_name
+      Keypair.new(proper_name, extra_paths)
     end
+    
+    def after_initialized
+      raise PoolParty::PoolPartyError.create("NoCloudProvider", <<-EOE
+You did not specify a cloud provider in your clouds.rb. Make sure you have a block that looks like:
+
+  using :ec2
+      EOE
+      ) unless cloud_provider
+      security_group(proper_name, :authorize => {:from_port => 22, :to_port => 22}) if security_groups.empty?
+    end
+    
     public
-    
-    # Declare the CloudProvider for a cloud
-    #  Create an instance of the cloud provider this cloud is using
-    def using(provider_symbol, o={}, &block)
-      return @cloud_provider if @cloud_provider
-      self.cloud_provider_name = provider_symbol
-      cloud_provider(o, &block)
-    end
-    
-    def cookbook_repos(*dirs)
-      dirs.each do |d|
-        _cookbook_repos << d
+    def instances(arg)
+      case arg
+      when Range
+        minimum_instances arg.first
+        maximum_instances arg.last
+      when Fixnum
+        minimum_instances arg
+        maximum_instances arg
+      when Hash
+        nodes(arg)
+      else
+        raise PoolParty::PoolPartyError.create("DslMethodCall", "You must call instances with either a number, a range or a hash (for a list of nodes)")
       end
-      _cookbook_repos
     end
     
-    def chef_repo(filepath="")
+    # Chef    
+    def chef_repo(filepath=nil)
       return @chef_repo if @chef_repo
-      cookbook_repos filepath/"site-cookbooks", filepath/"cookbooks"
-      @chef_repo = File.expand_path(filepath)
+      @chef_repo = filepath.nil? ? nil : File.expand_path(filepath)
+    end
+    
+    def chef_attributes(hsh={}, &block)
+      @chef_attributes ||= ChefAttribute.new(hsh, &block)
     end
     
     def recipe(recipe_name, hsh={})
-      if cookbook_repos.empty?
-        raise PoolParty::PoolPartyError.create("RecipeDirectoryNotFound", "Could not find the recipe directory")
-      end
-        vputs "Adding chef recipe: #{recipe_name}"
-        _recipes << recipe_name unless _recipes.include?(recipe_name)
-        _attributes.merge!(recipe_name => hsh) unless hsh.empty?
+      _recipes << recipe_name unless _recipes.include?(recipe_name)
+      _attributes.merge!(recipe_name => hsh) unless hsh.empty?
     end
     
     def recipes(*recipes)
@@ -120,327 +76,225 @@ module PoolParty
       end
     end
     
-    def chef_attributes(h={}, &block)
-      @chef_attributes ||= ChefAttribute.new(h, &block)
-    end
-    
     private
-    def _cookbook_repos
-      @_cookbook_repos ||= []
-    end
+    
     def _recipes
       @_recipes ||= []
     end
     def _attributes
       @_attributes ||= {}
     end
+    
+    # The NEW actual chef resolver.
+    def build_tmp_dir
+      base_directory = tmp_path/"etc"/"chef"
+      puts "Copying the chef-repo into the base directory from #{chef_repo}"
+      FileUtils.mkdir_p base_directory/"roles"   
+      if File.directory?(chef_repo)
+        FileUtils.cp_r "#{chef_repo}/.", base_directory 
+      else
+        raise "#{chef_repo} chef repo directory does not exist"
+      end
+      puts "Creating the dna.json"
+      chef_attributes.to_dna [], base_directory/"dna.json", {:run_list => ["role[#{name}]"]}
+      write_solo_dot_rb
+      write_chef_role_json tmp_path/"etc"/"chef"/"roles/#{name}.json"
+    end
+    
+    def write_solo_dot_rb(to=tmp_path/"etc"/"chef"/"solo.rb")
+      content = <<-EOE
+cookbook_path     ["/etc/chef/site-cookbooks", "/etc/chef/cookbooks"]
+role_path         "/etc/chef/roles"
+log_level         :info
+      EOE
+
+      File.open(to, "w") do |f|
+        f << content
+      end
+    end
+    
+    def write_chef_role_json(to=tmp_path/"etc"/"chef"/"dna.json")
+      ca = ChefAttribute.new({
+        :name => name,
+        :json_class => "Chef::Role",
+        :chef_type => "role",
+        :default_attributes => chef_attributes.init_opts,
+        :override_attributes => {},
+        :description => description
+      })
+      ca.to_dna _recipes.map {|a| File.basename(a) }, to
+    end
+    
+    # The pool can either be the parent (the context where the object is declared)
+    # or the global pool object
+    def pool
+      parent || pool
+    end
+    
+    def tmp_path
+      "/tmp/poolparty" / pool.name / name
+    end
+    
     public
     
-    # Cloud provider methods
-    def nodes(o={})
-       delayed_action {cloud_provider.nodes(o).collect{|n| n.cloud = self; n}}; 
+    attr_reader :cloud_provider
+    def using(provider_name, &block)
+      return @cloud_provider if @cloud_provider
+      @cloud_provider = "#{provider_name}".constantize(CloudProviders).send(:new, provider_name, :cloud => self, &block)
+      # Decorate the cloud with the cloud_provider methods
+      (class << self; self; end).instance_variable_set('@cloud_provider', @cloud_provider)
+        (class << self; self; end).class_eval do
+          @cloud_provider.public_methods(false).each do |meth|
+            next if respond_to?(meth) || method_defined?(meth) || private_method_defined?(meth)
+            eval <<-EOE
+              def #{meth}(*args, &block)
+                @cloud_provider.send(:#{meth}, *args, &block)
+              end
+            EOE
+        end
+      end
     end
+        
+    # compile the cloud spec and execute the compiled system and remote calls
+    def run
+      puts "  running on #{cloud_provider.class}"
+      cloud_provider.run
+      unless chef_repo.nil?
+        compile!
+        bootstrap!
+      end
+    end
+        
+    
+    # TODO: Incomplete and needs testing
+    # Shutdown and delete the load_balancers, auto_scaling_groups, launch_configurations,
+    # security_groups, triggers and instances defined by this cloud
+    def teardown
+      raise "Only Ec2 teardown supported" unless cloud_provider.name.to_s == 'ec2'
+      puts "! Tearing down cloud #{name}"
+      # load_balancers.each do |name, lb|
+      #   puts "! Deleting load_balaner #{lb_name}"
+      #   lb.teardown
+      # end
+      load_balancers.each do |lb|
+        puts "-----> Tearing down load balancer: #{lb.name}"
+        lb.teardown
+      end
+
+      rds_instances.each do |rds|
+        puts "-----> Tearing down RDS Instance: #{rds.name}"
+        rds.teardown
+      end
+      # instances belonging to an auto_scaling group must be deleted before the auto_scaling group
+      #THIS SCARES ME! nodes.each{|n| n.terminate_instance!}
+      # loop {nodes.size>0 ? sleep(4) : break }
+      if autoscalers.empty?
+        nodes.each do |node|
+          node.terminate!
+        end
+      else
+        autoscalers.each do |a|
+          puts "-----> Tearing down autoscaler #{a.name}"
+          a.teardown
+        end
+      end
+      # autoscalers.keys.each do |as_name|
+      #   puts "! Deleting auto_scaling_group #{as_name}"
+      #   cloud_provider.as.delete_autoscaling_group('AutoScalingGroupName' => as_name)
+      # end
+      #TODO: keypair.delete # Do we want to delete the keypair?  probably, but not certain
+    end
+    
+    def reboot!
+      orig_nodes = nodes
+      if autoscalers.empty?
+        puts <<-EOE
+No autoscalers defined
+  Launching new nodes and then shutting down original nodes
+        EOE
+        # Terminate the nodes
+        orig_nodes.each_with_index do |node, i|
+          # Start new nodes
+          print "Starting node: #{i}...\n"
+          expand_by(1)
+          print "Terminating node: #{i}...\n"
+          node.terminate!
+          puts ""
+        end
+      else
+        # Terminate the nodes
+        @num_nodes = orig_nodes.size
+        orig_nodes.each do |node|
+          node.terminate!
+          puts "----> Terminated node: #{node.instance_id}"
+          # Wait for the autoscaler to boot the next node
+          puts "----> Waiting for new node to boot via the autoscaler"
+          loop do
+            reset!
+            break if nodes.size == @num_nodes
+            $stdout.print "."
+            $stdout.flush
+            sleep 1
+          end
+        end
+      end
+      run
+      puts ""
+    end
+    
+    def compile!
+      build_tmp_dir unless chef_repo.nil?
+    end
+    
+    def bootstrap!
+      cloud_provider.bootstrap_nodes!(tmp_path)
+    end
+    
+    def configure!
+      compile!
+      cloud_provider.configure_nodes!(tmp_path)
+    end
+    
+    def reset!
+      cloud_provider.reset!
+    end
+    
+    def ssh(num=0)
+      nodes[num].ssh
+    end
+    
+    def rsync(source, dest)
+      nodes.each do |node|
+        node.rsync(:source => source, :destination => dest)
+      end
+    end
+    
+    # TODO: list of nodes needs to be consistentley sorted
+    def nodes
+      cloud_provider.nodes.select {|a| a.in_service? }
+    end
+        
+    # Run command/s on all nodes in the cloud.
+    # Returns a hash of instance_id=>result pairs
+    def cmd(commands, opts={})
+      key_by = opts.delete(:key_by) || :instance_id
+      results = {}
+      threads = nodes.collect do |n|
+        puts "result for #{n.instance_id} ==> n.ssh(#{commands.inspect}, #{opts.inspect})"
+        Thread.new{ results[ n.send(key_by) ] = n.ssh(commands, opts) }
+      end
+      threads.each{ |aThread| aThread.join }
+      results
+    end
+    
+    # Explicit proxies to cloud_provider methods
     def run_instance(o={}); cloud_provider.run_instance(o);end
     def terminate_instance!(o={}); cloud_provider.terminate_instance!(o);end
     def describe_instances(o={}); cloud_provider.describe_instances(o);end
     def describe_instance(o={}); cloud_provider.describe_instance(o);end
     
-    # Terminate all instances in the cloud
-    def terminate!
-      nodes.collect{|n| n.terminate! }
+    def proper_name
+      "#{parent.name}-#{name}"
     end
-    
-    # The actual cloud_provider instance
-    def cloud_provider(opts={}, &block)
-      return @cloud_provider if @cloud_provider
-      klass_name = "CloudProviders::#{cloud_provider_name}".classify
-      if provider_klass = CloudProviders.all.detect {|k| k.to_s == klass_name }
-        opts.merge!(:cloud => self)
-        @cloud_provider = provider_klass.new(dsl_options.merge(opts), &block)
-      else
-        raise PoolParty::PoolPartyError.create("UnknownCloudProviderError", "Unknown cloud_provider: #{cloud_provider_name}")
-      end
-      @cloud_provider
-    end
-    
-    # 1.) Launches a new instance,
-    # 2.) Waits for the instance to get an ip address
-    # 3.) Waits for port ssh_port to be open
-    # 4.) Calls call_after_launch_instance callbacks
-    # 5.) Executes passed &block, if any
-    # 6.) Returns the new instance object
-    def expand(opts={}, &block)
-      timeout = opts.delete(:timeout) || 300
-      callback :before_launch_instance
-      instance = cloud_provider.run_instance(opts)
-      instance.cloud = self
-      @instance = instance
-      #wait for an ip and then wait for ssh port, then configure instance
-      if instance.wait_for_public_ip(timeout) && instance.wait_for_port(ssh_port, :timeout=>timeout)
-        callback :after_launch_instance
-        instance.callback :before_bootstrap
-        instance.bootstrap!
-        instance.callback :after_bootstrap
-        instance.callback :before_configure
-        instance.configure!
-        instance.callback :after_configure
-        block.call(instance) if block
-        instance
-      else
-         raise StandardError.new("Instance port #{ssh_port} not available")
-      end
-      instance.refresh!
-      instance
-    end
-    
-    # Contract the cloud
-    def contract!(hsh={})
-      inst=nodes(hsh).last
-      inst.callback :before_terminate
-      inst.terminate!
-      inst.callback :after_terminate
-      inst
-    end
-    
-    # convenience method to loop thru all the nodes and configure them
-    def configure!(opts={}, threaded=true)
-      nodes.collect{|n| n.configure! }
-    end
-    
-    # Run command/s on all nodes in the cloud.
-    # Returns a hash of instance_id=>result pairs
-    def run(commands, opts={})
-      results = {}
-      threads = nodes.collect do |n|
-         Thread.new{ results[n.name] = n.run(commands, opts)  }
-      end
-      threads.each{ |aThread|  aThread.join }
-      results
-      # Serial implementation #
-      # nodes.inject({})do |results, n|
-      #   results[n.instance_id] = n.run(commands, opts)
-      #   results
-      # end
-    end
-    
-    # Temporary path
-    # Starts at the global default tmp path and appends the pool name
-    # and the cloud name
-    def tmp_path
-      Default.tmp_path / pool.name / name
-    end
-    
-    # The pool this cloud belongs to
-    def pool
-      parent
-    end
-    
-    # compile
-    
-    # Resolve with the dependency resolver
-    def resolve_with(a)
-      if DependencyResolvers.const_defined?(a.classify)        
-        dependency_resolver DependencyResolvers.module_eval("#{a.classify}")
-      else
-        raise PoolParty::PoolPartyError.create("DependencyResolverError", "Undefined dependency resolver: #{a}. Please specify one of the following: #{DependencyResolvers.all.join(", ")}")
-      end
-    end
-    
-    # Set the dependency resolver
-    def dependency_resolver(sym=nil)
-      @dependency_resolver ||= case sym
-      when :chef, nil
-        dsl_options[:dependency_resolver_name] = :chef
-        DependencyResolvers::Chef
-      end
-    end
-    
-    # # Add the monitoring stack
-    # def add_monitoring_stack_if_needed
-    #   if monitors.size > 0
-    #     
-    #     run_in_context do
-    #       %w(collectd hermes).each do |m|
-    #         self.send m.to_sym
-    #       end
-    #     end
-    #     
-    #   end
-    # end
-    
-    # The NEW actual chef resolver.
-    def resolve_for_clouds
-      base_directory = tmp_path/"etc"/"chef"
-      cookbook_directory = base_directory/"cookbooks"
-      FileUtils.mkdir_p cookbook_directory
-      vputs "Copying the chef-repo into the base directory from #{chef_repo}"
-      cookbook_repos.each do |r|
-        if File.directory?(r)
-          FileUtils.cp_r r, base_directory 
-        end
-      end
-      vputs "Creating the dna.json"
-      chef_attributes.merge!(_attributes)
-      chef_attributes.to_dna _recipes.map {|a| File.basename(a) }, base_directory/"dna.json"
-    end
-    
-    # Take the cloud's resources and compile them down using 
-    # the defined (or the default dependency_resolver, chef)
-    def compile(caller=nil)
-      callback :before_compile
-      cloud_provider.before_compile(self)
-      FileUtils.mkdir_p tmp_path unless File.directory?(tmp_path)
-      ddputs <<-EOE
-Compiling cloud #{self.name} to #{tmp_path/"etc"/"#{dependency_resolver_name}"} 
-  number of resources: #{ordered_resources.size}
-      EOE
-      out = dependency_resolver.compile_to(ordered_resources, tmp_path/"etc"/"#{dependency_resolver_name}", caller)
-      resolve_for_clouds
-      cloud_provider.after_compile(self)
-      callback :after_compile
-      out
-    end
-    
-    # Get the os of the first node if it was not explicity defined, we'll assume they are
-    # all homogenous
-    def os(sym=nil)
-      if sym
-        dsl_options[:os] = sym
-      else
-        nodes.size > 0 ? nodes.first.os : dsl_options[:os]
-      end
-    end
-    alias :platform :os
-    
-    # The public_ip of the cloud is equivalent to the public_ip
-    # of the cloud's oldest node
-    def public_ip
-      nodes.first.public_ip
-    end
-    
-    ### MONITORS ###
-    # Create a new monitor on the cloud
-    # == Usage
-    #   monitor :cpu do |v|
-    #     vote_for(:expand) if v > 0.8
-    #   end
-    def monitor(monitor_symbol, &block)
-      monitors[monitor_symbol.to_sym] ||= PoolParty::Monitor.new(monitor_symbol, &block)
-    end
-    
-    # Run the monitor logic
-    def run_monitor(monitor_name, value)
-      mon = monitors[monitor_name.to_sym]
-      if mon
-        mon.run(value)
-      else
-        "unhandled monitor"
-      end
-    end
-    
-    # Store the monitors in an array
-    def monitors
-      @monitors ||= {}
-    end
-    
-    def monitor_format(mon_name, meth=nil, &block)
-      if monitors.has_key?(mon_name.to_sym)
-        monitors[mon_name.to_sym].format(meth, &block)
-      else
-        raise PoolPartyError.create("MonitorsFormattingError", "You created a monitor format for an unknown monitor. Please check and try again!")
-      end
-    end
-    
-    ##### Internal methods #####
-    # Methods that only the cloud itself will use
-    # and thus are private
-    
-    # Form the cloud
-    # Run the init block with the init_opts
-    # on the cloud
-    # This is run after the cloud.rb file has been consumed
-    def form_clouds
-      run_with_callbacks(@init_opts, &@init_block)
-      loaded!
-    end
-    
-    def after_all_loaded
-      run_after_loaded do |b|
-        run_in_context(&b)
-      end
-    end
-    
-    def validate_all_resources
-      ddputs("Validating all the resources")
-      [:ensure_not_cyclic, :ensure_meta_fun_are_resources].each do |meth|
-        self.send meth
-      end
-    end
-    
-    def ensure_not_cyclic
-      if resources_graph.cyclic?
-        cycles = []
-        
-        cycles = resources_graph.find_cycle
-        cycle_string = cycles.map do |k,v|
-          "#{k} -> #{v}"
-        end
-        
-        filepath = "/tmp"
-        format = "png"
-        dotpath = "#{filepath}/dot.#{format}"
-        resources_graph.write_to_graphic_file(format, filepath)
-        
-        `open #{dotpath}`
-        msg =<<-EOE
-      
-        Your resource graph is cyclic. Two resources depend on each other, Cannot decide which resource
-        to go first. Dying instead. Correct this and then try again.
-      
-          #{dotpath}
-      
-        Hint: You can see the resource graph by generating it with:
-          cloud compile -g name
-        
-        EOE
-        raise PoolPartyError.create("CyclicResourceGraphError", msg)
-      end
-    end
-    
-    def ensure_meta_fun_are_resources
-      resources.each do |res|
-        
-        if res.meta_notifies
-          res.meta_notifies.each do |ty, arr|
-            arr.each do |nm, action|
-              raise PoolPartyError.create("ResourceNotFound", "A resource required for #{ty}(#{nm}) was not found: #{ty}(#{nm}). Please make sure you've specified this in your configuration.") unless get_resource(ty, nm)
-            end
-          end
-        end
-        
-      end
-    end    
-    
-  end
-end
-
-module GRATR
-  class Digraph
-    
-    # Crappy n*n
-    def find_cycle(from=self)
-      return [] unless cyclic?
-      cyclic_cycle = []
-      forward_edge = Proc.new {|e| }
-      back_edge    = Proc.new do |b| 
-        cyclic_cycle = dfs_tree_from_vertex(b)
-      end
-      from.dfs({ 
-       :forward_edge  => forward_edge,
-       :back_edge    => back_edge
-      })
-      cyclic_cycle
-    end
-    
   end
 end

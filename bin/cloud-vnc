@@ -1,0 +1,39 @@
+#!/usr/bin/env ruby
+$:.unshift(File.dirname(__FILE__) + "/../lib")
+require "poolparty"
+
+require 'git-style-binary/command'
+
+GitStyleBinary.command do
+  banner <<-EOS
+Usage: #{$0} #{all_options_string}
+
+  start a vnc server and create an ssh tunnel
+EOS
+
+  short_desc "ssh into an instance of the cloud"
+  
+  opt :instance_number, "Start VNC server on this instance number", :type => :integer, :default => 0
+  opt :local_port, "The local port to tunnel to", :type => :integer, :default => 5900
+  opt :display, "The remote display number to start the VNC Server on", :type => :integer, :default => 0
+  
+  run do |command|
+    cloud = @loaded_clouds.first
+    
+    if !cloud.nodes.empty?
+      inst = cloud.nodes[command[:instance_number]]
+      if inst
+        inst.ssh(["x11vnc -localhost -nopw -display :#{command[:display]}"],
+                 {'-X' => nil,
+                  '-C' => nil,
+                  ' -o' => 'UserKnownHostsFile=/dev/null',
+                  '-L' => "#{command[:local_port]}:localhost:5900"})
+      else
+        puts("Error: The instance number (#{command[:instance_number]}) is too high for the current number of instances")
+      end
+    else
+      puts "No running instances can be found"
+    end
+    
+  end
+end

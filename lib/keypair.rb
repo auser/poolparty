@@ -14,7 +14,6 @@ class Keypair
     @filepath = fpath
     @opts = opts
     @extra_paths = extra_paths.map {|a| File.expand_path(a) }
-    valid?
   end
   
   # If the full_filepath is nil, then the key doesn't exist
@@ -30,13 +29,18 @@ class Keypair
   # Returns the full_filepath of the key. If a full filepath is passed, we just return the expanded filepath
   # for the keypair, otherwise query where it is against known locations
   def full_filepath
-    @full_filepath ||= if File.file?(File.expand_path(filepath))
+    return @full_filepath if @full_filepath
+    @full_filepath = if File.file?(File.expand_path(filepath))
       ::File.expand_path(filepath)
       else
         search_in_known_locations(filepath, extra_paths)
       end
+    @full_filepath ? @full_filepath : false
   end
-  alias :to_s :full_filepath
+  
+  def to_s
+    basename
+  end
   
   #TODO: gracefully handle the case when a passpharase is needed
   # Generate a public key from the private key
@@ -68,16 +72,16 @@ class Keypair
   def each
     yield full_filepath
   end
-      
+
   # Validation checks
   # if all of the validations pass, the object is considered valid
   # the validations are responsible for raising a PoolPartyError (StandardError)
   def valid?
     validations.each {|validation| self.send(validation.to_sym) }
   end
-
+ 
   private
-
+ 
   # Validations
   def validations
     [:keypair_found?, :has_proper_permissions?]
@@ -87,8 +91,7 @@ class Keypair
   def has_proper_permissions?
     perm_truth = [:readable?, :writable?, :executable?].map {|meth| File.send(meth, full_filepath)} == [true, true, false]
     raise StandardError.new("Your keypair #{full_filepath} has improper file permissions. Keypairs must be 0600 permission. Please chmod your keypair file and try again") unless perm_truth
-  end
-  
+  end  
   def keypair_found?
     if exists?
       true

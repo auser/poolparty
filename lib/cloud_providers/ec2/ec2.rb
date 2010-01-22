@@ -2,46 +2,23 @@
   EC2 CloudProvider
   This serves as the basis for running PoolParty on Amazon's ec2 cloud.
 =end
-require "openssl"
-if OpenSSL::OPENSSL_VERSION_NUMBER < 0x00908000
-  warn "the ec2 cloud provider may not work with your version of ruby and OpenSSL.  Consider upgrading if you encoutner authentication errors."
-end
 begin
-  require 'right_aws'
+  require 'AWS'
 rescue LoadError
   puts <<-EOM
-Error: In order to use ec2, you need to install the right_aws gem
-
-Ec2 is the default cloud provider for PoolParty. If you intend on using
-a different provider, specify it with:
-
-using :provider_name
+  There was an error requiring AWS
 EOM
-end
-
-require "#{File.dirname(__FILE__)}/ec2_helpers"
-require "#{File.dirname(__FILE__)}/ec2_response"
-require "#{File.dirname(__FILE__)}/ec2_instance"
-require "#{File.dirname(__FILE__)}/elastic_load_balancer"
-
-%w(elastic_auto_scaling elastic_load_balancing).each do |lib|
-  require "#{File.dirname(__FILE__)}/modules/#{lib}"
 end
 
 module CloudProviders
   class Ec2 < CloudProvider
-    
-    include CloudProviders::Ec2Helpers
-    include CloudProviders::ElasticAutoScaling
-    include CloudProviders::ElasticLoadBalancing
-    
     # Set the aws keys from the environment, or load from /etc/poolparty/env.yml if the environment variable is not set
     def self.default_access_key
-      ENV['EC2_ACCESS_KEY'] || load_keys_from_file[:access_key]
+      ENV['EC2_ACCESS_KEY'] || load_keys_from_file[:access_key] || load_keys_from_credential_file[:access_key]
     end
     
     def self.default_secret_access_key
-      ENV['EC2_SECRET_KEY'] || load_keys_from_file[:secret_access_key]
+      ENV['EC2_SECRET_KEY'] || load_keys_from_file[:secret_access_key] || load_keys_from_credential_file[:secret_access_key]
     end
     
     def self.default_private_key
@@ -65,194 +42,417 @@ module CloudProviders
     end
     
     def self.default_cloud_cert
-     ENV['CLOUD_CERT'] || ENV['EUCALYPTUS_CERT'] || load_keys_from_file[:cloud_cert]
+      ENV['CLOUD_CERT'] || ENV['EUCALYPTUS_CERT'] || load_keys_from_file[:cloud_cert]
+    end
+
+    def self.default_credential_file
+      ENV['AWS_CREDENTIAL_FILE'] || load_keys_from_file[:credential_file]
     end
     
     # Load the yaml file containing keys.  If the file does not exist, return an empty hash
-    def self.load_keys_from_file(filename='/etc/poolparty/env.yml', caching=true)
+    def self.load_keys_from_file(filename="#{ENV["HOME"]}/.poolparty/aws", caching=true)
       return @aws_yml if @aws_yml && caching==true
       return {} unless File.exists?(filename)
-      ddputs("Reading keys from file: #{filename}")
+      puts("Reading keys from file: #{filename}")
       @aws_yml = YAML::load( open(filename).read ) || {}
     end
-    
-    default_options({
-        :image_id               => 'ami-bf5eb9d6',
-        :instance_type          => 'm1.small',
-        :addressing_type        => "public",
-        :availability_zones     => ["us-east-1a"],
-        :security_group         => ["default"],
-        :user_id                => default_user_id,
-        :private_key            => default_private_key,
-        :cert                   => default_cert,
-        :cloud_cert             => default_cloud_cert,
-        :access_key             => default_access_key,
-        :secret_access_key      => default_secret_access_key,
-        :ec2_url                => default_ec2_url,
-        :s3_url                 => default_s3_url,
-        :min_count              => 1,
-        :max_count              => 1,
-        :user_data              => '',
-        :addressing_type        => nil,
-        :kernel_id              => nil,
-        :ramdisk_id             => nil,
-        :block_device_mappings  => nil,
-        :elastic_ips            => [],  # An array of the elastic ips
-        :ebs_volumes            => []   # The volume id of an ebs volume # TODO: ensure this is consistent with :block_device_mappings
-      })
-      
-      
-    def ec2(o={})
-      @ec2 ||= Rightscale::Ec2.new(access_key, secret_access_key, o.merge(:logger => PoolParty::PoolPartyLog, :endpoint_url => ec2_url))
+
+    # Load credentials from file
+    def self.load_keys_from_credential_file(filename=default_credential_file, caching=true)
+      return {:access_key => @access_key, :secret_access_key => @secret_access_key} if @access_key and @secret_access_key
+      return {} if filename.nil? or not File.exists?(filename)
+      puts("Reading keys from file: #{filename}")
+      File.open(filename).each_line {|line|
+	if line =~ /AWSAccessKeyId=([a-zA-Z0-9]+)$/
+	  @access_key=$1.chomp
+	elsif line =~ /AWSSecretKey=([^ 	]+)$/
+	  @secret_access_key=$1.chomp
+	end
+      }
+      return {:access_key => @access_key, :secret_access_key => @secret_access_key}
     end
+      
     
-    # Start a new instance with the given options
-    def run_instance(o={})
-      number_of_instances = o[:number_of_instances] || 1
-      set_vars_from_options o
-      raise StandardError.new("You must pass a keypair to launch an instance, or else you will not be able to login. options = #{o.inspect}") if !keypair_name
-      vputs("--- Launching ec2 instances")
-      vputs({
-        "image_id" => image_id,
-        "security_group" => security_group,
-        "keypair" => keypair.basename
-      })
-      response_array = ec2(o).run_instances(image_id,
-                                      min_count,
-                                      number_of_instances,
-                                      security_group,
-                                      keypair.basename,
-                                      user_data,
-                                      addressing_type,
-                                      instance_type,
-                                      kernel_id,
-                                      ramdisk_id,
-                                      availability_zones,
-                                      block_device_mappings
-                                      )
-      instances = response_array.collect do |aws_response_hash|
-        Ec2Instance.new( Ec2Response.pp_format(aws_response_hash).merge(o) )
+    default_options(
+      :instance_type          => 'm1.small',
+      :addressing_type        => "public",
+      :availability_zones     => ["us-east-1a"],
+      :user_id                => default_user_id,
+      :private_key            => default_private_key,
+      :cert                   => default_cert,
+      :cloud_cert             => default_cloud_cert,
+      :access_key             => default_access_key,
+      :secret_access_key      => default_secret_access_key,
+      :ec2_url                => default_ec2_url,
+      :s3_url                 => default_s3_url,
+      :credential_file	      => default_credential_file,
+      :min_count              => 1,
+      :max_count              => 1,
+      :user_data              => '',
+      :addressing_type        => nil,
+      :kernel_id              => nil,
+      :ramdisk_id             => nil,
+      :block_device_mappings  => nil
+    )
+
+    # Called when the create command is called on the cloud
+    def create!
+      [:security_groups, :load_balancers, :rds_instances].each do |type|
+        self.send(type).each {|ele| ele.create! }
+      end
+    end
+
+    def run
+      puts "  for cloud: #{cloud.name}"
+      puts "  minimum_instances: #{minimum_instances}"
+      puts "  maximum_instances: #{maximum_instances}"
+      puts "  security_groups: #{security_group_names.join(", ")}"
+      puts "  using keypair: #{keypair}"
+      puts "  user: #{user}\n"
+
+      security_groups.each do |sg|
+        sg.run
+      end
+
+      unless load_balancers.empty?
+        load_balancers.each do |lb|
+          puts "    load balancer: #{lb.name}"
+          lb.run
+        end
+      end
+
+      unless rds_instances.empty?
+        rds_instances.each do |rdsi|
+          puts "    rds instance: #{rdsi.name}"
+          rdsi.run
+        end
+      end
+
+      if autoscalers.empty? # not using autoscaling
+        puts "---- live, running instances (#{nodes.size}) ----"
+        if nodes.size < minimum_instances
+          expansion_count = minimum_instances - nodes.size
+          puts "-----> expanding the cloud because the #{expansion_count} minimum_instances is not satisified: "
+          expand_by(expansion_count)
+        elsif nodes.size > maximum_instances
+          contraction_count = nodes.size - maximum_instances
+          puts "-----> contracting the cloud because the instances count exceeds the #{maximum_instances} maximum_instances by #{contraction_count}"
+          contract_by(contraction_count)
+        end
+        progress_bar_until("Waiting for the instances to be launched") do
+          reset!
+          running_nodes = nodes.select {|n| n.running? }
+          running_nodes.size >= minimum_instances
+        end
+        reset!
+        # ELASTIC IPS
+      else
+        autoscalers.each do |a|
+          puts "    autoscaler: #{a.name}"
+          puts "-----> The autoscaling groups will launch the instances"
+          a.run
+          
+          progress_bar_until("Waiting for autoscaler to launch instances") do
+            reset!
+            running_nodes = nodes.select {|n| n.running? }
+            running_nodes.size >= minimum_instances
+          end
+          reset!
+        end
       end
       
-      after_run_instance(instances)
+      from_ports = security_groups.map {|a| a.authorizes.map {|t| t.from_port.to_i }.flatten }.flatten      
+      if from_ports.include?(22)
+        progress_bar_until("Waiting for the instances to be accessible by ssh") do
+          running_nodes = nodes.select {|n| n.running? }
+          accessible_count = running_nodes.map do |node|
+            node.accessible?
+          end.size
+          accessible_count == running_nodes.size
+        end
+      end
       
-      instances.first
+      assign_elastic_ips
+      puts "Attaching EBS volumes"
+      assign_ebs_volumes # Assign EBS volumes
     end
     
-    # Will select the first instance matching the provided criteria hash
-    def describe_instance(hash_of_criteria_to_select_instance_against)
-      describe_instances(hash_of_criteria_to_select_instance_against).first
+    def teardown
+      puts "------ Tearing down and cleaning up #{cloud.name} cloud"
+      unless autoscalers.empty?
+        puts "Tearing down autoscalers"
+      end
+    end
+    
+    def expand_by(num=1)
+      e = Ec2Instance.run!({
+        :image_id => image_id,
+        :min_count => num,
+        :max_count => num,
+        :key_name => keypair.basename,
+        :security_groups => security_groups,
+        :user_data => decoded_user_data,
+        :instance_type => instance_type,
+        :availability_zone => availability_zones.first,
+        :base64_encoded => true,
+        :cloud => cloud
+      })
+      progress_bar_until("Waiting for node to launch...") do
+        wait_for_node(e)
+      end
+      all_nodes.detect {|n| n.instance_id == e.instance_id }
+    end
+    
+    def decoded_user_data
+      if user_data
+        if File.file?(user_data)
+          open(user_data).read
+        else
+          user_data
+        end
+      end
+    end
+    
+    def wait_for_node(instance)
+      reset!
+      inst = all_nodes.detect {|n| n.instance_id == instance.instance_id }
+      inst.running?
+    end
+    
+    def contract_by(num=1)
+      raise RuntimeError, "Contracting instances by #{num} will lower the number of instances below specified minimum" unless nodes.size - num > minimum_instances
+      num.times do |i|
+        id = nodes[-num].instance_id
+        Ec2Instance.terminate!(:instance_id => id, :cloud => cloud)
+      end
+      reset!
+    end
+    
+    def bootstrap_nodes!(tmp_path=nil)
+      tmp_path ||= cloud.tmp_path
+      nodes.each do |node|
+        next unless node.in_service?
+        node.cloud_provider = self
+        node.rsync_dir(tmp_path)
+        node.bootstrap_chef!
+        node.run_chef!
+      end
+    end
+    
+    def configure_nodes!(tmp_path=nil)
+      tmp_path ||= cloud.tmp_path
+      nodes.each do |node|
+        next unless node.in_service?
+        node.cloud_provider = self
+        node.rsync_dir(tmp_path) if tmp_path
+        node.run_chef!
+      end
+    end
+    
+    def assign_elastic_ips
+      unless elastic_ips.empty?
+        unused_elastic_ip_addresses = ElasticIp.unused_elastic_ips(self).map {|i| i.public_ip }
+        used_elastic_ip_addresses = ElasticIp.elastic_ips(self).map {|i| i.public_ip }
+
+        elastic_ip_objects = ElasticIp.unused_elastic_ips(self).select {|ip_obj| elastic_ips.include?(ip_obj.public_ip) }
+
+        assignee_nodes = nodes.select {|n| !ElasticIp.elastic_ips(self).include?(n.public_ip) }
+
+        elastic_ip_objects.each_with_index do |eip, idx|
+          # Only get the nodes that do not have elastic ips associated with them
+          begin
+            if assignee_nodes[idx]
+              puts "Assigning elastic ip: #{eip.public_ip} to node: #{assignee_nodes[idx].instance_id}"
+              ec2.associate_address(:instance_id => assignee_nodes[idx].instance_id, :public_ip => eip.public_ip)
+            end
+          rescue Exception => e
+            p [:error, e.inspect]
+          end
+          reset!
+        end
+      end
+    end
+    
+    def nodes
+      all_nodes.select {|i| i.in_service? }#describe_instances.select {|i| i.in_service? && security_groups.include?(i.security_groups) }
+    end
+    
+    def all_nodes
+      @nodes ||= describe_instances.select {|i| security_group_names.include?(i.security_groups) }.sort {|a,b| DateTime.parse(a.launchTime) <=> DateTime.parse(b.launchTime)}
     end
     
     # Describe instances
-    def describe_instances(o={})
-      instants = Ec2Response.describe_instances(ec2.describe_instances).select_with_hash(o)
-      return [] if instants.empty?
-      ec2_instances = instants.collect{|i| Ec2Instance.new(dsl_options.merge(i))}
-      ec2_instances.sort {|a,b| a[:launch_time].to_i <=> b[:launch_time].to_i }
-    end
-    
-    # Terminate an instance (or instances) by passing :instance_id and :instance_ids
-    def terminate_instance!(o={})
-      raise StandardError.new("You must pass an instance_id when terminating an instance with ec2") unless o[:instance_id] || o[:instance_ids]
-      instance_ids = o[:instance_ids] || [o[:instance_id]]
-      response = ec2.terminate_instances(instance_ids)
-      response.collect{|i| Ec2Instance.new(Ec2Response.pp_format(i)) }
-    end
-    
-    
-=begin rdoc
-  Helper methods for the Ec2 Cloud Provider. Helpers are not necessarily supported across all CloudProviders
-=end
-    # Are we running on amazon?
-    def amazon?
-      !['https://ec2.amazonaws.com', 
-       'https://us-east-1.ec2.amazonaws.com', 
-       'https://eu-west-1.ec2.amazonaws.com'
-       ].include?(ec2_url)
-    end
-    
-    # Callbacks
-    def before_compile(cld)
-    end
-    
-    def after_compile(cld)
-      save_aws_env_to_yml(cld.tmp_path/"etc"/"poolparty"/"env.yml") rescue nil
-    end
-    
-    # Run before each instance is launched
-    def before_launch_instance
-    end
-    
-    # Run after all the instances are run
-    def after_run_instance(instances_list)
-      instances_list.each do |inst|
-        associate_address(inst.instance_id) if next_unused_elastic_ip
-        attach_volume(inst.instance_id) if next_unused_volume
-        attach_to_load_balancer([inst]) if defined_load_balancer?
-        setup_auto_scaling_group if defined_auto_scaling?
+    # Describe the instances that are available on this cloud
+    # @params id (optional) if present, details about the instance
+    # with the id given will be returned
+    # if not given, details for all instances will be returned
+    def describe_instances(id=nil)
+      begin
+        @describe_instances = ec2.describe_instances.reservationSet.item.map do |r|
+          r.instancesSet.item.map do |i|
+            inst_options = i.merge(r.merge(:cloud => cloud)).merge(cloud.cloud_provider.dsl_options)
+            Ec2Instance.new(inst_options)
+          end
+        end.flatten
+      rescue AWS::InvalidClientTokenId => e # AWS credentials invalid
+	puts "Error contacting AWS: #{e}"
+	raise e
+      rescue Exception => e
+        []
       end
     end
     
-    # Read  yaml file and use it to set environment variables and local variables.
-    def set_aws_env_from_yml_file(filename='/etc/poolparty/env.yml')
-      aws = self.class.load_keys_from_file(filename)
-      aws.each{|k,v| ENV[k.upcase]=v.to_s}
-      set_vars_from_options aws
-    end
+    # Extras!
     
-    # Save aws keys and env variables to a yaml file
-    def save_aws_env_to_yml(filename='/etc/poolparty/env.yml')
-      hsh = aws_hash(default_options, "/etc/poolparty/ec2")
-      File.open(filename, 'w') {|f| f<<YAML::dump(hsh) }
+    def load_balancer(given_name=cloud.proper_name, o={}, &block)
+      load_balancers << ElasticLoadBalancer.new(given_name, sub_opts.merge(o || {}), &block)
     end
-    
-    # Return a hash of the aws keys and environment variables
-    # If base_dir string is provided as second argument, replace path to 
-    # file based variables, such as cert, with the base_dir.
-    def aws_hash(opts={}, base_dir=nil)
-      aws={
-        :user_id            => user_id,
-        :private_key        => private_key,
-        :cert               => cert,
-        :access_key         => access_key,
-        :secret_access_key  => secret_access_key,
-        :ec2_url            => ec2_url,
-        :s3_url             => s3_url,
-        :cloud_cert    => cloud_cert
-      }.merge(opts)
-      if base_dir
-        aws[:cert] = "#{base_dir}/#{File.basename(cert)}" if cert
-        aws[:private_key] = "#{base_dir}/#{File.basename(private_key)}" if private_key
-        aws[:cloud_cert] = "#{base_dir}/#{File.basename(cloud_cert)}" if cloud_cert
+    def autoscale(given_name=cloud.proper_name, o={}, &block)
+      autoscalers << ElasticAutoScaler.new(given_name, sub_opts.merge(o || {}), &block)
+    end
+    def security_group(given_name=cloud.proper_name, o={}, &block)
+      security_groups << SecurityGroup.new(given_name, sub_opts.merge(o || {}), &block)
+    end
+    def elastic_ip(*ips)
+      ips.each {|ip| elastic_ips << ip}
+    end
+
+    def rds(given_name=cloud.proper_name, o={}, &block)
+      rds_instances << RdsInstance.new(given_name, sub_opts.merge(o || {}), &block)
+    end
+
+    # Proxy to the raw Grempe amazon-aws @ec2 instance
+    def ec2
+      @ec2 ||= begin
+       AWS::EC2::Base.new( :access_key_id => access_key, :secret_access_key => secret_access_key )
+      rescue AWS::ArgumentError => e # AWS credentials missing?
+	puts "Error contacting AWS: #{e}"
+	raise e
+      rescue Exception => e
+	puts "Generic error #{e.class}: #{e}"
       end
-      aws.reject{|k,v| v.nil?}
+    end
+
+    # Proxy to the raw Grempe amazon-aws autoscaling instance
+    def as
+      @as = AWS::Autoscaling::Base.new( :access_key_id => access_key, :secret_access_key => secret_access_key )
+    end
+
+    # Proxy to the raw Grempe amazon-aws elastic_load_balancing instance
+    def elb
+      @elb ||= AWS::ELB::Base.new( :access_key_id => access_key, :secret_access_key => secret_access_key )
+    end
+
+    def awsrds
+      @awsrds ||= AWS::RDS::Base.new( :access_key_id => access_key, :secret_access_key => secret_access_key )
+    end
+
+    def security_group_names
+      security_groups.map {|a| a.to_s }
+    end
+    def security_groups
+      @security_groups ||= []
+    end
+    def load_balancers
+      @load_balancers ||= []
+    end
+    def autoscalers
+      @autoscalers ||= []
+    end
+    def elastic_ips
+      @elastic_ips ||= []
+    end
+
+    def ebs_volume_groups
+      @ebs_volume_groups ||= []
+    end
+
+    # dsl method for EBS volumes. E.G.: 
+    #   ebs_volumes do
+    #     volumes "vol-001248ff", "vol-01ff4b85" # use existing volumes, not mandatory
+    #     device "/dev/sdf"
+    #     snapshot_id "snap-602030dd"
+    #     size 200
+    #   end
+    def ebs_volumes(name=nil, &block)
+      ebs_volume_groups << ElasticBlockStoreGroup.new(sub_opts,&block) 
+    end
+
+    def assign_ebs_volumes
+      ebs_volume_groups.each{|ebs_volume_group| ebs_volume_group.attach(nodes)}
+    end
+    
+    def rds_instances
+      @rds_instances ||= []
+    end
+
+    # Clear the cache
+    def reset!
+      @nodes = @describe_instances = nil
+    end
+
+    # Get existing volumes on EC2. filters is a hash of filters, either single valued or multivalued (value is an array of possible values).
+    # The function will return volumes matching *all* filters. A volume is a filter match if *any* one of the filter values equals the volume parameter value.
+    def list_ec2_volumes(filters=nil)
+      @volumes_on_ec2=ec2.describe_volumes.volumeSet.item unless @volumes_on_ec2
+      return @volumes_on_ec2 if filters.nil? # no filter to check, so return at once
+      @volumes_on_ec2.select{|vol| # select volumes for which no filter failed
+        not filters.map {|filter_key, filter_val|
+          filter_key=filter_key.to_s if filter_key.is_a?(Symbol) # filter_key may be given as a symbol
+          raise ArgumentError, "Filter key #{filter_key} is invalid" unless vol.has_key?(filter_key)
+          if filter_val.is_a?(Array) # Deal with multiple filter values
+            filter_val.map{|val| val.is_a?(String) ? val : val.to_s}.member?(vol[filter_key]) # make sure fiter_val array values are Strings before checking for match
+          else
+            filter_val.is_a?(String) ? filter_val : filter_val.to_s==vol[filter_key] # make sure fiter_val is a String before comparing
+          end
+          }.member?(false) # Check if a filter failed, the 'not' statement at the beginning of the map block negates this so 'select' will choose only when no filter failed
+      }.compact # remove nil results from volume set.
+    end
+
+    # Read credentials from credential_file if one exists
+    def credential_file(file=nil)
+      unless file.nil?
+	      dsl_options[:credential_file]=file 
+	      dsl_options.merge((Ec2.load_keys_from_credential_file(file)))
+      else
+        fetch(:credential_file)
+      end
     end
     
     private
+    # Helper to get the options with self as parent
+    def sub_opts
+      dsl_options.merge(:parent => self, :cloud => cloud)
+    end
     def generate_keypair(n=nil)
-      puts "[EC2] generate_keypair is called with #{n}"
+      puts "[EC2] generate_keypair is called with #{default_keypair_path/n}"
       begin
-        hsh = ec2.create_key_pair(n)
-        string = hsh[:aws_material]
+        hsh = ec2.create_keypair(:key_name => n)
+        string = hsh.keyMaterial
         FileUtils.mkdir_p default_keypair_path unless File.directory?(default_keypair_path)
         puts "[EC2] Generated keypair #{default_keypair_path/n}"
-        vputs "[EC2] #{string}"
+        puts "[EC2] #{string}"
         File.open(default_keypair_path/n, "w") {|f| f << string }
         File.chmod 0600, default_keypair_path/n
-      rescue RightAws::AwsError => e
-        puts "[EC2] The keypair exists in EC2, but we cannot find the keypair locally: #{n}"
+      rescue Exception => e
+        puts "[EC2] The keypair exists in EC2, but we cannot find the keypair locally: #{n} (#{e.inspect})"
       end
       keypair n
     end
-    
-    public
-    
-    # shortcut to 
-    # ec2-add-keypair name > ~./.ec2/kname
-    def create_keypair(kname, path='~/.ec2')
-      ` ec2-add-keypair #{kname} > #{path}/#{kname} &&  chmod 600 #{path}/#{kname}`
-    end
-    
+
   end
+end
+
+require "#{File.dirname(__FILE__)}/ec2_instance"
+require "#{File.dirname(__FILE__)}/helpers/ec2_helper"
+%w( security_group
+    authorize
+    elastic_auto_scaler
+    elastic_block_store
+    elastic_block_store_group
+    elastic_load_balancer
+    elastic_ip
+    rds_instance
+    revoke).each do |lib|
+  require "#{File.dirname(__FILE__)}/helpers/#{lib}"
 end

@@ -38,16 +38,6 @@ def capture_stdout(&block)
    out.string
 end
 
-def include_fixture_resources
-  Dir["#{::File.dirname(__FILE__)}/fixtures/resources/*.rb"].each do |res|
-    require res
-  end
-end
-
-def include_chef_only_resources
-  DependencyResolvers::Chef.send :require_chef_only_resources
-end
-
 def stub_keypair_searchable_paths
   Keypair.searchable_paths << fixtures_dir/"keys"  
 end
@@ -55,7 +45,6 @@ end
 def stub_ec2_calls(&block)
   stub_keypair_searchable_paths
   
-  require fixtures_dir/'clouds/fake_clouds'
   require 'fakeweb'
   FakeWeb.allow_net_connect=false
 
@@ -70,6 +59,9 @@ def stub_ec2_calls(&block)
                        
   FakeWeb.register_uri(:post, /elasticloadbalancing\.amazonaws\.com/, :status => ["200", "OK"],
                        :body => open(fixtures_dir/"ec2/elb-describe-load-balancers.xml").read)
+                       
+  FakeWeb.register_uri(:post, /\//, :status => ["200", "OK"],
+                      :body => open(fixtures_dir/"ec2/ec2-describe-instances_response_body.xml").read)
   
   instance_eval &block if block
 end

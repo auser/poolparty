@@ -7,47 +7,21 @@ class Hash
   def choose(&block)
     Hash[*self.select(&block).inject([]){|res,(k,v)| res << k << v}]
   end
-
-  def to_instance_variables(inst=nil)
-    each do |k,v|
-      inst.instance_variable_set "@#{k}", v
-      inst.class.send :attr_reader, k if inst
-    end
+  
+  # Computes the difference between two hashes
+  def diff(other, *hsh)
+    o = {}
+    keys.map do |k|
+      if hsh.include?(k) || hsh.empty?
+        other[k] == self[k] ? nil : o.merge!({k => other[k]})
+      end
+    end.reject {|b| b.nil? }
+    o
   end
   
-  # extracted from activesupport
-  # Returns an array of the values at the specified indices:
-  #
-  #   hash = HashWithIndifferentAccess.new
-  #   hash[:a] = "x"
-  #   hash[:b] = "y"
-  #   hash.values_at("a", "b") # => ["x", "y"]
-  def values_at(*indices)
-    indices.collect {|key| self[key]}.compact
-  end
-  
-  def next_sorted_key(from)
-    idx = (size - keys.sort.index(from))
-    keys.sort[idx - 1]
-  end
-  
-  def stringify_keys
-    dup.stringify_keys!
-  end
-  
-  # Converts all of the keys to strings
-  def stringify_keys!
-    keys.each{|k| 
-      v = delete(k)
-      self[k.to_s] = v
-      v.stringify_keys! if v.is_a?(Hash)
-      v.each{|p| p.stringify_keys! if p.is_a?(Hash)} if v.is_a?(Array)
-    }
+  def merge_if!(k, v)
+    self[k] = v if v
     self
-  end
-  
-  def symbolize_keys(key_modifier=nil)
-    dup.symbolize_keys!(key_modifier)
   end
   
   # Converts all of the keys to strings

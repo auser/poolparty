@@ -1,13 +1,11 @@
 # Poolparty spec
 
-pool :poolparty do
+pool "poolparty" do
   
-  instances 1
-    
-  cloud :simple_cloud do
-    os :centos
-    keypair "test_key", PoolParty.lib_dir+"/../test/fixtures/keys"
-    has_file "/etc/motd", :content => "Simple"
+  cloud :fake_cloud do
+    keypair File.dirname(__FILE__)+"/../keys/test_key"
+    using :ec2 do
+    end
   end
   
 end

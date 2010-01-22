@@ -1,0 +1,13 @@
+#!/bin/bash
+# 2009-10-01
+
+# Also check if this is the right location of gmetric
+GMETRIC=/usr/bin/gmetric
+AUTH_LOG=/var/log/auth
+
+dEFAULT_COUNT=0
+COUNT=$(echo "status" | nc localhost 8081 | grep free |awk '{print $2}')
+[ "x" = "x$COUNT" ] && COUNT=${DEFAULT_COUNT}
+
+$GMETRIC --name "watson-free-channels" --value $COUNT --type uint8 --units ''
+exit 0

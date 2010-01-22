@@ -23,8 +23,7 @@ EOS
       
       print_msg(msg)
       
-      inst = cld.expand
-      inst.bootstrap!
+      inst = cld.expand_by(1)
       
       msg = [
         "Your cloud has expanded by node: #{inst.public_ip}"

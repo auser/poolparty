@@ -1,3 +1,0 @@
-[submodule "deps/configerl"]
-	path = deps/configerl
-	url = git://github.com/auser/configerl.git

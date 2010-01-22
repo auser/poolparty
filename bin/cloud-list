@@ -17,29 +17,29 @@ EOS
   short_desc "show a list of the current instances on the clouds"
 
   run do |command|
+    puts "#{pool.name}"
+    puts "==="
     @loaded_clouds.each do |cld|
       if command[:instance_id]
         require 'pp'
         pp result = cld.nodes(:instance_id=>command[:instance_id])
       else
-        line = "-----------------------------"
-        msg = ["Listing cloud #{cld.name}"]
+        msg = ["* #{cld.name} cloud,  #{cld.image_id}, #{cld.instance_type}"]
 
         hsh = {}
-        cld.describe_instances(:keypair_name => cld.keypair.basename).each do |n| 
+        
+        cld.all_nodes.each do |n| 
           (hsh[n.status] ||= []) << n
         end
         
         hsh.each do |k,v|
-          msg << "#{k.capitalize} nodes"
-          msg << line
+          msg << "  - #{k} nodes"
           v.each do |a|
-            msg << "  #{a[:instance_id] || a[:id]}\t#{a[:ip] || a[:public_ip] || a[:name]}"
+            msg << "      - #{a.instance_id}\t#{a.status}\t#{a.public_ip}\t#{a.private_ip}\t#{a.zone}"
           end
           msg << ""
         end
-        
-        print_msg(msg)
+        puts msg
       end
       
     end

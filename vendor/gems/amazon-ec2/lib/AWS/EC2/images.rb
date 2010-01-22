@@ -3,6 +3,46 @@ module AWS
 
     class Base < AWS::Base
 
+      # Creates an AMI that uses an Amazon EBS root device from a "running" or "stopped" instance.
+      #
+      # AMIs that use an Amazon EBS root device boot faster than AMIs that use instance stores.
+      # They can be up to 1 TiB in size, use storage that persists on instance failure, and can be
+      # stopped and started.
+      #
+      # @option options [String] :instance_id ("") The ID of the instance.
+      # @option options [String] :name ("") The name of the AMI that was provided during image creation. Constraints 3-128 alphanumeric characters, parenthesis (()), commas (,), slashes (/), dashes (-), or underscores(_)
+      # @option options [optional,String] :description ("") The description of the AMI that was provided during image creation.
+      # @option options [optional,Boolean] :no_reboot (false) By default this property is set to false, which means Amazon EC2 attempts to cleanly shut down the instance before image creation and reboots the instance afterwards. When set to true, Amazon EC2 does not shut down the instance before creating the image. When this option is used, file system integrity on the created image cannot be guaranteed.
+      #
+      def create_image( options = {} )
+        options = { :instance_id => "", :name => "" }.merge(options)
+        raise ArgumentError, "No :instance_id provided" if options.does_not_have? :instance_id
+        raise ArgumentError, "No :name provided" if options.does_not_have? :name
+        raise ArgumentError, "Invalid string length for :name provided" if options[:name] && options[:name].size < 3 || options[:name].size > 128
+        raise ArgumentError, "Invalid string length for :description provided (too long)" if options[:description] && options[:description].size > 255
+        raise ArgumentError, ":no_reboot option must be a Boolean" unless options[:no_reboot].nil? || [true, false].include?(options[:no_reboot])
+        params = {}
+        params["InstanceId"] = options[:instance_id].to_s
+        params["Name"] = options[:name].to_s
+        params["Description"] = options[:description].to_s
+        params["NoReboot"] = options[:no_reboot].to_s
+        return response_generator(:action => "CreateImage", :params => params)
+      end
+
+
+      # The DeregisterImage operation deregisters an AMI. Once deregistered, instances of the AMI may no
+      # longer be launched.
+      #
+      # @option options [String] :image_id ("")
+      #
+      def deregister_image( options = {} )
+        options = { :image_id => "" }.merge(options)
+        raise ArgumentError, "No :image_id provided" if options[:image_id].nil? || options[:image_id].empty?
+        params = { "ImageId" => options[:image_id] }
+        return response_generator(:action => "DeregisterImage", :params => params)
+      end
+
+
       # The RegisterImage operation registers an AMI with Amazon EC2. Images must be registered before
       # they can be launched.  Each AMI is associated with an unique ID which is provided by the EC2
       # service via the Registerimage operation. As part of the registration process, Amazon EC2 will
@@ -15,16 +55,12 @@ module AWS
       # @option options [String] :image_location ("")
       #
       def register_image( options = {} )
-
         options = {:image_location => ""}.merge(options)
-
         raise ArgumentError, "No :image_location provided" if options[:image_location].nil? || options[:image_location].empty?
-
         params = { "ImageLocation" => options[:image_location] }
-
         return response_generator(:action => "RegisterImage", :params => params)
-
       end
+
 
       # The DescribeImages operation returns information about AMIs available for use by the user. This
       # includes both public AMIs (those available for any user to launch) and private AMIs (those owned by
@@ -67,35 +103,15 @@ module AWS
       # @option options [Array] :executable_by ([])
       #
       def describe_images( options = {} )
-
         options = { :image_id => [], :owner_id => [], :executable_by => [] }.merge(options)
-
         params = pathlist( "ImageId", options[:image_id] )
         params.merge!(pathlist( "Owner", options[:owner_id] ))
         params.merge!(pathlist( "ExecutableBy", options[:executable_by] ))
-
         return response_generator(:action => "DescribeImages", :params => params)
-
       end
 
-      # The DeregisterImage operation deregisters an AMI. Once deregistered, instances of the AMI may no
-      # longer be launched.
-      #
-      # @option options [String] :image_id ("")
-      #
-      def deregister_image( options = {} )
-
-        options = { :image_id => "" }.merge(options)
-
-        raise ArgumentError, "No :image_id provided" if options[:image_id].nil? || options[:image_id].empty?
-
-        params = { "ImageId" => options[:image_id] }
-
-        return response_generator(:action => "DeregisterImage", :params => params)
-
-      end
 
     end
-
   end
 end
+

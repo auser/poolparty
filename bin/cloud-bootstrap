@@ -20,10 +20,8 @@ EOS
     
     @loaded_clouds.each do |cld|
       
-      cld.nodes.each do |node|
-        node.cloud = cld # needed for bootstrap
-        node.bootstrap!(:force=>command[:force])
-      end
+      cld.compile!
+      cld.bootstrap!
       
     end
     

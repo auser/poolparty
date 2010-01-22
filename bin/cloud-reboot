@@ -1,0 +1,23 @@
+#!/usr/bin/env ruby
+$:.unshift(File.dirname(__FILE__) + "/../lib")
+require "poolparty"
+
+require 'git-style-binary/command'
+
+GitStyleBinary.command do
+  banner <<-EOS
+Usage: #{$0} #{all_options_string}
+
+  Cycle through nodes in the cloud and wait for the autoscaler to reboot 
+EOS
+  
+  short_desc "Cycle the instances"
+
+  run do |command|
+    
+    @loaded_clouds.each do |cld|
+      cld.reboot!
+    end
+    
+  end
+end

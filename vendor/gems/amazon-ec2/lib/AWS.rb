@@ -28,6 +28,14 @@ class Hash
       self[meth.to_s] || self[meth.to_sym]
     end
   end
+
+  def has?(key)
+    self[key] && !self[key].to_s.empty?
+  end
+
+  def does_not_have?(key)
+    self[key].nil? || self[key].to_s.empty?
+  end
 end
 
 
@@ -177,10 +185,14 @@ module AWS
       # ("People", [{:name=>'jon', :age=>'22'}, {:name=>'chris'}], {:name => 'Name', :age => 'Age'}) you should get
       # {"People.1.Name"=>"jon", "People.1.Age"=>'22', 'People.2.Name'=>'chris'}
       def pathhashlist(key, arr_of_hashes, mappings)
-        params ={}
+        raise ArgumentError, "expected a key that is a String" unless key.is_a? String
+        raise ArgumentError, "expected a arr_of_hashes that is an Array" unless arr_of_hashes.is_a? Array
+        arr_of_hashes.each{|h| raise ArgumentError, "expected each element of arr_of_hashes to be a Hash" unless h.is_a?(Hash)}
+        raise ArgumentError, "expected a mappings that is an Hash" unless mappings.is_a? Hash
+        params = {}
         arr_of_hashes.each_with_index do |hash, i|
           hash.each do |attribute, value|
-            params["#{key}.#{i+1}.#{mappings[attribute]}"] = value
+            params["#{key}.#{i+1}.#{mappings[attribute]}"] = value.to_s
           end
         end
         params
@@ -248,7 +260,7 @@ module AWS
       end
 
       # Raises the appropriate error if the specified Net::HTTPResponse object
-      # contains an Amazon EC2 error; returns +false+ otherwise.
+      # contains an AWS error; returns +false+ otherwise.
       def aws_error?(response)
 
         # return false if we got a HTTP 200 code,
@@ -269,7 +281,7 @@ module AWS
 
         # An valid error response looks like this:
         # <?xml version="1.0"?><Response><Errors><Error><Code>InvalidParameterCombination</Code><Message>Unknown parameter: foo</Message></Error></Errors><RequestID>291cef62-3e86-414b-900e-17246eccfae8</RequestID></Response>
-        # AWS EC2 throws some exception codes that look like Error.SubError.  Since we can't name classes this way
+        # AWS throws some exception codes that look like Error.SubError.  Since we can't name classes this way
         # we need to strip out the '.' in the error 'Code' and we name the error exceptions with this
         # non '.' name as well.
         error_code    = doc.root.elements['Errors'].elements['Error'].elements['Code'].text.gsub('.', '')
