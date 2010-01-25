@@ -7,7 +7,8 @@ module CloudProviders
     
     default_options(
       :image_id    => 'ami-ed46a784',
-      :user        => "root"
+      :user        => "root",
+      :bootstrap_gems => []
     )
     
     attr_reader :name, :init_opts

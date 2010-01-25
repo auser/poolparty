@@ -62,12 +62,12 @@ module CloudProviders
       return {:access_key => @access_key, :secret_access_key => @secret_access_key} if @access_key and @secret_access_key
       return {} if filename.nil? or not File.exists?(filename)
       puts("Reading keys from file: #{filename}")
-      File.open(filename).each_line {|line|
-	if line =~ /AWSAccessKeyId=([a-zA-Z0-9]+)$/
-	  @access_key=$1.chomp
-	elsif line =~ /AWSSecretKey=([^ 	]+)$/
-	  @secret_access_key=$1.chomp
-	end
+      File.open(filename).each_line { |line|
+        if line =~ /AWSAccessKeyId=([a-zA-Z0-9]+)$/
+          @access_key=$1.chomp
+        elsif line =~ /AWSSecretKey=([^   ]+)$/
+          @secret_access_key=$1.chomp
+        end
       }
       return {:access_key => @access_key, :secret_access_key => @secret_access_key}
     end
