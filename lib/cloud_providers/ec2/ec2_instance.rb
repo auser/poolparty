@@ -9,7 +9,8 @@ module CloudProviders
       :public_ip => nil,
       :key_name => nil,
       :launch_time => nil,
-      :availability_zones => []
+      :availability_zones => [],
+      :block_device_mapping => [{}]
     )
     
     def initialize(raw_response={})
@@ -25,6 +26,7 @@ module CloudProviders
       self.launch_time = raw_response["launchTime"] rescue nil
       self.availability_zones = raw_response["placement"]["availabilityZone"] rescue nil
       self.status = raw_response["instanceState"]["name"] rescue nil
+      self.block_device_mapping = raw_response["blockDeviceMapping"] rescue nil
       super
     end
     
@@ -53,6 +55,7 @@ module CloudProviders
       :user_data => user_data,
       :instance_type => instance_type,
       :availability_zone => availability_zone,
+      :block_device_mapping => block_device_mapping,
       :base64_encoded => true)
       r.instancesSet.item.map do |i|
         inst_options = i.merge(r.merge(:cloud => cloud)).merge(cloud.cloud_provider.dsl_options)

@@ -92,7 +92,7 @@ module CloudProviders
       :addressing_type        => nil,
       :kernel_id              => nil,
       :ramdisk_id             => nil,
-      :block_device_mappings  => nil
+      :block_device_mapping  => [{}]
     )
 
     # Called when the create command is called on the cloud
@@ -195,7 +195,8 @@ module CloudProviders
         :instance_type => instance_type,
         :availability_zone => availability_zones.first,
         :base64_encoded => true,
-        :cloud => cloud
+        :cloud => cloud,
+        :block_device_mapping => block_device_mapping
       })
       progress_bar_until("Waiting for node to launch...") do
         wait_for_node(e)
@@ -304,6 +305,10 @@ module CloudProviders
     
     # Extras!
     
+    def block_device_mapping(o=[], given_name=cloud.proper_name )
+      @mappings ||= o
+    end
+
     def load_balancer(given_name=cloud.proper_name, o={}, &block)
       load_balancers << ElasticLoadBalancer.new(given_name, sub_opts.merge(o || {}), &block)
     end
@@ -448,6 +453,7 @@ require "#{File.dirname(__FILE__)}/helpers/ec2_helper"
 %w( security_group
     authorize
     elastic_auto_scaler
+    elastic_block_device_mapping
     elastic_block_store
     elastic_block_store_group
     elastic_load_balancer
