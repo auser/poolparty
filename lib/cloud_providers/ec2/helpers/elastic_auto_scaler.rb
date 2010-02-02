@@ -145,7 +145,7 @@ module CloudProviders
           :user_data => user_data,
           :kernel_id => kernel_id,
           :ramdisk_id => ramdisk_id,
-          :block_device_mappings => block_device_mappings
+          :block_device_mapping => block_device_mapping
         })
       rescue Exception => e
         puts <<-EOE
