@@ -62,12 +62,12 @@ module CloudProviders
       return {:access_key => @access_key, :secret_access_key => @secret_access_key} if @access_key and @secret_access_key
       return {} if filename.nil? or not File.exists?(filename)
       puts("Reading keys from file: #{filename}")
-      File.open(filename).each_line {|line|
-	if line =~ /AWSAccessKeyId=([a-zA-Z0-9]+)$/
-	  @access_key=$1.chomp
-	elsif line =~ /AWSSecretKey=([^ 	]+)$/
-	  @secret_access_key=$1.chomp
-	end
+      File.open(filename).each_line { |line|
+        if line =~ /AWSAccessKeyId=([a-zA-Z0-9]+)$/
+          @access_key=$1.chomp
+        elsif line =~ /AWSSecretKey=([^   ]+)$/
+          @secret_access_key=$1.chomp
+        end
       }
       return {:access_key => @access_key, :secret_access_key => @secret_access_key}
     end
@@ -92,7 +92,7 @@ module CloudProviders
       :addressing_type        => nil,
       :kernel_id              => nil,
       :ramdisk_id             => nil,
-      :block_device_mappings  => nil
+      :block_device_mapping  => [{}]
     )
 
     # Called when the create command is called on the cloud
@@ -195,7 +195,8 @@ module CloudProviders
         :instance_type => instance_type,
         :availability_zone => availability_zones.first,
         :base64_encoded => true,
-        :cloud => cloud
+        :cloud => cloud,
+        :block_device_mapping => block_device_mapping
       })
       progress_bar_until("Waiting for node to launch...") do
         wait_for_node(e)
@@ -307,6 +308,10 @@ module CloudProviders
     
     # Extras!
     
+    def block_device_mapping(o=[], given_name=cloud.proper_name )
+      @mappings ||= o
+    end
+
     def load_balancer(given_name=cloud.proper_name, o={}, &block)
       load_balancers << ElasticLoadBalancer.new(given_name, sub_opts.merge(o || {}), &block)
     end
@@ -451,6 +456,7 @@ require "#{File.dirname(__FILE__)}/helpers/ec2_helper"
 %w( security_group
     authorize
     elastic_auto_scaler
+    elastic_block_device_mapping
     elastic_block_store
     elastic_block_store_group
     elastic_load_balancer
