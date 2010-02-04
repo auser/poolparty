@@ -27,15 +27,48 @@ module CloudProviders
     def run(commands, o={})
       ssh(commands)
     end
-  	
+  
+    def shell_escape(str)
+      String(str).gsub(/(?=["'\\$])/n, '\\').
+        gsub(/\n/, "'\n'").
+        sub(/^$/, "''")
+    end
+
     def ssh( commands=[], extra_ssh_ops={})
-      commands = commands.collect { |c| "sudo " + c }.compact.join(' && ') if commands.is_a?(Array)
-      cmd_string = "ssh #{user}@#{host} #{ssh_options(extra_ssh_ops)}"
+      # Get the environment hash out of
+      # the extra_ssh_ops and then delete
+      # the element
+      env = extra_ssh_ops[:env] || {}
+      extra_ssh_ops.delete :env
+
+      # Decide to use sudo or not
+      do_sudo = true
+      if extra_ssh_ops.has_key? :do_sudo
+        do_sudo = extra_ssh_ops[:do_sudo] 
+        extra_ssh_ops.delete :do_sudo
+      end
+
+      envstring = env.collect {|k,v| "#{k}=#{v}"}.join ' && '
+      envstring += " && " unless envstring.size == 0
+      ssh_string = "ssh #{user}@#{host} #{ssh_options(extra_ssh_ops)}"
+
       if commands.empty?
         #TODO: replace this with a IO.popen call with read_nonblocking to show progress, and accept input
-        Kernel.system(cmd_string)
+        Kernel.system(ssh_string)
       else
-        system_run(cmd_string+" '#{commands}'")
+        r = nil
+        commands.each do |command|
+
+          cmd = "#{envstring}#{command}" 
+          if do_sudo
+            sudocmd = %Q% sudo sh -c "#{shell_escape cmd}" % 
+          else
+            sudocmd = cmd
+          end
+
+          r = system_run ssh_string + %Q% "#{shell_escape sudocmd}"% 
+        end
+        r
       end
     end
     
