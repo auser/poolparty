@@ -56,7 +56,6 @@ module CloudProviders
     def run_chef!
       chef_solo_cmd = <<-CMD
         $GEM_BIN/chef-solo -j /etc/chef/dna.json -c /etc/chef/solo.rb
-        && $GEM_BIN/chef-solo -j /etc/chef/dna.json -c /etc/chef/solo.rb
       CMD
       envhash = {
         :GEM_BIN => %q%$(gem env | grep "EXECUTABLE DIRECTORY" | awk "{print \\$4}")%
