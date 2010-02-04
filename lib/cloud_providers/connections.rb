@@ -29,7 +29,7 @@ module CloudProviders
     end
   	
     def ssh( commands=[], extra_ssh_ops={})
-      commands = commands.compact.join(' && ') if commands.is_a?(Array)
+      commands = commands.collect { |c| "sudo " + c }.compact.join(' && ') if commands.is_a?(Array)
       cmd_string = "ssh #{user}@#{host} #{ssh_options(extra_ssh_ops)}"
       if commands.empty?
         #TODO: replace this with a IO.popen call with read_nonblocking to show progress, and accept input
@@ -46,7 +46,7 @@ module CloudProviders
     def ssh_options(opts={})
       return @ssh_options if @ssh_options && opts.empty?
       ssh_opts = {"-i" => keypair.full_filepath,
-           "-o" =>"StrictHostKeyChecking=no"
+           "-o" =>"StrictHostKeyChecking=no",
            }.merge(opts)
       @ssh_options = ssh_opts.collect{ |k,v| "#{k} #{v}"}.join(' ')
     end
@@ -55,7 +55,8 @@ module CloudProviders
       raise StandardError.new("You must pass a :source=>uri option to rsync") unless opts[:source]
       destination_path = opts[:destination] || opts[:source]
       rsync_opts = opts[:rsync_opts] || '-va'
-      cmd_string =  "rsync -L -e 'ssh #{ssh_options}' #{rsync_opts} #{opts[:source]}  #{user}@#{host}:#{destination_path}"
+      rsync_opts += %q% --rsync-path="sudo rsync" %
+      cmd_string =  "rsync -L  -e 'ssh #{ssh_options}' #{rsync_opts} #{opts[:source]}  #{user}@#{host}:#{destination_path}"
       out = system_run(cmd_string)
       out
     end

@@ -47,9 +47,9 @@ module CloudProviders
           'apt-get autoremove -y',
           'apt-get install -y ruby ruby-dev rubygems git-core',
           'gem sources -a http://gems.opscode.com',
-          'gem install chef ohai --no-rdoc --no-ri' ] + 
-          bootstrap_gems.collect { |gem| "gem install #{gem} --no-rdoc --no-ri" } )
+          'gem install chef ohai --no-rdoc --no-ri' ])
       end
+      ssh(bootstrap_gems.collect { |gem| "gem install #{gem} --no-rdoc --no-ri" } )
     end
     
     def run_chef!
