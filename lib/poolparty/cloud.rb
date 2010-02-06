@@ -91,6 +91,10 @@ You did not specify a cloud provider in your clouds.rb. Make sure you have a blo
       puts "Copying the chef-repo into the base directory from #{chef_repo}"
       FileUtils.mkdir_p base_directory/"roles"   
       if File.directory?(chef_repo)
+        if File.exist?(base_directory)
+          # First remove the directory
+          FileUtils.remove_entry base_directory, :force => true
+        end
         FileUtils.cp_r "#{chef_repo}/.", base_directory 
       else
         raise "#{chef_repo} chef repo directory does not exist"

@@ -37,7 +37,8 @@ module CloudProviders
     end
     
     def chef_bootstrapped?
-      @chef_bootstrapped ||= !ssh(["gem list | grep chef"]).empty?
+      # do_sudo is false cause we want to capture the return code of the call
+      @chef_bootstrapped ||= !ssh(["gem list | grep chef"], :do_sudo => false).empty?
     end
     
     def bootstrap_chef!
@@ -45,19 +46,21 @@ module CloudProviders
         ssh([
           'apt-get update',
           'apt-get autoremove -y',
-          'apt-get install -y ruby ruby-dev rubygems git-core',
+          'apt-get install -y ruby ruby-dev rubygems git-core libopenssl-ruby',
           'gem sources -a http://gems.opscode.com',
-          'gem install chef ohai --no-rdoc --no-ri' ] + 
-          bootstrap_gems.collect { |gem| "gem install #{gem} --no-rdoc --no-ri" } )
+          'gem install chef ohai --no-rdoc --no-ri' ])
       end
+      ssh(bootstrap_gems.collect { |gem| "gem install #{gem} --no-rdoc --no-ri" } )
     end
     
     def run_chef!
       chef_solo_cmd = <<-CMD
-        GEM_BIN=$(gem env | grep "EXECUTABLE DIRECTORY" | awk "{print \\$4}") \
-        && $GEM_BIN/chef-solo -j /etc/chef/dna.json -c /etc/chef/solo.rb
+        $GEM_BIN/chef-solo -j /etc/chef/dna.json -c /etc/chef/solo.rb
       CMD
-      ssh([chef_solo_cmd.strip.squeeze(' ')])
+      envhash = {
+        :GEM_BIN => %q%$(gem env | grep "EXECUTABLE DIRECTORY" | awk "{print \\$4}")%
+      }
+      ssh([chef_solo_cmd.strip.squeeze(' ')], :env => envhash )
     end
         
     def run
