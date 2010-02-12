@@ -330,7 +330,7 @@ No autoscalers defined
     def describe_instance(o={}); cloud_provider.describe_instance(o);end
     
     def proper_name
-      "#{parent.name}-#{name}"
+      "#{name}-#{parent.name}"
     end
   end
 end
