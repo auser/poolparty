@@ -139,6 +139,17 @@ log_level         :info
     end
     
     def write_chef_role_json(to=tmp_path/"etc"/"chef"/"dna.json")
+
+      # Add the parent name and the name of the cloud to
+      # the role for easy access in recipes.
+      pp = {
+        :poolparty => {
+            :parent_name => parent.name,
+            :name => name,
+        }
+      }
+
+      chef_override_attributes.merge! pp
       ca = ChefAttribute.new({
         :name => name,
         :json_class => "Chef::Role",
