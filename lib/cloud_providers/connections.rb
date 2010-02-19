@@ -113,7 +113,7 @@ module CloudProviders
     def system_run(cmd, o={})
       opts = {:quiet => false, :sysread => 1024}.merge(o)
       buf = ""
-      puts("Running command: #{cmd}")
+      # puts("Running command: #{cmd}")
       Open3.popen3(cmd) do |stdout, stdin, stderr|
         begin
           while (chunk = stdin.readpartial(opts[:sysread]))

@@ -1,0 +1,31 @@
+#!/usr/bin/env ruby
+$:.unshift(File.dirname(__FILE__) + "/../lib")
+
+require "poolparty"
+require 'git-style-binary/command'
+
+GitStyleBinary.command do
+  banner <<-EOS
+Usage: #{$0} #{all_options_string}
+
+  Run a command on all running instances
+EOS
+
+  opt :instance_id, "Run only on a specific instance", :type => String, :default => nil
+  opt :command, "Command to run", :type => String, :default => nil
+
+  short_desc "Run a command on all running instances"
+
+  run do |command|
+    puts "Running command #{command[:command]} on all nodes"
+    @loaded_clouds.each do |cld|
+
+      output = cld.nodes.map do |n| 
+        n.ssh(command[:command])
+      end
+      
+      p output
+      
+    end
+  end
+end
