@@ -5,14 +5,14 @@
 
 Gem::Specification.new do |s|
   s.name = %q{poolparty}
-  s.version = "1.5.0"
+  s.version = "1.6.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Ari Lerner", "Michael Fairchild", "Nate Murray"]
   s.date = %q{2010-02-18}
   s.description = %q{PoolParty: The easy, open-source, cross-cloud management solution}
   s.email = %q{arilerner@mac.com}
-  s.executables = ["cloud", "cloud-bootstrap", "cloud-compile", "cloud-configure", "cloud-console", "cloud-contract", "cloud-expand", "cloud-list", "cloud-reboot", "cloud-rsync", "cloud-show", "cloud-ssh", "cloud-start", "cloud-terminate", "cloud-vnc"]
+  s.executables = ["cloud", "cloud-bootstrap", "cloud-compile", "cloud-configure", "cloud-console", "cloud-contract", "cloud-expand", "cloud-list", "cloud-reboot", "cloud-rsync", "cloud-run", "cloud-show", "cloud-ssh", "cloud-start", "cloud-terminate", "cloud-vnc"]
   s.extra_rdoc_files = [
     "README.rdoc"
   ]
@@ -31,6 +31,7 @@ Gem::Specification.new do |s|
      "bin/cloud-list",
      "bin/cloud-reboot",
      "bin/cloud-rsync",
+     "bin/cloud-run",
      "bin/cloud-show",
      "bin/cloud-ssh",
      "bin/cloud-start",
