@@ -321,7 +321,7 @@ module CloudProviders
       :measure => :cpu,
       :period => 60,
       :statistic => :average,
-      :unit => "Seconds",
+      :unit => "Percent",
       :lower_threshold => 20,
       :upper_threshold => 60,
       :trigger_name => "CpuTrigger",
