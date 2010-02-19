@@ -326,6 +326,10 @@ module CloudProviders
       rds_instances << RdsInstance.new(given_name, sub_opts.merge(o || {}), &block)
     end
 
+    def available_rds_instances
+      rds_instances.select{|r| r.available? }
+    end
+
     # Proxy to the raw Grempe amazon-aws @ec2 instance
     def ec2
       @ec2 ||= begin

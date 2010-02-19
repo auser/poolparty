@@ -33,6 +33,22 @@ module CloudProviders
       delete_rds_instance!
     end
 
+    def current_status
+      rds_instances.detect{|i| i.DBInstanceIdentifier == instance_id }
+    end
+
+    def exists?
+      ! current_status.nil?
+    end
+
+    def available?
+      exists? && current_status.DBInstanceStatus == 'available'
+    end
+
+    def instance_id
+      name.to_s
+    end
+
   private
 
     def authorizations
@@ -53,11 +69,7 @@ module CloudProviders
     end
 
     def should_create_rds_instance?
-      rds_instances.select{|i| i.DBInstanceIdentifier == instance_id }.empty?
-    end
-
-    def instance_id
-      name.to_s
+      ! exists?
     end
 
     def create_rds_instance!

@@ -38,6 +38,13 @@ EOS
         load_balancers = cld.cloud_provider.load_balancers.first.running_load_balancers.map {|a| a[:dns_name]}
         msg << "Load balancers:      #{load_balancers.join("\n\t\t\t")}"
       end
+
+      if cld.rds_instances.size > 0
+        available = cld.cloud_provider.available_rds_instances.map{|r| "#{r.instance_id}\t#{r.current_status.Endpoint.Address}" }
+        available.unshift 'RDS Instances:'
+
+        msg << available.join("\n\t\t\t")
+      end
             
       puts msg.flatten
       
