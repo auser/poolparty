@@ -54,7 +54,6 @@ module CloudProviders
 
       if commands.empty?
         #TODO: replace this with a IO.popen call with read_nonblocking to show progress, and accept input
-        p ssh_string
         Kernel.system(ssh_string)
       else
         r = nil
