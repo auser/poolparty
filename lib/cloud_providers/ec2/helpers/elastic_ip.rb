@@ -19,8 +19,12 @@ module CloudProviders
     end
     
     def self.elastic_ips(ec2_instance)
-      @elastic_ips ||= ec2_instance.ec2.describe_addresses.addressesSet.item.map do |i|
-        new(i)
+      begin
+        @elastic_ips ||= ec2_instance.ec2.describe_addresses.addressesSet.item.map do |i|
+          new(i)
+        end
+      rescue Exception => e
+        []
       end
     end
     

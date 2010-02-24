@@ -32,7 +32,7 @@ module CloudProviders
 
     # get volumes that are not attached
     def free_volumes(availability_zone)
-      @volumes.select{|vol| vol.available? and vol.availability_zone == availability_zone}
+      @volumes.flatten.select{|vol| vol.available? and vol.availability_zone == availability_zone}
     end
     # Get a free volume from existing volumes in group or create a new one
     def get_free_volume(availability_zone)

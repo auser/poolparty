@@ -217,7 +217,7 @@ module CloudProviders
     def wait_for_node(instance)
       reset!
       inst = all_nodes.detect {|n| n.instance_id == instance.instance_id }
-      inst.running?
+      inst.running? if inst
     end
     
     def contract_by(num=1)
