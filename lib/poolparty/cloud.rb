@@ -55,112 +55,6 @@ You did not specify a cloud provider in your clouds.rb. Make sure you have a blo
       end
     end
     
-    # Chef    
-    def chef_repo(filepath=nil)
-      return @chef_repo if @chef_repo
-      @chef_repo = filepath.nil? ? nil : File.expand_path(filepath)
-    end
-    
-    def chef_attributes(hsh={}, &block)
-      @chef_attributes ||= ChefAttribute.new(hsh, &block)
-    end
-
-    def chef_override_attributes(hsh={}, &block)
-      @chef_override_attributes ||= ChefAttribute.new(hsh, &block)
-    end
-    
-    # Adds a chef recipe to the cloud
-    #
-    # The hsh parameter is inserted into the chef_override_attributes.
-    # The insertion is performed as follows. If
-    # the recipe name = "foo::bar" then effectively the call is
-    #
-    # chef_override_attributes.merge! { :foo => { :bar => hsh } }
-    def recipe(recipe_name, hsh={})
-      _recipes << recipe_name unless _recipes.include?(recipe_name)
-
-      head = {}
-      tail = head
-      recipe_name.split("::").each do |key|
-        unless key == "default"
-          n = {}
-          tail[key] = n
-          tail = n
-        end
-      end
-      tail.replace hsh
-
-      chef_override_attributes.merge!(head) unless hsh.empty?
-
-    end
-    
-    def recipes(*recipes)
-      recipes.each do |r|
-        recipe(r)
-      end
-    end
-    
-    private
-    
-    def _recipes
-      @_recipes ||= []
-    end
-    
-    # The NEW actual chef resolver.
-    def build_tmp_dir
-      base_directory = tmp_path/"etc"/"chef"
-      FileUtils.rm_rf base_directory
-      puts "Copying the chef-repo into the base directory from #{chef_repo}"
-      FileUtils.mkdir_p base_directory/"roles"   
-      if File.directory?(chef_repo)
-        if File.exist?(base_directory)
-          # First remove the directory
-          FileUtils.remove_entry base_directory, :force => true
-        end
-        FileUtils.cp_r "#{chef_repo}/.", base_directory 
-      else
-        raise "#{chef_repo} chef repo directory does not exist"
-      end
-      puts "Creating the dna.json"
-      chef_attributes.to_dna [], base_directory/"dna.json", {:run_list => ["role[#{name}]"]}
-      write_solo_dot_rb
-      write_chef_role_json tmp_path/"etc"/"chef"/"roles/#{name}.json"
-    end
-    
-    def write_solo_dot_rb(to=tmp_path/"etc"/"chef"/"solo.rb")
-      content = <<-EOE
-cookbook_path     ["/etc/chef/site-cookbooks", "/etc/chef/cookbooks"]
-role_path         "/etc/chef/roles"
-log_level         :info
-      EOE
-
-      File.open(to, "w") do |f|
-        f << content
-      end
-    end
-    
-    def write_chef_role_json(to=tmp_path/"etc"/"chef"/"dna.json")
-
-      # Add the parent name and the name of the cloud to
-      # the role for easy access in recipes.
-      pp = {
-        :poolparty => {
-            :parent_name => parent.name,
-            :name => name,
-        }
-      }
-
-      chef_override_attributes.merge! pp
-      ca = ChefAttribute.new({
-        :name => name,
-        :json_class => "Chef::Role",
-        :chef_type => "role",
-        :default_attributes => chef_attributes.init_opts,
-        :override_attributes => chef_override_attributes.init_opts,
-        :description => description
-      })
-      ca.to_dna _recipes.map {|a| File.basename(a) }, to
-    end
     
     # The pool can either be the parent (the context where the object is declared)
     # or the global pool object
@@ -191,12 +85,17 @@ log_level         :info
         end
       end
     end
-        
+
+    def chef(chef_type=nil, &block)
+      return @chef ? @chef : nil  if chef_type.nil?
+      raise ArgumentError, "Chef type must be one of #{Chef.types.map{|v| ":" + v.to_s}.join(",")}." unless Chef.types.include?(chef_type)
+      @chef=Chef.get_chef(chef_type,self,&block)
+    end
     # compile the cloud spec and execute the compiled system and remote calls
     def run
       puts "  running on #{cloud_provider.class}"
       cloud_provider.run
-      unless chef_repo.nil?
+      unless chef.nil?
         compile!
         bootstrap!
       end
@@ -280,7 +179,7 @@ No autoscalers defined
     end
     
     def compile!
-      build_tmp_dir unless chef_repo.nil?
+      chef.compile! unless chef.nil?
     end
     
     def bootstrap!
