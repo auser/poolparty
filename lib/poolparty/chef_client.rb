@@ -1,4 +1,5 @@
 module PoolParty
+  # Chef class bootstrapping chef-client.
   class ChefClient < Chef
     dsl_methods :server_url,:validation_token
     
@@ -22,6 +23,9 @@ module PoolParty
     end
 
     private
+    def after_initialized
+      raise PoolPartyError.create("ChefArgumentMissing", "server_url must be specified!") unless server_url
+    end
     def chef_cmd
       return <<-CMD
         $GEM_BIN/chef-client -j /etc/chef/dna.json -c /etc/chef/client.rb"
