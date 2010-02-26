@@ -68,6 +68,12 @@ You did not specify a cloud provider in your clouds.rb. Make sure you have a blo
     def chef_override_attributes(hsh={}, &block)
       @chef_override_attributes ||= ChefAttribute.new(hsh, &block)
     end
+
+    # Upload the source to dest ( using rsync )
+    def upload source, dest
+      @uploads ||= []
+      @uploads << { :source => source, :dest => dest }
+    end
     
     # Adds a chef recipe to the cloud
     #
@@ -196,6 +202,12 @@ log_level         :info
     def run
       puts "  running on #{cloud_provider.class}"
       cloud_provider.run
+      unless @uploads.nil?
+        puts "Uploading files via rsync"
+        @uploads.each do |upload|
+          rsync upload[:source], upload[:dest]
+        end
+      end
       unless chef_repo.nil?
         compile!
         bootstrap!
