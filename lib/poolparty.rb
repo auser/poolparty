@@ -47,6 +47,7 @@ $LOAD_PATH.unshift(File.dirname(__FILE__)/"poolparty")
     chef_attribute
     chef
     chef_solo
+    chef_client
     cloud pool
   ).each do |lib|
   require "poolparty/#{lib}"

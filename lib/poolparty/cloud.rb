@@ -86,8 +86,7 @@ You did not specify a cloud provider in your clouds.rb. Make sure you have a blo
       end
     end
 
-    def chef(chef_type=nil, &block)
-      return @chef ? @chef : nil  if chef_type.nil?
+    def chef(chef_type=:solo, &block)
       raise ArgumentError, "Chef type must be one of #{Chef.types.map{|v| ":" + v.to_s}.join(",")}." unless Chef.types.include?(chef_type)
       @chef=Chef.get_chef(chef_type,self,&block)
     end
@@ -95,7 +94,7 @@ You did not specify a cloud provider in your clouds.rb. Make sure you have a blo
     def run
       puts "  running on #{cloud_provider.class}"
       cloud_provider.run
-      unless chef.nil?
+      unless @chef.nil?
         compile!
         bootstrap!
       end
@@ -179,7 +178,7 @@ No autoscalers defined
     end
     
     def compile!
-      chef.compile! unless chef.nil?
+      @chef.compile! unless @chef.nil?
     end
     
     def bootstrap!

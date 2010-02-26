@@ -1,7 +1,7 @@
 module PoolParty
   class Chef < Base
     def self.types
-      return [:solo]
+      return [:solo,:client]
     end
     
     def self.get_chef(type,cloud,&block)
