@@ -31,12 +31,39 @@ module PoolParty
       end
     end
     
+    # === Description
+    #
+    # Set / Get the recipe_set which will be executed on the remote
+    # host
+    def recipe_set name = nil
+      @selected_recipe_set ||= :default
+      if name
+        @selected_recipe_set = name.to_sym
+      end
+      @selected_recipe_set
+    end
+    
     def run
       clouds.each do |cloud_name, cld|
         puts "----> Starting to build cloud #{cloud_name}"
         cld.run
       end
     end
+
+    def to_hash
+      c = {}
+      clouds.each do |cloud_name, cld|
+        cld.nodes.collect do |node|
+          h = {}
+          [:dns_name, :private_ip, :public_ip].each do |f|
+            h[f] = node[f]
+          end
+          c[cloud_name] = h
+        end
+      end
+      c
+    end
+
   end
 
 end

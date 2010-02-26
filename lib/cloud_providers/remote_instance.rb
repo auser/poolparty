@@ -54,8 +54,7 @@ module CloudProviders
     end
     
     def run_chef!
-      ENV["CHEF_DEBUG"] ||= false
-      if ENV["CHEF_DEBUG"]
+      if ENV["CHEF_DEBUG"] 
         debug = "-l debug"
       else
         debug = ""

@@ -75,6 +75,45 @@ You did not specify a cloud provider in your clouds.rb. Make sure you have a blo
       @uploads << { :source => source, :dest => dest }
     end
     
+    # === Description
+    #
+    # Set the recipe set and yield to a block. At the end
+    # of the block the current recipe set is returned to
+    # :default
+    #
+    # recipe_set :install_mysql do 
+    #   reciepe "mysql::download"
+    # end
+    #
+    # recipe_set :write_conffiles do 
+    #   recipe "mysql::download", :hosts => hosts
+    # end
+    #
+    # recipe_set :boot_master do 
+    #   recipe "mysql::master", :hosts => hosts
+    # end
+    #
+    # This enables you to select different recipe
+    # sets from the command line.
+    #
+    # cloud-start --recipe-set=write_confiles.
+    #
+    # Why is this usefull? Bootstrapping a cluster may
+    # require several stages of initialization. For example
+    # setting up a MySQL cluster first all the conf files
+    # must be written with the prior knowledge of all IP
+    # addresses in the cluster. 
+    #
+    # After the conf files are written then the machines
+    # must be started in a specific order.
+    def recipe_set name, &block
+      prev = current_recipe_set
+      current_recipe_set name
+      yield
+      current_recipe_set prev
+    end
+
+
     # Adds a chef recipe to the cloud
     #
     # The hsh parameter is inserted into the chef_override_attributes.
@@ -108,8 +147,31 @@ You did not specify a cloud provider in your clouds.rb. Make sure you have a blo
     
     private
     
-    def _recipes
-      @_recipes ||= []
+    def current_recipe_set set = nil
+      if set
+        @current_recipe_set = set
+      end
+      @current_recipe_set ||= :default
+    end
+
+    # === Description
+    #
+    # Return a list of recipes from one of
+    # the chef recipe sets.
+    #
+    # === Parameters
+    #
+    # * set : Return the recipes from set recipe_set 
+    #         If set is nil then return the current recipe_set
+    #        
+    # === See
+    #
+    # The doc for method recipe_set
+    def _recipes set = nil
+      @_recipes ||= {}
+      @_recipes[:default] ||= []
+      @_recipes[current_recipe_set] ||= []
+      @_recipes[set || current_recipe_set]
     end
     
     # The NEW actual chef resolver.
@@ -153,10 +215,12 @@ log_level         :info
         :poolparty => {
             :parent_name => parent.name,
             :name => name,
+            :pool_info => pool.to_hash
         }
       }
 
       chef_override_attributes.merge! pp
+
       ca = ChefAttribute.new({
         :name => name,
         :json_class => "Chef::Role",
@@ -165,7 +229,11 @@ log_level         :info
         :override_attributes => chef_override_attributes.init_opts,
         :description => description
       })
-      ca.to_dna _recipes.map {|a| File.basename(a) }, to
+      puts "================="
+      puts "Recipe Set #{pool.recipe_set}"
+      puts _recipes(pool.recipe_set)
+      puts "================="
+      ca.to_dna _recipes(pool.recipe_set).map {|a| File.basename(a) }, to
     end
     
     # The pool can either be the parent (the context where the object is declared)

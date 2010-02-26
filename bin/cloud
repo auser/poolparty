@@ -23,6 +23,7 @@ EOS
   opt :debug, "Debug the output", :type => :boolean, :default => false
   opt :very_debug, "Set very debug mode on", :type => :boolean, :default => false
   opt :name, "Name of the working cloud", :type => String, :default => nil
+  opt :recipe_set, "Name of default recipe set", :type => String, :default => 'default'
 
   before_run do |command|
     # Setup testing/debugging
@@ -38,6 +39,8 @@ EOS
       exit
     end
     
+    pool.recipe_set command[:recipe_set].to_sym
+
     @loaded_pool = pool
     @loaded_clouds = command[:name] ? [pool.clouds[command[:name]]] : pool.clouds.map {|name,cld|cld}    
   end
