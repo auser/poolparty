@@ -88,7 +88,7 @@ You did not specify a cloud provider in your clouds.rb. Make sure you have a blo
 
     def chef(chef_type=:solo, &block)
       raise ArgumentError, "Chef type must be one of #{Chef.types.map{|v| ":" + v.to_s}.join(",")}." unless Chef.types.include?(chef_type)
-      @chef=Chef.get_chef(chef_type,self,&block)
+      @chef||=Chef.get_chef(chef_type,self,&block)
     end
     # compile the cloud spec and execute the compiled system and remote calls
     def run
