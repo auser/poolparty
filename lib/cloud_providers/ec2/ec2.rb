@@ -59,7 +59,7 @@ module CloudProviders
 
     # Load credentials from file
     def self.load_keys_from_credential_file(filename=default_credential_file, caching=true)
-      return {:access_key => @access_key, :secret_access_key => @secret_access_key} if @access_key and @secret_access_key
+      return {:access_key => @access_key, :secret_access_key => @secret_access_key} if @access_key and @secret_access_key and caching
       return {} if filename.nil? or not File.exists?(filename)
       puts("Reading keys from file: #{filename}")
       File.open(filename).each_line { |line|
@@ -424,8 +424,8 @@ module CloudProviders
     # Read credentials from credential_file if one exists
     def credential_file(file=nil)
       unless file.nil?
-	      dsl_options[:credential_file]=file 
-	      dsl_options.merge((Ec2.load_keys_from_credential_file(file)))
+        dsl_options[:credential_file]=file 
+        dsl_options.merge!(Ec2.load_keys_from_credential_file(file))
       else
         fetch(:credential_file)
       end
