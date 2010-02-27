@@ -14,7 +14,7 @@ module PoolParty
     end
     
     def roles(*roles)
-      return @_roles||=cloud.name if roles.empty?
+      return @_roles||=[cloud.name] if roles.empty?
       @_roles=roles
     end
 
