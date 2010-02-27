@@ -422,7 +422,7 @@ module CloudProviders
             }.member?(false) # Check if a filter failed, the 'not' statement at the beginning of the map block negates this so 'select' will choose only when no filter failed
           }.compact
         end
-        ).map{|vol| ElasticBlockStore.new(vol)} # remove nil results from volume set.
+        ).map{|vol| ElasticBlockStore.new(vol,:cloud => cloud)} # remove nil results from volume set.
     end
 
     # Read credentials from credential_file if one exists
