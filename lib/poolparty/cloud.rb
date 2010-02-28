@@ -64,10 +64,34 @@ You did not specify a cloud provider in your clouds.rb. Make sure you have a blo
     def chef_attributes(hsh={}, &block)
       @chef_attributes ||= ChefAttribute.new(hsh, &block)
     end
+
+    def chef_override_attributes(hsh={}, &block)
+      @chef_override_attributes ||= ChefAttribute.new(hsh, &block)
+    end
     
+    # Adds a chef recipe to the cloud
+    #
+    # The hsh parameter is inserted into the chef_override_attributes.
+    # The insertion is performed as follows. If
+    # the recipe name = "foo::bar" then effectively the call is
+    #
+    # chef_override_attributes.merge! { :foo => { :bar => hsh } }
     def recipe(recipe_name, hsh={})
       _recipes << recipe_name unless _recipes.include?(recipe_name)
-      _attributes.merge!(recipe_name => hsh) unless hsh.empty?
+
+      head = {}
+      tail = head
+      recipe_name.split("::").each do |key|
+        unless key == "default"
+          n = {}
+          tail[key] = n
+          tail = n
+        end
+      end
+      tail.replace hsh
+
+      chef_override_attributes.merge!(head) unless hsh.empty?
+
     end
     
     def recipes(*recipes)
@@ -81,16 +105,18 @@ You did not specify a cloud provider in your clouds.rb. Make sure you have a blo
     def _recipes
       @_recipes ||= []
     end
-    def _attributes
-      @_attributes ||= {}
-    end
     
     # The NEW actual chef resolver.
     def build_tmp_dir
       base_directory = tmp_path/"etc"/"chef"
+      FileUtils.rm_rf base_directory
       puts "Copying the chef-repo into the base directory from #{chef_repo}"
       FileUtils.mkdir_p base_directory/"roles"   
       if File.directory?(chef_repo)
+        if File.exist?(base_directory)
+          # First remove the directory
+          FileUtils.remove_entry base_directory, :force => true
+        end
         FileUtils.cp_r "#{chef_repo}/.", base_directory 
       else
         raise "#{chef_repo} chef repo directory does not exist"
@@ -114,12 +140,23 @@ log_level         :info
     end
     
     def write_chef_role_json(to=tmp_path/"etc"/"chef"/"dna.json")
+
+      # Add the parent name and the name of the cloud to
+      # the role for easy access in recipes.
+      pp = {
+        :poolparty => {
+            :parent_name => parent.name,
+            :name => name,
+        }
+      }
+
+      chef_override_attributes.merge! pp
       ca = ChefAttribute.new({
         :name => name,
         :json_class => "Chef::Role",
         :chef_type => "role",
         :default_attributes => chef_attributes.init_opts,
-        :override_attributes => {},
+        :override_attributes => chef_override_attributes.init_opts,
         :description => description
       })
       ca.to_dna _recipes.map {|a| File.basename(a) }, to

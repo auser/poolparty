@@ -217,7 +217,7 @@ module CloudProviders
     def wait_for_node(instance)
       reset!
       inst = all_nodes.detect {|n| n.instance_id == instance.instance_id }
-      inst.running?
+      inst.running? if inst
     end
     
     def contract_by(num=1)
@@ -324,6 +324,10 @@ module CloudProviders
 
     def rds(given_name=cloud.proper_name, o={}, &block)
       rds_instances << RdsInstance.new(given_name, sub_opts.merge(o || {}), &block)
+    end
+
+    def available_rds_instances
+      rds_instances.select{|r| r.available? }
     end
 
     # Proxy to the raw Grempe amazon-aws @ec2 instance
