@@ -49,7 +49,7 @@ ssl_verify_mode    :verify_none
 file_cache_path    "/var/cache/chef"
 pid_file           "/var/run/chef/client.pid"
 Chef::Log::Formatter.show_time = true
-openid_url         #{openid_url}
+openid_url         "#{openid_url}"
       EOE
       %w(search_url role_url remotefile_url template_url registration_url).each{|url|
         content+="#{url}   #{server_url}\n"
