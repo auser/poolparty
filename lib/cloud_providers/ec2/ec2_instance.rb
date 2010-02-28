@@ -27,7 +27,6 @@ module CloudProviders
       self.availability_zones = raw_response["placement"]["availabilityZone"] rescue nil
       self.status = raw_response["instanceState"]["name"] rescue nil
       self.block_device_mapping = raw_response["blockDeviceMapping"] rescue nil
-      self.ebs_volumes = raw_response["ebs"] rescue nil
       super
     end
     

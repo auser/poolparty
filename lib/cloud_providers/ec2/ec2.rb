@@ -420,9 +420,9 @@ module CloudProviders
               (filter_val.is_a?(String) ? filter_val : filter_val.to_s)==vol[filter_key] # make sure fiter_val is a String before comparing
             end
             }.member?(false) # Check if a filter failed, the 'not' statement at the beginning of the map block negates this so 'select' will choose only when no filter failed
-          }.compact
+          }.compact # remove nil results from volume set.
         end
-        ).map{|vol| ElasticBlockStore.new(vol)} # remove nil results from volume set.
+        ).map{|vol| ElasticBlockStore.new(vol)}
     end
 
     # Read credentials from credential_file if one exists
