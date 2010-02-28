@@ -47,6 +47,7 @@ module CloudProviders
         do_sudo = extra_ssh_ops[:do_sudo] 
         extra_ssh_ops.delete :do_sudo
       end
+      do_sudo=user!="root"
 
       envstring = env.collect {|k,v| "#{k}=#{v}"}.join ' && '
       envstring += " && " unless envstring.size == 0
@@ -88,7 +89,8 @@ module CloudProviders
       raise StandardError.new("You must pass a :source=>uri option to rsync") unless opts[:source]
       destination_path = opts[:destination] || opts[:source]
       rsync_opts = opts[:rsync_opts] || '-va'
-      rsync_opts += %q% --rsync-path="sudo rsync" --exclude=.svn --exclude=.git --exclude=.cvs %
+      rsync_opts += %q% --rsync-path="sudo rsync"% unless user=="root"
+      rsync_opts += %q% --exclude=.svn --exclude=.git --exclude=.cvs %
       cmd_string =  "rsync -L  -e 'ssh #{ssh_options}' #{rsync_opts} #{opts[:source]}  #{user}@#{host}:#{destination_path}"
       out = system_run(cmd_string)
       out

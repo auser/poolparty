@@ -28,7 +28,7 @@ module PoolParty
     end
     def chef_cmd
       return <<-CMD
-        $GEM_BIN/chef-client -j /etc/chef/dna.json -c /etc/chef/client.rb"
+        PATH="$PATH:$GEM_BIN" chef-client -j /etc/chef/dna.json -c /etc/chef/client.rb
       CMD
     end
     # The NEW actual chef resolver.

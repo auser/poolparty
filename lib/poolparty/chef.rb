@@ -55,7 +55,7 @@ module PoolParty
     end
 
     def node_bootsrapped?(remote_instance)
-      remote_instance.ssh(["(gem list; dpkg -l chef) | grep chef"], :do_sudo => false).empty?
+      remote_instance.ssh(["(gem list; dpkg -l chef) | grep -q chef && echo 'chef installed'"], :do_sudo => false).empty?
     end
    def node_bootstrap!(remote_instance)
       remote_instance.ssh([
