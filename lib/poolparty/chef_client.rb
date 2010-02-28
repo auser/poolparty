@@ -37,7 +37,7 @@ module PoolParty
       FileUtils.rm_rf base_directory
       FileUtils.mkdir_p base_directory   
       puts "Creating the dna.json"
-      attributes.to_dna [], base_directory/"dna.json", {:run_list => roles.map{|r| "role[#{r}]"} + @_recipes.map{|r| "recipe[#{r}]"}}
+      attributes.to_dna [], base_directory/"dna.json", {:run_list => roles.map{|r| "role[#{r}]"} + _recipes.map{|r| "recipe[#{r}]"}}
       write_client_dot_rb
     end
     
