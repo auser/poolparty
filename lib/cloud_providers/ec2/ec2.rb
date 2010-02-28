@@ -387,7 +387,7 @@ module CloudProviders
     #     size 200
     #   end
     def ebs_volumes(name=nil, &block)
-      ebs_volume_groups << ElasticBlockStoreGroup.new(sub_opts,&block) 
+      ebs_volume_groups << ElasticBlockStoreGroup.new(sub_opts,&block) if block
     end
 
     def assign_ebs_volumes
