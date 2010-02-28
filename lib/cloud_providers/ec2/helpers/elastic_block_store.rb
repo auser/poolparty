@@ -2,13 +2,14 @@ module CloudProviders
   class ElasticBlockStore < Ec2Helper
 
     # instance methods
-    attr_accessor :volumeId, :size, :snapshotId, :status, :attachments, :device, :availabilityZone, :instance_id
+    attr_accessor :volumeId, :size, :snapshotId, :status, :attachments, :device, :availabilityZone, :instanceId
     attr_reader :createTime
 
     alias :volume_id :volumeId
     alias :snapshot_id :snapshotId
     alias :availability_zone :availabilityZone 
     alias :create_time :createTime
+    alias :instance_id :instanceId
 
     def createTime(create_time)
       unless create_time.class==DateTime
