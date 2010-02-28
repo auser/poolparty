@@ -52,9 +52,9 @@ Chef::Log::Formatter.show_time = true
 openid_url         "#{openid_url}"
       EOE
       %w(search_url role_url remotefile_url template_url registration_url).each{|url|
-        content+="#{url}   #{server_url}\n"
+        content+="#{url}   \"#{server_url}\"\n"
       }
-      content+="validation_token  #{validation_token}\n" if validation_token
+      content+="validation_token  \"#{validation_token}\"\n" if validation_token
       File.open(to, "w") do |f|
         f << content
       end
