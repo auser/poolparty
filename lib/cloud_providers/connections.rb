@@ -90,7 +90,7 @@ module CloudProviders
       rsync_opts = opts[:rsync_opts] || '-va'
       rsync_opts += %q% --rsync-path="sudo rsync" --exclude=.svn --exclude=.git --exclude=.cvs %
       cmd_string =  "rsync -L  -e 'ssh #{ssh_options}' #{rsync_opts} #{opts[:source]}  #{user}@#{host}:#{destination_path}"
-      out = system_run(cmd_string)
+      out = system_run(cmd_string, :quiet => true)
       out
     end
     
@@ -119,7 +119,9 @@ module CloudProviders
           while (chunk = stdin.readpartial(opts[:sysread]))
             buf << chunk
             unless chunk.nil? || chunk.empty?
-              $stdout.write(chunk) #if debugging? || verbose?
+              if not opts[:quiet]
+                $stdout.write(chunk) #if debugging? || verbose?
+              end
             end
           end
           err = stderr.readlines

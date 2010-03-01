@@ -232,8 +232,12 @@ log_level         :info
       puts "================="
       puts "Recipe Set #{pool.recipe_set}"
       puts _recipes(pool.recipe_set)
+      if _recipes(pool.recipe_set)
+        ca.to_dna _recipes(pool.recipe_set).map {|a| File.basename(a) }, to
+      else
+        puts "No recipe set #{pool.recipe_set} for this node"
+      end
       puts "================="
-      ca.to_dna _recipes(pool.recipe_set).map {|a| File.basename(a) }, to
     end
     
     # The pool can either be the parent (the context where the object is declared)

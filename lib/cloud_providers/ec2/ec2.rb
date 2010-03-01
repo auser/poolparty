@@ -10,6 +10,8 @@ rescue LoadError
 EOM
 end
 
+require 'pp'
+
 module CloudProviders
   class Ec2 < CloudProvider
     # Set the aws keys from the environment, or load from /etc/poolparty/env.yml if the environment variable is not set
@@ -278,8 +280,24 @@ module CloudProviders
       all_nodes.select {|i| i.in_service? }#describe_instances.select {|i| i.in_service? && security_groups.include?(i.security_groups) }
     end
     
+    # === Description
+    #
+    # Return all the security groups of the instance that are prefixed with #poolparty.
+    #
+    # These are special security groups used only for tagging
+    #
+    # === Parameters
+    #   instance    -   An ec2 instance as returned from describe_instances
+    def tags instance
+      instance.groupSet.item.collect{|g| g.groupId }.select {|s| s.start_with? "#poolparty"}
+    end
+
     def all_nodes
-      @nodes ||= describe_instances.select {|i| security_group_names.include?(i.security_groups) }.sort {|a,b| DateTime.parse(a.launchTime) <=> DateTime.parse(b.launchTime)}
+      @nodes ||= describe_instances.select { |i| 
+        !(security_group_names & tags(i)).empty? 
+      }.sort {|a,b| 
+        DateTime.parse(a.launchTime) <=> DateTime.parse(b.launchTime)
+      }
     end
     
     # Describe instances

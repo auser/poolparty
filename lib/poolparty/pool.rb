@@ -4,7 +4,11 @@ module PoolParty
     attr_accessor :verbose, :very_verbose, :debugging, :very_debugging, :auto_execute
     
     def cloud(name, &block)
-      clouds[name.to_s] = Cloud.new(name.to_s, {:parent => self}, &block)
+      c = Cloud.new(name.to_s, {:parent => self}, &block)
+      clouds[name.to_s] = c
+      # Create a dummy security group for tagging purposes. Do not want to
+      # conflict with advance usage of security groups
+      c.security_group "#poolparty-#{c.proper_name}"
     end
     
     def clouds
@@ -51,17 +55,20 @@ module PoolParty
     end
 
     def to_hash
-      c = {}
-      clouds.each do |cloud_name, cld|
-        cld.nodes.collect do |node|
+      c = clouds.collect do |cloud_name, cld|
+        nodes = cld.nodes.collect do |node|
           h = {}
           [:dns_name, :private_ip, :public_ip].each do |f|
             h[f] = node[f]
           end
-          c[cloud_name] = h
+          h
         end
+        { cloud_name => nodes }
       end
-      c
+      h = c.inject({})do |old, new|
+       old.merge! new
+      end 
+      {:clouds => h }
     end
 
   end
