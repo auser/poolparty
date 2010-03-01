@@ -8,7 +8,7 @@ module PoolParty
     private
     def chef_cmd
       return <<-CMD
-        $GEM_BIN/chef-solo -j /etc/chef/dna.json -c /etc/chef/solo.rb
+        PATH="$PATH:$GEM_BIN" chef-solo -j /etc/chef/dna.json -c /etc/chef/solo.rb
       CMD
     end
     # The NEW actual chef resolver.

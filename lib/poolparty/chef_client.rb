@@ -28,7 +28,7 @@ module PoolParty
     end
     def chef_cmd
       return <<-CMD
-        PATH="$PATH:$GEM_BIN" chef-client -j /etc/chef/dna.json -c /etc/chef/client.rb
+        PATH="$PATH:$GEM_BIN" chef-client -j /etc/chef/dna.json -c /etc/chef/client.rb -d -i 1800 -s 20
       CMD
     end
     # The NEW actual chef resolver.
@@ -37,7 +37,7 @@ module PoolParty
       FileUtils.rm_rf base_directory
       FileUtils.mkdir_p base_directory   
       puts "Creating the dna.json"
-      attributes.to_dna [], base_directory/"dna.json", {:run_list => roles.map{|r| "role[#{r}]"} + _recipes.map{|r| "recipe[#{r}]"}}
+      attributes.to_dna [], base_directory/"dna.json", {:run_list => roles.map{|r| "role[#{r}]"} + _recipes.map{|r| "recipe[#{r}]"}}.merge(attributes.init_opts)
       write_client_dot_rb
     end
     
