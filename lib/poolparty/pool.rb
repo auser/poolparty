@@ -37,14 +37,14 @@ module PoolParty
     
     # === Description
     #
-    # Set / Get the recipe_set which will be executed on the remote
+    # Set / Get the chef_set which will be executed on the remote
     # host
-    def recipe_set name = nil
-      @selected_recipe_set ||= :default
+    def chef_set name = nil
+      @selected_chef_set ||= :default
       if name
-        @selected_recipe_set = name.to_sym
+        @selected_chef_set = name.to_sym
       end
-      @selected_recipe_set
+      @selected_chef_set
     end
     
     def run

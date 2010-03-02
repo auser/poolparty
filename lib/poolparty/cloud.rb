@@ -81,15 +81,15 @@ You did not specify a cloud provider in your clouds.rb. Make sure you have a blo
     # of the block the current recipe set is returned to
     # :default
     #
-    # recipe_set :install_mysql do 
+    # chef_set :install_mysql do 
     #   reciepe "mysql::download"
     # end
     #
-    # recipe_set :write_conffiles => :install_mysql do 
+    # chef_set :write_conffiles do 
     #   recipe "mysql::download", :hosts => hosts
     # end
     #
-    # recipe_set :boot_master => :write_conffiles do 
+    # chef_set :boot_master do 
     #   recipe "mysql::master", :hosts => hosts
     # end
     #
@@ -106,42 +106,11 @@ You did not specify a cloud provider in your clouds.rb. Make sure you have a blo
     #
     # After the conf files are written then the machines
     # must be started in a specific order.
-    def recipe_set ops, &block
-      recipe_set_name = :default
-      if ops.is_a? Hash
-        ops.each do |k, v|
-          recipe_set_name = k.to_sym
-          break
-        end
-      else
-        recipe_set_name = ops
-      end
-
-      prev = current_recipe_set
-      current_recipe_set recipe_set_name
-
-      if ops.is_a? Hash
-        # Merge in the recipes from the dependent
-        # hash
-        ops.each do |k,v|
-          puts "Looking up dependant recipe #{v} for #{k}"
-
-          if not _recipes(v)
-            raise "There is no recipe set named #{v} named as a dependency of #{k}. Valid options are #{recipe_sets.join(" ")}"
-          end
-
-          _recipes(v).each do |r|
-            puts "Adding recipe #{r}"
-            recipe r
-          end
-        end
-      end
-
-      if block_given? 
-        yield
-      end
-
-      current_recipe_set prev
+    def chef_set name, &block
+      prev = current_chef_set
+      current_chef_set name
+      yield
+      current_chef_set prev
     end
 
 
@@ -178,11 +147,11 @@ You did not specify a cloud provider in your clouds.rb. Make sure you have a blo
     
     private
     
-    def current_recipe_set set = nil
+    def current_chef_set set = nil
       if set
-        @current_recipe_set = set
+        @current_chef_set = set
       end
-      @current_recipe_set ||= :default
+      @current_chef_set ||= :default
     end
 
     # === Description
@@ -192,24 +161,17 @@ You did not specify a cloud provider in your clouds.rb. Make sure you have a blo
     #
     # === Parameters
     #
-    # * set : Return the recipes from set recipe_set 
-    #         If set is nil then return the current recipe_set
+    # * set : Return the recipes from set chef_set 
+    #         If set is nil then return the current chef_set
     #        
     # === See
     #
-    # The doc for method recipe_set
+    # The doc for method chef_set
     def _recipes set = nil
-      if set
-        set = set.to_sym
-      end
       @_recipes ||= {}
       @_recipes[:default] ||= []
-      @_recipes[current_recipe_set] ||= []
-      @_recipes[set || current_recipe_set]
-    end
-
-    def recipe_sets
-      @_recipes.keys
+      @_recipes[current_chef_set] ||= []
+      @_recipes[set || current_chef_set]
     end
     
     # The NEW actual chef resolver.
@@ -268,12 +230,12 @@ log_level         :info
         :description => description
       })
       puts "================="
-      puts "Recipe Set #{pool.recipe_set}"
-      puts _recipes(pool.recipe_set)
-      if _recipes(pool.recipe_set)
-        ca.to_dna _recipes(pool.recipe_set).map {|a| File.basename(a) }, to
+      puts "Recipe Set #{pool.chef_set}"
+      puts _recipes(pool.chef_set)
+      if _recipes(pool.chef_set)
+        ca.to_dna _recipes(pool.chef_set).map {|a| File.basename(a) }, to
       else
-        puts "No recipe set #{pool.recipe_set} for this node"
+        puts "No recipe set #{pool.chef_set} for this node"
       end
       puts "================="
     end
