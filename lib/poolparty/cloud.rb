@@ -106,10 +106,41 @@ You did not specify a cloud provider in your clouds.rb. Make sure you have a blo
     #
     # After the conf files are written then the machines
     # must be started in a specific order.
-    def recipe_set name, &block
+    def recipe_set ops, &block
+      recipe_set_name = :default
+      if ops.is_a? Hash
+        ops.each do |k, v|
+          recipe_set_name = k.to_sym
+          break
+        end
+      else
+        recipe_set_name = ops
+      end
+
       prev = current_recipe_set
-      current_recipe_set name
-      yield
+      current_recipe_set recipe_set_name
+
+      if ops.is_a? Hash
+        # Merge in the recipes from the dependent
+        # hash
+        ops.each do |k,v|
+          puts "Looking up dependant recipe #{v} for #{k}"
+
+          if not _recipes(v)
+            raise "There is no recipe set named #{v} named as a dependency of #{k}. Valid options are #{recipe_sets.join(" ")}"
+          end
+
+          _recipes(v).each do |r|
+            puts "Adding recipe #{r}"
+            recipe r
+          end
+        end
+      end
+
+      if block_given? 
+        yield
+      end
+
       current_recipe_set prev
     end
 
@@ -168,10 +199,17 @@ You did not specify a cloud provider in your clouds.rb. Make sure you have a blo
     #
     # The doc for method recipe_set
     def _recipes set = nil
+      if set
+        set = set.to_sym
+      end
       @_recipes ||= {}
       @_recipes[:default] ||= []
       @_recipes[current_recipe_set] ||= []
       @_recipes[set || current_recipe_set]
+    end
+
+    def recipe_sets
+      @_recipes.keys
     end
     
     # The NEW actual chef resolver.
