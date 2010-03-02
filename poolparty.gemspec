@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Ari Lerner", "Michael Fairchild", "Nate Murray"]
-  s.date = %q{2010-03-01}
+  s.date = %q{2010-03-02}
   s.description = %q{PoolParty: The easy, open-source, cross-cloud management solution}
   s.email = %q{arilerner@mac.com}
   s.executables = ["cloud-configure", "cloud-vnc", "cloud-contract", "cloud-console", "cloud-ssh", "cloud-run", "cloud-reboot", "cloud-bootstrap", "cloud-compile", "cloud-expand", "cloud-terminate", "cloud", "cloud-show", "cloud-start", "cloud-rsync", "cloud-list"]
