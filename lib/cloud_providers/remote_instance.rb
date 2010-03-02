@@ -50,7 +50,9 @@ module CloudProviders
           'gem sources -a http://gems.opscode.com',
           'gem install chef ohai --no-rdoc --no-ri' ])
       end
-      ssh(bootstrap_gems.collect { |gem| "gem install #{gem} --no-rdoc --no-ri" } )
+      if bootstrap_gems.size > 0
+        ssh(bootstrap_gems.collect { |gem| "gem install #{gem} --no-rdoc --no-ri" } )
+      end
     end
     
     def run_chef!
