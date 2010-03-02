@@ -19,10 +19,8 @@ module CloudProviders
       end
       begin
         ec2.authorize_security_group_ingress(options) 
-      rescue Exception => e
-        puts "Got Error authorizing"
-        puts e
-        raise
+      rescue AWS::InvalidPermissionDuplicate => e
+        nil
       end
         
     end

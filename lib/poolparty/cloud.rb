@@ -85,11 +85,11 @@ You did not specify a cloud provider in your clouds.rb. Make sure you have a blo
     #   reciepe "mysql::download"
     # end
     #
-    # recipe_set :write_conffiles do 
+    # recipe_set :write_conffiles => :install_mysql do 
     #   recipe "mysql::download", :hosts => hosts
     # end
     #
-    # recipe_set :boot_master do 
+    # recipe_set :boot_master => :write_conffiles do 
     #   recipe "mysql::master", :hosts => hosts
     # end
     #
