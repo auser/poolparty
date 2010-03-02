@@ -24,7 +24,7 @@ EOS
         n.ssh(command[:command])
       end
       
-      p output
+      #p output
       
     end
   end
