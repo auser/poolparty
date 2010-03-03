@@ -39,7 +39,7 @@ module CloudProviders
       # the extra_ssh_ops and then delete
       # the element
       ssh_error_msg="SSH is not available for this node. perhaps you need to authorize it?"
-      raise PoolParty::PoolPartyError.create(PoolPartySSHError, ssh_error_msg) unless ssh_available?
+      raise PoolParty::PoolPartyError.create("SSHError", ssh_error_msg) unless ssh_available?
       env = extra_ssh_ops[:env] || {}
       extra_ssh_ops.delete :env
 
@@ -90,7 +90,7 @@ module CloudProviders
     def rsync( opts={} )
       raise StandardError.new("You must pass a :source=>uri option to rsync") unless opts[:source]
       ssh_error_msg="SSH is not available for this node. perhaps you need to authorize it?"
-      raise PoolParty::PoolPartyError.create(PoolPartySSHError, ssh_error_msg) unless ssh_available?
+      raise PoolParty::PoolPartyError.create("SSHError", ssh_error_msg) unless ssh_available?
       destination_path = opts[:destination] || opts[:source]
       rsync_opts = opts[:rsync_opts] || '-va'
       rsync_opts += %q% --rsync-path="sudo rsync"% unless user=="root"
