@@ -28,7 +28,7 @@ module CloudProviders
       raw_response.each{|k,v| instance_variable_set("@"+k,v) if respond_to?(k) }
       unless raw_response.attachmentSet.nil?
         @attachments=raw_response.attachmentSet.item 
-        @attachments.each{|attch| if attch.status=="attached"
+        @attachments.each{|attch| if attch.status=="attached" or attch.status=="attaching"
             @instanceId=attch.instanceId 
             @device=attch.device
           end
@@ -37,6 +37,7 @@ module CloudProviders
     end
 
     def attached?(fn_instance_id=nil)
+      warn "vol status #{@status} fn_instance_id: #{fn_instance_id} instance_id: #{instance_id}"
       return false unless @status=="in-use" or @status=="attaching"
       return true if fn_instance_id.nil?
       return true if fn_instance_id == instance_id

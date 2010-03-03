@@ -113,6 +113,9 @@ module CloudProviders
       Time.now - Time.parse(launch_time)
     end
     
+    def ssh_available?
+      warn "Implemented in cloudprovider instance class. something is wrong"
+    end
     # def  to_s
     #  (cloud ? to_hash.merge(:cloud=>cloud.name) : to_hash)
     # end

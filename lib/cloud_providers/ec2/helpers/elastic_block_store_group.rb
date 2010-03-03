@@ -57,6 +57,7 @@ module CloudProviders
         # Check no volumes are attached to node on device
         skip_node=false
         cloud.list_ec2_volumes.each{|vol| 
+          warn "vol: #{vol.volume_id} node: #{node.instance_id} vol attached?: #{vol.attached?(node.instance_id)}"
           if vol.attached?(node.instance_id) and vol.device == device
             warn "A volume is allready attached to device #{device} of instance #{node.instance_id}" 
             skip_node = true
