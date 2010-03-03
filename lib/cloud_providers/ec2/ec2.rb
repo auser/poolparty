@@ -245,6 +245,10 @@ module CloudProviders
     end
     
     def configure_nodes!(tmp_path=nil)
+      unless security_groups.map {|a| a.authorizes.map {|t| t.from_port.to_i }.flatten }.flatten.include?(22)      
+        warn "Cloud security_groups are not authorized for ssh. Cannot configure."
+        return
+      end
       tmp_path ||= cloud.tmp_path
       nodes.each do |node|
         next unless node.in_service?

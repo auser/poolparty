@@ -37,7 +37,6 @@ module CloudProviders
     end
 
     def attached?(fn_instance_id=nil)
-      warn "vol status #{@status} fn_instance_id: #{fn_instance_id} instance_id: #{instance_id}"
       return false unless @status=="in-use" or @status=="attaching"
       return true if fn_instance_id.nil?
       return true if fn_instance_id == instance_id
