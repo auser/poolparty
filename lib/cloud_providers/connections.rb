@@ -21,7 +21,7 @@ module CloudProviders
           sleep(2)
         end
       end
-      false
+      connected
     end
     
     def run(commands, o={})
