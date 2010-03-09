@@ -1,3 +1,5 @@
+require "fileutils"
+
 module PoolParty
   class ChefSolo < Chef
     dsl_methods :repo 
