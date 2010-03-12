@@ -16,9 +16,11 @@ module PoolParty
     # The NEW actual chef resolver.
     def build_tmp_dir
       base_directory = tmp_path/"etc"/"chef"
+      roles_dir = "#{base_directory}/roles"
       FileUtils.rm_rf base_directory
       puts "Copying the chef-repo into the base directory from #{repo}"
-      FileUtils.mkdir_p base_directory/"roles"   
+      FileUtils.mkdir_p roles_dir
+      
       if File.directory?(repo)
         if File.exist?(base_directory)
           # First remove the directory
@@ -31,7 +33,7 @@ module PoolParty
       puts "Creating the dna.json"
       attributes.to_dna [], base_directory/"dna.json", {:run_list => ["role[#{cloud.name}]"]}
       write_solo_dot_rb
-      write_chef_role_json tmp_path/"etc"/"chef"/"roles/#{cloud.name}.json"
+      write_chef_role_json "#{roles_dir}/#{cloud.name}.json"
     end
     
     def write_solo_dot_rb(to=tmp_path/"etc"/"chef"/"solo.rb")
