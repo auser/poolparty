@@ -64,7 +64,7 @@ module PoolParty
         'apt-get install -y ruby ruby-dev rubygems git-core libopenssl-ruby',
         'gem sources -a http://gems.opscode.com',
         'gem install chef ohai --no-rdoc --no-ri' ])
-      remote_instance.ssh(remote_instance.bootstrap_gems.collect { |gem| "gem install #{gem} --no-rdoc --no-ri" } )
+      remote_instance.ssh(remote_instance.bootstrap_gems.collect { |g| "gem install #{g} --no-rdoc --no-ri" } )
     end
     private
     
