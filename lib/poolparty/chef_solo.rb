@@ -19,7 +19,6 @@ module PoolParty
       roles_dir = "#{base_directory}/roles"
       FileUtils.rm_rf base_directory
       puts "Copying the chef-repo into the base directory from #{repo}"
-      FileUtils.mkdir_p roles_dir
       
       if File.directory?(repo)
         if File.exist?(base_directory)
@@ -33,6 +32,8 @@ module PoolParty
       puts "Creating the dna.json"
       attributes.to_dna [], base_directory/"dna.json", {:run_list => ["role[#{cloud.name}]"]}
       write_solo_dot_rb
+      # Make sure the roles directory exists
+      FileUtils.mkdir_p roles_dir
       write_chef_role_json "#{roles_dir}/#{cloud.name}.json"
     end
     
