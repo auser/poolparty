@@ -2,13 +2,14 @@ module CloudProviders
   class ElasticBlockStore < Ec2Helper
 
     # instance methods
-    attr_accessor :volumeId, :size, :snapshotId, :status, :attachments, :device, :availabilityZone, :instance_id
-    attr_reader :createTime
+    attr_reader :volumeId, :size, :snapshotId, :status, :attachments, :device, :availabilityZone, :instanceId
+    attr_reader :createTime 
 
     alias :volume_id :volumeId
     alias :snapshot_id :snapshotId
     alias :availability_zone :availabilityZone 
     alias :create_time :createTime
+    alias :instance_id :instanceId
 
     def createTime(create_time)
       unless create_time.class==DateTime
@@ -24,10 +25,14 @@ module CloudProviders
 
     def parse_raw_response(raw_response)
       @raw_respons = raw_response
-      raw_response.each{|k,v| send k+"=", v if respond_to?(k+"=") }
-      if raw_response.attachmentSet.respond_to?(:item)
+      raw_response.each{|k,v| instance_variable_set("@"+k,v) if respond_to?(k) }
+      unless raw_response.attachmentSet.nil?
         @attachments=raw_response.attachmentSet.item 
-        @attachments.each{|attch| instance_id=attch.instanceId if attch.status=="attached"}
+        @attachments.each{|attch| if attch.status=="attached" or attch.status=="attaching"
+            @instanceId=attch.instanceId 
+            @device=attch.device
+          end
+        }
       end
     end
 
@@ -43,11 +48,19 @@ module CloudProviders
     end
 
     def attach(ec2_instance,device)
-      ec2.attach_volume(:volume_id => volume_id, :instance_id => ec2_instance.instance_id, :device => device).return=="true"
+      if ec2.attach_volume(:volume_id => volume_id, :instance_id => ec2_instance.instance_id, :device => device).return=="true"
+        update!
+        return true
+      end
+      false
     end
 
     def detach
-      ec2.detach_volume(:volume_id => volume_id).return=="true"
+      if ec2.detach_volume(:volume_id => volume_id).return=="true"
+        update!
+        return true
+      end
+      false
     end
 
     def detach!

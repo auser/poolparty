@@ -61,7 +61,7 @@ module CloudProviders
 
     # Load credentials from file
     def self.load_keys_from_credential_file(filename=default_credential_file, caching=true)
-      return {:access_key => @access_key, :secret_access_key => @secret_access_key} if @access_key and @secret_access_key
+      return {:access_key => @access_key, :secret_access_key => @secret_access_key} if @access_key and @secret_access_key and caching
       return {} if filename.nil? or not File.exists?(filename)
       puts("Reading keys from file: #{filename}")
       File.open(filename).each_line { |line|
@@ -232,6 +232,10 @@ module CloudProviders
     end
     
     def bootstrap_nodes!(tmp_path=nil)
+      unless security_groups.map {|a| a.authorizes.map {|t| t.from_port.to_i }.flatten }.flatten.include?(22)      
+        warn "Cloud security_groups are not authorized for ssh. Cannot bootstrap."
+        return
+      end
       tmp_path ||= cloud.tmp_path
       nodes.each do |node|
         next unless node.in_service?
@@ -243,12 +247,19 @@ module CloudProviders
     end
     
     def configure_nodes!(tmp_path=nil)
+      unless security_groups.map {|a| a.authorizes.map {|t| t.from_port.to_i }.flatten }.flatten.include?(22)      
+        warn "Cloud security_groups are not authorized for ssh. Cannot configure."
+        return
+      end
       tmp_path ||= cloud.tmp_path
       nodes.each do |node|
         next unless node.in_service?
         node.cloud_provider = self
         node.rsync_dir(tmp_path) if tmp_path
         node.run_chef!
+      end
+      ebs_volume_groups.each do |vol_grp|
+        vol_grp.verify_attachments nodes
       end
     end
     
@@ -402,7 +413,7 @@ module CloudProviders
     #     size 200
     #   end
     def ebs_volumes(name=nil, &block)
-      ebs_volume_groups << ElasticBlockStoreGroup.new(sub_opts,&block) 
+      ebs_volume_groups << ElasticBlockStoreGroup.new(sub_opts,&block) if block
     end
 
     def assign_ebs_volumes
@@ -422,25 +433,29 @@ module CloudProviders
     # The function will return volumes matching *all* filters. A volume is a filter match if *any* one of the filter values equals the volume parameter value.
     def list_ec2_volumes(filters=nil)
       @volumes_on_ec2=ec2.describe_volumes.volumeSet.item unless @volumes_on_ec2
-      return @volumes_on_ec2 if filters.nil? # no filter to check, so return at once
-      @volumes_on_ec2.select{|vol| # select volumes for which no filter failed
-        not filters.map {|filter_key, filter_val|
-          filter_key=filter_key.to_s if filter_key.is_a?(Symbol) # filter_key may be given as a symbol
-          raise ArgumentError, "Filter key #{filter_key} is invalid" unless vol.has_key?(filter_key)
-          if filter_val.is_a?(Array) # Deal with multiple filter values
-            filter_val.map{|val| val.is_a?(String) ? val : val.to_s}.member?(vol[filter_key]) # make sure fiter_val array values are Strings before checking for match
-          else
-            filter_val.is_a?(String) ? filter_val : filter_val.to_s==vol[filter_key] # make sure fiter_val is a String before comparing
-          end
-          }.member?(false) # Check if a filter failed, the 'not' statement at the beginning of the map block negates this so 'select' will choose only when no filter failed
-      }.compact # remove nil results from volume set.
+      (if filters.nil? # no filter to check, so return at once
+        @volumes_on_ec2
+      else
+        @volumes_on_ec2.select{|vol| # select volumes for which no filter failed
+          not filters.map {|filter_key, filter_val|
+            filter_key=filter_key.to_s if filter_key.is_a?(Symbol) # filter_key may be given as a symbol
+            raise ArgumentError, "Filter key #{filter_key} is invalid" unless vol.has_key?(filter_key)
+            if filter_val.is_a?(Array) # Deal with multiple filter values
+              filter_val.map{|val| val.is_a?(String) ? val : val.to_s}.member?(vol[filter_key]) # make sure fiter_val array values are Strings before checking for match
+            else
+              (filter_val.is_a?(String) ? filter_val : filter_val.to_s)==vol[filter_key] # make sure fiter_val is a String before comparing
+            end
+            }.member?(false) # Check if a filter failed, the 'not' statement at the beginning of the map block negates this so 'select' will choose only when no filter failed
+          }.compact # remove nil results from volume set.
+        end
+        ).map{|vol| ElasticBlockStore.new(vol,:cloud => cloud)}
     end
 
     # Read credentials from credential_file if one exists
     def credential_file(file=nil)
       unless file.nil?
-	      dsl_options[:credential_file]=file 
-	      dsl_options.merge((Ec2.load_keys_from_credential_file(file)))
+        dsl_options[:credential_file]=file 
+        dsl_options.merge!(Ec2.load_keys_from_credential_file(file))
       else
         fetch(:credential_file)
       end

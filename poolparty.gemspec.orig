@@ -9,7 +9,11 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Ari Lerner", "Michael Fairchild", "Nate Murray"]
-  s.date = %q{2010-03-15}
+<<<<<<< HEAD:poolparty.gemspec
+  s.date = %q{2010-03-02}
+=======
+  s.date = %q{2010-03-09}
+>>>>>>> 81a7e0df2d02545ff9b22572194a4f115f73906a:poolparty.gemspec
   s.description = %q{PoolParty: The easy, open-source, cross-cloud management solution}
   s.email = %q{arilerner@mac.com}
   s.executables = ["cloud-configure", "cloud-vnc", "cloud-contract", "cloud-console", "cloud-ssh", "cloud-run", "cloud-reboot", "cloud-bootstrap", "cloud-compile", "cloud-expand", "cloud-terminate", "cloud", "cloud-show", "cloud-start", "cloud-rsync", "cloud-list"]
@@ -239,7 +243,6 @@ Gem::Specification.new do |s|
      "lib/cloud_providers/ec2/helpers/revoke.rb",
      "lib/cloud_providers/ec2/helpers/security_group.rb",
      "lib/cloud_providers/remote_instance.rb",
-     "lib/cloud_providers/remote_instance.rb.orig",
      "lib/core/array.rb",
      "lib/core/hash.rb",
      "lib/core/object.rb",
@@ -253,7 +256,6 @@ Gem::Specification.new do |s|
      "lib/poolparty/chef_client.rb",
      "lib/poolparty/chef_solo.rb",
      "lib/poolparty/cloud.rb",
-     "lib/poolparty/cloud.rb.orig",
      "lib/poolparty/pool.rb",
      "lib/poolparty/pool_party_error.rb",
      "test/fixtures/bad_perms_test_key",

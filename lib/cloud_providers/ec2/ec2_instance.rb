@@ -41,6 +41,10 @@ module CloudProviders
     def reachable?
       ping_port self.public_ip, 22
     end
+
+    def ssh_available?
+      cloud.security_groups.map {|a| a.authorizes.map {|t| t.from_port.to_i }.flatten }.flatten.include?(22) and reachable? and in_service?
+    end
     
     def in_service?
       running?

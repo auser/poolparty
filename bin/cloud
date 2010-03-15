@@ -43,6 +43,10 @@ EOS
 
     @loaded_pool = pool
     @loaded_clouds = command[:name] ? [pool.clouds[command[:name]]] : pool.clouds.map {|name,cld|cld}    
+    if @loaded_clouds.count == 0
+      puts "No clouds loaded. Check your clouds.rb or -n option"
+      exit
+    end
   end
   
   run do |command|

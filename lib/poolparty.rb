@@ -45,6 +45,9 @@ require "keypair"
 $LOAD_PATH.unshift(File.dirname(__FILE__)/"poolparty")
 %w( base 
     chef_attribute
+    chef
+    chef_solo
+    chef_client
     cloud pool
   ).each do |lib|
   require "poolparty/#{lib}"

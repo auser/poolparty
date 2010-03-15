@@ -21,7 +21,7 @@ module CloudProviders
           sleep(2)
         end
       end
-      false
+      connected
     end
     
     def run(commands, o={})
@@ -38,6 +38,8 @@ module CloudProviders
       # Get the environment hash out of
       # the extra_ssh_ops and then delete
       # the element
+      ssh_error_msg="SSH is not available for this node. perhaps you need to authorize it?"
+      raise PoolParty::PoolPartyError.create("SSHError", ssh_error_msg) unless ssh_available?
       env = extra_ssh_ops[:env] || {}
       extra_ssh_ops.delete :env
 
@@ -47,6 +49,7 @@ module CloudProviders
         do_sudo = extra_ssh_ops[:do_sudo] 
         extra_ssh_ops.delete :do_sudo
       end
+      do_sudo=user!="root"
 
       envstring = env.collect {|k,v| "#{k}=#{v}"}.join ' && '
       envstring += " && " unless envstring.size == 0
@@ -86,9 +89,12 @@ module CloudProviders
     
     def rsync( opts={} )
       raise StandardError.new("You must pass a :source=>uri option to rsync") unless opts[:source]
+      ssh_error_msg="SSH is not available for this node. perhaps you need to authorize it?"
+      raise PoolParty::PoolPartyError.create("SSHError", ssh_error_msg) unless ssh_available?
       destination_path = opts[:destination] || opts[:source]
       rsync_opts = opts[:rsync_opts] || '-va'
-      rsync_opts += %q% --rsync-path="sudo rsync" --exclude=.svn --exclude=.git --exclude=.cvs %
+      rsync_opts += %q% --rsync-path="sudo rsync"% unless user=="root"
+      rsync_opts += %q% --exclude=.svn --exclude=.git --exclude=.cvs %
       cmd_string =  "rsync -L  -e 'ssh #{ssh_options}' #{rsync_opts} #{opts[:source]}  #{user}@#{host}:#{destination_path}"
       out = system_run(cmd_string, :quiet => true)
       out
