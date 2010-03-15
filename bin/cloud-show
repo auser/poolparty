@@ -31,9 +31,10 @@ EOS
         "Keypair:             #{cld.keypair.basename}",
         "Security group:      #{cld.cloud_provider.security_group_names}",
         "Availability zones:  #{cld.cloud_provider.availability_zones}",
-        "User:  #{cld.user}"
+        "User:  #{cld.user}",
+        "Active recipes:      #{cld.chef._recipes(cld.pool.chef_step).join ", " }"
       ]
-      
+
       if cld.load_balancers.size > 0
         load_balancers = cld.cloud_provider.load_balancers.first.running_load_balancers.map {|a| a[:dns_name]}
         msg << "Load balancers:      #{load_balancers.join("\n\t\t\t")}"

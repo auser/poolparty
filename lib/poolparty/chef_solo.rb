@@ -30,6 +30,7 @@ module PoolParty
           # First remove the directory
           FileUtils.remove_entry base_directory, :force => true
         end
+        FileUtils.mkdir_p base_directory
         FileUtils.cp_r "#{repo}/.", base_directory 
       else
         raise "#{repo} chef repo directory does not exist"
@@ -62,6 +63,7 @@ log_level         :info
         :poolparty => {
             :parent_name => cloud.parent.name,
             :name => cloud.name,
+            :pool_info => pool.to_hash
         }
       }
 
@@ -74,7 +76,7 @@ log_level         :info
         :override_attributes => override_attributes.init_opts,
         :description => description
       })
-      ca.to_dna _recipes.map {|a| File.basename(a) }, to
+      ca.to_dna _recipes(pool.chef_step).map {|a| File.basename(a) }, to
     end
   end
 end
