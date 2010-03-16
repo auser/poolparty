@@ -43,7 +43,12 @@ module CloudProviders
     end
 
     def ssh_available?
-      cloud.security_groups.map {|a| a.authorizes.map {|t| t.from_port.to_i }.flatten }.flatten.include?(22) and reachable? and in_service?
+      cloud.security_groups.map {|a|
+        a.authorizes.map {|t| t.from_port.to_i }.flatten
+      }.flatten.include?(22) and
+        reachable? and
+        in_service? and
+        keypair and keypair.exists?
     end
     
     def in_service?
