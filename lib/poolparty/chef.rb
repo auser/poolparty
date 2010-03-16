@@ -56,9 +56,7 @@ module PoolParty
 
     def node_bootsrapped?(remote_instance)
       # "(gem list; dpkg -l chef) | grep -q chef && echo 'chef installed'"
-      remote_instance.ssh([
-        'if [ -z "$(gem list | grep chef)" ]; then echo ""; else echo "chef installed"; fi'
-      ], :do_sudo => false).empty?
+      remote_instance.ssh(['if [ ! -n "$(gem list 2>/dev/null | grep chef)" ]; then echo "chef installed"; fi'], :do_sudo => false).empty? rescue false
     end
    def node_bootstrap!(remote_instance)
       remote_instance.ssh([
@@ -76,7 +74,11 @@ module PoolParty
     end
 
     def method_missing(m,*args,&block)
-      cloud.send(m,*args,&block) if cloud.respond_to?(m)
+      if cloud.respond_to?(m)
+        cloud.send(m,*args,&block)
+      else
+        super
+      end
     end
     
   end
