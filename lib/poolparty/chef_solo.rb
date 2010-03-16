@@ -26,7 +26,9 @@ module PoolParty
           # First remove the directory
           FileUtils.remove_entry base_directory, :force => true
         end
-        FileUtils.cp_r "#{repo}/.", base_directory 
+        cookbook_path = "#{base_directory}/cookbooks"
+        FileUtils.mkdir_p cookbook_path
+        FileUtils.cp_r "#{repo}/.", cookbook_path
       else
         raise "#{repo} chef repo directory does not exist"
       end
