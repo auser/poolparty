@@ -17,9 +17,10 @@ module PoolParty
     def build_tmp_dir
       base_directory = tmp_path/"etc"/"chef"
       roles_dir = "#{base_directory}/roles"
-      FileUtils.rm_rf base_directory
+      FileUtils.rm_rf base_directory # cleanup old chef temp directory
       puts "Copying the chef-repo into the base directory from #{repo}"
       
+      FileUtils.mkdir_p base_directory
       if File.directory?(repo)
         if File.exist?(base_directory)
           # First remove the directory
