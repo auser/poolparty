@@ -37,12 +37,11 @@ module CloudProviders
     end
     
     def chef_bootstrapped?
-      # do_sudo is false cause we want to capture the return code of the call
-      @chef_bootstrapped ||= cloud.chef.node_bootsrapped?(self)
+      @chef_bootstrapped ||= cloud.chef.node_bootstrapped?(self)
     end
     
     def bootstrap_chef!
-      cloud.chef.node_bootstrap(self) unless chef_bootstrapped?
+      cloud.chef.node_bootstrap!(self) unless chef_bootstrapped?
     end
     
     def run_chef!

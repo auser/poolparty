@@ -173,6 +173,7 @@ module CloudProviders
       end
       
       assign_elastic_ips
+      cleanup_ssh_known_hosts!
       puts "Attaching EBS volumes"
       assign_ebs_volumes # Assign EBS volumes
     end
@@ -223,7 +224,9 @@ module CloudProviders
     def contract_by(num=1)
       raise RuntimeError, "Contracting instances by #{num} will lower the number of instances below specified minimum" unless nodes.size - num > minimum_instances
       num.times do |i|
-        id = nodes[-num].instance_id
+        node = nodes[-num]
+        id = node.instance_id
+        node.ssh_cleanup_known_hosts!
         Ec2Instance.terminate!(:instance_id => id, :cloud => cloud)
       end
       reset!
@@ -245,17 +248,11 @@ module CloudProviders
     end
     
     def configure_nodes!(tmp_path=nil)
-      unless security_groups.map {|a| a.authorizes.map {|t| t.from_port.to_i }.flatten }.flatten.include?(22)      
-        warn "Cloud security_groups are not authorized for ssh. Cannot configure."
-        return
-      end
-      tmp_path ||= cloud.tmp_path
-      nodes.each do |node|
-        next unless node.in_service?
-        node.cloud_provider = self
-        node.rsync_dir(tmp_path) if tmp_path
-        node.run_chef!
-      end
+      # removed duplicated code (now configure_nodes! invokes
+      # node.bootstrap_chef!, while old version did not, but I believe
+      # this is harmless)
+      bootstrap_nodes!(tmp_path) 
+
       ebs_volume_groups.each do |vol_grp|
         vol_grp.verify_attachments nodes
       end
@@ -284,7 +281,17 @@ module CloudProviders
         end
       end
     end
-    
+
+    def cleanup_ssh_known_hosts!(nodes_to_cleanup=nodes,
+                                 even_unavailable=false)
+      puts "cleaning up .ssh/known_hosts"
+      nodes_to_cleanup.find_all do |node|
+        even_unavailable || node.ssh_available?
+      end.each do |node|
+        node.ssh_cleanup_known_hosts!
+      end
+    end
+
     def nodes
       all_nodes.select {|i| i.in_service? }#describe_instances.select {|i| i.in_service? && security_groups.include?(i.security_groups) }
     end

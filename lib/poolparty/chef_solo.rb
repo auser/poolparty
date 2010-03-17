@@ -3,16 +3,12 @@ require "fileutils"
 module PoolParty
   class ChefSolo < Chef
     dsl_methods :repo 
-    def compile!
-      build_tmp_dir
-    end
 
     private
-    def chef_cmd
-      return <<-CMD
-        PATH="$PATH:$GEM_BIN" chef-solo -j /etc/chef/dna.json -c /etc/chef/solo.rb
-      CMD
+    def chef_bin
+      "chef-solo"
     end
+
     # The NEW actual chef resolver.
     def build_tmp_dir
       base_directory = tmp_path/"etc"/"chef"
