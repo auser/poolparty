@@ -105,7 +105,7 @@ module PoolParty
     end
 
     def node_bootstrap!(remote_instance, force=false)
-      return if !force && node_bootstrapped?
+      return if !force && node_bootstrapped?(remote_instance)
 
       # TODO: this should not be hardcoded (like in node_run)
       deb_gem_bin='/var/lib/gems/1.8/bin'
