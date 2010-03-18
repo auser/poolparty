@@ -75,7 +75,6 @@ module CloudProviders
     
     default_options(
       :instance_type          => 'm1.small',
-      :addressing_type        => "public",
       :availability_zones     => ["us-east-1a"],
       :user_id                => default_user_id,
       :private_key            => default_private_key,
@@ -89,10 +88,12 @@ module CloudProviders
       :min_count              => 1,
       :max_count              => 1,
       :user_data              => '',
-      :addressing_type        => nil,
       :kernel_id              => nil,
       :ramdisk_id             => nil,
-      :block_device_mapping  => [{}]
+      :block_device_mapping  => [{}],
+      :disable_api_termination => nil,
+      :instance_initiated_shutdown_behavior => nil,
+      :subnet_id => nil
     )
 
     # Called when the create command is called on the cloud
@@ -197,7 +198,10 @@ module CloudProviders
         :availability_zone => availability_zones.first,
         :base64_encoded => true,
         :cloud => cloud,
-        :block_device_mapping => block_device_mapping
+        :block_device_mapping => block_device_mapping,
+        :disable_api_termination => disable_api_termination,
+        :instance_initiated_shutdown_behavior => instance_initiated_shutdown_behavior,
+        :subnet_id => subnet_id,
       })
       progress_bar_until("Waiting for node to launch...") do
         wait_for_node(e)

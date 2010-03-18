@@ -10,7 +10,10 @@ module CloudProviders
       :key_name => nil,
       :launch_time => nil,
       :availability_zones => [],
-      :block_device_mapping => [{}]
+      :block_device_mapping => [{}],
+      :disable_api_termination => nil,
+      :instance_initiated_shutdown_behavior => nil,
+      :subnet_id => nil
     )
     
     def initialize(raw_response={})
@@ -27,6 +30,9 @@ module CloudProviders
       self.availability_zones = raw_response["placement"]["availabilityZone"] rescue nil
       self.status = raw_response["instanceState"]["name"] rescue nil
       self.block_device_mapping = raw_response["blockDeviceMapping"] rescue nil
+      self.disable_api_termination = raw_response["disableApiTermination"] rescue nil
+      self.instance_initiated_shutdown_behavior = raw_response["instance_initiated_shutdown_behavior"] rescue nil
+      self.subnet_id = raw_response["subnetId"] rescue nil
       super
     end
     
