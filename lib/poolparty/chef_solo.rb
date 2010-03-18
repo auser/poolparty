@@ -13,15 +13,18 @@ module PoolParty
     def build_tmp_dir
       base_directory = tmp_path/"etc"/"chef"
       roles_dir = "#{base_directory}/roles"
-      FileUtils.rm_rf base_directory
+      FileUtils.rm_rf base_directory # cleanup old chef temp directory
       puts "Copying the chef-repo into the base directory from #{repo}"
       
+      FileUtils.mkdir_p base_directory
       if File.directory?(repo)
         if File.exist?(base_directory)
           # First remove the directory
           FileUtils.remove_entry base_directory, :force => true
         end
-        FileUtils.cp_r "#{repo}/.", base_directory 
+        cookbook_path = "#{base_directory}/cookbooks"
+        FileUtils.mkdir_p cookbook_path
+        FileUtils.cp_r "#{repo}/.", cookbook_path
       else
         raise "#{repo} chef repo directory does not exist"
       end

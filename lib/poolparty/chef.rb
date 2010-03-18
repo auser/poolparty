@@ -140,7 +140,11 @@ module PoolParty
     end
 
     def method_missing(m,*args,&block)
-      cloud.send(m,*args,&block) if cloud.respond_to?(m)
+      if cloud.respond_to?(m)
+        cloud.send(m,*args,&block)
+      else
+        super
+      end
     end
     
   end
