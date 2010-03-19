@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{poolparty}
-  s.version = "1.6.4"
+  s.version = "1.6.5"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Ari Lerner", "Michael Fairchild", "Nate Murray"]
@@ -269,6 +269,8 @@ Gem::Specification.new do |s|
      "test/fixtures/ec2/ec2-terminate-instances_response_body.xml",
      "test/fixtures/ec2/elb-describe-load-balancers.xml",
      "test/fixtures/ec2/rds-describe-db-instances-empty_response_body.xml",
+     "test/fixtures/keys/pem_key.pem",
+     "test/fixtures/keys/pem_pub_key.pem",
      "test/fixtures/keys/test_key",
      "test/fixtures/keys/test_pub_key",
      "test/fixtures/resources/fake_plugin.rb",
