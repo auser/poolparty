@@ -8,7 +8,7 @@
 # Home::      http://github.com/grempe/amazon-ec2/tree/master
 #++
 
-%w[ base64 cgi openssl digest/sha1 net/https rexml/document time ostruct ].each { |f| require f }
+%w[ base64 cgi openssl digest/sha1 net/https net/http rexml/document time ostruct ].each { |f| require f }
 
 begin
   require 'xmlsimple' unless defined? XmlSimple
@@ -57,7 +57,10 @@ module AWS
       encoded = (CGI::escape(p[0].to_s) +
                  "=" + CGI::escape(p[1].to_s))
       # Ensure spaces are encoded as '%20', not '+'
-      encoded.gsub('+', '%20')
+      encoded = encoded.gsub('+', '%20')
+      # According to RFC3986 (the scheme for values expected by signing requests), '~' 
+      # should not be encoded
+      encoded = encoded.gsub('%7E', '~')
     end
     sigquery = encoded_params.join("&")
 
