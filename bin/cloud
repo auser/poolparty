@@ -49,6 +49,7 @@ EOS
   run do |command|
     subcommands = GitStyleBinary.list_subcommands
     
+    puts "cloud %s" % PoolParty.version
     puts "Usage: cloud COMMAND [ARGS]
     
     The cloud subcommands commands are:

@@ -22,3 +22,5 @@ test/test_dir/
 examples/thrift/erlang/deps/thrift/ebin/*.beam
 examples/thrift/erlang/ebin/*.beam
 *.swp
+*~
+\#*\#

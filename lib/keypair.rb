@@ -5,20 +5,25 @@ class Keypair
   
   include SearchablePaths
   has_searchable_paths(:prepend_paths => [Dir.pwd, '/etc/poolparty/keys', "#{ENV["HOME"]}/.ssh/", "#{ENV["HOME"]}/.ec2/", ENV['EC2_CONFIG_DIR']])
-  
+
+  # Amazon will not append suffix, but public key may have '.pem' suffix
+  SEARCH_SUFFIXES = %w( .pem )
+
   attr_accessor :filepath
   attr_reader :extra_paths, :opts
+  attr_reader :search_suffixes
   
   # Create a new key that defaults to id_rsa as the name. 
   def initialize(fpath, extra_paths=[], opts={})
     @filepath = fpath
     @opts = opts
     @extra_paths = extra_paths.map {|a| File.expand_path(a) }
+    @search_suffixes = SEARCH_SUFFIXES
   end
   
-  # If the full_filepath is nil, then the key doesn't exist
+  # If the full_filepath is nil or false, then the key doesn't exist
   def exists?
-    full_filepath != nil
+    !! full_filepath
   end
   
   # Read the content of the key
@@ -29,13 +34,9 @@ class Keypair
   # Returns the full_filepath of the key. If a full filepath is passed, we just return the expanded filepath
   # for the keypair, otherwise query where it is against known locations
   def full_filepath
-    return @full_filepath if @full_filepath
-    @full_filepath = if File.file?(File.expand_path(filepath))
-      ::File.expand_path(filepath)
-      else
-        search_in_known_locations(filepath, extra_paths)
-      end
-    @full_filepath ? @full_filepath : false
+    @full_filepath ||= 
+      find_file_in_path_with_suffix(filepath, extra_paths, 
+                                    search_suffixes) || false
   end
   
   def to_s
@@ -99,6 +100,24 @@ class Keypair
       raise StandardError.new("#{filepath} key file cannot be found") unless filepath.nil?
     end
   end
-  
+
+  # try filename with suffix and without suffixes.
+  # Checks all paths without suffix first, then try all paths for all suffixes.
+  def find_file_in_path_with_suffix(file, extra_paths, suffixes=[], 
+                                    try_wo_suffix=true)
+    suffixes_to_try = suffixes.dup
+    suffixes_to_try.unshift '' if try_wo_suffix
+
+    suffixes_to_try.map {|s| file + s }.each do |suffixed|
+      fullpath = if File.file?(File.expand_path(suffixed))
+                   ::File.expand_path(suffixed)
+                 else
+                   search_in_known_locations(suffixed, extra_paths)
+                 end
+      return fullpath if fullpath
+    end
+
+    nil
+  end
   
 end
