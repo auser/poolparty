@@ -17,6 +17,7 @@ module PoolParty
       puts "Copying the chef-repo into the base directory from #{repo}"
       
       FileUtils.mkdir_p base_directory
+      FileUtils.mkdir_p roles_dir # Why do we need this??!?
       if File.directory?(repo)
         if File.exist?(base_directory)
           # First remove the directory
