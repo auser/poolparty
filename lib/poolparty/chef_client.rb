@@ -3,7 +3,7 @@ require 'uri' # for URI.parse in write_bootstrap_files
 module PoolParty
   # Chef class bootstrapping chef-client.
   class ChefClient < Chef
-    dsl_methods :server_url,:validation_token, :validation_key
+    dsl_methods :server_url,:validation_token, :validation_key, :validation_client_name
 
     # When init_style.nil?, old behavior is used (just run the client).
     # If init_style is specified, bootstrap::client cookbook is executed
@@ -84,6 +84,7 @@ openid_url         "#{openid_url}"
       }
       content+="validation_token  \"#{validation_token}\"\n" if validation_token
       content+="validation_key    \"/etc/chef/#{File.basename validation_key}\"\n" if validation_key
+      content+="validation_client_name  \"#{validation_client_name}\"\n" if validation_client_name
       File.open(to, "w") do |f|
         f << content
       end
@@ -109,12 +110,15 @@ recipe_url "http://s3.amazonaws.com/chef-solo/bootstrap-latest.tar.gz"
             :init_style => init_style,
             :path => "/srv/chef",
             :serve_path => "/srv/chef",
-            :server_fqdn => uri.host,
+            :server_fqdn => uri.host + uri.path,
             :server_port => uri.port,
           },
         },
         :run_list => [ 'recipe[bootstrap::client]' ],
       }
+      if validation_client_name
+        bootstrap_json[:bootstrap][:chef][:validation_client_name] = validation_client_name
+      end
       ChefAttribute.new(bootstrap_json).to_dna([], chef_json)
     end
   end
