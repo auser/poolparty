@@ -38,7 +38,7 @@ module PoolParty
     
     def write_solo_dot_rb(to=tmp_path/"etc"/"chef"/"solo.rb")
       content = <<-EOE
-cookbook_path     ["/etc/chef/site-cookbooks", "/etc/chef/cookbooks"]
+cookbook_path     ["/etc/chef/cookbooks", "/etc/chef/site-cookbooks"]
 role_path         "/etc/chef/roles"
 log_level         :info
       EOE
