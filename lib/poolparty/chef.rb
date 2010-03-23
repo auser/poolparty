@@ -101,7 +101,7 @@ module PoolParty
         " && echo OK || echo MISSING"
 
       r = remote_instance.ssh(cmd, :do_sudo => false )
-      r.lines.to_a.last.chomp == "OK"
+      r.split("\n").to_a.last.chomp == "OK"
     end
 
     def node_bootstrap!(remote_instance, force=false)
