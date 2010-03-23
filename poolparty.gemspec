@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{poolparty}
-  s.version = "1.6.6"
+  s.version = "1.6.7"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Ari Lerner", "Michael Fairchild", "Nate Murray"]
@@ -431,11 +431,10 @@ Gem::Specification.new do |s|
      "vendor/gems/trollop/www/index.html",
      "vendor/gems/xml-simple/lib/xmlsimple.rb"
   ]
-  s.has_rdoc = true
   s.homepage = %q{http://poolpartyrb.com}
   s.rdoc_options = ["--quiet", "--title", "PoolParty documentation", "--line-numbers", "--main", "README.rdoc"]
   s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.3.1}
+  s.rubygems_version = %q{1.3.6}
   s.summary = %q{Self-healing, auto-scaling system administration, provisioning and maintaining tool that makes cloud computing easier.}
   s.test_files = [
     "test/test_helper.rb",
@@ -444,7 +443,7 @@ Gem::Specification.new do |s|
 
   if s.respond_to? :specification_version then
     current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
-    s.specification_version = 2
+    s.specification_version = 3
 
     if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
     else
