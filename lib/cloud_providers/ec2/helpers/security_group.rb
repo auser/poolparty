@@ -1,57 +1,54 @@
 module CloudProviders
   class SecurityGroup < Ec2Helper
-    
+
     def run
       if should_create_security_group?
         create_security_group!
       end
-      current_security_groups = security_groups.map {|a| 
+      current_security_groups = security_groups.map {|a|
+        # Example:
+        #    [{ :ip_permissions=>[
+        #       {:ip_ranges=>[{:cidr_ip=>"0.0.0.0/0"}], :from_port=>"22", :protocol=>"tcp", :to_port=>"22"},
+        #       {:ip_ranges=>[{:cidr_ip=>"0.0.0.0/0"}], :from_port=>"80", :protocol=>"tcp", :to_port=>"80"} ],
+        #     :description=>"PoolParty generated security group: clyde-chefclient", :name=>"clyde-chefclient"}]
+        #
         a[:ip_permissions].map do |perm|
           if perm[:group_name]
             {
               :group_name => perm[:group_name]
             }
           else
-            if perm[:ip_ranges].size > 1
-              perm[:ip_ranges].map do |range|
-                {
-                  :group_name => a[:name],
-                  :from_port => perm[:from_port],
-                  :to_port => perm[:to_port],
-                  :cidr_ip => range,
-                  :ip_protocol => perm[:protocol]
-                }.flatten
-              end.flatten
-            else
+            (perm[:ip_ranges] || ["0.0.0.0/0"]).map do |range|
+              range = range[:cidr_ip] if range.is_a?(Hash)
               {
-                :group_name => a[:name],
-                :from_port => perm[:from_port], 
-                :to_port => perm[:to_port],
-                :cidr_ip => perm[:ip_ranges].map {|c| c[:cidrIp] }.first, # first for simplicity for now...
+                :group_name  => a[:name],
+                :from_port   => perm[:from_port].to_i,
+                :to_port     => perm[:to_port].to_i,
+                :cidr_ip     => range,
                 :ip_protocol => perm[:protocol]
               }
-            end
+            end.flatten
           end
         end.flatten
       }.flatten
-      
-      authorizers = []
-      authorizes.each do |a|
-        unless current_security_groups.include?(a.to_hash)
-          authorizers << a
-        end
+
+      authorizes_requested        = authorizes.select{|a| a.name == name }
+      authorizes_requested_hashes = authorizes_requested.map{|a| a.to_hash}
+      authorizes_needed = []
+
+      # take each requested authorization. If it doesn't exist in the current_security_groups, we need to add it.
+      authorizes_requested.each do |a|
+        authorizes_needed << a unless current_security_groups.include?(a.to_hash)
       end
-      
-      defined_security_group_hashes = authorizes.map {|a| a.to_hash}
-      
+      # conversely, every current_security_groups authorization that isn't in the authorizes_requested list must be revoked
       current_security_groups.each do |hsh|
-        unless defined_security_group_hashes.include?(hsh)
+        unless authorizes_requested_hashes.include?(hsh)
           revoke(hsh.merge(:protocol => hsh[:ip_protocol]))
         end
       end
-      
+
       revokes.each {|r| r.run }
-      authorizers.each {|a| a.run}
+      authorizes_needed.each {|a| a.run}
     end
     def authorize(o={}, &block)
       authorizes << Authorize.new("#{name}", o.merge(:parent => parent, :cloud => cloud), &block)
@@ -82,7 +79,7 @@ module CloudProviders
               :to_port => i["toPort"],
               :ip_ranges => ip_ranges["item"].map do |ip|
                 {
-                  :cidrIp => ip["cidrIp"]
+                  :cidr_ip => ip["cidrIp"]
                 }
               end
             }
