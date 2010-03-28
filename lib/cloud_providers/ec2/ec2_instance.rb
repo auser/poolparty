@@ -37,7 +37,8 @@ module CloudProviders
     end
 
     def keypair(n=nil)
-      @keypair ||= Keypair.new(self.key_name)
+      return @keypair if @keypair
+      @keypair = (cloud.keypair.basename == self.key_name) ? cloud.keypair : Keypair.new(self.key_name, cloud.keypair.extra_paths)
     end
 
     def zone
