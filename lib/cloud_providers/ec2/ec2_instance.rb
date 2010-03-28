@@ -19,7 +19,7 @@ module CloudProviders
     def initialize(raw_response={})
       @raw_response = raw_response
       self.instance_id                          = raw_response["instanceId"] rescue nil
-      self.security_groups                      = raw_response.groupSet.item[0].groupId rescue nil
+      self.security_groups                      = raw_response.groupSet.item.map{|sg| sg.groupId }.sort rescue nil
       self.image_id                             = raw_response["imageId"] rescue nil
       self.private_ip                           = raw_response["privateIpAddress"] rescue nil
       self.dns_name                             = raw_response["dnsName"] rescue nil
@@ -40,6 +40,10 @@ module CloudProviders
     def keypair(n=nil)
       return @keypair if @keypair
       @keypair = (cloud.keypair.basename == self.key_name) ? cloud.keypair : Keypair.new(self.key_name, cloud.keypair.extra_paths)
+    end
+
+    def security_group_names
+      security_groups.map{|a| a.to_s }
     end
 
     def zone

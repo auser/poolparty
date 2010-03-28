@@ -16,31 +16,31 @@ module CloudProviders
     def self.default_access_key
       ENV['EC2_ACCESS_KEY'] || load_keys_from_file[:access_key] || load_keys_from_credential_file[:access_key]
     end
-    
+
     def self.default_secret_access_key
       ENV['EC2_SECRET_KEY'] || load_keys_from_file[:secret_access_key] || load_keys_from_credential_file[:secret_access_key]
     end
-    
+
     def self.default_private_key
       ENV['EC2_PRIVATE_KEY'] || load_keys_from_file[:private_key]
     end
-    
+
     def self.default_cert
       ENV['EC2_CERT'] || load_keys_from_file[:cert]
     end
-    
+
     def self.default_user_id
       ENV['EC2_USER_ID'] || load_keys_from_file[:user_id]
     end
-    
+
     def self.default_ec2_url
       ENV['EC2_URL'] || load_keys_from_file[:ec2_url]
     end
-    
+
     def self.default_s3_url
       ENV['S3_URL'] || load_keys_from_file[:s3_url]
     end
-    
+
     def self.default_cloud_cert
       ENV['CLOUD_CERT'] || ENV['EUCALYPTUS_CERT'] || load_keys_from_file[:cloud_cert]
     end
@@ -48,7 +48,7 @@ module CloudProviders
     def self.default_credential_file
       ENV['AWS_CREDENTIAL_FILE'] || load_keys_from_file[:credential_file]
     end
-    
+
     # Load the yaml file containing keys.  If the file does not exist, return an empty hash
     def self.load_keys_from_file(filename="#{ENV["HOME"]}/.poolparty/aws", caching=true)
       return @aws_yml if @aws_yml && caching==true
@@ -71,8 +71,8 @@ module CloudProviders
       }
       return {:access_key => @access_key, :secret_access_key => @secret_access_key}
     end
-      
-    
+
+
     default_options(
       :instance_type          => 'm1.small',
       :availability_zones     => ["us-east-1a"],
@@ -84,7 +84,7 @@ module CloudProviders
       :secret_access_key      => default_secret_access_key,
       :ec2_url                => default_ec2_url,
       :s3_url                 => default_s3_url,
-      :credential_file	      => default_credential_file,
+      :credential_file        => default_credential_file,
       :min_count              => 1,
       :max_count              => 1,
       :user_data              => '',
@@ -109,6 +109,7 @@ module CloudProviders
       puts "  maximum_instances: #{maximum_instances}"
       puts "  security_groups: #{security_group_names.join(", ")}"
       puts "  using keypair: #{keypair}"
+      puts "  with user_data #{user_data.to_s[0..100]}"
       puts "  user: #{user}\n"
 
       security_groups.each do |sg|
@@ -152,7 +153,7 @@ module CloudProviders
           puts "    autoscaler: #{a.name}"
           puts "-----> The autoscaling groups will launch the instances"
           a.run
-          
+
           progress_bar_until("Waiting for autoscaler to launch instances") do
             reset!
             running_nodes = nodes.select {|n| n.running? }
@@ -161,8 +162,8 @@ module CloudProviders
           reset!
         end
       end
-      
-      from_ports = security_groups.map {|a| a.authorizes.map {|t| t.from_port.to_i }.flatten }.flatten      
+
+      from_ports = security_groups.map {|a| a.authorizes.map {|t| t.from_port.to_i }.flatten }.flatten
       if from_ports.include?(22)
         progress_bar_until("Waiting for the instances to be accessible by ssh") do
           running_nodes = nodes.select {|n| n.running? }
@@ -172,20 +173,20 @@ module CloudProviders
           accessible_count == running_nodes.size
         end
       end
-      
+
       assign_elastic_ips
       cleanup_ssh_known_hosts!
       puts "Attaching EBS volumes"
       assign_ebs_volumes # Assign EBS volumes
     end
-    
+
     def teardown
       puts "------ Tearing down and cleaning up #{cloud.name} cloud"
       unless autoscalers.empty?
         puts "Tearing down autoscalers"
       end
     end
-    
+
     def expand_by(num=1)
       e = Ec2Instance.run!({
         :image_id => image_id,
@@ -208,7 +209,7 @@ module CloudProviders
       end
       all_nodes.detect {|n| n.instance_id == e.instance_id }
     end
-    
+
     def decoded_user_data
       if user_data
         if File.file?(user_data)
@@ -218,13 +219,13 @@ module CloudProviders
         end
       end
     end
-    
+
     def wait_for_node(instance)
       reset!
       inst = all_nodes.detect {|n| n.instance_id == instance.instance_id }
       inst.running? if inst
     end
-    
+
     def contract_by(num=1)
       raise RuntimeError, "Contracting instances by #{num} will lower the number of instances below specified minimum" unless nodes.size - num > minimum_instances
       num.times do |i|
@@ -235,9 +236,9 @@ module CloudProviders
       end
       reset!
     end
-    
+
     def bootstrap_nodes!(tmp_path=nil)
-      unless security_groups.map {|a| a.authorizes.map {|t| t.from_port.to_i }.flatten }.flatten.include?(22)      
+      unless security_groups.map {|a| a.authorizes.map {|t| t.from_port.to_i }.flatten }.flatten.include?(22)
         warn "Cloud security_groups are not authorized for ssh. Cannot bootstrap."
         return
       end
@@ -250,18 +251,18 @@ module CloudProviders
         node.run_chef!
       end
     end
-    
+
     def configure_nodes!(tmp_path=nil)
       # removed duplicated code (now configure_nodes! invokes
       # node.bootstrap_chef!, while old version did not, but I believe
       # this is harmless)
-      bootstrap_nodes!(tmp_path) 
+      bootstrap_nodes!(tmp_path)
 
       ebs_volume_groups.each do |vol_grp|
         vol_grp.verify_attachments nodes
       end
     end
-    
+
     def assign_elastic_ips
       unless elastic_ips.empty?
         unused_elastic_ip_addresses = ElasticIp.unused_elastic_ips(self).map {|i| i.public_ip }
@@ -299,11 +300,11 @@ module CloudProviders
     def nodes
       all_nodes.select {|i| i.in_service? }#describe_instances.select {|i| i.in_service? && security_groups.include?(i.security_groups) }
     end
-    
+
     def all_nodes
-      @nodes ||= describe_instances.select {|i| security_group_names.include?(i.security_groups) }.sort {|a,b| DateTime.parse(a.launchTime) <=> DateTime.parse(b.launchTime)}
+      @nodes ||= describe_instances.select {|i| security_group_names.sort == i.security_group_names.sort }.sort {|a,b| DateTime.parse(a.launchTime) <=> DateTime.parse(b.launchTime)}
     end
-    
+
     # Describe instances
     # Describe the instances that are available on this cloud
     # @params id (optional) if present, details about the instance
@@ -318,15 +319,15 @@ module CloudProviders
           end
         end.flatten
       rescue AWS::InvalidClientTokenId => e # AWS credentials invalid
-	puts "Error contacting AWS: #{e}"
-	raise e
+        puts "Error contacting AWS: #{e}"
+        raise e
       rescue Exception => e
         []
       end
     end
-    
+
     # Extras!
-    
+
     def block_device_mapping(o=[], given_name=cloud.proper_name )
       @mappings ||= o
     end
@@ -357,10 +358,10 @@ module CloudProviders
       @ec2 ||= begin
        AWS::EC2::Base.new( :access_key_id => access_key, :secret_access_key => secret_access_key )
       rescue AWS::ArgumentError => e # AWS credentials missing?
-	puts "Error contacting AWS: #{e}"
-	raise e
+        puts "Error contacting AWS: #{e}"
+        raise e
       rescue Exception => e
-	puts "Generic error #{e.class}: #{e}"
+        puts "Generic error #{e.class}: #{e}"
       end
     end
 
@@ -398,7 +399,7 @@ module CloudProviders
       @ebs_volume_groups ||= []
     end
 
-    # dsl method for EBS volumes. E.G.: 
+    # dsl method for EBS volumes. E.G.:
     #   ebs_volumes do
     #     volumes "vol-001248ff", "vol-01ff4b85" # use existing volumes, not mandatory
     #     device "/dev/sdf"
@@ -412,7 +413,7 @@ module CloudProviders
     def assign_ebs_volumes
       ebs_volume_groups.each{|ebs_volume_group| ebs_volume_group.attach(nodes)}
     end
-    
+
     def rds_instances
       @rds_instances ||= []
     end
@@ -447,13 +448,13 @@ module CloudProviders
     # Read credentials from credential_file if one exists
     def credential_file(file=nil)
       unless file.nil?
-        dsl_options[:credential_file]=file 
+        dsl_options[:credential_file]=file
         dsl_options.merge!(Ec2.load_keys_from_credential_file(file))
       else
         fetch(:credential_file)
       end
     end
-    
+
     private
     # Helper to get the options with self as parent
     def sub_opts
