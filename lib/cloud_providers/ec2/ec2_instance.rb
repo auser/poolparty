@@ -30,9 +30,10 @@ module CloudProviders
       self.availability_zones                   = raw_response["placement"]["availabilityZone"] rescue nil
       self.status                               = raw_response["instanceState"]["name"] rescue nil
       self.block_device_mapping                 = raw_response["blockDeviceMapping"] rescue nil
-      self.disable_api_termination              = raw_response["disableApiTermination"] rescue nil
-      self.instance_initiated_shutdown_behavior = raw_response["instance_initiated_shutdown_behavior"] rescue nil
       self.subnet_id                            = raw_response["subnetId"] rescue nil
+      # disable_api_termination and instance_initiated_shutdown_behavior don't currently get returned in the request -- you'd need to later call describe_instance_attribute
+      self.disable_api_termination              = raw_response["disableApiTermination"] rescue nil
+      self.instance_initiated_shutdown_behavior = raw_response["instanceInitiatedShutdownBehavior"] rescue nil
       super
     end
 
@@ -63,16 +64,19 @@ module CloudProviders
     end
 
     def run!
-      r = cloud_provider.ec2.run_instances(:image_id => image_id,
-      :min_count => min_count,
-      :max_count => max_count,
-      :key_name => keypair.basename,
-      :security_group => cloud.security_group_names,
-      :user_data => user_data,
-      :instance_type => instance_type,
-      :availability_zone => availability_zone,
-      :block_device_mapping => block_device_mapping,
-      :base64_encoded => true)
+      r = cloud_provider.ec2.run_instances(
+        :image_id             => image_id,
+        :min_count            => min_count,
+        :max_count            => max_count,
+        :key_name             => keypair.basename,
+        :security_group       => cloud.security_group_names,
+        :user_data            => user_data,
+        :instance_type        => instance_type,
+        :availability_zone    => availability_zone,
+        :block_device_mapping => block_device_mapping,
+        :disable_api_termination => disable_api_termination,
+        :instance_initiated_shutdown_behavior => instance_initiated_shutdown_behavior,
+        :base64_encoded       => true)
       r.instancesSet.item.map do |i|
         inst_options = i.merge(r.merge(:cloud => cloud)).merge(cloud.cloud_provider.dsl_options)
         Ec2Instance.new(inst_options)
