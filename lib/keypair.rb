@@ -15,7 +15,7 @@ class Keypair
 
   # Create a new key that defaults to id_rsa as the name.
   def initialize(fpath, extra_paths=[], opts={})
-    @filepath = fpath
+    @filepath = fpath.to_s
     @opts = opts
     @extra_paths = extra_paths.map {|a| File.expand_path(a) }
     @search_suffixes = SEARCH_SUFFIXES
