@@ -327,7 +327,8 @@ module CloudProviders
       :trigger_name => "CpuTrigger",
       :lower_breach_scale_increment => -1,
       :upper_breach_scale_increment => 1,
-      :breach_duration => 120
+      :breach_duration => 120,
+      :namespace => 'AWS/EC2'
     )
     
     def measure_names
@@ -392,7 +393,8 @@ module CloudProviders
             :breach_duration => trigger["BreachDuration"],
             :dimensions => trigger["Dimensions"],
             :unit => trigger["Unit"],
-            :autoscaling_group_name => trigger["AutoScalingGroupName"]
+            :autoscaling_group_name => trigger["AutoScalingGroupName"],
+            :namespace => trigger['Namespace']
           }
         end
       rescue Exception => e
@@ -412,7 +414,8 @@ module CloudProviders
         :lower_threshold => "#{lower_threshold}",
         :lower_breach_scale_increment => "#{lower_breach_scale_increment}",
         :upper_threshold => "#{upper_threshold}",
-        :upper_breach_scale_increment => "#{upper_breach_scale_increment}"
+        :upper_breach_scale_increment => "#{upper_breach_scale_increment}",
+        :namespace => namespace
       )
     end
     
