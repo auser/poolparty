@@ -13,7 +13,8 @@ module CloudProviders
       :block_device_mapping => [{}],
       :disable_api_termination => nil,
       :instance_initiated_shutdown_behavior => nil,
-      :subnet_id => nil
+      :subnet_id => nil,
+      :spot_price => nil
     )
 
     def initialize(raw_response={})
@@ -68,6 +69,15 @@ module CloudProviders
     end
 
     def run!
+      if spot_price.to_f > 0
+        request_spot_instances!
+      else
+        launch_instances!
+      end
+    end
+    def self.run!(hsh); new(hsh).run!; end
+
+    def launch_instances!
       r = cloud_provider.ec2.run_instances(
         :image_id             => image_id,
         :min_count            => min_count,
@@ -86,7 +96,23 @@ module CloudProviders
         Ec2Instance.new(inst_options)
       end.first
     end
-    def self.run!(hsh); new(hsh).run!; end
+
+    def request_spot_instances!
+      r = cloud_provider.ec2.request_spot_instances(
+        :spot_price           => spot_price,
+        :instance_count       => max_count,
+        # TODO: type, valid_from, valid_until, launch_group, availability_zone_group
+        :image_id             => image_id,
+        :key_name             => keypair.basename,
+        :security_group       => cloud.security_group_names,
+        :user_data            => user_data,
+        :instance_type        => instance_type,
+        :availability_zone    => availability_zone,
+        :block_device_mapping => block_device_mapping,
+        :base64_encoded       => true)
+      p r
+      return 'spot instances requested'
+    end
 
     def terminate!
       cloud_provider.ec2.terminate_instances(:instance_id => [self.instance_id])

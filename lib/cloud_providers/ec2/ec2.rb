@@ -90,10 +90,11 @@ module CloudProviders
       :user_data              => '',
       :kernel_id              => nil,
       :ramdisk_id             => nil,
-      :block_device_mapping  => [{}],
+      :block_device_mapping   => [{}],
       :disable_api_termination => nil,
       :instance_initiated_shutdown_behavior => nil,
-      :subnet_id => nil
+      :subnet_id              => nil,
+      :spot_price             => nil
     )
 
     # Called when the create command is called on the cloud
@@ -111,6 +112,7 @@ module CloudProviders
       puts "  using keypair: #{keypair}"
       puts "  with user_data #{user_data.to_s[0..100]}"
       puts "  user: #{user}\n"
+      puts "  at spot price: #{spot_price}\n" if spot_price
 
       security_groups.each do |sg|
         sg.run
@@ -202,8 +204,10 @@ module CloudProviders
         :block_device_mapping => block_device_mapping,
         :disable_api_termination => disable_api_termination,
         :instance_initiated_shutdown_behavior => instance_initiated_shutdown_behavior,
-        :subnet_id => subnet_id,
-      })
+          :subnet_id => subnet_id,
+          :spot_price => spot_price,
+        })
+      return if e == 'spot instances requested'
       progress_bar_until("Waiting for node to launch...") do
         wait_for_node(e)
       end
