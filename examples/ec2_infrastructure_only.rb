@@ -3,7 +3,7 @@ $PP_VERBOSE=true
 
 pool "CloudteamExample" do
   do_not_execute = true
-  
+
   #TODO: declarative, serializable syntax, and allow definition outside a cloud
   # security_group 'minerva_monitor', [
   #   {:port=>80, :protocol=>'tcp', :network=>'0.0.0.0/0'},
@@ -12,13 +12,13 @@ pool "CloudteamExample" do
   #   {:port=>25826, :protocol=>'udp', :security_group=>'minerva_chacha'}
   #  ]
   # end
-  
+
   #TODO: allow definition of a load_balancer in the pool that balances between clouds, default name of pool.name
   #TODO: default cloud load_balancer taking an array of balancer/port/protocol hashes.
   #NOTE: loadbalancers are paid for per balancer, and are limited availabiliyt, so good to use multiple ports per LB
-  # load_balancer [ {:external_port=>80, :internal_port=>8080, :protocol=>'tcp'}, 
+  # load_balancer [ {:external_port=>80, :internal_port=>8080, :protocol=>'tcp'},
   #                  {:external_port=>443, :internal_port=>8443, :protocol=>'tcp'} ]
-  
+
   cloud "basic" do
     minimum_instances 1
     maximum_instances 2
@@ -29,13 +29,12 @@ pool "CloudteamExample" do
       authorize :from_port => "22", :to_port => "22"
     end
     availability_zones ['us-east-1b', 'us-east-1c']
-    end
     load_balancer do
       listener :external_port => 8080, :internal_port => 8080, :protocol => 'tcp'
     end
     autoscaler
   end
-  
+
 end
 
 
@@ -52,7 +51,7 @@ end
 sleep 4
 puts "pool has been run\n----"
 puts "describing current autscaling activities:"
- 
+
  # Set things up for amazon-ec2
 @opts={:access_key_id => ENV['EC2_ACCESS_KEY'], :secret_access_key => ENV['EC2_SECRET_KEY'], :symbolize_keys=>:snake_case}
 if ENV['EC2_URL']
@@ -61,7 +60,7 @@ end
 @ec2 = AWS::EC2::Base.new(@opts)
 @elb = AWS::ELB::Base.new(@opts)
 @as = AWS::Autoscaling::Base.new(@opts)
- 
+
 # Iterate over the clods and ensure the elb and autoscaling groups exist
 pool.clouds.each do |name,cld|
   puts "\ncloud[:#{name}]\n"
