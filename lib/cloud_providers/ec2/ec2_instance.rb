@@ -99,7 +99,7 @@ module CloudProviders
 
     def request_spot_instances!
       r = cloud_provider.ec2.request_spot_instances(
-        :spot_price           => spot_price,
+        :spot_price           => spot_price.to_s,
         :instance_count       => max_count,
         # TODO: type, valid_from, valid_until, launch_group, availability_zone_group
         :image_id             => image_id,
