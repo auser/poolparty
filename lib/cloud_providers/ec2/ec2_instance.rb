@@ -2,19 +2,20 @@ module CloudProviders
   class Ec2Instance < RemoteInstance
 
     default_options(
-      :security_groups => [],
-      :private_ip => nil,
-      :dns_name => nil,
-      :instance_type => nil,
-      :public_ip => nil,
-      :key_name => nil,
-      :launch_time => nil,
-      :availability_zones => [],
+      :security_groups      => [],
+      :private_ip           => nil,
+      :dns_name             => nil,
+      :instance_type        => nil,
+      :public_ip            => nil,
+      :key_name             => nil,
+      :launch_time          => nil,
+      :availability_zones   => [],
       :block_device_mapping => [{}],
+      :subnet_id            => nil,
+      :spot_price           => nil,
+      :launch_group         => nil,
       :disable_api_termination => nil,
-      :instance_initiated_shutdown_behavior => nil,
-      :subnet_id => nil,
-      :spot_price => nil
+      :instance_initiated_shutdown_behavior => nil
     )
 
     def initialize(raw_response={})
@@ -32,6 +33,7 @@ module CloudProviders
       self.status                               = raw_response["instanceState"]["name"] rescue nil
       self.block_device_mapping                 = raw_response["blockDeviceMapping"] rescue nil
       self.subnet_id                            = raw_response["subnetId"] rescue nil
+      self.launch_group                         = raw_response["launchGroup"] rescue nil
       # disable_api_termination and instance_initiated_shutdown_behavior don't currently get returned in the request -- you'd need to later call describe_instance_attribute
       self.disable_api_termination              = raw_response["disableApiTermination"] rescue nil
       self.instance_initiated_shutdown_behavior = raw_response["instanceInitiatedShutdownBehavior"] rescue nil
@@ -100,8 +102,9 @@ module CloudProviders
     def request_spot_instances!
       r = cloud_provider.ec2.request_spot_instances(
         :spot_price           => spot_price.to_s,
+        :launch_group         => launch_group.to_s,
         :instance_count       => max_count,
-        # TODO: type, valid_from, valid_until, launch_group, availability_zone_group
+        # TODO: type, valid_from, valid_until, availability_zone_group
         :image_id             => image_id,
         :key_name             => keypair.basename,
         :security_group       => cloud.security_group_names,
@@ -109,6 +112,7 @@ module CloudProviders
         :instance_type        => instance_type,
         :availability_zone    => availability_zone,
         :block_device_mapping => block_device_mapping,
+        :launch_group         => launch_group,
         :base64_encoded       => true)
       p r
       return 'spot instances requested'

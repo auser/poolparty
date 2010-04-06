@@ -91,10 +91,11 @@ module CloudProviders
       :kernel_id              => nil,
       :ramdisk_id             => nil,
       :block_device_mapping   => [{}],
-      :disable_api_termination => nil,
-      :instance_initiated_shutdown_behavior => nil,
       :subnet_id              => nil,
-      :spot_price             => nil
+      :spot_price             => nil,
+      :launch_group           => nil,
+      :disable_api_termination => nil,
+      :instance_initiated_shutdown_behavior => nil
     )
 
     # Called when the create command is called on the cloud
@@ -191,21 +192,22 @@ module CloudProviders
 
     def expand_by(num=1)
       e = Ec2Instance.run!({
-        :image_id => image_id,
-        :min_count => num,
-        :max_count => num,
-        :key_name => keypair.basename,
-        :security_groups => security_groups,
-        :user_data => decoded_user_data,
-        :instance_type => instance_type,
-        :availability_zone => availability_zones.first,
-        :base64_encoded => true,
-        :cloud => cloud,
-        :block_device_mapping => block_device_mapping,
-        :disable_api_termination => disable_api_termination,
-        :instance_initiated_shutdown_behavior => instance_initiated_shutdown_behavior,
-          :subnet_id => subnet_id,
-          :spot_price => spot_price,
+          :image_id             => image_id,
+          :min_count            => num,
+          :max_count            => num,
+          :key_name             => keypair.basename,
+          :security_groups      => security_groups,
+          :user_data            => decoded_user_data,
+          :instance_type        => instance_type,
+          :availability_zone    => availability_zones.first,
+          :base64_encoded       => true,
+          :cloud                => cloud,
+          :block_device_mapping => block_device_mapping,
+          :subnet_id            => subnet_id,
+          :spot_price           => spot_price,
+          :launch_group         => launch_group,
+          :disable_api_termination => disable_api_termination,
+          :instance_initiated_shutdown_behavior => instance_initiated_shutdown_behavior
         })
       return if e == 'spot instances requested'
       progress_bar_until("Waiting for node to launch...") do
