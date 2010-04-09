@@ -14,6 +14,7 @@ module CloudProviders
       :subnet_id            => nil,
       :spot_price           => nil,
       :launch_group         => nil,
+      :spot_persistence     => nil,
       :disable_api_termination => nil,
       :instance_initiated_shutdown_behavior => nil
     )
@@ -104,7 +105,8 @@ module CloudProviders
         :spot_price           => spot_price.to_s,
         :launch_group         => launch_group.to_s,
         :instance_count       => max_count,
-        # TODO: type, valid_from, valid_until, availability_zone_group
+        :type                 => spot_persistence,
+        # TODO: valid_from, valid_until, availability_zone_group
         :image_id             => image_id,
         :key_name             => keypair.basename,
         :security_group       => cloud.security_group_names,

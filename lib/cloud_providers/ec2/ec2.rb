@@ -94,6 +94,7 @@ module CloudProviders
       :subnet_id              => nil,
       :spot_price             => nil,
       :launch_group           => nil,
+      :spot_persistence       => nil,
       :disable_api_termination => nil,
       :instance_initiated_shutdown_behavior => nil
     )
@@ -113,7 +114,7 @@ module CloudProviders
       puts "  using keypair: #{keypair}"
       puts "  with user_data #{user_data.to_s[0..100]}"
       puts "  user: #{user}\n"
-      puts "  at spot price: #{spot_price}\n" if spot_price
+      puts "  at spot price: #{spot_price} #{spot_persistence}\n" if spot_price
 
       security_groups.each do |sg|
         sg.run
@@ -206,6 +207,7 @@ module CloudProviders
           :subnet_id            => subnet_id,
           :spot_price           => spot_price,
           :launch_group         => launch_group,
+          :spot_persistence     => spot_persistence,
           :disable_api_termination => disable_api_termination,
           :instance_initiated_shutdown_behavior => instance_initiated_shutdown_behavior
         })
