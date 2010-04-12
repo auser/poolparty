@@ -101,12 +101,6 @@ You did not specify a cloud provider in your clouds.rb. Make sure you have a blo
     def run
       puts "  running on #{cloud_provider.class}"
       cloud_provider.run
-      unless @uploads.nil?
-        puts "Uploading files via rsync"
-        @uploads.each do |upload|
-          rsync upload[:source], upload[:dest]
-        end
-      end
       unless @chef.nil?
         compile!
         bootstrap!
@@ -191,6 +185,12 @@ No autoscalers defined
     end
     
     def compile!
+      unless @uploads.nil?
+        puts "Uploading files via rsync"
+        @uploads.each do |upload|
+          rsync upload[:source], upload[:dest]
+        end
+      end
       @chef.compile! unless @chef.nil?
     end
     

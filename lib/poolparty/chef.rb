@@ -192,13 +192,18 @@ module PoolParty
     end
     
     def chef_cmd
+
+      if ENV["CHEF_DEBUG"]
+        debug = "-l debug"
+      else
+        debug = ""
+      end
+
       return <<-CMD
-        PATH="$PATH:$GEM_BIN" #{chef_bin} -j /etc/chef/dna.json -c /etc/chef/client.rb -d -i 1800 -s 20
+        PATH="$PATH:$GEM_BIN" #{chef_bin} -j /etc/chef/dna.json -c /etc/chef/client.rb -d -i 1800 -s 20 #{debug}
       CMD
     end
     
-    end
-
     def method_missing(m,*args,&block)
       if cloud.respond_to?(m)
         cloud.send(m,*args,&block)

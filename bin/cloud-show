@@ -31,7 +31,7 @@ EOS
         "Keypair:             #{cld.keypair.basename}",
         "Security group:      #{cld.cloud_provider.security_group_names.join(', ')}",
         "Availability zones:  #{cld.cloud_provider.availability_zones.join(', ')}",
-        "User:                #{cld.user}"
+        "User:                #{cld.user}",
         "Active recipes:      #{cld.chef._recipes(cld.pool.chef_step).join ", " }"
       ]
 
