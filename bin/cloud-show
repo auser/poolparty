@@ -6,8 +6,8 @@ require 'git-style-binary/command'
 
 GitStyleBinary.command do
   @theme = :short
-  
-  version "PoolParty #{$0} command"  
+
+  version "PoolParty #{$0} command"
   banner <<-EOS
 Usage: #{$0} #{all_options_string}
 
@@ -20,7 +20,7 @@ EOS
   run do |command|
 
     @loaded_clouds.each do |cld|
-        
+
       msg = [
         "Cloud: #{cld.name}",
         "----------------------------",
@@ -29,9 +29,9 @@ EOS
         "Maximum instances:   #{cld.maximum_instances}",
         "Running on:          #{cld.cloud_provider.name}",
         "Keypair:             #{cld.keypair.basename}",
-        "Security group:      #{cld.cloud_provider.security_group_names}",
-        "Availability zones:  #{cld.cloud_provider.availability_zones}",
-        "User:  #{cld.user}",
+        "Security group:      #{cld.cloud_provider.security_group_names.join(', ')}",
+        "Availability zones:  #{cld.cloud_provider.availability_zones.join(', ')}",
+        "User:                #{cld.user}"
         "Active recipes:      #{cld.chef._recipes(cld.pool.chef_step).join ", " }"
       ]
 
@@ -46,10 +46,10 @@ EOS
 
         msg << available.join("\n\t\t\t")
       end
-            
+
       puts msg.flatten
-      
+
     end
-    
+
   end
 end

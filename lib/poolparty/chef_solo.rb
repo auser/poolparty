@@ -3,35 +3,30 @@ require "fileutils"
 module PoolParty
   class ChefSolo < Chef
     dsl_methods :repo 
-    def compile!
-      build_tmp_dir
-    end
 
     private
-    def chef_cmd
-      if ENV["CHEF_DEBUG"]
-        debug = "-l debug"
-      else
-        debug = ""
-      end
-      return <<-CMD
-        PATH="$PATH:$GEM_BIN" chef-solo -j /etc/chef/dna.json -c /etc/chef/solo.rb #{debug}
-      CMD
+    def chef_bin
+      "chef-solo"
     end
+
+
     # The NEW actual chef resolver.
     def build_tmp_dir
       base_directory = tmp_path/"etc"/"chef"
       roles_dir = "#{base_directory}/roles"
-      FileUtils.rm_rf base_directory
+      FileUtils.rm_rf base_directory # cleanup old chef temp directory
       puts "Copying the chef-repo into the base directory from #{repo}"
       
+      FileUtils.mkdir_p base_directory
+      FileUtils.mkdir_p roles_dir # Why do we need this??!?
       if File.directory?(repo)
         if File.exist?(base_directory)
           # First remove the directory
           FileUtils.remove_entry base_directory, :force => true
         end
-        FileUtils.mkdir_p base_directory
-        FileUtils.cp_r "#{repo}/.", base_directory 
+        cookbook_path = "#{base_directory}/cookbooks"
+        FileUtils.mkdir_p cookbook_path
+        FileUtils.cp_r "#{repo}/.", cookbook_path
       else
         raise "#{repo} chef repo directory does not exist"
       end
@@ -45,7 +40,7 @@ module PoolParty
     
     def write_solo_dot_rb(to=tmp_path/"etc"/"chef"/"solo.rb")
       content = <<-EOE
-cookbook_path     ["/etc/chef/site-cookbooks", "/etc/chef/cookbooks"]
+cookbook_path     ["/etc/chef/cookbooks", "/etc/chef/site-cookbooks"]
 role_path         "/etc/chef/roles"
 log_level         :info
       EOE

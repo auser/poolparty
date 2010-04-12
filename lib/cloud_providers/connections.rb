@@ -35,6 +35,9 @@ module CloudProviders
     end
 
     def ssh( commands=[], extra_ssh_ops={})
+      # commands can be single commands, as well as array
+      commands = [commands] unless commands.respond_to? :each
+
       # Get the environment hash out of
       # the extra_ssh_ops and then delete
       # the element
@@ -44,12 +47,12 @@ module CloudProviders
       extra_ssh_ops.delete :env
 
       # Decide to use sudo or not
-      do_sudo = true
+      do_sudo = user!="root"
+
       if extra_ssh_ops.has_key? :do_sudo
         do_sudo = extra_ssh_ops[:do_sudo] 
         extra_ssh_ops.delete :do_sudo
       end
-      do_sudo=user!="root"
 
       envstring = env.collect {|k,v| "#{k}=#{v}"}.join ' && '
       envstring += " && " unless envstring.size == 0
@@ -72,6 +75,15 @@ module CloudProviders
           r = system_run ssh_string + %Q% "#{shell_escape sudocmd}"% 
         end
         r
+      end
+    end
+
+    # remove hostname and corresponding from known_hosts file.  Avoids warning when reusing elastic_ip, and 
+    # less likely, if amazone reassigns ip.  By default removes both dns_name and ip
+    def ssh_cleanup_known_hosts!(hosts=[host, public_ip])
+      hosts = [hosts] unless hosts.respond_to? :each
+      hosts.compact.each do |name|
+        system_run "ssh-keygen -R %s" % name
       end
     end
     
