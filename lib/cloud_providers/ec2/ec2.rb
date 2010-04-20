@@ -118,13 +118,6 @@ module CloudProviders
         sg.run
       end
 
-      unless load_balancers.empty?
-        load_balancers.each do |lb|
-          puts "    load balancer: #{lb.name}"
-          lb.run
-        end
-      end
-
       unless rds_instances.empty?
         rds_instances.each do |rdsi|
           puts "    rds instance: #{rdsi.name}"
@@ -173,6 +166,13 @@ module CloudProviders
             node.accessible?
           end.size
           accessible_count == running_nodes.size
+        end
+      end
+
+      unless load_balancers.empty?
+        load_balancers.each do |lb|
+          puts "    load balancer: #{lb.name}"
+          lb.run
         end
       end
 
