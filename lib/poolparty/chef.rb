@@ -32,6 +32,56 @@ module PoolParty
     def override_attributes(hsh={}, &block)
       @override_attributes ||= ChefAttribute.new(hsh, &block)
     end
+
+
+    # === Description
+    #
+    # Provides the ability to specify steps that can be
+    # run via chef
+    #
+    # pool "mycluster" do
+    #   cloud "mycloud" do
+    #       
+    #       on_step :download_install do
+    #           recipe "myrecipes::download"
+    #           recipe "myrecipes::install"
+    #       end
+    #
+    #       on_step :run => :download_install do
+    #           recipe "myrecipes::run"
+    #       end
+    #   end
+    # end
+    #
+    # Then from the command line you can do
+    #
+    # cloud-configure --step=download_install 
+    #
+    # to only do the partial job or
+    #
+    # cloud-configure --step=run
+    #
+    # to do everything
+    #
+    def on_step action, &block
+      if action.is_a? Hash
+        t = action
+        action = t.keys[0]
+        depends = t.values[0]
+      else
+        depends = nil
+      end
+      change_attr :@_current_action, action do
+        yield
+        if depends
+          # Merge the recipes of the dependency into
+          # the current recipes
+          _recipes(depends).each do |r|
+            recipe r
+          end
+        end
+      end
+    end
     
     # Adds a chef recipe to the cloud
     #
@@ -125,20 +175,35 @@ module PoolParty
         ]
 
       remote_instance.ssh(bootstrap_cmds)
+      end
+
+    
+    def _recipes action = nil
+      action = action.to_sym unless action.nil?
+      @_recipes ||= {:default => [] }
+      key = action || _current_action
+      @_recipes[key] ||= []
     end
 
     private
 
+    def _current_action
+      @_current_action ||= :default
+    end
+    
     def chef_cmd
+
+      if ENV["CHEF_DEBUG"]
+        debug = "-l debug"
+      else
+        debug = ""
+      end
+
       return <<-CMD
-        PATH="$PATH:$GEM_BIN" #{chef_bin} -j /etc/chef/dna.json -c /etc/chef/client.rb -d -i 1800 -s 20
+        PATH="$PATH:$GEM_BIN" #{chef_bin} -j /etc/chef/dna.json -c /etc/chef/client.rb -d -i 1800 -s 20 #{debug}
       CMD
     end
     
-    def _recipes
-      @_recipes ||= []
-    end
-
     def method_missing(m,*args,&block)
       if cloud.respond_to?(m)
         cloud.send(m,*args,&block)

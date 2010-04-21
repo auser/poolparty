@@ -9,6 +9,20 @@ module PoolParty
       "chef-solo"
     end
 
+    def chef_cmd
+
+      if ENV["CHEF_DEBUG"]
+        debug = "-l debug"
+      else
+        debug = ""
+      end
+
+      return <<-CMD
+        PATH="$PATH:$GEM_BIN" #{chef_bin} -j /etc/chef/dna.json -c /etc/chef/solo.rb #{debug}
+      CMD
+    end
+
+
     # The NEW actual chef resolver.
     def build_tmp_dir
       base_directory = tmp_path/"etc"/"chef"
@@ -39,7 +53,7 @@ module PoolParty
     
     def write_solo_dot_rb(to=tmp_path/"etc"/"chef"/"solo.rb")
       content = <<-EOE
-cookbook_path     ["/etc/chef/cookbooks", "/etc/chef/site-cookbooks"]
+cookbook_path     ["/etc/chef/cookbooks/cookbooks", "/etc/chef/cookbooks/site-cookbooks"]
 role_path         "/etc/chef/roles"
 log_level         :info
       EOE
@@ -57,6 +71,7 @@ log_level         :info
         :poolparty => {
             :parent_name => cloud.parent.name,
             :name => cloud.name,
+            :pool_info => pool.to_hash
         }
       }
 
@@ -69,7 +84,7 @@ log_level         :info
         :override_attributes => override_attributes.init_opts,
         :description => description
       })
-      ca.to_dna _recipes.map {|a| File.basename(a) }, to
+      ca.to_dna _recipes(pool.chef_step).map {|a| File.basename(a) }, to
     end
   end
 end

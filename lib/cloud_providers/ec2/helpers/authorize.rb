@@ -12,12 +12,17 @@ module CloudProviders
       options = 
       if group_name
         puts "Authorizing #{name} for group named: #{group_name} of owner id: #{owner_id}"
-        {:authorize_security_group_ingress => group_name, :source_security_group_owner_id => owner_id}
+        {:group_name => name, :source_security_group_name=> group_name, :source_security_group_owner_id => owner_id}
       else
         puts "Authorizing: #{name} for #{protocol} to #{from_port}:#{to_port} #{network}"
         to_hash
       end
-      ec2.authorize_security_group_ingress(options) rescue nil
+      begin
+        ec2.authorize_security_group_ingress(options) 
+      rescue AWS::InvalidPermissionDuplicate => e
+        nil
+      end
+        
     end
     
     def to_hash
