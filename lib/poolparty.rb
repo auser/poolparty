@@ -3,7 +3,7 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 t=Time.now
 
 # Load system gems
-%w(rubygems logger erb open-uri).each do |lib|
+%w(rubygems logger erb open-uri yaml).each do |lib|
   require lib
 end
 
@@ -44,7 +44,7 @@ require "keypair"
 
 # PoolParty core
 $LOAD_PATH.unshift(File.dirname(__FILE__)/"poolparty")
-%w( base 
+%w( base
     chef_attribute
     chef
     chef_solo
