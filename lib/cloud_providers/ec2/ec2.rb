@@ -12,6 +12,8 @@ end
 
 require 'pp'
 
+POOLPARTY_CONFIG_FILE = "#{ENV["HOME"]}/.poolparty/aws" unless defined?(POOLPARTY_CONFIG_FILE)
+
 module CloudProviders
   class Ec2 < CloudProvider
     # Set the aws keys from the environment, or load from /etc/poolparty/env.yml if the environment variable is not set
@@ -52,7 +54,7 @@ module CloudProviders
     end
 
     # Load the yaml file containing keys.  If the file does not exist, return an empty hash
-    def self.load_keys_from_file(filename="#{ENV["HOME"]}/.poolparty/aws", caching=true)
+    def self.load_keys_from_file(filename=POOLPARTY_CONFIG_FILE, caching=true)
       return @aws_yml if @aws_yml && caching==true
       return {} unless File.exists?(filename)
       puts("Reading keys from file: #{filename}")
@@ -61,19 +63,18 @@ module CloudProviders
 
     # Load credentials from file
     def self.load_keys_from_credential_file(filename=default_credential_file, caching=true)
-      return {:access_key => @access_key, :secret_access_key => @secret_access_key} if @access_key and @secret_access_key and caching
+      return {:access_key => @access_key, :secret_access_key => @secret_access_key} if (@access_key && @secret_access_key && caching)
       return {} if filename.nil? or not File.exists?(filename)
       puts("Reading keys from file: #{filename}")
-      File.open(filename).each_line { |line|
+      File.open(filename).each_line do |line|
         if line =~ /AWSAccessKeyId=([a-zA-Z0-9]+)$/
           @access_key=$1.chomp
         elsif line =~ /AWSSecretKey=([^   ]+)$/
           @secret_access_key=$1.chomp
         end
-      }
+      end
       return {:access_key => @access_key, :secret_access_key => @secret_access_key}
     end
-
 
     default_options(
       :instance_type          => 'm1.small',
@@ -109,14 +110,15 @@ module CloudProviders
     end
 
     def run
-      puts "  for cloud: #{cloud.name}"
+      puts "  for cloud:         #{cloud.name}"
       puts "  minimum_instances: #{minimum_instances}"
       puts "  maximum_instances: #{maximum_instances}"
-      puts "  security_groups: #{security_group_names.join(", ")}"
-      puts "  using keypair: #{keypair}"
-      puts "  with user_data #{user_data.to_s[0..100]}"
-      puts "  user: #{user}\n"
-      puts "  at spot price: #{spot_price} #{spot_persistence}\n" if spot_price
+      puts "  security_groups:   #{security_group_names.join(", ")}"
+      puts "  image id:          #{image_id}"
+      puts "  using keypair:     #{keypair}"
+      puts "  with user_data:    #{user_data.to_s.inspect[0..100]} ..."
+      puts "  user:              #{user}"
+      puts "  at spot price:     #{spot_price} #{spot_persistence}\n" if spot_price
 
       security_groups.each do |sg|
         sg.run
@@ -324,9 +326,9 @@ module CloudProviders
     end
 
     def all_nodes
-      @nodes ||= describe_instances.select { |i| 
-        !(security_group_names & tags(i)).empty? 
-      }.sort {|a,b| 
+      @nodes ||= describe_instances.select { |i|
+        !(security_group_names & tags(i)).empty?
+      }.sort {|a,b|
         DateTime.parse(a.launchTime) <=> DateTime.parse(b.launchTime)
       }
     end
