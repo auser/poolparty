@@ -35,7 +35,6 @@ EOS
     begin
       require command[:clouds_dot_rb]
     rescue LoadError => e
-      puts "Failed loading #{command[:clouds_dot_rb]}, try using -c to specify the location of your clouds.rb"
       puts e
       puts e.backtrace
       puts "Failed loading #{command[:clouds_dot_rb]}, try using -c to specify the location of your clouds.rb"

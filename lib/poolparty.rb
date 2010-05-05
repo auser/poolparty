@@ -3,7 +3,7 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 t=Time.now
 
 # Load system gems
-%w(rubygems logger erb open-uri yaml).each do |lib|
+%w(rubygems json logger erb open-uri yaml).each do |lib|
   require lib
 end
 
@@ -11,7 +11,7 @@ end
 Dir[File.dirname(__FILE__)+"/../vendor/gems/*"].each {|lib| $LOAD_PATH.unshift(File.expand_path("#{lib}/lib")) }
 
 # Load local gems
-%w(dslify json searchable_paths).each do |dep|
+%w(dslify searchable_paths).each do |dep|
   require dep
 end
 
