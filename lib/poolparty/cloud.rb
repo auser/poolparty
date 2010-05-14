@@ -12,8 +12,8 @@ module PoolParty
     def keypair(n=nil, extra_paths=[])
       return @keypair if @keypair
       @keypair = case n
-      when String, Symbol
-        Keypair.new(n.to_s, extra_paths)
+      when String
+        Keypair.new(n, extra_paths)
       when nil
         fpath = CloudProviders::CloudProvider.default_keypair_path/"#{proper_name}"
         File.exists?(fpath) ? Keypair.new(fpath, extra_paths) : generate_keypair(extra_paths)
