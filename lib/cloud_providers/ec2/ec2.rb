@@ -317,7 +317,8 @@ module CloudProviders
 
     def all_nodes
       @nodes ||= describe_instances.select { |i| 
-        !(security_group_names & tags(i)).empty? 
+        # !(security_group_names & tags(i)).empty? 
+        !(security_group_names & i.security_groups).empty?
       }.sort {|a,b| 
         DateTime.parse(a.launchTime) <=> DateTime.parse(b.launchTime)
       }
