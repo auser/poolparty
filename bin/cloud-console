@@ -16,18 +16,31 @@ EOS
 
   run do |command|    
     
-    irb = RUBY_PLATFORM =~ /(:?mswin|mingw)/ ? 'irb.bat' : 'irb'
-
-    libs =  " -r irb/completion"
-    # Perhaps use a console_lib to store any extra methods I may want available in the cosole
-    # libs << " -r #{File.dirname(__FILE__) + '/../lib/console_lib/console_logger.rb'}"
-    libs <<  " -r #{File.dirname(__FILE__) + '/../lib/poolparty.rb'}"
-    f = command[:clouds_dot_rb]
-    File.open("/tmp/console.rb", "w") {|f| f << "require '#{command[:clouds_dot_rb]}'\npool.auto_execute = false" }
-    libs <<  " -r /tmp/console.rb"
-    
     puts "Loading PoolParty console..."
-    exec "#{irb} #{libs} --simple-prompt"
+    #exec "#{irb} #{libs} --simple-prompt"
+    require 'irb/completion'
+    require command[:clouds_dot_rb]
+    require "#{File.dirname(__FILE__) + '/../lib/poolparty.rb'}"
+    require 'irb'
+    pool.auto_execute = false
     
+    IRB.setup(nil)
+    IRB.conf[:IRB_NAME]="cloud"
+    IRB.conf[:PROMPT_MODE]=:CLOUD
+    IRB.conf[:PROMPT][:CLOUD]={
+      :PROMPT_I => "%N> ",
+      :PROMPT_S => "%l> ",
+      :PROMPT_C => "* ",
+      :PROMPT_N => ">> ",
+      :RETURN => "=>%s\n" }
+    irb=IRB::Irb.new
+    IRB.conf[:IRB_RC].call(irb.context) if IRB.conf[:IRB_RC]
+    IRB.conf[:MAIN_CONTEXT] = irb.context
+    trap("SIGINT") do
+      irb.signal_handle
+    end
+    catch(:IRB_EXIT) do
+      irb.eval_input
+    end
   end
 end

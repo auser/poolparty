@@ -51,6 +51,7 @@ There are a number of commands PoolParty offers to interact with your cloud. The
 * <tt>cloud list</tt>
 * <tt>cloud show</tt>
 * <tt>cloud ssh</tt>
+* <tt>cloud run</tt>
 
 Clouds are distinguished by security groups. If a security group is not specified in your cloud block, one will be created based on the naming convention poolname-cloudname.
 

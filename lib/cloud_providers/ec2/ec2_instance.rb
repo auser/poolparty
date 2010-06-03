@@ -1,6 +1,6 @@
 module CloudProviders
   class Ec2Instance < RemoteInstance
-    
+
     default_options(
       :security_groups => [],
       :private_ip => nil,
@@ -9,67 +9,95 @@ module CloudProviders
       :public_ip => nil,
       :key_name => nil,
       :launch_time => nil,
-      :availability_zones => []
+      :availability_zones => [],
+      :block_device_mapping => [{}],
+      :disable_api_termination => nil,
+      :instance_initiated_shutdown_behavior => nil,
+      :subnet_id => nil
     )
-    
+
     def initialize(raw_response={})
       @raw_response = raw_response
-      self.instance_id = raw_response["instanceId"] rescue nil
-      self.security_groups = raw_response.groupSet.item[0].groupId rescue nil
-      self.image_id = raw_response["imageId"] rescue nil
-      self.private_ip = raw_response["privateIpAddress"] rescue nil
-      self.dns_name = raw_response["dnsName"] rescue nil
-      self.instance_type = raw_response["instanceType"] rescue nil
-      self.public_ip = raw_response["ipAddress"] rescue nil
-      self.key_name = raw_response["keyName"] rescue nil
-      self.launch_time = raw_response["launchTime"] rescue nil
-      self.availability_zones = raw_response["placement"]["availabilityZone"] rescue nil
-      self.status = raw_response["instanceState"]["name"] rescue nil
+      self.instance_id                          = raw_response["instanceId"] rescue nil
+      self.security_groups                      = raw_response.groupSet.item.map{|sg| sg.groupId }.sort rescue nil
+      self.image_id                             = raw_response["imageId"] rescue nil
+      self.private_ip                           = raw_response["privateIpAddress"] rescue nil
+      self.dns_name                             = raw_response["dnsName"] rescue nil
+      self.instance_type                        = raw_response["instanceType"] rescue nil
+      self.public_ip                            = raw_response["ipAddress"] rescue nil
+      self.key_name                             = raw_response["keyName"] rescue nil
+      self.launch_time                          = raw_response["launchTime"] rescue nil
+      self.availability_zones                   = raw_response["placement"]["availabilityZone"] rescue nil
+      self.status                               = raw_response["instanceState"]["name"] rescue nil
+      self.block_device_mapping                 = raw_response["blockDeviceMapping"] rescue nil
+      self.subnet_id                            = raw_response["subnetId"] rescue nil
+      # disable_api_termination and instance_initiated_shutdown_behavior don't currently get returned in the request -- you'd need to later call describe_instance_attribute
+      self.disable_api_termination              = raw_response["disableApiTermination"] rescue nil
+      self.instance_initiated_shutdown_behavior = raw_response["instanceInitiatedShutdownBehavior"] rescue nil
       super
     end
-    
+
     def keypair(n=nil)
-      @keypair ||= Keypair.new(self.key_name)
+      return @keypair if @keypair
+      @keypair = (cloud.keypair.basename == self.key_name) ? cloud.keypair : Keypair.new(self.key_name, cloud.keypair.extra_paths)
     end
-    
+
+    def security_group_names
+      security_groups.map{|a| a.to_s }
+    end
+
     def zone
       availability_zones.first
     end
-    
+
     def reachable?
       ping_port self.public_ip, 22
     end
-    
+
+    def ssh_available?
+      cloud.security_groups.map {|a|
+        a.authorizes.map {|t| t.from_port.to_i }.flatten
+      }.flatten.include?(22) and
+        reachable? and
+        in_service? and
+        keypair and keypair.exists?
+    end
+
     def in_service?
       running?
     end
-    
+
     def run!
-      r = cloud_provider.ec2.run_instances(:image_id => image_id,
-      :min_count => min_count,
-      :max_count => max_count,
-      :key_name => keypair.basename,
-      :security_group => cloud.security_group_names,
-      :user_data => user_data,
-      :instance_type => instance_type,
-      :availability_zone => availability_zone,
-      :base64_encoded => true)
+      r = cloud_provider.ec2.run_instances(
+        :image_id             => image_id,
+        :min_count            => min_count,
+        :max_count            => max_count,
+        :key_name             => keypair.basename,
+        :security_group       => cloud.security_group_names,
+        :user_data            => user_data,
+        :instance_type        => instance_type,
+        :availability_zone    => availability_zone,
+        :block_device_mapping => block_device_mapping,
+        :disable_api_termination => disable_api_termination,
+        :instance_initiated_shutdown_behavior => instance_initiated_shutdown_behavior,
+        :base64_encoded       => true)
       r.instancesSet.item.map do |i|
         inst_options = i.merge(r.merge(:cloud => cloud)).merge(cloud.cloud_provider.dsl_options)
         Ec2Instance.new(inst_options)
       end.first
     end
     def self.run!(hsh); new(hsh).run!; end
-    
+
     def terminate!
       cloud_provider.ec2.terminate_instances(:instance_id => [self.instance_id])
       cloud_provider.reset!
     end
     def self.terminate!(hsh={}); new(hsh).terminate!; end
-    
+
     # list of directories and files to exclude when bundling an instance
     def rsync_excludes(array_of_abs_paths_to_exclude=nil)
-      array_of_abs_paths_to_exclude ||= %w( /sys
+      array_of_abs_paths_to_exclude ||= %w[
+            /sys
             /proc
             /dev/pts
             /dev
@@ -81,8 +109,8 @@ module CloudProviders
             /etc/ssh/moduli
             /etc/udev/rules.d/70-persistent-net.rules
             /etc/udev/rules.d/z25_persistent-net.rules
-            )
-      array_of_abs_paths_to_exclude.inject(''){|str, path| str<<"--exclude=#{path}"; str}
+            ]
+      array_of_abs_paths_to_exclude.inject(''){|str, path| str << "--exclude=#{path}" ; str}
     end
 
     # create an image file and copy this instance to the image file.
@@ -120,7 +148,7 @@ module CloudProviders
       scp ec2cert, "/mnt/bundle/"
       scp cert, "/mnt/bundle/"
       arch = self[:instanceType].match(/m1\.small|c1\.medium/) ? 'i386' : 'x86_64'
-      image = img ? img : make_image(opts) 
+      image = img ? img : make_image(opts)
       ssh "ec2-bundle-image #{image} -d /mnt/bundle -u #{self[:ownerId]} -k /mnt/bundle/pk-*.pem -c /tmp/cert-*.pem"
       manifest = "/mnt/bundle/#{opts[:prefix]}.manifest.xml"
       ssh "ec2-upload-bundle -a #{access_key} -s #{secret_access_key} -m #{manifest}"
@@ -128,6 +156,6 @@ module CloudProviders
       ami = ami_str.grep(/ami-\w*/).first
       return ami
     end
-        
+
   end
 end

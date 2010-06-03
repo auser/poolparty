@@ -14,7 +14,17 @@ require 'config/jeweler' # setup gem configuration
 
 task :default  => [:test, :cleanup_test]
 desc "Update vendor directory and run tests"
-task :ci => ["poolparty:vendor:setup", "poolparty:vendor:update", :spec, :test]
+
+namespace :poolparty do
+    namespace :vendor do
+        desc "Fetch all the submodules"
+        task :submodules do
+            `git submodule update`
+        end
+    end
+end
+
+task :vendor => ["poolparty:vendor:submodules"]
  
 task :cleanup_test do
   ::FileUtils.rm_rf "/tmp/poolparty"

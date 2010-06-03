@@ -23,6 +23,7 @@ EOS
   opt :debug, "Debug the output", :type => :boolean, :default => false
   opt :very_debug, "Set very debug mode on", :type => :boolean, :default => false
   opt :name, "Name of the working cloud", :type => String, :default => nil
+  opt :chef_task, "Name of chef task to execute", :type => String, :default => 'default'
 
   before_run do |command|
     # Setup testing/debugging
@@ -31,15 +32,27 @@ EOS
     $DEBUGGING      = true if command[:debug]
     $VERY_DEBUGGING = true if command[:very_debug]
     
-    require command[:clouds_dot_rb]
+    begin
+      require command[:clouds_dot_rb]
+    rescue LoadError => e
+      puts "Failed loading #{command[:clouds_dot_rb]}, try using -c to specify the location of your clouds.rb"
+      exit
+    end
     
+    pool.chef_step command[:chef_task].to_sym
+
     @loaded_pool = pool
     @loaded_clouds = command[:name] ? [pool.clouds[command[:name]]] : pool.clouds.map {|name,cld|cld}    
+    if @loaded_clouds.size == 0
+      puts "No clouds loaded. Check your clouds.rb or -n option"
+      exit
+    end
   end
   
   run do |command|
     subcommands = GitStyleBinary.list_subcommands
     
+    puts "cloud %s" % PoolParty.version
     puts "Usage: cloud COMMAND [ARGS]
     
     The cloud subcommands commands are:

@@ -37,17 +37,45 @@ module CloudProviders
     end
     
     def chef_bootstrapped?
-      @chef_bootstrapped ||= cloud.chef.node_bootstrapped?(self)
+      # do_sudo is false cause we want to capture the return code of the call
+      @chef_bootstrapped ||= cloud.chef.node_bootsrapped?(self)
     end
     
-    # TODO: chef_bootstrapped? should go away, since Chef#node_bootstrap!
-    # already checks node_bootstrap!.  There is a force flag as well.
     def bootstrap_chef!
-      cloud.chef.node_bootstrap!(self)
+<<<<<<< HEAD:lib/cloud_providers/remote_instance.rb
+      unless chef_bootstrapped?
+        ssh([
+          'apt-get update',
+          'apt-get autoremove -y',
+          'apt-get install -y ruby ruby-dev rubygems git-core libopenssl-ruby',
+          'gem sources -a http://gems.opscode.com',
+          'gem install chef ohai --no-rdoc --no-ri' ])
+      end
+      if bootstrap_gems.size > 0
+        ssh(bootstrap_gems.collect { |gem| "gem install #{gem} --no-rdoc --no-ri" } )
+      end
+    end
+    
+    def run_chef!
+      if ENV["CHEF_DEBUG"] 
+        debug = "-l debug"
+      else
+        debug = ""
+      end
+      chef_solo_cmd = <<-CMD
+        $GEM_BIN/chef-solo -j /etc/chef/dna.json -c /etc/chef/solo.rb #{debug}
+      CMD
+      envhash = {
+        :GEM_BIN => %q%$(gem env | grep "EXECUTABLE DIRECTORY" | awk "{print \\$4}")%
+      }
+      ssh([chef_solo_cmd.strip.squeeze(' ')], :env => envhash )
+=======
+      cloud.chef.node_bootstrap(self) unless chef_bootstrapped?
     end
     
     def run_chef!
       cloud.chef.node_run!(self)
+>>>>>>> 81a7e0df2d02545ff9b22572194a4f115f73906a:lib/cloud_providers/remote_instance.rb
     end
         
     def run

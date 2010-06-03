@@ -4,7 +4,11 @@ module PoolParty
     attr_accessor :verbose, :very_verbose, :debugging, :very_debugging, :auto_execute
     
     def cloud(name, &block)
-      clouds[name.to_s] = Cloud.new(name.to_s, {:parent => self}, &block)
+      c = Cloud.new(name.to_s, {:parent => self}, &block)
+      clouds[name.to_s] = c
+      # Create a dummy security group for tagging purposes. Do not want to
+      # conflict with advance usage of security groups
+      c.security_group "#poolparty-#{c.proper_name}"
     end
     
     def clouds
@@ -31,12 +35,42 @@ module PoolParty
       end
     end
     
+    # === Description
+    #
+    # Set / Get the chef_step which will be executed on the remote
+    # host
+    def chef_step name = nil
+      @selected_chef_step ||= :default
+      if name
+        @selected_chef_step = name.to_sym
+      end
+      @selected_chef_step
+    end
+    
     def run
       clouds.each do |cloud_name, cld|
         puts "----> Starting to build cloud #{cloud_name}"
         cld.run
       end
     end
+
+    def to_hash
+      c = clouds.collect do |cloud_name, cld|
+        nodes = cld.nodes.collect do |node|
+          h = {}
+          [:dns_name, :private_ip, :public_ip].each do |f|
+            h[f] = node[f]
+          end
+          h
+        end
+        { cloud_name => nodes }
+      end
+      h = c.inject({})do |old, new|
+       old.merge! new
+      end 
+      {:clouds => h }
+    end
+
   end
 
 end

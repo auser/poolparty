@@ -145,7 +145,7 @@ module CloudProviders
           :user_data => user_data,
           :kernel_id => kernel_id,
           :ramdisk_id => ramdisk_id,
-          :block_device_mappings => block_device_mappings
+          :block_device_mapping => block_device_mapping
         })
       rescue Exception => e
         puts <<-EOE
@@ -321,13 +321,14 @@ module CloudProviders
       :measure => :cpu,
       :period => 60,
       :statistic => :average,
-      :unit => "Seconds",
+      :unit => "Percent",
       :lower_threshold => 20,
       :upper_threshold => 60,
       :trigger_name => "CpuTrigger",
       :lower_breach_scale_increment => -1,
       :upper_breach_scale_increment => 1,
-      :breach_duration => 120
+      :breach_duration => 120,
+      :namespace => 'AWS/EC2'
     )
     
     def measure_names
@@ -392,7 +393,8 @@ module CloudProviders
             :breach_duration => trigger["BreachDuration"],
             :dimensions => trigger["Dimensions"],
             :unit => trigger["Unit"],
-            :autoscaling_group_name => trigger["AutoScalingGroupName"]
+            :autoscaling_group_name => trigger["AutoScalingGroupName"],
+            :namespace => trigger['Namespace']
           }
         end
       rescue Exception => e
@@ -412,7 +414,8 @@ module CloudProviders
         :lower_threshold => "#{lower_threshold}",
         :lower_breach_scale_increment => "#{lower_breach_scale_increment}",
         :upper_threshold => "#{upper_threshold}",
-        :upper_breach_scale_increment => "#{upper_breach_scale_increment}"
+        :upper_breach_scale_increment => "#{upper_breach_scale_increment}",
+        :namespace => namespace
       )
     end
     
