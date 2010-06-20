@@ -49,7 +49,9 @@ You did not specify a cloud provider in your clouds.rb. Make sure you have a blo
         minimum_instances arg
         maximum_instances arg
       when Hash
-        nodes(arg)
+        minimum_instances arg[:instances].to_i
+        maximum_instances arg[:instances].to_i
+        # nodes(arg)
       else
         raise PoolParty::PoolPartyError.create("DslMethodCall", "You must call instances with either a number, a range or a hash (for a list of nodes)")
       end
