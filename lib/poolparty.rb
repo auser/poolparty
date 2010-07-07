@@ -2,6 +2,8 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 
 t=Time.now
 
+require 'yaml'
+
 # Load system gems
 %w(rubygems logger erb open-uri fileutils).each do |lib|
   require lib
