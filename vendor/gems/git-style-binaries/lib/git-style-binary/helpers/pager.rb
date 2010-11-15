@@ -4,7 +4,7 @@ module GitStyleBinary
 
       # by Nathan Weizenbaum - http://nex-3.com/posts/73-git-style-automatic-paging-in-ruby
       def run_pager
-        return if PLATFORM =~ /win32/
+        return if RUBY_PLATFORM =~ /win32/
         return unless STDOUT.tty?
         STDOUT.use_color = true
 

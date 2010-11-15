@@ -1,6 +1,3 @@
 [submodule "vendor/gems/amazon-ec2"]
 	path = vendor/gems/amazon-ec2
 	url = git://github.com/grempe/amazon-ec2.git
-[submodule "vendor/gems/json"]
-	path = vendor/gems/json
-	url = git://github.com/flori/json.git

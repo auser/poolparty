@@ -2,7 +2,7 @@
 # Colorize String class extension.
 #
 class String
-  
+
   #
   # Version string
   #
@@ -21,7 +21,7 @@ class String
     :cyan           => 6,
     :white          => 7,
     :default        => 9,
-    
+
     :light_black    => 10,
     :light_red      => 11,
     :light_green    => 12,
@@ -43,9 +43,9 @@ class String
     :swap           => 7, # Exchange foreground and background colors
     :hide           => 8  # Hide text (foreground color would be the same as background)
   }
-  
+
   protected
-  
+
   #
   # Set color values in new string intance
   #
@@ -79,18 +79,18 @@ class String
   #   puts "This is blue text on red".blue.on_red.blink
   #
   def colorize( params )
-    
+
     unless STDOUT.use_color
       return self unless STDOUT.isatty
     end
     return self if ENV['NO_COLOR']
-    
+
     begin
-        require 'Win32/Console/ANSI' if PLATFORM =~ /win32/
+        require 'Win32/Console/ANSI' if RUBY_PLATFORM =~ /win32/
     rescue LoadError
         raise 'You must gem install win32console to use color on Windows'
     end
-    
+
     color_parameters = {}
 
     if (params.instance_of?(Hash))
@@ -100,13 +100,13 @@ class String
     elsif (params.instance_of?(Symbol))
       color_parameters[:color] = COLORS[params]
     end
-    
+
     color_parameters[:color] ||= @color || 9
     color_parameters[:background] ||= @background || 9
     color_parameters[:mode] ||= @mode || 0
 
     color_parameters[:uncolorized] ||= @uncolorized || self.dup
-   
+
     # calculate bright mode
     color_parameters[:color] += 50 if color_parameters[:color] > 10
 
@@ -115,14 +115,14 @@ class String
     return "\033[#{color_parameters[:mode]};#{color_parameters[:color]+30};#{color_parameters[:background]+40}m#{color_parameters[:uncolorized]}\033[0m".set_color_parameters( color_parameters )
   end
 
-  
+
   #
   # Return uncolorized string
   #
   def uncolorize
     return @uncolorized || self
   end
-  
+
   #
   # Return true if sting is colorized
   #
@@ -156,7 +156,7 @@ class String
   end
 
   class << self
-    
+
     #
     # Return array of available modes used by colorize method
     #
@@ -177,7 +177,7 @@ class String
         keys << key
       end
       keys
-    end 
+    end
 
     #
     # Display color matrix with color names.
@@ -192,7 +192,7 @@ class String
       end
       String.colors.reverse.each_with_index do | back, index |
         puts "#{"|".rjust(txt.length)*(size-index)} < #{back}"
-      end 
+      end
     end
   end
 end
