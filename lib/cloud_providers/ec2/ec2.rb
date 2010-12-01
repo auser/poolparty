@@ -136,11 +136,15 @@ module CloudProviders
         if nodes.size < minimum_instances
           expansion_count = minimum_instances - nodes.size
           puts "-----> expanding the cloud because the #{expansion_count} minimum_instances is not satisified: "
-          expand_by(expansion_count)
+          maybe('expand cloud') do
+            expand_by(expansion_count)
+          end
         elsif nodes.size > maximum_instances
           contraction_count = nodes.size - maximum_instances
           puts "-----> contracting the cloud because the instances count exceeds the #{maximum_instances} maximum_instances by #{contraction_count}"
-          contract_by(contraction_count)
+          maybe('contract cloud') do
+            contract_by(contraction_count)
+          end
         end
         progress_bar_until("Waiting for the instances to be launched") do
           reset!
@@ -367,7 +371,12 @@ module CloudProviders
       autoscalers << ElasticAutoScaler.new(given_name, sub_opts.merge(o || {}), &block)
     end
     def security_group(given_name=cloud.proper_name, o={}, &block)
-      security_groups << SecurityGroup.new(given_name, sub_opts.merge(o || {}), &block)
+      existing_security_group = security_groups.detect{|grp| grp.name == given_name }
+      if existing_security_group
+        existing_security_group.merge!(sub_opts.merge(o || {}), &block)
+      else
+        security_groups << SecurityGroup.new(given_name, sub_opts.merge(o || {}), &block)
+      end
     end
     def elastic_ip(*ips)
       ips.each {|ip| elastic_ips << ip}
