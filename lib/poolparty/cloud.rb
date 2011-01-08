@@ -235,6 +235,15 @@ No autoscalers defined
       results
     end
 
+    def cssh(user = nil, use_keypair = nil)
+      opts = []
+      opts.push "-i #{keypair.full_filepath}" if use_keypair
+      opts.push "-l #{user}" if user
+      opts = opts.join(" ")
+      puts "cssh -o '#{opts}' " + nodes.map{|n| n.public_ip}.join(" ") + " &"
+      system "cssh -o '#{opts}' " + nodes.map{|n| n.public_ip}.join(" ") + " &"
+    end
+
     # Explicit proxies to cloud_provider methods
     def run_instance(o={}); cloud_provider.run_instance(o);end
     def terminate_instance!(o={}); cloud_provider.terminate_instance!(o);end

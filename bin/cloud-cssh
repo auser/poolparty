@@ -1,0 +1,28 @@
+#!/usr/bin/env ruby
+$:.unshift(File.dirname(__FILE__) + "/../lib")
+require "poolparty"
+
+require 'git-style-binary/command'
+
+GitStyleBinary.command do
+  banner <<-EOS
+Usage: #{$0} #{all_options_string}
+
+  cssh into the cloud
+EOS
+
+  short_desc "cssh into the cloud"
+  
+  opt :user, "the user name", :type => :string, :default => nil
+  opt :use_keypair, "whether or not to use the default keypair", :type => :integer, :default => 0
+  
+  run do |command|
+    cloud = @loaded_clouds.first
+    
+    user = command[:user]
+    keyp = command[:use_keypair]
+
+    cloud.cssh( user, keyp != 0 )
+    
+  end
+end
