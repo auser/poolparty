@@ -3,7 +3,7 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 t=Time.now
 
 # Load system gems
-%w(rubygems logger erb open-uri).each do |lib|
+%w(rubygems logger erb open-uri yaml).each do |lib|
   require lib
 end
 
@@ -18,7 +18,7 @@ end
 module PoolParty
   def self.version
     return @version if @version
-    config = YAML.load(File.read(File.expand_path("#{File.dirname(__FILE__)}/../VERSION.yml")))
+    config = ::YAML.load(File.read(File.expand_path("#{File.dirname(__FILE__)}/../VERSION.yml")))
     @version = "#{config[:major]}.#{config[:minor]}.#{config[:patch]}"
     @version += "-" + config[:build] if  config[:build]
   end
