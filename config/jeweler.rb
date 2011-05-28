@@ -27,7 +27,6 @@ end
     s.files = (%w(Rakefile README.rdoc License.txt VERSION.yml) + Dir["{config,examples,lib,test,tasks,script,generators,bin,vendor}/**/*"])
     # s.files.exclude "**/*/erl_crash.dump"
     
-    s.has_rdoc = true
     s.require_paths = ["lib"]
     s.rdoc_options = ['--quiet', '--title', 'PoolParty documentation',
         # "index.html",
@@ -37,5 +36,5 @@ end
     
   end
 rescue LoadError
-  puts "Jeweler not available. Install it with: sudo gem install technicalpickles-jeweler -s http://gems.github.com"
+  puts "Jeweler not available. Install it with: sudo gem install jeweler -s http://gems.github.com"
 end
