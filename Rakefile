@@ -1,7 +1,7 @@
 require 'rake'
 require 'rake/testtask'
 require 'rake/rdoctask'
-
+$: << File.dirname(__FILE__)
 require 'config/requirements'
 
 begin
@@ -25,24 +25,24 @@ namespace :poolparty do
 end
 
 task :vendor => ["poolparty:vendor:submodules"]
- 
+
 task :cleanup_test do
   ::FileUtils.rm_rf "/tmp/poolparty"
 end
- 
+
 # task :test do
 #   sh "ruby -Ilib:test #{Dir["#{File.dirname(__FILE__)}/../test/poolparty/*/*.rb"].join(" ")}"
 # end
- 
+
 Rake::TestTask.new(:test) do |t|
   t.test_files = FileList['test/lib/**/*_test.rb']
   t.warning = false
   t.verbose = false
 end
- 
+
 begin
   require 'rcov/rcovtask'
- 
+
   Rcov::RcovTask.new(:rcov) do |t|
     t.libs << FileList['lib/**/*.rb']
     t.rcov_opts = [
@@ -62,7 +62,7 @@ end
 
 desc "Clean tmp directory"
 task :clean_tmp do |t|
-  FileUtils.rm_rf("#{File.dirname(__FILE__)}/Manifest.txt") if ::File.exists?("#{File.dirname(__FILE__)}/Manifest.txt") 
+  FileUtils.rm_rf("#{File.dirname(__FILE__)}/Manifest.txt") if ::File.exists?("#{File.dirname(__FILE__)}/Manifest.txt")
   FileUtils.touch("#{File.dirname(__FILE__)}/Manifest.txt")
   %w(logs tmp).each do |dir|
     FileUtils.rm_rf("#{File.dirname(__FILE__)}/#{dir}") if ::File.exists?("#{File.dirname(__FILE__)}/#{dir}")
@@ -79,10 +79,10 @@ end
 
 namespace :gem do
   task(:build).prerequisites.unshift :gemspec # Prepend the gemspec generation
-  
+
   desc "Build the gem only if the tests pass"
   task :test_then_build => [:test, :build]
-  
+
   desc "Build and install the gem only if the tests pass"
   task :test_then_install => [:test, :install]
 end

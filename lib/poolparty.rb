@@ -44,7 +44,7 @@ require "keypair"
 
 # PoolParty core
 $LOAD_PATH.unshift(File.dirname(__FILE__)/"poolparty")
-%w( base 
+%w( base
     chef_attribute
     chef
     chef_solo
