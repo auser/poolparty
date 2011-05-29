@@ -14,8 +14,7 @@ end
     s.name = "poolparty"
     s.description = "PoolParty: The easy, open-source, cross-cloud management solution"
     s.summary = <<-EOM      
-      Self-healing, auto-scaling system administration, provisioning
-      and maintaining tool that makes cloud computing easier.
+      Simple DSL to describe and realize cloud deployment architectures.
     EOM
     
     s.homepage = "http://poolpartyrb.com"
