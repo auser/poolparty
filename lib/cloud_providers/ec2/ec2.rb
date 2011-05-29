@@ -389,11 +389,24 @@ module CloudProviders
     def available_rds_instances
       rds_instances.select{|r| r.available? }
     end
+    
+    # prepare options for AWS gem
+    def aws_options(opts={})
+      uri=URI.parse(ec2_url)
+      { :access_key_id    => access_key, 
+        :secret_access_key=> secret_access_key, 
+        :use_ssl          => (uri.scheme=='https'), 
+        :path             => uri.path, 
+        :host             => uri.host,
+        :port             => uri.port
+      }.merge(opts)
+      
+    end
 
     # Proxy to the raw Grempe amazon-aws @ec2 instance
     def ec2
       @ec2 ||= begin
-       AWS::EC2::Base.new( :access_key_id => access_key, :secret_access_key => secret_access_key )
+       AWS::EC2::Base.new( aws_options )
       rescue AWS::ArgumentError => e # AWS credentials missing?
         puts "Error contacting AWS: #{e}"
         raise e
@@ -404,16 +417,16 @@ module CloudProviders
 
     # Proxy to the raw Grempe amazon-aws autoscaling instance
     def as
-      @as = AWS::Autoscaling::Base.new( :access_key_id => access_key, :secret_access_key => secret_access_key )
+      @as = AWS::Autoscaling::Base.new( aws_options )
     end
 
     # Proxy to the raw Grempe amazon-aws elastic_load_balancing instance
     def elb
-      @elb ||= AWS::ELB::Base.new( :access_key_id => access_key, :secret_access_key => secret_access_key )
+      @elb ||= AWS::ELB::Base.new( aws_options )
     end
 
     def awsrds
-      @awsrds ||= AWS::RDS::Base.new( :access_key_id => access_key, :secret_access_key => secret_access_key )
+      @awsrds ||= AWS::RDS::Base.new( aws_options )
     end
 
     def security_group_names
