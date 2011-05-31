@@ -4,15 +4,15 @@
 module CloudProviders
   class CloudProvider
     include Dslify
-    
+
     default_options(
       :image_id    => 'ami-ed46a784',
       :user        => "root",
       :bootstrap_gems => []
     )
-    
+
     attr_reader :name, :init_opts
-    
+
     def initialize(name, init_opts={}, &block)
       @name = name
       if name.is_a?(Hash) && init_opts.empty?
@@ -24,25 +24,25 @@ module CloudProviders
       instance_eval &block if block
       after_initialized
     end
-    
+
     def after_initialized
     end
-    
+
     def run
       warn "#{self.class} does not implement run. Something is wrong"
     end
-    
+
     def default_keypair_path
       self.class.default_keypair_path
     end
-    
+
     def self.default_keypair_path
       ENV["EC2_CONFIG_DIR"] || "#{ENV["HOME"]}/.ssh"
     end
-    
+
     def bootstrap_nodes!
     end
-    
+
     def method_missing(m,*a,&block)
       if cloud && cloud.respond_to?(m)
         cloud.send(m,*a,&block)
@@ -50,16 +50,26 @@ module CloudProviders
         super
       end
     end
-    
+
     private
-    
+
     def proper_name
       cloud.proper_name
     end
-    
+
     def cloud
       init_opts.has_key?(:cloud) ? init_opts[:cloud] : nil
     end
-    
+
+    def maybe action_description, &block
+      puts "About to #{action_description}. Type 'Y' to do this, 'N' to skip"
+      line = $stdin.readline
+      if line =~ /^Y/
+        block.call
+      else
+        puts "Skipping."
+      end
+    end
+
   end
 end

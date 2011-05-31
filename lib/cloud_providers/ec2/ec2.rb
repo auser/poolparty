@@ -12,6 +12,8 @@ end
 
 require 'pp'
 
+POOLPARTY_CONFIG_FILE = "#{ENV["HOME"]}/.poolparty/aws" unless defined?(POOLPARTY_CONFIG_FILE)
+
 module CloudProviders
   class Ec2 < CloudProvider
     # Set the aws keys from the environment, or load from /etc/poolparty/env.yml if the environment variable is not set
@@ -52,7 +54,7 @@ module CloudProviders
     end
 
     # Load the yaml file containing keys.  If the file does not exist, return an empty hash
-    def self.load_keys_from_file(filename="#{ENV["HOME"]}/.poolparty/aws", caching=true)
+    def self.load_keys_from_file(filename=POOLPARTY_CONFIG_FILE, caching=true)
       return @aws_yml if @aws_yml && caching==true
       return {} unless File.exists?(filename)
       puts("Reading keys from file: #{filename}")
@@ -61,19 +63,18 @@ module CloudProviders
 
     # Load credentials from file
     def self.load_keys_from_credential_file(filename=default_credential_file, caching=true)
-      return {:access_key => @access_key, :secret_access_key => @secret_access_key} if @access_key and @secret_access_key and caching
+      return {:access_key => @access_key, :secret_access_key => @secret_access_key} if (@access_key && @secret_access_key && caching)
       return {} if filename.nil? or not File.exists?(filename)
       puts("Reading keys from file: #{filename}")
-      File.open(filename).each_line { |line|
+      File.open(filename).each_line do |line|
         if line =~ /AWSAccessKeyId=([a-zA-Z0-9]+)$/
           @access_key=$1.chomp
         elsif line =~ /AWSSecretKey=([^   ]+)$/
           @secret_access_key=$1.chomp
         end
-      }
+      end
       return {:access_key => @access_key, :secret_access_key => @secret_access_key}
     end
-
 
     default_options(
       :instance_type          => 'm1.small',
@@ -92,10 +93,13 @@ module CloudProviders
       :user_data              => '',
       :kernel_id              => nil,
       :ramdisk_id             => nil,
-      :block_device_mapping  => [{}],
+      :block_device_mapping   => [{}],
+      :subnet_id              => nil,
+      :spot_price             => nil,
+      :launch_group           => nil,
+      :spot_persistence       => nil,
       :disable_api_termination => nil,
-      :instance_initiated_shutdown_behavior => nil,
-      :subnet_id => nil
+      :instance_initiated_shutdown_behavior => nil
     )
 
     # Called when the create command is called on the cloud
@@ -106,13 +110,15 @@ module CloudProviders
     end
 
     def run
-      puts "  for cloud: #{cloud.name}"
+      puts "  for cloud:         #{cloud.name}"
       puts "  minimum_instances: #{minimum_instances}"
       puts "  maximum_instances: #{maximum_instances}"
-      puts "  security_groups: #{security_group_names.join(", ")}"
-      puts "  using keypair: #{keypair}"
-      puts "  with user_data #{user_data.to_s[0..100]}"
-      puts "  user: #{user}\n"
+      puts "  security_groups:   #{security_group_names.join(", ")}"
+      puts "  image id:          #{image_id}"
+      puts "  using keypair:     #{keypair}"
+      puts "  with user_data:    #{user_data.to_s.inspect[0..100]} ..."
+      puts "  user:              #{user}"
+      puts "  at spot price:     #{spot_price} #{spot_persistence}\n" if spot_price
 
       security_groups.each do |sg|
         sg.run
@@ -130,11 +136,15 @@ module CloudProviders
         if nodes.size < minimum_instances
           expansion_count = minimum_instances - nodes.size
           puts "-----> expanding the cloud because the #{expansion_count} minimum_instances is not satisified: "
-          expand_by(expansion_count)
+          maybe('expand cloud') do
+            expand_by(expansion_count)
+          end
         elsif nodes.size > maximum_instances
           contraction_count = nodes.size - maximum_instances
           puts "-----> contracting the cloud because the instances count exceeds the #{maximum_instances} maximum_instances by #{contraction_count}"
-          contract_by(contraction_count)
+          maybe('contract cloud') do
+            contract_by(contraction_count)
+          end
         end
         progress_bar_until("Waiting for the instances to be launched") do
           reset!
@@ -191,21 +201,25 @@ module CloudProviders
 
     def expand_by(num=1)
       e = Ec2Instance.run!({
-        :image_id => image_id,
-        :min_count => num,
-        :max_count => num,
-        :key_name => keypair.basename,
-        :security_groups => security_groups,
-        :user_data => decoded_user_data,
-        :instance_type => instance_type,
-        :availability_zone => availability_zones.first,
-        :base64_encoded => true,
-        :cloud => cloud,
-        :block_device_mapping => block_device_mapping,
-        :disable_api_termination => disable_api_termination,
-        :instance_initiated_shutdown_behavior => instance_initiated_shutdown_behavior,
-        :subnet_id => subnet_id,
-      })
+          :image_id             => image_id,
+          :min_count            => num,
+          :max_count            => num,
+          :key_name             => keypair.basename,
+          :security_groups      => security_groups,
+          :user_data            => decoded_user_data,
+          :instance_type        => instance_type,
+          :availability_zone    => availability_zones.first,
+          :base64_encoded       => true,
+          :cloud                => cloud,
+          :block_device_mapping => block_device_mapping,
+          :subnet_id            => subnet_id,
+          :spot_price           => spot_price,
+          :launch_group         => launch_group,
+          :spot_persistence     => spot_persistence,
+          :disable_api_termination => disable_api_termination,
+          :instance_initiated_shutdown_behavior => instance_initiated_shutdown_behavior
+        })
+      return if e == 'spot instances requested'
       progress_bar_until("Waiting for node to launch...") do
         wait_for_node(e)
       end
@@ -316,9 +330,9 @@ module CloudProviders
     end
 
     def all_nodes
-      @nodes ||= describe_instances.select { |i| 
-        !(security_group_names & tags(i)).empty? 
-      }.sort {|a,b| 
+      @nodes ||= describe_instances.select { |i|
+        !(security_group_names & tags(i)).empty?
+      }.sort {|a,b|
         DateTime.parse(a.launchTime) <=> DateTime.parse(b.launchTime)
       }
     end
@@ -357,7 +371,12 @@ module CloudProviders
       autoscalers << ElasticAutoScaler.new(given_name, sub_opts.merge(o || {}), &block)
     end
     def security_group(given_name=cloud.proper_name, o={}, &block)
-      security_groups << SecurityGroup.new(given_name, sub_opts.merge(o || {}), &block)
+      existing_security_group = security_groups.detect{|grp| grp.name == given_name }
+      if existing_security_group
+        existing_security_group.merge!(sub_opts.merge(o || {}), &block)
+      else
+        security_groups << SecurityGroup.new(given_name, sub_opts.merge(o || {}), &block)
+      end
     end
     def elastic_ip(*ips)
       ips.each {|ip| elastic_ips << ip}
@@ -370,11 +389,24 @@ module CloudProviders
     def available_rds_instances
       rds_instances.select{|r| r.available? }
     end
+    
+    # prepare options for AWS gem
+    def aws_options(opts={})
+      uri=URI.parse(ec2_url)
+      { :access_key_id    => access_key, 
+        :secret_access_key=> secret_access_key, 
+        :use_ssl          => (uri.scheme=='https'), 
+        :path             => uri.path, 
+        :host             => uri.host,
+        :port             => uri.port
+      }.merge(opts)
+      
+    end
 
     # Proxy to the raw Grempe amazon-aws @ec2 instance
     def ec2
       @ec2 ||= begin
-       AWS::EC2::Base.new( :access_key_id => access_key, :secret_access_key => secret_access_key )
+       AWS::EC2::Base.new( aws_options )
       rescue AWS::ArgumentError => e # AWS credentials missing?
         puts "Error contacting AWS: #{e}"
         raise e
@@ -385,16 +417,16 @@ module CloudProviders
 
     # Proxy to the raw Grempe amazon-aws autoscaling instance
     def as
-      @as = AWS::Autoscaling::Base.new( :access_key_id => access_key, :secret_access_key => secret_access_key )
+      @as = AWS::Autoscaling::Base.new( aws_options )
     end
 
     # Proxy to the raw Grempe amazon-aws elastic_load_balancing instance
     def elb
-      @elb ||= AWS::ELB::Base.new( :access_key_id => access_key, :secret_access_key => secret_access_key )
+      @elb ||= AWS::ELB::Base.new( aws_options )
     end
 
     def awsrds
-      @awsrds ||= AWS::RDS::Base.new( :access_key_id => access_key, :secret_access_key => secret_access_key )
+      @awsrds ||= AWS::RDS::Base.new( aws_options )
     end
 
     def security_group_names

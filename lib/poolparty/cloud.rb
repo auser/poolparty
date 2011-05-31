@@ -1,11 +1,11 @@
-module PoolParty  
+module PoolParty
   class Cloud < Base
     default_options(
       :description            => "PoolParty cloud",
       :minimum_instances      => 1,
       :maximum_instances      => 3
     )
-    
+
     # returns an instance of Keypair
     # You can pass either a filename which will be searched for in ~/.ec2/ and ~/.ssh/
     # Or you can pass a full filepath
@@ -21,14 +21,14 @@ module PoolParty
         raise ArgumentError, "There was an error when defining the keypair"
       end
     end
-    
+
     private
     def generate_keypair(extra_paths=[])
       puts "Generate the keypair for this cloud because its not found: #{proper_name}"
       cloud_provider.send :generate_keypair, proper_name
       Keypair.new(proper_name, extra_paths)
     end
-    
+
     def after_initialized
       raise PoolParty::PoolPartyError.create("NoCloudProvider", <<-EOE
 You did not specify a cloud provider in your clouds.rb. Make sure you have a block that looks like:
@@ -38,7 +38,7 @@ You did not specify a cloud provider in your clouds.rb. Make sure you have a blo
       ) unless cloud_provider
       security_group(proper_name, :authorize => {:from_port => 22, :to_port => 22}) if security_groups.empty?
     end
-    
+
     public
     def instances(arg)
       case arg
@@ -49,32 +49,32 @@ You did not specify a cloud provider in your clouds.rb. Make sure you have a blo
         minimum_instances arg
         maximum_instances arg
       when Hash
-        nodes(arg)
+        minimum_instances arg[:instances].to_i
+        maximum_instances arg[:instances].to_i
+        # nodes(arg)
       else
         raise PoolParty::PoolPartyError.create("DslMethodCall", "You must call instances with either a number, a range or a hash (for a list of nodes)")
       end
     end
-    
 
     # Upload the source to dest ( using rsync )
     def upload source, dest
       @uploads ||= []
       @uploads << { :source => source, :dest => dest }
-    end    
+    end
 
-    
     # The pool can either be the parent (the context where the object is declared)
     # or the global pool object
     def pool
       parent || pool
     end
-    
+
     def tmp_path
       "/tmp/poolparty" / pool.name / name
     end
-    
+
     public
-    
+
     attr_reader :cloud_provider
     def using(provider_name, &block)
       return @cloud_provider if @cloud_provider
@@ -106,8 +106,8 @@ You did not specify a cloud provider in your clouds.rb. Make sure you have a blo
         bootstrap!
       end
     end
-        
-    
+
+
     # TODO: Incomplete and needs testing
     # Shutdown and delete the load_balancers, auto_scaling_groups, launch_configurations,
     # security_groups, triggers and instances defined by this cloud
@@ -146,7 +146,7 @@ You did not specify a cloud provider in your clouds.rb. Make sure you have a blo
       # end
       #TODO: keypair.delete # Do we want to delete the keypair?  probably, but not certain
     end
-    
+
     def reboot!
       orig_nodes = nodes
       if autoscalers.empty?
@@ -183,7 +183,7 @@ No autoscalers defined
       run
       puts ""
     end
-    
+
     def compile!
       unless @uploads.nil?
         puts "Uploading files via rsync"
@@ -193,35 +193,35 @@ No autoscalers defined
       end
       @chef.compile! unless @chef.nil?
     end
-    
+
     def bootstrap!
       cloud_provider.bootstrap_nodes!(tmp_path)
     end
-    
+
     def configure!
       compile!
       cloud_provider.configure_nodes!(tmp_path)
     end
-    
+
     def reset!
       cloud_provider.reset!
     end
-    
+
     def ssh(num=0)
       nodes[num].ssh
     end
-    
+
     def rsync(source, dest)
       nodes.each do |node|
         node.rsync(:source => source, :destination => dest)
       end
     end
-    
+
     # TODO: list of nodes needs to be consistentley sorted
     def nodes
       cloud_provider.nodes.select {|a| a.in_service? }
     end
-        
+
     # Run command/s on all nodes in the cloud.
     # Returns a hash of instance_id=>result pairs
     def cmd(commands, opts={})
@@ -234,13 +234,13 @@ No autoscalers defined
       threads.each{ |aThread| aThread.join }
       results
     end
-    
+
     # Explicit proxies to cloud_provider methods
     def run_instance(o={}); cloud_provider.run_instance(o);end
     def terminate_instance!(o={}); cloud_provider.terminate_instance!(o);end
     def describe_instances(o={}); cloud_provider.describe_instances(o);end
     def describe_instance(o={}); cloud_provider.describe_instance(o);end
-    
+
     def proper_name
       "#{parent.name}-#{name}"
     end

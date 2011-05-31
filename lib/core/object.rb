@@ -13,6 +13,14 @@ class Object
       puts line
     end
   end
+  
+  # return true if nil?, empty? or size==0
+  def blank?
+    return true if nil?
+    return true if self.respond_to?('empty?') && self.empty?
+    return true if self.respond_to?('size') && self.size==0
+    return false
+  end
 
   # === Description
   #
