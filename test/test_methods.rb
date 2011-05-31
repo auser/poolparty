@@ -19,7 +19,13 @@ def modify_env_with_hash(h={})
     orig_env[k] = v
     orig_env[k].freeze
   end
-  Kernel.send :remove_const, :ENV if Kernel.const_defined?(:ENV)
+  if RUBY_VERSION.scan(/1.8/).pop
+    Kernel.instance_eval {remove_const :ENV } if Kernel.const_defined?('ENV' )
+  elsif RUBY_VERSION.scan(/1.9/).pop
+    Object.instance_eval {remove_const :ENV } if Object.const_defined?('ENV' )
+  else
+    raise "can't determine what version of ruby you are running."
+  end
   Kernel.const_set(:ENV, orig_env)
 end
 

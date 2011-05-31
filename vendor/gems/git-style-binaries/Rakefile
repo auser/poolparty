@@ -20,7 +20,7 @@ begin
     gem.extra_rdoc_files = FileList["README*", "ChangeLog*", "LICENSE*"].delete_if{|f| f =~ excludes}
   end
 rescue LoadError
-  puts "Jeweler not available. Install it with: sudo gem install technicalpickles-jeweler -s http://gems.github.com"
+  puts "Jeweler not available. Install it with: sudo gem install jeweler"
 end
 
 require 'rake/testtask'
@@ -46,7 +46,7 @@ end
 
 task :default => :test
 
-require 'rake/rdoctask'
+require 'rdoc/task'
 Rake::RDocTask.new do |rdoc|
   if File.exist?('VERSION.yml')
     config = YAML.load(File.read('VERSION.yml'))

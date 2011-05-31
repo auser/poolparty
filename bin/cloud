@@ -5,9 +5,9 @@ require 'git-style-binary/command'
 
 GitStyleBinary.primary do
   # self.class.send :include, Printing
-  
+
   @theme = :short
-  
+
   version "PoolParty release: #{PoolParty.version}"
   banner <<-EOS
 Usage: #{$0} #{all_options_string} COMMAND [ARGS]
@@ -17,7 +17,7 @@ The cloud subcommands commands are:
 
 See 'cloud help COMMAND' for more information on a specific command.
 EOS
-    
+
   opt :clouds_dot_rb, "Set the clouds.rb file", :type => String, :default => "clouds.rb"
   opt :very_verbose, "Set very verbose mode on", :type => :boolean, :default => false
   opt :debug, "Debug the output", :type => :boolean, :default => false
@@ -31,30 +31,32 @@ EOS
     $VERY_VERBOSE   = true if command[:very_verbose]
     $DEBUGGING      = true if command[:debug]
     $VERY_DEBUGGING = true if command[:very_debug]
-    
+
     begin
       require command[:clouds_dot_rb]
     rescue LoadError => e
+      puts e
+      puts e.backtrace
       puts "Failed loading #{command[:clouds_dot_rb]}, try using -c to specify the location of your clouds.rb"
       exit
     end
-    
+
     pool.chef_step command[:chef_task].to_sym
 
     @loaded_pool = pool
-    @loaded_clouds = command[:name] ? [pool.clouds[command[:name]]] : pool.clouds.map {|name,cld|cld}    
+    @loaded_clouds = command[:name] ? [pool.clouds[command[:name]]] : pool.clouds.map {|name,cld|cld}
     if @loaded_clouds.size == 0
       puts "No clouds loaded. Check your clouds.rb or -n option"
       exit
     end
   end
-  
+
   run do |command|
     subcommands = GitStyleBinary.list_subcommands
-    
+
     puts "cloud %s" % PoolParty.version
     puts "Usage: cloud COMMAND [ARGS]
-    
+
     The cloud subcommands commands are:
       #{subcommands}
 
