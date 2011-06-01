@@ -1,4 +1,4 @@
-require "#{File.dirname(__FILE__)}/../../test_helper"
+require 'test_helper'
 stub_ec2_calls
 
 class RdsTest < Test::Unit::TestCase

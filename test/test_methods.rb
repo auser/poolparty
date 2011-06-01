@@ -19,7 +19,7 @@ def modify_env_with_hash(h={})
     orig_env[k] = v
     orig_env[k].freeze
   end
-  Kernel.send :remove_const, :ENV if Kernel.const_defined?(:ENV)
+  # Kernel.send :remove_const, :ENV if Kernel.const_defined?(:ENV)
   Kernel.const_set(:ENV, orig_env)
 end
 

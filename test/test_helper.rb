@@ -1,5 +1,7 @@
-$:.unshift(::File.dirname(__FILE__))
-$:.unshift(::File.dirname(__FILE__) + "/../lib")
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
+$LOAD_PATH.unshift(File.dirname(__FILE__))
+
+ENV['RACK_ENV'] ||= 'test'
 
 # Test dependencies
 %w(fakeweb right_http_connection matchy shoulda).each do |dep|
@@ -18,6 +20,7 @@ modify_env_with_hash(
   )
 
 require 'poolparty'
+
 require "rubygems"
 require "test/unit"
 # TODO: Rip out shoulda

@@ -1,3 +1,4 @@
+$:.unshift(File.join(File.dirname(__FILE__), "."))
 require 'rake'
 require 'rake/testtask'
 require 'rake/rdoctask'
@@ -34,10 +35,16 @@ end
 #   sh "ruby -Ilib:test #{Dir["#{File.dirname(__FILE__)}/../test/poolparty/*/*.rb"].join(" ")}"
 # end
  
-Rake::TestTask.new(:test) do |t|
-  t.test_files = FileList['test/lib/**/*_test.rb']
-  t.warning = false
-  t.verbose = false
+# Rake::TestTask.new(:test) do |t|
+#   t.test_files = FileList['test/lib/**/*_test.rb']
+#   t.warning = false
+#   t.verbose = false
+# end
+
+Rake::TestTask.new(:test) do |test|
+  test.libs << 'lib' << 'test'
+  test.pattern = 'test/**/*_test.rb'
+  test.verbose = true
 end
  
 begin
