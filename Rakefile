@@ -1,7 +1,7 @@
 $:.unshift(File.join(File.dirname(__FILE__), "."))
 require 'rake'
 require 'rake/testtask'
-require 'rake/rdoctask'
+require 'rdoc/task'
 
 require 'config/requirements'
 

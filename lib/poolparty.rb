@@ -9,6 +9,16 @@ require 'yaml'
   require lib
 end
 
+begin
+  require 'AWS'
+rescue LoadError
+  puts <<-EOM
+  There was an error requiring AWS
+EOM
+end
+
+require 'pp'
+
 # Add all vendor gems to the load paths
 Dir[File.dirname(__FILE__)+"/../vendor/gems/*"].each {|lib| $LOAD_PATH.unshift(File.expand_path("#{lib}/lib")) }
 

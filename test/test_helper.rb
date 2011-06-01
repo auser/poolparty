@@ -26,6 +26,7 @@ require "test/unit"
 # TODO: Rip out shoulda
 require "shoulda"
 require 'mocha' # ARG!  don't want to introduce additional test dependencies, but FakeWeb can only handle one fake post per URL!!!
+require 'webmock/test_unit'
 
 require 'git-style-binary/command'
 

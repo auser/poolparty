@@ -2,11 +2,12 @@ source "http://www.rubygems.org"
  
 gemspec
 
-gem 'aws'
+gem 'amazon-ec2'
 gem 'git-style-binaries'
 
 group :test do
   gem 'fakeweb'
+  gem 'webmock'
   gem 'shoulda'
   gem 'rcov'
   gem 'mocha'

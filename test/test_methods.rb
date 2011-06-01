@@ -45,23 +45,23 @@ end
 def stub_ec2_calls(&block)
   stub_keypair_searchable_paths
   
-  require 'fakeweb'
-  FakeWeb.allow_net_connect=false
+  # FakeWeb.allow_net_connect=false
+  stub_request(:get, /.*Action=DescribeInstances.*/).to_return(:status => 200, :body => open(fixtures_dir/"ec2/ec2-describe-instances_response_body.xml").read)
 
-  FakeWeb.register_uri(:get, /.*Action=DescribeInstances.*/, :status => ["200", "OK"],
-                       :body => open(fixtures_dir/"ec2/ec2-describe-instances_response_body.xml").read)
-
-  FakeWeb.register_uri(:get, /.*Action=RunInstances.*/, :status => ["200", "OK"],
-                       :body => open(fixtures_dir/"ec2/ec2-run-instances_response_body.xml").read)
-
-  FakeWeb.register_uri(:get, /.*Action=TerminateInstances.*/, :status => ["200", "OK"],
-                       :body => open(fixtures_dir/"ec2/ec2-terminate-instances_response_body.xml").read)
-                       
-  FakeWeb.register_uri(:post, /elasticloadbalancing\.amazonaws\.com/, :status => ["200", "OK"],
-                       :body => open(fixtures_dir/"ec2/elb-describe-load-balancers.xml").read)
-                       
-  FakeWeb.register_uri(:post, /\//, :status => ["200", "OK"],
-                      :body => open(fixtures_dir/"ec2/ec2-describe-instances_response_body.xml").read)
+  # FakeWeb.register_uri(:get, /.*Action=DescribeInstances.*/, :status => ["200", "OK"],
+  #                      :body => open(fixtures_dir/"ec2/ec2-describe-instances_response_body.xml").read)
+  # 
+  # FakeWeb.register_uri(:get, /.*Action=RunInstances.*/, :status => ["200", "OK"],
+  #                      :body => open(fixtures_dir/"ec2/ec2-run-instances_response_body.xml").read)
+  # 
+  # FakeWeb.register_uri(:get, /.*Action=TerminateInstances.*/, :status => ["200", "OK"],
+  #                      :body => open(fixtures_dir/"ec2/ec2-terminate-instances_response_body.xml").read)
+  #                      
+  # FakeWeb.register_uri(:post, /elasticloadbalancing\.amazonaws\.com/, :status => ["200", "OK"],
+  #                      :body => open(fixtures_dir/"ec2/elb-describe-load-balancers.xml").read)
+  #                      
+  # FakeWeb.register_uri(:post, /\//, :status => ["200", "OK"],
+  #                     :body => open(fixtures_dir/"ec2/ec2-describe-instances_response_body.xml").read)
   
   instance_eval &block if block
 end
