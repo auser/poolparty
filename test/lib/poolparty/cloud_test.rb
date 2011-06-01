@@ -1,14 +1,14 @@
-require "#{File.dirname(__FILE__)}/../../test_helper"
+require 'test_helper'
 # require 'rr'
-stub_ec2_calls
 
 class CloudTest < Test::Unit::TestCase
   # include RR::Adapters::TestUnit
   def setup
     clear!
-    @filepath = fixtures_dir/"clouds/simple_cloud.rb"
+    @filepath = File.join(FIXTURES_PATH, "clouds/simple_cloud.rb")
     require @filepath
     @cloud = pool.clouds[pool.clouds.keys.first]
+    stub_ec2_calls
   end
     
   def test_have_a_pool_name
@@ -33,7 +33,7 @@ class CloudTest < Test::Unit::TestCase
   def test_set_the_cloud_provider_with_a_using_block
     @cloud.instance_eval do
       using :ec2
-      keypair "test_key", fixtures_dir/"keys"
+      keypair "test_key", File.join(FIXTURES_PATH, "keys")
       image_id 'emi-39921602'
     end
     assert_equal :ec2, @cloud.cloud_provider.name
@@ -44,7 +44,7 @@ class CloudTest < Test::Unit::TestCase
   def test_nodes
     assert_respond_to @cloud, :nodes
     assert_respond_to @cloud.nodes, :each
-    assert @cloud.nodes.size>1
+    assert @cloud.nodes.size>1, "Cloudsize was: #{@cloud.nodes.size}"
   end
       
   def test_run

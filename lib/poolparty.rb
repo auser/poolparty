@@ -2,10 +2,22 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 
 t=Time.now
 
+require 'yaml'
+
 # Load system gems
-%w(rubygems logger erb open-uri yaml).each do |lib|
+%w(rubygems logger erb open-uri fileutils).each do |lib|
   require lib
 end
+
+begin
+  require 'AWS'
+rescue LoadError
+  puts <<-EOM
+  There was an error requiring AWS
+EOM
+end
+
+require 'pp'
 
 # Add all vendor gems to the load paths
 Dir[File.dirname(__FILE__)+"/../vendor/gems/*"].each {|lib| $LOAD_PATH.unshift(File.expand_path("#{lib}/lib")) }
@@ -41,6 +53,8 @@ require "poolparty/pool_party_error"
 end
 
 require "keypair"
+
+POOLPARTY_CONFIG_FILE = "#{ENV["HOME"]}/.poolparty/aws" unless defined?(POOLPARTY_CONFIG_FILE)
 
 # PoolParty core
 $LOAD_PATH.unshift(File.dirname(__FILE__)/"poolparty")

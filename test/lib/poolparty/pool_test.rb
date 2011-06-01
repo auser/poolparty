@@ -1,8 +1,10 @@
-require "#{File.dirname(__FILE__)}/../../test_helper"
-
-stub_keypair_searchable_paths
+require 'test_helper'
 
 class PoolTest < Test::Unit::TestCase  
+  def setup
+    stub_keypair_searchable_paths
+  end
+  
   def test_set_up_pool_object
     reset!
     pool "hi" do
