@@ -130,6 +130,9 @@
             </p>
             <ul>
               <li>
+                <tt>EC2_URL</tt>
+              </li>
+              <li>
                 <tt>EC2_ACCESS_KEY</tt>
               </li>
               <li>
@@ -141,7 +144,7 @@
               <span class='caps'>
                 AWS
               </span>
-              access key, secret key, private key &amp; cert, respectively.
+              ec2 url, access key, secret key, private key &amp; cert, respectively.
             </p>
             <p>
               Stick this in your
@@ -156,6 +159,8 @@
               <tt>~/.profile)</tt>
             </p>
             <pre><code>#!/bin/sh
+            export EC2_URL="https://us-west-1.ec2.amazonaws.com/"
+            export EC2_ACCESS_KEY="AAAAAAAAAABBBBBB"
             export EC2_ACCESS_KEY="AAAAAAAAAABBBBBB"
             export EC2_SECRET_KEY="NRLSKDM@$@$/4@$%%NNNSN"
             export EC2_PRIVATE_KEY="/path/to/pk-XXX.pem"
