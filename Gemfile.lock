@@ -1,14 +1,33 @@
 PATH
   remote: .
   specs:
-    poolparty (1.6.9)
+    poolparty (1.7.0.pre)
+      amazon-ec2 (~> 0.9.17)
+      json
+      xml-simple
 
 GEM
   remote: http://rubygems.org/
   specs:
+    amazon-ec2 (0.9.17)
+      xml-simple (>= 1.0.12)
+    fakeweb (1.3.0)
+    json (1.5.3)
+    mcmire-matchy (0.5.2)
+    mocha (0.9.12)
+    rdoc (3.9.4)
+    right_http_connection (1.3.0)
+    shoulda (2.11.3)
+    xml-simple (1.1.0)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  fakeweb
+  mcmire-matchy
+  mocha
   poolparty!
+  rdoc
+  right_http_connection
+  shoulda
