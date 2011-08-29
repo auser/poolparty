@@ -1,16 +1,9 @@
 require 'rake'
+require "bundler/gem_tasks"
 require 'rake/testtask'
 require 'rake/rdoctask'
 $: << File.dirname(__FILE__)
 require 'config/requirements'
-
-begin
-  require 'hanna/rdoctask'
-rescue LoadError => e
-  require "rake/rdoctask"
-end
-
-require 'config/jeweler' # setup gem configuration
 
 task :default  => [:test, :cleanup_test]
 desc "Update vendor directory and run tests"
@@ -78,8 +71,6 @@ end
 
 
 namespace :gem do
-  task(:build).prerequisites.unshift :gemspec # Prepend the gemspec generation
-
   desc "Build the gem only if the tests pass"
   task :test_then_build => [:test, :build]
 
