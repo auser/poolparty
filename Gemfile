@@ -6,6 +6,9 @@ group :test do
   gem "fakeweb" 
   gem "right_http_connection" 
   gem "mcmire-matchy"
+end
+
+group :development do
   gem "rdoc"
 end
 
