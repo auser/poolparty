@@ -13,7 +13,7 @@ require 'git-style-binary'
 GitStyleBinary.run = true
 
 class Test::Unit::TestCase
-  def fixtures_dir
+  def FIXTURES_PATH
     File.join(File.dirname(__FILE__), "fixtures")
   end
 end
@@ -21,7 +21,7 @@ end
 module RunsBinaryFixtures
   # run the specified cmd returning the string values of [stdout,stderr]
   def bin(cmd)
-    stdin, stdout, stderr = Open3.popen3("#{fixtures_dir}/#{cmd}")
+    stdin, stdout, stderr = Open3.popen3("#{FIXTURES_PATH}/#{cmd}")
     [stdout.read, stderr.read]
   end
 end

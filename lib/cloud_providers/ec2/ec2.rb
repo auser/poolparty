@@ -2,17 +2,6 @@
   EC2 CloudProvider
   This serves as the basis for running PoolParty on Amazon's ec2 cloud.
 =end
-begin
-  require 'AWS'
-rescue LoadError
-  puts <<-EOM
-  There was an error requiring AWS
-EOM
-end
-
-require 'pp'
-
-POOLPARTY_CONFIG_FILE = "#{ENV["HOME"]}/.poolparty/aws" unless defined?(POOLPARTY_CONFIG_FILE)
 
 module CloudProviders
   class Ec2 < CloudProvider

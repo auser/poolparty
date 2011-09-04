@@ -1,8 +1,8 @@
-require "#{File.dirname(__FILE__)}/../../test_helper"
-stub_ec2_calls
+require 'test_helper'
 
 class RdsTest < Test::Unit::TestCase
   def setup
+    stub_ec2_calls
     stub_response(AWS::EC2::Base, :describe_security_groups, 'ec2-describe-security-groups')
     stub_response(AWS::EC2::Base, :run_instances,            'ec2-run-instances')
     stub_response(AWS::RDS::Base, :describe_db_instances,    'rds-describe-db-instances-empty')
@@ -22,7 +22,7 @@ class RdsTest < Test::Unit::TestCase
   def scenario(filename)
     clear!
 
-    @filepath = fixtures_dir/"clouds/#{filename}.rb"
+    @filepath = File.join(FIXTURES_PATH, "clouds/#{filename}.rb")
     require @filepath
     @cloud = pool.clouds[pool.clouds.keys.first]
 
@@ -30,6 +30,6 @@ class RdsTest < Test::Unit::TestCase
   end
 
   def stub_response(klass, method, fixture_filename)
-    klass.any_instance.stubs(method).returns AWS::Response.parse(:xml => open(fixtures_dir/"ec2/#{fixture_filename}_response_body.xml").read)
+    klass.any_instance.stubs(method).returns AWS::Response.parse(:xml => open(File.join(FIXTURES_PATH, "ec2/#{fixture_filename}_response_body.xml")).read)
   end
 end
