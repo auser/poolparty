@@ -15,6 +15,7 @@ group :test do
   gem 'mocha'
   gem 'right_http_connection'
   gem "jnunemaker-matchy", "~> 0.4.0"
+  gem 'vagrant'
 end
 
 group :development do
