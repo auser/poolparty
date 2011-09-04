@@ -132,7 +132,7 @@ module CloudProviders
       opts = {:quiet => false, :sysread => 1024}.merge(o)
       buf = ""
       # puts("Running command: #{cmd}")
-      Open3.popen3(cmd) do |stdout, stdin, stderr|
+      status = Open3.popen3(cmd) do |stdout, stdin, stderr, wait_thr|
         begin
           while (chunk = stdin.readpartial(opts[:sysread]))
             buf << chunk
@@ -152,8 +152,9 @@ module CloudProviders
           $stderr.write_nonblock(err)
           # used to do nothing
         end
+        wait_thr.value
       end
-      unless $?.success?
+      unless status.success?
         warn "Failed sshing. Check ~/.poolparty/ssh.log for details"
       end
       buf

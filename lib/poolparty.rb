@@ -27,15 +27,14 @@ Dir[File.dirname(__FILE__)+"/../vendor/gems/*"].each {|lib| $LOAD_PATH.unshift(F
   require dep
 end
 
+require "poolparty/version"
 module PoolParty
   def self.version
-    return @version if @version
-    config = ::YAML.load(File.read(File.expand_path("#{File.dirname(__FILE__)}/../VERSION.yml")))
-    @version = "#{config[:major]}.#{config[:minor]}.#{config[:patch]}"
-    @version += "-" + config[:build] if  config[:build]
+    VERSION
   end
+
   def self.lib_dir
-  File.join(File.dirname(__FILE__), "..")
+    File.join(File.dirname(__FILE__), "..")
   end
 end
 
