@@ -1,4 +1,5 @@
 source "http://rubygems.org"
+gem 'git-style-binaries'
 
 group :test do
   gem "shoulda"
