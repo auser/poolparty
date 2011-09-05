@@ -61,10 +61,17 @@ module CloudProviders
       init_opts.has_key?(:cloud) ? init_opts[:cloud] : nil
     end
 
-    def maybe action_description, &block
-      puts "About to #{action_description}. Type 'Y' to do this, 'N' to skip"
-      line = $stdin.readline
-      if line =~ /^Y/
+    def maybe(action_description, default='Y', &block)
+      puts "About to #{action_description}. Type 'Y' to do this, 'N' to skip. #{default} will be chosen within 10 seconds."
+      begin
+        Timeout::timeout(10) do
+          line = $stdin.readline
+        end
+      rescue Timeout::Error => e
+        line = default
+        puts "Timeout:  #{default} default will be used."
+      end
+      if line =~ /^Y/i
         block.call
       else
         puts "Skipping."

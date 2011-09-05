@@ -5,7 +5,7 @@ t=Time.now
 require 'yaml'
 
 # Load system gems
-%w(rubygems logger erb open-uri fileutils).each do |lib|
+%w(rubygems logger erb open-uri fileutils timeout).each do |lib|
   require lib
 end
 
