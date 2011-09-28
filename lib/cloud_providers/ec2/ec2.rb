@@ -386,7 +386,7 @@ module CloudProviders
       { :access_key_id    => access_key, 
         :secret_access_key=> secret_access_key, 
         :use_ssl          => (uri.scheme=='https'), 
-        :path             => uri.path, 
+        :path             => (uri.path.empty? ? '/' : uri.path), 
         :host             => uri.host,
         :port             => uri.port
       }.merge(opts)
