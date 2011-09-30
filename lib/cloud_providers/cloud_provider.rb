@@ -63,6 +63,7 @@ module CloudProviders
 
     def maybe(action_description, default='Y', &block)
       puts "About to #{action_description}. Type 'Y' to do this, 'N' to skip. #{default} will be chosen within 10 seconds."
+      line = nil
       begin
         Timeout::timeout(10) do
           line = $stdin.readline
